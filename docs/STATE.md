@@ -137,3 +137,4 @@ Proposed: **A** (or C immediately on Android while A is pending).
 
 ## v0.1.2 published (2026-10-08 ~15:20 PT)
 - Device-voice improvement deployed to https://aaronchu903-png.github.io/appartement-411/ under standing permission; live file byte-identical to dist; npm test 35/35. Audio candidates (Qwen3-TTS, Pocket TTS, Kokoro) prototyped in audio-candidates/, not shipped; awaiting founder listening choice.
+- 2026-10-08 ~15:16 PT: Background helper stopped: Cursor account reported no Grok Bot usage available. Work already on disk was complete (commit c9665a7). Usage/quota is now a real blocker for large work; no on-demand spend enabled (USD 0 policy). Voice sample page published at /appartement-411/voices/; awaiting founder choice.
