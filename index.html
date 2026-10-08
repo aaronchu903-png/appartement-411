@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.1.1 single-file build 2026-10-08T19:58:21.858Z -->
+<!-- L’Appartement 411 v0.1.2 single-file build 2026-10-08T22:15:19.340Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -75,6 +75,13 @@ pre.summary, textarea.summary { white-space:pre-wrap; font-family:inherit; font-
 body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::after { animation:none !important; transition:none !important; }
 .probe-opts .btn { background:#fff; color:var(--ink); } /* identical styling for every option: no answer cue */
 .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+/* v0.1.2 voice settings */
+label.field { display:flex; flex-direction:column; gap:4px; margin-top:10px; }
+select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid #2a2e3a; border-radius:4px; background:#fff; min-height:48px; max-width:100%; }
+#voiceSettings .card { margin:8px 0; }
+#voiceSettings .path { font-weight:bold; background:#fff; border:1px dashed #8a8170; padding:6px 8px; border-radius:4px; word-break:break-word; }
+#voiceSettings details summary { min-height:44px; display:flex; align-items:center; cursor:pointer; }
+#voiceSettings .row .radio { padding-right:8px; }
 
 </style>
 </head>
@@ -241,7 +248,7 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
   var C = (root.A411 && root.A411.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.1.1';
+  var APP_VERSION = '0.1.2';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -617,6 +624,8 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
       context: f.context || null,
       speaker: f.speaker || null,
       stimulus: f.stimulus || null,
+      // which device voice/rate actually played for this attempt (null = nothing played / not audio)
+      audioVoice: f.audioVoice || null,
       at: f.at || nowISO()
     };
   }
@@ -710,10 +719,19 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
     L.push('版本：app ' + save.appVersion + ' · 内容 ' + save.contentVersion + ' · 存档 schema v' + save.schemaVersion);
     L.push('进度：Day ' + save.progress.episode + ' · ' + (C.SCENE_ZH[sc] || sc) + '（' + sc + ' 第 ' + (save.progress.step + 1) + ' 步）· ' + (save.progress.status === 'complete' ? '已完成' : '进行中'));
     var au = save.meta.audio || {};
-    L.push('法语语音：' + (au.status === 'available' ? '可用（设备语音 ' + (au.voice || '?') + '）' : au.status === 'unavailable' ? '不可用 → 阅读模式（听力未验证）' : '未检测'));
-    var played = save.learning.attempts.filter(function (a) { return a.audioStatus === 'played'; }).length;
+    var QZ = { premium: '高级', enhanced: '增强', natural: '自然', network: '在线高质量', 'local-hq': '高质量', standard: '标准', compact: '基础', robotic: '机械' };
+    var avail = '可用（设备语音 ' + (au.voice || '?') + '）';
+    if (au.status === 'available' && au.voices) {
+      avail = '可用 · Camille=' + (au.voices.camille || '?') + '（' + (QZ[au.quality && au.quality.camille] || '?') + '）· Noé=' + (au.voices.noe || '?') + '（' + (QZ[au.quality && au.quality.noe] || '?') + '）' +
+        (au.distinctVoices ? '' : ' · 共用一个声音') + ' · 本机法语声音 ' + (au.frenchVoiceCount != null ? au.frenchVoiceCount : '?') + ' 个 · 语速 ' + (au.rate || '?');
+    }
+    L.push('法语语音：' + (au.status === 'available' ? avail : au.status === 'unavailable' ? '不可用 → 阅读模式（听力未验证）' : '未检测'));
+    var playedA = save.learning.attempts.filter(function (a) { return a.audioStatus === 'played'; });
     var failed = save.learning.attempts.filter(function (a) { return a.audioStatus === 'failed' || a.audioStatus === 'unavailable'; }).length;
-    L.push('语音播放记录：成功 ' + played + ' · 失败/不可用 ' + failed);
+    var byVoice = {};
+    playedA.forEach(function (a) { var v = a.audioVoice; var k = v ? v.name + '（' + (QZ[v.quality] || v.quality) + '，语速 ' + v.rate + '）' : '未记录声音（v0.1.1 及以前）'; byVoice[k] = (byVoice[k] || 0) + 1; });
+    var bv = Object.keys(byVoice).map(function (k) { return k + ' ×' + byVoice[k]; });
+    L.push('语音播放记录：成功 ' + playedA.length + ' · 失败/不可用 ' + failed + (bv.length ? ' · 实际播放的声音：' + bv.join('；') : ''));
     var b = save.learning.baseline;
     if (b.status === 'skipped') L.push('开始前小测：跳过');
     else if (b.status === 'done') {
@@ -1015,11 +1033,126 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
 <script>
 /* L’Appartement 411 — French audio via the device's own speech engine (Web Speech API).
  * Status values are what the browser reports: 'played' = speech engine reported it finished.
- * A muted phone can still report 'played'; the player can always replay or read instead. */
+ * A muted phone can still report 'played'; the player can always replay or read instead.
+ *
+ * v0.1.2: voice ranking (premium/enhanced/natural/network voices first; Apple "Eloquence" and
+ * novelty voices such as Eddy, Flo, Grandma, Bad News/Mauvaises nouvelles are never auto-picked
+ * because they sound robotic), per-character voices (Camille / Noé) when the device has more
+ * than one usable French voice, a per-device speed (0.75 / 0.9 / 1.0) and voice choice stored
+ * outside the save (voices differ per device, so they must not travel with an exported save).
+ * Every speak() records which voice/rate actually played in A.last so evidence stays honest. */
 (function (root) {
   'use strict';
-  var A = { status: 'unknown', voice: null, voiceName: null, reason: null };
+  var A = { status: 'unknown', voice: null, voiceName: null, reason: null, voices: [], assign: {}, prefs: null, last: null };
   var synth = root.speechSynthesis;
+  var PREFS_KEY = 'a411.device.audio';
+  var RATES = [0.75, 0.9, 1.0];
+  var DEFAULT_RATE = 0.9;
+
+  // ---------- pure helpers (unit-tested in Node) ----------
+  function norm(s) { return String(s || '').toLowerCase().normalize ? String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : String(s || '').toLowerCase(); }
+  function firstWord(name) { return norm(name).replace(/\(.*$/, '').trim(); }
+  // Apple Eloquence voices + novelty voices (English and French localised names) + eSpeak.
+  var ROBOTIC = ['eddy', 'flo', 'grandma', 'grandpa', 'grand-mere', 'grand-pere', 'mamie', 'papi', 'jacques', 'reed', 'rocko', 'sandy', 'shelley',
+    'fred', 'junior', 'kathy', 'ralph', 'albert', 'bad news', 'mauvaises nouvelles', 'bahh', 'bells', 'cloches', 'boing', 'bubbles', 'bulles',
+    'cellos', 'violoncelles', 'good news', 'bonnes nouvelles', 'jester', 'bouffon', 'organ', 'orgue', 'superstar', 'superestrella', 'trinoids',
+    'trinoides', 'whisper', 'murmure', 'wobble', 'zarvox'];
+  var FEMALE = ['amelie', 'audrey', 'aurelie', 'marie', 'aude', 'chantal', 'julie', 'hortense', 'hortence', 'caroline', 'denise', 'eloise', 'vivienne',
+    'charline', 'ariane', 'sylvie', 'celine', 'lea', 'brigitte', 'coralie', 'jacqueline', 'josephine', 'yvette', 'virginie', 'estelle', 'camille', 'google francais'];
+  var MALE = ['thomas', 'nicolas', 'daniel', 'paul', 'claude', 'guillaume', 'henri', 'remy', 'gerard', 'fabrice', 'antoine', 'jean', 'thierry',
+    'alain', 'maurice', 'yves', 'mathieu', 'jerome', 'lucien', 'olivier', 'sebastien'];
+  var APPLE_STD = { thomas: 54, audrey: 54, aurelie: 52, amelie: 52, marie: 50, aude: 48, chantal: 48, nicolas: 48 };
+
+  function isFrench(v) { return !!v && /^fr([-_]|$)/i.test(v.lang || ''); }
+  function region(v) { var m = String(v.lang || '').replace('_', '-').split('-'); return (m[0] || '').toLowerCase() + (m[1] ? '-' + m[1].toUpperCase() : ''); }
+  function classify(v) {
+    var name = norm(v.name), uri = norm(v.voiceURI), all = name + ' ' + uri, fw = firstWord(v.name);
+    var robotic = /espeak|eloquence|speech\.synthesis\.voice\./.test(all) || ROBOTIC.some(function (r) { return fw === r || fw.indexOf(r + ' ') === 0; });
+    var quality, score;
+    if (robotic) { quality = 'robotic'; score = -100; }
+    else if (/premium/.test(all)) { quality = 'premium'; score = 92; }
+    else if (/natural|neural|wavenet|online/.test(all)) { quality = 'natural'; score = 88; }
+    else if (/enhanced|amelior/.test(all)) { quality = 'enhanced'; score = 82; }
+    else if (/network/.test(all) || /^google\s/.test(name)) { quality = 'network'; score = 76; }
+    else if (/-x-[a-z]{3}-local|android|chrome os/.test(all)) { quality = 'local-hq'; score = 66; }
+    else if (APPLE_STD[fw] != null) { quality = 'standard'; score = APPLE_STD[fw]; }
+    else if (/compact/.test(all)) { quality = 'compact'; score = 42; }
+    else { quality = 'standard'; score = 44; }
+    var r = region(v);
+    if (r === 'fr-FR') score += 8; else if (r === 'fr-BE' || r === 'fr-CH') score += 3; else if (r === 'fr-CA') score += 2;
+    var gender = null;
+    if (/-x-(frc|fra|vlf|caa|cac)-/.test(uri + ' ' + name)) gender = 'female';
+    else if (/-x-(frd|frb|cab|cad)-/.test(uri + ' ' + name)) gender = 'male';
+    else {
+      var words = name.replace(/microsoft|google|apple|online|natural|multilingual|enhanced|premium|compact|\(.*?\)|-.*$/g, ' ').trim();
+      if (FEMALE.some(function (n) { return words === n || words.indexOf(n) === 0 || name.indexOf(n) >= 0 && n.indexOf(' ') > 0; })) gender = 'female';
+      else if (MALE.some(function (n) { return words === n || words.indexOf(n) === 0; })) gender = 'male';
+    }
+    return { quality: quality, score: score, gender: gender, region: r, robotic: robotic };
+  }
+  function key(v) { return (v.voiceURI || '') + '|' + (v.name || '') + '|' + (v.lang || ''); }
+  function rankFrench(voices) {
+    var seen = {};
+    return (voices || []).filter(isFrench).filter(function (v) { var k = key(v); if (seen[k]) return false; seen[k] = 1; return true; })
+      .map(function (v, i) { var c = classify(v); return { v: v, key: key(v), name: v.name, lang: v.lang, quality: c.quality, score: c.score, gender: c.gender, region: c.region, robotic: c.robotic, i: i }; })
+      .sort(function (a, b) { return b.score - a.score || a.i - b.i; });
+  }
+  // prefs: { camille: key|null, noe: key|null } -> { camille, noe, neutral, distinct }
+  function assignVoices(ranked, prefs) {
+    prefs = prefs || {};
+    var good = ranked.filter(function (r) { return !r.robotic; });
+    var pool = good.length ? good : ranked;
+    if (!pool.length) return { camille: null, noe: null, neutral: null, distinct: false };
+    function byKey(k) { return k ? ranked.filter(function (r) { return r.key === k; })[0] || null : null; }
+    var cam = byKey(prefs.camille) || pool.filter(function (r) { return r.gender === 'female'; })[0] || pool[0];
+    var noe = byKey(prefs.noe);
+    if (!noe) {
+      var others = pool.filter(function (r) { return r.key !== cam.key; });
+      noe = others.filter(function (r) { return r.gender === 'male'; })[0] || others[0] || cam;
+    }
+    return { camille: cam, noe: noe, neutral: pool[0], distinct: cam.key !== noe.key };
+  }
+  function qualityZh(q) {
+    return { premium: '高级 Premium', enhanced: '增强 Enhanced', natural: '自然 Natural', network: '在线高质量', 'local-hq': '高质量', standard: '标准', compact: '基础（压缩）', robotic: '机械/趣味声音，不推荐' }[q] || q;
+  }
+  function label(r) { return r ? r.name + ' (' + r.lang + ')' : null; }
+  function normRate(x) {
+    x = Number(x);
+    if (!isFinite(x)) return DEFAULT_RATE;
+    var best = RATES[0]; RATES.forEach(function (r) { if (Math.abs(r - x) < Math.abs(best - x)) best = r; });
+    return best;
+  }
+  function platform(nav) {
+    nav = nav || root.navigator || {};
+    var ua = String(nav.userAgent || '');
+    if (/iPhone|iPad|iPod/.test(ua) || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1)) return 'ios';
+    if (/Android/.test(ua)) return 'android';
+    return 'desktop';
+  }
+
+  // ---------- device prefs (outside the save) ----------
+  function ls() { try { return root.localStorage || null; } catch (e) { return null; } }
+  A.loadPrefs = function (fallbackRate) {
+    var p = null;
+    try { var s = ls(); p = s ? JSON.parse(s.getItem(PREFS_KEY) || 'null') : null; } catch (e) { p = null; }
+    if (!p || typeof p !== 'object') p = {};
+    A.prefs = { camille: typeof p.camille === 'string' ? p.camille : null, noe: typeof p.noe === 'string' ? p.noe : null,
+      rate: p.rate != null ? normRate(p.rate) : (fallbackRate != null ? normRate(fallbackRate) : DEFAULT_RATE) };
+    return A.prefs;
+  };
+  A.savePrefs = function (patch) {
+    if (!A.prefs) A.loadPrefs();
+    Object.keys(patch || {}).forEach(function (k) { A.prefs[k] = k === 'rate' ? normRate(patch[k]) : patch[k]; });
+    try { var s = ls(); if (s) s.setItem(PREFS_KEY, JSON.stringify(A.prefs)); } catch (e) { return false; }
+    A.reassign();
+    return true;
+  };
+  A.reassign = function () {
+    A.assign = assignVoices(A.voices, A.prefs || {});
+    A.voice = A.assign.camille ? A.assign.camille.v : null;
+    A.voiceName = label(A.assign.camille);
+  };
+  A.rate = function () { return (A.prefs || A.loadPrefs()).rate; };
 
   function getVoices(timeoutMs) {
     return new Promise(function (resolve) {
@@ -1034,45 +1167,56 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
   }
 
   A.init = function () {
+    if (!A.prefs) A.loadPrefs();
     if (!synth || typeof root.SpeechSynthesisUtterance !== 'function') {
-      A.status = 'unavailable'; A.reason = 'no-speech-api';
+      A.status = 'unavailable'; A.reason = 'no-speech-api'; A.voices = []; A.reassign();
       return Promise.resolve(A.status);
     }
     return getVoices(2000).then(function (voices) {
-      var fr = voices.filter(function (v) { return /^fr([-_]|$)/i.test(v.lang || ''); });
-      var pick = fr.filter(function (v) { return /fr[-_]FR/i.test(v.lang); })[0] || fr[0] || null;
-      A.voice = pick; A.voiceName = pick ? (pick.name + ' (' + pick.lang + ')') : null;
-      A.status = pick ? 'available' : 'unavailable';
-      A.reason = pick ? null : 'no-french-voice';
+      A.voices = rankFrench(voices);
+      A.reassign();
+      A.status = A.voice ? 'available' : 'unavailable';
+      A.reason = A.voice ? null : 'no-french-voice';
       return A.status;
     });
   };
 
-  // Resolves to 'played' | 'failed' | 'unavailable' | 'stopped' (we cancelled it: pause/next). Never rejects.
+  // opts: { speaker: 'camille'|'noe'|'neutral', rate } -> 'played' | 'failed' | 'unavailable' | 'stopped'. Never rejects.
   A.speak = function (text, opts) {
     opts = opts || {};
     return new Promise(function (resolve) {
-      if (A.status !== 'available' || !A.voice) return resolve('unavailable');
-      var settled = false, started = false;
-      function fin(r) { if (settled) return; settled = true; clearTimeout(t1); clearTimeout(t2); resolve(r); }
+      var sp = opts.speaker === 'noe' ? 'noe' : opts.speaker === 'neutral' ? 'neutral' : 'camille';
+      var r = A.assign && A.assign[sp];
+      if (A.status !== 'available' || !r) { A.last = null; return resolve('unavailable'); }
+      var rate = normRate(opts.rate != null ? opts.rate : A.rate());
+      // Pitch-shifting degrades naturalness; only use a mild shift when both characters share one voice.
+      var pitch = 1;
+      if (!A.assign.distinct) pitch = sp === 'camille' ? 1.06 : sp === 'noe' ? 0.92 : 1;
+      A.last = { speaker: sp, voice: label(r), voiceURI: r.v.voiceURI || null, quality: r.quality, rate: rate, pitch: pitch, distinct: !!A.assign.distinct };
+      var settled = false, started = false, t1, t2;
+      function fin(res) { if (settled) return; settled = true; clearTimeout(t1); clearTimeout(t2); resolve(res); }
       try {
         synth.cancel();
         var u = new root.SpeechSynthesisUtterance(String(text).replace(/\u00A0/g, ' ').replace(/[\u2019\u2018]/g, "'"));
-        u.voice = A.voice; u.lang = A.voice.lang || 'fr-FR';
-        u.rate = opts.rate || 0.85; u.pitch = opts.pitch || 1;
+        u.voice = r.v; u.lang = r.v.lang || 'fr-FR';
+        u.rate = rate; u.pitch = pitch;
         u.onstart = function () { started = true; };
         u.onend = function () { fin('played'); };
         u.onerror = function (ev) { fin(ev && (ev.error === 'interrupted' || ev.error === 'canceled') ? 'stopped' : 'failed'); };
-        var t1 = setTimeout(function () { if (!started) { try { synth.cancel(); } catch (e) { } fin('failed'); } }, 5000);
-        var t2 = setTimeout(function () { try { synth.cancel(); } catch (e) { } fin(started ? 'played' : 'failed'); }, 15000);
+        t1 = setTimeout(function () { if (!started) { try { synth.cancel(); } catch (e) { } fin('failed'); } }, 5000);
+        t2 = setTimeout(function () { try { synth.cancel(); } catch (e) { } fin(started ? 'played' : 'failed'); }, 15000);
         synth.speak(u);
       } catch (e) { fin('failed'); }
     });
   };
   A.stop = function () { try { if (synth) synth.cancel(); } catch (e) { } };
 
+  A.RATES = RATES; A.DEFAULT_RATE = DEFAULT_RATE; A.PREFS_KEY = PREFS_KEY;
+  A.classify = classify; A.rankFrench = rankFrench; A.assignVoices = assignVoices; A.qualityZh = qualityZh; A.label = label;
+  A.normRate = normRate; A.platform = platform; A.voiceKey = key;
   root.A411 = root.A411 || {};
   root.A411.Audio = A;
+  if (typeof module !== 'undefined' && module.exports) module.exports = A;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -1131,7 +1275,17 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
   function level() { return S ? S.settings.supportLevel : 3; }
 
   // ---------- persistence ----------
-  function syncAudioMeta() { if (S && Au.status !== 'unknown') { S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = S.meta.audio.checkedAt || L.nowISO(); } }
+  function syncAudioMeta() { if (S && Au.status !== 'unknown') { setAudioMeta(); S.meta.audio.checkedAt = S.meta.audio.checkedAt || L.nowISO(); } }
+  // What the device offers now (not proof of what was heard; per-attempt voice/rate is recorded on each attempt).
+  function setAudioMeta() {
+    var m = S.meta.audio, a = Au.assign || {};
+    m.status = Au.status; m.voice = Au.voiceName;
+    m.voices = { camille: Au.label(a.camille), noe: Au.label(a.noe), neutral: Au.label(a.neutral) };
+    m.quality = { camille: a.camille ? a.camille.quality : null, noe: a.noe ? a.noe.quality : null };
+    m.distinctVoices = !!a.distinct; m.rate = Au.rate(); m.frenchVoiceCount = (Au.voices || []).length;
+    S.settings.speechRate = Au.rate();
+  }
+  function voiceFields(info) { return info ? { name: info.voice, quality: info.quality, rate: info.rate, pitch: info.pitch } : null; }
   function persist(reason) {
     if (!S) return true;
     if (S.meta.audio.status === 'unknown') syncAudioMeta();
@@ -1198,9 +1352,8 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
   }
   function speakLine(lineId) {
     var line = C.LINES[lineId];
-    var sp = C.SPEAKERS[line.speaker] || C.SPEAKERS.neutral;
-    return Au.speak(line.fr.replace(/\u00A0/g, ' '), { rate: S.settings.speechRate, pitch: sp.pitch }).then(function (st) {
-      S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = L.nowISO();
+    return Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (st) {
+      setAudioMeta(); S.meta.audio.checkedAt = L.nowISO();
       return st;
     });
   }
@@ -1353,7 +1506,8 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
       target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
       visibleSupport: { level: level(), subtitles: st.sub, chinese: st.zh, gesture: true, speakerVisible: true, label: line.label },
       replays: st.replays, firstListen: null, response: null, correct: null,
-      resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker
+      resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker,
+      audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? st.voiceInfo : null)
     }));
     [line.target].concat(line.also || []).forEach(function (t) {
       if (!t) return;
@@ -1366,6 +1520,7 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
     if (isReplay) { st.replays++; S.learning.helpLog.push({ kind: 'replay', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: C.LINES[step.line].target, at: L.nowISO() }); }
     var stEl = document.getElementById('audioState'); if (stEl) stEl.textContent = '🔊 播放中…';
     return speakLine(step.line).then(function (res) {
+      if (res === 'played' || (!st.voiceInfo && res === 'failed')) st.voiceInfo = Au.last;
       st.audio = bestAudio(st.audio === 'pending' ? 'not_used' : st.audio, res);
       if (res === 'stopped') return;
       if (res === 'failed' || res === 'unavailable') st.sub = true; // fallback: reveal text, never call it listening
@@ -1459,9 +1614,10 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
       reading ? null : btn(t.plays ? '🔁 再听一次' : '🔊 播放', function () {
         if (t.plays) t.replays++;
         t.plays++;
-        Au.speak(line.fr.replace(/\u00A0/g, ' '), { rate: S.settings.speechRate, pitch: (C.SPEAKERS[line.speaker] || {}).pitch }).then(function (r) {
-          S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName;
+        Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+          setAudioMeta();
           if (r === 'stopped' || ui.trial !== t) return;
+          if (r === 'played' || !t.voiceInfo) t.voiceInfo = Au.last;
           if (r === 'played') t.audio = 'played'; else if (t.audio !== 'played') t.audio = 'failed';
           rerenderStep();
         });
@@ -1479,10 +1635,11 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
     $screen.appendChild(card);
     if (ui.gesture && t.audio === 'pending' && Au.status === 'available' && !t.autoTried) {
       t.autoTried = true; t.plays++;
-      Au.speak(line.fr.replace(/\u00A0/g, ' '), { rate: S.settings.speechRate, pitch: (C.SPEAKERS[line.speaker] || {}).pitch }).then(function (r) {
-        S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName;
+      Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+        setAudioMeta();
         if (ui.trial !== t) return;
         if (r === 'stopped') { t.plays--; t.autoTried = false; return; }
+        t.voiceInfo = Au.last;
         t.audio = r === 'played' ? 'played' : 'failed'; rerenderStep();
       });
     }
@@ -1504,7 +1661,8 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
         var correct = resp === 'unsure' ? null : resp === item.answer;
         var rec = { target: line.target, lesson: 'd1', modality: modality, audioStatus: t.audio === 'pending' ? 'not_used' : t.audio,
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false }, replays: t.replays, firstListen: t.replays === 0,
-          response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line };
+          response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line,
+          audioVoice: voiceFields(t.audio === 'played' || t.audio === 'failed' ? t.voiceInfo : null) };
         S.learning.attempts.push(L.makeAttempt(rec));
         S.learning.baseline.items.push({ line: item.line, response: resp, correct: correct, modality: modality, replays: t.replays, help: t.sub || t.zh });
         b.index++; ui.trial = null; ui.gesture = true; persist('baseline'); render();
@@ -1689,7 +1847,8 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
           target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false, nameHighlight: false },
           replays: t.replays, firstListen: t.replays === 0, response: resp, correct: resp === 'unsure' ? null : resp === line.func,
-          resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId
+          resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId,
+          audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? t.voiceInfo : null)
         }));
         p.index++; ui.trial = null; ui.gesture = true;
         if (p.index >= p.order.length) { L.recordEvent(S, 'probe_done'); S.review = L.buildReview(S, new Date()); next(); }
@@ -1790,29 +1949,103 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
     rm.addEventListener('change', function () { S.settings.reducedMotion = rm.checked; persist('settings'); applySettings(); });
     var lt = h('input', { type: 'checkbox', id: 'optLarge' }); lt.checked = !!S.settings.largeText;
     lt.addEventListener('change', function () { S.settings.largeText = lt.checked; persist('settings'); applySettings(); });
-    var slow = h('input', { type: 'checkbox', id: 'optSlow' }); slow.checked = S.settings.speechRate < 0.8;
-    slow.addEventListener('change', function () { S.settings.speechRate = slow.checked ? 0.7 : 0.85; persist('settings'); });
-    box.appendChild(h('h3', { text: '显示与声音' }));
+    box.appendChild(h('h3', { text: '显示' }));
     box.appendChild(h('label', { class: 'check' }, rm, '减少动画'));
     box.appendChild(h('label', { class: 'check' }, lt, '大字体'));
-    box.appendChild(h('label', { class: 'check' }, slow, '语速更慢'));
-    var st = h('p', { id: 'audioTestResult', class: 'muted', text: '法语语音：' + audioStatusText() });
-    box.appendChild(st);
-    box.appendChild(btn('🔊 测试法语语音', function () {
-      Au.init().then(function () {
-        S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = L.nowISO();
-        if (Au.status !== 'available') { st.textContent = '法语语音：' + audioStatusText(); persist('audio'); return; }
-        st.textContent = '播放中…';
-        return Au.speak('Bonjour ! Je m\u2019appelle Camille.', { rate: S.settings.speechRate }).then(function (r) {
-          st.textContent = r === 'played' ? '✓ 浏览器报告已播放（' + Au.voiceName + '）。如果没听到声音，请检查静音开关和音量。' : '⚠️ 播放失败——游戏会显示文字（阅读模式）。';
-          persist('audio');
-        });
-      });
-    }, 'small', { id: 'btnAudioTest' }));
+    box.appendChild(voiceSettings());
     openOverlay(sheet('⚙️ 设置', box));
   }
+  // ---------- voice settings (device-level: stored in a411.device.audio, not in the save) ----------
+  var TEST_LINES = { camille: 'Bonjour\u00A0! Je m\u2019appelle Camille.', noe: 'Salut\u00A0! Je m\u2019appelle Noé.' };
+  function voiceTip() {
+    var pf = Au.platform();
+    var ios = h('div', { class: 'card', id: 'voiceTipIos' },
+      h('b', { text: '📱 iPhone / iPad' }),
+      h('p', { text: '如果法语听起来很机械，可以试着下载更好的法语声音（需要 Wi‑Fi，每个声音约 100 MB 以上）：' }),
+      h('p', { lang: 'en', class: 'path', text: 'Settings › Accessibility › Spoken Content › Voices › French' }),
+      h('p', { text: '选一个法国法语（France）的声音，例如 Audrey 或 Thomas，下载它的 Enhanced 或 Premium 版本。下载后完全关闭 Safari 再打开游戏，回到这里点「🔄 重新检测声音」。' }),
+      h('p', { class: 'muted', text: '注意：根据目前公开的测试，iPhone 上的 Safari（以及 iPhone 上的其他浏览器）经常不会把下载的 Enhanced / Premium 声音提供给网页使用。如果下载后这里的列表没有出现它，这是 Apple 的限制，不是你操作错了。少数系统版本里，下载新版本后原来的法语声音反而在网页里消失——这时在同一页面把刚下载的声音左滑删除即可恢复。我们也在准备固定的高质量法语录音，让所有手机听到同样自然的声音。' }));
+    var android = h('div', { class: 'card', id: 'voiceTipAndroid' },
+      h('b', { text: '🤖 Android' }),
+      h('p', null, '在系统设置里搜索「文字转语音 / ', h('span', { lang: 'en', text: 'Text-to-speech' }), '」，首选引擎选 Google 语音服务，进入它的设置 → 安装语音数据 → 法语（法国），下载你喜欢的声音。不同品牌的菜单名称会略有不同。下载后重新打开浏览器，回到这里点「🔄 重新检测声音」。'));
+    var desktop = h('div', { class: 'card', id: 'voiceTipDesktop' },
+      h('b', { text: '💻 电脑' }),
+      h('p', { text: 'Microsoft Edge 自带高质量的法语 Natural 声音（如 Denise、Henri），Chrome 有「Google français」。Mac 上 Safari 往往用不到下载的高级声音，Chrome / Edge 一般可以。' }));
+    var first = pf === 'ios' ? ios : pf === 'android' ? android : desktop;
+    var rest = [ios, android, desktop].filter(function (x) { return x !== first; });
+    return h('div', { id: 'voiceTip' }, first, h('details', null, h('summary', { text: '其他设备怎么办' }), rest));
+  }
+  function voiceSettings() {
+    var wrap = h('div', { id: 'voiceSettings' });
+    wrap.appendChild(h('h3', { text: '🔊 法语声音（只保存在这台设备）' }));
+    var status = h('p', { id: 'audioTestResult', class: 'muted', text: '法语语音：' + audioStatusText() });
+    wrap.appendChild(status);
+    var lists = h('div', { id: 'voiceLists' });
+    wrap.appendChild(lists);
+    function voiceSelect(sp) {
+      var cur = (Au.prefs || {})[sp] || '';
+      var a = Au.assign || {};
+      var autoR = a[sp];
+      var sel = h('select', { id: 'voice_' + sp, 'aria-label': (sp === 'noe' ? 'Noé' : 'Camille') + ' 的声音' });
+      sel.appendChild(h('option', { value: '', text: '自动（推荐' + (autoR && !cur ? '：' + autoR.name : '') + '）' }));
+      Au.voices.forEach(function (r) {
+        var o = h('option', { value: r.key, text: r.name + ' · ' + r.lang + ' · ' + Au.qualityZh(r.quality) });
+        if (r.key === cur) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', function () {
+        var patch = {}; patch[sp] = sel.value || null; Au.savePrefs(patch);
+        setAudioMeta(); persist('voice'); renderLists();
+        testVoice(sp);
+      });
+      return sel;
+    }
+    function testVoice(sp) {
+      if (Au.status !== 'available') { status.textContent = '法语语音：' + audioStatusText(); return; }
+      status.textContent = '播放中…';
+      Au.speak(TEST_LINES[sp], { speaker: sp }).then(function (r) {
+        var info = Au.last || {};
+        status.textContent = r === 'played' ? '✓ 浏览器报告已播放（' + info.voice + ' · ' + Au.qualityZh(info.quality) + ' · 语速 ' + info.rate + '）。如果没听到声音，请检查静音开关和音量。'
+          : r === 'stopped' ? '已停止。' : '⚠️ 播放失败——游戏会显示文字（阅读模式）。';
+        persist('audio');
+      });
+    }
+    function renderLists() {
+      lists.innerHTML = '';
+      status.textContent = '法语语音：' + audioStatusText();
+      if (Au.status !== 'available') return;
+      var a = Au.assign;
+      lists.appendChild(h('label', { class: 'field' }, h('span', { text: 'Camille 的声音' }), voiceSelect('camille')));
+      lists.appendChild(h('div', { class: 'row' }, btn('▶ 试听 Camille', function () { testVoice('camille'); }, 'small grow', { id: 'btnAudioTest' })));
+      lists.appendChild(h('label', { class: 'field' }, h('span', { text: 'Noé 的声音' }), voiceSelect('noe')));
+      lists.appendChild(h('div', { class: 'row' }, btn('▶ 试听 Noé', function () { testVoice('noe'); }, 'small grow', { id: 'btnAudioTestNoe' })));
+      var good = Au.voices.filter(function (r) { return !r.robotic; });
+      lists.appendChild(h('p', { class: 'muted', id: 'voiceNote', text: a.distinct ? 'Camille 和 Noé 用两个不同的声音。'
+        : good.length <= 1 ? '这台设备只有一个合适的法语声音，所以 Camille 和 Noé 共用它（Noé 的音调稍低一点）。' : 'Camille 和 Noé 现在用同一个声音。' }));
+      var best = good[0];
+      if (!best || ['standard', 'compact'].indexOf(best.quality) >= 0) lists.appendChild(h('p', { class: 'muted', id: 'voiceQualityNote', text: '这台设备目前只有基础质量的法语声音，听起来可能有点机械。下面有改善办法。' }));
+    }
+    renderLists();
+    // speed
+    wrap.appendChild(h('h3', { text: '语速（这台设备记住）' }));
+    var rates = h('div', { class: 'row', role: 'radiogroup', 'aria-label': '语速' });
+    [[0.75, '慢 0.75'], [0.9, '稍慢 0.9'], [1.0, '正常 1.0']].forEach(function (rr) {
+      var r = h('input', { type: 'radio', name: 'rate', value: String(rr[0]), id: 'rate' + String(rr[0]).replace('.', '') });
+      r.checked = Au.rate() === rr[0];
+      r.addEventListener('change', function () { Au.savePrefs({ rate: rr[0] }); setAudioMeta(); persist('settings'); testVoice('camille'); });
+      rates.appendChild(h('label', { class: 'radio', for: r.id }, r, h('span', { text: rr[1] })));
+    });
+    wrap.appendChild(rates);
+    wrap.appendChild(h('div', { class: 'row' }, btn('🔄 重新检测声音', function () {
+      status.textContent = '检测中…';
+      Au.init().then(function () { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio'); renderLists(); });
+    }, 'small grow', { id: 'btnVoiceRescan' })));
+    wrap.appendChild(h('h3', { text: '想要更自然的声音？' }));
+    wrap.appendChild(voiceTip());
+    return wrap;
+  }
   function audioStatusText() {
-    return Au.status === 'available' ? '可用：' + Au.voiceName : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）→ 阅读模式' : '检测中…';
+    return Au.status === 'available' ? '可用（找到 ' + Au.voices.length + ' 个法语声音）' : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）→ 阅读模式' : '检测中…';
   }
 
   function download(name, text) {
@@ -1915,10 +2148,11 @@ body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::aft
       if (S && S.plant) { var ps = L.plantStatus(S.plant, new Date()); if (ps !== S.plant.careState) { S.plant.careState = ps; persist('plant-thirst'); } }
     }
     applySettings();
+    Au.loadPrefs(S ? S.settings.speechRate : null);
     render();
     Au.init().then(function () {
       // only write when the device's audio situation actually changed (keeps reopen side-effect free)
-      if (S && (S.meta.audio.status !== Au.status || S.meta.audio.voice !== Au.voiceName)) { S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = L.nowISO(); persist('audio-init'); }
+      if (S && (S.meta.audio.status !== Au.status || S.meta.audio.voice !== Au.voiceName)) { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio-init'); }
       if (ui.view !== 'title') rerenderStep();
     });
   }
