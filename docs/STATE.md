@@ -134,3 +134,6 @@ Proposed: **A** (or C immediately on Android while A is pending).
 - No candidate is in the game yet.
 - Human recording script plus permission template: `audio-candidates/HUMAN_RECORDING_SCRIPT.md`.
 - Cloud free tiers were researched but not used (each needs a new account, usually with a card, so founder approval is required).
+
+## v0.1.2 published (2026-10-08 ~15:20 PT)
+- Device-voice improvement deployed to https://aaronchu903-png.github.io/appartement-411/ under standing permission; live file byte-identical to dist; npm test 35/35. Audio candidates (Qwen3-TTS, Pocket TTS, Kokoro) prototyped in audio-candidates/, not shipped; awaiting founder listening choice.
