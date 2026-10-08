@@ -140,7 +140,7 @@ Proposed: **A** (or C immediately on Android while A is pending).
 - 2026-10-08 ~15:16 PT: Background helper stopped: Cursor account reported no Grok Bot usage available. Work already on disk was complete (commit c9665a7). Usage/quota is now a real blocker for large work; no on-demand spend enabled (USD 0 policy). Voice sample page published at /appartement-411/voices/; awaiting founder choice.
 - 2026-10-08 15:25 PT: Founder decision: use Qwen3-TTS (sample 1) for Day 1 fixed recordings. Next: integrate audio/d1/<lineId>.mp3 playback with device-voice then reading fallback (v0.1.3).
 
-## v0.1.3: fixed Day 1 recordings (Qwen3-TTS), published 2026-10-08 ~15:45 PT
+## v0.1.3: fixed Day 1 recordings (Qwen3-TTS), published 2026-10-08 ~15:33 PT
 - Founder decision 15:25 PT: Qwen3-TTS (sample 1). App **v0.1.3**, content **d1-2026-10-08c** (audio presentation changed; French text, targets, probe items, help unchanged), save schema **v1** unchanged.
 - `audio/d1/<lineId>.mp3`: 19 clips (17 Day 1 lines + `test_camille`/`test_noe`), ~170 KB, from `audio-candidates/qwen3-tts/mp3/`. Map in `js/clips.js`; `tools/build.mjs` inlines them as base64 data URIs (dist 354.7 KB, works offline from one file; played via blob: URLs).
 - Playback (`js/audio.js` `playLine`): recorded clip via one shared HTMLAudioElement → device voice (v0.1.2 logic) → reading with visible "播放失败，已显示文字（阅读）". Replay replays the same clip. Speed 0.75/0.9/1.0 applies via `playbackRate` + `preservesPitch`/`webkitPreservesPitch`. iOS: element unlocked on first touchend/pointerdown/click/keydown; clips are started synchronously in the tap handler; play() rejection / error / no start within 4 s → fallback, never blocks 继续.
