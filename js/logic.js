@@ -5,7 +5,7 @@
   var C = (root.A411 && root.A411.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.1.2';
+  var APP_VERSION = '0.1.3';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -383,6 +383,8 @@
       stimulus: f.stimulus || null,
       // which device voice/rate actually played for this attempt (null = nothing played / not audio)
       audioVoice: f.audioVoice || null,
+      // v0.1.3: what was actually heard — 'recording:qwen3-tts' | 'device:<voice>' | 'none'. Absent on older attempts.
+      audioSource: f.audioSource || 'none',
       at: f.at || nowISO()
     };
   }
@@ -476,19 +478,21 @@
     L.push('版本：app ' + save.appVersion + ' · 内容 ' + save.contentVersion + ' · 存档 schema v' + save.schemaVersion);
     L.push('进度：Day ' + save.progress.episode + ' · ' + (C.SCENE_ZH[sc] || sc) + '（' + sc + ' 第 ' + (save.progress.step + 1) + ' 步）· ' + (save.progress.status === 'complete' ? '已完成' : '进行中'));
     var au = save.meta.audio || {};
-    var QZ = { premium: '高级', enhanced: '增强', natural: '自然', network: '在线高质量', 'local-hq': '高质量', standard: '标准', compact: '基础', robotic: '机械' };
+    var QZ = { premium: '高级', enhanced: '增强', natural: '自然', network: '在线高质量', 'local-hq': '高质量', standard: '标准', compact: '基础', robotic: '机械', recording: '固定录音' };
     var avail = '可用（设备语音 ' + (au.voice || '?') + '）';
     if (au.status === 'available' && au.voices) {
       avail = '可用 · Camille=' + (au.voices.camille || '?') + '（' + (QZ[au.quality && au.quality.camille] || '?') + '）· Noé=' + (au.voices.noe || '?') + '（' + (QZ[au.quality && au.quality.noe] || '?') + '）' +
         (au.distinctVoices ? '' : ' · 共用一个声音') + ' · 本机法语声音 ' + (au.frenchVoiceCount != null ? au.frenchVoiceCount : '?') + ' 个 · 语速 ' + (au.rate || '?');
     }
-    L.push('法语语音：' + (au.status === 'available' ? avail : au.status === 'unavailable' ? '不可用 → 阅读模式（听力未验证）' : '未检测'));
+    if (au.recordings) L.push('固定录音：' + au.recordings.source + '（Day 1 共 ' + au.recordings.lines + ' 句）；没有录音或播放失败时用设备声音');
+    L.push((au.recordings ? '设备语音（备用）：' : '法语语音：') + (au.status === 'available' ? avail : au.status === 'unavailable' ? (au.recordings ? '不可用' : '不可用 → 阅读模式（听力未验证）') : '未检测'));
     var playedA = save.learning.attempts.filter(function (a) { return a.audioStatus === 'played'; });
     var failed = save.learning.attempts.filter(function (a) { return a.audioStatus === 'failed' || a.audioStatus === 'unavailable'; }).length;
     var byVoice = {};
     playedA.forEach(function (a) { var v = a.audioVoice; var k = v ? v.name + '（' + (QZ[v.quality] || v.quality) + '，语速 ' + v.rate + '）' : '未记录声音（v0.1.1 及以前）'; byVoice[k] = (byVoice[k] || 0) + 1; });
     var bv = Object.keys(byVoice).map(function (k) { return k + ' ×' + byVoice[k]; });
-    L.push('语音播放记录：成功 ' + playedA.length + ' · 失败/不可用 ' + failed + (bv.length ? ' · 实际播放的声音：' + bv.join('；') : ''));
+    var bySrc = {}; playedA.forEach(function (a) { var k = a.audioSource && a.audioSource !== 'none' ? a.audioSource.split(':')[0] : a.audioVoice ? 'device' : 'unrecorded'; bySrc[k] = (bySrc[k] || 0) + 1; });
+    L.push('语音播放记录：成功 ' + playedA.length + (playedA.length ? '（录音 ' + (bySrc.recording || 0) + ' · 设备声音 ' + (bySrc.device || 0) + (bySrc.unrecorded ? ' · 旧版未记录来源 ' + bySrc.unrecorded : '') + '）' : '') + ' · 失败/不可用 ' + failed + (bv.length ? ' · 实际播放的声音：' + bv.join('；') : ''));
     var b = save.learning.baseline;
     if (b.status === 'skipped') L.push('开始前小测：跳过');
     else if (b.status === 'done') {

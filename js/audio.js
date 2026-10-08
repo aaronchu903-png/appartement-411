@@ -7,7 +7,13 @@
  * because they sound robotic), per-character voices (Camille / Noé) when the device has more
  * than one usable French voice, a per-device speed (0.75 / 0.9 / 1.0) and voice choice stored
  * outside the save (voices differ per device, so they must not travel with an exported save).
- * Every speak() records which voice/rate actually played in A.last so evidence stays honest. */
+ * Every speak() records which voice/rate actually played in A.last so evidence stays honest.
+ *
+ * v0.1.3: fixed recordings first. playLine(lineId) plays the Qwen3-TTS clip for that line through one shared
+ * HTMLAudioElement (speed via playbackRate, pitch preserved where supported); if there is no clip, or play() is
+ * rejected / errors / never starts, it falls back to the device voice (speak), and the caller falls back to
+ * reading. A.last.source is 'recording:qwen3-tts' or 'device:<voice>'. iOS Safari: the element is unlocked on
+ * the first touch/click, and clips are started synchronously inside the tap handler. */
 (function (root) {
   'use strict';
   var A = { status: 'unknown', voice: null, voiceName: null, reason: null, voices: [], assign: {}, prefs: null, last: null };
@@ -159,7 +165,7 @@
       // Pitch-shifting degrades naturalness; only use a mild shift when both characters share one voice.
       var pitch = 1;
       if (!A.assign.distinct) pitch = sp === 'camille' ? 1.06 : sp === 'noe' ? 0.92 : 1;
-      A.last = { speaker: sp, voice: label(r), voiceURI: r.v.voiceURI || null, quality: r.quality, rate: rate, pitch: pitch, distinct: !!A.assign.distinct };
+      A.last = { source: 'device:' + label(r), speaker: sp, voice: label(r), voiceURI: r.v.voiceURI || null, quality: r.quality, rate: rate, pitch: pitch, distinct: !!A.assign.distinct };
       var settled = false, started = false, t1, t2;
       function fin(res) { if (settled) return; settled = true; clearTimeout(t1); clearTimeout(t2); resolve(res); }
       try {
@@ -176,7 +182,94 @@
       } catch (e) { fin('failed'); }
     });
   };
-  A.stop = function () { try { if (synth) synth.cancel(); } catch (e) { } };
+  // ---------- fixed recordings (v0.1.3) ----------
+  var SILENT = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
+  var CL = (root.A411 && root.A411.CLIPS) || null;
+  A.clipSource = CL ? CL.source : null;
+  A.clipCredit = CL ? CL.credit : null;
+  A.clips = CL ? CL.files : {};
+  A.clipLog = []; // { id, result, rate, at } — every clip attempt (tests + debugging)
+  var el = null, cur = null, unlocked = false, blobs = {};
+  function clipsOn() { return !root.A411_NO_CLIPS && typeof root.Audio === 'function'; }
+  A.hasClip = function (id) { return clipsOn() && !!(id && A.clips && A.clips[id]); };
+  A.canPlay = function (id) { return A.hasClip(id) || A.status === 'available'; };
+  function getEl() { if (!el) { el = new root.Audio(); el.preload = 'auto'; try { el.setAttribute('playsinline', ''); } catch (e) { } } return el; }
+  // data: URI -> blob: URL once (smaller strings for the media element; Safari handles both)
+  function clipUrl(id) {
+    var u = A.clips[id];
+    if (blobs[id]) return blobs[id];
+    if (/^data:/.test(u) && root.URL && root.URL.createObjectURL && root.atob && root.Blob) {
+      try {
+        var bin = root.atob(u.slice(u.indexOf(',') + 1)), arr = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        return (blobs[id] = root.URL.createObjectURL(new root.Blob([arr], { type: 'audio/mpeg' })));
+      } catch (e) { }
+    }
+    return u;
+  }
+  // iOS: a media element may only start from a user gesture once; prime the shared element on the first tap.
+  A.unlock = function () {
+    if (unlocked || !clipsOn()) return;
+    unlocked = true;
+    try {
+      var a = getEl();
+      if (cur) return; // a clip is being started by this same tap; that unlocks it
+      a.muted = true; a.src = SILENT;
+      var p = a.play();
+      var done = function () { if (!cur) { try { a.pause(); } catch (e) { } } a.muted = false; };
+      if (p && p.then) p.then(done, function () { a.muted = false; unlocked = false; }); else done();
+    } catch (e) { unlocked = false; }
+  };
+  function playClip(id, rate) {
+    return new Promise(function (resolve) {
+      var a, settled = false, started = false, t1, t2, token = {};
+      function fin(res) {
+        if (settled) return; settled = true; clearTimeout(t1); clearTimeout(t2);
+        if (cur === token) { cur = null; if (a) { a.onended = a.onerror = a.onplaying = null; } }
+        resolve(res);
+      }
+      token.stop = function () { try { a.pause(); } catch (e) { } fin('stopped'); };
+      try {
+        a = getEl();
+        if (cur) cur.stop();
+        cur = token;
+        a.onplaying = function () { started = true; try { a.playbackRate = rate; } catch (e) { } };
+        a.onended = function () { fin(started || a.currentTime > 0 ? 'played' : 'failed'); };
+        a.onerror = function () { fin('failed'); };
+        a.muted = false;
+        a.src = clipUrl(id);
+        try { a.preservesPitch = true; a.webkitPreservesPitch = true; a.mozPreservesPitch = true; } catch (e) { }
+        a.defaultPlaybackRate = rate; a.playbackRate = rate;
+        t1 = setTimeout(function () { if (!started) { try { a.pause(); } catch (e) { } fin('failed'); } }, 4000);
+        t2 = setTimeout(function () { try { a.pause(); } catch (e) { } fin(started ? 'played' : 'failed'); }, 20000);
+        var p = a.play(); // synchronous inside the caller's tap handler (iOS)
+        if (p && p.then) p.then(function () { started = true; }, function () { fin('failed'); });
+      } catch (e) { fin('failed'); }
+    });
+  }
+  // Recorded clip -> device voice. Resolves 'played' | 'failed' | 'unavailable' | 'stopped'; never rejects.
+  // A.last describes what actually played (or was last tried).
+  A.playLine = function (id, text, opts) {
+    opts = opts || {};
+    if (!A.hasClip(id)) return A.speak(text, opts);
+    var sp = opts.speaker === 'noe' ? 'noe' : opts.speaker === 'neutral' ? 'neutral' : 'camille';
+    var rate = normRate(opts.rate != null ? opts.rate : A.rate());
+    try { if (synth) synth.cancel(); } catch (e) { }
+    A.last = { source: A.clipSource, speaker: sp, voice: 'Qwen3-TTS · ' + ({ camille: 'Camille', noe: 'Noé', neutral: '旁白' })[sp], quality: 'recording', rate: rate, pitch: 1, clip: id };
+    var mine = A.last;
+    return playClip(id, rate).then(function (res) {
+      A.clipLog.push({ id: id, result: res, rate: rate, at: Date.now() });
+      if (res === 'played' || res === 'stopped') { A.last = mine; return res; }
+      return A.speak(text, opts).then(function (r2) {
+        if (r2 === 'unavailable') A.last = mine; // nothing played; keep the failed recording as "last tried"
+        return r2 === 'unavailable' ? 'failed' : r2;
+      });
+    });
+  };
+  A.stop = function () { try { if (synth) synth.cancel(); } catch (e) { } if (cur) cur.stop(); };
+  if (root.document && root.document.addEventListener) {
+    ['touchend', 'pointerdown', 'click', 'keydown'].forEach(function (ev) { root.document.addEventListener(ev, A.unlock, { capture: true, passive: true }); });
+  }
 
   A.RATES = RATES; A.DEFAULT_RATE = DEFAULT_RATE; A.PREFS_KEY = PREFS_KEY;
   A.classify = classify; A.rankFrench = rankFrench; A.assignVoices = assignVoices; A.qualityZh = qualityZh; A.label = label;

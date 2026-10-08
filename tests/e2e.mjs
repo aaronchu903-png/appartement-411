@@ -20,6 +20,8 @@ const env = { chrome: (await browser.version()), viewport: '390x844 @2x, isMobil
 
 async function newPage(opts = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, acceptDownloads: true, locale: 'zh-CN', ...(opts.ctx || {}) });
+  // v0.1.3: older sections test the device-voice / reading paths, so recordings are switched off unless opts.clips.
+  if (!opts.clips) await ctx.addInitScript(() => { window.A411_NO_CLIPS = true; });
   if (opts.init) await ctx.addInitScript(opts.init);
   const page = await ctx.newPage();
   page.errors = [];
@@ -35,6 +37,8 @@ const raw = (page) => page.evaluate(() => localStorage.getItem('a411.save'));
 async function tap(page, sel) { await page.locator(sel).first().click(); await page.waitForTimeout(60); }
 async function shot(page, name) { await page.waitForTimeout(450); const p = path.join(EV, name); await page.screenshot({ path: p, fullPage: false }); return p; }
 async function lineNext(page) { await tap(page, '#btnNext'); }
+// dialogue line without the transient audio-status label (it legitimately differs between builds/devices)
+const lineText = (page) => page.evaluate(() => { const b = document.querySelector('#lineBody').cloneNode(true); const s = b.querySelector('#audioState'); if (s) s.remove(); return b.textContent; });
 async function touchTargetsOk(page) {
   return page.evaluate(() => [...document.querySelectorAll('button, input[type=checkbox], input[type=radio], input[type=text], textarea')]
     .filter(e => e.offsetParent !== null)
@@ -79,7 +83,7 @@ try {
     const { ctx, page } = await newPage({ ctx: { permissions: ['clipboard-read', 'clipboard-write'] } });
     const audio = await page.evaluate(() => ({ status: A411.Audio.status, reason: A411.Audio.reason }));
     check('Audio', 'headless Chrome voice detection reported honestly', audio.status === 'unavailable', audio);
-    check('Usable entry', 'version visible on title', /App v0\.1\.2 · 内容 d1-2026-10-08b · 存档 schema v1/.test(await page.textContent('#versionFooter')));
+    check('Usable entry', 'version visible on title', /App v0\.1\.3 · 内容 d1-2026-10-08c · 存档 schema v1/.test(await page.textContent('#versionFooter')));
     await shot(page, '01-title-390.png');
     check('Mobile presentation', 'no horizontal overflow on title (390px)', await noOverflow(page));
     const naDays = await page.evaluate(() => [...document.querySelectorAll('.days li.na')].map(li => ({ t: li.textContent, buttons: li.querySelectorAll('button,a').length })));
@@ -194,7 +198,7 @@ try {
     const summary = await page.inputValue('#summaryText');
     check('Privacy', 'summary excludes private journal text and nickname by default', !summary.includes('chat secret') && !summary.includes('Alex') && summary.includes('私人日记：未包含'), null);
     check('Learning validity', 'summary reports the self-introduction as supported (help was used) and journal writing separately', summary.includes('自我介绍（打字）：完整句型') && /自我介绍.*有提示/.test(summary) && summary.includes('日记写作'));
-    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.2', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
+    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.3', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
     await tap(page, '#btnCopySummary');
     const clip = await page.evaluate(() => navigator.clipboard.readText().catch(e => 'ERR ' + e.message));
     const shownNow = await page.inputValue('#summaryText');
@@ -208,7 +212,7 @@ try {
     const exportPath = path.join(EV, 'test-export-synthetic.json');
     await dl.saveAs(exportPath);
     const exported = JSON.parse(fs.readFileSync(exportPath, 'utf8'));
-    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.2' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
+    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.3' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
     // bad imports on the existing save
     const before = await raw(page);
     const badFile = path.join(EV, '..', 'tests', 'fixtures', 'bad-truncated.json');
@@ -396,7 +400,7 @@ try {
     await lineNext(old); await tap(old, '#greetSalut'); await old.waitForSelector('#speakerTag'); await lineNext(old);
     const oldRaw = await old.evaluate(() => localStorage.getItem('a404.save'));
     const oldSave = JSON.parse(oldRaw);
-    const oldLine = await old.textContent('#lineBody');
+    const oldLine = await lineText(old);
     check('Recovery', '[rename] real v0.1.0 build wrote its save under a404.save', !!oldRaw && oldSave.appVersion === '0.1.0' && old.errors.length === 0, { scene: oldSave.progress.scene, step: oldSave.progress.step });
     await old.close();
     const pg = await ctx.newPage(); pg.errors = []; pg.on('pageerror', e => pg.errors.push(e.message));
@@ -410,7 +414,7 @@ try {
       { scene: ns && ns.progress.scene, step: ns && ns.progress.step });
     check('Recovery', '[rename] player is told the old save was kept', (await pg.textContent('#screen')).includes('改名前'));
     await tap(pg, '#btnContinue');
-    check('Recovery', '[rename] resumes at the exact line the old build was on', (await pg.textContent('#lineBody')) === oldLine, oldLine.slice(0, 60));
+    check('Recovery', '[rename] resumes at the exact line the old build was on', (await lineText(pg)) === oldLine, oldLine.slice(0, 60));
     await shot(pg, '18-rename-old-save-resumed.png');
     await pg.reload(); await pg.waitForFunction(() => A411.Audio.status !== 'unknown');
     check('Recovery', '[rename] old a404.save never modified by the new build', (await pg.evaluate(() => localStorage.getItem('a404.save'))) === ls.a404);
@@ -429,6 +433,107 @@ try {
     check('Recovery', '[rename] old v0.1.0 exported file imports losslessly via the 存档 panel', imp && JSON.stringify(strip2(imp)) === JSON.stringify(strip2(want)) && imp.diary.journal[0].original === want.diary.journal[0].original);
     check('Mobile presentation', '[rename] no JS errors on old-file import', B.page.errors.length === 0, B.page.errors);
     await B.ctx.close();
+  }
+
+  // ================= C3. v0.1.3 fixed recordings (Qwen3-TTS clips; real mp3 playback in headless Chrome) =================
+  // Logs every real HTMLMediaElement.play() call with the state the clip starts in.
+  const PLAY_SPY = () => {
+    window.__plays = [];
+    const orig = HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play = function () { window.__plays.push({ src: String(this.src).slice(0, 200), rate: this.playbackRate, preservesPitch: this.preservesPitch }); return orig.call(this); };
+  };
+  const REJECT_PLAY = () => { HTMLMediaElement.prototype.play = function () { return Promise.reject(new DOMException('blocked (test)', 'NotAllowedError')); }; };
+  const clipLog = (page) => page.evaluate(() => A411.Audio.clipLog.map(x => [x.id, x.result, x.rate]));
+  {
+    const { ctx, page } = await newPage({ clips: true, init: PLAY_SPY });
+    const a = await page.evaluate(() => ({ s: A411.Audio.status, has: A411.Audio.hasClip('cam_bonjour'), src: A411.Audio.clipSource }));
+    check('Audio', '[v0.1.3] recordings available although headless Chrome has no French voice', a.s === 'unavailable' && a.has && a.src === 'recording:qwen3-tts', a);
+    check('Mobile presentation', '[v0.1.3] footer credits the recordings', (await page.textContent('#versionFooter')).includes('Qwen3-TTS (Apache-2.0), synthetic designed voices'));
+    await tap(page, '#btnSettings');
+    check('Mobile presentation', '[v0.1.3] settings shows the voice credit line', (await page.textContent('#voiceCredit')) === 'Voices: Qwen3-TTS (Apache-2.0), synthetic designed voices');
+    await tap(page, '#btnRecTest');
+    await page.waitForFunction(() => document.querySelector('#recTestResult').textContent.includes('已播放'), null, { timeout: 8000 });
+    check('Audio', '[v0.1.3] settings recording test plays the real clip', (await page.textContent('#recTestResult')).includes('固定录音'), await page.textContent('#recTestResult'));
+    await tap(page, '#rate075'); await page.waitForFunction(() => document.querySelector('#recTestResult').textContent.includes('0.75'), null, { timeout: 8000 });
+    check('Mobile presentation', '[v0.1.3] settings sheet with recording controls: no overflow, controls ≥44px', (await noOverflow(page)) && (await touchTargetsOk(page)).length === 0, await touchTargetsOk(page));
+    await shot(page, '21-settings-recordings.png');
+    await tap(page, '.sheet .head button');
+    await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
+    await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('已播放'), null, { timeout: 8000 });
+    check('Audio', '[v0.1.3] no "reading mode" banner on a line that has a recording', !(await page.isVisible('#audioBanner')));
+    await tap(page, '#btnReplay');
+    await page.waitForFunction(() => A411.Audio.clipLog.length >= 4, null, { timeout: 8000 });
+    const log = await clipLog(page);
+    const plays = await page.evaluate(() => window.__plays.filter(p => p.src.startsWith('blob:') || p.src.includes('audio/d1')));
+    check('Audio', '[v0.1.3] line clip really played in Chrome (ended event), replay replays the same clip, at speed 0.75',
+      JSON.stringify(log.slice(-2)) === JSON.stringify([['cam_bonjour', 'played', 0.75], ['cam_bonjour', 'played', 0.75]]), log);
+    check('Audio', '[v0.1.3] clip started with playbackRate 0.75 and preservesPitch on', plays.length >= 2 && plays.slice(-2).every(p => p.rate === 0.75 && p.preservesPitch === true), plays.slice(-2));
+    await shot(page, '22-line-recording-played.png');
+    await lineNext(page);
+    const s = await st(page);
+    const ex = s.learning.attempts.find(x => x.context && x.context.includes('cam_bonjour'));
+    check('Learning validity', '[v0.1.3] attempt records audioSource=recording:qwen3-tts, played, replays=1, content 08c', ex && ex.audioSource === 'recording:qwen3-tts' && ex.audioStatus === 'played' && ex.replays === 1 && ex.contentVersion === 'd1-2026-10-08c' && ex.audioVoice.quality === 'recording' && ex.audioVoice.rate === 0.75, ex);
+    check('Learning validity', '[v0.1.3] save meta lists the recordings (17 Day 1 lines)', s.meta.audio.recordings && s.meta.audio.recordings.lines === 17, s.meta.audio.recordings);
+    // the next line (cam_intro) autoplays its own clip on the greeting tap
+    await tap(page, '#greetSalut');
+    await page.waitForFunction(() => A411.Audio.clipLog.some(x => x.id === 'cam_intro'), null, { timeout: 8000 });
+    check('Audio', '[v0.1.3] next line autoplays its own clip from the tap', (await clipLog(page)).some(x => x[0] === 'cam_intro' && x[1] === 'played'));
+    check('Mobile presentation', '[v0.1.3] no JS errors (recordings)', page.errors.length === 0, page.errors);
+    await ctx.close();
+  }
+  {
+    // play() rejected (as iOS does without a tap) + device voice present -> device voice, evidence says device
+    const { ctx, page } = await newPage({ clips: true, init: `(${REJECT_PLAY})(); (${FAKE_VOICE})();` });
+    await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
+    await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('已播放'), null, { timeout: 8000 });
+    await lineNext(page);
+    const s = await st(page);
+    const ex = s.learning.attempts.find(x => x.context && x.context.includes('cam_bonjour'));
+    const sp = await page.evaluate(() => window.__spoken);
+    check('Audio', '[v0.1.3] clip play() rejected -> device voice fallback; audioSource=device:<voice>', ex && ex.audioStatus === 'played' && ex.audioSource === 'device:Fake Français (test) (fr-FR)' && sp[0] === 'Bonjour !', { src: ex && ex.audioSource, sp });
+    await ctx.close();
+  }
+  {
+    // play() rejected and no device voice -> visible reading fallback, never trapped, not counted as listening
+    const { ctx, page } = await newPage({ clips: true, init: REJECT_PLAY });
+    await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
+    await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('阅读'), null, { timeout: 8000 });
+    check('Audio', '[v0.1.3] clip fails + no device voice -> French text shown with notice', (await page.textContent('#lineBody')).includes('Bonjour') && (await page.textContent('#audioState')).includes('播放失败'));
+    await shot(page, '23-recording-failed-reading.png');
+    await lineNext(page);
+    const s = await st(page);
+    const ex = s.learning.attempts.find(x => x.context && x.context.includes('cam_bonjour'));
+    check('Learning validity', '[v0.1.3] failed clip recorded as reading, audioSource=none', ex && ex.audioStatus === 'failed' && ex.modality === 'reading' && ex.audioSource === 'none', ex);
+    check('Complete interaction', '[v0.1.3] player not trapped after clip failure (moved on to the greeting step)', s.progress.step === 2 && (await page.isVisible('#greetSalut')), s.progress);
+    await ctx.close();
+  }
+  if (fs.existsSync(URL_DIST.replace('file://', ''))) {
+    // single file with inlined clips + a real v0.1.2 save carried over
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'zh-CN' });
+    const old = await ctx.newPage(); old.errors = []; old.on('pageerror', e => old.errors.push(e.message));
+    await old.goto('file://' + path.join(ROOT, 'tests', 'fixtures', 'legacy-v0.1.2-appartement-411.html'));
+    await old.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown');
+    await tap(old, '#btnStart'); await tap(old, '#btnBaselineSkip'); await tap(old, '#btnKnock'); await lineNext(old); await tap(old, '#greetSalut'); await old.waitForSelector('#speakerTag'); await lineNext(old);
+    const oldLine = await lineText(old);
+    const oldSave = JSON.parse(await old.evaluate(() => localStorage.getItem('a411.save')));
+    check('Recovery', '[v0.1.3] real v0.1.2 build wrote a save (content 08b, no audioSource)', oldSave.appVersion === '0.1.2' && oldSave.contentVersion === 'd1-2026-10-08b' && oldSave.learning.attempts.length >= 2 && oldSave.learning.attempts.every(a => !('audioSource' in a)) && old.errors.length === 0);
+    await old.close();
+    const pg = await ctx.newPage(); pg.errors = []; pg.requests = []; pg.on('pageerror', e => pg.errors.push(e.message)); pg.on('request', r => pg.requests.push(r.url()));
+    await pg.addInitScript(PLAY_SPY);
+    await pg.goto(URL_DIST);
+    await pg.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown');
+    const has = await pg.evaluate(() => Object.keys(A411.CLIPS.files).filter(k => A411.CLIPS.files[k].startsWith('data:audio/mpeg;base64,')).length);
+    check('Usable entry', '[v0.1.3] single file inlines all 19 clips as data URIs', has === 19, has);
+    await tap(pg, '#btnContinue');
+    check('Recovery', '[v0.1.3] old v0.1.2 save loads in v0.1.3 and resumes at the exact line', (await lineText(pg)) === oldLine, oldLine.slice(0, 40));
+    await pg.waitForFunction(() => A411.Audio.clipLog.some(x => x.result === 'played'), null, { timeout: 8000 });
+    await lineNext(pg);
+    const ns = JSON.parse(await pg.evaluate(() => localStorage.getItem('a411.save')));
+    const newA = ns.learning.attempts[ns.learning.attempts.length - 1];
+    check('Recovery', '[v0.1.3] old attempts kept verbatim; new attempt records the recording', ns.saveId === oldSave.saveId && JSON.stringify(ns.learning.attempts.slice(0, oldSave.learning.attempts.length)) === JSON.stringify(oldSave.learning.attempts) && newA.audioSource === 'recording:qwen3-tts' && newA.audioStatus === 'played', newA);
+    check('Audio', '[v0.1.3] single file plays the inlined clip from file:// (blob URL), no external requests, no JS errors',
+      (await pg.evaluate(() => window.__plays.some(p => p.src.startsWith('blob:')))) && pg.requests.every(u => u === URL_DIST || /^(data|blob):/.test(u)) && pg.errors.length === 0, { req: pg.requests.filter(u => u !== URL_DIST).slice(0, 3), err: pg.errors });
+    await ctx.close();
   }
 
   // ================= E. Errors never trap the player =================
@@ -451,7 +556,7 @@ try {
     await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
     const resume = (await page.textContent('#btnContinue')).includes('门口');
     check('Usable entry', 'dist/appartement-411.html (single file) plays and resumes from file://', ok && resume && page.errors.length === 0);
-    check('Usable entry', 'single file makes no external requests', page.requests.every(u => u === URL_DIST), page.requests);
+    check('Usable entry', 'single file makes no external requests', page.requests.every(u => u === URL_DIST || /^(data|blob):/.test(u)), page.requests);
     await ctx.close();
   } else check('Usable entry', 'dist single file exists', false, 'run npm run build first');
 } catch (e) {

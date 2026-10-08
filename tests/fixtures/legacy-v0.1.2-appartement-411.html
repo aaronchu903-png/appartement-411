@@ -1,0 +1,2165 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<!-- L’Appartement 411 v0.1.2 single-file build 2026-10-08T22:15:19.340Z -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex">
+<title>L’Appartement 411 · Day 1</title>
+<style>
+/* L’Appartement 411 — phone-first styles. System fonts for readable accents and Chinese; pixel art only in the scene canvas. */
+:root { --bg:#f6f1e7; --ink:#1f1d1a; --muted:#5b554c; --card:#fffdf8; --line:#d9cfbf; --accent:#2f5d8a; --accent-ink:#fff; --warn:#8a3b12; --ok:#2f6e36; --cam:#2f7d5b; --noe:#b5521f; }
+* { box-sizing: border-box; }
+html, body { margin:0; background:var(--bg); color:var(--ink); }
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%; }
+body.large-text { font-size:20px; }
+.app { max-width:480px; margin:0 auto; min-height:100vh; padding-bottom:env(safe-area-inset-bottom); }
+.topbar[hidden] { display:none; }
+.topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#2a2e3a; color:#fff; }
+.topbar .where { font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.screen { padding:0 0 16px; }
+.pad { padding:12px 14px; }
+canvas.stage { display:block; width:100%; aspect-ratio:3/2; image-rendering:pixelated; image-rendering:crisp-edges; background:#222; }
+h1 { font-size:1.6em; margin:.3em 0 .1em; letter-spacing:.02em; }
+h2 { font-size:1.2em; margin:.6em 0 .3em; }
+h3 { font-size:1.05em; margin:.8em 0 .3em; }
+p { margin:.4em 0; }
+.muted { color:var(--muted); font-size:.9em; }
+.card { background:var(--card); border:2px solid var(--line); border-radius:6px; padding:10px 12px; margin:10px 12px; }
+.dialogue { margin:10px 12px; background:var(--card); border:3px solid #2a2e3a; border-radius:4px; padding:10px 12px; box-shadow:4px 4px 0 #2a2e3a22; }
+.speaker { display:inline-flex; align-items:center; gap:6px; font-weight:700; padding:2px 8px; border-radius:3px; color:#fff; font-size:.9em; }
+.speaker.camille { background:var(--cam); } .speaker.noe { background:var(--noe); } .speaker.neutral { background:#555; }
+.fr { font-size:1.25em; font-weight:600; margin:.35em 0; }
+.zh { color:#3c4a5c; background:#eef3f8; border-left:4px solid #8aa6c4; padding:4px 8px; margin:.4em 0; }
+.hidden-text { color:var(--muted); font-style:italic; }
+.row { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.col { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.btn { appearance:none; border:2px solid #2a2e3a; background:#fff; color:var(--ink); border-radius:6px; min-height:48px; min-width:48px; padding:10px 14px; font:inherit; font-size:1em; cursor:pointer; box-shadow:0 3px 0 #2a2e3a; touch-action:manipulation; }
+.btn:active { transform:translateY(2px); box-shadow:0 1px 0 #2a2e3a; }
+.btn:focus-visible { outline:3px solid #f0b429; outline-offset:2px; }
+.btn.primary { background:var(--accent); color:var(--accent-ink); border-color:#1c3b5a; box-shadow:0 3px 0 #1c3b5a; }
+.btn.small { min-height:44px; padding:6px 12px; font-size:.9em; }
+.btn.grow { flex:1 1 auto; }
+.btn[disabled] { opacity:.55; cursor:not-allowed; }
+.btn.choice { text-align:left; width:100%; }
+.banner { margin:10px 12px; padding:8px 10px; border-radius:4px; font-size:.92em; }
+.banner.warn { background:#fdecd8; border:2px solid #e0a46b; color:var(--warn); }
+.banner.info { background:#e7f0f8; border:2px solid #9ab8d4; }
+.banner.ok { background:#e5f3e3; border:2px solid #93c28c; color:var(--ok); }
+.days { list-style:none; padding:0; margin:6px 0; }
+.days li { padding:8px 4px; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; gap:8px; }
+.days li.na { color:var(--muted); }
+.tag { font-size:.78em; border:1px solid currentColor; border-radius:3px; padding:0 5px; white-space:nowrap; }
+input[type=text], textarea { width:100%; font:inherit; font-size:1.05em; padding:10px; border:2px solid #2a2e3a; border-radius:4px; background:#fff; min-height:48px; }
+textarea { min-height:96px; resize:vertical; }
+label.check { display:flex; gap:10px; align-items:center; min-height:44px; }
+label.check input { width:24px; height:24px; }
+.radio { display:flex; gap:10px; align-items:flex-start; padding:6px 0; min-height:44px; }
+.radio input { width:24px; height:24px; margin-top:2px; flex:none; }
+.chron { padding-left:1.1em; margin:.3em 0; }
+.chron li { margin:.25em 0; }
+pre.summary, textarea.summary { white-space:pre-wrap; font-family:inherit; font-size:.9em; background:#fff; border:2px dashed #8a8170; padding:10px; border-radius:4px; }
+.overlay { position:fixed; inset:0; z-index:20; background:rgba(20,22,30,.6); display:flex; align-items:flex-start; justify-content:center; overflow:auto; padding:16px 8px; }
+.overlay[hidden] { display:none; }
+.sheet { background:var(--bg); width:100%; max-width:464px; border-radius:8px; border:3px solid #2a2e3a; padding:8px 4px 14px; }
+.sheet .head { display:flex; justify-content:space-between; align-items:center; padding:0 10px; }
+.toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); z-index:30; background:#2a2e3a; color:#fff; padding:10px 14px; border-radius:6px; max-width:92vw; font-size:.95em; }
+.toast[hidden] { display:none; }
+.footer { text-align:center; color:var(--muted); font-size:.8em; padding:10px; }
+.stage-wrap { position:relative; }
+.bob { animation:bob 1.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform:translateY(-2px); } }
+.fade-in { animation:fade .35s ease-out; }
+@keyframes fade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::after { animation:none !important; transition:none !important; }
+.probe-opts .btn { background:#fff; color:var(--ink); } /* identical styling for every option: no answer cue */
+.sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+/* v0.1.2 voice settings */
+label.field { display:flex; flex-direction:column; gap:4px; margin-top:10px; }
+select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid #2a2e3a; border-radius:4px; background:#fff; min-height:48px; max-width:100%; }
+#voiceSettings .card { margin:8px 0; }
+#voiceSettings .path { font-weight:bold; background:#fff; border:1px dashed #8a8170; padding:6px 8px; border-radius:4px; word-break:break-word; }
+#voiceSettings details summary { min-height:44px; display:flex; align-items:center; cursor:pointer; }
+#voiceSettings .row .radio { padding-right:8px; }
+
+</style>
+</head>
+<body>
+<div id="app" class="app">
+  <header class="topbar" id="topbar" hidden>
+    <div class="where" id="where" aria-live="polite"></div>
+    <button class="btn small" id="btnPause" type="button" aria-label="暂停 Pause">⏸ 暂停</button>
+  </header>
+  <main id="screen" class="screen"></main>
+  <div id="overlay" class="overlay" hidden role="dialog" aria-modal="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <noscript><p class="pad">需要开启 JavaScript 才能玩。</p></noscript>
+</div>
+<script>
+/* L’Appartement 411 — Day 1 authored content.
+ * French text follows CURRICULUM_WEEK_01.md (Day 1). Reviewed in the Experience pass
+ * (AI review, not native-expert certification) — see docs/CONTENT_REVIEW.md.
+ * NBSP (\u00A0) before ! and ? follows French typography and prevents orphaned marks. */
+(function (root) {
+  'use strict';
+  var NB = '\u00A0';
+  // 08b (2026-10-08): project renamed to L’Appartement 411 — only the apartment number in the Chinese
+  // narration (404 -> 411) changed. French lines, targets, probe items and help are identical to 08a,
+  // so learning evidence recorded under 08a stays comparable.
+  var CONTENT_VERSION = 'd1-2026-10-08b';
+
+  // label: understand | atmosphere | baseline
+  var LINES = {
+    cam_bonjour: { speaker: 'camille', fr: 'Bonjour' + NB + '!', zh: '你好！（通用、礼貌的招呼）', target: 'bonjour', label: 'understand' },
+    cam_intro: { speaker: 'camille', fr: 'Salut' + NB + '! Je m\u2019appelle Camille.', zh: '嗨！我叫 Camille。（她指着自己）', target: 'je_mappelle', also: ['salut'], label: 'understand' },
+    noe_intro: { speaker: 'noe', fr: 'Salut' + NB + '! Je m\u2019appelle Noé.', zh: '嗨！我叫 Noé。', target: 'je_mappelle', also: ['salut'], label: 'understand' },
+    noe_moi: { speaker: 'noe', fr: 'Moi, c\u2019est Noé.', zh: '我嘛，我是 Noé。（另一种自我介绍，氛围句，不考）', target: null, label: 'atmosphere' },
+    cam_ask: { speaker: 'camille', fr: 'Tu t\u2019appelles comment' + NB + '?', zh: '你叫什么名字？', target: 'tu_tappelles_comment', label: 'understand' },
+    cam_plante: { speaker: 'camille', fr: 'C\u2019est ta plante.', zh: '这是你的植物。（氛围句，不考）', target: null, label: 'atmosphere' },
+    cam_soif: { speaker: 'camille', fr: 'Ta plante a soif.', zh: '你的植物渴了。（氛围句，不考）', target: null, label: 'atmosphere' },
+    cam_bye: { speaker: 'camille', fr: 'Salut' + NB + '!', zh: '拜拜！（Salut 也可以用来告别）', target: 'salut', label: 'understand' },
+    noe_croissant: { speaker: 'noe', fr: 'C\u2019est Croissant.', zh: '这是 Croissant。（猫的名字，“可颂”）（氛围句，不考）', target: null, label: 'atmosphere' },
+    noe_secret: { speaker: 'noe', fr: 'Un secret' + NB + '?', zh: '保密，好吗？（字面：一个秘密？）（氛围句，不考）', target: null, label: 'atmosphere' },
+    // Probe stimuli (familiar language; one variant per item; speakers varied)
+    pr_cam_ask: { speaker: 'camille', fr: 'Tu t\u2019appelles comment' + NB + '?', zh: '你叫什么名字？', target: 'tu_tappelles_comment', label: 'probe', func: 'asks' },
+    pr_noe_ask: { speaker: 'noe', fr: 'Tu t\u2019appelles comment' + NB + '?', zh: '你叫什么名字？', target: 'tu_tappelles_comment', label: 'probe', func: 'asks' },
+    pr_noe_intro: { speaker: 'noe', fr: 'Salut' + NB + '! Je m\u2019appelle Noé.', zh: '嗨！我叫 Noé。', target: 'je_mappelle', label: 'probe', func: 'tells' },
+    pr_cam_intro: { speaker: 'camille', fr: 'Je m\u2019appelle Camille.', zh: '我叫 Camille。', target: 'je_mappelle', label: 'probe', func: 'tells' },
+    // Baseline items (neutral voice, a name not used in the story)
+    bl_bonjour: { speaker: 'neutral', fr: 'Bonjour' + NB + '!', zh: '你好！', target: 'bonjour', label: 'baseline' },
+    bl_lea: { speaker: 'neutral', fr: 'Je m\u2019appelle Léa.', zh: '我叫 Léa。', target: 'je_mappelle', label: 'baseline' },
+    bl_ask: { speaker: 'neutral', fr: 'Tu t\u2019appelles comment' + NB + '?', zh: '你叫什么名字？', target: 'tu_tappelles_comment', label: 'baseline' }
+  };
+
+  var SPEAKERS = {
+    camille: { name: 'Camille', color: '#2f7d5b', pitch: 1.12 },
+    noe: { name: 'Noé', color: '#c0602a', pitch: 0.88 },
+    neutral: { name: '🔊', color: '#555', pitch: 1.0 }
+  };
+
+  var BASELINE = [
+    { line: 'bl_bonjour', answer: 'greet', options: [
+      { id: 'greet', zh: '打招呼' }, { id: 'thanks', zh: '道谢' }, { id: 'askname', zh: '问我的名字' } ] },
+    { line: 'bl_lea', answer: 'tells', options: [
+      { id: 'tells', zh: '她在说自己的名字' }, { id: 'asks', zh: '她在问我的名字' }, { id: 'bye', zh: '她在说再见' } ] },
+    { line: 'bl_ask', answer: 'asks', options: [
+      { id: 'asks', zh: '在问我的名字' }, { id: 'tells', zh: '在说自己的名字' }, { id: 'thanks', zh: '在道谢' } ] }
+  ];
+
+  var PROBE = {
+    task: 'd1.probe.tell_vs_ask',
+    items: ['pr_cam_ask', 'pr_noe_ask', 'pr_noe_intro', 'pr_cam_intro'],
+    options: [
+      { id: 'tells', zh: '对方在告诉我他/她的名字' },
+      { id: 'asks', zh: '对方在问我的名字' }
+    ]
+  };
+
+  // Chronicle templates: rendered only from events that actually happened.
+  var CHRONICLE = {
+    arrived: function () { return '你来到了 411 号公寓门口，敲了门。'; },
+    greeted: function (p) { return p && p.choice === 'wave' ? '你向开门的人挥了挥手。' : '你回应了招呼：«' + (p && p.fr || '') + '»'; },
+    met_camille: function () { return 'Camille 开了门：« Salut' + NB + '! Je m\u2019appelle Camille. »'; },
+    met_noe: function () { return 'Noé 出现了：« Salut' + NB + '! Je m\u2019appelle Noé. »'; },
+    introduced: function (p) {
+      if (!p || p.kind === 'skipped') return 'Camille 问了你的名字，你选择暂时不说。';
+      return 'Camille 问了你的名字，你回答：«' + p.original + '»';
+    },
+    plant_shown: function () { return 'Camille 给你看了你的植物：« C\u2019est ta plante. »'; },
+    plant_watered: function () { return '你给植物浇了水。'; },
+    plant_later: function () { return '你决定稍后再给植物浇水。'; },
+    camille_left: function () { return 'Camille 说了« Salut' + NB + '! »，出门了。'; },
+    met_croissant: function () { return 'Camille 走后，Noé 介绍了一只橘猫：« C\u2019est Croissant. »'; },
+    secret_kept: function () { return 'Noé 请你为猫保密。你答应了。'; },
+    secret_declined: function () { return 'Noé 请你为猫保密。你没有答应。'; },
+    probe_done: function () { return '你完成了一个小小的听力/理解练习。'; },
+    day1_complete: function () { return '第一天结束了。'; }
+  };
+
+  var DAYS = [
+    { n: 1, title: 'Bienvenue chez nous', zh: '欢迎来我们家', available: true },
+    { n: 2, title: 'Le petit-déjeuner', zh: '早餐', available: false },
+    { n: 3, title: 'Le colis mystérieux', zh: '神秘包裹', available: false },
+    { n: 4, title: 'La voisine en colère', zh: '生气的邻居', available: false },
+    { n: 5, title: 'Les clés perdues', zh: '丢失的钥匙', available: false },
+    { n: 6, title: 'Où est Croissant\u00A0?', zh: 'Croissant 在哪里？', available: false },
+    { n: 7, title: 'L\u2019inspection', zh: '房东来检查', available: false }
+  ];
+
+  // Scene scripts. Each step is resumable by (scene, step).
+  var SCENES = {
+    baseline: [{ type: 'baselineIntro' }, { type: 'baseline' }],
+    doorway: [
+      { type: 'knock', art: { door: 'closed' } },
+      { type: 'line', line: 'cam_bonjour', art: { door: 'open', camille: 'idle' } },
+      { type: 'greet', art: { door: 'open', camille: 'idle' } },
+      { type: 'line', line: 'cam_intro', event: 'met_camille', art: { door: 'open', camille: 'point' } },
+      { type: 'line', line: 'noe_intro', event: 'met_noe', art: { door: 'open', camille: 'idle', noe: 'point' } },
+      { type: 'line', line: 'noe_moi', art: { door: 'open', camille: 'idle', noe: 'wave' } }
+    ],
+    name: [
+      { type: 'line', line: 'cam_ask', art: { camille: 'ask', noe: 'idle' } },
+      { type: 'nameInput', art: { camille: 'ask', noe: 'idle' } },
+      { type: 'nameReaction', art: { camille: 'happy', noe: 'wave' } }
+    ],
+    plant: [
+      { type: 'line', line: 'cam_plante', event: 'plant_shown', art: { camille: 'pointPlant' } },
+      { type: 'line', line: 'cam_soif', art: { camille: 'can' } },
+      { type: 'water', art: { camille: 'idle' } }
+    ],
+    cat: [
+      { type: 'line', line: 'cam_bye', event: 'camille_left', art: { camille: 'wave', noe: 'idle', door: 'open' } },
+      { type: 'beat', art: { noe: 'idle', cat: 'peek', door: 'closed' } },
+      { type: 'line', line: 'noe_croissant', event: 'met_croissant', art: { noe: 'point', cat: 'sit', door: 'closed' } },
+      { type: 'line', line: 'noe_secret', art: { noe: 'shh', cat: 'sit', door: 'closed' } },
+      { type: 'secret', art: { noe: 'shh', cat: 'sit', door: 'closed' } },
+      { type: 'secretReaction', art: { noe: 'auto', cat: 'sit', door: 'closed' } }
+    ],
+    probe: [{ type: 'probeIntro' }, { type: 'probe' }, { type: 'probeDone' }],
+    diary: [{ type: 'diary' }],
+    end: [{ type: 'end' }]
+  };
+  var ORDER = ['baseline', 'doorway', 'name', 'plant', 'cat', 'probe', 'diary', 'end'];
+  var SCENE_ZH = { baseline: '开始前小测', doorway: '门口', name: '自我介绍', plant: '植物角', cat: '猫', probe: '小练习', diary: '日记', end: '第一天完成' };
+
+  var TARGETS = {
+    salut: { fr: 'Salut\u00A0!', zh: '嗨/拜拜' },
+    bonjour: { fr: 'Bonjour\u00A0!', zh: '你好' },
+    je_mappelle: { fr: 'Je m\u2019appelle…', zh: '我叫……' },
+    tu_tappelles_comment: { fr: 'Tu t\u2019appelles comment\u00A0?', zh: '你叫什么名字？' },
+    try_je_mappelle: { fr: 'Je m\u2019appelle [昵称].', zh: '（尝试）说出自己的名字' },
+    greeting_reply: { fr: 'Bonjour\u00A0! / Salut\u00A0!', zh: '（尝试）回应招呼' }
+  };
+
+  var api = { CONTENT_VERSION: CONTENT_VERSION, LINES: LINES, SPEAKERS: SPEAKERS, BASELINE: BASELINE, PROBE: PROBE,
+    CHRONICLE: CHRONICLE, DAYS: DAYS, SCENES: SCENES, ORDER: ORDER, SCENE_ZH: SCENE_ZH, TARGETS: TARGETS };
+  root.A411 = root.A411 || {};
+  root.A411.Content = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — pure logic: save schema, validation, migration, storage,
+ * world/plant/learning rules and summaries. No DOM access; runs in browser and Node. */
+(function (root) {
+  'use strict';
+  var C = (root.A411 && root.A411.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
+
+  var SCHEMA_VERSION = 1;
+  var APP_VERSION = '0.1.2';
+  var KEY = 'a411.save';
+  var TMP_KEY = 'a411.save.tmp';
+  var BACKUP_PREFIX = 'a411.backup.';
+  // Keys used before the 2026-10-08 rename (v0.1.0, "Appartement 404"). Read-only: this app never
+  // writes or deletes them. They are adopted once into the new keys when no new save exists yet.
+  // (GitHub Pages serves both the old and new repo paths from the same origin, so a save made on
+  // /appartement-404/ is visible to /appartement-411/ under these keys.)
+  var LEGACY_KEY = 'a404.save';
+  var LEGACY_TMP_KEY = 'a404.save.tmp';
+  var LEGACY_BACKUP_PREFIX = 'a404.backup.';
+  var MAX_BACKUPS = 5;
+  var MAX_IMPORT_CHARS = 1000000;
+
+  var ENUM = {
+    scene: C.ORDER.slice(),
+    modality: ['listening', 'reading', 'listening+reading', 'writing', 'selection', 'gesture', 'unknown'],
+    audioStatus: ['played', 'failed', 'unavailable', 'not_used', 'unknown'],
+    resultType: ['exposure', 'supported', 'independent', 'baseline', 'unknown'],
+    evidenceKind: ['encounter', 'supported_understanding', 'discrimination', 'production', 'baseline', 'choice', 'unknown'],
+    careState: ['thirsty', 'watered']
+  };
+
+  function nowISO(d) { return (d || new Date()).toISOString(); }
+  function isObj(x) { return x !== null && typeof x === 'object' && !Array.isArray(x); }
+  function clone(x) { return JSON.parse(JSON.stringify(x)); }
+  function rid() { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }
+
+  function newSave(opts) {
+    opts = opts || {};
+    var t = nowISO(opts.now);
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      appVersion: APP_VERSION,
+      contentVersion: C.CONTENT_VERSION,
+      saveId: rid(),
+      createdAt: t,
+      updatedAt: t,
+      settings: { supportLevel: 3, reducedMotion: !!opts.reducedMotion, largeText: false, speechRate: 0.85 },
+      progress: { episode: 1, scene: 'baseline', step: 0, status: 'in_progress', probe: null, baseline: null, draft: '' },
+      world: {
+        completedEvents: [],
+        choices: {},
+        facts: { catInApartment: false },
+        knowledge: {
+          camille: { playerName: null, knowsCat: false, heardPlayerAnswer: false },
+          noe: { playerName: null, knowsCat: true, heardPlayerAnswer: false, playerStanceOnSecret: null },
+          player: { knowsCat: false, metCamille: false, metNoe: false }
+        },
+        relationships: { camille: { notes: [] }, noe: { secretPromise: null, notes: [] } }
+      },
+      player: { nickname: null },
+      plant: { careState: 'thirsty', lastCareAt: null, careLog: [], growth: 0, mementos: [] },
+      learning: { attempts: [], helpLog: [], supportByTarget: {}, baseline: { status: 'not_started', items: [] } },
+      review: [],
+      diary: { chronicle: [], journal: [] },
+      meta: { audio: { engine: 'speechSynthesis', status: 'unknown', voice: null, checkedAt: null }, migratedFrom: null, recovery: [] }
+    };
+  }
+
+  // ---------- Validation ----------
+  function validateSave(s) {
+    var e = [];
+    function req(cond, msg) { if (!cond) e.push(msg); }
+    if (!isObj(s)) return { ok: false, errors: ['存档不是 JSON 对象 / not an object'] };
+    req(s.schemaVersion === SCHEMA_VERSION, 'schemaVersion 必须是 ' + SCHEMA_VERSION);
+    req(typeof s.appVersion === 'string', 'appVersion 缺失');
+    req(typeof s.contentVersion === 'string', 'contentVersion 缺失');
+    req(typeof s.saveId === 'string', 'saveId 缺失');
+    req(isObj(s.settings) && [0, 1, 2, 3].indexOf(s.settings.supportLevel) >= 0, 'settings.supportLevel 必须是 0–3');
+    var p = s.progress;
+    req(isObj(p), 'progress 缺失');
+    if (isObj(p)) {
+      req(Number.isInteger(p.episode) && p.episode >= 1 && p.episode <= 7, 'progress.episode 无效');
+      req(ENUM.scene.indexOf(p.scene) >= 0, 'progress.scene 无效');
+      req(Number.isInteger(p.step) && p.step >= 0 && C.SCENES[p.scene] && p.step < C.SCENES[p.scene].length, 'progress.step 无效');
+      req(p.status === 'in_progress' || p.status === 'complete', 'progress.status 无效');
+    }
+    var w = s.world;
+    req(isObj(w), 'world 缺失');
+    if (isObj(w)) {
+      req(Array.isArray(w.completedEvents) && w.completedEvents.every(function (x) { return typeof x === 'string'; }), 'world.completedEvents 无效');
+      req(isObj(w.choices), 'world.choices 无效');
+      req(isObj(w.knowledge) && isObj(w.knowledge.camille) && isObj(w.knowledge.noe) && isObj(w.knowledge.player), 'world.knowledge 无效');
+      req(isObj(w.relationships), 'world.relationships 无效');
+    }
+    var pl = s.plant;
+    req(isObj(pl), 'plant 缺失');
+    if (isObj(pl)) {
+      req(ENUM.careState.indexOf(pl.careState) >= 0, 'plant.careState 无效');
+      req(Array.isArray(pl.careLog), 'plant.careLog 无效');
+      if (Array.isArray(pl.careLog)) {
+        var ids = pl.careLog.map(function (c) { return c && c.actionId; });
+        req(ids.every(function (x) { return typeof x === 'string'; }), 'plant.careLog 项目无效');
+        req(new Set(ids).size === ids.length, 'plant.careLog 有重复的照料记录');
+      }
+    }
+    var L = s.learning;
+    req(isObj(L) && Array.isArray(L.attempts) && Array.isArray(L.helpLog) && isObj(L.supportByTarget), 'learning 无效');
+    if (isObj(L) && Array.isArray(L.attempts)) {
+      L.attempts.forEach(function (a, i) {
+        if (!isObj(a)) { e.push('learning.attempts[' + i + '] 不是对象'); return; }
+        if (!(a.target === null || typeof a.target === 'string')) e.push('attempts[' + i + '].target 无效');
+        if (ENUM.modality.indexOf(a.modality) < 0) e.push('attempts[' + i + '].modality 无效');
+        if (ENUM.audioStatus.indexOf(a.audioStatus) < 0) e.push('attempts[' + i + '].audioStatus 无效');
+        if (ENUM.resultType.indexOf(a.resultType) < 0) e.push('attempts[' + i + '].resultType 无效');
+        if (!Number.isInteger(a.replays) || a.replays < 0) e.push('attempts[' + i + '].replays 无效');
+        if (typeof a.at !== 'string' || isNaN(Date.parse(a.at))) e.push('attempts[' + i + '].at 无效');
+        if (typeof a.contentVersion !== 'string') e.push('attempts[' + i + '].contentVersion 无效');
+        if (!isObj(a.visibleSupport)) e.push('attempts[' + i + '].visibleSupport 无效');
+      });
+    }
+    req(Array.isArray(s.review), 'review 无效');
+    var d = s.diary;
+    req(isObj(d) && Array.isArray(d.chronicle) && Array.isArray(d.journal), 'diary 无效');
+    if (isObj(d) && Array.isArray(d.journal)) {
+      d.journal.forEach(function (j, i) {
+        if (!isObj(j) || typeof j.original !== 'string' || j.original.length > 4000) e.push('diary.journal[' + i + '] 无效');
+      });
+    }
+    if (isObj(d) && Array.isArray(d.chronicle)) {
+      d.chronicle.forEach(function (c, i) { if (!isObj(c) || !C.CHRONICLE[c.eventId]) e.push('diary.chronicle[' + i + '] 未知事件'); });
+    }
+    req(isObj(s.meta), 'meta 缺失');
+    return { ok: e.length === 0, errors: e };
+  }
+
+  // ---------- Migration ----------
+  // v0 = the pre-release test format (flat object, {v:0,...}). No real v0 saves were ever
+  // distributed; the path exists so later schema changes follow the same backup->migrate->validate route.
+  var V0_SCENE = { door: 'doorway', doorway: 'doorway', name: 'name', plant: 'plant', cat: 'cat', quiz: 'probe', probe: 'probe', diary: 'diary', end: 'end' };
+  var V0_TARGET = { 'salut !': 'salut', 'bonjour !': 'bonjour', "tu t'appelles comment ?": 'tu_tappelles_comment', "je m'appelle": 'je_mappelle' };
+
+  function detectVersion(obj) {
+    if (!isObj(obj)) return null;
+    if (typeof obj.schemaVersion === 'number') return obj.schemaVersion;
+    if (obj.v === 0 || obj.version === 0) return 0;
+    return null;
+  }
+
+  function migrateV0toV1(v0, now) {
+    var s = newSave({ now: now });
+    var at = nowISO(now);
+    var scene = V0_SCENE[String(v0.scene || '').toLowerCase()] || 'doorway';
+    s.progress.scene = scene; s.progress.step = 0;
+    if (scene === 'end') s.progress.status = 'complete';
+    var idx = C.ORDER.indexOf(scene);
+    var nick = typeof v0.name === 'string' && v0.name.trim() ? v0.name.trim().slice(0, 40) : null;
+    s.player.nickname = nick;
+    if (idx > C.ORDER.indexOf('name') && nick) { s.world.knowledge.camille.playerName = nick; s.world.knowledge.noe.playerName = nick; }
+    if (idx > C.ORDER.indexOf('doorway')) { s.world.knowledge.player.metCamille = true; s.world.knowledge.player.metNoe = true; }
+    if (v0.watered === true) {
+      var t = typeof v0.wateredAt === 'number' ? new Date(v0.wateredAt).toISOString() : at;
+      s.plant.careState = 'watered'; s.plant.lastCareAt = t;
+      s.plant.careLog.push({ actionId: 'd1.water', at: t, scene: 'plant', source: 'migrated-v0' });
+    }
+    if (v0.secret === 'keep' || v0.secret === 'decline') {
+      s.world.choices.d1_secret = v0.secret;
+      s.world.relationships.noe.secretPromise = v0.secret === 'keep' ? 'kept' : 'declined';
+      s.world.knowledge.noe.playerStanceOnSecret = v0.secret;
+      s.world.knowledge.player.knowsCat = true; s.world.facts.catInApartment = true;
+    }
+    (Array.isArray(v0.attempts) ? v0.attempts : []).forEach(function (a) {
+      if (!isObj(a)) return;
+      var phrase = String(a.phrase || '').toLowerCase().replace(/[\u2019]/g, "'").replace(/\s+/g, ' ').trim();
+      s.learning.attempts.push(makeAttempt({
+        target: V0_TARGET[phrase] || null, lesson: 'd1', contentVersion: 'v0-unknown',
+        modality: 'unknown', audioStatus: 'unknown', resultType: 'unknown', evidenceKind: 'unknown',
+        response: a.response != null ? String(a.response) : null, correct: typeof a.ok === 'boolean' ? a.ok : null,
+        context: 'migrated-v0', at: typeof a.t === 'number' ? new Date(a.t).toISOString() : at,
+        visibleSupport: { level: null, note: 'unknown (v0 did not record support)' }
+      }));
+    });
+    if (typeof v0.journal === 'string' && v0.journal.length) {
+      s.diary.journal.push({ id: 'j-v0', at: at, original: v0.journal, usedTemplate: null, suggestedRewrite: null, share: false, source: 'migrated-v0' });
+    }
+    s.meta.migratedFrom = 0;
+    s.meta.recovery.push({ at: at, action: 'migrated v0 -> v1' });
+    return s;
+  }
+
+  function migrate(obj, now) {
+    var v = detectVersion(obj);
+    if (v === SCHEMA_VERSION) return { save: obj, from: v };
+    if (v === 0) return { save: migrateV0toV1(obj, now), from: 0 };
+    if (v !== null && v > SCHEMA_VERSION) throw new Error('存档来自更新的版本 (schema ' + v + ')，当前版本无法读取');
+    throw new Error('无法识别的存档格式');
+  }
+
+  function parseImport(text, now) {
+    if (typeof text !== 'string' || !text.trim()) return { ok: false, errors: ['文件是空的'] };
+    if (text.length > MAX_IMPORT_CHARS) return { ok: false, errors: ['文件太大'] };
+    var obj;
+    try { obj = JSON.parse(text); } catch (err) { return { ok: false, errors: ['不是有效的 JSON：' + err.message] }; }
+    var m;
+    try { m = migrate(obj, now); } catch (err) { return { ok: false, errors: [err.message] }; }
+    var v = validateSave(m.save);
+    if (!v.ok) return { ok: false, errors: v.errors };
+    return { ok: true, save: m.save, migratedFrom: m.from === SCHEMA_VERSION ? null : m.from };
+  }
+
+  // ---------- Storage (failure-safe writes, backups, recovery) ----------
+  function createStorage(ls) {
+    function backup(label, raw) {
+      try {
+        var key = BACKUP_PREFIX + Date.now() + '.' + label;
+        ls.setItem(key, typeof raw === 'string' ? raw : JSON.stringify(raw));
+        var keys = listBackups().filter(function (b) { return !b.legacy; }); // legacy backups are never pruned
+        while (keys.length > MAX_BACKUPS) { ls.removeItem(keys.shift().key); }
+        return key;
+      } catch (e) { return null; }
+    }
+    function listBackups() {
+      var out = [];
+      for (var i = 0; i < ls.length; i++) {
+        var k = ls.key(i);
+        var pre = k && k.indexOf(BACKUP_PREFIX) === 0 ? BACKUP_PREFIX : (k && k.indexOf(LEGACY_BACKUP_PREFIX) === 0 ? LEGACY_BACKUP_PREFIX : null);
+        if (pre) {
+          var parts = k.slice(pre.length).split('.');
+          var legacy = pre === LEGACY_BACKUP_PREFIX;
+          out.push({ key: k, time: Number(parts[0]), label: parts.slice(1).join('.') + (legacy ? '（改名前的旧备份）' : ''), legacy: legacy });
+        }
+      }
+      return out.sort(function (a, b) { return a.time - b.time; });
+    }
+    function write(save) {
+      save.updatedAt = nowISO();
+      var raw = JSON.stringify(save);
+      var v = validateSave(save);
+      if (!v.ok) return { ok: false, error: 'invalid: ' + v.errors.join('; ') };
+      try {
+        ls.setItem(TMP_KEY, raw);
+        if (ls.getItem(TMP_KEY) !== raw) throw new Error('verify failed');
+        ls.setItem(KEY, raw);
+        ls.removeItem(TMP_KEY);
+        return { ok: true };
+      } catch (e) { return { ok: false, error: String(e && e.message || e) }; }
+    }
+    function load(now) {
+      var notices = [];
+      var raw = null;
+      try { raw = ls.getItem(KEY); } catch (e) { return { save: null, notices: ['无法读取本机存储'], storageOk: false }; }
+      var tmp = null; try { tmp = ls.getItem(TMP_KEY); } catch (e) { }
+      var fromLegacy = false;
+      if (!raw && !tmp) {
+        // Adopt a pre-rename save. Order: verbatim backup under the new prefix -> parse/validate (or v0
+        // migrate) -> verified write to the new key. The old keys are left untouched, so if any step
+        // fails the original is still there and the next load simply tries again.
+        var lraw = null, ltmp = null;
+        try { lraw = ls.getItem(LEGACY_KEY); ltmp = ls.getItem(LEGACY_TMP_KEY); } catch (e) { }
+        if (lraw || ltmp) {
+          fromLegacy = true;
+          backup('pre-rename-a404', lraw || ltmp);
+          raw = lraw; tmp = ltmp;
+        }
+      }
+      function adopted(save, via) {
+        if (!fromLegacy) return save;
+        save.meta.recovery = Array.isArray(save.meta.recovery) ? save.meta.recovery : [];
+        save.meta.recovery.push({ at: nowISO(now), action: 'storage key renamed ' + via + ' -> ' + KEY + ' (Appartement 404 -> L’Appartement 411); original left in place' });
+        notices.push('已沿用改名前（Appartement 404）的存档，进度不变。');
+        return save;
+      }
+      function tryRaw(r) {
+        if (!r) return null;
+        var obj; try { obj = JSON.parse(r); } catch (e) { return { bad: true }; }
+        var ver = detectVersion(obj);
+        if (ver === SCHEMA_VERSION) { var v = validateSave(obj); return v.ok ? { save: obj } : { bad: true, errors: v.errors }; }
+        if (ver === 0) {
+          var bk = backup('pre-migration-v0', r);
+          if (!bk) return { bad: true, errors: ['备份失败，未迁移'] };
+          try {
+            var m = migrate(obj, now); var v2 = validateSave(m.save);
+            if (!v2.ok) return { bad: true, errors: v2.errors };
+            notices.push('旧存档 (v0) 已升级到 v' + SCHEMA_VERSION + '，原始存档已备份。');
+            return { save: m.save, migrated: true };
+          } catch (e) { return { bad: true, errors: [e.message] }; }
+        }
+        return { bad: true };
+      }
+      var r = tryRaw(raw);
+      if (r && r.save) {
+        if (fromLegacy) { adopted(r.save, LEGACY_KEY); var wl = write(r.save); if (!wl.ok) notices.push('旧存档已读取，但写入新位置失败——请先导出存档。'); }
+        else if (r.migrated) write(r.save);
+        return { save: r.save, notices: notices, storageOk: true };
+      }
+      if (r && r.bad) {
+        backup('corrupt-main', raw);
+        var rt = tryRaw(tmp);
+        if (rt && rt.save) { notices.push('主存档损坏，已从临时副本恢复（损坏版本已备份）。'); adopted(rt.save, LEGACY_TMP_KEY); write(rt.save); return { save: rt.save, notices: notices, storageOk: true }; }
+        notices.push('存档无法读取，已备份损坏的数据并开始新游戏。');
+        return { save: null, notices: notices, storageOk: true };
+      }
+      if (!raw && tmp) {
+        var rt2 = tryRaw(tmp);
+        if (rt2 && rt2.save) { notices.push('已从未完成的写入中恢复存档。'); adopted(rt2.save, LEGACY_TMP_KEY); write(rt2.save); return { save: rt2.save, notices: notices, storageOk: true }; }
+      }
+      return { save: null, notices: notices, storageOk: true };
+    }
+    function importText(text, current, now) {
+      var r = parseImport(text, now);
+      if (!r.ok) return r; // existing save untouched
+      if (current) backup('pre-import', current);
+      var w = write(r.save);
+      if (!w.ok) return { ok: false, errors: ['写入失败：' + w.error] };
+      return r;
+    }
+    function readBackup(key) { try { return ls.getItem(key); } catch (e) { return null; } }
+    return { load: load, write: write, backup: backup, listBackups: listBackups, importText: importText, readBackup: readBackup };
+  }
+
+  // ---------- World ----------
+  function recordEvent(save, eventId, params, now) {
+    if (save.world.completedEvents.indexOf(eventId) >= 0) return false; // events are facts; not duplicated
+    save.world.completedEvents.push(eventId);
+    if (C.CHRONICLE[eventId]) save.diary.chronicle.push({ eventId: eventId, at: nowISO(now), params: params || null });
+    return true;
+  }
+
+  function applySecretChoice(save, choice, now) {
+    if (choice !== 'keep' && choice !== 'decline') throw new Error('bad choice');
+    if (save.world.choices.d1_secret) return false; // a made choice is a fact; not silently redone
+    save.world.choices.d1_secret = choice;
+    save.world.relationships.noe.secretPromise = choice === 'keep' ? 'kept' : 'declined';
+    save.world.knowledge.noe.playerStanceOnSecret = choice;
+    // Camille was not present: her knowledge is intentionally untouched.
+    recordEvent(save, choice === 'keep' ? 'secret_kept' : 'secret_declined', null, now);
+    return true;
+  }
+
+  function applyName(save, cls, original, now) {
+    save.world.choices.d1_name = { kind: cls.kind };
+    save.player.nickname = cls.nickname || null;
+    ['camille', 'noe'].forEach(function (k) {
+      save.world.knowledge[k].heardPlayerAnswer = cls.kind !== 'skipped';
+      save.world.knowledge[k].playerName = cls.nickname || null;
+    });
+    recordEvent(save, 'introduced', { kind: cls.kind, original: cls.kind === 'skipped' ? null : original }, now);
+  }
+
+  // ---------- Plant ----------
+  var THIRST_AFTER_MS = 48 * 3600 * 1000; // tuning heuristic, not botany
+  function waterPlant(save, actionId, scene, now) {
+    var exists = save.plant.careLog.some(function (c) { return c.actionId === actionId; });
+    if (exists) return { counted: false, reason: 'already' };
+    var t = nowISO(now);
+    save.plant.careLog.push({ actionId: actionId, at: t, scene: scene });
+    save.plant.careState = 'watered';
+    save.plant.lastCareAt = t;
+    return { counted: true };
+  }
+  function plantStatus(plant, now) {
+    if (plant.careState === 'watered' && plant.lastCareAt && ((now || new Date()) - new Date(plant.lastCareAt)) > THIRST_AFTER_MS) return 'thirsty';
+    return plant.careState;
+  }
+
+  // ---------- Learning ----------
+  function makeAttempt(f) {
+    return {
+      id: f.id || rid(),
+      target: f.target === undefined ? null : f.target,
+      lesson: f.lesson || 'd1',
+      contentVersion: f.contentVersion || C.CONTENT_VERSION,
+      modality: f.modality || 'unknown',
+      audioStatus: f.audioStatus || 'not_used',
+      visibleSupport: f.visibleSupport || {},
+      replays: f.replays | 0,
+      firstListen: f.firstListen === undefined ? null : f.firstListen,
+      response: f.response === undefined ? null : f.response,
+      correct: f.correct === undefined ? null : f.correct,
+      resultType: f.resultType || 'unknown',
+      evidenceKind: f.evidenceKind || 'unknown',
+      production: f.production || null,
+      context: f.context || null,
+      speaker: f.speaker || null,
+      stimulus: f.stimulus || null,
+      // which device voice/rate actually played for this attempt (null = nothing played / not audio)
+      audioVoice: f.audioVoice || null,
+      at: f.at || nowISO()
+    };
+  }
+
+  // Result type for a comprehension probe trial. Independent only when nothing visible
+  // could reveal the answer; any text/translation help makes it supported.
+  function probeResultType(o) {
+    if (o.subtitlesShown || o.chineseShown || o.answerCue) return 'supported';
+    return 'independent';
+  }
+  function probeModality(audioStatus, subtitlesShown) {
+    if (audioStatus === 'played') return subtitlesShown ? 'listening+reading' : 'listening';
+    return 'reading';
+  }
+
+  // "Tu t'appelles comment ?" response classification. Never infers gender; never requires real data.
+  function classifyNameResponse(text) {
+    var t = String(text == null ? '' : text).replace(/[\u2019`´]/g, "'").replace(/\s+/g, ' ').trim();
+    if (!t) return { kind: 'skipped', nickname: null };
+    var m = t.match(/^(?:bonjour|salut)?[\s,!.]*je\s*m\s*'?\s*app?ell?e?s?\s+(.+?)[\s.!]*$/i);
+    if (m) {
+      var exact = /je m'appelle\s/i.test(t);
+      return { kind: 'full_structure', exactForm: exact, nickname: m[1].trim().slice(0, 40) };
+    }
+    var m2 = t.match(/^moi\s*,?\s*c'?\s*est\s+(.+?)[\s.!]*$/i);
+    if (m2) return { kind: 'moi_cest', nickname: m2[1].trim().slice(0, 40) };
+    if (t.split(' ').length <= 3) return { kind: 'nickname_only', nickname: t.replace(/[.!]+$/, '').slice(0, 40) };
+    return { kind: 'other_sentence', nickname: null };
+  }
+
+  // Support recommendation per target+modality (CURRICULUM: two independent successes in
+  // distinct contexts -> one-level trial reduction; difficulty or help -> restore).
+  function recommendSupport(attempts, target, modality, current) {
+    var rel = attempts.filter(function (a) { return a.target === target && a.modality === modality && (a.resultType === 'independent' || a.resultType === 'supported'); });
+    var last = rel[rel.length - 1];
+    if (last && (last.correct === false || last.resultType === 'supported')) {
+      return { level: Math.min(3, current + (last.correct === false ? 1 : 0)), reason: last.correct === false ? 'difficulty' : 'help-used' };
+    }
+    var indep = rel.filter(function (a) { return a.resultType === 'independent' && a.correct === true; });
+    var ctx = new Set(indep.map(function (a) { return a.context; }));
+    if (indep.length >= 2 && ctx.size >= 2 && current > 0) return { level: current - 1, reason: 'two-independent-distinct-contexts (trial reduction, not mastery)' };
+    return { level: current, reason: 'insufficient-evidence' };
+  }
+
+  var REVIEW_DAYS = [1, 3, 7, 14];
+  function buildReview(save, now) {
+    var targets = {};
+    save.learning.attempts.forEach(function (a) {
+      if (!a.target || a.resultType === 'unknown') return;
+      var key = a.target + '|' + (a.modality === 'listening+reading' ? 'listening' : a.modality);
+      (targets[key] = targets[key] || []).push(a);
+    });
+    var t0 = now || new Date();
+    return Object.keys(targets).map(function (key) {
+      var parts = key.split('|'), list = targets[key];
+      var cur = (save.learning.supportByTarget[parts[0]] || {})[parts[1]];
+      if (cur == null) cur = save.settings.supportLevel;
+      var rec = recommendSupport(save.learning.attempts, parts[0], parts[1], cur);
+      var successes = list.filter(function (a) { return a.resultType === 'independent' && a.correct === true; }).length;
+      var days = REVIEW_DAYS[Math.min(successes, REVIEW_DAYS.length - 1)];
+      return {
+        target: parts[0], modality: parts[1],
+        recentEvidence: list.slice(-4).map(function (a) { return { id: a.id, resultType: a.resultType, correct: a.correct, replays: a.replays, at: a.at }; }),
+        nextEncounter: new Date(t0.getTime() + days * 86400000).toISOString(),
+        nextEncounterNote: 'Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.',
+        supportRecommendation: rec
+      };
+    });
+  }
+
+  function probeStats(save) {
+    var trials = save.learning.attempts.filter(function (a) { return a.evidenceKind === 'discrimination' && a.lesson === 'd1'; });
+    var s = { total: trials.length, independentFirstListenCorrect: 0, independentReplayCorrect: 0, supportedCorrect: 0, incorrect: 0, unsure: 0, readingOnly: 0 };
+    trials.forEach(function (a) {
+      if (a.modality === 'reading') s.readingOnly++;
+      if (a.response === 'unsure') { s.unsure++; return; }
+      if (a.correct === false) { s.incorrect++; return; }
+      if (a.resultType === 'supported') s.supportedCorrect++;
+      else if (a.replays === 0) s.independentFirstListenCorrect++;
+      else s.independentReplayCorrect++;
+    });
+    return s;
+  }
+
+  // ---------- Shareable feedback summary (private journal excluded by default) ----------
+  function buildSummary(save, opts) {
+    opts = opts || {};
+    var L = [];
+    var sc = save.progress.scene;
+    L.push('L’Appartement 411 · 反馈摘要');
+    L.push('版本：app ' + save.appVersion + ' · 内容 ' + save.contentVersion + ' · 存档 schema v' + save.schemaVersion);
+    L.push('进度：Day ' + save.progress.episode + ' · ' + (C.SCENE_ZH[sc] || sc) + '（' + sc + ' 第 ' + (save.progress.step + 1) + ' 步）· ' + (save.progress.status === 'complete' ? '已完成' : '进行中'));
+    var au = save.meta.audio || {};
+    var QZ = { premium: '高级', enhanced: '增强', natural: '自然', network: '在线高质量', 'local-hq': '高质量', standard: '标准', compact: '基础', robotic: '机械' };
+    var avail = '可用（设备语音 ' + (au.voice || '?') + '）';
+    if (au.status === 'available' && au.voices) {
+      avail = '可用 · Camille=' + (au.voices.camille || '?') + '（' + (QZ[au.quality && au.quality.camille] || '?') + '）· Noé=' + (au.voices.noe || '?') + '（' + (QZ[au.quality && au.quality.noe] || '?') + '）' +
+        (au.distinctVoices ? '' : ' · 共用一个声音') + ' · 本机法语声音 ' + (au.frenchVoiceCount != null ? au.frenchVoiceCount : '?') + ' 个 · 语速 ' + (au.rate || '?');
+    }
+    L.push('法语语音：' + (au.status === 'available' ? avail : au.status === 'unavailable' ? '不可用 → 阅读模式（听力未验证）' : '未检测'));
+    var playedA = save.learning.attempts.filter(function (a) { return a.audioStatus === 'played'; });
+    var failed = save.learning.attempts.filter(function (a) { return a.audioStatus === 'failed' || a.audioStatus === 'unavailable'; }).length;
+    var byVoice = {};
+    playedA.forEach(function (a) { var v = a.audioVoice; var k = v ? v.name + '（' + (QZ[v.quality] || v.quality) + '，语速 ' + v.rate + '）' : '未记录声音（v0.1.1 及以前）'; byVoice[k] = (byVoice[k] || 0) + 1; });
+    var bv = Object.keys(byVoice).map(function (k) { return k + ' ×' + byVoice[k]; });
+    L.push('语音播放记录：成功 ' + playedA.length + ' · 失败/不可用 ' + failed + (bv.length ? ' · 实际播放的声音：' + bv.join('；') : ''));
+    var b = save.learning.baseline;
+    if (b.status === 'skipped') L.push('开始前小测：跳过');
+    else if (b.status === 'done') {
+      var bc = b.items.filter(function (i) { return i.correct; }).length;
+      L.push('开始前小测：' + bc + '/' + b.items.length + '（' + (b.items[0] && b.items[0].modality || '?') + '）');
+    } else L.push('开始前小测：未做');
+    var ps = probeStats(save);
+    if (ps.total) {
+      L.push('小练习「告诉我名字 vs 问我名字」：' + ps.total + ' 题 · 独立首听正确 ' + ps.independentFirstListenCorrect + ' · 独立重听后正确 ' + ps.independentReplayCorrect + ' · 有帮助时正确 ' + ps.supportedCorrect + ' · 错误 ' + ps.incorrect + ' · 不确定 ' + ps.unsure + (ps.readingOnly ? ' · 其中阅读模式 ' + ps.readingOnly + '（不算听力）' : ''));
+    } else L.push('小练习：尚未进行');
+    var nameA = save.learning.attempts.filter(function (a) { return a.context === 'd1.name.input'; }).pop();
+    if (nameA) {
+      var kindZh = { full_structure: '完整句型 Je m\u2019appelle…', nickname_only: '只说了昵称（能沟通，不算完整句型）', moi_cest: 'Moi, c\u2019est…（另一种说法）', other_sentence: '其他句子', skipped: '跳过' }[nameA.production] || nameA.production;
+      L.push('自我介绍（打字）：' + kindZh + ' · ' + (nameA.resultType === 'supported' ? '有提示' : '无提示') + '（昵称本身未包含）');
+    }
+    var jA = save.learning.attempts.filter(function (a) { return a.context === 'd1.diary.journal'; }).pop();
+    if (jA) L.push('日记写作（打字）：' + ({ full_structure: '含 Je m\u2019appelle… 句型', nickname_only: '很短的一句', moi_cest: 'Moi, c\u2019est…', other_sentence: '自己的句子', skipped: '空' }[jA.production] || jA.production) + ' · ' + (jA.resultType === 'supported' ? '用了句型插入' : '无插入') + '（内容未包含）');
+    var h = {}; save.learning.helpLog.forEach(function (x) { h[x.kind] = (h[x.kind] || 0) + 1; });
+    var hz = { subtitle: '显示法语文字', chinese: '中文解释', replay: '重播', explain: '任务说明' };
+    var hs = Object.keys(h).map(function (k) { return (hz[k] || k) + ' ' + h[k]; });
+    L.push('使用的帮助：' + (hs.length ? hs.join(' · ') : '无') + ' · 支持等级设置 ' + save.settings.supportLevel);
+    var sec = save.world.choices.d1_secret;
+    L.push('剧情选择：猫的秘密 = ' + (sec === 'keep' ? '答应保密' : sec === 'decline' ? '没有答应' : '尚未选择'));
+    L.push('植物：' + (save.plant.careState === 'watered' ? '已浇水' : '口渴') + ' · 照料次数 ' + save.plant.careLog.length);
+    var shareJ = opts.includeJournal ? save.diary.journal.filter(function (j) { return j.share; }) : [];
+    L.push('私人日记：' + (save.diary.journal.length ? (shareJ.length ? '包含你选择分享的 ' + shareJ.length + ' 条' : '未包含（默认不分享）') : '没有写'));
+    shareJ.forEach(function (j) { L.push('  日记（你选择分享）：' + j.original); });
+    if (opts.note && String(opts.note).trim()) L.push('问题/感受：' + String(opts.note).trim().slice(0, 1000));
+    L.push('生成时间：' + localStamp(opts.now || new Date()));
+    return L.join('\n');
+  }
+
+  function localStamp(d) {
+    function p2(n) { return String(n).padStart(2, '0'); }
+    var off = -d.getTimezoneOffset(), sign = off >= 0 ? '+' : '-';
+    return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()) + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()) + '（UTC' + sign + Math.floor(Math.abs(off) / 60) + (Math.abs(off) % 60 ? ':' + p2(Math.abs(off) % 60) : '') + '）';
+  }
+  function chronicleText(entry) {
+    var f = C.CHRONICLE[entry.eventId];
+    return f ? f(entry.params) : '';
+  }
+
+  var api = {
+    SCHEMA_VERSION: SCHEMA_VERSION, APP_VERSION: APP_VERSION, KEY: KEY, TMP_KEY: TMP_KEY, BACKUP_PREFIX: BACKUP_PREFIX,
+    LEGACY_KEY: LEGACY_KEY, LEGACY_TMP_KEY: LEGACY_TMP_KEY, LEGACY_BACKUP_PREFIX: LEGACY_BACKUP_PREFIX, ENUM: ENUM,
+    newSave: newSave, validateSave: validateSave, migrate: migrate, migrateV0toV1: migrateV0toV1, detectVersion: detectVersion,
+    parseImport: parseImport, createStorage: createStorage, recordEvent: recordEvent, applySecretChoice: applySecretChoice,
+    applyName: applyName, waterPlant: waterPlant, plantStatus: plantStatus, makeAttempt: makeAttempt, probeResultType: probeResultType,
+    probeModality: probeModality, classifyNameResponse: classifyNameResponse, recommendSupport: recommendSupport,
+    buildReview: buildReview, probeStats: probeStats, buildSummary: buildSummary, chronicleText: chronicleText, clone: clone, nowISO: nowISO
+  };
+  root.A411 = root.A411 || {};
+  root.A411.Logic = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — original pixel art, authored in code for this project (2026-10-08).
+ * No external images, fonts or assets. Provenance: docs/ASSETS.md. 96x64 logical pixels. */
+(function (root) {
+  'use strict';
+  var W = 96, H = 64;
+  var PAL = {
+    '.': null,
+    h: '#3b2a20', // Camille hair
+    H: '#7a4a22', // Noé hair
+    s: '#f1c7a5', // skin
+    S: '#c98e6b', // skin shade
+    e: '#1d1d1d', // eyes
+    m: '#b5524b', // mouth
+    g: '#2f7d5b', // Camille sweater
+    G: '#24624a',
+    p: '#2c3555', // trousers
+    b: '#1e1e24', // shoes
+    o: '#e2873a', // Noé shirt / cat
+    O: '#b8642a', // cat stripes / shade
+    w: '#f4efe6', // apron
+    k: '#22303a', // cat eye
+    n: '#e79aa0'  // cat nose
+  };
+  var SPR = {
+    camille: [
+      '....hhh.....',
+      '...hhhhh....',
+      '..hhhhhhh...',
+      '..hssssshh..',
+      '..hsesesh...',
+      '..hsssssh...',
+      '...ssmss....',
+      '....sss.....',
+      '..gggggggg..',
+      '..gggggggg..',
+      '..gggggggg..',
+      '..gGggggGg..',
+      '..gggggggg..',
+      '..pppppppp..',
+      '..ppp..ppp..',
+      '..ppp..ppp..',
+      '..ppp..ppp..',
+      '..bbb..bbb..'
+    ],
+    noe: [
+      '..H.H.H.H...',
+      '.HHHHHHHHH..',
+      '.HHHHHHHHH..',
+      '.HHsssssHH..',
+      '..HsesesH...',
+      '..SsssssS...',
+      '...ssmss....',
+      '....sss.....',
+      '..oowwwwoo..',
+      '..oowwwwoo..',
+      '..oowwwwoo..',
+      '..oowwwwoo..',
+      '..oowwwwoo..',
+      '..OOOOOOOO..',
+      '..OOO..OOO..',
+      '..OOO..OOO..',
+      '..OOO..OOO..',
+      '..bbb..bbb..'
+    ],
+    cat: [
+      'o.....o...',
+      'oo...oo...',
+      'ooooooo...',
+      'okoooko..o',
+      'ooonooo..o',
+      '.ooooooo.o',
+      '.oOoOoOoo.',
+      '.o.o..o.o.'
+    ],
+    catPeek: [
+      'o.....o',
+      'oo...oo',
+      'ooooooo',
+      'okoooko'
+    ]
+  };
+
+  function px(ctx, x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+  function sprite(ctx, map, x, y) {
+    for (var r = 0; r < map.length; r++) for (var c = 0; c < map[r].length; c++) {
+      var col = PAL[map[r][c]]; if (col) px(ctx, x + c, y + r, 1, 1, col);
+    }
+  }
+  // 3x5 digits for the door plaque
+  var DIG = { '4': ['1.1', '1.1', '111', '..1', '..1'], '0': ['111', '1.1', '1.1', '1.1', '111'], '1': ['.1.', '11.', '.1.', '.1.', '111'] };
+  function digits(ctx, str, x, y, c) {
+    for (var i = 0; i < str.length; i++) { var d = DIG[str[i]]; for (var r = 0; r < 5; r++) for (var k = 0; k < 3; k++) if (d[r][k] === '1') px(ctx, x + i * 4 + k, y + r, 1, 1, c); }
+  }
+
+  // Arms per pose (drawn after body). x,y = sprite origin. Skin-coloured hands, sleeve colour from sprite.
+  function arms(ctx, who, pose, x, y) {
+    var sl = who === 'camille' ? PAL.g : PAL.o, sk = PAL.s;
+    // left arm (viewer's left)
+    function leftDown() { px(ctx, x + 1, y + 9, 1, 4, sl); px(ctx, x + 1, y + 13, 1, 1, sk); }
+    function rightDown() { px(ctx, x + 10, y + 9, 1, 4, sl); px(ctx, x + 10, y + 13, 1, 1, sk); }
+    switch (pose) {
+      case 'point': // hand on own chest
+        leftDown(); px(ctx, x + 10, y + 9, 1, 3, sl); px(ctx, x + 7, y + 11, 3, 1, sl); px(ctx, x + 5, y + 10, 2, 2, sk); break;
+      case 'wave':
+        leftDown(); px(ctx, x + 10, y + 5, 1, 4, sl); px(ctx, x + 10, y + 3, 1, 2, sk); px(ctx, x + 11, y + 3, 1, 1, sk); break;
+      case 'ask': // open palm towards viewer
+        leftDown(); px(ctx, x + 10, y + 9, 2, 1, sl); px(ctx, x + 12, y + 9, 1, 2, sl); px(ctx, x + 12, y + 8, 1, 1, sk); px(ctx, x + 13, y + 8, 1, 1, sk); break;
+      case 'pointPlant': // arm out to viewer's left
+        rightDown(); px(ctx, x - 3, y + 9, 4, 1, sl); px(ctx, x - 4, y + 9, 1, 1, sk); break;
+      case 'can': // holding watering can
+        rightDown(); px(ctx, x - 1, y + 9, 2, 1, sl); px(ctx, x - 2, y + 9, 1, 1, sk);
+        px(ctx, x - 7, y + 9, 5, 4, '#6f8fa6'); px(ctx, x - 10, y + 9, 3, 1, '#6f8fa6'); px(ctx, x - 6, y + 8, 3, 1, '#4f6b80'); break;
+      case 'shh': // finger to lips
+        leftDown(); px(ctx, x + 10, y + 8, 1, 3, sl); px(ctx, x + 8, y + 7, 2, 1, sl); px(ctx, x + 7, y + 6, 1, 1, sk); px(ctx, x + 5, y + 4, 1, 3, sk); break;
+      case 'happy': leftDown(); rightDown(); px(ctx, x + 5, y + 6, 3, 1, PAL.m); break;
+      case 'sad': leftDown(); rightDown(); px(ctx, x + 5, y + 6, 3, 1, PAL.S); px(ctx, x + 4, y + 4, 1, 1, PAL.S); break;
+      default: leftDown(); rightDown();
+    }
+  }
+  function person(ctx, who, pose, x, y) {
+    if (!pose) return;
+    px(ctx, x + 1, y + 18, 11, 1, 'rgba(0,0,0,0.18)'); // shadow
+    sprite(ctx, SPR[who], x, y);
+    arms(ctx, who, pose, x, y);
+  }
+  function marker(ctx, x, y) { // speaker marker: a small down-pointing triangle (shape, not colour only)
+    px(ctx, x, y, 5, 1, '#fff7c2'); px(ctx, x + 1, y + 1, 3, 1, '#fff7c2'); px(ctx, x + 2, y + 2, 1, 1, '#fff7c2');
+    px(ctx, x - 1, y - 1, 7, 1, '#2a2a2a');
+  }
+
+  function plant(ctx, x, y, watered) {
+    px(ctx, x, y + 10, 10, 1, '#8c4a2f'); px(ctx, x + 1, y + 11, 8, 5, '#b8603b'); px(ctx, x + 2, y + 16, 6, 1, '#8c4a2f');
+    var L = '#4f9a4a', D = '#2f6e36';
+    if (watered) {
+      px(ctx, x + 4, y + 2, 2, 8, D);
+      px(ctx, x + 1, y + 3, 3, 2, L); px(ctx, x + 6, y + 1, 3, 2, L); px(ctx, x + 1, y + 6, 3, 2, L); px(ctx, x + 6, y + 5, 3, 2, L); px(ctx, x + 4, y, 2, 2, L);
+    } else { // drooping
+      px(ctx, x + 4, y + 5, 2, 5, D); px(ctx, x + 6, y + 4, 2, 1, D);
+      px(ctx, x + 1, y + 7, 3, 1, '#8aa04a'); px(ctx, x, y + 8, 2, 2, '#8aa04a'); px(ctx, x + 8, y + 5, 2, 1, '#8aa04a'); px(ctx, x + 9, y + 6, 1, 3, '#8aa04a');
+    }
+  }
+
+  function room(ctx, wall, floor) {
+    px(ctx, 0, 0, W, 44, wall); px(ctx, 0, 44, W, 20, floor);
+    for (var i = 0; i < W; i += 8) px(ctx, i, 44, 1, 20, 'rgba(0,0,0,0.06)');
+    px(ctx, 0, 43, W, 1, '#00000022');
+  }
+  function door(ctx, x, y, open) {
+    px(ctx, x - 2, y - 2, 24, 40, '#5a3b26');
+    if (open) { px(ctx, x, y, 20, 38, '#f3e3c3'); px(ctx, x, y, 3, 38, '#7b5236'); }
+    else { px(ctx, x, y, 20, 38, '#8a5a3a'); px(ctx, x + 2, y + 3, 16, 14, '#946446'); px(ctx, x + 2, y + 20, 16, 14, '#946446'); px(ctx, x + 16, y + 19, 2, 2, '#e0c060'); }
+  }
+
+  function scene(ctx, name, st) {
+    st = st || {};
+    ctx.clearRect(0, 0, W, H);
+    var spk = st.speaker;
+    if (name === 'title') {
+      px(ctx, 0, 0, W, H, '#28324a');
+      for (var i = 0; i < 18; i++) px(ctx, (i * 37) % W, (i * 23) % 26, 1, 1, '#c9d3ff');
+      px(ctx, 18, 12, 60, 52, '#8c6b5a'); px(ctx, 18, 12, 60, 2, '#5e463b');
+      for (var r = 0; r < 3; r++) for (var c = 0; c < 4; c++) {
+        var lit = (r === 1 && c === 2);
+        px(ctx, 23 + c * 14, 18 + r * 14, 9, 9, lit ? '#ffd77a' : '#3b4660');
+        if (lit) { plant(ctx, 24 + c * 14, 18 + r * 14 - 2, true); }
+      }
+      digits(ctx, '411', 42, 58, '#ffd77a');
+      return;
+    }
+    if (name === 'doorway') {
+      room(ctx, '#c9b79a', '#8d7a63');
+      door(ctx, 38, 6, st.door === 'open');
+      px(ctx, 60, 12, 13, 7, '#e8dcc0'); digits(ctx, '411', 61, 13, '#3a2a1e'); // plaque spans all three 3px digits + 1px margin
+      if (st.door === 'open') {
+        if (st.noe) { person(ctx, 'noe', st.noe, 50, 22); if (spk === 'noe') marker(ctx, 53, 17); }
+        if (st.camille) { person(ctx, 'camille', st.camille, 40, 25); if (spk === 'camille') marker(ctx, 43, 20); }
+      }
+      px(ctx, 30, 58, 36, 4, '#7a3b3b'); // doormat
+      return;
+    }
+    if (name === 'name') {
+      room(ctx, '#e8d9bd', '#a88a68');
+      px(ctx, 6, 8, 20, 16, '#9fd0ea'); px(ctx, 6, 15, 20, 1, '#fff'); px(ctx, 15, 8, 1, 16, '#fff'); px(ctx, 5, 7, 22, 1, '#6b4f3a');
+      person(ctx, 'camille', st.camille || 'idle', 36, 26); if (spk === 'camille') marker(ctx, 39, 21);
+      person(ctx, 'noe', st.noe || 'idle', 58, 25); if (spk === 'noe') marker(ctx, 61, 20);
+      return;
+    }
+    if (name === 'plant') {
+      room(ctx, '#dfe6d2', '#a88a68');
+      px(ctx, 8, 6, 26, 22, '#a6d7f0'); px(ctx, 8, 16, 26, 1, '#fff'); px(ctx, 20, 6, 1, 22, '#fff'); px(ctx, 7, 28, 28, 2, '#6b4f3a');
+      px(ctx, 10, 40, 22, 3, '#6b4f3a'); px(ctx, 12, 43, 2, 10, '#6b4f3a'); px(ctx, 28, 43, 2, 10, '#6b4f3a');
+      plant(ctx, 16, 23, !!st.watered);
+      if (st.drops) { px(ctx, 20, 18, 1, 2, '#4aa3df'); px(ctx, 23, 16, 1, 2, '#4aa3df'); px(ctx, 18, 15, 1, 2, '#4aa3df'); }
+      if (st.camille) { person(ctx, 'camille', st.camille, 48, 26); if (spk === 'camille') marker(ctx, 51, 21); }
+      return;
+    }
+    if (name === 'cat') {
+      room(ctx, '#e3d3c6', '#9d8064');
+      door(ctx, 4, 6, st.door === 'open');
+      if (st.camille) { person(ctx, 'camille', st.camille, 8, 24); if (spk === 'camille') marker(ctx, 11, 19); }
+      px(ctx, 52, 34, 40, 10, '#5b6fa0'); px(ctx, 52, 30, 40, 5, '#4b5d8a'); px(ctx, 50, 32, 3, 12, '#4b5d8a'); px(ctx, 91, 32, 3, 12, '#4b5d8a');
+      if (st.noe) {
+        var pose = st.noe;
+        person(ctx, 'noe', pose, 36, 25); if (spk === 'noe') marker(ctx, 39, 20);
+      }
+      if (st.cat === 'peek') sprite(ctx, SPR.catPeek, 60, 26);
+      if (st.cat === 'sit') sprite(ctx, SPR.cat, 52, 44);
+      return;
+    }
+    if (name === 'diary') {
+      px(ctx, 0, 0, W, H, '#3d3346');
+      px(ctx, 0, 40, W, 24, '#7a5a3e'); px(ctx, 0, 40, W, 2, '#5e432c');
+      px(ctx, 24, 30, 48, 20, '#f6efdc'); px(ctx, 47, 30, 2, 20, '#d8ccb0');
+      for (var l = 0; l < 5; l++) { px(ctx, 28, 34 + l * 3, 16, 1, '#b9ad94'); px(ctx, 52, 34 + l * 3, 15, 1, '#b9ad94'); }
+      px(ctx, 76, 12, 2, 28, '#c9a227'); px(ctx, 70, 8, 14, 6, '#e8c95a'); px(ctx, 66, 14, 22, 20, 'rgba(255,230,150,0.08)');
+      plant(ctx, 8, 24, !!st.watered);
+      if (st.cat) sprite(ctx, SPR.catPeek, 82, 37);
+      return;
+    }
+    if (name === 'probe' || name === 'baseline') { // neutral frame: no faces, no pointing
+      px(ctx, 0, 0, W, H, '#2e3440');
+      px(ctx, 38, 20, 6, 10, '#d8dee9'); px(ctx, 44, 16, 4, 18, '#d8dee9'); px(ctx, 48, 12, 2, 26, '#d8dee9');
+      px(ctx, 53, 19, 1, 12, '#88c0d0'); px(ctx, 56, 16, 1, 18, '#88c0d0');
+      return;
+    }
+    if (name === 'end') {
+      px(ctx, 0, 0, W, H, '#1f2a44');
+      px(ctx, 70, 8, 8, 8, '#f5e6a8'); px(ctx, 72, 8, 6, 6, '#1f2a44');
+      plant(ctx, 42, 36, !!st.watered);
+      if (st.cat) sprite(ctx, SPR.cat, 58, 48);
+      return;
+    }
+  }
+
+  var api = { W: W, H: H, scene: scene };
+  root.A411 = root.A411 || {};
+  root.A411.Art = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — French audio via the device's own speech engine (Web Speech API).
+ * Status values are what the browser reports: 'played' = speech engine reported it finished.
+ * A muted phone can still report 'played'; the player can always replay or read instead.
+ *
+ * v0.1.2: voice ranking (premium/enhanced/natural/network voices first; Apple "Eloquence" and
+ * novelty voices such as Eddy, Flo, Grandma, Bad News/Mauvaises nouvelles are never auto-picked
+ * because they sound robotic), per-character voices (Camille / Noé) when the device has more
+ * than one usable French voice, a per-device speed (0.75 / 0.9 / 1.0) and voice choice stored
+ * outside the save (voices differ per device, so they must not travel with an exported save).
+ * Every speak() records which voice/rate actually played in A.last so evidence stays honest. */
+(function (root) {
+  'use strict';
+  var A = { status: 'unknown', voice: null, voiceName: null, reason: null, voices: [], assign: {}, prefs: null, last: null };
+  var synth = root.speechSynthesis;
+  var PREFS_KEY = 'a411.device.audio';
+  var RATES = [0.75, 0.9, 1.0];
+  var DEFAULT_RATE = 0.9;
+
+  // ---------- pure helpers (unit-tested in Node) ----------
+  function norm(s) { return String(s || '').toLowerCase().normalize ? String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : String(s || '').toLowerCase(); }
+  function firstWord(name) { return norm(name).replace(/\(.*$/, '').trim(); }
+  // Apple Eloquence voices + novelty voices (English and French localised names) + eSpeak.
+  var ROBOTIC = ['eddy', 'flo', 'grandma', 'grandpa', 'grand-mere', 'grand-pere', 'mamie', 'papi', 'jacques', 'reed', 'rocko', 'sandy', 'shelley',
+    'fred', 'junior', 'kathy', 'ralph', 'albert', 'bad news', 'mauvaises nouvelles', 'bahh', 'bells', 'cloches', 'boing', 'bubbles', 'bulles',
+    'cellos', 'violoncelles', 'good news', 'bonnes nouvelles', 'jester', 'bouffon', 'organ', 'orgue', 'superstar', 'superestrella', 'trinoids',
+    'trinoides', 'whisper', 'murmure', 'wobble', 'zarvox'];
+  var FEMALE = ['amelie', 'audrey', 'aurelie', 'marie', 'aude', 'chantal', 'julie', 'hortense', 'hortence', 'caroline', 'denise', 'eloise', 'vivienne',
+    'charline', 'ariane', 'sylvie', 'celine', 'lea', 'brigitte', 'coralie', 'jacqueline', 'josephine', 'yvette', 'virginie', 'estelle', 'camille', 'google francais'];
+  var MALE = ['thomas', 'nicolas', 'daniel', 'paul', 'claude', 'guillaume', 'henri', 'remy', 'gerard', 'fabrice', 'antoine', 'jean', 'thierry',
+    'alain', 'maurice', 'yves', 'mathieu', 'jerome', 'lucien', 'olivier', 'sebastien'];
+  var APPLE_STD = { thomas: 54, audrey: 54, aurelie: 52, amelie: 52, marie: 50, aude: 48, chantal: 48, nicolas: 48 };
+
+  function isFrench(v) { return !!v && /^fr([-_]|$)/i.test(v.lang || ''); }
+  function region(v) { var m = String(v.lang || '').replace('_', '-').split('-'); return (m[0] || '').toLowerCase() + (m[1] ? '-' + m[1].toUpperCase() : ''); }
+  function classify(v) {
+    var name = norm(v.name), uri = norm(v.voiceURI), all = name + ' ' + uri, fw = firstWord(v.name);
+    var robotic = /espeak|eloquence|speech\.synthesis\.voice\./.test(all) || ROBOTIC.some(function (r) { return fw === r || fw.indexOf(r + ' ') === 0; });
+    var quality, score;
+    if (robotic) { quality = 'robotic'; score = -100; }
+    else if (/premium/.test(all)) { quality = 'premium'; score = 92; }
+    else if (/natural|neural|wavenet|online/.test(all)) { quality = 'natural'; score = 88; }
+    else if (/enhanced|amelior/.test(all)) { quality = 'enhanced'; score = 82; }
+    else if (/network/.test(all) || /^google\s/.test(name)) { quality = 'network'; score = 76; }
+    else if (/-x-[a-z]{3}-local|android|chrome os/.test(all)) { quality = 'local-hq'; score = 66; }
+    else if (APPLE_STD[fw] != null) { quality = 'standard'; score = APPLE_STD[fw]; }
+    else if (/compact/.test(all)) { quality = 'compact'; score = 42; }
+    else { quality = 'standard'; score = 44; }
+    var r = region(v);
+    if (r === 'fr-FR') score += 8; else if (r === 'fr-BE' || r === 'fr-CH') score += 3; else if (r === 'fr-CA') score += 2;
+    var gender = null;
+    if (/-x-(frc|fra|vlf|caa|cac)-/.test(uri + ' ' + name)) gender = 'female';
+    else if (/-x-(frd|frb|cab|cad)-/.test(uri + ' ' + name)) gender = 'male';
+    else {
+      var words = name.replace(/microsoft|google|apple|online|natural|multilingual|enhanced|premium|compact|\(.*?\)|-.*$/g, ' ').trim();
+      if (FEMALE.some(function (n) { return words === n || words.indexOf(n) === 0 || name.indexOf(n) >= 0 && n.indexOf(' ') > 0; })) gender = 'female';
+      else if (MALE.some(function (n) { return words === n || words.indexOf(n) === 0; })) gender = 'male';
+    }
+    return { quality: quality, score: score, gender: gender, region: r, robotic: robotic };
+  }
+  function key(v) { return (v.voiceURI || '') + '|' + (v.name || '') + '|' + (v.lang || ''); }
+  function rankFrench(voices) {
+    var seen = {};
+    return (voices || []).filter(isFrench).filter(function (v) { var k = key(v); if (seen[k]) return false; seen[k] = 1; return true; })
+      .map(function (v, i) { var c = classify(v); return { v: v, key: key(v), name: v.name, lang: v.lang, quality: c.quality, score: c.score, gender: c.gender, region: c.region, robotic: c.robotic, i: i }; })
+      .sort(function (a, b) { return b.score - a.score || a.i - b.i; });
+  }
+  // prefs: { camille: key|null, noe: key|null } -> { camille, noe, neutral, distinct }
+  function assignVoices(ranked, prefs) {
+    prefs = prefs || {};
+    var good = ranked.filter(function (r) { return !r.robotic; });
+    var pool = good.length ? good : ranked;
+    if (!pool.length) return { camille: null, noe: null, neutral: null, distinct: false };
+    function byKey(k) { return k ? ranked.filter(function (r) { return r.key === k; })[0] || null : null; }
+    var cam = byKey(prefs.camille) || pool.filter(function (r) { return r.gender === 'female'; })[0] || pool[0];
+    var noe = byKey(prefs.noe);
+    if (!noe) {
+      var others = pool.filter(function (r) { return r.key !== cam.key; });
+      noe = others.filter(function (r) { return r.gender === 'male'; })[0] || others[0] || cam;
+    }
+    return { camille: cam, noe: noe, neutral: pool[0], distinct: cam.key !== noe.key };
+  }
+  function qualityZh(q) {
+    return { premium: '高级 Premium', enhanced: '增强 Enhanced', natural: '自然 Natural', network: '在线高质量', 'local-hq': '高质量', standard: '标准', compact: '基础（压缩）', robotic: '机械/趣味声音，不推荐' }[q] || q;
+  }
+  function label(r) { return r ? r.name + ' (' + r.lang + ')' : null; }
+  function normRate(x) {
+    x = Number(x);
+    if (!isFinite(x)) return DEFAULT_RATE;
+    var best = RATES[0]; RATES.forEach(function (r) { if (Math.abs(r - x) < Math.abs(best - x)) best = r; });
+    return best;
+  }
+  function platform(nav) {
+    nav = nav || root.navigator || {};
+    var ua = String(nav.userAgent || '');
+    if (/iPhone|iPad|iPod/.test(ua) || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1)) return 'ios';
+    if (/Android/.test(ua)) return 'android';
+    return 'desktop';
+  }
+
+  // ---------- device prefs (outside the save) ----------
+  function ls() { try { return root.localStorage || null; } catch (e) { return null; } }
+  A.loadPrefs = function (fallbackRate) {
+    var p = null;
+    try { var s = ls(); p = s ? JSON.parse(s.getItem(PREFS_KEY) || 'null') : null; } catch (e) { p = null; }
+    if (!p || typeof p !== 'object') p = {};
+    A.prefs = { camille: typeof p.camille === 'string' ? p.camille : null, noe: typeof p.noe === 'string' ? p.noe : null,
+      rate: p.rate != null ? normRate(p.rate) : (fallbackRate != null ? normRate(fallbackRate) : DEFAULT_RATE) };
+    return A.prefs;
+  };
+  A.savePrefs = function (patch) {
+    if (!A.prefs) A.loadPrefs();
+    Object.keys(patch || {}).forEach(function (k) { A.prefs[k] = k === 'rate' ? normRate(patch[k]) : patch[k]; });
+    try { var s = ls(); if (s) s.setItem(PREFS_KEY, JSON.stringify(A.prefs)); } catch (e) { return false; }
+    A.reassign();
+    return true;
+  };
+  A.reassign = function () {
+    A.assign = assignVoices(A.voices, A.prefs || {});
+    A.voice = A.assign.camille ? A.assign.camille.v : null;
+    A.voiceName = label(A.assign.camille);
+  };
+  A.rate = function () { return (A.prefs || A.loadPrefs()).rate; };
+
+  function getVoices(timeoutMs) {
+    return new Promise(function (resolve) {
+      if (!synth) return resolve([]);
+      var v = synth.getVoices();
+      if (v && v.length) return resolve(v);
+      var done = false;
+      function fin() { if (done) return; done = true; resolve(synth.getVoices() || []); }
+      try { synth.addEventListener('voiceschanged', fin, { once: true }); } catch (e) { synth.onvoiceschanged = fin; }
+      setTimeout(fin, timeoutMs || 1500);
+    });
+  }
+
+  A.init = function () {
+    if (!A.prefs) A.loadPrefs();
+    if (!synth || typeof root.SpeechSynthesisUtterance !== 'function') {
+      A.status = 'unavailable'; A.reason = 'no-speech-api'; A.voices = []; A.reassign();
+      return Promise.resolve(A.status);
+    }
+    return getVoices(2000).then(function (voices) {
+      A.voices = rankFrench(voices);
+      A.reassign();
+      A.status = A.voice ? 'available' : 'unavailable';
+      A.reason = A.voice ? null : 'no-french-voice';
+      return A.status;
+    });
+  };
+
+  // opts: { speaker: 'camille'|'noe'|'neutral', rate } -> 'played' | 'failed' | 'unavailable' | 'stopped'. Never rejects.
+  A.speak = function (text, opts) {
+    opts = opts || {};
+    return new Promise(function (resolve) {
+      var sp = opts.speaker === 'noe' ? 'noe' : opts.speaker === 'neutral' ? 'neutral' : 'camille';
+      var r = A.assign && A.assign[sp];
+      if (A.status !== 'available' || !r) { A.last = null; return resolve('unavailable'); }
+      var rate = normRate(opts.rate != null ? opts.rate : A.rate());
+      // Pitch-shifting degrades naturalness; only use a mild shift when both characters share one voice.
+      var pitch = 1;
+      if (!A.assign.distinct) pitch = sp === 'camille' ? 1.06 : sp === 'noe' ? 0.92 : 1;
+      A.last = { speaker: sp, voice: label(r), voiceURI: r.v.voiceURI || null, quality: r.quality, rate: rate, pitch: pitch, distinct: !!A.assign.distinct };
+      var settled = false, started = false, t1, t2;
+      function fin(res) { if (settled) return; settled = true; clearTimeout(t1); clearTimeout(t2); resolve(res); }
+      try {
+        synth.cancel();
+        var u = new root.SpeechSynthesisUtterance(String(text).replace(/\u00A0/g, ' ').replace(/[\u2019\u2018]/g, "'"));
+        u.voice = r.v; u.lang = r.v.lang || 'fr-FR';
+        u.rate = rate; u.pitch = pitch;
+        u.onstart = function () { started = true; };
+        u.onend = function () { fin('played'); };
+        u.onerror = function (ev) { fin(ev && (ev.error === 'interrupted' || ev.error === 'canceled') ? 'stopped' : 'failed'); };
+        t1 = setTimeout(function () { if (!started) { try { synth.cancel(); } catch (e) { } fin('failed'); } }, 5000);
+        t2 = setTimeout(function () { try { synth.cancel(); } catch (e) { } fin(started ? 'played' : 'failed'); }, 15000);
+        synth.speak(u);
+      } catch (e) { fin('failed'); }
+    });
+  };
+  A.stop = function () { try { if (synth) synth.cancel(); } catch (e) { } };
+
+  A.RATES = RATES; A.DEFAULT_RATE = DEFAULT_RATE; A.PREFS_KEY = PREFS_KEY;
+  A.classify = classify; A.rankFrench = rankFrench; A.assignVoices = assignVoices; A.qualityZh = qualityZh; A.label = label;
+  A.normRate = normRate; A.platform = platform; A.voiceKey = key;
+  root.A411 = root.A411 || {};
+  root.A411.Audio = A;
+  if (typeof module !== 'undefined' && module.exports) module.exports = A;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — Day 1 player (UI + scene engine). */
+(function () {
+  'use strict';
+  var C = A411.Content, L = A411.Logic, Art = A411.Art, Au = A411.Audio;
+  var $screen = document.getElementById('screen');
+  var $overlay = document.getElementById('overlay');
+  var $toast = document.getElementById('toast');
+  var $topbar = document.getElementById('topbar');
+  var $where = document.getElementById('where');
+  var NB = '\u00A0';
+
+  var storage = null, storageOk = true, S = null, notices = [];
+  var ui = { gesture: false, line: null, trial: null, view: 'title' };
+
+  // ---------- helpers ----------
+  function h(tag, attrs) {
+    var el = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v == null || v === false) return;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v);
+      else if (v === true) el.setAttribute(k, '');
+      else el.setAttribute(k, v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var c = arguments[i];
+      if (c == null || c === false) continue;
+      if (Array.isArray(c)) c.forEach(function (x) { if (x != null && x !== false) el.appendChild(typeof x === 'string' ? document.createTextNode(x) : x); });
+      else el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    }
+    return el;
+  }
+  function btn(label, fn, cls, extra) {
+    var a = { class: 'btn ' + (cls || ''), type: 'button', onclick: function (ev) { ui.gesture = true; safe(fn)(ev); } };
+    if (extra) Object.keys(extra).forEach(function (k) { a[k] = extra[k]; });
+    return h('button', a, label);
+  }
+  function toast(msg, ms) {
+    $toast.textContent = msg; $toast.hidden = false;
+    clearTimeout(toast._t); toast._t = setTimeout(function () { $toast.hidden = true; }, ms || 2600);
+  }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function safe(fn) {
+    return function () {
+      try { return fn.apply(this, arguments); } catch (e) { showError(e); }
+    };
+  }
+  function fr(text) { return h('div', { class: 'fr', lang: 'fr' }, text); }
+  function zh(text) { return h('div', { class: 'zh', lang: 'zh-Hans' }, text); }
+  function level() { return S ? S.settings.supportLevel : 3; }
+
+  // ---------- persistence ----------
+  function syncAudioMeta() { if (S && Au.status !== 'unknown') { setAudioMeta(); S.meta.audio.checkedAt = S.meta.audio.checkedAt || L.nowISO(); } }
+  // What the device offers now (not proof of what was heard; per-attempt voice/rate is recorded on each attempt).
+  function setAudioMeta() {
+    var m = S.meta.audio, a = Au.assign || {};
+    m.status = Au.status; m.voice = Au.voiceName;
+    m.voices = { camille: Au.label(a.camille), noe: Au.label(a.noe), neutral: Au.label(a.neutral) };
+    m.quality = { camille: a.camille ? a.camille.quality : null, noe: a.noe ? a.noe.quality : null };
+    m.distinctVoices = !!a.distinct; m.rate = Au.rate(); m.frenchVoiceCount = (Au.voices || []).length;
+    S.settings.speechRate = Au.rate();
+  }
+  function voiceFields(info) { return info ? { name: info.voice, quality: info.quality, rate: info.rate, pitch: info.pitch } : null; }
+  function persist(reason) {
+    if (!S) return true;
+    if (S.meta.audio.status === 'unknown') syncAudioMeta();
+    if (!storage) { storageOk = false; return false; }
+    var r = storage.write(S);
+    if (!r.ok) {
+      storageOk = false;
+      toast('⚠️ 无法保存到本机：' + r.error + '。请在「存档」中导出备份。', 5000);
+      return false;
+    }
+    storageOk = true;
+    return true;
+  }
+  function initStorage() {
+    try { var ls = window.localStorage; var k = 'a411.probe'; ls.setItem(k, '1'); ls.removeItem(k); storage = L.createStorage(ls); }
+    catch (e) { storage = null; storageOk = false; }
+  }
+
+  // ---------- error handling: never trap the player ----------
+  function showError(e) {
+    try { console.error(e); } catch (x) { }
+    ui.paused = false;
+    Au.stop();
+    var box = h('div', { class: 'sheet' },
+      h('div', { class: 'head' }, h('h2', { text: '出了点问题' })),
+      h('div', { class: 'pad' },
+        h('p', { text: '游戏遇到一个错误，但你的存档没有被删除（最后一次保存的进度仍在）。' }),
+        h('p', { class: 'muted', text: '错误信息：' + String(e && e.message || e).slice(0, 200) }),
+        h('div', { class: 'col' },
+          btn('↻ 重新载入当前步骤', function () { closeOverlay(); reloadFromStorage(); render(); }, 'primary'),
+          btn('🏠 回到主菜单', function () { closeOverlay(); reloadFromStorage(); goTitle(); }),
+          btn('💾 打开存档工具（导出备份）', function () { closeOverlay(); openSave(); })
+        )));
+    openOverlay(box);
+  }
+  window.addEventListener('error', function (ev) { showError(ev.error || ev.message); });
+  window.addEventListener('unhandledrejection', function (ev) { showError(ev.reason); });
+  function reloadFromStorage() { if (!storage) return; var r = storage.load(); if (r.save) S = r.save; }
+
+  // ---------- overlay ----------
+  function openOverlay(node) { $overlay.innerHTML = ''; $overlay.appendChild(node); $overlay.hidden = false; var f = $overlay.querySelector('button'); if (f) f.focus(); }
+  function closeOverlay() { $overlay.hidden = true; $overlay.innerHTML = ''; if (ui.paused && !closeOverlay._inner) { closeOverlay._inner = true; try { openPause(); } finally { closeOverlay._inner = false; } } }
+  function sheet(title, body) {
+    return h('div', { class: 'sheet' },
+      h('div', { class: 'head' }, h('h2', { text: title }), btn('✕ 关闭', closeOverlay, 'small', { 'aria-label': '关闭' })),
+      body);
+  }
+
+  // ---------- settings ----------
+  function applySettings() {
+    var rm = S ? S.settings.reducedMotion : (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    document.body.classList.toggle('reduced-motion', !!rm);
+    document.body.classList.toggle('large-text', !!(S && S.settings.largeText));
+  }
+
+  // ---------- audio helpers ----------
+  function audioBanner() {
+    if (Au.status === 'unavailable') {
+      return h('div', { class: 'banner warn', id: 'audioBanner', role: 'status' },
+        '🔇 这台设备/浏览器没有可用的法语语音（', h('span', { lang: 'en' }, Au.reason || 'unavailable'), '）。现在是',
+        h('b', { text: '阅读模式' }), '：法语文字会显示出来，这部分不算听力练习。');
+    }
+    return null;
+  }
+  function speakLine(lineId) {
+    var line = C.LINES[lineId];
+    return Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (st) {
+      setAudioMeta(); S.meta.audio.checkedAt = L.nowISO();
+      return st;
+    });
+  }
+  function bestAudio(a, b) { var rank = { played: 3, failed: 2, unavailable: 1, not_used: 0 }; return (rank[b] || 0) > (rank[a] || 0) ? b : a; }
+
+  // ---------- navigation ----------
+  function curStep() { return C.SCENES[S.progress.scene][S.progress.step]; }
+  function setWhere() {
+    $where.textContent = 'Day ' + S.progress.episode + ' · ' + (C.SCENE_ZH[S.progress.scene] || S.progress.scene) + ' · v' + L.APP_VERSION;
+  }
+  function next() {
+    Au.stop();
+    var sc = C.SCENES[S.progress.scene];
+    if (S.progress.step + 1 < sc.length) S.progress.step++;
+    else {
+      var i = C.ORDER.indexOf(S.progress.scene);
+      S.progress.scene = C.ORDER[Math.min(i + 1, C.ORDER.length - 1)];
+      S.progress.step = 0;
+    }
+    S.progress.draft = '';
+    ui.line = null; ui.trial = null;
+    persist('advance');
+    render();
+  }
+  function goTitle() { Au.stop(); ui.view = 'title'; ui.line = null; ui.trial = null; render(); }
+  function startPlay() { ui.view = 'play'; ui.gesture = true; render(); }
+
+  // ---------- rendering ----------
+  function stage(sceneName, st) {
+    var c = h('canvas', { class: 'stage', width: Art.W, height: Art.H, role: 'img', 'aria-label': st && st.alt || '像素场景' });
+    Art.scene(c.getContext('2d'), sceneName, st || {});
+    return c;
+  }
+  function render() {
+    if (ui.paused) return; // nothing re-renders behind the pause sheet
+    try {
+      applySettings();
+      $screen.innerHTML = '';
+      if (ui.view === 'title' || !S) { $topbar.hidden = true; renderTitle(); return; }
+      $topbar.hidden = false; setWhere();
+      var step = curStep();
+      var fn = R[step.type];
+      if (!fn) throw new Error('未知步骤 ' + step.type);
+      fn(step);
+      ui.gesture = false;
+    } catch (e) { showError(e); }
+  }
+
+  function artFor(step) {
+    var st = {}; var a = step.art || {};
+    Object.keys(a).forEach(function (k) { st[k] = a[k]; });
+    st.watered = S.plant.careState === 'watered';
+    return st;
+  }
+
+  // ---------- Title ----------
+  function renderTitle() {
+    var hasSave = !!S && (S.progress.scene !== 'baseline' || S.progress.step > 0 || S.learning.baseline.status !== 'not_started');
+    var wrap = h('div', { class: 'fade-in' });
+    wrap.appendChild(stage('title', { alt: '夜晚的公寓楼，411 号窗户亮着灯，窗台上有一盆植物' }));
+    var main = h('div', { class: 'pad' },
+      h('h1', { lang: 'fr', text: 'L’Appartement 411' }),
+      h('p', { class: 'muted' }, h('span', { lang: 'fr', text: 'Day 1 · Bienvenue chez nous' }), ' — 搬家第一天'));
+    var col = h('div', { class: 'col' });
+    if (hasSave && S.progress.status !== 'complete') {
+      col.appendChild(btn('▶ 继续：Day 1 · ' + C.SCENE_ZH[S.progress.scene] + '（第 ' + (S.progress.step + 1) + ' 步）', startPlay, 'primary', { id: 'btnContinue' }));
+    } else if (!hasSave) {
+      col.appendChild(btn('▶ 开始 Day 1', function () { if (!S) S = L.newSave({ reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches }); persist('new'); startPlay(); }, 'primary', { id: 'btnStart' }));
+    } else {
+      col.appendChild(h('div', { class: 'banner ok', text: '✓ 第一天已完成。第二天还在制作中。' }));
+      col.appendChild(btn('📖 查看日记', openDiary, 'primary', { id: 'btnDiary' }));
+    }
+    if (hasSave) col.appendChild(btn('↺ 重新开始（会先自动备份当前存档）', confirmNewGame, '', { id: 'btnNew' }));
+    main.appendChild(col);
+    wrap.appendChild(main);
+
+    if (hasSave && S.world.completedEvents.indexOf('plant_shown') >= 0) {
+      var ps = L.plantStatus(S.plant, new Date());
+      var today = new Date(); var dayKey = 'daily.' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      var done = S.plant.careLog.some(function (c) { return c.actionId === dayKey || (c.at && new Date(c.at).toDateString() === today.toDateString()); });
+      wrap.appendChild(h('div', { class: 'card', id: 'plantCard' },
+        h('b', { text: '🪴 你的植物：' }), ps === 'watered' ? '精神（已浇水）' : '有点渴',
+        S.plant.mementos.length ? h('div', { class: 'muted', text: '纪念：' + S.plant.mementos.map(function (m) { return m.label; }).join('、') }) : null,
+        h('div', { class: 'row' }, btn(done ? '✓ 今天已经浇过了' : '💧 浇水（快速探望）', function () {
+          var r = L.waterPlant(S, dayKey, 'title', new Date());
+          if (r.counted) { persist('care'); toast('💧 浇好了。'); } else toast('今天已经浇过了，不会重复计算。');
+          render();
+        }, 'small', { id: 'btnTitleWater' }))));
+    }
+
+    var days = h('ul', { class: 'days', 'aria-label': '章节' });
+    C.DAYS.forEach(function (d) {
+      var status = d.available ? (S && S.progress.status === 'complete' ? '已完成' : '可以玩') : '尚未开放';
+      days.appendChild(h('li', { class: d.available ? '' : 'na', 'aria-disabled': d.available ? null : 'true' },
+        h('span', null, 'Day ' + d.n + ' · ', h('span', { lang: 'fr', text: d.title }), ' ', h('span', { class: 'muted', text: d.zh })),
+        h('span', { class: 'tag', text: status })));
+    });
+    wrap.appendChild(h('div', { class: 'card' }, h('h3', { text: '章节' }), days,
+      h('p', { class: 'muted', text: 'Day 2–7 还没做好，所以这里不放按钮。完成并检查好一天，才会开放下一天。' })));
+
+    wrap.appendChild(h('div', { class: 'row pad' },
+      btn('⚙️ 设置', openSettings, 'grow', { id: 'btnSettings' }),
+      btn('💾 存档', openSave, 'grow', { id: 'btnSave' }),
+      btn('📝 反馈摘要', openSummary, 'grow', { id: 'btnSummary' }),
+      hasSave ? btn('📖 日记', openDiary, 'grow', { id: 'btnDiary2' }) : null));
+    if (!storage) wrap.appendChild(h('div', { class: 'banner warn', text: '⚠️ 这个浏览器不允许本机存储，进度不会被保存。请在「存档」中导出。' }));
+    notices.forEach(function (n) { wrap.appendChild(h('div', { class: 'banner info', text: n })); });
+    wrap.appendChild(h('div', { class: 'footer', id: 'versionFooter' },
+      'App v' + L.APP_VERSION + ' · 内容 ' + C.CONTENT_VERSION + ' · 存档 schema v' + L.SCHEMA_VERSION,
+      h('br'), '存档只保存在这台设备的这个浏览器里，不会自动同步。清除浏览器数据会删除它——请定期导出。',
+      h('br'), '像素画为本项目原创；法语语音来自你设备自带的语音引擎。'));
+    $screen.appendChild(wrap);
+  }
+
+  function confirmNewGame() {
+    openOverlay(sheet('重新开始？', h('div', { class: 'pad' },
+      h('p', { text: '当前存档会先自动备份（可在「存档 → 备份」中恢复），然后开始新的第一天。' }),
+      h('div', { class: 'col' },
+        btn('确定，备份并重新开始', function () {
+          if (storage && S) storage.backup('pre-new-game', S);
+          S = L.newSave({ reducedMotion: S && S.settings.reducedMotion });
+          persist('new'); closeOverlay(); startPlay();
+        }, 'primary', { id: 'btnConfirmNew' }),
+        btn('取消', closeOverlay)))));
+  }
+
+  // ---------- Pause ----------
+  function openPause() {
+    ui.paused = true;
+    Au.stop();
+    persist('pause');
+    var box = sheet('⏸ 已暂停', h('div', { class: 'pad' },
+      h('p', { id: 'pauseMsg', text: '进度已保存：Day 1 · ' + C.SCENE_ZH[S.progress.scene] + '（第 ' + (S.progress.step + 1) + ' 步）。可以随时离开，下次会回到这里。' }),
+      storageOk ? null : h('div', { class: 'banner warn', text: '⚠️ 保存失败——请先导出存档。' }),
+      h('div', { class: 'col' },
+        btn('▶ 继续', function () { ui.paused = false; closeOverlay(); ui.gesture = true; render(); }, 'primary', { id: 'btnResume' }),
+        btn('⚙️ 设置', openSettings),
+        btn('🏠 回到主菜单', function () { ui.paused = false; closeOverlay(); goTitle(); }, '', { id: 'btnPauseHome' }))));
+    openOverlay(box);
+  }
+  document.getElementById('btnPause').addEventListener('click', safe(openPause));
+  document.addEventListener('visibilitychange', function () { if (document.hidden && S) { Au.stop(); persist('hidden'); } });
+
+  // ---------- Line (dialogue) ----------
+  function recordLineExposure(step) {
+    var st = ui.line, line = C.LINES[step.line];
+    var audio = st.audio === 'pending' ? 'not_used' : st.audio;
+    var modality = audio === 'played' ? (st.sub ? 'listening+reading' : 'listening') : 'reading';
+    S.learning.attempts.push(L.makeAttempt({
+      target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
+      visibleSupport: { level: level(), subtitles: st.sub, chinese: st.zh, gesture: true, speakerVisible: true, label: line.label },
+      replays: st.replays, firstListen: null, response: null, correct: null,
+      resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker,
+      audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? st.voiceInfo : null)
+    }));
+    [line.target].concat(line.also || []).forEach(function (t) {
+      if (!t) return;
+      var sb = S.learning.supportByTarget[t] = S.learning.supportByTarget[t] || {};
+      if (sb.listening == null) sb.listening = level();
+    });
+  }
+  function playCurrentLine(step, isReplay) {
+    var st = ui.line;
+    if (isReplay) { st.replays++; S.learning.helpLog.push({ kind: 'replay', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: C.LINES[step.line].target, at: L.nowISO() }); }
+    var stEl = document.getElementById('audioState'); if (stEl) stEl.textContent = '🔊 播放中…';
+    return speakLine(step.line).then(function (res) {
+      if (res === 'played' || (!st.voiceInfo && res === 'failed')) st.voiceInfo = Au.last;
+      st.audio = bestAudio(st.audio === 'pending' ? 'not_used' : st.audio, res);
+      if (res === 'stopped') return;
+      if (res === 'failed' || res === 'unavailable') st.sub = true; // fallback: reveal text, never call it listening
+      persist('audio');
+      if (ui.line === st) renderLineBody(step);
+    });
+  }
+  function renderLineBody(step) {
+    var host = document.getElementById('lineBody'); if (!host) return;
+    var st = ui.line, line = C.LINES[step.line], sp = C.SPEAKERS[line.speaker];
+    host.innerHTML = '';
+    host.appendChild(h('div', null, h('span', { class: 'speaker ' + line.speaker, id: 'speakerTag' }, '▼ ' + sp.name), ' ',
+      h('span', { class: 'muted', id: 'audioState', text: st.audio === 'played' ? '🔊 已播放' : st.audio === 'failed' ? '⚠️ 播放失败，已显示文字（阅读）' : st.audio === 'unavailable' ? '🔇 无语音（阅读）' : '' })));
+    host.appendChild(st.sub ? h('div', { id: 'subtitle' }, fr(line.fr)) : h('p', { class: 'hidden-text', id: 'subtitle', text: '（先听；需要时点「文字」）' }));
+    if (st.zh) host.appendChild(h('div', { id: 'gloss' }, zh(line.zh)));
+  }
+  R_line = function (step) {
+    var line = C.LINES[step.line];
+    if (!ui.line || ui.line.id !== step.line + '@' + S.progress.scene + S.progress.step) {
+      ui.line = { id: step.line + '@' + S.progress.scene + S.progress.step, sub: level() >= 2, zh: level() >= 3, replays: 0, audio: 'pending' };
+    }
+    var st = ui.line, art = artFor(step); art.speaker = line.speaker;
+    if (Au.status === 'unavailable') { st.sub = true; if (st.audio === 'pending') st.audio = 'unavailable'; }
+    $screen.appendChild(stage(S.progress.scene, art));
+    var ab = audioBanner(); if (ab) $screen.appendChild(ab);
+    var body = h('div', { id: 'lineBody' });
+    var dlg = h('div', { class: 'dialogue fade-in' }, body,
+      h('div', { class: 'row' },
+        btn('🔁 重播', function () { playCurrentLine(step, st.audio !== 'pending'); }, 'small', { id: 'btnReplay', disabled: Au.status === 'unavailable' }),
+        btn('文字', function () { if (!st.sub) { st.sub = true; S.learning.helpLog.push({ kind: 'subtitle', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: line.target, at: L.nowISO() }); persist('help'); } renderLineBody(step); }, 'small', { id: 'btnSub', 'aria-label': '显示法语文字' }),
+        btn('中文', function () { if (!st.zh) { st.zh = true; st.sub = true; S.learning.helpLog.push({ kind: 'chinese', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: line.target, at: L.nowISO() }); persist('help'); } renderLineBody(step); }, 'small', { id: 'btnZh', 'aria-label': '显示中文帮助' }),
+        btn('继续 ▶', function () {
+          recordLineExposure(step);
+          if (step.event) L.recordEvent(S, step.event, null);
+          if (step.event === 'met_camille') S.world.knowledge.player.metCamille = true;
+          if (step.event === 'met_noe') S.world.knowledge.player.metNoe = true;
+          next();
+        }, 'primary grow', { id: 'btnNext' })));
+    $screen.appendChild(dlg);
+    renderLineBody(step);
+    if (ui.gesture && st.audio === 'pending' && Au.status === 'available') playCurrentLine(step, false);
+  };
+  var R_line;
+
+  // ---------- Step renderers ----------
+  var R = {};
+  R.line = function (s) { R_line(s); };
+
+  R.baselineIntro = function () {
+    $screen.appendChild(stage('baseline', { alt: '中性画面：一个扬声器图标' }));
+    $screen.appendChild(h('div', { class: 'card fade-in' },
+      h('h2', { text: '开始前的小测（可跳过）' }),
+      h('p', { text: '约 1 分钟：听 3 句很短的法语，选你理解的意思。不扣分、不贴标签，只是记录你从哪里开始——如果你已经会一些法语，游戏可以少给提示。' }),
+      audioBanner(),
+      h('div', { class: 'col' },
+        btn('开始小测', function () {
+          S.progress.baseline = { index: 0, optOrders: C.BASELINE.map(function (b) { return shuffle(b.options.map(function (o) { return o.id; })); }) };
+          S.learning.baseline.status = 'in_progress';
+          next();
+        }, 'primary', { id: 'btnBaselineStart' }),
+        btn('跳过，直接开始故事', skipBaseline, '', { id: 'btnBaselineSkip' }))));
+  };
+  function skipBaseline() {
+    S.learning.baseline.status = S.learning.baseline.items.length ? 'partial' : 'skipped';
+    if (S.learning.baseline.status === 'partial') S.learning.baseline.status = 'done';
+    S.progress.baseline = null;
+    S.progress.scene = 'doorway'; S.progress.step = 0; ui.trial = null;
+    persist('skip'); render();
+  }
+
+  // shared listening-trial UI for baseline and probe
+  function trialUI(opts) {
+    // opts: {lineId, title, options:[{id,zh}], onAnswer(resp, trialState), extraButtons}
+    var key = opts.key;
+    if (!ui.trial || ui.trial.key !== key) ui.trial = { key: key, replays: 0, audio: 'pending', sub: false, zh: false, plays: 0 };
+    var t = ui.trial, line = C.LINES[opts.lineId];
+    if (Au.status === 'unavailable' && t.audio === 'pending') t.audio = 'unavailable';
+    var reading = t.audio === 'unavailable' || t.audio === 'failed';
+    $screen.appendChild(stage('probe', { alt: '中性画面：只有一个扬声器图标，没有人物和手势' }));
+    var ab = audioBanner(); if (ab) $screen.appendChild(ab);
+    var card = h('div', { class: 'dialogue' });
+    card.appendChild(h('div', { class: 'muted', id: 'trialTitle', text: opts.title }));
+    var stim = h('div', { id: 'stimulus' });
+    if (reading) stim.appendChild(h('div', null, h('div', { class: 'muted', text: '阅读模式（语音不可用）：' }), fr(line.fr)));
+    else if (t.sub) stim.appendChild(fr(line.fr));
+    else stim.appendChild(h('p', { class: 'hidden-text', text: t.audio === 'played' ? '🔊 已播放。可以再听一次。' : '点「🔊 播放」听这一句。' }));
+    if (t.zh) stim.appendChild(zh(line.zh));
+    card.appendChild(stim);
+    var answerable = reading || t.audio === 'played' || t.sub;
+    card.appendChild(h('div', { class: 'row' },
+      reading ? null : btn(t.plays ? '🔁 再听一次' : '🔊 播放', function () {
+        if (t.plays) t.replays++;
+        t.plays++;
+        Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+          setAudioMeta();
+          if (r === 'stopped' || ui.trial !== t) return;
+          if (r === 'played' || !t.voiceInfo) t.voiceInfo = Au.last;
+          if (r === 'played') t.audio = 'played'; else if (t.audio !== 'played') t.audio = 'failed';
+          rerenderStep();
+        });
+      }, 'small', { id: 'btnPlay' }),
+      reading ? null : btn('显示文字（记为“有帮助”）', function () { t.sub = true; S.learning.helpLog.push({ kind: 'subtitle', context: key, target: line.target, at: L.nowISO() }); rerenderStep(); }, 'small', { id: 'btnTrialSub', disabled: t.sub }),
+      btn('中文帮助（记为“有帮助”）', function () { t.zh = true; t.sub = true; S.learning.helpLog.push({ kind: 'chinese', context: key, target: line.target, at: L.nowISO() }); rerenderStep(); }, 'small', { id: 'btnTrialZh', disabled: t.zh })));
+    var optsBox = h('div', { class: 'col probe-opts', role: 'group', 'aria-label': '选项' });
+    opts.options.forEach(function (o) {
+      optsBox.appendChild(btn(o.zh, function () { opts.onAnswer(o.id, t); }, 'choice', { 'data-option': o.id, disabled: !answerable }));
+    });
+    optsBox.appendChild(btn(opts.unsureLabel || '不确定 / 不知道', function () { opts.onAnswer('unsure', t); }, 'choice', { 'data-option': 'unsure', disabled: !answerable }));
+    card.appendChild(optsBox);
+    if (!answerable) card.appendChild(h('p', { class: 'muted', text: '先播放这一句，再选择。' }));
+    if (opts.extra) card.appendChild(opts.extra);
+    $screen.appendChild(card);
+    if (ui.gesture && t.audio === 'pending' && Au.status === 'available' && !t.autoTried) {
+      t.autoTried = true; t.plays++;
+      Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+        setAudioMeta();
+        if (ui.trial !== t) return;
+        if (r === 'stopped') { t.plays--; t.autoTried = false; return; }
+        t.voiceInfo = Au.last;
+        t.audio = r === 'played' ? 'played' : 'failed'; rerenderStep();
+      });
+    }
+  }
+  function rerenderStep() { var g = ui.gesture; ui.gesture = false; render(); ui.gesture = g; }
+
+  R.baseline = function () {
+    var b = S.progress.baseline;
+    if (!b) { skipBaseline(); return; }
+    if (b.index >= C.BASELINE.length) { renderBaselineResult(); return; }
+    var item = C.BASELINE[b.index];
+    var options = b.optOrders[b.index].map(function (id) { return item.options.filter(function (o) { return o.id === id; })[0]; });
+    trialUI({
+      key: 'd1.baseline.' + b.index, lineId: item.line, title: '开始前小测 · 第 ' + (b.index + 1) + '/' + C.BASELINE.length + ' 句：这句话是什么意思？',
+      options: options,
+      onAnswer: function (resp, t) {
+        var line = C.LINES[item.line];
+        var modality = L.probeModality(t.audio, t.sub);
+        var correct = resp === 'unsure' ? null : resp === item.answer;
+        var rec = { target: line.target, lesson: 'd1', modality: modality, audioStatus: t.audio === 'pending' ? 'not_used' : t.audio,
+          visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false }, replays: t.replays, firstListen: t.replays === 0,
+          response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line,
+          audioVoice: voiceFields(t.audio === 'played' || t.audio === 'failed' ? t.voiceInfo : null) };
+        S.learning.attempts.push(L.makeAttempt(rec));
+        S.learning.baseline.items.push({ line: item.line, response: resp, correct: correct, modality: modality, replays: t.replays, help: t.sub || t.zh });
+        b.index++; ui.trial = null; ui.gesture = true; persist('baseline'); render();
+      },
+      unsureLabel: '不知道（完全没关系）',
+      extra: h('div', { class: 'row' }, btn('跳过剩下的小测', skipBaseline, 'small', { id: 'btnBaselineSkip2' }))
+    });
+  };
+  function renderBaselineResult() {
+    var items = S.learning.baseline.items;
+    var indep = items.filter(function (i) { return i.correct && !i.help && i.modality === 'listening'; }).length;
+    S.learning.baseline.status = 'done';
+    $screen.appendChild(stage('baseline', { alt: '中性画面' }));
+    var card = h('div', { class: 'card fade-in' }, h('h2', { text: '小测记录好了' }),
+      h('p', { text: '已记录你的起点（' + items.filter(function (i) { return i.correct; }).length + '/' + items.length + ' 理解；其中纯听、无提示 ' + indep + ' 句）。这不是分数，只用来调整提示多少。' }));
+    var col = h('div', { class: 'col' });
+    if (indep === items.length && items.length === C.BASELINE.length && level() === 3) {
+      card.appendChild(h('p', { text: '你似乎已经认识这些句子。要把提示调少一点吗？（等级 2：有法语字幕，中文按需显示。随时可以在设置里改回。）' }));
+      col.appendChild(btn('调到等级 2', function () { S.settings.supportLevel = 2; finishBaseline(); }, 'primary', { id: 'btnLevel2' }));
+      col.appendChild(btn('保持等级 3（最多帮助）', finishBaseline, '', { id: 'btnKeep3' }));
+    } else col.appendChild(btn('开始故事 ▶', finishBaseline, 'primary', { id: 'btnBaselineDone' }));
+    card.appendChild(col);
+    $screen.appendChild(card);
+  }
+  function finishBaseline() { S.progress.baseline = null; S.progress.scene = 'doorway'; S.progress.step = 0; persist('baseline-done'); ui.gesture = true; render(); }
+
+  R.knock = function (step) {
+    $screen.appendChild(stage('doorway', artFor(step)));
+    $screen.appendChild(h('div', { class: 'dialogue fade-in' },
+      h('p', { text: '你拖着行李，来到 411 号公寓门口。今天开始，你是这里的第三位室友。' }),
+      h('div', { class: 'row' }, btn('🚪 敲门', function () { L.recordEvent(S, 'arrived'); next(); }, 'primary grow', { id: 'btnKnock' }))));
+  };
+
+  R.greet = function (step) {
+    $screen.appendChild(stage('doorway', artFor(step)));
+    var choose = function (id, frText) {
+      S.world.choices.d1_greeting = id;
+      S.learning.attempts.push(L.makeAttempt({ target: 'greeting_reply', modality: 'selection', audioStatus: 'not_used',
+        visibleSupport: { level: level(), optionsShown: true }, replays: 0, response: id, correct: null,
+        resultType: 'supported', evidenceKind: 'choice', production: 'selected_option', context: 'd1.doorway.greet' }));
+      L.recordEvent(S, 'greeted', { choice: id, fr: frText });
+      next();
+    };
+    $screen.appendChild(h('div', { class: 'dialogue fade-in' },
+      h('p', { text: '你想怎么回应？（选一个，没有对错）' }),
+      h('div', { class: 'col' },
+        btn(h('span', { lang: 'fr', text: '👋 Bonjour' + NB + '!' }), function () { choose('bonjour', 'Bonjour' + NB + '!'); }, 'choice', { id: 'greetBonjour' }),
+        btn(h('span', { lang: 'fr', text: '👋 Salut' + NB + '!' }), function () { choose('salut', 'Salut' + NB + '!'); }, 'choice', { id: 'greetSalut' }),
+        btn('🙂 只挥挥手', function () { choose('wave', null); }, 'choice', { id: 'greetWave' })),
+      level() >= 2 ? h('p', { class: 'muted', text: 'Bonjour = 通用的“你好”；Salut = 更随意的“嗨”。' }) : null));
+  };
+
+  R.nameInput = function (step) {
+    var art = artFor(step); art.speaker = 'camille';
+    $screen.appendChild(stage('name', art));
+    var showZh = level() >= 3 || (ui.nameHelp === S.saveId);
+    var showTemplate = level() >= 2 || (ui.nameHelp === S.saveId);
+    var input = h('input', { type: 'text', id: 'nameInput', maxlength: '60', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', lang: 'fr',
+      placeholder: '昵称，或一句法语（可留空）', 'aria-label': '你的回答' });
+    input.value = S.progress.draft || '';
+    var tmr = null;
+    input.addEventListener('input', function () { S.progress.draft = input.value; clearTimeout(tmr); tmr = setTimeout(function () { persist('draft'); }, 300); });
+    var usedTemplate = !!S.progress.nameTemplate;
+    var card = h('div', { class: 'dialogue fade-in' },
+      h('div', null, h('span', { class: 'speaker camille', text: '▼ Camille' })),
+      fr('Tu t\u2019appelles comment' + NB + '?'),
+      showZh ? zh('她在问你叫什么名字。可以只说一个昵称，也可以试着说一句法语，也可以跳过。不需要真实姓名。') : null,
+      showTemplate ? h('p', { class: 'muted', id: 'nameTemplateHint' }, '可以这样说：', h('b', { lang: 'fr', text: 'Je m\u2019appelle' }), ' + 昵称。') : null,
+      input,
+      h('div', { class: 'row' },
+        btn('插入 “Je m’appelle …”', function () {
+          S.progress.nameTemplate = true;
+          if (!/je m.?appelle/i.test(input.value)) input.value = 'Je m\u2019appelle ' + input.value;
+          S.progress.draft = input.value; persist('draft'); input.focus();
+        }, 'small', { id: 'btnTemplate' }),
+        showZh ? null : btn('中文', function () { ui.nameHelp = S.saveId; S.learning.helpLog.push({ kind: 'chinese', context: 'd1.name.input', target: 'tu_tappelles_comment', at: L.nowISO() }); persist('help'); render(); }, 'small', { id: 'btnNameZh' })),
+      h('div', { class: 'row' },
+        btn('回答 ✓', function () { submitName(input.value, showZh, showTemplate); }, 'primary grow', { id: 'btnNameSubmit' }),
+        btn('先不说', function () { submitName('', showZh, showTemplate); }, 'grow', { id: 'btnNameSkip' })));
+    $screen.appendChild(card);
+  };
+  function submitName(raw, showZh, showTemplate) {
+    var cls = L.classifyNameResponse(raw);
+    var supported = !!(showZh || showTemplate || S.progress.nameTemplate);
+    S.learning.attempts.push(L.makeAttempt({
+      target: 'try_je_mappelle', modality: 'writing', audioStatus: 'not_used',
+      visibleSupport: { level: level(), chinese: !!showZh, templateHint: !!showTemplate, templateInserted: !!S.progress.nameTemplate },
+      replays: 0, response: raw, correct: null, production: cls.kind,
+      resultType: supported ? 'supported' : 'independent', evidenceKind: 'production', context: 'd1.name.input', speaker: 'camille'
+    }));
+    L.applyName(S, cls, raw);
+    delete S.progress.nameTemplate;
+    next();
+  }
+
+  R.nameReaction = function (step) {
+    $screen.appendChild(stage('name', artFor(step)));
+    var k = S.world.choices.d1_name && S.world.choices.d1_name.kind;
+    var nick = S.player.nickname;
+    var body = h('div', { class: 'dialogue fade-in' });
+    if (nick) body.appendChild(h('div', null, h('span', { class: 'speaker camille', text: 'Camille' }), ' ', h('span', { class: 'muted', text: '（无语音：名字由你决定）' }), fr('« ' + nick + NB + '! » 🙂')));
+    else body.appendChild(h('p', { text: k === 'skipped' ? 'Camille 笑了笑，没有追问。🙂' : 'Camille 点点头，笑了。🙂' }));
+    body.appendChild(h('p', { class: 'muted', text: 'Noé 挥手。他们带你去看你的房间角落。' }));
+    body.appendChild(h('div', { class: 'row' }, btn('继续 ▶', next, 'primary grow', { id: 'btnNext' })));
+    $screen.appendChild(body);
+  };
+
+  R.water = function (step) {
+    var watered = S.world.completedEvents.indexOf('plant_watered') >= 0;
+    var art = artFor(step); art.drops = ui.justWatered; ui.justWatered = false;
+    $screen.appendChild(stage('plant', art));
+    var later = S.world.completedEvents.indexOf('plant_later') >= 0;
+    var card = h('div', { class: 'dialogue fade-in' },
+      h('p', { text: watered ? '🪴 植物喝饱了水，叶子立起来了。' : 'Camille 把水壶递给你。植物的叶子垂着。' }),
+      h('div', { class: 'row' },
+        btn(watered ? '✓ 已浇水' : '💧 浇水', function () {
+          var r = L.waterPlant(S, 'd1.water', 'plant');
+          if (r.counted) { L.recordEvent(S, 'plant_watered'); ui.justWatered = true; persist('water'); toast('💧 浇好了。'); }
+          else toast('已经浇过了——同一次照料不会重复计算。');
+          rerenderStep();
+        }, watered ? 'grow' : 'primary grow', { id: 'btnWater', 'aria-pressed': watered ? 'true' : 'false' }),
+        watered || later ? null : btn('稍后再浇', function () { L.recordEvent(S, 'plant_later'); persist('later'); rerenderStep(); }, 'grow', { id: 'btnWaterLater' })),
+      h('p', { class: 'muted', text: '可以随时按右上角 ⏸ 暂停离开。' }),
+      (watered || later) ? h('div', { class: 'row' }, btn('继续 ▶', next, 'primary grow', { id: 'btnNext' })) : null);
+    $screen.appendChild(card);
+  };
+
+  R.beat = function (step) {
+    $screen.appendChild(stage('cat', artFor(step)));
+    $screen.appendChild(h('div', { class: 'dialogue fade-in' },
+      h('p', { text: '门关上了。沙发后面……有什么东西在动？🐾' }),
+      h('div', { class: 'row' }, btn('看一看 ▶', function () {
+        S.world.facts.catInApartment = true; S.world.knowledge.player.knowsCat = true;
+        next();
+      }, 'primary grow', { id: 'btnNext' }))));
+  };
+
+  R.secret = function (step) {
+    $screen.appendChild(stage('cat', artFor(step)));
+    $screen.appendChild(h('div', { class: 'dialogue fade-in' },
+      h('p', { text: 'Noé 把手指放在嘴边，看着你。你怎么做？（这是剧情选择，没有对错，也不算法语成绩）' }),
+      h('div', { class: 'col' },
+        btn('🤫 点点头：我帮你保密', function () { L.applySecretChoice(S, 'keep'); next(); }, 'choice', { id: 'secretKeep' }),
+        btn('✋ 摇摇头：我不想保密', function () { L.applySecretChoice(S, 'decline'); next(); }, 'choice', { id: 'secretDecline' }))));
+  };
+  R.secretReaction = function (step) {
+    var keep = S.world.choices.d1_secret === 'keep';
+    var art = artFor(step); art.noe = keep ? 'happy' : 'sad';
+    $screen.appendChild(stage('cat', art));
+    $screen.appendChild(h('div', { class: 'dialogue fade-in' },
+      h('p', { id: 'secretResult', text: keep ? 'Noé 松了一口气，冲你比了个大拇指。😊 Croissant 跳上了沙发。' : 'Noé 有点担心地挠挠头。😟 不过这是你的选择。Croissant 跳上了沙发。' }),
+      h('p', { class: 'muted', text: 'Camille 当时不在家，她不知道刚才发生了什么。' }),
+      h('div', { class: 'row' }, btn('继续 ▶', next, 'primary grow', { id: 'btnNext' }))));
+  };
+
+  R.probeIntro = function () {
+    $screen.appendChild(stage('probe', { alt: '中性画面' }));
+    $screen.appendChild(h('div', { class: 'card fade-in' },
+      h('h2', { text: '小练习：是在说名字，还是在问名字？' }),
+      h('p', { text: '你会听到 ' + C.PROBE.items.length + ' 句话。画面上没有人物、没有手势、不显示文字。每句请判断：' }),
+      h('ul', null, h('li', { text: '对方在告诉你他/她的名字' }), h('li', { text: '对方在问你的名字' })),
+      h('p', { text: '可以重播，可以选“不确定”。需要帮助随时可以点（会记录为“有帮助”，这完全没问题）。结束后再告诉你答案。' }),
+      audioBanner(),
+      h('div', { class: 'row' }, btn('开始', function () {
+        S.progress.probe = { order: shuffle(C.PROBE.items), optOrders: C.PROBE.items.map(function () { return shuffle(C.PROBE.options.map(function (o) { return o.id; })); }), index: 0 };
+        next();
+      }, 'primary grow', { id: 'btnProbeStart' }))));
+  };
+  R.probe = function () {
+    var p = S.progress.probe;
+    if (!p) { S.progress.step = 0; render(); return; }
+    if (p.index >= p.order.length) { next(); return; }
+    var lineId = p.order[p.index], line = C.LINES[lineId];
+    var options = p.optOrders[p.index].map(function (id) { return C.PROBE.options.filter(function (o) { return o.id === id; })[0]; });
+    trialUI({
+      key: 'd1.probe.' + p.index, lineId: lineId, title: '第 ' + (p.index + 1) + '/' + p.order.length + ' 句', options: options,
+      onAnswer: function (resp, t) {
+        var audio = t.audio === 'pending' ? 'not_used' : t.audio;
+        var modality = L.probeModality(audio, t.sub);
+        var rt = modality === 'reading' && !t.zh ? 'independent' : L.probeResultType({ subtitlesShown: t.sub, chineseShown: t.zh, answerCue: false });
+        S.learning.attempts.push(L.makeAttempt({
+          target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
+          visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false, nameHighlight: false },
+          replays: t.replays, firstListen: t.replays === 0, response: resp, correct: resp === 'unsure' ? null : resp === line.func,
+          resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId,
+          audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? t.voiceInfo : null)
+        }));
+        p.index++; ui.trial = null; ui.gesture = true;
+        if (p.index >= p.order.length) { L.recordEvent(S, 'probe_done'); S.review = L.buildReview(S, new Date()); next(); }
+        else { persist('probe'); render(); }
+      }
+    });
+  };
+  R.probeDone = function () {
+    var trials = S.learning.attempts.filter(function (a) { return a.evidenceKind === 'discrimination' && a.lesson === 'd1'; }).slice(-C.PROBE.items.length);
+    var ps = L.probeStats(S);
+    $screen.appendChild(stage('probe', { alt: '中性画面' }));
+    var list = h('ol', null);
+    trials.forEach(function (a) {
+      var line = a.stimulus ? C.LINES[a.stimulus] : null;
+      list.appendChild(h('li', null, line ? h('span', { lang: 'fr', text: line.fr + ' ' }) : '',
+        h('span', { class: 'muted', text: '（' + (line && line.func === 'tells' ? '告诉你名字' : '问你的名字') + '）你的选择：' + (a.response === 'unsure' ? '不确定' : a.correct ? '✓ 对' : '✗ 不同') + (a.replays ? ' · 重听 ' + a.replays : '') + (a.resultType === 'supported' ? ' · 有帮助' : '') })));
+    });
+    $screen.appendChild(h('div', { class: 'card fade-in', id: 'probeResult' },
+      h('h2', { text: '练习记录' }),
+      h('p', { text: '不看文字、第一次听就选对：' + ps.independentFirstListenCorrect + ' 句；重听后选对：' + ps.independentReplayCorrect + ' 句；有帮助时选对：' + ps.supportedCorrect + ' 句。' + (ps.readingOnly ? '（其中 ' + ps.readingOnly + ' 句是阅读模式，不算听力。）' : '') }),
+      h('p', { class: 'muted', text: '只有几句，可能有猜的成分——这只是一个小记录，不是等级。下面是答案：' }),
+      list,
+      h('div', { class: 'row' }, btn('去写日记 ▶', next, 'primary grow', { id: 'btnNext' }))));
+  };
+
+  function chronicleList() {
+    var ul = h('ul', { class: 'chron', id: 'chronicle' });
+    S.diary.chronicle.forEach(function (c) { ul.appendChild(h('li', { text: L.chronicleText(c) })); });
+    if (!S.diary.chronicle.length) ul.appendChild(h('li', { class: 'muted', text: '还没有发生什么。' }));
+    return ul;
+  }
+  R.diary = function () {
+    $screen.appendChild(stage('diary', { watered: S.plant.careState === 'watered', cat: S.world.facts.catInApartment, alt: '书桌上摊开的日记本，旁边是你的植物' }));
+    var ta = h('textarea', { id: 'journal', maxlength: '2000', lang: 'fr', placeholder: '可以写 Je m’appelle…、一句你自己的话（任何语言），或者什么都不写。', 'aria-label': '私人日记' });
+    ta.value = S.progress.draft || '';
+    var tmr = null;
+    ta.addEventListener('input', function () { S.progress.draft = ta.value; clearTimeout(tmr); tmr = setTimeout(function () { persist('draft'); }, 300); });
+    var share = h('input', { type: 'checkbox', id: 'journalShare' });
+    $screen.appendChild(h('div', { class: 'card fade-in' },
+      h('h2', { text: '📖 日记 · 第一天' }),
+      h('h3', { text: '今天发生的事（游戏自动记录，只写你亲历的事）' }),
+      chronicleList(),
+      h('h3', { text: '私人日记（可选，原样保存）' }),
+      ta,
+      h('div', { class: 'row' }, btn('插入 “Je m’appelle …”', function () {
+        S.progress.journalTemplate = true; ta.value = (ta.value ? ta.value + '\n' : '') + 'Je m\u2019appelle '; S.progress.draft = ta.value; persist('draft'); ta.focus();
+      }, 'small', { id: 'btnJournalTemplate' })),
+      h('label', { class: 'check' }, share, '允许把这条日记放进反馈摘要（默认不放）'),
+      h('div', { class: 'row' }, btn('保存并结束第一天 ✓', function () {
+        var text = ta.value; // stored verbatim, never rewritten
+        if (text.length) {
+          var j = { id: 'j-' + Date.now().toString(36), at: L.nowISO(), original: text, usedTemplate: !!S.progress.journalTemplate, suggestedRewrite: null, share: !!share.checked };
+          S.diary.journal.push(j);
+          var cls = L.classifyNameResponse(text.split('\n')[0]);
+          S.learning.attempts.push(L.makeAttempt({ target: cls.kind === 'full_structure' ? 'try_je_mappelle' : null, modality: 'writing', audioStatus: 'not_used',
+            visibleSupport: { level: level(), templateInserted: !!S.progress.journalTemplate }, replays: 0, response: '[private journal ' + j.id + ']',
+            production: cls.kind, resultType: S.progress.journalTemplate ? 'supported' : 'independent', evidenceKind: 'production', context: 'd1.diary.journal' }));
+        }
+        delete S.progress.journalTemplate;
+        L.recordEvent(S, 'day1_complete');
+        if (!S.plant.mementos.some(function (m) { return m.id === 'd1'; })) { S.plant.growth += 1; S.plant.mementos.push({ id: 'd1', label: '🌱 第一天的新叶', at: L.nowISO() }); }
+        S.progress.status = 'complete';
+        S.review = L.buildReview(S, new Date());
+        next();
+      }, 'primary grow', { id: 'btnDiarySave' }))));
+  };
+
+  R.end = function () {
+    $screen.appendChild(stage('end', { watered: S.plant.careState === 'watered', cat: S.world.facts.catInApartment, alt: '夜晚，月亮，你的植物和猫' }));
+    $screen.appendChild(h('div', { class: 'card fade-in', id: 'endCard' },
+      h('h2', { text: '🌙 第一天结束了' }),
+      h('p', { text: '植物长出了一片新叶（纪念：第一天）。你的选择、日记和练习记录都已保存在这台设备上。' }),
+      h('p', { class: 'muted', text: 'Day 2「Le petit-déjeuner」还在制作中，暂时不能玩。' }),
+      h('div', { class: 'col' },
+        btn('📝 生成反馈摘要', openSummary, 'primary', { id: 'btnEndSummary' }),
+        btn('📖 查看日记', openDiary, '', { id: 'btnEndDiary' }),
+        btn('🏠 回到主菜单', goTitle, '', { id: 'btnEndHome' }))));
+  };
+
+  // ---------- Panels ----------
+  function openSettings() {
+    if (!S) { S = L.newSave({ reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches }); }
+    var levels = [
+      [3, '3 · 最多帮助：语音 + 法语字幕 + 中文解释'],
+      [2, '2 · 中等：语音 + 法语字幕，中文按需'],
+      [1, '1 · 较少：先听，文字和中文按需'],
+      [0, '0 · 独立尝试：先听，不主动给任何提示（重播和帮助一直可用）']
+    ];
+    var box = h('div', { class: 'pad' });
+    box.appendChild(h('h3', { text: '帮助程度' }));
+    levels.forEach(function (lv) {
+      var r = h('input', { type: 'radio', name: 'lvl', value: String(lv[0]), id: 'lvl' + lv[0] });
+      r.checked = S.settings.supportLevel === lv[0];
+      r.addEventListener('change', function () { S.settings.supportLevel = lv[0]; persist('settings'); });
+      box.appendChild(h('label', { class: 'radio', for: 'lvl' + lv[0] }, r, h('span', { text: lv[1] })));
+    });
+    var rm = h('input', { type: 'checkbox', id: 'optReduced' }); rm.checked = !!S.settings.reducedMotion;
+    rm.addEventListener('change', function () { S.settings.reducedMotion = rm.checked; persist('settings'); applySettings(); });
+    var lt = h('input', { type: 'checkbox', id: 'optLarge' }); lt.checked = !!S.settings.largeText;
+    lt.addEventListener('change', function () { S.settings.largeText = lt.checked; persist('settings'); applySettings(); });
+    box.appendChild(h('h3', { text: '显示' }));
+    box.appendChild(h('label', { class: 'check' }, rm, '减少动画'));
+    box.appendChild(h('label', { class: 'check' }, lt, '大字体'));
+    box.appendChild(voiceSettings());
+    openOverlay(sheet('⚙️ 设置', box));
+  }
+  // ---------- voice settings (device-level: stored in a411.device.audio, not in the save) ----------
+  var TEST_LINES = { camille: 'Bonjour\u00A0! Je m\u2019appelle Camille.', noe: 'Salut\u00A0! Je m\u2019appelle Noé.' };
+  function voiceTip() {
+    var pf = Au.platform();
+    var ios = h('div', { class: 'card', id: 'voiceTipIos' },
+      h('b', { text: '📱 iPhone / iPad' }),
+      h('p', { text: '如果法语听起来很机械，可以试着下载更好的法语声音（需要 Wi‑Fi，每个声音约 100 MB 以上）：' }),
+      h('p', { lang: 'en', class: 'path', text: 'Settings › Accessibility › Spoken Content › Voices › French' }),
+      h('p', { text: '选一个法国法语（France）的声音，例如 Audrey 或 Thomas，下载它的 Enhanced 或 Premium 版本。下载后完全关闭 Safari 再打开游戏，回到这里点「🔄 重新检测声音」。' }),
+      h('p', { class: 'muted', text: '注意：根据目前公开的测试，iPhone 上的 Safari（以及 iPhone 上的其他浏览器）经常不会把下载的 Enhanced / Premium 声音提供给网页使用。如果下载后这里的列表没有出现它，这是 Apple 的限制，不是你操作错了。少数系统版本里，下载新版本后原来的法语声音反而在网页里消失——这时在同一页面把刚下载的声音左滑删除即可恢复。我们也在准备固定的高质量法语录音，让所有手机听到同样自然的声音。' }));
+    var android = h('div', { class: 'card', id: 'voiceTipAndroid' },
+      h('b', { text: '🤖 Android' }),
+      h('p', null, '在系统设置里搜索「文字转语音 / ', h('span', { lang: 'en', text: 'Text-to-speech' }), '」，首选引擎选 Google 语音服务，进入它的设置 → 安装语音数据 → 法语（法国），下载你喜欢的声音。不同品牌的菜单名称会略有不同。下载后重新打开浏览器，回到这里点「🔄 重新检测声音」。'));
+    var desktop = h('div', { class: 'card', id: 'voiceTipDesktop' },
+      h('b', { text: '💻 电脑' }),
+      h('p', { text: 'Microsoft Edge 自带高质量的法语 Natural 声音（如 Denise、Henri），Chrome 有「Google français」。Mac 上 Safari 往往用不到下载的高级声音，Chrome / Edge 一般可以。' }));
+    var first = pf === 'ios' ? ios : pf === 'android' ? android : desktop;
+    var rest = [ios, android, desktop].filter(function (x) { return x !== first; });
+    return h('div', { id: 'voiceTip' }, first, h('details', null, h('summary', { text: '其他设备怎么办' }), rest));
+  }
+  function voiceSettings() {
+    var wrap = h('div', { id: 'voiceSettings' });
+    wrap.appendChild(h('h3', { text: '🔊 法语声音（只保存在这台设备）' }));
+    var status = h('p', { id: 'audioTestResult', class: 'muted', text: '法语语音：' + audioStatusText() });
+    wrap.appendChild(status);
+    var lists = h('div', { id: 'voiceLists' });
+    wrap.appendChild(lists);
+    function voiceSelect(sp) {
+      var cur = (Au.prefs || {})[sp] || '';
+      var a = Au.assign || {};
+      var autoR = a[sp];
+      var sel = h('select', { id: 'voice_' + sp, 'aria-label': (sp === 'noe' ? 'Noé' : 'Camille') + ' 的声音' });
+      sel.appendChild(h('option', { value: '', text: '自动（推荐' + (autoR && !cur ? '：' + autoR.name : '') + '）' }));
+      Au.voices.forEach(function (r) {
+        var o = h('option', { value: r.key, text: r.name + ' · ' + r.lang + ' · ' + Au.qualityZh(r.quality) });
+        if (r.key === cur) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', function () {
+        var patch = {}; patch[sp] = sel.value || null; Au.savePrefs(patch);
+        setAudioMeta(); persist('voice'); renderLists();
+        testVoice(sp);
+      });
+      return sel;
+    }
+    function testVoice(sp) {
+      if (Au.status !== 'available') { status.textContent = '法语语音：' + audioStatusText(); return; }
+      status.textContent = '播放中…';
+      Au.speak(TEST_LINES[sp], { speaker: sp }).then(function (r) {
+        var info = Au.last || {};
+        status.textContent = r === 'played' ? '✓ 浏览器报告已播放（' + info.voice + ' · ' + Au.qualityZh(info.quality) + ' · 语速 ' + info.rate + '）。如果没听到声音，请检查静音开关和音量。'
+          : r === 'stopped' ? '已停止。' : '⚠️ 播放失败——游戏会显示文字（阅读模式）。';
+        persist('audio');
+      });
+    }
+    function renderLists() {
+      lists.innerHTML = '';
+      status.textContent = '法语语音：' + audioStatusText();
+      if (Au.status !== 'available') return;
+      var a = Au.assign;
+      lists.appendChild(h('label', { class: 'field' }, h('span', { text: 'Camille 的声音' }), voiceSelect('camille')));
+      lists.appendChild(h('div', { class: 'row' }, btn('▶ 试听 Camille', function () { testVoice('camille'); }, 'small grow', { id: 'btnAudioTest' })));
+      lists.appendChild(h('label', { class: 'field' }, h('span', { text: 'Noé 的声音' }), voiceSelect('noe')));
+      lists.appendChild(h('div', { class: 'row' }, btn('▶ 试听 Noé', function () { testVoice('noe'); }, 'small grow', { id: 'btnAudioTestNoe' })));
+      var good = Au.voices.filter(function (r) { return !r.robotic; });
+      lists.appendChild(h('p', { class: 'muted', id: 'voiceNote', text: a.distinct ? 'Camille 和 Noé 用两个不同的声音。'
+        : good.length <= 1 ? '这台设备只有一个合适的法语声音，所以 Camille 和 Noé 共用它（Noé 的音调稍低一点）。' : 'Camille 和 Noé 现在用同一个声音。' }));
+      var best = good[0];
+      if (!best || ['standard', 'compact'].indexOf(best.quality) >= 0) lists.appendChild(h('p', { class: 'muted', id: 'voiceQualityNote', text: '这台设备目前只有基础质量的法语声音，听起来可能有点机械。下面有改善办法。' }));
+    }
+    renderLists();
+    // speed
+    wrap.appendChild(h('h3', { text: '语速（这台设备记住）' }));
+    var rates = h('div', { class: 'row', role: 'radiogroup', 'aria-label': '语速' });
+    [[0.75, '慢 0.75'], [0.9, '稍慢 0.9'], [1.0, '正常 1.0']].forEach(function (rr) {
+      var r = h('input', { type: 'radio', name: 'rate', value: String(rr[0]), id: 'rate' + String(rr[0]).replace('.', '') });
+      r.checked = Au.rate() === rr[0];
+      r.addEventListener('change', function () { Au.savePrefs({ rate: rr[0] }); setAudioMeta(); persist('settings'); testVoice('camille'); });
+      rates.appendChild(h('label', { class: 'radio', for: r.id }, r, h('span', { text: rr[1] })));
+    });
+    wrap.appendChild(rates);
+    wrap.appendChild(h('div', { class: 'row' }, btn('🔄 重新检测声音', function () {
+      status.textContent = '检测中…';
+      Au.init().then(function () { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio'); renderLists(); });
+    }, 'small grow', { id: 'btnVoiceRescan' })));
+    wrap.appendChild(h('h3', { text: '想要更自然的声音？' }));
+    wrap.appendChild(voiceTip());
+    return wrap;
+  }
+  function audioStatusText() {
+    return Au.status === 'available' ? '可用（找到 ' + Au.voices.length + ' 个法语声音）' : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）→ 阅读模式' : '检测中…';
+  }
+
+  function download(name, text) {
+    var blob = new Blob([text], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = h('a', { href: url, download: name }); document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  function openSave() {
+    var box = h('div', { class: 'pad' });
+    box.appendChild(h('p', { id: 'saveInfo', text: S ? ('存档 schema v' + S.schemaVersion + ' · app ' + S.appVersion + ' · 内容 ' + S.contentVersion + ' · 最后保存 ' + new Date(S.updatedAt).toLocaleString()) : '还没有存档。' }));
+    box.appendChild(h('p', { class: 'muted', text: '存档只在这台设备的这个浏览器里。换手机、清除浏览器数据或用隐私模式都会丢失——导出的文件可以在任何设备上导入。' }));
+    var msg = h('div', { id: 'importMsg', role: 'status' });
+    if (S) {
+      box.appendChild(h('div', { class: 'col' },
+        btn('⬇️ 导出存档（JSON 文件）', function () {
+          persist('export');
+          var d = new Date(); var stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
+          download('appartement-411-save-' + stamp + '.json', JSON.stringify(S, null, 2));
+          toast('已导出。');
+        }, 'primary', { id: 'btnExport' }),
+        btn('📋 显示存档文本（可复制保存）', function () {
+          var ta = h('textarea', { class: 'summary', readonly: true, id: 'exportText' }); ta.value = JSON.stringify(S);
+          box.insertBefore(ta, msg);
+        }, '', { id: 'btnExportText' })));
+    }
+    box.appendChild(h('h3', { text: '导入存档' }));
+    box.appendChild(h('p', { class: 'muted', text: '导入前会验证文件；文件有问题时，当前存档完全不会被改动。导入成功前会先备份当前存档。' }));
+    var file = h('input', { type: 'file', id: 'importFile', accept: 'application/json,.json,text/plain', 'aria-label': '选择存档文件' });
+    var paste = h('textarea', { id: 'importText', placeholder: '或者把存档文本粘贴到这里', 'aria-label': '粘贴存档文本' });
+    box.appendChild(file);
+    box.appendChild(paste);
+    function doImport(text) {
+      if (!storage) { msg.className = 'banner warn'; msg.textContent = '本机存储不可用，无法导入。'; return; }
+      var r = storage.importText(text, S);
+      if (!r.ok) { msg.className = 'banner warn'; msg.textContent = '✗ 没有导入：' + r.errors.slice(0, 4).join('；') + '（当前存档未改动）'; return; }
+      S = r.save; ui.line = null; ui.trial = null;
+      msg.className = 'banner ok'; msg.textContent = '✓ 已导入' + (r.migratedFrom !== null && r.migratedFrom !== undefined ? '（已从 v' + r.migratedFrom + ' 升级）' : '') + '。之前的存档已备份。';
+      ui.view = 'title'; render();
+    }
+    file.addEventListener('change', function () {
+      var f = file.files && file.files[0]; if (!f) return;
+      if (f.size > 1000000) { msg.className = 'banner warn'; msg.textContent = '✗ 文件太大（当前存档未改动）'; return; }
+      var rd = new FileReader(); rd.onload = function () { doImport(String(rd.result)); }; rd.onerror = function () { msg.className = 'banner warn'; msg.textContent = '✗ 读取文件失败'; }; rd.readAsText(f);
+    });
+    box.appendChild(h('div', { class: 'row' }, btn('导入粘贴的文本', function () { doImport(paste.value); }, 'small', { id: 'btnImportText' })));
+    box.appendChild(msg);
+    if (storage) {
+      var bks = storage.listBackups();
+      box.appendChild(h('h3', { text: '自动备份（最多 5 份）' }));
+      if (!bks.length) box.appendChild(h('p', { class: 'muted', text: '暂无。' }));
+      bks.slice().reverse().forEach(function (b) {
+        box.appendChild(h('div', { class: 'row' }, h('span', { class: 'muted', text: new Date(b.time).toLocaleString() + ' · ' + b.label }),
+          btn('恢复', function () { var raw = storage.readBackup(b.key); doImport(raw || ''); }, 'small')));
+      });
+    }
+    openOverlay(sheet('💾 存档', box));
+  }
+
+  function openSummary() {
+    if (!S) { toast('还没有存档。'); return; }
+    var note = h('textarea', { id: 'summaryNote', placeholder: '（可选）遇到的问题或感受，例如：第 2 句听不清' });
+    var inc = h('input', { type: 'checkbox', id: 'summaryIncludeJournal' });
+    var out = h('textarea', { class: 'summary', id: 'summaryText', readonly: true, rows: '14', 'aria-label': '反馈摘要' });
+    function gen() { out.value = L.buildSummary(S, { note: note.value, includeJournal: inc.checked }); }
+    note.addEventListener('input', gen); inc.addEventListener('change', gen);
+    gen();
+    var box = h('div', { class: 'pad' },
+      h('p', { class: 'muted', text: '把这段文字和你的反馈一起发给 CEO。私人日记默认不包含；昵称也不包含。游戏不会自动上传任何东西。' }),
+      note,
+      h('label', { class: 'check' }, inc, '包含我标记为“允许分享”的日记'),
+      out,
+      h('div', { class: 'row' }, btn('📋 复制', function () {
+        gen();
+        var okFn = function () { toast('已复制。'); };
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(out.value).then(okFn, fallback); else fallback();
+        function fallback() { out.removeAttribute('readonly'); out.select(); try { document.execCommand('copy'); okFn(); } catch (e) { toast('请长按文字手动复制。'); } out.setAttribute('readonly', ''); }
+      }, 'primary grow', { id: 'btnCopySummary' })));
+    openOverlay(sheet('📝 反馈摘要', box));
+  }
+
+  function openDiary() {
+    if (!S) return;
+    var box = h('div', { class: 'pad' }, h('h3', { text: '今天发生的事' }), chronicleList(), h('h3', { text: '私人日记（原文）' }));
+    if (!S.diary.journal.length) box.appendChild(h('p', { class: 'muted', text: '没有写。' }));
+    S.diary.journal.forEach(function (j) {
+      box.appendChild(h('div', { class: 'card' }, h('div', { class: 'journal-original', lang: 'fr', style: 'white-space:pre-wrap', text: j.original }),
+        h('div', { class: 'muted', text: new Date(j.at).toLocaleString() + (j.usedTemplate ? ' · 用了句型提示' : '') + (j.share ? ' · 允许分享' : ' · 不分享') })));
+    });
+    openOverlay(sheet('📖 日记', box));
+  }
+
+  // ---------- boot ----------
+  function boot() {
+    initStorage();
+    if (storage) {
+      var r = storage.load(new Date());
+      notices = r.notices || [];
+      S = r.save;
+      if (S && S.plant) { var ps = L.plantStatus(S.plant, new Date()); if (ps !== S.plant.careState) { S.plant.careState = ps; persist('plant-thirst'); } }
+    }
+    applySettings();
+    Au.loadPrefs(S ? S.settings.speechRate : null);
+    render();
+    Au.init().then(function () {
+      // only write when the device's audio situation actually changed (keeps reopen side-effect free)
+      if (S && (S.meta.audio.status !== Au.status || S.meta.audio.voice !== Au.voiceName)) { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio-init'); }
+      if (ui.view !== 'title') rerenderStep();
+    });
+  }
+  window.A411.App = { state: function () { return S; }, render: render, persist: persist }; // debug/test hook
+  boot();
+})();
+
+</script>
+</body>
+</html>

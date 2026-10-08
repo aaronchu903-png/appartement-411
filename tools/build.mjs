@@ -4,11 +4,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (_, f) => '<style>\n' + fs.readFileSync(path.join(ROOT, f), 'utf8') + '\n</style>');
-html = html.replace(/<script src="([^"]+)"><\/script>/g, (_, f) => '<script>\n' + fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/<\/script/gi, '<\\/script') + '\n</script>');
+// v0.1.3: the Day 1 recordings (audio/d1/*.mp3) are inlined as base64 data URIs so the single file works offline.
+function inlineClips() {
+  const CL = require('../js/clips.js');
+  const files = {};
+  for (const id of CL.ids) files[id] = 'data:audio/mpeg;base64,' + fs.readFileSync(path.join(ROOT, 'audio', 'd1', id + '.mp3')).toString('base64');
+  return '\n;(function () { window.A411.CLIPS.files = ' + JSON.stringify(files) + '; })();';
+}
+html = html.replace(/<script src="([^"]+)"><\/script>/g, (_, f) => '<script>\n' + (fs.readFileSync(path.join(ROOT, f), 'utf8') + (f === 'js/clips.js' ? inlineClips() : '')).replace(/<\/script/gi, '<\\/script') + '\n</script>');
 if (/(src|href)="(?!data:|#)[^"]+"/.test(html.replace(/<a [^>]*>/g, ''))) throw new Error('external reference left in single-file build');
 html = html.replace('<head>', '<head>\n<!-- L’Appartement 411 v' + pkg.version + ' single-file build ' + new Date().toISOString() + ' -->');
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
@@ -16,7 +25,7 @@ const out = path.join(ROOT, 'dist', 'appartement-411.html');
 fs.writeFileSync(out, html);
 console.log('wrote', out, (html.length / 1024).toFixed(1) + ' KB');
 const zip = path.join(ROOT, 'dist', 'appartement-411-v' + pkg.version + '.zip');
-const files = ['index.html', 'css', 'js', 'docs', 'tests', 'tools', 'package.json', 'package-lock.json', 'README.md', 'dist/appartement-411.html', 'evidence'];
+const files = ['index.html', 'css', 'js', 'audio', 'docs', 'tests', 'tools', 'package.json', 'package-lock.json', 'README.md', 'dist/appartement-411.html', 'evidence'];
 execFileSync('python3', ['-c', `
 import zipfile, os, sys
 root, out, items = sys.argv[1], sys.argv[2], sys.argv[3:]

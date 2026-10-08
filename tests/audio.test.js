@@ -141,3 +141,59 @@ test('platform detection for the voice tip', () => {
   assert.equal(A.platform({ userAgent: 'Mozilla/5.0 (Linux; Android 15; Pixel 8) Chrome/140 Mobile' }), 'android');
   assert.equal(A.platform({ userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Edg/140' }), 'desktop');
 });
+
+// ---------- v0.1.3: recorded clip first, then device voice, then failure (caller shows text) ----------
+function fakeAudioClass(behaviour) {
+  const log = [];
+  function FakeAudio() { this.playbackRate = 1; this.currentTime = 0; this.muted = false; }
+  FakeAudio.prototype.setAttribute = function () {};
+  FakeAudio.prototype.pause = function () { log.push('pause'); };
+  FakeAudio.prototype.play = function () {
+    const self = this; log.push({ src: this.src, rate: this.playbackRate, preservesPitch: this.preservesPitch });
+    if (behaviour === 'reject') return Promise.reject(Object.assign(new Error('not allowed'), { name: 'NotAllowedError' }));
+    if (behaviour === 'error') { setTimeout(() => self.onerror && self.onerror(), 5); return Promise.resolve(); }
+    setTimeout(() => { self.currentTime = 1; self.onplaying && self.onplaying(); self.onended && self.onended(); }, 5);
+    return Promise.resolve();
+  };
+  FakeAudio.log = log;
+  return FakeAudio;
+}
+function withClips(globals) {
+  delete require.cache[require.resolve('../js/clips.js')];
+  for (const k of ['A411', 'Audio']) delete globalThis[k];
+  require('../js/clips.js');
+  return fresh(globals);
+}
+test('v0.1.3: playLine plays the recorded clip with the chosen speed, pitch preserved, source recorded', async () => {
+  const Au = withClips({ Audio: fakeAudioClass('ok'), localStorage: memLS() });
+  Au.loadPrefs(); Au.savePrefs({ rate: 0.75 });
+  assert.equal(Au.hasClip('cam_intro'), true);
+  const r = await Au.playLine('cam_intro', 'Salut ! Je m’appelle Camille.', { speaker: 'camille' });
+  assert.equal(r, 'played');
+  assert.equal(Au.last.source, 'recording:qwen3-tts');
+  assert.equal(Au.last.rate, 0.75);
+  const call = globalThis.Audio.log.find(x => x.src);
+  assert.equal(call.src, 'audio/d1/cam_intro.mp3');
+  assert.equal(call.rate, 0.75);
+  assert.equal(call.preservesPitch, true);
+  assert.deepEqual(Au.clipLog.map(x => [x.id, x.result]), [['cam_intro', 'played']]);
+});
+test('v0.1.3: rejected play() (iOS without a tap) falls back to the device voice; source says device', async () => {
+  const synth = fakeSynth([{ name: 'Thomas', lang: 'fr-FR', voiceURI: 'com.apple.voice.compact.fr-FR.Thomas' }]);
+  const Au = withClips({ Audio: fakeAudioClass('reject'), speechSynthesis: synth, SpeechSynthesisUtterance: Utt, localStorage: memLS() });
+  await Au.init();
+  const r = await Au.playLine('noe_intro', 'Salut ! Je m’appelle Noé.', { speaker: 'noe' });
+  assert.equal(r, 'played');
+  assert.equal(Au.last.source, 'device:Thomas (fr-FR)');
+  assert.equal(synth.spoken.length, 1);
+  assert.deepEqual(Au.clipLog.map(x => x.result), ['failed']);
+});
+test('v0.1.3: clip error and no device voice -> failed (caller shows text); no clip -> device path unchanged', async () => {
+  const Au = withClips({ Audio: fakeAudioClass('error'), localStorage: memLS() });
+  await Au.init();
+  assert.equal(Au.status, 'unavailable');
+  assert.equal(Au.canPlay('cam_bonjour'), true, 'recordings make audio available even without a device voice');
+  assert.equal(await Au.playLine('cam_bonjour', 'Bonjour !', { speaker: 'camille' }), 'failed');
+  assert.equal(Au.canPlay('nickname_echo'), false);
+  assert.equal(await Au.playLine('nickname_echo', 'Alex !', { speaker: 'camille' }), 'unavailable');
+});

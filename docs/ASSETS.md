@@ -31,3 +31,18 @@ Prototype clips for all 17 Day 1 lines plus 2 settings test lines live in `audio
 | Kokoro-82M, voice `ff_siwis` | Apache-2.0 (https://huggingface.co/hexgrad/Kokoro-82M) | One female voice trained on the SIWIS French corpus (CC BY 4.0) | "SIWIS French speech synthesis database (CC BY 4.0)." Female only, so there is no real Noé voice. |
 
 Rejected for licence reasons: Piper French voices (see below), XTTS-v2 (Coqui Public Model Licence, non-commercial), F5-TTS weights (CC-BY-NC), Meta MMS-TTS (CC-BY-NC), Fish Speech / OpenAudio (CC-BY-NC-SA). Cloud free tiers (Google Cloud TTS, Azure F0, Amazon Polly, ElevenLabs) were researched but not used. All of them need a new account (and usually a card), which needs founder approval. ElevenLabs' free tier is also non-commercial only.
+
+## Shipped Day 1 audio (v0.1.3, 2026-10-08) — Qwen3-TTS fixed recordings
+
+Founder decision 2026-10-08 15:25 PT: use sample 1, Qwen3-TTS, as the fixed Day 1 audio.
+
+| Item | Detail |
+|---|---|
+| Files | `audio/d1/<lineId>.mp3`, 19 clips (17 Day 1 lines + `test_camille` / `test_noe` for 设置 → 试听录音), ~170 KB total. Copied unchanged from `audio-candidates/qwen3-tts/mp3/`. Inlined as base64 data URIs in `dist/appartement-411.html`. |
+| Engine | Qwen3-TTS 1.7B (VoiceDesign → Base clone of the designed reference), rendered offline on the box CPU, USD 0. Code: https://github.com/QwenLM/Qwen3-TTS · weights: https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign and https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base |
+| Licence | Apache-2.0 (code and weights). Generated audio is our output; Apache-2.0 notice kept here and in the game. |
+| Voices | Synthetic voices designed from text descriptions (`audio-candidates/qwen3-tts/design.json`): Camille (young woman, standard Parisian), Noé (young man, soft), neutral narrator (baseline). **No real person's voice was cloned or imitated.** |
+| In-game credit | 设置 → 固定录音: "Voices: Qwen3-TTS (Apache-2.0), synthetic designed voices"; title footer also names it. |
+| Checks done | ASR (faster-whisper large-v3-turbo) 19/19 exact; UTMOS 3.61 (see `audio-candidates/README.md`). |
+| Known risks | Qwen3-TTS training data is not disclosed. Pronunciation/accent not yet reviewed by a native speaker. Synthetic voice may still sound "AI". |
+| Fallback | No clip or clip fails → device speech voice (v0.1.2 logic) → visible French text (reading; not counted as listening). |

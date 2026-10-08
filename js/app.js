@@ -61,8 +61,11 @@
     m.quality = { camille: a.camille ? a.camille.quality : null, noe: a.noe ? a.noe.quality : null };
     m.distinctVoices = !!a.distinct; m.rate = Au.rate(); m.frenchVoiceCount = (Au.voices || []).length;
     S.settings.speechRate = Au.rate();
+    m.recordings = Au.clipSource && Au.hasClip(C.BASELINE[0].line) ? { source: Au.clipSource, lines: Object.keys(Au.clips).filter(function (k) { return C.LINES[k]; }).length } : null;
   }
-  function voiceFields(info) { return info ? { name: info.voice, quality: info.quality, rate: info.rate, pitch: info.pitch } : null; }
+  function voiceFields(info) { return info ? { name: info.voice, quality: info.quality, rate: info.rate, pitch: info.pitch, source: info.source || ('device:' + info.voice) } : null; }
+  // what was actually heard for this attempt: 'recording:qwen3-tts' | 'device:<voice>' | 'none' (only played audio counts)
+  function audioSourceOf(audio, info) { return audio === 'played' && info ? (info.source || ('device:' + info.voice)) : 'none'; }
   function persist(reason) {
     if (!S) return true;
     if (S.meta.audio.status === 'unknown') syncAudioMeta();
@@ -119,8 +122,8 @@
   }
 
   // ---------- audio helpers ----------
-  function audioBanner() {
-    if (Au.status === 'unavailable') {
+  function audioBanner(lineId) {
+    if (!Au.canPlay(lineId) && Au.status !== 'unknown') {
       return h('div', { class: 'banner warn', id: 'audioBanner', role: 'status' },
         '🔇 这台设备/浏览器没有可用的法语语音（', h('span', { lang: 'en' }, Au.reason || 'unavailable'), '）。现在是',
         h('b', { text: '阅读模式' }), '：法语文字会显示出来，这部分不算听力练习。');
@@ -129,7 +132,7 @@
   }
   function speakLine(lineId) {
     var line = C.LINES[lineId];
-    return Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (st) {
+    return Au.playLine(lineId, line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (st) {
       setAudioMeta(); S.meta.audio.checkedAt = L.nowISO();
       return st;
     });
@@ -241,7 +244,7 @@
     wrap.appendChild(h('div', { class: 'footer', id: 'versionFooter' },
       'App v' + L.APP_VERSION + ' · 内容 ' + C.CONTENT_VERSION + ' · 存档 schema v' + L.SCHEMA_VERSION,
       h('br'), '存档只保存在这台设备的这个浏览器里，不会自动同步。清除浏览器数据会删除它——请定期导出。',
-      h('br'), '像素画为本项目原创；法语语音来自你设备自带的语音引擎。'));
+      h('br'), '像素画为本项目原创。法语语音：Day 1 用固定录音（' + (Au.clipCredit || 'Qwen3-TTS') + '）；没有录音的句子或录音播放失败时，用设备自带的声音，再不行就显示文字。'));
     $screen.appendChild(wrap);
   }
 
@@ -284,7 +287,7 @@
       visibleSupport: { level: level(), subtitles: st.sub, chinese: st.zh, gesture: true, speakerVisible: true, label: line.label },
       replays: st.replays, firstListen: null, response: null, correct: null,
       resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker,
-      audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? st.voiceInfo : null)
+      audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? st.voiceInfo : null), audioSource: audioSourceOf(audio, st.voiceInfo)
     }));
     [line.target].concat(line.also || []).forEach(function (t) {
       if (!t) return;
@@ -320,13 +323,13 @@
       ui.line = { id: step.line + '@' + S.progress.scene + S.progress.step, sub: level() >= 2, zh: level() >= 3, replays: 0, audio: 'pending' };
     }
     var st = ui.line, art = artFor(step); art.speaker = line.speaker;
-    if (Au.status === 'unavailable') { st.sub = true; if (st.audio === 'pending') st.audio = 'unavailable'; }
+    if (!Au.canPlay(step.line) && Au.status !== 'unknown') { st.sub = true; if (st.audio === 'pending') st.audio = 'unavailable'; }
     $screen.appendChild(stage(S.progress.scene, art));
-    var ab = audioBanner(); if (ab) $screen.appendChild(ab);
+    var ab = audioBanner(step.line); if (ab) $screen.appendChild(ab);
     var body = h('div', { id: 'lineBody' });
     var dlg = h('div', { class: 'dialogue fade-in' }, body,
       h('div', { class: 'row' },
-        btn('🔁 重播', function () { playCurrentLine(step, st.audio !== 'pending'); }, 'small', { id: 'btnReplay', disabled: Au.status === 'unavailable' }),
+        btn('🔁 重播', function () { playCurrentLine(step, st.audio !== 'pending'); }, 'small', { id: 'btnReplay', disabled: !Au.canPlay(step.line) && Au.status !== 'unknown' }),
         btn('文字', function () { if (!st.sub) { st.sub = true; S.learning.helpLog.push({ kind: 'subtitle', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: line.target, at: L.nowISO() }); persist('help'); } renderLineBody(step); }, 'small', { id: 'btnSub', 'aria-label': '显示法语文字' }),
         btn('中文', function () { if (!st.zh) { st.zh = true; st.sub = true; S.learning.helpLog.push({ kind: 'chinese', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: line.target, at: L.nowISO() }); persist('help'); } renderLineBody(step); }, 'small', { id: 'btnZh', 'aria-label': '显示中文帮助' }),
         btn('继续 ▶', function () {
@@ -338,7 +341,7 @@
         }, 'primary grow', { id: 'btnNext' })));
     $screen.appendChild(dlg);
     renderLineBody(step);
-    if (ui.gesture && st.audio === 'pending' && Au.status === 'available') playCurrentLine(step, false);
+    if (ui.gesture && st.audio === 'pending' && Au.canPlay(step.line)) playCurrentLine(step, false);
   };
   var R_line;
 
@@ -351,7 +354,7 @@
     $screen.appendChild(h('div', { class: 'card fade-in' },
       h('h2', { text: '开始前的小测（可跳过）' }),
       h('p', { text: '约 1 分钟：听 3 句很短的法语，选你理解的意思。不扣分、不贴标签，只是记录你从哪里开始——如果你已经会一些法语，游戏可以少给提示。' }),
-      audioBanner(),
+      audioBanner(C.BASELINE[0].line),
       h('div', { class: 'col' },
         btn('开始小测', function () {
           S.progress.baseline = { index: 0, optOrders: C.BASELINE.map(function (b) { return shuffle(b.options.map(function (o) { return o.id; })); }) };
@@ -374,10 +377,10 @@
     var key = opts.key;
     if (!ui.trial || ui.trial.key !== key) ui.trial = { key: key, replays: 0, audio: 'pending', sub: false, zh: false, plays: 0 };
     var t = ui.trial, line = C.LINES[opts.lineId];
-    if (Au.status === 'unavailable' && t.audio === 'pending') t.audio = 'unavailable';
+    if (!Au.canPlay(opts.lineId) && Au.status !== 'unknown' && t.audio === 'pending') t.audio = 'unavailable';
     var reading = t.audio === 'unavailable' || t.audio === 'failed';
     $screen.appendChild(stage('probe', { alt: '中性画面：只有一个扬声器图标，没有人物和手势' }));
-    var ab = audioBanner(); if (ab) $screen.appendChild(ab);
+    var ab = audioBanner(opts.lineId); if (ab) $screen.appendChild(ab);
     var card = h('div', { class: 'dialogue' });
     card.appendChild(h('div', { class: 'muted', id: 'trialTitle', text: opts.title }));
     var stim = h('div', { id: 'stimulus' });
@@ -391,7 +394,7 @@
       reading ? null : btn(t.plays ? '🔁 再听一次' : '🔊 播放', function () {
         if (t.plays) t.replays++;
         t.plays++;
-        Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+        Au.playLine(opts.lineId, line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
           setAudioMeta();
           if (r === 'stopped' || ui.trial !== t) return;
           if (r === 'played' || !t.voiceInfo) t.voiceInfo = Au.last;
@@ -410,9 +413,9 @@
     if (!answerable) card.appendChild(h('p', { class: 'muted', text: '先播放这一句，再选择。' }));
     if (opts.extra) card.appendChild(opts.extra);
     $screen.appendChild(card);
-    if (ui.gesture && t.audio === 'pending' && Au.status === 'available' && !t.autoTried) {
+    if (ui.gesture && t.audio === 'pending' && Au.canPlay(opts.lineId) && !t.autoTried) {
       t.autoTried = true; t.plays++;
-      Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+      Au.playLine(opts.lineId, line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
         setAudioMeta();
         if (ui.trial !== t) return;
         if (r === 'stopped') { t.plays--; t.autoTried = false; return; }
@@ -439,7 +442,7 @@
         var rec = { target: line.target, lesson: 'd1', modality: modality, audioStatus: t.audio === 'pending' ? 'not_used' : t.audio,
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false }, replays: t.replays, firstListen: t.replays === 0,
           response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line,
-          audioVoice: voiceFields(t.audio === 'played' || t.audio === 'failed' ? t.voiceInfo : null) };
+          audioVoice: voiceFields(t.audio === 'played' || t.audio === 'failed' ? t.voiceInfo : null), audioSource: audioSourceOf(t.audio, t.voiceInfo) };
         S.learning.attempts.push(L.makeAttempt(rec));
         S.learning.baseline.items.push({ line: item.line, response: resp, correct: correct, modality: modality, replays: t.replays, help: t.sub || t.zh });
         b.index++; ui.trial = null; ui.gesture = true; persist('baseline'); render();
@@ -602,7 +605,7 @@
       h('p', { text: '你会听到 ' + C.PROBE.items.length + ' 句话。画面上没有人物、没有手势、不显示文字。每句请判断：' }),
       h('ul', null, h('li', { text: '对方在告诉你他/她的名字' }), h('li', { text: '对方在问你的名字' })),
       h('p', { text: '可以重播，可以选“不确定”。需要帮助随时可以点（会记录为“有帮助”，这完全没问题）。结束后再告诉你答案。' }),
-      audioBanner(),
+      audioBanner(C.PROBE.items[0]),
       h('div', { class: 'row' }, btn('开始', function () {
         S.progress.probe = { order: shuffle(C.PROBE.items), optOrders: C.PROBE.items.map(function () { return shuffle(C.PROBE.options.map(function (o) { return o.id; })); }), index: 0 };
         next();
@@ -625,7 +628,7 @@
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false, nameHighlight: false },
           replays: t.replays, firstListen: t.replays === 0, response: resp, correct: resp === 'unsure' ? null : resp === line.func,
           resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId,
-          audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? t.voiceInfo : null)
+          audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? t.voiceInfo : null), audioSource: audioSourceOf(audio, t.voiceInfo)
         }));
         p.index++; ui.trial = null; ui.gesture = true;
         if (p.index >= p.order.length) { L.recordEvent(S, 'probe_done'); S.review = L.buildReview(S, new Date()); next(); }
@@ -741,7 +744,7 @@
       h('p', { text: '如果法语听起来很机械，可以试着下载更好的法语声音（需要 Wi‑Fi，每个声音约 100 MB 以上）：' }),
       h('p', { lang: 'en', class: 'path', text: 'Settings › Accessibility › Spoken Content › Voices › French' }),
       h('p', { text: '选一个法国法语（France）的声音，例如 Audrey 或 Thomas，下载它的 Enhanced 或 Premium 版本。下载后完全关闭 Safari 再打开游戏，回到这里点「🔄 重新检测声音」。' }),
-      h('p', { class: 'muted', text: '注意：根据目前公开的测试，iPhone 上的 Safari（以及 iPhone 上的其他浏览器）经常不会把下载的 Enhanced / Premium 声音提供给网页使用。如果下载后这里的列表没有出现它，这是 Apple 的限制，不是你操作错了。少数系统版本里，下载新版本后原来的法语声音反而在网页里消失——这时在同一页面把刚下载的声音左滑删除即可恢复。我们也在准备固定的高质量法语录音，让所有手机听到同样自然的声音。' }));
+      h('p', { class: 'muted', text: '注意：根据目前公开的测试，iPhone 上的 Safari（以及 iPhone 上的其他浏览器）经常不会把下载的 Enhanced / Premium 声音提供给网页使用。如果下载后这里的列表没有出现它，这是 Apple 的限制，不是你操作错了。少数系统版本里，下载新版本后原来的法语声音反而在网页里消失——这时在同一页面把刚下载的声音左滑删除即可恢复。现在 Day 1 已经改用固定的法语录音（每台手机听到的都一样），这里的设备声音只在录音播放失败时作为备用。' }));
     var android = h('div', { class: 'card', id: 'voiceTipAndroid' },
       h('b', { text: '🤖 Android' }),
       h('p', null, '在系统设置里搜索「文字转语音 / ', h('span', { lang: 'en', text: 'Text-to-speech' }), '」，首选引擎选 Google 语音服务，进入它的设置 → 安装语音数据 → 法语（法国），下载你喜欢的声音。不同品牌的菜单名称会略有不同。下载后重新打开浏览器，回到这里点「🔄 重新检测声音」。'));
@@ -754,7 +757,24 @@
   }
   function voiceSettings() {
     var wrap = h('div', { id: 'voiceSettings' });
-    wrap.appendChild(h('h3', { text: '🔊 法语声音（只保存在这台设备）' }));
+    // v0.1.3: fixed recordings are used first; the device voices below are the fallback.
+    wrap.appendChild(h('h3', { text: '🎧 固定录音（优先使用）' }));
+    var recStatus = h('p', { id: 'recTestResult', class: 'muted', text: Au.hasClip('test_camille') ? 'Day 1 的台词都有固定录音，每台手机听到的都一样。语速设置也对录音有效。' : '录音不可用，使用设备声音。' });
+    wrap.appendChild(recStatus);
+    function testRecording(sp) {
+      var id = sp === 'noe' ? 'test_noe' : 'test_camille';
+      recStatus.textContent = '播放中…';
+      Au.playLine(id, TEST_LINES[sp], { speaker: sp }).then(function (r) {
+        var info = Au.last || {};
+        recStatus.textContent = r === 'played' ? '✓ 已播放（' + (info.source === Au.clipSource ? '固定录音' : '设备声音 ' + info.voice) + ' · 语速 ' + info.rate + '）。如果没听到，请检查音量和静音开关。'
+          : r === 'stopped' ? '已停止。' : '⚠️ 播放失败——游戏会显示文字（阅读模式）。';
+      });
+    }
+    if (Au.hasClip('test_camille')) wrap.appendChild(h('div', { class: 'row' },
+      btn('▶ 试听录音 Camille', function () { testRecording('camille'); }, 'small grow', { id: 'btnRecTest' }),
+      btn('▶ 试听录音 Noé', function () { testRecording('noe'); }, 'small grow', { id: 'btnRecTestNoe' })));
+    wrap.appendChild(h('p', { class: 'muted', id: 'voiceCredit', lang: 'en', text: Au.clipCredit || 'Voices: Qwen3-TTS (Apache-2.0), synthetic designed voices' }));
+    wrap.appendChild(h('h3', { text: '🔊 设备自带的法语声音（备用，只保存在这台设备）' }));
     var status = h('p', { id: 'audioTestResult', class: 'muted', text: '法语语音：' + audioStatusText() });
     wrap.appendChild(status);
     var lists = h('div', { id: 'voiceLists' });
@@ -809,7 +829,7 @@
     [[0.75, '慢 0.75'], [0.9, '稍慢 0.9'], [1.0, '正常 1.0']].forEach(function (rr) {
       var r = h('input', { type: 'radio', name: 'rate', value: String(rr[0]), id: 'rate' + String(rr[0]).replace('.', '') });
       r.checked = Au.rate() === rr[0];
-      r.addEventListener('change', function () { Au.savePrefs({ rate: rr[0] }); setAudioMeta(); persist('settings'); testVoice('camille'); });
+      r.addEventListener('change', function () { Au.savePrefs({ rate: rr[0] }); setAudioMeta(); persist('settings'); if (Au.hasClip('test_camille')) testRecording('camille'); else testVoice('camille'); });
       rates.appendChild(h('label', { class: 'radio', for: r.id }, r, h('span', { text: rr[1] })));
     });
     wrap.appendChild(rates);
@@ -822,7 +842,7 @@
     return wrap;
   }
   function audioStatusText() {
-    return Au.status === 'available' ? '可用（找到 ' + Au.voices.length + ' 个法语声音）' : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）→ 阅读模式' : '检测中…';
+    return Au.status === 'available' ? '可用（找到 ' + Au.voices.length + ' 个法语声音）' : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）' + (Au.hasClip('test_camille') ? '——没关系，Day 1 用上面的固定录音' : '→ 阅读模式') : '检测中…';
   }
 
   function download(name, text) {

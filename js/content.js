@@ -8,7 +8,10 @@
   // 08b (2026-10-08): project renamed to L’Appartement 411 — only the apartment number in the Chinese
   // narration (404 -> 411) changed. French lines, targets, probe items and help are identical to 08a,
   // so learning evidence recorded under 08a stays comparable.
-  var CONTENT_VERSION = 'd1-2026-10-08b';
+  // 08c (2026-10-08, app v0.1.3): audio presentation changed — Day 1 lines now play fixed Qwen3-TTS recordings
+  // (device voice / reading only as fallback). French text, targets, probe items and help are unchanged; each
+  // attempt records audioSource so recording vs device-voice evidence can be separated.
+  var CONTENT_VERSION = 'd1-2026-10-08c';
 
   // label: understand | atmosphere | baseline
   var LINES = {

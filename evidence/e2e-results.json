@@ -2,9 +2,9 @@
   "env": {
     "chrome": "154.0.8037.57",
     "viewport": "390x844 @2x, isMobile, hasTouch",
-    "date": "2026-10-08T20:14:26.273Z"
+    "date": "2026-10-08T22:32:26.466Z"
   },
-  "passed": 84,
+  "passed": 105,
   "failed": 0,
   "results": [
     {
@@ -124,10 +124,10 @@
       "check": "name attempt: writing, full_structure, supported (Chinese help shown), original preserved",
       "pass": true,
       "detail": {
-        "id": "pkdu442vmuzz67fc",
+        "id": "spk0s83hmv043n2i",
         "target": "try_je_mappelle",
         "lesson": "d1",
-        "contentVersion": "d1-2026-10-08b",
+        "contentVersion": "d1-2026-10-08c",
         "modality": "writing",
         "audioStatus": "not_used",
         "visibleSupport": {
@@ -147,7 +147,8 @@
         "speaker": "camille",
         "stimulus": null,
         "audioVoice": null,
-        "at": "2026-10-08T20:14:32.472Z"
+        "audioSource": "none",
+        "at": "2026-10-08T22:32:30.858Z"
       }
     },
     {
@@ -300,13 +301,13 @@
       "gate": "Usable entry",
       "check": "copy-to-clipboard copies the visible summary text",
       "pass": true,
-      "detail": "L’Appartement 411 · 反馈摘要\n版本：app 0.1.2 · "
+      "detail": "L’Appartement 411 · 反馈摘要\n版本：app 0.1.3 · "
     },
     {
       "gate": "Recovery",
       "check": "export downloads valid JSON with schema/app version",
       "pass": true,
-      "detail": "appartement-411-save-20261008-1314.json"
+      "detail": "appartement-411-save-20261008-1532.json"
     },
     {
       "gate": "Recovery",
@@ -349,10 +350,10 @@
       "check": "[simulated voice] playback + replay recorded (audioStatus=played, replays=1)",
       "pass": true,
       "detail": {
-        "id": "gsnavksamuzz6ihg",
+        "id": "r0zh9pcqmv043wf2",
         "target": "bonjour",
         "lesson": "d1",
-        "contentVersion": "d1-2026-10-08b",
+        "contentVersion": "d1-2026-10-08c",
         "modality": "listening+reading",
         "audioStatus": "played",
         "visibleSupport": {
@@ -377,9 +378,11 @@
           "name": "Fake Français (test) (fr-FR)",
           "quality": "standard",
           "rate": 0.9,
-          "pitch": 1.06
+          "pitch": 1.06,
+          "source": "device:Fake Français (test) (fr-FR)"
         },
-        "at": "2026-10-08T20:14:46.804Z"
+        "audioSource": "device:Fake Français (test) (fr-FR)",
+        "at": "2026-10-08T22:32:42.974Z"
       }
     },
     {
@@ -452,10 +455,10 @@
       "pass": true,
       "detail": [
         "Tu t'appelles comment ?",
-        "Salut ! Je m'appelle Noé.",
-        "Salut ! Je m'appelle Noé.",
+        "Je m'appelle Camille.",
+        "Je m'appelle Camille.",
         "Tu t'appelles comment ?",
-        "Je m'appelle Camille."
+        "Salut ! Je m'appelle Noé."
       ]
     },
     {
@@ -510,19 +513,22 @@
           "name": "Marie (fr-FR)",
           "quality": "standard",
           "rate": 0.9,
-          "pitch": 1
+          "pitch": 1,
+          "source": "device:Marie (fr-FR)"
         },
         {
           "name": "Marie (fr-FR)",
           "quality": "standard",
           "rate": 0.9,
-          "pitch": 1
+          "pitch": 1,
+          "source": "device:Marie (fr-FR)"
         },
         {
           "name": "Thomas (fr-FR)",
           "quality": "standard",
           "rate": 0.9,
-          "pitch": 1
+          "pitch": 1,
+          "source": "device:Thomas (fr-FR)"
         }
       ]
     },
@@ -595,7 +601,7 @@
       "pass": true,
       "detail": [
         "法语语音：可用 · Camille=Marie (fr-FR)（标准）· Noé=Amélie (fr-CA)（标准） · 本机法语声音 6 个 · 语速 0.75",
-        "语音播放记录：成功 3 · 失败/不可用 0 · 实际播放的声音：Marie (fr-FR)（标准，语速 0.9） ×2；Thomas (fr-FR)（标准，语速 0.9） ×1"
+        "语音播放记录：成功 3（录音 0 · 设备声音 3） · 失败/不可用 0 · 实际播放的声音：Marie (fr-FR)（标准，语速 0.9） ×2；Thomas (fr-FR)（标准，语速 0.9） ×1"
       ]
     },
     {
@@ -717,7 +723,7 @@
       "gate": "Recovery",
       "check": "[rename] resumes at the exact line the old build was on",
       "pass": true,
-      "detail": "▼ Noé 🔇 无语音（阅读）Salut ! Je m’appelle Noé.嗨！我叫 Noé。"
+      "detail": "▼ Noé Salut ! Je m’appelle Noé.嗨！我叫 Noé。"
     },
     {
       "gate": "Recovery",
@@ -748,6 +754,292 @@
       "check": "[rename] no JS errors on old-file import",
       "pass": true,
       "detail": []
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] recordings available although headless Chrome has no French voice",
+      "pass": true,
+      "detail": {
+        "s": "unavailable",
+        "has": true,
+        "src": "recording:qwen3-tts"
+      }
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.1.3] footer credits the recordings",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.1.3] settings shows the voice credit line",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] settings recording test plays the real clip",
+      "pass": true,
+      "detail": "✓ 已播放（固定录音 · 语速 0.9）。如果没听到，请检查音量和静音开关。"
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.1.3] settings sheet with recording controls: no overflow, controls ≥44px",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] no \"reading mode\" banner on a line that has a recording",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] line clip really played in Chrome (ended event), replay replays the same clip, at speed 0.75",
+      "pass": true,
+      "detail": [
+        [
+          "test_camille",
+          "played",
+          0.9
+        ],
+        [
+          "test_camille",
+          "played",
+          0.75
+        ],
+        [
+          "cam_bonjour",
+          "played",
+          0.75
+        ],
+        [
+          "cam_bonjour",
+          "played",
+          0.75
+        ]
+      ]
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] clip started with playbackRate 0.75 and preservesPitch on",
+      "pass": true,
+      "detail": [
+        {
+          "src": "file:///workspace/appartement-411/audio/d1/cam_bonjour.mp3",
+          "rate": 0.75,
+          "preservesPitch": true
+        },
+        {
+          "src": "file:///workspace/appartement-411/audio/d1/cam_bonjour.mp3",
+          "rate": 0.75,
+          "preservesPitch": true
+        }
+      ]
+    },
+    {
+      "gate": "Learning validity",
+      "check": "[v0.1.3] attempt records audioSource=recording:qwen3-tts, played, replays=1, content 08c",
+      "pass": true,
+      "detail": {
+        "id": "gxvbs4akmv044qis",
+        "target": "bonjour",
+        "lesson": "d1",
+        "contentVersion": "d1-2026-10-08c",
+        "modality": "listening+reading",
+        "audioStatus": "played",
+        "visibleSupport": {
+          "level": 3,
+          "subtitles": true,
+          "chinese": true,
+          "gesture": true,
+          "speakerVisible": true,
+          "label": "understand"
+        },
+        "replays": 1,
+        "firstListen": null,
+        "response": null,
+        "correct": null,
+        "resultType": "exposure",
+        "evidenceKind": "encounter",
+        "production": null,
+        "context": "d1.doorway.1.cam_bonjour",
+        "speaker": "camille",
+        "stimulus": null,
+        "audioVoice": {
+          "name": "Qwen3-TTS · Camille",
+          "quality": "recording",
+          "rate": 0.75,
+          "pitch": 1,
+          "source": "recording:qwen3-tts"
+        },
+        "audioSource": "recording:qwen3-tts",
+        "at": "2026-10-08T22:33:21.988Z"
+      }
+    },
+    {
+      "gate": "Learning validity",
+      "check": "[v0.1.3] save meta lists the recordings (17 Day 1 lines)",
+      "pass": true,
+      "detail": {
+        "source": "recording:qwen3-tts",
+        "lines": 17
+      }
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] next line autoplays its own clip from the tap",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.1.3] no JS errors (recordings)",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] clip play() rejected -> device voice fallback; audioSource=device:<voice>",
+      "pass": true,
+      "detail": {
+        "src": "device:Fake Français (test) (fr-FR)",
+        "sp": [
+          "Bonjour !"
+        ]
+      }
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] clip fails + no device voice -> French text shown with notice",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "[v0.1.3] failed clip recorded as reading, audioSource=none",
+      "pass": true,
+      "detail": {
+        "id": "buzp9rs4mv044w3a",
+        "target": "bonjour",
+        "lesson": "d1",
+        "contentVersion": "d1-2026-10-08c",
+        "modality": "reading",
+        "audioStatus": "failed",
+        "visibleSupport": {
+          "level": 3,
+          "subtitles": true,
+          "chinese": true,
+          "gesture": true,
+          "speakerVisible": true,
+          "label": "understand"
+        },
+        "replays": 0,
+        "firstListen": null,
+        "response": null,
+        "correct": null,
+        "resultType": "exposure",
+        "evidenceKind": "encounter",
+        "production": null,
+        "context": "d1.doorway.1.cam_bonjour",
+        "speaker": "camille",
+        "stimulus": null,
+        "audioVoice": {
+          "name": "Qwen3-TTS · Camille",
+          "quality": "recording",
+          "rate": 0.9,
+          "pitch": 1,
+          "source": "recording:qwen3-tts"
+        },
+        "audioSource": "none",
+        "at": "2026-10-08T22:33:29.206Z"
+      }
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[v0.1.3] player not trapped after clip failure (moved on to the greeting step)",
+      "pass": true,
+      "detail": {
+        "episode": 1,
+        "scene": "doorway",
+        "step": 2,
+        "status": "in_progress",
+        "probe": null,
+        "baseline": null,
+        "draft": ""
+      }
+    },
+    {
+      "gate": "Recovery",
+      "check": "[v0.1.3] real v0.1.2 build wrote a save (content 08b, no audioSource)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Usable entry",
+      "check": "[v0.1.3] single file inlines all 19 clips as data URIs",
+      "pass": true,
+      "detail": 19
+    },
+    {
+      "gate": "Recovery",
+      "check": "[v0.1.3] old v0.1.2 save loads in v0.1.3 and resumes at the exact line",
+      "pass": true,
+      "detail": "▼ Noé Salut ! Je m’appelle Noé.嗨！我叫 Noé。"
+    },
+    {
+      "gate": "Recovery",
+      "check": "[v0.1.3] old attempts kept verbatim; new attempt records the recording",
+      "pass": true,
+      "detail": {
+        "id": "sdsmaocxmv0450cz",
+        "target": "je_mappelle",
+        "lesson": "d1",
+        "contentVersion": "d1-2026-10-08c",
+        "modality": "listening+reading",
+        "audioStatus": "played",
+        "visibleSupport": {
+          "level": 3,
+          "subtitles": true,
+          "chinese": true,
+          "gesture": true,
+          "speakerVisible": true,
+          "label": "understand"
+        },
+        "replays": 0,
+        "firstListen": null,
+        "response": null,
+        "correct": null,
+        "resultType": "exposure",
+        "evidenceKind": "encounter",
+        "production": null,
+        "context": "d1.doorway.4.noe_intro",
+        "speaker": "noe",
+        "stimulus": null,
+        "audioVoice": {
+          "name": "Qwen3-TTS · Noé",
+          "quality": "recording",
+          "rate": 0.9,
+          "pitch": 1,
+          "source": "recording:qwen3-tts"
+        },
+        "audioSource": "recording:qwen3-tts",
+        "at": "2026-10-08T22:33:34.739Z"
+      }
+    },
+    {
+      "gate": "Audio",
+      "check": "[v0.1.3] single file plays the inlined clip from file:// (blob URL), no external requests, no JS errors",
+      "pass": true,
+      "detail": {
+        "req": [
+          "blob:null/65fd33dd-c33a-4443-9a85-a70f16a34417",
+          "blob:null/56b3cd07-c157-4fd0-9a79-f490651e3637"
+        ],
+        "err": []
+      }
     },
     {
       "gate": "Complete interaction",

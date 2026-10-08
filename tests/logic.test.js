@@ -300,10 +300,10 @@ test('v0.1.2: attempts carry the voice/rate that actually played; summary report
   const sum = L.buildSummary(s, {});
   assert.match(sum, /Camille=Marie \(fr-FR\)（标准）· Noé=Thomas \(fr-FR\)（标准）/);
   assert.match(sum, /语速 0\.9/);
-  assert.match(sum, /成功 2 · 失败\/不可用 1/);
+  assert.match(sum, /成功 2（录音 0 · 设备声音 1 · 旧版未记录来源 1） · 失败\/不可用 1/);
   assert.match(sum, /Marie \(fr-FR\)（标准，语速 0\.9） ×1/);
   assert.match(sum, /未记录声音（v0\.1\.1 及以前） ×1/);
-  assert.equal(L.APP_VERSION, '0.1.2');
+  assert.equal(L.APP_VERSION, '0.1.3');
 });
 
 test('v0.1.2: a v0.1.1 save (no audioVoice fields, speechRate 0.85) still validates unchanged', () => {
@@ -312,4 +312,50 @@ test('v0.1.2: a v0.1.1 save (no audioVoice fields, speechRate 0.85) still valida
   const r = L.parseImport(JSON.stringify(old));
   assert.equal(r.ok, true);
   assert.equal(r.save.settings.speechRate, old.settings.speechRate);
+});
+
+// ---------- v0.1.3: fixed Qwen3-TTS recordings ----------
+test('v0.1.3: clip map covers every Day 1 line id, each file exists and is a non-empty mp3', () => {
+  const fs = require('node:fs'), path = require('node:path');
+  delete require.cache[require.resolve('../js/clips.js')];
+  const CL = require('../js/clips.js');
+  assert.equal(CL.source, 'recording:qwen3-tts');
+  assert.match(CL.credit, /Qwen3-TTS \(Apache-2\.0\), synthetic designed voices/);
+  const missing = Object.keys(C.LINES).filter(id => !CL.files[id]);
+  assert.deepEqual(missing, [], 'every spoken Day 1 line has a recording');
+  for (const id of Object.keys(CL.files)) {
+    const f = path.join(__dirname, '..', CL.files[id]);
+    const b = fs.readFileSync(f);
+    assert.ok(b.length > 1000, id + ' size');
+    assert.ok(b.slice(0, 3).toString() === 'ID3' || (b[0] === 0xff && (b[1] & 0xe0) === 0xe0), id + ' is mp3');
+  }
+  assert.ok(CL.files.test_camille && CL.files.test_noe, 'settings test lines recorded too');
+});
+
+test('v0.1.3: attempts carry audioSource; default none; content version bumped, text unchanged', () => {
+  const a = L.makeAttempt({ target: 'bonjour', modality: 'listening', audioStatus: 'played', audioSource: 'recording:qwen3-tts', resultType: 'exposure' });
+  assert.equal(a.audioSource, 'recording:qwen3-tts');
+  assert.equal(L.makeAttempt({ target: 'bonjour' }).audioSource, 'none');
+  assert.equal(C.CONTENT_VERSION, 'd1-2026-10-08c');
+  assert.equal(C.LINES.cam_intro.fr, 'Salut\u00A0! Je m\u2019appelle Camille.');
+  const s = L.newSave();
+  s.meta.audio = { status: 'unavailable', recordings: { source: 'recording:qwen3-tts', lines: 17 } };
+  s.learning.attempts.push(a);
+  s.learning.attempts.push(L.makeAttempt({ target: 'salut', modality: 'listening', audioStatus: 'played', audioSource: 'device:Thomas (fr-FR)', audioVoice: { name: 'Thomas (fr-FR)', quality: 'standard', rate: 0.9, pitch: 1, source: 'device:Thomas (fr-FR)' } }));
+  assert.equal(L.validateSave(s).ok, true);
+  const sum = L.buildSummary(s, {});
+  assert.match(sum, /固定录音：recording:qwen3-tts（Day 1 共 17 句）/);
+  assert.match(sum, /成功 2（录音 1 · 设备声音 1）/);
+});
+
+test('v0.1.3: a v0.1.2 save (content 08b, no audioSource) still validates and imports unchanged', () => {
+  const s = L.newSave();
+  s.appVersion = '0.1.2'; s.contentVersion = 'd1-2026-10-08b';
+  const at = L.makeAttempt({ target: 'bonjour', modality: 'listening', audioStatus: 'played', audioVoice: { name: 'Marie (fr-FR)', quality: 'standard', rate: 0.9, pitch: 1 }, contentVersion: 'd1-2026-10-08b' });
+  delete at.audioSource; s.learning.attempts.push(at);
+  const r = L.parseImport(JSON.stringify(s));
+  assert.equal(r.ok, true);
+  assert.equal(r.save.contentVersion, 'd1-2026-10-08b');
+  assert.equal('audioSource' in r.save.learning.attempts[0], false);
+  assert.match(L.buildSummary(r.save, {}), /成功 1（录音 0 · 设备声音 1）/);
 });
