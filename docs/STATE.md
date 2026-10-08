@@ -81,3 +81,4 @@ Proposed: **A** (or C immediately on Android while A is pending).
 - Deploy dir: `/workspace/a404-pages` (git, branch main). Rollback: `git revert`/reset to previous commit there and push.
 - Real-phone audio, real-phone persistence: still untested; awaits founder play.
 - Repeat low-risk preview updates: not yet authorized; ask founder for narrow standing permission per CEO.md.
+- 2026-10-08 12:50 PT: Founder granted standing permission for small preview updates (bug fixes, text, new day) to this Pages URL; notify after each publish. Spend, new platforms, wider exposure still need approval.
