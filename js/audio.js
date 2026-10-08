@@ -143,6 +143,7 @@
     if (!A.prefs) A.loadPrefs();
     if (!synth || typeof root.SpeechSynthesisUtterance !== 'function') {
       A.status = 'unavailable'; A.reason = 'no-speech-api'; A.voices = []; A.reassign();
+      try { root.__a411Boot = Date.now() + Math.random(); } catch (e) {}
       return Promise.resolve(A.status);
     }
     return getVoices(2000).then(function (voices) {
@@ -150,6 +151,7 @@
       A.reassign();
       A.status = A.voice ? 'available' : 'unavailable';
       A.reason = A.voice ? null : 'no-french-voice';
+      try { root.__a411Boot = Date.now() + Math.random(); } catch (e) {}
       return A.status;
     });
   };
@@ -188,6 +190,7 @@
   A.clipSource = CL ? CL.source : null;
   A.clipCredit = CL ? CL.credit : null;
   A.clips = CL ? CL.files : {};
+  A.useExtraClips = function (files) { if (!files) return; Object.keys(files).forEach(function (k) { if (!A.clips[k]) A.clips[k] = files[k]; }); };
   A.clipLog = []; // { id, result, rate, at } — every clip attempt (tests + debugging)
   var el = null, cur = null, unlocked = false, blobs = {};
   function clipsOn() { return !root.A411_NO_CLIPS && typeof root.Audio === 'function'; }

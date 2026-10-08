@@ -36,6 +36,27 @@
     bl_ask: { speaker: 'neutral', fr: 'Tu t\u2019appelles comment' + NB + '?', zh: '你叫什么名字？', target: 'tu_tappelles_comment', label: 'baseline' }
   };
 
+  var LINE_EN = {
+    cam_bonjour: 'Hello! (a general, polite greeting)',
+    cam_intro: 'Hi! My name is Camille. (she is pointing at herself)',
+    noe_intro: 'Hi! My name is Noé.',
+    noe_moi: 'Me, I am Noé. (another way to introduce yourself; atmosphere, not tested)',
+    cam_ask: 'What is your name?',
+    cam_plante: 'This is your plant. (atmosphere, not tested)',
+    cam_soif: 'Your plant is thirsty. (atmosphere, not tested)',
+    cam_bye: 'Bye! (Salut can also mean goodbye)',
+    noe_croissant: 'This is Croissant. (the cat’s name; atmosphere, not tested)',
+    noe_secret: 'A secret? (atmosphere, not tested)',
+    pr_cam_ask: 'What is your name?',
+    pr_noe_ask: 'What is your name?',
+    pr_noe_intro: 'Hi! My name is Noé.',
+    pr_cam_intro: 'My name is Camille.',
+    bl_bonjour: 'Hello!',
+    bl_lea: 'My name is Léa.',
+    bl_ask: 'What is your name?'
+  };
+  Object.keys(LINE_EN).forEach(function (k) { if (LINES[k]) LINES[k].en = LINE_EN[k]; });
+
   var SPEAKERS = {
     camille: { name: 'Camille', color: '#2f7d5b', pitch: 1.12 },
     noe: { name: 'Noé', color: '#c0602a', pitch: 0.88 },

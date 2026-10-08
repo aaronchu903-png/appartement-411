@@ -303,7 +303,7 @@ test('v0.1.2: attempts carry the voice/rate that actually played; summary report
   assert.match(sum, /成功 2（录音 0 · 设备声音 1 · 旧版未记录来源 1） · 失败\/不可用 1/);
   assert.match(sum, /Marie \(fr-FR\)（标准，语速 0\.9） ×1/);
   assert.match(sum, /未记录声音（v0\.1\.1 及以前） ×1/);
-  assert.equal(L.APP_VERSION, '0.1.3');
+  assert.equal(L.APP_VERSION, '0.2.0');
 });
 
 test('v0.1.2: a v0.1.1 save (no audioVoice fields, speechRate 0.85) still validates unchanged', () => {

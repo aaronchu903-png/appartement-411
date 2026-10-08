@@ -10,7 +10,8 @@
   var NB = '\u00A0';
 
   var storage = null, storageOk = true, S = null, notices = [];
-  var ui = { gesture: false, line: null, trial: null, view: 'title' };
+  var ui = { gesture: false, line: null, trial: null, view: 'title', legacy: false };
+  var learnState = null, profileId = null;
 
   // ---------- helpers ----------
   function h(tag, attrs) {
@@ -50,6 +51,17 @@
   function fr(text) { return h('div', { class: 'fr', lang: 'fr' }, text); }
   function zh(text) { return h('div', { class: 'zh', lang: 'zh-Hans' }, text); }
   function level() { return S ? S.settings.supportLevel : 3; }
+  function uiLang() { try { return profileId ? A411.Learn.getLang(localStorage, profileId) : 'zh'; } catch (e) { return 'zh'; } }
+  function T(key) { return (A411.I18n && A411.I18n.t(uiLang(), key)) || key; }
+  function saveLearn() { if (learnState && storageOk !== false) { try { A411.Learn.saveLearn(localStorage, learnState); } catch (e) {} } }
+  function pushAttempt(fields) {
+    var a = L.makeAttempt(fields);
+    S.learning.attempts.push(a);
+    if (learnState && A411.Learn && A411.Deck) {
+      try { A411.Learn.noteStory(learnState, A411.Deck, a, new Date()); saveLearn(); } catch (e) {}
+    }
+    return a;
+  }
 
   // ---------- persistence ----------
   function syncAudioMeta() { if (S && Au.status !== 'unknown') { setAudioMeta(); S.meta.audio.checkedAt = S.meta.audio.checkedAt || L.nowISO(); } }
@@ -167,11 +179,73 @@
     Art.scene(c.getContext('2d'), sceneName, st || {});
     return c;
   }
+  function studyCtx() {
+    return {
+      h: h, btn: btn, T: T, lang: uiLang, learn: learnState, profileName: profileId, screen: $screen, toast: toast,
+      legacy: ui.legacy,
+      onChoose: function (id) { chooseProfile(id); },
+      openStudy: function () { ui.view = 'study'; render(); },
+      closeStudy: function () { ui.view = 'title'; render(); },
+      openProgress: function () { ui.view = 'progress'; render(); },
+      beginStudy: function (opts) {
+        A411.Learn.startSession(learnState, A411.Deck, new Date(), opts || null);
+        saveLearn(); ui.view = 'study'; render();
+      },
+      save: saveLearn, render: render,
+      playItem: function (item) { Au.playLine(item.id, item.fr.replace(/\u00a0/g, ' '), { speaker: item.speaker }); },
+      playText: function (fr, speaker, id) { Au.playLine(id, fr, { speaker: speaker }); },
+      skipPlacement: function () { A411.Learn.skipPlacement(learnState); saveLearn(); ui.view = 'title'; render(); },
+      answerPlacement: function (item, response) {
+        var sup = { audio: Au.last && Au.last.clip === item.id ? 'played' : 'not_used', subtitles: false, chinese: false };
+        A411.Learn.placementAnswer(learnState, item.id, response, sup, new Date());
+        saveLearn();
+        if (learnState.settings.placement !== 'not_started') ui.view = 'title';
+        render();
+      },
+      onChoice: function (entry, item, choice, modality) {
+        var sess = learnState.session;
+        var ok = item.listen && choice === item.listen.answer;
+        sess.lastCorrect = !!ok; sess.accent = false;
+        if (ok) { sess.phase = 'rate'; }
+        else if (sess.hints < 2) { sess.hints++; sess.phase = 'hint'; sess.wrong = true; }
+        else { sess.phase = 'reveal'; sess.revealed = true; sess.wrong = true; }
+        entry.modality = modality;
+        saveLearn(); render();
+      },
+      onType: function (entry, item, value, modality) {
+        var sess = learnState.session;
+        var accept = (modality === 'reading' && item.cloze) ? item.cloze.accept : ((item.produce && item.produce.accept) || [item.fr]);
+        var chk = A411.Learn.checkAnswer(value, accept);
+        sess.lastCorrect = chk.ok; sess.accent = chk.accent;
+        if (chk.ok) sess.phase = 'rate';
+        else if (sess.hints < 2) { sess.hints++; sess.phase = 'hint'; }
+        else { sess.phase = 'reveal'; sess.revealed = true; }
+        entry.modality = modality;
+        saveLearn(); render();
+      },
+      onRate: function (entry, item, grade, modality, suggested) {
+        entry.modality = modality;
+        var sess = learnState.session;
+        A411.Learn.commit(learnState, grade, { suggested: suggested, hints: sess.hints, correct: !!sess.lastCorrect, accent: !!sess.accent, revealed: !!sess.revealed, audio: modality === 'listening' ? 'played' : 'not_used' }, new Date());
+        saveLearn(); render();
+      },
+      exportBundle: function () {
+        var bundle = { kind: 'a411-profile-bundle', schemaVersion: 1, profileId: profileId, story: S, learn: learnState, uiLang: uiLang() };
+        var d = new Date();
+        download('appartement-411-' + profileId + '-' + d.getFullYear() + '.json', JSON.stringify(bundle));
+        toast(uiLang() === 'en' ? 'Exported.' : '已导出。');
+      }
+    };
+  }
   function render() {
     if (ui.paused) return; // nothing re-renders behind the pause sheet
     try {
       applySettings();
       $screen.innerHTML = '';
+      if (ui.view === 'gate') { $topbar.hidden = true; A411.StudyUI.renderGate(studyCtx()); return; }
+      if (ui.view === 'placement') { $topbar.hidden = true; A411.StudyUI.renderPlacement(studyCtx()); return; }
+      if (ui.view === 'study') { $topbar.hidden = false; $where.textContent = (profileId || '') + ' · ' + T('today') + ' · v' + L.APP_VERSION; A411.StudyUI.renderSession(studyCtx()); return; }
+      if (ui.view === 'progress') { $topbar.hidden = true; A411.StudyUI.renderProgress(studyCtx()); return; }
       if (ui.view === 'title' || !S) { $topbar.hidden = true; renderTitle(); return; }
       $topbar.hidden = false; setWhere();
       var step = curStep();
@@ -194,9 +268,19 @@
     var hasSave = !!S && (S.progress.scene !== 'baseline' || S.progress.step > 0 || S.learning.baseline.status !== 'not_started');
     var wrap = h('div', { class: 'fade-in' });
     wrap.appendChild(stage('title', { alt: '夜晚的公寓楼，411 号窗户亮着灯，窗台上有一盆植物' }));
+    if (profileId) {
+      wrap.appendChild(h('div', { class: 'row pad', id: 'profileBar' },
+        h('span', { id: 'profileName', text: (uiLang() === 'en' ? 'Profile: ' : '正在使用：') + profileId }),
+        btn(uiLang() === 'en' ? '中文' : 'English', function () {
+          A411.Learn.setLang(localStorage, profileId, uiLang() === 'en' ? 'zh' : 'en');
+          render();
+        }, 'small', { id: 'btnLang' }),
+        btn(T('switchProfile'), function () { ui.legacy = false; ui.view = 'gate'; render(); }, 'small', { id: 'btnSwitchProfile' })));
+      if (learnState && A411.StudyUI) A411.StudyUI.fillToday(studyCtx(), wrap);
+    }
     var main = h('div', { class: 'pad' },
       h('h1', { lang: 'fr', text: 'L’Appartement 411' }),
-      h('p', { class: 'muted' }, h('span', { lang: 'fr', text: 'Day 1 · Bienvenue chez nous' }), ' — 搬家第一天'));
+      h('p', { class: 'muted' }, h('span', { lang: 'fr', text: 'Day 1 · Bienvenue chez nous' }), ' — ' + T('moveIn')));
     var col = h('div', { class: 'col' });
     if (hasSave && S.progress.status !== 'complete') {
       col.appendChild(btn('▶ 继续：Day 1 · ' + C.SCENE_ZH[S.progress.scene] + '（第 ' + (S.progress.step + 1) + ' 步）', startPlay, 'primary', { id: 'btnContinue' }));
@@ -226,12 +310,12 @@
 
     var days = h('ul', { class: 'days', 'aria-label': '章节' });
     C.DAYS.forEach(function (d) {
-      var status = d.available ? (S && S.progress.status === 'complete' ? '已完成' : '可以玩') : '尚未开放';
+      var status = d.available ? (S && S.progress.status === 'complete' ? T('dayDone') : T('dayOpen')) : T('dayClosed');
       days.appendChild(h('li', { class: d.available ? '' : 'na', 'aria-disabled': d.available ? null : 'true' },
         h('span', null, 'Day ' + d.n + ' · ', h('span', { lang: 'fr', text: d.title }), ' ', h('span', { class: 'muted', text: d.zh })),
         h('span', { class: 'tag', text: status })));
     });
-    wrap.appendChild(h('div', { class: 'card' }, h('h3', { text: '章节' }), days,
+    wrap.appendChild(h('div', { class: 'card' }, h('h3', { text: T('chapters') }), days,
       h('p', { class: 'muted', text: 'Day 2–7 还没做好，所以这里不放按钮。完成并检查好一天，才会开放下一天。' })));
 
     wrap.appendChild(h('div', { class: 'row pad' },
@@ -282,13 +366,13 @@
     var st = ui.line, line = C.LINES[step.line];
     var audio = st.audio === 'pending' ? 'not_used' : st.audio;
     var modality = audio === 'played' ? (st.sub ? 'listening+reading' : 'listening') : 'reading';
-    S.learning.attempts.push(L.makeAttempt({
+    pushAttempt({
       target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
       visibleSupport: { level: level(), subtitles: st.sub, chinese: st.zh, gesture: true, speakerVisible: true, label: line.label },
       replays: st.replays, firstListen: null, response: null, correct: null,
       resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker,
       audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? st.voiceInfo : null), audioSource: audioSourceOf(audio, st.voiceInfo)
-    }));
+    });
     [line.target].concat(line.also || []).forEach(function (t) {
       if (!t) return;
       var sb = S.learning.supportByTarget[t] = S.learning.supportByTarget[t] || {};
@@ -315,7 +399,7 @@
     host.appendChild(h('div', null, h('span', { class: 'speaker ' + line.speaker, id: 'speakerTag' }, '▼ ' + sp.name), ' ',
       h('span', { class: 'muted', id: 'audioState', text: st.audio === 'played' ? '🔊 已播放' : st.audio === 'failed' ? '⚠️ 播放失败，已显示文字（阅读）' : st.audio === 'unavailable' ? '🔇 无语音（阅读）' : '' })));
     host.appendChild(st.sub ? h('div', { id: 'subtitle' }, fr(line.fr)) : h('p', { class: 'hidden-text', id: 'subtitle', text: '（先听；需要时点「文字」）' }));
-    if (st.zh) host.appendChild(h('div', { id: 'gloss' }, zh(line.zh)));
+    if (st.zh) host.appendChild(h('div', { id: 'gloss' }, zh(uiLang() === 'en' && line.en ? line.en : line.zh)));
   }
   R_line = function (step) {
     var line = C.LINES[step.line];
@@ -443,7 +527,7 @@
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false }, replays: t.replays, firstListen: t.replays === 0,
           response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line,
           audioVoice: voiceFields(t.audio === 'played' || t.audio === 'failed' ? t.voiceInfo : null), audioSource: audioSourceOf(t.audio, t.voiceInfo) };
-        S.learning.attempts.push(L.makeAttempt(rec));
+        pushAttempt(rec);
         S.learning.baseline.items.push({ line: item.line, response: resp, correct: correct, modality: modality, replays: t.replays, help: t.sub || t.zh });
         b.index++; ui.trial = null; ui.gesture = true; persist('baseline'); render();
       },
@@ -480,9 +564,9 @@
     $screen.appendChild(stage('doorway', artFor(step)));
     var choose = function (id, frText) {
       S.world.choices.d1_greeting = id;
-      S.learning.attempts.push(L.makeAttempt({ target: 'greeting_reply', modality: 'selection', audioStatus: 'not_used',
+      pushAttempt({ target: 'greeting_reply', modality: 'selection', audioStatus: 'not_used',
         visibleSupport: { level: level(), optionsShown: true }, replays: 0, response: id, correct: null,
-        resultType: 'supported', evidenceKind: 'choice', production: 'selected_option', context: 'd1.doorway.greet' }));
+        resultType: 'supported', evidenceKind: 'choice', production: 'selected_option', context: 'd1.doorway.greet' });
       L.recordEvent(S, 'greeted', { choice: id, fr: frText });
       next();
     };
@@ -527,12 +611,12 @@
   function submitName(raw, showZh, showTemplate) {
     var cls = L.classifyNameResponse(raw);
     var supported = !!(showZh || showTemplate || S.progress.nameTemplate);
-    S.learning.attempts.push(L.makeAttempt({
+    pushAttempt({
       target: 'try_je_mappelle', modality: 'writing', audioStatus: 'not_used',
       visibleSupport: { level: level(), chinese: !!showZh, templateHint: !!showTemplate, templateInserted: !!S.progress.nameTemplate },
       replays: 0, response: raw, correct: null, production: cls.kind,
       resultType: supported ? 'supported' : 'independent', evidenceKind: 'production', context: 'd1.name.input', speaker: 'camille'
-    }));
+    });
     L.applyName(S, cls, raw);
     delete S.progress.nameTemplate;
     next();
@@ -623,13 +707,13 @@
         var audio = t.audio === 'pending' ? 'not_used' : t.audio;
         var modality = L.probeModality(audio, t.sub);
         var rt = modality === 'reading' && !t.zh ? 'independent' : L.probeResultType({ subtitlesShown: t.sub, chineseShown: t.zh, answerCue: false });
-        S.learning.attempts.push(L.makeAttempt({
+        pushAttempt({
           target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false, nameHighlight: false },
           replays: t.replays, firstListen: t.replays === 0, response: resp, correct: resp === 'unsure' ? null : resp === line.func,
           resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId,
           audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? t.voiceInfo : null), audioSource: audioSourceOf(audio, t.voiceInfo)
-        }));
+        });
         p.index++; ui.trial = null; ui.gesture = true;
         if (p.index >= p.order.length) { L.recordEvent(S, 'probe_done'); S.review = L.buildReview(S, new Date()); next(); }
         else { persist('probe'); render(); }
@@ -683,9 +767,9 @@
           var j = { id: 'j-' + Date.now().toString(36), at: L.nowISO(), original: text, usedTemplate: !!S.progress.journalTemplate, suggestedRewrite: null, share: !!share.checked };
           S.diary.journal.push(j);
           var cls = L.classifyNameResponse(text.split('\n')[0]);
-          S.learning.attempts.push(L.makeAttempt({ target: cls.kind === 'full_structure' ? 'try_je_mappelle' : null, modality: 'writing', audioStatus: 'not_used',
+          pushAttempt({ target: cls.kind === 'full_structure' ? 'try_je_mappelle' : null, modality: 'writing', audioStatus: 'not_used',
             visibleSupport: { level: level(), templateInserted: !!S.progress.journalTemplate }, replays: 0, response: '[private journal ' + j.id + ']',
-            production: cls.kind, resultType: S.progress.journalTemplate ? 'supported' : 'independent', evidenceKind: 'production', context: 'd1.diary.journal' }));
+            production: cls.kind, resultType: S.progress.journalTemplate ? 'supported' : 'independent', evidenceKind: 'production', context: 'd1.diary.journal' });
         }
         delete S.progress.journalTemplate;
         L.recordEvent(S, 'day1_complete');
@@ -936,21 +1020,44 @@
   }
 
   // ---------- boot ----------
-  function boot() {
-    initStorage();
-    if (storage) {
-      var r = storage.load(new Date());
-      notices = r.notices || [];
-      S = r.save;
-      if (S && S.plant) { var ps = L.plantStatus(S.plant, new Date()); if (ps !== S.plant.careState) { S.plant.careState = ps; persist('plant-thirst'); } }
-    }
+  function chooseProfile(id) {
+    try { localStorage.setItem('a411.device.profile', JSON.stringify({ activeProfile: id })); } catch (e) {}
+    profileId = id;
+    storage = A411.Learn.storyStore(localStorage, id, L);
+    var adopted = A411.Learn.adoptLegacy(localStorage, id, L, new Date());
+    var loaded = storage.load(new Date());
+    notices = (adopted.notices || []).concat(loaded.notices || []);
+    S = (adopted.adopted && adopted.save) || loaded.save || null;
+    if (S && S.plant) { var ps = L.plantStatus(S.plant, new Date()); if (ps !== S.plant.careState) { S.plant.careState = ps; persist('plant-thirst'); } }
+    var lr = A411.Learn.loadLearn(localStorage, id);
+    learnState = lr.learn || A411.Learn.emptyLearn(id, new Date());
+    if (!lr.learn) saveLearn();
     applySettings();
     Au.loadPrefs(S ? S.settings.speechRate : null);
+    if (id === 'yuechao' && learnState.settings.placement === 'not_started') ui.view = 'placement';
+    else if (learnState.session && learnState.session.active) ui.view = 'study';
+    else ui.view = 'title';
     render();
+  }
+  function boot() {
+    initStorage();
+    try { if (A411.DECK_CLIPS && Au.useExtraClips) Au.useExtraClips(A411.DECK_CLIPS.files); } catch (e) {}
+    var dev = {};
+    try { dev = JSON.parse(localStorage.getItem('a411.device.profile') || 'null') || {}; } catch (e) {}
+    if (!dev.activeProfile) {
+      ui.legacy = false;
+      try { ui.legacy = !!(localStorage.getItem('a411.save') || localStorage.getItem('a404.save') || localStorage.getItem('a404.save.tmp') || localStorage.getItem('a411.save.tmp')); } catch (e) {}
+      ui.view = 'gate';
+      applySettings();
+      Au.loadPrefs(null);
+      render();
+      Au.init();
+      return;
+    }
+    chooseProfile(dev.activeProfile);
     Au.init().then(function () {
-      // only write when the device's audio situation actually changed (keeps reopen side-effect free)
       if (S && (S.meta.audio.status !== Au.status || S.meta.audio.voice !== Au.voiceName)) { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio-init'); }
-      if (ui.view !== 'title') rerenderStep();
+      if (ui.view === 'play') rerenderStep();
     });
   }
   window.A411.App = { state: function () { return S; }, render: render, persist: persist }; // debug/test hook

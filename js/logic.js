@@ -5,7 +5,7 @@
   var C = (root.A411 && root.A411.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.1.3';
+  var APP_VERSION = '0.2.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';

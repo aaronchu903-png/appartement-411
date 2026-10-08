@@ -2,9 +2,9 @@
   "env": {
     "chrome": "154.0.8037.57",
     "viewport": "390x844 @2x, isMobile, hasTouch",
-    "date": "2026-10-08T22:32:26.466Z"
+    "date": "2026-10-08T23:52:08.290Z"
   },
-  "passed": 105,
+  "passed": 116,
   "failed": 0,
   "results": [
     {
@@ -124,7 +124,7 @@
       "check": "name attempt: writing, full_structure, supported (Chinese help shown), original preserved",
       "pass": true,
       "detail": {
-        "id": "spk0s83hmv043n2i",
+        "id": "07n1ujkrmv06y4qz",
         "target": "try_je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -148,7 +148,7 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:30.858Z"
+        "at": "2026-10-08T23:52:12.683Z"
       }
     },
     {
@@ -301,13 +301,13 @@
       "gate": "Usable entry",
       "check": "copy-to-clipboard copies the visible summary text",
       "pass": true,
-      "detail": "L’Appartement 411 · 反馈摘要\n版本：app 0.1.3 · "
+      "detail": "L’Appartement 411 · 反馈摘要\n版本：app 0.2.0 · "
     },
     {
       "gate": "Recovery",
       "check": "export downloads valid JSON with schema/app version",
       "pass": true,
-      "detail": "appartement-411-save-20261008-1532.json"
+      "detail": "appartement-411-save-20261008-1652.json"
     },
     {
       "gate": "Recovery",
@@ -350,7 +350,7 @@
       "check": "[simulated voice] playback + replay recorded (audioStatus=played, replays=1)",
       "pass": true,
       "detail": {
-        "id": "r0zh9pcqmv043wf2",
+        "id": "oguyaem0mv06ygv3",
         "target": "bonjour",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -382,7 +382,7 @@
           "source": "device:Fake Français (test) (fr-FR)"
         },
         "audioSource": "device:Fake Français (test) (fr-FR)",
-        "at": "2026-10-08T22:32:42.974Z"
+        "at": "2026-10-08T23:52:28.383Z"
       }
     },
     {
@@ -454,9 +454,9 @@
       "check": "[simulated voice] probe stimuli were sent to speech engine",
       "pass": true,
       "detail": [
+        "Je m'appelle Camille.",
         "Tu t'appelles comment ?",
-        "Je m'appelle Camille.",
-        "Je m'appelle Camille.",
+        "Tu t'appelles comment ?",
         "Tu t'appelles comment ?",
         "Salut ! Je m'appelle Noé."
       ]
@@ -706,7 +706,7 @@
     },
     {
       "gate": "Recovery",
-      "check": "[rename] new build adopted the old save into a411.save (same saveId/scene/step), verbatim backup of a404.save made first",
+      "check": "[rename] new build adopted the old save into the chosen profile (and a411.save), verbatim backup of a404.save made first",
       "pass": true,
       "detail": {
         "scene": "doorway",
@@ -844,7 +844,7 @@
       "check": "[v0.1.3] attempt records audioSource=recording:qwen3-tts, played, replays=1, content 08c",
       "pass": true,
       "detail": {
-        "id": "gxvbs4akmv044qis",
+        "id": "7l76iwqhmv06zeu6",
         "target": "bonjour",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -876,7 +876,7 @@
           "source": "recording:qwen3-tts"
         },
         "audioSource": "recording:qwen3-tts",
-        "at": "2026-10-08T22:33:21.988Z"
+        "at": "2026-10-08T23:53:12.414Z"
       }
     },
     {
@@ -922,7 +922,7 @@
       "check": "[v0.1.3] failed clip recorded as reading, audioSource=none",
       "pass": true,
       "detail": {
-        "id": "buzp9rs4mv044w3a",
+        "id": "63vyf9psmv06zlkb",
         "target": "bonjour",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -954,7 +954,7 @@
           "source": "recording:qwen3-tts"
         },
         "audioSource": "none",
-        "at": "2026-10-08T22:33:29.206Z"
+        "at": "2026-10-08T23:53:21.131Z"
       }
     },
     {
@@ -994,7 +994,7 @@
       "check": "[v0.1.3] old attempts kept verbatim; new attempt records the recording",
       "pass": true,
       "detail": {
-        "id": "sdsmaocxmv0450cz",
+        "id": "wt0vf3pamv06zrez",
         "target": "je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -1026,7 +1026,7 @@
           "source": "recording:qwen3-tts"
         },
         "audioSource": "recording:qwen3-tts",
-        "at": "2026-10-08T22:33:34.739Z"
+        "at": "2026-10-08T23:53:28.715Z"
       }
     },
     {
@@ -1035,11 +1035,77 @@
       "pass": true,
       "detail": {
         "req": [
-          "blob:null/65fd33dd-c33a-4443-9a85-a70f16a34417",
-          "blob:null/56b3cd07-c157-4fd0-9a79-f490651e3637"
+          "blob:null/1ed376dc-4010-498e-9fab-777021408082",
+          "blob:null/39b3c147-b8e8-4835-bb89-70773b99a3cd"
         ],
         "err": []
       }
+    },
+    {
+      "gate": "Usable entry",
+      "check": "[v0.2] today card for Jinyi",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.2] English UI",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "[v0.2] switching language does not change the learn record",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.2] Chinese UI restored",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[v0.2] a review card is shown",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "[v0.2] a miss shows a hint and is not marked independent yet",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "[v0.2] reload resumes the review",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "[v0.2] Yuechao starts with a skippable placement, not Jinyi’s cards",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[v0.2] skipping placement lands on Yuechao’s own today card",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Privacy",
+      "check": "[v0.2] Jinyi’s learn record is unchanged and not shown as Yuechao’s card list",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[v0.2] no JS errors in study flow",
+      "pass": true,
+      "detail": []
     },
     {
       "gate": "Complete interaction",

@@ -37,3 +37,15 @@ Typography: non-breaking space before `!` and `?`, typographic apostrophe in dis
 - No French voice ⇒ modality `reading`, audio `unavailable`; never labelled listening.
 - Name answer: nickname-only is recorded as `nickname_only` (communicates, not full structure). Shown template/Chinese ⇒ supported. No gender is inferred; skipping is accepted.
 - Diary: chronicle is generated only from events that happened (e2e checks both paths); the journal is stored verbatim; a template insertion is flagged as supported writing.
+
+## v0.2.0 deck (2026-10-08) — not a native review
+
+The public starter deck (`js/deck.js`, version `deck-2026-10-08`, 126 items) was drafted by the same Bot that wrote the app. It is **not** native-speaker certified. French targets stay French. Every item has a Chinese meaning, an English gloss, and a trigger note in both languages (`noteZh`, `noteEn`).
+
+- Situations stay inside the apartment / Camille / Noé / Montreal frame used by Week 1.
+- Bands are A1 / A2 / B1 labels for scheduling, not a CEFR certificate.
+- A public sentence about *meilleur* / *mieux* was written differently from the founder’s private example so that private wording is not in the repo.
+- Private cards exist only in `/workspace/jinyi-french/jinyi-seed.json` after a local import. They are not in the build.
+- Day 1 French lines are unchanged (`d1-2026-10-08c`). English glosses were added beside the existing Chinese help; the Chinese help is still the default.
+
+Story chrome (door, plant, cat, diary, settings, save) is still Chinese-only. The language toggle covers the study layer, the home chapter labels, and Day 1 line glosses.

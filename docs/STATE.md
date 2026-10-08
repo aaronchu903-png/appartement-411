@@ -1,36 +1,24 @@
 # Project State
 
-Working record. Replace unknowns with observed facts; preserve any established project state found during startup rather than resetting it to this template.
+Working record. Older sections below are kept as history (including v0.1.1–v0.1.3). The table is the current snapshot.
 
-Last updated: 2026-10-08 PT (America/Vancouver). First feedback-led improvement: **v0.1.2 is committed locally and NOT deployed** (published preview is still v0.1.1). Pre-rendered audio candidates have been prototyped and await a founder listening decision. Earlier: project renamed to L’Appartement 411 (v0.1.1). Task IDs are A411-00x; they were formerly A404-00x.
+Last updated: 2026-10-08 ~16:20 PT (America/Vancouver). **v0.2.0** adds two profiles, FSRS-5 reviews, a bilingual UI, and a public starter deck. Day 1 story and Qwen3-TTS clips from v0.1.3 stay.
 
 | Field | Current record |
 |---|---|
-| Stage | 01 - Reliable first-week learning alpha. |
-| First task | A411-001 (formerly A404-001) - Move-in day: **implemented, locally verified; awaiting first phone play.** |
-| Existing repository/workspace | Inspected 2026-10-08: nothing named appartement/a404 in `/workspace` or `/home/box` (only the spec pack in `/workspace/upload1/Appartement_404/`, renamed 2026-10-08 to `/workspace/upload1/LAppartement_411/`). `gh` CLI present but **not authenticated** → GitHub check skipped. Cursor "Origin" code host: no namespaces. Nothing to preserve; new project created. |
-| Stable version / entry point | **v0.1.2 local** (commit `8143c60`, not deployed; preview still serves v0.1.1), content `d1-2026-10-08b`, save schema v1. Entry: `/workspace/appartement-411/index.html` (multi-file) or `/workspace/appartement-411/dist/appartement-411.html` (single file, everything inlined). Old path `/workspace/appartement-404` is a symlink. |
-| Latest artifact | `/workspace/appartement-411/` (source, tests, docs, evidence); `dist/appartement-411.html`; `dist/appartement-411-v0.1.1.zip`; `dist/LAppartement_411_docs.zip` (renamed original spec pack). Local git repo in the project folder (no remote). |
-| Tool/account capabilities | Box: Node 20, Chrome 154 (headless via `playwright-core`), Python 3, ffmpeg, sudo. No GitHub auth. No paid services used. `speech-dispatcher`/`espeak-ng` were installed on the box during an attempt to give headless Chrome a French voice (did not work; harmless, can be removed). |
-| Available quota / billing state | Additional spend: USD 0. No accounts created, no paid assets/services. |
-| Working collaborators | One Bot doing CTO + Experience passes. No independent reviewer; no human native-speaker review yet. |
-| Deployment scope / authorization | **Not deployed.** No public or private preview exists. First exposure needs founder approval (see decision below). |
-| Founder-device audio | **2026-10-08 founder report (iPhone, Safari, English UI): French voice audible but sounds robotic.** Pronunciation and naturalness matter most to them. v0.1.2 addresses voice choice (see below); pre-rendered clips are being evaluated. Earlier record: **Not tested.** Audio route = device fr-FR voice (Web Speech API) + visible reading fallback. Fallback verified in headless Chrome (which has no voices); voice-available logic verified with a simulated voice only. Real voice untested on any phone. |
-| Save / restore / migration | Verified in headless Chrome + unit tests (see evidence below). localStorage only — one browser on one device, no sync; clearing site data deletes it; export/import provided. |
-| Learning baseline | Implemented (3 skippable items). Founder's baseline **not measured yet** (no founder play). |
-| Feedback receiving path | In-game "反馈摘要" generates text (copy button + visible text); founder pastes it to the CEO manually. No automatic ingestion exists. |
-| Recurring workflow | Not configured (by design: CEO.md requires one proven build-test-deliver-feedback cycle first). |
+| Stage | 01, plus a daily-study layer (v0.2.0) on the same static app. |
+| Stable version / entry point | **v0.2.0**, Day 1 content `d1-2026-10-08c`, deck `deck-2026-10-08`, save schema v1 (story) + learn schema 1 (separate). Entry: `index.html` or `dist/appartement-411.html`. Live: https://aaronchu903-png.github.io/appartement-411/ |
+| Latest artifact | Source `/workspace/appartement-411`. Private seed is **not** in the repo: `/workspace/jinyi-french/jinyi-seed.json`. |
+| Tool/account capabilities | Box: Node 20, Chrome headless, Python 3, ffmpeg, Qwen3-TTS in `/home/box/tts/venv-q` (weights already cached). `gh` authenticated for the Pages repo. USD 0. |
+| Deployment | Standing permission: small updates and this version go to the same preview URL. |
+| Save / restore | Per profile, this browser only. No cross-device sync. Export/import per profile. Legacy `a411.save` / `a404.save` is adopted once into the profile the player chooses (backup first). |
+| Learning | FSRS-5 (19 weights, short-term off) per item and per modality. Yuechao: skippable placement, default A1. Jinyi: track all; personal intervals only after importing the private seed. |
 
 ## Next action
 
-**Now (2026-10-08, Improvement cycle):**
-1. Founder listens to `audio-candidates/compare/*_3lines.mp3` and chooses: ship one TTS set as fixed Day 1 clips, or wait for a native speaker's recordings (`audio-candidates/HUMAN_RECORDING_SCRIPT.md`). Then integrate the chosen clips (plan in `audio-candidates/README.md`), with the device voice and then reading mode as fallbacks.
-2. Deploying v0.1.2 to the preview is covered by the standing small-update permission. It was deliberately not deployed in this task; the CEO decides.
-
-**Earlier list (kept for the record):**
-
-1. First founder play of Day 1 on the phone (preview URL below) → record: did French audio play (voice name shown in 设置 → 测试法语语音), readability, any stuck point, paste of the feedback summary.
-2. Use that feedback for the first feedback-led improvement (Stage 01 "Improvement" gate), then start A411-002 (Day 2) without resetting the founder's save. Saves made under v0.1.0 (`a404.save`) are adopted automatically into `a411.save`.
+1. Founder and Yuechao each open the preview on a phone: pick a profile, try one review, toggle English, and (Jinyi only) import the private seed from Files.
+2. Listen to a few deck clips on the phone. Native-speaker review of the French deck is still open.
+3. Day 2 story is still not built. Story buttons and the settings sheet are still Chinese when the UI language is English (study screens, home chapter labels, and Day 1 glosses do switch).
 
 ## Current blocker or decision
 
@@ -48,7 +36,7 @@ Proposed: **A** (or C immediately on Android while A is pending).
 
 ## Latest delivery and evidence
 
-**Artifact (current): v0.1.1 / content `d1-2026-10-08b` / schema v1.** First delivered artifact was v0.1.0 / `d1-2026-10-08a`. Day 1 "Bienvenue chez nous": skippable baseline → doorway (Camille, Noé; speaker tag + replay) → "Tu t’appelles comment ?" (nickname / sentence / skip) → plant corner (water once or later; pause) → Camille leaves, Croissant, secrecy choice (keep / decline) → 4-trial neutral recognition check → diary (factual chronicle + optional verbatim journal) → end. Days 2–7 listed as "尚未开放" with no buttons. Title screen also offers a once-per-day plant quick visit.
+**Historical artifact (v0.1.1, not the current build): v0.1.1 / content `d1-2026-10-08b` / schema v1.** First delivered artifact was v0.1.0 / `d1-2026-10-08a`. Day 1 "Bienvenue chez nous": skippable baseline → doorway (Camille, Noé; speaker tag + replay) → "Tu t’appelles comment ?" (nickname / sentence / skip) → plant corner (water once or later; pause) → Camille leaves, Croissant, secrecy choice (keep / decline) → 4-trial neutral recognition check → diary (factual chronicle + optional verbatim journal) → end. Days 2–7 listed as "尚未开放" with no buttons. Title screen also offers a once-per-day plant quick visit.
 
 **Environment of checks:** headless Google Chrome 154.0.8037.57 on the Linux box, 390×844 @2x mobile emulation (touch), plus 375×667 for the alternate path; `file://` URLs. Unit tests: Node 20 `node:test`. v0.1.0 run (2026-10-08 ~12:02 PT): `npm test` 18/18, `npm run e2e` 63/63. **v0.1.1 re-run (2026-10-08 ~13:00 PT): `npm test` 25/25 pass; `npm run e2e` 72/72 pass** (`evidence/e2e-results.json`), including rename migration checks.
 
@@ -150,3 +138,27 @@ Proposed: **A** (or C immediately on Android while A is pending).
 - Tests: `npm test` **41/41** (6 new: clip map covers every line id + files are mp3; audioSource field; v0.1.2 save import; clip plays with rate/pitch; rejected play → device voice; clip error + no voice → failed). `npm run e2e` **105/105** (Chrome 154; new C3: real mp3 playback logged with ended event, replay same clip at 0.75 with preservesPitch, settings test + credit, no reading banner, audioSource recorded, play() rejected → device voice, play() rejected + no voice → reading + not trapped, dist inlines 19 data URIs and plays via blob: from file:// with no external requests, real v0.1.2 build's save resumes at the exact line with old attempts kept verbatim). Older sections run with recordings switched off (`window.A411_NO_CLIPS`, test-only flag) so the device-voice/reading paths stay covered.
 - Deploy: `/workspace/a411-pages` commit `fb03e97` (voices/ kept), pushed; https://aaronchu903-png.github.io/appartement-411/ sha256 `aeaa846e…f8d2` byte-identical to dist; headless Chrome 390×844: footer v0.1.3 / 08c, 0 page errors, `cam_bonjour` clip played (evidence/24-live-v013-390.png). Rollback: revert fb03e97 in a411-pages and push.
 - Not verified: real iPhone Safari (unlock, silent switch, playbackRate/pitch quality at 0.75), native-speaker review of the recordings.
+
+## Decisions that change the plan (2026-10-08 afternoon)
+
+- ~15:51 PT: Founder: the next version must support daily French study for two people, **Jinyi** and **Yuechao**, with separate learning records and separate plans. Real progress and a forgetting-curve scheduler. No passwords.
+- Yuechao’s level is unknown. First open: a short skippable placement from A0/~A1 to about B1, a few comparable items per band, stop a band after two misses, record the result as baseline (modality and support recorded). Skip → beginner A1. No penalty.
+- Support language is per profile, remembered, toggled from the home screen (and used on the study screens): Chinese or English. French targets stay French. Every public deck item has a Chinese meaning, an English meaning, and a trigger note in both languages. Switching language must not change the learning record.
+- Jinyi’s private notes stay off the public site. Personalisation is a seed file the player imports on their own phone.
+
+## v0.2.0: two profiles, FSRS-5, bilingual study (2026-10-08)
+
+- App **0.2.0**. Story schema stays v1. Learn record is a separate key `a411.p.<id>.learn`. UI language is `a411.p.<id>.uiLang`, outside the learn JSON.
+- Profiles: Jinyi (track all, placement already known) and Yuechao (track starts A1, placement `not_started`). One shared phone or two phones. Honest limit shown in the app: local storage, no sync.
+- Scheduler: FSRS-5, the 19 published default weights, `enable_fuzz` off, `enable_short_term` off, request retention 0.9, max interval 36500 days. Port of open-spaced-repetition/ts-fsrs **v4.7.1** (“FSRS-5.0”) and the FSRS-5 section of the awesome-fsrs wiki. Not FSRS-6 (21 parameters). Decay −0.5, factor 19/81. Ratings Again/Hard/Good/Easy. Suggested rating: correct with no help → Good, hint or missing accent → Hard, wrong → Again. The learner can override. Hints are never relabelled independent. Same-day Again is requeued in the session; the stored due date is still +1 day, so a missed day does not create a punitive backlog. Default caps: 20 reviews and 6 new cards (quick mode: 4 and 2).
+- Deck `deck-2026-10-08`: **126** public items (A1 43, A2 59, B1 24). Life situations (Camille, Noé, the apartment, Montreal). Each item: French, Chinese, English, grammar tag, band, `noteZh`, `noteEn`. Exercise shapes: listen-and-choose, Chinese/English→French typed (accent-tolerant), cloze. AI-drafted French, not native-certified. No private notes in the deck.
+- Grammar counts (items): present 11, introductions 7, location 7, passe-compose 7, search 6, directions 6, drinks 5, greetings 4, pc-imp 4, meilleur-mieux 4, passive 4, and smaller sets for imparfait, agreement, futur simple, dont, subjonctif, conditionnel, and the rest of the grammar map.
+- Placement: 3 items × A1 / A2 / B1. Two wrong stops the band. Two right advances. Skip or fail A1 → track A1. Pass A1 → track A2. Pass A1, A2 and B1 → track all.
+- Story attempts that match a deck id (`bonjour`, `salut`, `je_mappelle`, `tu_tappelles_comment`) update the same learn record. Exposure does not schedule. Listening without played audio is recorded as reading.
+- Private seed (not published): `/workspace/jinyi-french/jinyi-seed.json`, kind `a411-personal-seed`. Built from the local grammar map (productive areas get longer intervals; recurring gaps come back sooner) plus example sentences from the local knowledge notes as private cards. iPhone: AirDrop or email the JSON into Files, then Progress → pick the file or paste it. A bad file is rejected before anything is written.
+- Tests: `npm test` 52/52 (FSRS reference values, per-modality cards, no-backlog cap, profile isolation, v0.1.3 save still valid, seed validation). `npm run e2e` 116/116 at 390×844, including language toggle with an unchanged learn record, a missed card and hint, reload, and a separate Yuechao plan.
+- UI language: study, placement, progress, and the home “today” card are fully switched. Day 1 glosses have English equivalents (`js/content.js` LINE_EN). Home chapter status switches. Story buttons, narration, and the settings/save sheets stay Chinese in this version.
+- Deck audio: Qwen3-TTS, same designed Camille/Noé/neutral voices as Day 1, mono 32 kbps mp3 in `audio/deck/`. Device voice, then reading, if a clip is missing. Coverage is recorded in ASSETS.md after the render and the ASR check.
+
+- Home-screen icon (2026-10-08): Croissant’s head, the same pixels as `js/art.js` (`tools/make_icon.py`). `icons/apple-touch-icon.png` 180×180, `icon-192.png`, `icon-512.png`, `favicon-32.png`, all opaque, nearest-neighbour. `manifest.json` name “L’Appartement 411”, short_name “Appart 411”, display standalone. The single-file build inlines the apple-touch icon, favicon and manifest as data URIs. The Pages copy also ships the real files and points the icon links at them, because iOS often ignores a data-URI touch icon.
+- iOS Home Screen is a separate website from Safari. A save made in Safari does not appear in the Home Screen app, and the other way around. The in-app note says so. Export / import is how to move a profile. Preview of the icon: `evidence/icon-180.png`.

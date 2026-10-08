@@ -22,6 +22,11 @@ async function newPage(opts = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, acceptDownloads: true, locale: 'zh-CN', ...(opts.ctx || {}) });
   // v0.1.3: older sections test the device-voice / reading paths, so recordings are switched off unless opts.clips.
   if (!opts.clips) await ctx.addInitScript(() => { window.A411_NO_CLIPS = true; });
+  if (!opts.noProfile) await ctx.addInitScript(() => {
+    try {
+      if (!localStorage.getItem('a411.device.profile')) localStorage.setItem('a411.device.profile', JSON.stringify({ activeProfile: 'jinyi' }));
+    } catch (e) {}
+  });
   if (opts.init) await ctx.addInitScript(opts.init);
   const page = await ctx.newPage();
   page.errors = [];
@@ -32,11 +37,28 @@ async function newPage(opts = {}) {
   await page.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown', null, { timeout: 8000 });
   return { ctx, page };
 }
-const st = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('a411.save') || 'null'));
-const raw = (page) => page.evaluate(() => localStorage.getItem('a411.save'));
+const storyKeyOf = (page) => page.evaluate(() => {
+  const dev = JSON.parse(localStorage.getItem('a411.device.profile') || 'null');
+  return dev && dev.activeProfile ? 'a411.p.' + dev.activeProfile + '.story' : 'a411.save';
+});
+const st = (page) => page.evaluate(() => {
+  const dev = JSON.parse(localStorage.getItem('a411.device.profile') || 'null');
+  const key = dev && dev.activeProfile ? 'a411.p.' + dev.activeProfile + '.story' : 'a411.save';
+  return JSON.parse(localStorage.getItem(key) || 'null');
+});
+const raw = (page) => page.evaluate(() => {
+  const dev = JSON.parse(localStorage.getItem('a411.device.profile') || 'null');
+  const key = dev && dev.activeProfile ? 'a411.p.' + dev.activeProfile + '.story' : 'a411.save';
+  return localStorage.getItem(key);
+});
 async function tap(page, sel) { await page.locator(sel).first().click(); await page.waitForTimeout(60); }
 async function shot(page, name) { await page.waitForTimeout(450); const p = path.join(EV, name); await page.screenshot({ path: p, fullPage: false }); return p; }
 async function lineNext(page) { await tap(page, '#btnNext'); }
+async function reloadApp(page) {
+  await page.evaluate(() => { window.__a411Boot = 'leaving'; });
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => window.__a411Boot && window.__a411Boot !== 'leaving' && window.A411 && A411.Audio && A411.Audio.status !== 'unknown');
+}
 // dialogue line without the transient audio-status label (it legitimately differs between builds/devices)
 const lineText = (page) => page.evaluate(() => { const b = document.querySelector('#lineBody').cloneNode(true); const s = b.querySelector('#audioState'); if (s) s.remove(); return b.textContent; });
 async function touchTargetsOk(page) {
@@ -83,7 +105,7 @@ try {
     const { ctx, page } = await newPage({ ctx: { permissions: ['clipboard-read', 'clipboard-write'] } });
     const audio = await page.evaluate(() => ({ status: A411.Audio.status, reason: A411.Audio.reason }));
     check('Audio', 'headless Chrome voice detection reported honestly', audio.status === 'unavailable', audio);
-    check('Usable entry', 'version visible on title', /App v0\.1\.3 · 内容 d1-2026-10-08c · 存档 schema v1/.test(await page.textContent('#versionFooter')));
+    check('Usable entry', 'version visible on title', /App v0\.2\.0 · 内容 d1-2026-10-08c · 存档 schema v1/.test(await page.textContent('#versionFooter')));
     await shot(page, '01-title-390.png');
     check('Mobile presentation', 'no horizontal overflow on title (390px)', await noOverflow(page));
     const naDays = await page.evaluate(() => [...document.querySelectorAll('.days li.na')].map(li => ({ t: li.textContent, buttons: li.querySelectorAll('button,a').length })));
@@ -134,7 +156,7 @@ try {
     check('Complete interaction', 'pause overlay mid-scene with saved position', (await page.textContent('#pauseMsg')).includes('植物角（第 2 步）'));
     await shot(page, '05-pause-mid-scene.png');
     const beforeReload = await raw(page);
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
+    await reloadApp(page);
     const noTs = (r) => { const o = JSON.parse(r); delete o.updatedAt; return JSON.stringify(o); };
     check('Persistence', 'close/reopen keeps save identical (except updatedAt timestamp)', noTs(await raw(page)) === noTs(beforeReload));
     { const A = JSON.parse(beforeReload), Bq = JSON.parse(await raw(page)); const d = []; (function walk(a, b, p) { if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) { if (JSON.stringify(a) !== JSON.stringify(b)) d.push(p + ': ' + JSON.stringify(a) + ' -> ' + JSON.stringify(b)); return; } for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) walk(a[k], b[k], p + '.' + k); })(A, Bq, ''); const d2 = d.filter(x => !x.startsWith('.updatedAt')); if (d2.length) console.log('DIFF', d2); }
@@ -163,7 +185,7 @@ try {
     let a1 = await answerFor(); await tap(page, `[data-option="${a1.func}"]`);
     let a2 = await answerFor(); await tap(page, `[data-option="${a2.func === 'tells' ? 'asks' : 'tells'}"]`);
     // reload mid-probe -> resume at trial 3
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
+    await reloadApp(page);
     await tap(page, '#btnContinue');
     check('Persistence', 'mid-probe resume at trial 3/4', (await page.textContent('#trialTitle')).includes('第 3/4'));
     await tap(page, '[data-option="unsure"]');
@@ -186,7 +208,7 @@ try {
     check('Complete interaction', 'episode completes to end screen', await page.isVisible('#endCard'));
     await shot(page, '10-end.png');
     // reopen: everything retained
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
+    await reloadApp(page);
     s = await st(page);
     check('Persistence', 'after reload: journal verbatim, plant, choice, attempts, status', s.diary.journal[0].original === J && s.plant.careState === 'watered' && s.world.choices.d1_secret === 'keep' && s.progress.status === 'complete' && s.learning.attempts.length >= 15, { journalVerbatim: s.diary.journal[0].original === J, attempts: s.learning.attempts.length });
     await tap(page, '#btnDiary');
@@ -198,7 +220,7 @@ try {
     const summary = await page.inputValue('#summaryText');
     check('Privacy', 'summary excludes private journal text and nickname by default', !summary.includes('chat secret') && !summary.includes('Alex') && summary.includes('私人日记：未包含'), null);
     check('Learning validity', 'summary reports the self-introduction as supported (help was used) and journal writing separately', summary.includes('自我介绍（打字）：完整句型') && /自我介绍.*有提示/.test(summary) && summary.includes('日记写作'));
-    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.3', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
+    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.2.0', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
     await tap(page, '#btnCopySummary');
     const clip = await page.evaluate(() => navigator.clipboard.readText().catch(e => 'ERR ' + e.message));
     const shownNow = await page.inputValue('#summaryText');
@@ -212,7 +234,7 @@ try {
     const exportPath = path.join(EV, 'test-export-synthetic.json');
     await dl.saveAs(exportPath);
     const exported = JSON.parse(fs.readFileSync(exportPath, 'utf8'));
-    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.3' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
+    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.2.0' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
     // bad imports on the existing save
     const before = await raw(page);
     const badFile = path.join(EV, '..', 'tests', 'fixtures', 'bad-truncated.json');
@@ -253,7 +275,7 @@ try {
     check('Learning validity', 'baseline skip recorded', s.learning.baseline.status === 'skipped');
     // jump to probe via a crafted state (keeps test short): set scene to probe intro
     await page.evaluate(() => { const x = A411.App.state(); x.progress.scene = 'probe'; x.progress.step = 0; A411.App.persist('test'); });
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status === 'available');
+    await reloadApp(page); await page.waitForFunction(() => A411.Audio.status === 'available');
     await tap(page, '#btnContinue'); await tap(page, '#btnProbeStart');
     await page.waitForTimeout(400);
     const leak = await page.evaluate(() => { const h = document.getElementById('screen').innerHTML; return { appelle: /appelle/i.test(h), comment: /comment/i.test(h), names: /Camille|Noé/.test(h), portraitsMarker: false }; });
@@ -319,7 +341,7 @@ try {
     const dev = await page.evaluate(() => JSON.parse(localStorage.getItem('a411.device.audio')));
     const saveRaw = await raw(page);
     check('Persistence', '[v0.1.2] voice + speed stored per device (a411.device.audio), voice choice not inside the exportable save', dev.noe === amKey && dev.rate === 0.75 && !saveRaw.includes('com.apple.voice.compact.fr-CA.Amelie|'), dev);
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status === 'available');
+    await reloadApp(page); await page.waitForFunction(() => A411.Audio.status === 'available');
     const after = await page.evaluate(() => ({ noe: A411.Audio.assign.noe.name, cam: A411.Audio.assign.camille.name, rate: A411.Audio.rate() }));
     check('Persistence', '[v0.1.2] after reload the device keeps Noé=Amélie and speed 0.75', after.noe === 'Amélie' && after.cam === 'Marie' && after.rate === 0.75, after);
     await tap(page, '#btnSummary');
@@ -371,7 +393,7 @@ try {
     const v0 = JSON.parse(fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'save-v0-synthetic.json'), 'utf8'));
     const { ctx, page } = await newPage();
     await page.evaluate((v) => { localStorage.clear(); localStorage.setItem('a411.save', JSON.stringify(v)); }, v0);
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
+    await reloadApp(page);
     const s = await st(page);
     const backups = await page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith('a411.backup.')).map(k => [k, localStorage.getItem(k)]));
     const bk = backups.find(([k]) => k.includes('pre-migration-v0'));
@@ -406,10 +428,12 @@ try {
     const pg = await ctx.newPage(); pg.errors = []; pg.on('pageerror', e => pg.errors.push(e.message));
     await pg.goto(URL_DIST);
     await pg.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown', null, { timeout: 8000 });
+    await tap(pg, '#assignJinyi');
     const ls = await pg.evaluate(() => ({ a411: localStorage.getItem('a411.save'), a404: localStorage.getItem('a404.save'),
+      profile: localStorage.getItem('a411.p.jinyi.story'),
       bk: Object.keys(localStorage).filter(k => k.startsWith('a411.backup.') && k.includes('pre-rename-a404')).map(k => localStorage.getItem(k)) }));
-    const ns = JSON.parse(ls.a411 || 'null');
-    check('Recovery', '[rename] new build adopted the old save into a411.save (same saveId/scene/step), verbatim backup of a404.save made first',
+    const ns = JSON.parse(ls.profile || ls.a411 || 'null');
+    check('Recovery', '[rename] new build adopted the old save into the chosen profile (and a411.save), verbatim backup of a404.save made first',
       ns && ns.saveId === oldSave.saveId && ns.progress.scene === oldSave.progress.scene && ns.progress.step === oldSave.progress.step && ls.bk.length === 1 && ls.bk[0] === ls.a404 && JSON.parse(ls.a404).saveId === oldSave.saveId,
       { scene: ns && ns.progress.scene, step: ns && ns.progress.step });
     check('Recovery', '[rename] player is told the old save was kept', (await pg.textContent('#screen')).includes('改名前'));
@@ -524,15 +548,59 @@ try {
     await pg.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown');
     const has = await pg.evaluate(() => Object.keys(A411.CLIPS.files).filter(k => A411.CLIPS.files[k].startsWith('data:audio/mpeg;base64,')).length);
     check('Usable entry', '[v0.1.3] single file inlines all 19 clips as data URIs', has === 19, has);
+    if (await pg.locator('#assignJinyi').count()) await tap(pg, '#assignJinyi');
     await tap(pg, '#btnContinue');
     check('Recovery', '[v0.1.3] old v0.1.2 save loads in v0.1.3 and resumes at the exact line', (await lineText(pg)) === oldLine, oldLine.slice(0, 40));
     await pg.waitForFunction(() => A411.Audio.clipLog.some(x => x.result === 'played'), null, { timeout: 8000 });
     await lineNext(pg);
-    const ns = JSON.parse(await pg.evaluate(() => localStorage.getItem('a411.save')));
+    const ns = JSON.parse(await pg.evaluate(() => localStorage.getItem('a411.p.jinyi.story') || localStorage.getItem('a411.save')));
     const newA = ns.learning.attempts[ns.learning.attempts.length - 1];
     check('Recovery', '[v0.1.3] old attempts kept verbatim; new attempt records the recording', ns.saveId === oldSave.saveId && JSON.stringify(ns.learning.attempts.slice(0, oldSave.learning.attempts.length)) === JSON.stringify(oldSave.learning.attempts) && newA.audioSource === 'recording:qwen3-tts' && newA.audioStatus === 'played', newA);
     check('Audio', '[v0.1.3] single file plays the inlined clip from file:// (blob URL), no external requests, no JS errors',
       (await pg.evaluate(() => window.__plays.some(p => p.src.startsWith('blob:')))) && pg.requests.every(u => u === URL_DIST || /^(data|blob):/.test(u)) && pg.errors.length === 0, { req: pg.requests.filter(u => u !== URL_DIST).slice(0, 3), err: pg.errors });
+    await ctx.close();
+  }
+
+
+  // ================= G. v0.2.0 profiles, review, language =================
+  {
+    const { ctx, page } = await newPage();
+    check('Usable entry', '[v0.2] today card for Jinyi', await page.isVisible('#todayCard') && (await page.textContent('#profileName')).includes('jinyi'));
+    const learnBefore = await page.evaluate(() => localStorage.getItem('a411.p.jinyi.learn'));
+    await tap(page, '#btnLang');
+    check('Mobile presentation', '[v0.2] English UI', (await page.textContent('#todayTitle')).includes('Today'));
+    check('Learning validity', '[v0.2] switching language does not change the learn record', (await page.evaluate(() => localStorage.getItem('a411.p.jinyi.learn'))) === learnBefore);
+    await tap(page, '#btnLang');
+    check('Mobile presentation', '[v0.2] Chinese UI restored', (await page.textContent('#todayTitle')).includes('今天'));
+    await tap(page, '#btnReview');
+    check('Complete interaction', '[v0.2] a review card is shown', await page.isVisible('#studyCard'));
+    // wrong answer then a hint (choice cards) or a typed miss
+    if (await page.locator('#answerInput').count()) {
+      await page.fill('#answerInput', 'zzzz-not-french');
+      await tap(page, '#btnSubmit');
+    } else {
+      const ids = await page.locator('[data-choice]').evaluateAll(els => els.map(e => e.getAttribute('data-choice')));
+      let hinted = false;
+      for (const id of ids) {
+        await page.locator(`[data-choice="${id}"]`).click();
+        if (await page.locator('#hintBox').count()) { hinted = true; break; }
+      }
+      if (!hinted) throw new Error('no wrong choice produced a hint: ' + ids.join(','));
+    }
+    check('Learning validity', '[v0.2] a miss shows a hint and is not marked independent yet', await page.isVisible('#hintBox'));
+    await page.reload();
+    await page.waitForFunction(() => A411.Audio.status !== 'unknown');
+    check('Persistence', '[v0.2] reload resumes the review', await page.isVisible('#studyCard') || await page.isVisible('#hintBox'));
+    await tap(page, '#btnStudyHome');
+    await tap(page, '#btnSwitchProfile');
+    await tap(page, '#pickYuechao');
+    check('Learning validity', '[v0.2] Yuechao starts with a skippable placement, not Jinyi’s cards', await page.isVisible('#placement') && await page.isVisible('#btnPlaceSkip'));
+    const jinyiLearn = await page.evaluate(() => localStorage.getItem('a411.p.jinyi.learn'));
+    await tap(page, '#btnPlaceSkip');
+    check('Complete interaction', '[v0.2] skipping placement lands on Yuechao’s own today card', (await page.textContent('#profileName')).includes('yuechao') && (await page.textContent('#todayTitle')).includes('今天'));
+    check('Privacy', '[v0.2] Jinyi’s learn record is unchanged and not shown as Yuechao’s card list', jinyiLearn === await page.evaluate(() => localStorage.getItem('a411.p.jinyi.learn')) && !(await page.textContent('#screen')).includes('jinyi'));
+    await shot(page, '25-yuechao-today.png');
+    check('Mobile presentation', '[v0.2] no JS errors in study flow', page.errors.length === 0, page.errors);
     await ctx.close();
   }
 
@@ -553,7 +621,7 @@ try {
     const { ctx, page } = await newPage({ url: URL_DIST });
     await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
     const ok = (await page.textContent('#lineBody')).includes('Bonjour');
-    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
+    await reloadApp(page);
     const resume = (await page.textContent('#btnContinue')).includes('门口');
     check('Usable entry', 'dist/appartement-411.html (single file) plays and resumes from file://', ok && resume && page.errors.length === 0);
     check('Usable entry', 'single file makes no external requests', page.requests.every(u => u === URL_DIST || /^(data|blob):/.test(u)), page.requests);

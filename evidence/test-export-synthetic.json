@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "appVersion": "0.1.3",
+  "appVersion": "0.2.0",
   "contentVersion": "d1-2026-10-08c",
-  "saveId": "v3hifox2mv043kgq",
-  "createdAt": "2026-10-08T22:32:27.482Z",
-  "updatedAt": "2026-10-08T22:32:38.390Z",
+  "saveId": "lwu963lgmv06y255",
+  "createdAt": "2026-10-08T23:52:09.305Z",
+  "updatedAt": "2026-10-08T23:52:22.316Z",
   "settings": {
     "supportLevel": 1,
     "reducedMotion": true,
@@ -18,10 +18,10 @@
     "status": "complete",
     "probe": {
       "order": [
-        "pr_noe_intro",
         "pr_cam_ask",
-        "pr_noe_ask",
-        "pr_cam_intro"
+        "pr_noe_intro",
+        "pr_cam_intro",
+        "pr_noe_ask"
       ],
       "optOrders": [
         [
@@ -33,8 +33,8 @@
           "asks"
         ],
         [
-          "tells",
-          "asks"
+          "asks",
+          "tells"
         ],
         [
           "asks",
@@ -104,11 +104,11 @@
   },
   "plant": {
     "careState": "watered",
-    "lastCareAt": "2026-10-08T22:32:32.092Z",
+    "lastCareAt": "2026-10-08T23:52:15.900Z",
     "careLog": [
       {
         "actionId": "d1.water",
-        "at": "2026-10-08T22:32:32.092Z",
+        "at": "2026-10-08T23:52:15.900Z",
         "scene": "plant"
       }
     ],
@@ -117,14 +117,14 @@
       {
         "id": "d1",
         "label": "🌱 第一天的新叶",
-        "at": "2026-10-08T22:32:36.593Z"
+        "at": "2026-10-08T23:52:20.468Z"
       }
     ]
   },
   "learning": {
     "attempts": [
       {
-        "id": "xoxpo666mv043lcx",
+        "id": "06ysf4a5mv06y310",
         "target": "bonjour",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -149,10 +149,10 @@
         "stimulus": "bl_bonjour",
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:28.641Z"
+        "at": "2026-10-08T23:52:10.452Z"
       },
       {
-        "id": "flladpl7mv043lf9",
+        "id": "vlkb39dtmv06y339",
         "target": "je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -177,10 +177,10 @@
         "stimulus": "bl_lea",
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:28.725Z"
+        "at": "2026-10-08T23:52:10.533Z"
       },
       {
-        "id": "xonu0q6umv043lhk",
+        "id": "k0x6puuwmv06y35k",
         "target": "tu_tappelles_comment",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -205,10 +205,10 @@
         "stimulus": "bl_ask",
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:28.808Z"
+        "at": "2026-10-08T23:52:10.616Z"
       },
       {
-        "id": "xyc5in1nmv043loz",
+        "id": "0q2sj3n5mv06y3d0",
         "target": "bonjour",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -234,10 +234,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:29.075Z"
+        "at": "2026-10-08T23:52:10.884Z"
       },
       {
-        "id": "6zritlnpmv043lrr",
+        "id": "s6n37s7lmv06y3fs",
         "target": "greeting_reply",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -259,10 +259,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:29.175Z"
+        "at": "2026-10-08T23:52:10.984Z"
       },
       {
-        "id": "9vd58bp2mv043mb5",
+        "id": "kl87ml45mv06y3zq",
         "target": "je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -288,10 +288,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:29.873Z"
+        "at": "2026-10-08T23:52:11.702Z"
       },
       {
-        "id": "icb7yl42mv043mdh",
+        "id": "cbqcrvocmv06y41z",
         "target": "je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -317,10 +317,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:29.957Z"
+        "at": "2026-10-08T23:52:11.783Z"
       },
       {
-        "id": "ev40b92cmv043mft",
+        "id": "05iz3tqrmv06y44a",
         "target": null,
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -346,10 +346,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:30.041Z"
+        "at": "2026-10-08T23:52:11.866Z"
       },
       {
-        "id": "l1wvvep4mv043mi5",
+        "id": "v0f7a28nmv06y46l",
         "target": "tu_tappelles_comment",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -375,10 +375,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:30.125Z"
+        "at": "2026-10-08T23:52:11.949Z"
       },
       {
-        "id": "spk0s83hmv043n2i",
+        "id": "07n1ujkrmv06y4qz",
         "target": "try_je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -402,10 +402,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:30.858Z"
+        "at": "2026-10-08T23:52:12.683Z"
       },
       {
-        "id": "9ioarihtmv043nac",
+        "id": "9urv3rdymv06y4yu",
         "target": null,
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -431,10 +431,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:31.140Z"
+        "at": "2026-10-08T23:52:12.966Z"
       },
       {
-        "id": "uairyscdmv043nyf",
+        "id": "7fpldp0nmv06y75z",
         "target": null,
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -460,10 +460,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:32.007Z"
+        "at": "2026-10-08T23:52:15.815Z"
       },
       {
-        "id": "csxd73temv043opb",
+        "id": "hrja13wjmv06y7wu",
         "target": "salut",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -489,10 +489,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:32.975Z"
+        "at": "2026-10-08T23:52:16.782Z"
       },
       {
-        "id": "4sf9bfl3mv043oty",
+        "id": "yfsphb67mv06y81i",
         "target": null,
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -518,10 +518,10 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:33.142Z"
+        "at": "2026-10-08T23:52:16.950Z"
       },
       {
-        "id": "jfkjt3sumv043ow8",
+        "id": "h1vb0ksgmv06y83s",
         "target": null,
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -547,10 +547,39 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:33.224Z"
+        "at": "2026-10-08T23:52:17.032Z"
       },
       {
-        "id": "z8ycmd78mv043q70",
+        "id": "gvhfby7fmv06y9ek",
+        "target": "tu_tappelles_comment",
+        "lesson": "d1",
+        "contentVersion": "d1-2026-10-08c",
+        "modality": "reading",
+        "audioStatus": "unavailable",
+        "visibleSupport": {
+          "level": 1,
+          "subtitles": false,
+          "chinese": false,
+          "gesture": false,
+          "speakerVisible": false,
+          "nameHighlight": false
+        },
+        "replays": 0,
+        "firstListen": true,
+        "response": "asks",
+        "correct": true,
+        "resultType": "independent",
+        "evidenceKind": "discrimination",
+        "production": null,
+        "context": "d1.probe.t1.camille",
+        "speaker": "camille",
+        "stimulus": "pr_cam_ask",
+        "audioVoice": null,
+        "audioSource": "none",
+        "at": "2026-10-08T23:52:18.716Z"
+      },
+      {
+        "id": "7slsczr9mv06y9hb",
         "target": "je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -566,50 +595,21 @@
         },
         "replays": 0,
         "firstListen": true,
-        "response": "tells",
-        "correct": true,
-        "resultType": "independent",
-        "evidenceKind": "discrimination",
-        "production": null,
-        "context": "d1.probe.t1.noe",
-        "speaker": "noe",
-        "stimulus": "pr_noe_intro",
-        "audioVoice": null,
-        "audioSource": "none",
-        "at": "2026-10-08T22:32:34.908Z"
-      },
-      {
-        "id": "t42ibydamv043q99",
-        "target": "tu_tappelles_comment",
-        "lesson": "d1",
-        "contentVersion": "d1-2026-10-08c",
-        "modality": "reading",
-        "audioStatus": "unavailable",
-        "visibleSupport": {
-          "level": 1,
-          "subtitles": false,
-          "chinese": false,
-          "gesture": false,
-          "speakerVisible": false,
-          "nameHighlight": false
-        },
-        "replays": 0,
-        "firstListen": true,
-        "response": "tells",
+        "response": "asks",
         "correct": false,
         "resultType": "independent",
         "evidenceKind": "discrimination",
         "production": null,
-        "context": "d1.probe.t2.camille",
-        "speaker": "camille",
-        "stimulus": "pr_cam_ask",
+        "context": "d1.probe.t2.noe",
+        "speaker": "noe",
+        "stimulus": "pr_noe_intro",
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:34.989Z"
+        "at": "2026-10-08T23:52:18.815Z"
       },
       {
-        "id": "u3y3d1lvmv043qfs",
-        "target": "tu_tappelles_comment",
+        "id": "8qms00ojmv06y9os",
+        "target": "je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
         "modality": "reading",
@@ -629,16 +629,16 @@
         "resultType": "independent",
         "evidenceKind": "discrimination",
         "production": null,
-        "context": "d1.probe.t3.noe",
-        "speaker": "noe",
-        "stimulus": "pr_noe_ask",
+        "context": "d1.probe.t3.camille",
+        "speaker": "camille",
+        "stimulus": "pr_cam_intro",
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:35.224Z"
+        "at": "2026-10-08T23:52:19.084Z"
       },
       {
-        "id": "xh69vdysmv043qi2",
-        "target": "je_mappelle",
+        "id": "03m2low9mv06y9ri",
+        "target": "tu_tappelles_comment",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
         "modality": "reading",
@@ -653,20 +653,20 @@
         },
         "replays": 0,
         "firstListen": true,
-        "response": "tells",
+        "response": "asks",
         "correct": true,
         "resultType": "independent",
         "evidenceKind": "discrimination",
         "production": null,
-        "context": "d1.probe.t4.camille",
-        "speaker": "camille",
-        "stimulus": "pr_cam_intro",
+        "context": "d1.probe.t4.noe",
+        "speaker": "noe",
+        "stimulus": "pr_noe_ask",
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:35.306Z"
+        "at": "2026-10-08T23:52:19.182Z"
       },
       {
-        "id": "87qybmi2mv043rht",
+        "id": "acj7x5x3mv06yar7",
         "target": "try_je_mappelle",
         "lesson": "d1",
         "contentVersion": "d1-2026-10-08c",
@@ -678,7 +678,7 @@
         },
         "replays": 0,
         "firstListen": null,
-        "response": "[private journal j-mv043rht]",
+        "response": "[private journal j-mv06yar7]",
         "correct": null,
         "resultType": "independent",
         "evidenceKind": "production",
@@ -688,7 +688,7 @@
         "stimulus": null,
         "audioVoice": null,
         "audioSource": "none",
-        "at": "2026-10-08T22:32:36.593Z"
+        "at": "2026-10-08T23:52:20.467Z"
       }
     ],
     "helpLog": [
@@ -696,13 +696,13 @@
         "kind": "chinese",
         "context": "d1.doorway.3",
         "target": "je_mappelle",
-        "at": "2026-10-08T22:32:29.274Z"
+        "at": "2026-10-08T23:52:11.083Z"
       },
       {
         "kind": "chinese",
         "context": "d1.name.input",
         "target": "tu_tappelles_comment",
-        "at": "2026-10-08T22:32:30.242Z"
+        "at": "2026-10-08T23:52:12.066Z"
       }
     ],
     "supportByTarget": {
@@ -755,21 +755,21 @@
       "modality": "reading",
       "recentEvidence": [
         {
-          "id": "xoxpo666mv043lcx",
+          "id": "06ysf4a5mv06y310",
           "resultType": "baseline",
           "correct": true,
           "replays": 0,
-          "at": "2026-10-08T22:32:28.641Z"
+          "at": "2026-10-08T23:52:10.452Z"
         },
         {
-          "id": "xyc5in1nmv043loz",
+          "id": "0q2sj3n5mv06y3d0",
           "resultType": "exposure",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:29.075Z"
+          "at": "2026-10-08T23:52:10.884Z"
         }
       ],
-      "nextEncounter": "2026-10-09T22:32:36.593Z",
+      "nextEncounter": "2026-10-09T23:52:20.468Z",
       "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
       "supportRecommendation": {
         "level": 1,
@@ -781,75 +781,35 @@
       "modality": "reading",
       "recentEvidence": [
         {
-          "id": "9vd58bp2mv043mb5",
+          "id": "kl87ml45mv06y3zq",
           "resultType": "exposure",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:29.873Z"
+          "at": "2026-10-08T23:52:11.702Z"
         },
         {
-          "id": "icb7yl42mv043mdh",
+          "id": "cbqcrvocmv06y41z",
           "resultType": "exposure",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:29.957Z"
+          "at": "2026-10-08T23:52:11.783Z"
         },
         {
-          "id": "z8ycmd78mv043q70",
-          "resultType": "independent",
-          "correct": true,
-          "replays": 0,
-          "at": "2026-10-08T22:32:34.908Z"
-        },
-        {
-          "id": "xh69vdysmv043qi2",
-          "resultType": "independent",
-          "correct": true,
-          "replays": 0,
-          "at": "2026-10-08T22:32:35.306Z"
-        }
-      ],
-      "nextEncounter": "2026-10-15T22:32:36.593Z",
-      "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
-      "supportRecommendation": {
-        "level": 0,
-        "reason": "two-independent-distinct-contexts (trial reduction, not mastery)"
-      }
-    },
-    {
-      "target": "tu_tappelles_comment",
-      "modality": "reading",
-      "recentEvidence": [
-        {
-          "id": "xonu0q6umv043lhk",
-          "resultType": "baseline",
-          "correct": null,
-          "replays": 0,
-          "at": "2026-10-08T22:32:28.808Z"
-        },
-        {
-          "id": "l1wvvep4mv043mi5",
-          "resultType": "exposure",
-          "correct": null,
-          "replays": 0,
-          "at": "2026-10-08T22:32:30.125Z"
-        },
-        {
-          "id": "t42ibydamv043q99",
+          "id": "7slsczr9mv06y9hb",
           "resultType": "independent",
           "correct": false,
           "replays": 0,
-          "at": "2026-10-08T22:32:34.989Z"
+          "at": "2026-10-08T23:52:18.815Z"
         },
         {
-          "id": "u3y3d1lvmv043qfs",
+          "id": "8qms00ojmv06y9os",
           "resultType": "independent",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:35.224Z"
+          "at": "2026-10-08T23:52:19.084Z"
         }
       ],
-      "nextEncounter": "2026-10-09T22:32:36.593Z",
+      "nextEncounter": "2026-10-09T23:52:20.468Z",
       "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
       "supportRecommendation": {
         "level": 1,
@@ -857,18 +817,58 @@
       }
     },
     {
+      "target": "tu_tappelles_comment",
+      "modality": "reading",
+      "recentEvidence": [
+        {
+          "id": "k0x6puuwmv06y35k",
+          "resultType": "baseline",
+          "correct": null,
+          "replays": 0,
+          "at": "2026-10-08T23:52:10.616Z"
+        },
+        {
+          "id": "v0f7a28nmv06y46l",
+          "resultType": "exposure",
+          "correct": null,
+          "replays": 0,
+          "at": "2026-10-08T23:52:11.949Z"
+        },
+        {
+          "id": "gvhfby7fmv06y9ek",
+          "resultType": "independent",
+          "correct": true,
+          "replays": 0,
+          "at": "2026-10-08T23:52:18.716Z"
+        },
+        {
+          "id": "03m2low9mv06y9ri",
+          "resultType": "independent",
+          "correct": true,
+          "replays": 0,
+          "at": "2026-10-08T23:52:19.182Z"
+        }
+      ],
+      "nextEncounter": "2026-10-15T23:52:20.468Z",
+      "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
+      "supportRecommendation": {
+        "level": 0,
+        "reason": "two-independent-distinct-contexts (trial reduction, not mastery)"
+      }
+    },
+    {
       "target": "greeting_reply",
       "modality": "selection",
       "recentEvidence": [
         {
-          "id": "6zritlnpmv043lrr",
+          "id": "s6n37s7lmv06y3fs",
           "resultType": "supported",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:29.175Z"
+          "at": "2026-10-08T23:52:10.984Z"
         }
       ],
-      "nextEncounter": "2026-10-09T22:32:36.593Z",
+      "nextEncounter": "2026-10-09T23:52:20.468Z",
       "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
       "supportRecommendation": {
         "level": 1,
@@ -880,21 +880,21 @@
       "modality": "writing",
       "recentEvidence": [
         {
-          "id": "spk0s83hmv043n2i",
+          "id": "07n1ujkrmv06y4qz",
           "resultType": "supported",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:30.858Z"
+          "at": "2026-10-08T23:52:12.683Z"
         },
         {
-          "id": "87qybmi2mv043rht",
+          "id": "acj7x5x3mv06yar7",
           "resultType": "independent",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:36.593Z"
+          "at": "2026-10-08T23:52:20.467Z"
         }
       ],
-      "nextEncounter": "2026-10-09T22:32:36.593Z",
+      "nextEncounter": "2026-10-09T23:52:20.468Z",
       "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
       "supportRecommendation": {
         "level": 1,
@@ -906,14 +906,14 @@
       "modality": "reading",
       "recentEvidence": [
         {
-          "id": "csxd73temv043opb",
+          "id": "hrja13wjmv06y7wu",
           "resultType": "exposure",
           "correct": null,
           "replays": 0,
-          "at": "2026-10-08T22:32:32.975Z"
+          "at": "2026-10-08T23:52:16.782Z"
         }
       ],
-      "nextEncounter": "2026-10-09T22:32:36.593Z",
+      "nextEncounter": "2026-10-09T23:52:20.468Z",
       "nextEncounterNote": "Week 1 uses chapter recurrence (greetings return with the neighbour and landlady); date is a heuristic.",
       "supportRecommendation": {
         "level": 1,
@@ -925,12 +925,12 @@
     "chronicle": [
       {
         "eventId": "arrived",
-        "at": "2026-10-08T22:32:28.974Z",
+        "at": "2026-10-08T23:52:10.784Z",
         "params": null
       },
       {
         "eventId": "greeted",
-        "at": "2026-10-08T22:32:29.176Z",
+        "at": "2026-10-08T23:52:10.984Z",
         "params": {
           "choice": "salut",
           "fr": "Salut !"
@@ -938,17 +938,17 @@
       },
       {
         "eventId": "met_camille",
-        "at": "2026-10-08T22:32:29.873Z",
+        "at": "2026-10-08T23:52:11.702Z",
         "params": null
       },
       {
         "eventId": "met_noe",
-        "at": "2026-10-08T22:32:29.957Z",
+        "at": "2026-10-08T23:52:11.783Z",
         "params": null
       },
       {
         "eventId": "introduced",
-        "at": "2026-10-08T22:32:30.858Z",
+        "at": "2026-10-08T23:52:12.683Z",
         "params": {
           "kind": "full_structure",
           "original": "Je m’appelle Alex"
@@ -956,44 +956,44 @@
       },
       {
         "eventId": "plant_shown",
-        "at": "2026-10-08T22:32:31.140Z",
+        "at": "2026-10-08T23:52:12.966Z",
         "params": null
       },
       {
         "eventId": "plant_watered",
-        "at": "2026-10-08T22:32:32.092Z",
+        "at": "2026-10-08T23:52:15.900Z",
         "params": null
       },
       {
         "eventId": "camille_left",
-        "at": "2026-10-08T22:32:32.975Z",
+        "at": "2026-10-08T23:52:16.782Z",
         "params": null
       },
       {
         "eventId": "met_croissant",
-        "at": "2026-10-08T22:32:33.142Z",
+        "at": "2026-10-08T23:52:16.950Z",
         "params": null
       },
       {
         "eventId": "secret_kept",
-        "at": "2026-10-08T22:32:33.808Z",
+        "at": "2026-10-08T23:52:17.617Z",
         "params": null
       },
       {
         "eventId": "probe_done",
-        "at": "2026-10-08T22:32:35.306Z",
+        "at": "2026-10-08T23:52:19.182Z",
         "params": null
       },
       {
         "eventId": "day1_complete",
-        "at": "2026-10-08T22:32:36.593Z",
+        "at": "2026-10-08T23:52:20.468Z",
         "params": null
       }
     ],
     "journal": [
       {
-        "id": "j-mv043rht",
-        "at": "2026-10-08T22:32:36.593Z",
+        "id": "j-mv06yar7",
+        "at": "2026-10-08T23:52:20.467Z",
         "original": "Je m’appelle Alex.\n  Aujourd’hui : un chat secret 🐈  ",
         "usedTemplate": false,
         "suggestedRewrite": null,
@@ -1006,7 +1006,7 @@
       "engine": "speechSynthesis",
       "status": "unavailable",
       "voice": null,
-      "checkedAt": "2026-10-08T22:32:27.660Z",
+      "checkedAt": "2026-10-08T23:52:09.467Z",
       "voices": {
         "camille": null,
         "noe": null,

@@ -10,6 +10,14 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (_, f) => '<style>\n' + fs.readFileSync(path.join(ROOT, f), 'utf8') + '\n</style>');
+function dataPng(rel) { return 'data:image/png;base64,' + fs.readFileSync(path.join(ROOT, rel)).toString('base64'); }
+html = html.replace(/<link rel="icon" href="([^"]+)"([^>]*)>/, (_, f, rest) => '<link rel="icon" href="' + dataPng(f) + '"' + rest + '>');
+html = html.replace(/<link rel="apple-touch-icon" href="([^"]+)"([^>]*)>/, (_, f, rest) => '<link rel="apple-touch-icon" href="' + dataPng(f) + '"' + rest + '>');
+html = html.replace(/<link rel="manifest" href="manifest.json">/, () => {
+  const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.json'), 'utf8'));
+  for (const ic of man.icons || []) ic.src = dataPng(ic.src);
+  return '<link rel="manifest" href="data:application/manifest+json;base64,' + Buffer.from(JSON.stringify(man)).toString('base64') + '">';
+});
 // v0.1.3: the Day 1 recordings (audio/d1/*.mp3) are inlined as base64 data URIs so the single file works offline.
 function inlineClips() {
   const CL = require('../js/clips.js');
@@ -25,7 +33,7 @@ const out = path.join(ROOT, 'dist', 'appartement-411.html');
 fs.writeFileSync(out, html);
 console.log('wrote', out, (html.length / 1024).toFixed(1) + ' KB');
 const zip = path.join(ROOT, 'dist', 'appartement-411-v' + pkg.version + '.zip');
-const files = ['index.html', 'css', 'js', 'audio', 'docs', 'tests', 'tools', 'package.json', 'package-lock.json', 'README.md', 'dist/appartement-411.html', 'evidence'];
+const files = ['index.html', 'css', 'js', 'audio', 'docs', 'tests', 'tools', 'icons', 'manifest.json', 'package.json', 'package-lock.json', 'README.md', 'dist/appartement-411.html', 'evidence'];
 execFileSync('python3', ['-c', `
 import zipfile, os, sys
 root, out, items = sys.argv[1], sys.argv[2], sys.argv[3:]
