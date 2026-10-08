@@ -1,0 +1,561 @@
+{
+  "env": {
+    "chrome": "154.0.8037.57",
+    "viewport": "390x844 @2x, isMobile, hasTouch",
+    "date": "2026-10-08T19:02:20.538Z"
+  },
+  "passed": 63,
+  "failed": 0,
+  "results": [
+    {
+      "gate": "Audio",
+      "check": "headless Chrome voice detection reported honestly",
+      "pass": true,
+      "detail": {
+        "status": "unavailable",
+        "reason": "no-french-voice"
+      }
+    },
+    {
+      "gate": "Usable entry",
+      "check": "version visible on title",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "no horizontal overflow on title (390px)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "Days 2–7 marked unavailable without buttons",
+      "pass": true,
+      "detail": 6
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "reduced-motion option applies",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Audio",
+      "check": "unavailable voice is visible to the player",
+      "pass": true,
+      "detail": "🔇 这台设备/浏览器没有可用的法语语音（no-french-voice）。现在是阅读模式：法语文字会显示出来，这部分不算听力练习。"
+    },
+    {
+      "gate": "Learning validity",
+      "check": "baseline recorded as reading (listening unverified), no labels",
+      "pass": true,
+      "detail": [
+        {
+          "line": "bl_bonjour",
+          "response": "greet",
+          "correct": true,
+          "modality": "reading",
+          "replays": 0,
+          "help": false
+        },
+        {
+          "line": "bl_lea",
+          "response": "tells",
+          "correct": true,
+          "modality": "reading",
+          "replays": 0,
+          "help": false
+        },
+        {
+          "line": "bl_ask",
+          "response": "unsure",
+          "correct": null,
+          "modality": "reading",
+          "replays": 0,
+          "help": false
+        }
+      ]
+    },
+    {
+      "gate": "Audio",
+      "check": "line falls back to visible French text with status \"无语音（阅读）\"",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "speaker visible on intro line",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "Chinese help reveals gloss",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "all visible controls ≥44px on dialogue screen",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "Noé intro shown with speaker tag",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "name draft preserved across help re-render",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "Camille repeats nickname (no audio claimed)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "name attempt: writing, full_structure, supported (Chinese help shown), original preserved",
+      "pass": true,
+      "detail": {
+        "id": "16akb5gbmuzwlg8g",
+        "target": "try_je_mappelle",
+        "lesson": "d1",
+        "contentVersion": "d1-2026-10-08a",
+        "modality": "writing",
+        "audioStatus": "not_used",
+        "visibleSupport": {
+          "level": 1,
+          "chinese": true,
+          "templateHint": true,
+          "templateInserted": false
+        },
+        "replays": 0,
+        "firstListen": null,
+        "response": "Je m’appelle Alex",
+        "correct": null,
+        "resultType": "supported",
+        "evidenceKind": "production",
+        "production": "full_structure",
+        "context": "d1.name.input",
+        "speaker": "camille",
+        "stimulus": null,
+        "at": "2026-10-08T19:02:24.880Z"
+      }
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "pause overlay mid-scene with saved position",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "close/reopen keeps save identical (except updatedAt timestamp)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "title offers exact resume point",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "resume lands on exact line (Ta plante a soif.)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "watering counted once despite double tap",
+      "pass": true,
+      "detail": {
+        "careLog": 1,
+        "toast": "已经浇过了——同一次照料不会重复计算。"
+      }
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "secret choice (keep) saved; Camille knowledge unchanged",
+      "pass": true,
+      "detail": {
+        "choice": "keep",
+        "camille": {
+          "playerName": "Alex",
+          "knowsCat": false,
+          "heardPlayerAnswer": true
+        }
+      }
+    },
+    {
+      "gate": "Learning validity",
+      "check": "probe options visually identical (no highlight)",
+      "pass": true,
+      "detail": "rgb(255, 255, 255)|rgb(31, 29, 26)|rgb(42, 46, 58)|400|rgb(42, 46, 58) 0px 3px 0px 0px|btn choice"
+    },
+    {
+      "gate": "Persistence",
+      "check": "mid-probe resume at trial 3/4",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "probe trials recorded as reading (not listening) when no voice",
+      "pass": true,
+      "detail": [
+        [
+          "reading",
+          "unavailable",
+          "independent",
+          true
+        ],
+        [
+          "reading",
+          "unavailable",
+          "independent",
+          false
+        ],
+        [
+          "reading",
+          "unavailable",
+          "independent",
+          null
+        ],
+        [
+          "reading",
+          "unavailable",
+          "independent",
+          true
+        ]
+      ]
+    },
+    {
+      "gate": "Learning validity",
+      "check": "probe order randomised & stored",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "every learning attempt has all STAGE_01 minimum fields",
+      "pass": true,
+      "detail": "19 attempts"
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "chronicle = encountered events only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "episode completes to end screen",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "after reload: journal verbatim, plant, choice, attempts, status",
+      "pass": true,
+      "detail": {
+        "journalVerbatim": true,
+        "attempts": 20
+      }
+    },
+    {
+      "gate": "Persistence",
+      "check": "diary view shows journal verbatim",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Privacy",
+      "check": "summary excludes private journal text and nickname by default",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "summary reports the self-introduction as supported (help was used) and journal writing separately",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Usable entry",
+      "check": "summary carries version/episode/evidence/help/note",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Usable entry",
+      "check": "copy-to-clipboard copies the visible summary text",
+      "pass": true,
+      "detail": "Appartement 404 · 反馈摘要\n版本：app 0.1.0 · 内容"
+    },
+    {
+      "gate": "Recovery",
+      "check": "export downloads valid JSON with schema/app version",
+      "pass": true,
+      "detail": "appartement-404-save-20261008-1202.json"
+    },
+    {
+      "gate": "Recovery",
+      "check": "malformed import rejected, existing save byte-identical",
+      "pass": true,
+      "detail": {
+        "m1": "✗ 没有导入：不是有效的 JSON：Unterminated string in JSON at position 64",
+        "m2": "✗ 没有导入：progress.scene 无效；progress.step 无效（当前存档未改动）"
+      }
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "no JS errors during main path",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Privacy",
+      "check": "no network requests (local only)",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Recovery",
+      "check": "export → import round trip into fresh profile is lossless",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Audio",
+      "check": "[simulated voice] fr-FR voice detected and used",
+      "pass": true,
+      "detail": {
+        "s": "available",
+        "v": "Fake Français (test) (fr-FR)"
+      }
+    },
+    {
+      "gate": "Audio",
+      "check": "[simulated voice] playback + replay recorded (audioStatus=played, replays=1)",
+      "pass": true,
+      "detail": {
+        "id": "sxmz0hezmuzwlso2",
+        "target": "bonjour",
+        "lesson": "d1",
+        "contentVersion": "d1-2026-10-08a",
+        "modality": "listening+reading",
+        "audioStatus": "played",
+        "visibleSupport": {
+          "level": 3,
+          "subtitles": true,
+          "chinese": true,
+          "gesture": true,
+          "speakerVisible": true,
+          "label": "understand"
+        },
+        "replays": 1,
+        "firstListen": null,
+        "response": null,
+        "correct": null,
+        "resultType": "exposure",
+        "evidenceKind": "encounter",
+        "production": null,
+        "context": "d1.doorway.1.cam_bonjour",
+        "speaker": "camille",
+        "stimulus": null,
+        "at": "2026-10-08T19:02:40.994Z"
+      }
+    },
+    {
+      "gate": "Learning validity",
+      "check": "baseline skip recorded",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Learning validity",
+      "check": "probe DOM contains no stimulus text, names or translation before help",
+      "pass": true,
+      "detail": {
+        "appelle": false,
+        "comment": false,
+        "names": false,
+        "portraitsMarker": false
+      }
+    },
+    {
+      "gate": "Learning validity",
+      "check": "first-listen / replay / text-help trials recorded distinctly; assisted not labelled independent",
+      "pass": true,
+      "detail": [
+        [
+          "listening",
+          "independent",
+          0,
+          true,
+          true
+        ],
+        [
+          "listening",
+          "independent",
+          1,
+          false,
+          true
+        ],
+        [
+          "listening+reading",
+          "supported",
+          0,
+          true,
+          true
+        ],
+        [
+          "listening",
+          "independent",
+          0,
+          true,
+          true
+        ]
+      ]
+    },
+    {
+      "gate": "Learning validity",
+      "check": "help reveals text only on request",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Audio",
+      "check": "[simulated voice] speech text uses plain apostrophes/spaces for TTS",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Audio",
+      "check": "[simulated voice] probe stimuli were sent to speech engine",
+      "pass": true,
+      "detail": [
+        "Salut ! Je m'appelle Noé.",
+        "Tu t'appelles comment ?",
+        "Tu t'appelles comment ?",
+        "Je m'appelle Camille.",
+        "Tu t'appelles comment ?"
+      ]
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[alt] skipped name accepted; no name invented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[alt] decline reaction shown",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[alt] decline saved, no promise credited, Camille unaware",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "[alt] plant stays thirsty, no care logged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[375px] no horizontal overflow and all controls ≥44px (name, probe, diary screens)",
+      "pass": true,
+      "detail": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[alt] chronicle reflects the actual alternate events",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "[alt] empty journal allowed; nothing fabricated",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Persistence",
+      "check": "[alt] title quick-visit watering counted once",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[alt] no JS errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Recovery",
+      "check": "v0 save migrated to schema 1 with original backed up first",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Recovery",
+      "check": "v0 data preserved (scene, plant, choice, journal verbatim, attempts unknown-type)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Recovery",
+      "check": "migration notice shown to player",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Recovery",
+      "check": "migrated save is playable (resumes in plant scene)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Complete interaction",
+      "check": "injected runtime error shows recovery sheet and play continues at same step",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Usable entry",
+      "check": "dist/appartement-404.html (single file) plays and resumes from file://",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Usable entry",
+      "check": "single file makes no external requests",
+      "pass": true,
+      "detail": [
+        "file:///workspace/appartement-404/dist/appartement-404.html",
+        "file:///workspace/appartement-404/dist/appartement-404.html"
+      ]
+    }
+  ]
+}

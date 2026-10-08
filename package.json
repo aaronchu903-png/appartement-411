@@ -1,0 +1,16 @@
+{
+  "name": "appartement-404",
+  "version": "0.1.0",
+  "description": "Appartement 404 — Day 1 static browser game",
+  "scripts": {
+    "test": "node --test tests/logic.test.js",
+    "e2e": "node tests/e2e.mjs",
+    "build": "node tools/build.mjs"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "playwright-core": "^1.64.0"
+  },
+  "private": true
+}

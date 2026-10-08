@@ -1,0 +1,1 @@
+{"v":0,"scene":"plant","name":"Testeur","watered":true,"wateredAt":1696000000000,"secret":"keep","journal":"Je m'appelle Testeur.\n(synthetic v0 fixture — not a real learner record)","attempts":[{"phrase":"Tu t'appelles comment ?","ok":true,"t":1696000000000},{"phrase":"Salut !","ok":false,"t":1696000100000}]}

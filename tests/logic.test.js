@@ -1,0 +1,199 @@
+// Run: npm test   (node:test, no dependencies). Synthetic fixtures only — no real learner records.
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const C = require('../js/content.js');
+const L = require('../js/logic.js');
+
+function memLS(failWrites) {
+  const m = new Map();
+  return {
+    get length() { return m.size; }, key: i => [...m.keys()][i] ?? null,
+    getItem: k => (m.has(k) ? m.get(k) : null),
+    setItem: (k, v) => { if (failWrites && failWrites(k)) throw new Error('QuotaExceededError'); m.set(k, String(v)); },
+    removeItem: k => m.delete(k), _m: m
+  };
+}
+const V0 = { v: 0, scene: 'plant', name: 'Mimi', watered: true, wateredAt: 1696000000000, secret: 'keep',
+  journal: "Je m'appelle Mimi.\n  j'aime  le chat ", attempts: [{ phrase: "Tu t'appelles comment ?", ok: true, t: 1696000000000 }] };
+
+test('new save validates; version fields present', () => {
+  const s = L.newSave();
+  assert.deepEqual(L.validateSave(s), { ok: true, errors: [] });
+  assert.equal(s.schemaVersion, 1); assert.equal(s.appVersion, L.APP_VERSION); assert.equal(s.contentVersion, C.CONTENT_VERSION);
+});
+
+test('malformed imports are rejected', () => {
+  const bad = ['', 'not json', '[]', '{}', JSON.stringify({ schemaVersion: 99 }),
+    JSON.stringify(Object.assign(L.newSave(), { progress: { episode: 1, scene: 'nowhere', step: 0, status: 'in_progress' } })),
+    JSON.stringify(Object.assign(L.newSave(), { plant: { careState: 'watered', careLog: [{ actionId: 'd1.water' }, { actionId: 'd1.water' }] } })),
+    (() => { const s = L.newSave(); s.learning.attempts.push({ target: 'x' }); return JSON.stringify(s); })(),
+    'x'.repeat(1000001)];
+  for (const t of bad) assert.equal(L.parseImport(t).ok, false, 'should reject: ' + t.slice(0, 60));
+});
+
+test('import failure leaves existing save byte-identical', () => {
+  const ls = memLS(); const st = L.createStorage(ls);
+  const s = L.newSave(); s.player.nickname = 'Keep'; assert.ok(st.write(s).ok);
+  const before = ls.getItem(L.KEY);
+  const r = st.importText('{"schemaVersion":1,"broken":true}', s);
+  assert.equal(r.ok, false);
+  assert.equal(ls.getItem(L.KEY), before);
+  assert.equal(st.listBackups().length, 0, 'no backup churn on rejected import');
+});
+
+test('export/import round trip preserves everything and backs up current first', () => {
+  const ls = memLS(); const st = L.createStorage(ls);
+  const a = L.newSave(); a.progress.scene = 'cat'; a.progress.step = 3; L.waterPlant(a, 'd1.water', 'plant');
+  a.diary.journal.push({ id: 'j1', at: L.nowISO(), original: '  Je m’appelle Zoé.\n😊 ', usedTemplate: false, suggestedRewrite: null, share: false });
+  const exported = JSON.stringify(a, null, 2);
+  const cur = L.newSave(); st.write(cur);
+  const r = st.importText(exported, cur);
+  assert.equal(r.ok, true);
+  const loaded = st.load().save;
+  const strip = x => { const c = JSON.parse(JSON.stringify(x)); delete c.updatedAt; return c; };
+  assert.deepEqual(strip(loaded), strip(a));
+  assert.equal(loaded.diary.journal[0].original, '  Je m’appelle Zoé.\n😊 ');
+  assert.equal(st.listBackups().filter(b => b.label === 'pre-import').length, 1);
+});
+
+test('v0 migration: backup first, data mapped honestly, journal verbatim', () => {
+  const ls = memLS(); ls.setItem(L.KEY, JSON.stringify(V0));
+  const st = L.createStorage(ls);
+  const r = st.load(new Date('2026-10-08T12:00:00Z'));
+  assert.ok(r.save); assert.equal(r.save.schemaVersion, 1); assert.equal(r.save.meta.migratedFrom, 0);
+  const bk = st.listBackups().find(b => b.label === 'pre-migration-v0');
+  assert.ok(bk, 'backup exists'); assert.deepEqual(JSON.parse(ls.getItem(bk.key)), V0, 'backup is the original v0');
+  assert.equal(r.save.progress.scene, 'plant');
+  assert.equal(r.save.plant.careState, 'watered'); assert.equal(r.save.plant.careLog.length, 1);
+  assert.equal(r.save.world.choices.d1_secret, 'keep');
+  assert.equal(r.save.world.knowledge.camille.knowsCat, false);
+  assert.equal(r.save.diary.journal[0].original, V0.journal);
+  const a = r.save.learning.attempts[0];
+  assert.equal(a.target, 'tu_tappelles_comment'); assert.equal(a.resultType, 'unknown', 'never relabelled independent'); assert.equal(a.audioStatus, 'unknown');
+  assert.equal(JSON.parse(ls.getItem(L.KEY)).schemaVersion, 1, 'migrated save written');
+});
+
+test('v0 via import also works; future schema rejected', () => {
+  assert.equal(L.parseImport(JSON.stringify(V0)).ok, true);
+  assert.equal(L.parseImport(JSON.stringify(V0)).migratedFrom, 0);
+  const f = L.newSave(); f.schemaVersion = 2;
+  assert.equal(L.parseImport(JSON.stringify(f)).ok, false);
+});
+
+test('failure-safe write: failed write keeps previous save; corrupt main recovers from tmp or is backed up', () => {
+  let fail = false; const ls = memLS(k => fail && k === L.KEY);
+  const st = L.createStorage(ls);
+  const s1 = L.newSave(); s1.progress.scene = 'plant'; assert.ok(st.write(s1).ok);
+  const before = ls.getItem(L.KEY);
+  fail = true; const s2 = L.clone(s1); s2.progress.scene = 'cat';
+  assert.equal(st.write(s2).ok, false);
+  assert.equal(ls.getItem(L.KEY), before, 'main untouched');
+  // tmp holds the newer complete copy -> corrupt main recovers from it
+  fail = false; ls.setItem(L.KEY, '{corrupt');
+  const r = st.load(); assert.equal(r.save.progress.scene, 'cat'); assert.ok(st.listBackups().some(b => b.label === 'corrupt-main'));
+  // corrupt main and no tmp -> start fresh but corrupt data preserved as backup
+  const ls2 = memLS(); ls2.setItem(L.KEY, 'garbage'); const st2 = L.createStorage(ls2);
+  const r2 = st2.load(); assert.equal(r2.save, null); assert.equal(ls2.getItem(st2.listBackups()[0].key), 'garbage');
+});
+
+test('invalid in-memory save is never written', () => {
+  const ls = memLS(); const st = L.createStorage(ls);
+  const s = L.newSave(); s.progress.scene = 'bogus';
+  assert.equal(st.write(s).ok, false); assert.equal(ls.getItem(L.KEY), null);
+});
+
+test('plant: one care action cannot be counted twice; thirst returns after 48h', () => {
+  const s = L.newSave(); const t0 = new Date('2026-10-08T10:00:00Z');
+  assert.equal(L.waterPlant(s, 'd1.water', 'plant', t0).counted, true);
+  assert.equal(L.waterPlant(s, 'd1.water', 'plant', t0).counted, false);
+  assert.equal(s.plant.careLog.length, 1);
+  assert.equal(L.plantStatus(s.plant, new Date('2026-10-09T10:00:00Z')), 'watered');
+  assert.equal(L.plantStatus(s.plant, new Date('2026-10-10T11:00:00Z')), 'thirsty');
+});
+
+test('secret choice saved; Camille gains no knowledge; choice not silently redone', () => {
+  for (const ch of ['keep', 'decline']) {
+    const s = L.newSave(); const camBefore = JSON.stringify(s.world.knowledge.camille);
+    assert.equal(L.applySecretChoice(s, ch), true);
+    assert.equal(s.world.choices.d1_secret, ch);
+    assert.equal(s.world.relationships.noe.secretPromise, ch === 'keep' ? 'kept' : 'declined');
+    assert.equal(JSON.stringify(s.world.knowledge.camille), camBefore);
+    assert.equal(L.applySecretChoice(s, ch === 'keep' ? 'decline' : 'keep'), false);
+    assert.equal(s.world.choices.d1_secret, ch);
+  }
+});
+
+test('name response classification (no gender inference, nickname-only is not full structure)', () => {
+  const c = L.classifyNameResponse;
+  assert.equal(c('').kind, 'skipped'); assert.equal(c('   ').kind, 'skipped');
+  assert.deepEqual(c('Je m’appelle Alex.'), { kind: 'full_structure', exactForm: true, nickname: 'Alex' });
+  assert.equal(c("je mapelle Kiki").kind, 'full_structure'); assert.equal(c("je mapelle Kiki").exactForm, false);
+  assert.equal(c('Salut ! Je m\'appelle Lou').nickname, 'Lou');
+  assert.equal(c('Alex').kind, 'nickname_only'); assert.equal(c('Alex').nickname, 'Alex');
+  assert.equal(c("Moi, c'est Max").kind, 'moi_cest');
+  assert.equal(c('je ne sais pas quoi dire ici').kind, 'other_sentence');
+  for (const k of Object.keys(c('Je m’appelle Alex.'))) assert.ok(!/gender|sexe/i.test(k));
+});
+
+test('probe result type: any visible text/translation => supported; reading mode is not listening', () => {
+  assert.equal(L.probeResultType({}), 'independent');
+  assert.equal(L.probeResultType({ subtitlesShown: true }), 'supported');
+  assert.equal(L.probeResultType({ chineseShown: true }), 'supported');
+  assert.equal(L.probeModality('played', false), 'listening');
+  assert.equal(L.probeModality('played', true), 'listening+reading');
+  assert.equal(L.probeModality('unavailable', false), 'reading');
+  assert.equal(L.probeModality('failed', false), 'reading');
+});
+
+test('probe content: balanced tells/asks, ≥2 speakers per function, curriculum phrases only', () => {
+  const items = C.PROBE.items.map(id => C.LINES[id]);
+  assert.equal(items.filter(i => i.func === 'tells').length, 2); assert.equal(items.filter(i => i.func === 'asks').length, 2);
+  assert.equal(new Set(items.filter(i => i.func === 'asks').map(i => i.speaker)).size, 2);
+  const allowed = [/^Salut\u00A0! Je m’appelle (Camille|Noé)\.$/, /^Je m’appelle (Camille|Noé|Léa)\.$/, /^Tu t’appelles comment\u00A0\?$/];
+  for (const i of items) assert.ok(allowed.some(r => r.test(i.fr)), i.fr);
+});
+
+test('support recommendation: two independent successes in distinct contexts -> one-level trial reduction; help/difficulty restores', () => {
+  const mk = (o) => L.makeAttempt(Object.assign({ target: 'je_mappelle', modality: 'listening', resultType: 'independent', correct: true }, o));
+  assert.equal(L.recommendSupport([mk({ context: 'a' })], 'je_mappelle', 'listening', 3).level, 3);
+  assert.equal(L.recommendSupport([mk({ context: 'a' }), mk({ context: 'a' })], 'je_mappelle', 'listening', 3).level, 3);
+  assert.equal(L.recommendSupport([mk({ context: 'a' }), mk({ context: 'b' })], 'je_mappelle', 'listening', 3).level, 2);
+  assert.equal(L.recommendSupport([mk({ context: 'a' }), mk({ context: 'b' }), mk({ context: 'c', correct: false })], 'je_mappelle', 'listening', 2).level, 3);
+  assert.equal(L.recommendSupport([mk({ context: 'a' }), mk({ context: 'b', resultType: 'supported' })], 'je_mappelle', 'listening', 2).level, 2);
+});
+
+test('chronicle contains only encountered events, no duplicates', () => {
+  const s = L.newSave();
+  L.recordEvent(s, 'arrived'); L.recordEvent(s, 'met_camille'); L.recordEvent(s, 'met_camille');
+  assert.deepEqual(s.diary.chronicle.map(c => c.eventId), ['arrived', 'met_camille']);
+  assert.ok(!s.diary.chronicle.some(c => c.eventId === 'met_croissant'));
+  L.applyName(s, { kind: 'skipped', nickname: null }, '');
+  assert.match(L.chronicleText(s.diary.chronicle[2]), /暂时不说/);
+});
+
+test('feedback summary excludes journal text and nickname by default; includes only explicitly shared entries on request', () => {
+  const s = L.newSave(); s.player.nickname = 'SecretNick';
+  s.diary.journal.push({ id: 'j1', at: L.nowISO(), original: 'PRIVATE-LINE-123', usedTemplate: false, suggestedRewrite: null, share: false });
+  s.diary.journal.push({ id: 'j2', at: L.nowISO(), original: 'SHARED-LINE-456', usedTemplate: false, suggestedRewrite: null, share: true });
+  const def = L.buildSummary(s, { note: 'son trop bas' });
+  assert.ok(!def.includes('PRIVATE-LINE-123')); assert.ok(!def.includes('SHARED-LINE-456')); assert.ok(!def.includes('SecretNick'));
+  assert.ok(def.includes('0.1.0')); assert.ok(def.includes('son trop bas'));
+  const inc = L.buildSummary(s, { includeJournal: true });
+  assert.ok(inc.includes('SHARED-LINE-456')); assert.ok(!inc.includes('PRIVATE-LINE-123'));
+});
+
+test('review entries carry target, modality, recent evidence, next encounter and support recommendation', () => {
+  const s = L.newSave();
+  s.learning.attempts.push(L.makeAttempt({ target: 'je_mappelle', modality: 'listening', resultType: 'independent', correct: true, context: 'x' }));
+  const r = L.buildReview(s, new Date('2026-10-08T00:00:00Z'));
+  assert.equal(r.length, 1);
+  for (const k of ['target', 'modality', 'recentEvidence', 'nextEncounter', 'supportRecommendation']) assert.ok(k in r[0], k);
+});
+
+test('every scene step type and line reference is defined', () => {
+  for (const [name, steps] of Object.entries(C.SCENES)) for (const st of steps) {
+    if (st.line) assert.ok(C.LINES[st.line], name + ':' + st.line);
+    if (st.event) assert.ok(C.CHRONICLE[st.event], st.event);
+  }
+  assert.equal(C.DAYS.filter(d => d.available).length, 1);
+});
