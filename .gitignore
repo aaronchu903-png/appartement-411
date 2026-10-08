@@ -1,2 +1,4 @@
 node_modules/
 *.tmp.mjs
+audio-candidates/*/wav/
+audio-candidates/*/alt/

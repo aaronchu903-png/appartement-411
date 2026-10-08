@@ -1,0 +1,14 @@
+{
+ "camille": {
+  "instruct": "Une jeune femme française de 25 ans, accent parisien standard, voix claire, chaleureuse et amicale, débit naturel et articulé, ton détendu de colocataire.",
+  "ref_text": "Salut ! Je m'appelle Camille. Tu t'appelles comment ? Ta plante a soif."
+ },
+ "noe": {
+  "instruct": "Un jeune homme français de 23 ans, accent parisien standard, voix douce et un peu timide, légèrement grave, débit naturel et articulé.",
+  "ref_text": "Salut ! Je m'appelle Noé. Tu t'appelles comment ? Ta plante a soif."
+ },
+ "neutral": {
+  "instruct": "Une femme française de 40 ans, accent standard de France, voix neutre et posée de présentatrice, très bien articulée, débit modéré.",
+  "ref_text": "Bonjour ! Je m'appelle Léa. Tu t'appelles comment ? C'est ta plante."
+ }
+}

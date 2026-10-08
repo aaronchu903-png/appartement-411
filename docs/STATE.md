@@ -2,26 +2,32 @@
 
 Working record. Replace unknowns with observed facts; preserve any established project state found during startup rather than resetting it to this template.
 
-Last updated: 2026-10-08 ~13:05 PT (America/Vancouver) — project renamed to L’Appartement 411 (v0.1.1). Task IDs are A411-00x; they were formerly A404-00x (A404-001 = A411-001, same task).
+Last updated: 2026-10-08 PT (America/Vancouver). First feedback-led improvement: **v0.1.2 is committed locally and NOT deployed** (published preview is still v0.1.1). Pre-rendered audio candidates have been prototyped and await a founder listening decision. Earlier: project renamed to L’Appartement 411 (v0.1.1). Task IDs are A411-00x; they were formerly A404-00x.
 
 | Field | Current record |
 |---|---|
 | Stage | 01 - Reliable first-week learning alpha. |
 | First task | A411-001 (formerly A404-001) - Move-in day: **implemented, locally verified; awaiting first phone play.** |
 | Existing repository/workspace | Inspected 2026-10-08: nothing named appartement/a404 in `/workspace` or `/home/box` (only the spec pack in `/workspace/upload1/Appartement_404/`, renamed 2026-10-08 to `/workspace/upload1/LAppartement_411/`). `gh` CLI present but **not authenticated** → GitHub check skipped. Cursor "Origin" code host: no namespaces. Nothing to preserve; new project created. |
-| Stable version / entry point | **v0.1.1**, content `d1-2026-10-08b`, save schema v1. Entry: `/workspace/appartement-411/index.html` (multi-file) or `/workspace/appartement-411/dist/appartement-411.html` (single file, everything inlined). Old path `/workspace/appartement-404` is a symlink. |
+| Stable version / entry point | **v0.1.2 local** (commit `8143c60`, not deployed; preview still serves v0.1.1), content `d1-2026-10-08b`, save schema v1. Entry: `/workspace/appartement-411/index.html` (multi-file) or `/workspace/appartement-411/dist/appartement-411.html` (single file, everything inlined). Old path `/workspace/appartement-404` is a symlink. |
 | Latest artifact | `/workspace/appartement-411/` (source, tests, docs, evidence); `dist/appartement-411.html`; `dist/appartement-411-v0.1.1.zip`; `dist/LAppartement_411_docs.zip` (renamed original spec pack). Local git repo in the project folder (no remote). |
 | Tool/account capabilities | Box: Node 20, Chrome 154 (headless via `playwright-core`), Python 3, ffmpeg, sudo. No GitHub auth. No paid services used. `speech-dispatcher`/`espeak-ng` were installed on the box during an attempt to give headless Chrome a French voice (did not work; harmless, can be removed). |
 | Available quota / billing state | Additional spend: USD 0. No accounts created, no paid assets/services. |
 | Working collaborators | One Bot doing CTO + Experience passes. No independent reviewer; no human native-speaker review yet. |
 | Deployment scope / authorization | **Not deployed.** No public or private preview exists. First exposure needs founder approval (see decision below). |
-| Founder-device audio | **Not tested.** Audio route = device fr-FR voice (Web Speech API) + visible reading fallback. Fallback verified in headless Chrome (which has no voices); voice-available logic verified with a simulated voice only. Real voice untested on any phone. |
+| Founder-device audio | **2026-10-08 founder report (iPhone, Safari, English UI): French voice audible but sounds robotic.** Pronunciation and naturalness matter most to them. v0.1.2 addresses voice choice (see below); pre-rendered clips are being evaluated. Earlier record: **Not tested.** Audio route = device fr-FR voice (Web Speech API) + visible reading fallback. Fallback verified in headless Chrome (which has no voices); voice-available logic verified with a simulated voice only. Real voice untested on any phone. |
 | Save / restore / migration | Verified in headless Chrome + unit tests (see evidence below). localStorage only — one browser on one device, no sync; clearing site data deletes it; export/import provided. |
 | Learning baseline | Implemented (3 skippable items). Founder's baseline **not measured yet** (no founder play). |
 | Feedback receiving path | In-game "反馈摘要" generates text (copy button + visible text); founder pastes it to the CEO manually. No automatic ingestion exists. |
 | Recurring workflow | Not configured (by design: CEO.md requires one proven build-test-deliver-feedback cycle first). |
 
 ## Next action
+
+**Now (2026-10-08, Improvement cycle):**
+1. Founder listens to `audio-candidates/compare/*_3lines.mp3` and chooses: ship one TTS set as fixed Day 1 clips, or wait for a native speaker's recordings (`audio-candidates/HUMAN_RECORDING_SCRIPT.md`). Then integrate the chosen clips (plan in `audio-candidates/README.md`), with the device voice and then reading mode as fallbacks.
+2. Deploying v0.1.2 to the preview is covered by the standing small-update permission. It was deliberately not deployed in this task; the CEO decides.
+
+**Earlier list (kept for the record):**
 
 1. First founder play of Day 1 on the phone (preview URL below) → record: did French audio play (voice name shown in 设置 → 测试法语语音), readability, any stuck point, paste of the feedback summary.
 2. Use that feedback for the first feedback-led improvement (Stage 01 "Improvement" gate), then start A411-002 (Day 2) without resetting the founder's save. Saves made under v0.1.0 (`a404.save`) are adopted automatically into `a411.save`.
@@ -56,7 +62,7 @@ Proposed: **A** (or C immediately on Android while A is pending).
 | Recovery | **Passed (emulation + unit).** | Export JSON → import into a fresh browser profile is lossless; truncated JSON and structurally invalid saves are rejected with the existing save byte-identical; failed write keeps the previous save; corrupt main save recovers from the temp copy or is backed up before a fresh start; v0 test save migrates on load with the original backed up first, journal verbatim, old attempts typed `unknown` (not relabelled). Max 5 automatic backups, restorable from 存档. |
 | Learning validity | **Passed (emulation + unit); content not native-reviewed.** | Probe: neutral frame (no faces/pointing/name highlight), French text absent from the DOM until requested, identical option styles, randomised order. First-listen / replay / text-help / reading-only recorded and summarised separately; any shown text ⇒ `supported`. All attempts carry target, content version, modality, audio status, visible support, replays, response, result type, context, time. Review entries (target, modality, recent evidence, next encounter, support recommendation) generated. See `docs/CONTENT_REVIEW.md` for flags. |
 | Privacy | **Passed.** | Summary excludes journal text and nickname by default (only entries the player marked "允许分享" and only when the box is ticked); no network requests; test data is synthetic; no secrets in the artifact. |
-| Improvement | **Untested — needs founder feedback.** | No founder observation yet. |
+| Improvement | **In progress (first cycle).** | Founder feedback 2026-10-08: v0.1.1 satisfying; the iPhone French voice sounds robotic, and voice quality and pronunciation matter most. Response: v0.1.2 (device-voice ranking, picker, speed, tips) verified in emulation only; pre-rendered clip candidates built and ASR-checked. Not yet confirmed on the founder's phone. |
 
 **Known limitations / honest gaps**
 - Real French voice not heard on any device; iOS Safari has known speechSynthesis quirks (first utterance after `cancel()` can be dropped → app times out after 5 s, shows text, replay available). Voice quality depends on the phone.
@@ -94,3 +100,37 @@ Proposed: **A** (or C immediately on Android while A is pending).
 - Deploy (2026-10-08 ~13:00 PT): `gh repo rename` appartement-404 → **appartement-411**; description "L’Appartement 411 preview build", homepage set; Pages stayed enabled (main, /) and rebuilt on push. **https://aaronchu903-png.github.io/appartement-411/** returns 200, sha256 `60b2ba33…caab` byte-identical to `dist/appartement-411.html`; headless Chrome 390×844: title/h1 "L’Appartement 411", footer v0.1.1 / d1-2026-10-08b, 0 page errors (evidence/19-live-pages-411-390.png). Live same-origin check: a v0.1.0 save placed under `a404.save` on that origin was adopted into `a411.save` with the old key untouched and the notice shown (test data then cleared).
 - **Old URL** https://aaronchu903-png.github.io/appartement-404/ now returns **404** (GitHub does not redirect Pages after a repo rename). The old repo page github.com/aaronchu903-png/appartement-404 301-redirects to the new repo. Anyone with the old link needs the new one; their saves carry over because the origin is the same.
 - Push note: git on the box has no credential helper configured; pushes use `git -c 'credential.helper=!gh auth git-credential' push` (no global git config changed).
+
+## v0.1.2: first feedback-led improvement (2026-10-08, local only)
+
+- **Founder feedback:** satisfied with v0.1.1. On iPhone (Safari, English UI) the French voice sounds robotic, and pronunciation and naturalness are what matter most.
+- **Likely root cause:** v0.1.1 used the *first* fr-FR voice it was given. On iOS 17/18, Safari's voice list includes Eloquence voices (Jacques, Grand-mère, Grand-père, Rocko, Eddy, Flo, Reed, Sandy, Shelley) and novelty voices (Bulles, Cloches, Bonnes nouvelles…) tagged fr-FR. These are robotic by design and can come first in the list.
+- **Change (commit `8143c60`, app v0.1.2, content `d1-2026-10-08b` unchanged, save schema v1 unchanged):**
+  - French voices are now ranked and robotic/novelty voices are never auto-picked.
+  - Camille gets the best female voice and Noé the best different male voice. If only one voice exists, both use it with a slight pitch difference.
+  - 设置 has a voice picker for each character, with test lines and quality labels.
+  - Speed can be set to 0.75 / 0.9 / 1.0. The voice and speed choices are stored per device in `a411.device.audio`, not in the save.
+  - Platform-specific tips: on iOS, the English menu path with Chinese explanation.
+  - Each attempt records the voice name, quality and rate that actually played (`audioVoice`), and the feedback summary shows them.
+- **Honest limit:**
+  - iOS Safari generally does **not** expose downloaded Enhanced/Premium voices to web pages (Apple Developer Forums thread 723503; Readium research). In some iOS 18 builds, downloading a better variant even removed the base voice from Safari.
+  - The in-game tip says this plainly, so the device route can only reach "standard" quality on iPhone. Fixed recordings are the real fix.
+- **Verification (headless Chrome 154, emulation):** `npm test` **35/35**; `npm run e2e` **84/84**. The new section B2 uses a simulated iPhone voice list:
+  - Robotic voices are skipped. Camille=Marie and Noé=Thomas.
+  - The override and the 0.75 speed persist across a reload and stay outside the save.
+  - The iOS tip shows first.
+  - Screenshot: `evidence/20-voice-settings-iphone.png`.
+  - Builds: `dist/appartement-411.html` (122.3 KB) and `dist/appartement-411-v0.1.2.zip`.
+- **Not done:** no real-iPhone check, and not deployed.
+
+## Pre-rendered audio candidates (2026-10-08)
+
+- `audio-candidates/` holds Day 1 (17 lines + 2 test lines) rendered offline at USD 0 with three permissively licensed engines:
+  - Kyutai Pocket TTS (CC-BY-4.0 weights)
+  - Qwen3-TTS 1.7B (Apache-2.0; synthetic designed voices)
+  - Kokoro-82M (Apache-2.0; female voice only)
+- Comparison set: `audio-candidates/compare/<engine>_3lines.mp3`, each with the same 3 lines.
+- Checks: ASR with faster-whisper large-v3-turbo and naturalness proxy UTMOS. Results and provenance are in `audio-candidates/README.md`.
+- No candidate is in the game yet.
+- Human recording script plus permission template: `audio-candidates/HUMAN_RECORDING_SCRIPT.md`.
+- Cloud free tiers were researched but not used (each needs a new account, usually with a card, so founder approval is required).

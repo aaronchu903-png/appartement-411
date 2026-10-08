@@ -1,0 +1,135 @@
+[
+ {
+  "id": "cam_bonjour",
+  "speaker": "camille",
+  "fr": "Bonjour !",
+  "tts": "Bonjour !",
+  "label": "understand"
+ },
+ {
+  "id": "cam_intro",
+  "speaker": "camille",
+  "fr": "Salut ! Je m’appelle Camille.",
+  "tts": "Salut ! Je m'appelle Camille.",
+  "label": "understand"
+ },
+ {
+  "id": "noe_intro",
+  "speaker": "noe",
+  "fr": "Salut ! Je m’appelle Noé.",
+  "tts": "Salut ! Je m'appelle Noé.",
+  "label": "understand"
+ },
+ {
+  "id": "noe_moi",
+  "speaker": "noe",
+  "fr": "Moi, c’est Noé.",
+  "tts": "Moi, c'est Noé.",
+  "label": "atmosphere"
+ },
+ {
+  "id": "cam_ask",
+  "speaker": "camille",
+  "fr": "Tu t’appelles comment ?",
+  "tts": "Tu t'appelles comment ?",
+  "label": "understand"
+ },
+ {
+  "id": "cam_plante",
+  "speaker": "camille",
+  "fr": "C’est ta plante.",
+  "tts": "C'est ta plante.",
+  "label": "atmosphere"
+ },
+ {
+  "id": "cam_soif",
+  "speaker": "camille",
+  "fr": "Ta plante a soif.",
+  "tts": "Ta plante a soif.",
+  "label": "atmosphere"
+ },
+ {
+  "id": "cam_bye",
+  "speaker": "camille",
+  "fr": "Salut !",
+  "tts": "Salut !",
+  "label": "understand"
+ },
+ {
+  "id": "noe_croissant",
+  "speaker": "noe",
+  "fr": "C’est Croissant.",
+  "tts": "C'est Croissant.",
+  "label": "atmosphere"
+ },
+ {
+  "id": "noe_secret",
+  "speaker": "noe",
+  "fr": "Un secret ?",
+  "tts": "Un secret ?",
+  "label": "atmosphere"
+ },
+ {
+  "id": "pr_cam_ask",
+  "speaker": "camille",
+  "fr": "Tu t’appelles comment ?",
+  "tts": "Tu t'appelles comment ?",
+  "label": "probe"
+ },
+ {
+  "id": "pr_noe_ask",
+  "speaker": "noe",
+  "fr": "Tu t’appelles comment ?",
+  "tts": "Tu t'appelles comment ?",
+  "label": "probe"
+ },
+ {
+  "id": "pr_noe_intro",
+  "speaker": "noe",
+  "fr": "Salut ! Je m’appelle Noé.",
+  "tts": "Salut ! Je m'appelle Noé.",
+  "label": "probe"
+ },
+ {
+  "id": "pr_cam_intro",
+  "speaker": "camille",
+  "fr": "Je m’appelle Camille.",
+  "tts": "Je m'appelle Camille.",
+  "label": "probe"
+ },
+ {
+  "id": "bl_bonjour",
+  "speaker": "neutral",
+  "fr": "Bonjour !",
+  "tts": "Bonjour !",
+  "label": "baseline"
+ },
+ {
+  "id": "bl_lea",
+  "speaker": "neutral",
+  "fr": "Je m’appelle Léa.",
+  "tts": "Je m'appelle Léa.",
+  "label": "baseline"
+ },
+ {
+  "id": "bl_ask",
+  "speaker": "neutral",
+  "fr": "Tu t’appelles comment ?",
+  "tts": "Tu t'appelles comment ?",
+  "label": "baseline"
+ },
+ {
+  "id": "test_camille",
+  "speaker": "camille",
+  "fr": "Bonjour ! Je m’appelle Camille.",
+  "tts": "Bonjour ! Je m'appelle Camille.",
+  "label": "settings-test"
+ },
+ {
+  "id": "test_noe",
+  "speaker": "noe",
+  "fr": "Salut ! Je m’appelle Noé.",
+  "tts": "Salut ! Je m'appelle Noé.",
+  "label": "settings-test"
+ }
+]

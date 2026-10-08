@@ -1,0 +1,20 @@
+{
+ "pocket-tts": {
+  "syl_per_s": 4.08,
+  "cam_ask": 5.2,
+  "cam_intro": 4.2,
+  "noe_intro": 4.7
+ },
+ "qwen3-tts": {
+  "syl_per_s": 3.82,
+  "cam_ask": 3.8,
+  "cam_intro": 4.0,
+  "noe_intro": 3.9
+ },
+ "kokoro": {
+  "syl_per_s": 3.39,
+  "cam_ask": 3.6,
+  "cam_intro": 4.0,
+  "noe_intro": 3.9
+ }
+}
