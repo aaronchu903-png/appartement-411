@@ -71,3 +71,13 @@ Proposed: **A** (or C immediately on Android while A is pending).
 
 - 2026-10-08 (CTO, reversible): audio = device voice (Web Speech API) + reading fallback. Pre-rendered Piper clips rejected for now (one voice unintelligible by ASR check; the intelligible one has an unclear research-licence ancestry). Details in `docs/ASSETS.md`.
 - No founder decisions recorded yet.
+
+## Preview deployment (2026-10-08, ~12:45 PT)
+
+- Founder approved (chat, 2026-10-08) a free GitHub Pages preview.
+- gh CLI on the box logged in as `aaronchu903-png` via device flow (scopes: repo, workflow, gist, read:org).
+- Public repo `aaronchu903-png/appartement-404` contains ONLY the built single file (`index.html` = `dist/appartement-404.html` v0.1.0), `.nojekyll`, README. Spec docs, tests, evidence and source stay local in `/workspace/appartement-404` (local git) and are NOT published.
+- Preview URL: https://aaronchu903-png.github.io/appartement-404/ — served file byte-identical to local dist (cmp). Headless Chrome at 390x844 loaded it with 0 page errors (evidence/17-live-pages-390.png).
+- Deploy dir: `/workspace/a404-pages` (git, branch main). Rollback: `git revert`/reset to previous commit there and push.
+- Real-phone audio, real-phone persistence: still untested; awaits founder play.
+- Repeat low-risk preview updates: not yet authorized; ask founder for narrow standing permission per CEO.md.
