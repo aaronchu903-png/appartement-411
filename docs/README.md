@@ -1,4 +1,4 @@
-# Appartement 404 - Project Pack
+# L’Appartement 411 - Project Pack
 
 Version 1.0 | 2026-10-08
 
@@ -28,7 +28,7 @@ Send:
 ```text
 Read README.md and the six documents it identifies. Adopt CEO.md and
 coordinate the responsibilities in TEAM.md. Preserve FINAL_PROJECT.md
-as the destination. Start STAGE_01.md with A404-001, not the entire
+as the destination. Start STAGE_01.md with A411-001, not the entire
 future world. Inspect any existing project before creating or replacing
 files. Use CURRICULUM_WEEK_01.md for learning content and update STATE.md
 with actual results. Deliver a usable artifact and verification evidence,

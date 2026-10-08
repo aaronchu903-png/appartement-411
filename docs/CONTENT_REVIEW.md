@@ -3,6 +3,8 @@
 Reviewer: Experience role pass performed by the same Bot that wrote the code (no separate agent, no human native-speaker review).
 This is AI review, **not** expert certification. Content version reviewed: `d1-2026-10-08a`. Reviewed in the running artifact (screenshots in `evidence/`), not only in source.
 
+> 2026-10-08 rename (v0.1.1, content `d1-2026-10-08b`): the project is now **L’Appartement 411**. The only content change from 08a is the apartment number in two Chinese narration lines and the title-screen alt text (404 号 → 411 号) plus the door-plaque pixel digits. No French line, learning target, probe item or help text changed, so this review still applies to 08b.
+
 ## French lines (all from CURRICULUM_WEEK_01 Day 1)
 
 | Line | Use | Label | Verdict |

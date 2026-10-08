@@ -1,6 +1,6 @@
 # Stage 01 - A Reliable First-Week Learning Alpha
 
-**Current build stage. First active task: A404-001.**
+**Current build stage. First active task: A411-001.**
 
 ## Outcome
 
@@ -29,7 +29,7 @@ Prefer one stable preview address on an approved destination. A local artifact i
 
 ## Delivery sequence
 
-### A404-001 - Move-in day
+### A411-001 - Move-in day
 
 Deliver one complete roughly 10-15 minute episode, with the option to pause much sooner. Implement Day 1 from `CURRICULUM_WEEK_01.md`: introductions, plant care, the cat encounter, an actual choice, a small comprehension check and a diary entry.
 
@@ -37,13 +37,13 @@ On return, preserve the exact scene, decision, care state and learning attempts.
 
 Finish and check this slice before building the remaining six. Do not fill an hour with repetitions or seven empty chapter buttons. Mark future episodes honestly as unavailable.
 
-### A404-002 - A continuous first week
+### A411-002 - A continuous first week
 
 Extend Days 2-6 one complete episode at a time. Carry forward decisions and language evidence; introduce the later characters and locations only as the episodes require them. Add contextual recurrence and per-target support adjustment. A "day" is a learning chapter, not a compulsory real-date login.
 
 The founder's real feedback should shape at least one improvement. Do not restart their progress to demonstrate a new version.
 
-### A404-003 - Verify and stabilize
+### A411-003 - Verify and stabilize
 
 Add Day 7, the baseline-aware first-week check and a later retention check. Validate the end-to-end records, data recovery and the feedback path. Report observed abilities, assistance still needed and missing evidence separately.
 
@@ -92,4 +92,4 @@ Keep the last stable release when a core gate fails. Do not replace the active e
 
 ## First execution
 
-Read the package, inspect the available project and account environment, and start A404-001. Choose the smallest viable technical route. Handle reversible work directly; bundle only indispensable authorization requests. Leave `STATE.md` with the actual artifact, checks and next step. Establish a recurring cycle only under the conditions in `CEO.md`.
+Read the package, inspect the available project and account environment, and start A411-001. Choose the smallest viable technical route. Handle reversible work directly; bundle only indispensable authorization requests. Leave `STATE.md` with the actual artifact, checks and next step. Establish a recurring cycle only under the conditions in `CEO.md`.

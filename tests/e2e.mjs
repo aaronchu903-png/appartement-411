@@ -10,7 +10,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EV = path.join(ROOT, 'evidence');
 fs.mkdirSync(EV, { recursive: true });
 const URL_SRC = 'file://' + path.join(ROOT, 'index.html');
-const URL_DIST = 'file://' + path.join(ROOT, 'dist', 'appartement-404.html');
+const URL_DIST = 'file://' + path.join(ROOT, 'dist', 'appartement-411.html');
 const CHROME = process.env.CHROME || '/usr/bin/google-chrome';
 const results = [];
 function check(gate, name, pass, detail) { results.push({ gate, check: name, pass: !!pass, detail: detail ?? null }); console.log((pass ? 'PASS' : 'FAIL') + ' [' + gate + '] ' + name + (detail ? ' — ' + (typeof detail === 'string' ? detail : JSON.stringify(detail)) : '')); }
@@ -27,11 +27,11 @@ async function newPage(opts = {}) {
   page.requests = [];
   page.on('request', r => page.requests.push(r.url()));
   await page.goto(opts.url || URL_SRC);
-  await page.waitForFunction(() => window.A404 && A404.Audio && A404.Audio.status !== 'unknown', null, { timeout: 8000 });
+  await page.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown', null, { timeout: 8000 });
   return { ctx, page };
 }
-const st = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('a404.save') || 'null'));
-const raw = (page) => page.evaluate(() => localStorage.getItem('a404.save'));
+const st = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('a411.save') || 'null'));
+const raw = (page) => page.evaluate(() => localStorage.getItem('a411.save'));
 async function tap(page, sel) { await page.locator(sel).first().click(); await page.waitForTimeout(60); }
 async function shot(page, name) { await page.waitForTimeout(450); const p = path.join(EV, name); await page.screenshot({ path: p, fullPage: false }); return p; }
 async function lineNext(page) { await tap(page, '#btnNext'); }
@@ -60,9 +60,9 @@ try {
   // ================= A. Main path, real headless Chrome (no French voice -> reading fallback) =================
   {
     const { ctx, page } = await newPage({ ctx: { permissions: ['clipboard-read', 'clipboard-write'] } });
-    const audio = await page.evaluate(() => ({ status: A404.Audio.status, reason: A404.Audio.reason }));
+    const audio = await page.evaluate(() => ({ status: A411.Audio.status, reason: A411.Audio.reason }));
     check('Audio', 'headless Chrome voice detection reported honestly', audio.status === 'unavailable', audio);
-    check('Usable entry', 'version visible on title', /App v0\.1\.0 · 内容 d1-2026-10-08a · 存档 schema v1/.test(await page.textContent('#versionFooter')));
+    check('Usable entry', 'version visible on title', /App v0\.1\.1 · 内容 d1-2026-10-08b · 存档 schema v1/.test(await page.textContent('#versionFooter')));
     await shot(page, '01-title-390.png');
     check('Mobile presentation', 'no horizontal overflow on title (390px)', await noOverflow(page));
     const naDays = await page.evaluate(() => [...document.querySelectorAll('.days li.na')].map(li => ({ t: li.textContent, buttons: li.querySelectorAll('button,a').length })));
@@ -113,7 +113,7 @@ try {
     check('Complete interaction', 'pause overlay mid-scene with saved position', (await page.textContent('#pauseMsg')).includes('植物角（第 2 步）'));
     await shot(page, '05-pause-mid-scene.png');
     const beforeReload = await raw(page);
-    await page.reload(); await page.waitForFunction(() => A404.Audio.status !== 'unknown');
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
     const noTs = (r) => { const o = JSON.parse(r); delete o.updatedAt; return JSON.stringify(o); };
     check('Persistence', 'close/reopen keeps save identical (except updatedAt timestamp)', noTs(await raw(page)) === noTs(beforeReload));
     { const A = JSON.parse(beforeReload), Bq = JSON.parse(await raw(page)); const d = []; (function walk(a, b, p) { if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) { if (JSON.stringify(a) !== JSON.stringify(b)) d.push(p + ': ' + JSON.stringify(a) + ' -> ' + JSON.stringify(b)); return; } for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) walk(a[k], b[k], p + '.' + k); })(A, Bq, ''); const d2 = d.filter(x => !x.startsWith('.updatedAt')); if (d2.length) console.log('DIFF', d2); }
@@ -142,7 +142,7 @@ try {
     let a1 = await answerFor(); await tap(page, `[data-option="${a1.func}"]`);
     let a2 = await answerFor(); await tap(page, `[data-option="${a2.func === 'tells' ? 'asks' : 'tells'}"]`);
     // reload mid-probe -> resume at trial 3
-    await page.reload(); await page.waitForFunction(() => A404.Audio.status !== 'unknown');
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
     await tap(page, '#btnContinue');
     check('Persistence', 'mid-probe resume at trial 3/4', (await page.textContent('#trialTitle')).includes('第 3/4'));
     await tap(page, '[data-option="unsure"]');
@@ -165,7 +165,7 @@ try {
     check('Complete interaction', 'episode completes to end screen', await page.isVisible('#endCard'));
     await shot(page, '10-end.png');
     // reopen: everything retained
-    await page.reload(); await page.waitForFunction(() => A404.Audio.status !== 'unknown');
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
     s = await st(page);
     check('Persistence', 'after reload: journal verbatim, plant, choice, attempts, status', s.diary.journal[0].original === J && s.plant.careState === 'watered' && s.world.choices.d1_secret === 'keep' && s.progress.status === 'complete' && s.learning.attempts.length >= 15, { journalVerbatim: s.diary.journal[0].original === J, attempts: s.learning.attempts.length });
     await tap(page, '#btnDiary');
@@ -177,7 +177,7 @@ try {
     const summary = await page.inputValue('#summaryText');
     check('Privacy', 'summary excludes private journal text and nickname by default', !summary.includes('chat secret') && !summary.includes('Alex') && summary.includes('私人日记：未包含'), null);
     check('Learning validity', 'summary reports the self-introduction as supported (help was used) and journal writing separately', summary.includes('自我介绍（打字）：完整句型') && /自我介绍.*有提示/.test(summary) && summary.includes('日记写作'));
-    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.0', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
+    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.1', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
     await tap(page, '#btnCopySummary');
     const clip = await page.evaluate(() => navigator.clipboard.readText().catch(e => 'ERR ' + e.message));
     const shownNow = await page.inputValue('#summaryText');
@@ -191,7 +191,7 @@ try {
     const exportPath = path.join(EV, 'test-export-synthetic.json');
     await dl.saveAs(exportPath);
     const exported = JSON.parse(fs.readFileSync(exportPath, 'utf8'));
-    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.0' && dl.suggestedFilename().startsWith('appartement-404-save-'), dl.suggestedFilename());
+    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.1' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
     // bad imports on the existing save
     const before = await raw(page);
     const badFile = path.join(EV, '..', 'tests', 'fixtures', 'bad-truncated.json');
@@ -219,7 +219,7 @@ try {
   // ================= B. Voice-available path (injected fake fr-FR voice) — checks play/replay recording & probe cues =================
   {
     const { ctx, page } = await newPage({ init: FAKE_VOICE });
-    const a = await page.evaluate(() => ({ s: A404.Audio.status, v: A404.Audio.voiceName }));
+    const a = await page.evaluate(() => ({ s: A411.Audio.status, v: A411.Audio.voiceName }));
     check('Audio', '[simulated voice] fr-FR voice detected and used', a.s === 'available', a);
     await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
     await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('已播放'));
@@ -231,8 +231,8 @@ try {
     check('Audio', '[simulated voice] playback + replay recorded (audioStatus=played, replays=1)', ex && ex.audioStatus === 'played' && ex.replays === 1 && ex.modality === 'listening+reading', ex);
     check('Learning validity', 'baseline skip recorded', s.learning.baseline.status === 'skipped');
     // jump to probe via a crafted state (keeps test short): set scene to probe intro
-    await page.evaluate(() => { const x = A404.App.state(); x.progress.scene = 'probe'; x.progress.step = 0; A404.App.persist('test'); });
-    await page.reload(); await page.waitForFunction(() => A404.Audio.status === 'available');
+    await page.evaluate(() => { const x = A411.App.state(); x.progress.scene = 'probe'; x.progress.step = 0; A411.App.persist('test'); });
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status === 'available');
     await tap(page, '#btnContinue'); await tap(page, '#btnProbeStart');
     await page.waitForTimeout(400);
     const leak = await page.evaluate(() => { const h = document.getElementById('screen').innerHTML; return { appelle: /appelle/i.test(h), comment: /comment/i.test(h), names: /Camille|Noé/.test(h), portraitsMarker: false }; });
@@ -300,10 +300,10 @@ try {
   {
     const v0 = JSON.parse(fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'save-v0-synthetic.json'), 'utf8'));
     const { ctx, page } = await newPage();
-    await page.evaluate((v) => { localStorage.clear(); localStorage.setItem('a404.save', JSON.stringify(v)); }, v0);
-    await page.reload(); await page.waitForFunction(() => A404.Audio.status !== 'unknown');
+    await page.evaluate((v) => { localStorage.clear(); localStorage.setItem('a411.save', JSON.stringify(v)); }, v0);
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
     const s = await st(page);
-    const backups = await page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith('a404.backup.')).map(k => [k, localStorage.getItem(k)]));
+    const backups = await page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith('a411.backup.')).map(k => [k, localStorage.getItem(k)]));
     const bk = backups.find(([k]) => k.includes('pre-migration-v0'));
     check('Recovery', 'v0 save migrated to schema 1 with original backed up first', s.schemaVersion === 1 && s.meta.migratedFrom === 0 && bk && JSON.stringify(JSON.parse(bk[1])) === JSON.stringify(v0));
     check('Recovery', 'v0 data preserved (scene, plant, choice, journal verbatim, attempts unknown-type)', s.progress.scene === 'plant' && s.plant.careLog.length === 1 && s.plant.lastCareAt === new Date(v0.wateredAt).toISOString() && s.plant.careState === 'thirsty' /* 2023 care -> thirsty now (recoverable) */ && s.world.choices.d1_secret === 'keep' && s.diary.journal[0].original === v0.journal && s.learning.attempts.every(a => a.resultType === 'unknown'));
@@ -312,6 +312,57 @@ try {
     check('Recovery', 'migrated save is playable (resumes in plant scene)', (await page.textContent('#lineBody')).includes('C’est ta plante'));
     await shot(page, '15-v0-migrated-resume.png');
     await ctx.close();
+  }
+
+  // ================= D2. Rename (Appartement 404 -> L’Appartement 411): old saves survive =================
+  {
+    // (1) The real v0.1.0 build (frozen copy of dist/appartement-404.html) writes a save under a404.save;
+    //     the new build in the same origin (file:// here; on GitHub Pages both repo paths share
+    //     aaronchu903-png.github.io) must adopt it.
+    const LEGACY_URL = 'file://' + path.join(ROOT, 'tests', 'fixtures', 'legacy-v0.1.0-appartement-404.html');
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'zh-CN' });
+    const old = await ctx.newPage(); old.errors = []; old.on('pageerror', e => old.errors.push(e.message));
+    await old.goto(LEGACY_URL);
+    await old.waitForFunction(() => window.A404 && A404.Audio && A404.Audio.status !== 'unknown', null, { timeout: 8000 });
+    await old.evaluate(() => localStorage.clear()); await old.reload();
+    await old.waitForFunction(() => window.A404 && A404.Audio && A404.Audio.status !== 'unknown');
+    await tap(old, '#btnStart'); await tap(old, '#btnBaselineSkip'); await tap(old, '#btnKnock');
+    await lineNext(old); await tap(old, '#greetSalut'); await old.waitForSelector('#speakerTag'); await lineNext(old);
+    const oldRaw = await old.evaluate(() => localStorage.getItem('a404.save'));
+    const oldSave = JSON.parse(oldRaw);
+    const oldLine = await old.textContent('#lineBody');
+    check('Recovery', '[rename] real v0.1.0 build wrote its save under a404.save', !!oldRaw && oldSave.appVersion === '0.1.0' && old.errors.length === 0, { scene: oldSave.progress.scene, step: oldSave.progress.step });
+    await old.close();
+    const pg = await ctx.newPage(); pg.errors = []; pg.on('pageerror', e => pg.errors.push(e.message));
+    await pg.goto(URL_DIST);
+    await pg.waitForFunction(() => window.A411 && A411.Audio && A411.Audio.status !== 'unknown', null, { timeout: 8000 });
+    const ls = await pg.evaluate(() => ({ a411: localStorage.getItem('a411.save'), a404: localStorage.getItem('a404.save'),
+      bk: Object.keys(localStorage).filter(k => k.startsWith('a411.backup.') && k.includes('pre-rename-a404')).map(k => localStorage.getItem(k)) }));
+    const ns = JSON.parse(ls.a411 || 'null');
+    check('Recovery', '[rename] new build adopted the old save into a411.save (same saveId/scene/step), verbatim backup of a404.save made first',
+      ns && ns.saveId === oldSave.saveId && ns.progress.scene === oldSave.progress.scene && ns.progress.step === oldSave.progress.step && ls.bk.length === 1 && ls.bk[0] === ls.a404 && JSON.parse(ls.a404).saveId === oldSave.saveId,
+      { scene: ns && ns.progress.scene, step: ns && ns.progress.step });
+    check('Recovery', '[rename] player is told the old save was kept', (await pg.textContent('#screen')).includes('改名前'));
+    await tap(pg, '#btnContinue');
+    check('Recovery', '[rename] resumes at the exact line the old build was on', (await pg.textContent('#lineBody')) === oldLine, oldLine.slice(0, 60));
+    await shot(pg, '18-rename-old-save-resumed.png');
+    await pg.reload(); await pg.waitForFunction(() => A411.Audio.status !== 'unknown');
+    check('Recovery', '[rename] old a404.save never modified by the new build', (await pg.evaluate(() => localStorage.getItem('a404.save'))) === ls.a404);
+    check('Recovery', '[rename] after reload: no repeat migration, no notice', !(await pg.textContent('#screen')).includes('改名前') &&
+      (await pg.evaluate(() => Object.keys(localStorage).filter(k => k.includes('pre-rename-a404')).length)) === 1);
+    check('Mobile presentation', '[rename] no JS errors', pg.errors.length === 0, pg.errors);
+    await ctx.close();
+
+    // (2) An old exported file (appartement-404-save-*.json from v0.1.0) imports through the UI.
+    const B = await newPage();
+    await tap(B.page, '#btnSave');
+    const oldExport = path.join(ROOT, 'tests', 'fixtures', 'export-v0.1.0-appartement-404.json');
+    await B.page.setInputFiles('#importFile', oldExport); await B.page.waitForSelector('#importMsg.banner, #versionFooter');
+    const imp = await st(B.page); const want = JSON.parse(fs.readFileSync(oldExport, 'utf8'));
+    const strip2 = x => { const c = JSON.parse(JSON.stringify(x)); delete c.updatedAt; delete c.meta.audio.checkedAt; delete c.meta.audio.status; delete c.meta.audio.voice; return c; };
+    check('Recovery', '[rename] old v0.1.0 exported file imports losslessly via the 存档 panel', imp && JSON.stringify(strip2(imp)) === JSON.stringify(strip2(want)) && imp.diary.journal[0].original === want.diary.journal[0].original);
+    check('Mobile presentation', '[rename] no JS errors on old-file import', B.page.errors.length === 0, B.page.errors);
+    await B.ctx.close();
   }
 
   // ================= E. Errors never trap the player =================
@@ -331,9 +382,9 @@ try {
     const { ctx, page } = await newPage({ url: URL_DIST });
     await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
     const ok = (await page.textContent('#lineBody')).includes('Bonjour');
-    await page.reload(); await page.waitForFunction(() => A404.Audio.status !== 'unknown');
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status !== 'unknown');
     const resume = (await page.textContent('#btnContinue')).includes('门口');
-    check('Usable entry', 'dist/appartement-404.html (single file) plays and resumes from file://', ok && resume && page.errors.length === 0);
+    check('Usable entry', 'dist/appartement-411.html (single file) plays and resumes from file://', ok && resume && page.errors.length === 0);
     check('Usable entry', 'single file makes no external requests', page.requests.every(u => u === URL_DIST), page.requests);
     await ctx.close();
   } else check('Usable entry', 'dist single file exists', false, 'run npm run build first');

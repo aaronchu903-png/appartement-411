@@ -2,9 +2,9 @@
   "env": {
     "chrome": "154.0.8037.57",
     "viewport": "390x844 @2x, isMobile, hasTouch",
-    "date": "2026-10-08T19:02:20.538Z"
+    "date": "2026-10-08T19:58:26.934Z"
   },
-  "passed": 63,
+  "passed": 72,
   "failed": 0,
   "results": [
     {
@@ -124,10 +124,10 @@
       "check": "name attempt: writing, full_structure, supported (Chinese help shown), original preserved",
       "pass": true,
       "detail": {
-        "id": "16akb5gbmuzwlg8g",
+        "id": "r7107e4tmuzyllpn",
         "target": "try_je_mappelle",
         "lesson": "d1",
-        "contentVersion": "d1-2026-10-08a",
+        "contentVersion": "d1-2026-10-08b",
         "modality": "writing",
         "audioStatus": "not_used",
         "visibleSupport": {
@@ -146,7 +146,7 @@
         "context": "d1.name.input",
         "speaker": "camille",
         "stimulus": null,
-        "at": "2026-10-08T19:02:24.880Z"
+        "at": "2026-10-08T19:58:31.211Z"
       }
     },
     {
@@ -299,13 +299,13 @@
       "gate": "Usable entry",
       "check": "copy-to-clipboard copies the visible summary text",
       "pass": true,
-      "detail": "Appartement 404 · 反馈摘要\n版本：app 0.1.0 · 内容"
+      "detail": "L’Appartement 411 · 反馈摘要\n版本：app 0.1.1 · "
     },
     {
       "gate": "Recovery",
       "check": "export downloads valid JSON with schema/app version",
       "pass": true,
-      "detail": "appartement-404-save-20261008-1202.json"
+      "detail": "appartement-411-save-20261008-1258.json"
     },
     {
       "gate": "Recovery",
@@ -348,10 +348,10 @@
       "check": "[simulated voice] playback + replay recorded (audioStatus=played, replays=1)",
       "pass": true,
       "detail": {
-        "id": "sxmz0hezmuzwlso2",
+        "id": "zjuhzs6lmuzylwm7",
         "target": "bonjour",
         "lesson": "d1",
-        "contentVersion": "d1-2026-10-08a",
+        "contentVersion": "d1-2026-10-08b",
         "modality": "listening+reading",
         "audioStatus": "played",
         "visibleSupport": {
@@ -372,7 +372,7 @@
         "context": "d1.doorway.1.cam_bonjour",
         "speaker": "camille",
         "stimulus": null,
-        "at": "2026-10-08T19:02:40.994Z"
+        "at": "2026-10-08T19:58:45.343Z"
       }
     },
     {
@@ -444,11 +444,11 @@
       "check": "[simulated voice] probe stimuli were sent to speech engine",
       "pass": true,
       "detail": [
-        "Salut ! Je m'appelle Noé.",
+        "Tu t'appelles comment ?",
         "Tu t'appelles comment ?",
         "Tu t'appelles comment ?",
         "Je m'appelle Camille.",
-        "Tu t'appelles comment ?"
+        "Salut ! Je m'appelle Noé."
       ]
     },
     {
@@ -537,6 +537,66 @@
       "detail": null
     },
     {
+      "gate": "Recovery",
+      "check": "[rename] real v0.1.0 build wrote its save under a404.save",
+      "pass": true,
+      "detail": {
+        "scene": "doorway",
+        "step": 4
+      }
+    },
+    {
+      "gate": "Recovery",
+      "check": "[rename] new build adopted the old save into a411.save (same saveId/scene/step), verbatim backup of a404.save made first",
+      "pass": true,
+      "detail": {
+        "scene": "doorway",
+        "step": 4
+      }
+    },
+    {
+      "gate": "Recovery",
+      "check": "[rename] player is told the old save was kept",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Recovery",
+      "check": "[rename] resumes at the exact line the old build was on",
+      "pass": true,
+      "detail": "▼ Noé 🔇 无语音（阅读）Salut ! Je m’appelle Noé.嗨！我叫 Noé。"
+    },
+    {
+      "gate": "Recovery",
+      "check": "[rename] old a404.save never modified by the new build",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Recovery",
+      "check": "[rename] after reload: no repeat migration, no notice",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[rename] no JS errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "gate": "Recovery",
+      "check": "[rename] old v0.1.0 exported file imports losslessly via the 存档 panel",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "gate": "Mobile presentation",
+      "check": "[rename] no JS errors on old-file import",
+      "pass": true,
+      "detail": []
+    },
+    {
       "gate": "Complete interaction",
       "check": "injected runtime error shows recovery sheet and play continues at same step",
       "pass": true,
@@ -544,7 +604,7 @@
     },
     {
       "gate": "Usable entry",
-      "check": "dist/appartement-404.html (single file) plays and resumes from file://",
+      "check": "dist/appartement-411.html (single file) plays and resumes from file://",
       "pass": true,
       "detail": null
     },
@@ -553,8 +613,8 @@
       "check": "single file makes no external requests",
       "pass": true,
       "detail": [
-        "file:///workspace/appartement-404/dist/appartement-404.html",
-        "file:///workspace/appartement-404/dist/appartement-404.html"
+        "file:///workspace/appartement-411/dist/appartement-411.html",
+        "file:///workspace/appartement-411/dist/appartement-411.html"
       ]
     }
   ]

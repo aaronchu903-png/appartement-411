@@ -1,4 +1,4 @@
-/* Appartement 404 — French audio via the device's own speech engine (Web Speech API).
+/* L’Appartement 411 — French audio via the device's own speech engine (Web Speech API).
  * Status values are what the browser reports: 'played' = speech engine reported it finished.
  * A muted phone can still report 'played'; the player can always replay or read instead. */
 (function (root) {
@@ -56,6 +56,6 @@
   };
   A.stop = function () { try { if (synth) synth.cancel(); } catch (e) { } };
 
-  root.A404 = root.A404 || {};
-  root.A404.Audio = A;
+  root.A411 = root.A411 || {};
+  root.A411.Audio = A;
 })(typeof window !== 'undefined' ? window : globalThis);

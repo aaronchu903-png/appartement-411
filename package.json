@@ -1,7 +1,7 @@
 {
-  "name": "appartement-404",
-  "version": "0.1.0",
-  "description": "Appartement 404 — Day 1 static browser game",
+  "name": "appartement-411",
+  "version": "0.1.1",
+  "description": "L’Appartement 411 — Day 1 static browser game",
   "scripts": {
     "test": "node --test tests/logic.test.js",
     "e2e": "node tests/e2e.mjs",

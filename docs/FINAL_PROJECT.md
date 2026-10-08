@@ -1,4 +1,4 @@
-# Appartement 404 - Final Project
+# L’Appartement 411 - Final Project
 
 ## 1. The destination
 
@@ -42,7 +42,7 @@ Each player has a personal continuity. Multiplayer, shared economies and trading
 
 The default view is a navigable 2D pixel neighborhood, preferably an oblique overhead view. The player walks into apartments, shops and public spaces, notices changes, handles objects and meets people. Exploration has value without always initiating a quest.
 
-Start the world concept with a dense, interconnected district rather than an empty full-scale Paris: Appartement 404, a bakery/cafe, language school, a small shop, a courtyard or garden, and connecting streets. The mature world can expand when places create meaningful relationships and activities.
+Start the world concept with a dense, interconnected district rather than an empty full-scale Paris: L’Appartement 411, a bakery/cafe, language school, a small shop, a courtyard or garden, and connecting streets. The mature world can expand when places create meaningful relationships and activities.
 
 ### Watch and intervene
 

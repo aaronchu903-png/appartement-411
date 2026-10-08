@@ -177,7 +177,7 @@ test('feedback summary excludes journal text and nickname by default; includes o
   s.diary.journal.push({ id: 'j2', at: L.nowISO(), original: 'SHARED-LINE-456', usedTemplate: false, suggestedRewrite: null, share: true });
   const def = L.buildSummary(s, { note: 'son trop bas' });
   assert.ok(!def.includes('PRIVATE-LINE-123')); assert.ok(!def.includes('SHARED-LINE-456')); assert.ok(!def.includes('SecretNick'));
-  assert.ok(def.includes('0.1.0')); assert.ok(def.includes('son trop bas'));
+  assert.ok(def.includes(L.APP_VERSION)); assert.ok(def.includes('L’Appartement 411')); assert.ok(def.includes('son trop bas'));
   const inc = L.buildSummary(s, { includeJournal: true });
   assert.ok(inc.includes('SHARED-LINE-456')); assert.ok(!inc.includes('PRIVATE-LINE-123'));
 });
@@ -196,4 +196,93 @@ test('every scene step type and line reference is defined', () => {
     if (st.event) assert.ok(C.CHRONICLE[st.event], st.event);
   }
   assert.equal(C.DAYS.filter(d => d.available).length, 1);
+});
+
+// ---------- Rename 2026-10-08: Appartement 404 (a404.*) -> L’Appartement 411 (a411.*) ----------
+const fs = require('node:fs');
+const path = require('node:path');
+const OLD_EXPORT = fs.readFileSync(path.join(__dirname, 'fixtures', 'export-v0.1.0-appartement-404.json'), 'utf8');
+const stripVolatile = x => { const c = JSON.parse(JSON.stringify(x)); delete c.updatedAt; delete c.meta.recovery; return c; };
+
+test('rename: new keys are a411.*, legacy keys are a404.*', () => {
+  assert.equal(L.KEY, 'a411.save'); assert.equal(L.TMP_KEY, 'a411.save.tmp'); assert.equal(L.BACKUP_PREFIX, 'a411.backup.');
+  assert.equal(L.LEGACY_KEY, 'a404.save'); assert.equal(L.LEGACY_TMP_KEY, 'a404.save.tmp'); assert.equal(L.LEGACY_BACKUP_PREFIX, 'a404.backup.');
+});
+
+test('rename: an old a404.save (v0.1.0) is adopted: backup first, verified write to a411.save, original untouched', () => {
+  const ls = memLS(); ls.setItem('a404.save', OLD_EXPORT);
+  const order = []; const set = ls.setItem; ls.setItem = (k, v) => { order.push(k); set(k, v); };
+  const st = L.createStorage(ls);
+  const r = st.load();
+  assert.ok(r.save, 'save loaded');
+  assert.deepEqual(stripVolatile(r.save), stripVolatile(JSON.parse(OLD_EXPORT)), 'progress, choices, journal, attempts all preserved');
+  assert.equal(r.save.diary.journal[0].original, JSON.parse(OLD_EXPORT).diary.journal[0].original, 'journal verbatim');
+  assert.equal(ls.getItem('a404.save'), OLD_EXPORT, 'old key byte-identical (never deleted or rewritten)');
+  assert.ok(ls.getItem('a411.save'), 'new key written');
+  assert.deepEqual(stripVolatile(JSON.parse(ls.getItem('a411.save'))), stripVolatile(JSON.parse(OLD_EXPORT)));
+  const bk = st.listBackups().find(b => b.label === 'pre-rename-a404');
+  assert.ok(bk && ls.getItem(bk.key) === OLD_EXPORT, 'verbatim backup under the new prefix');
+  assert.ok(order.indexOf(bk.key) < order.indexOf('a411.save'), 'backup written before the new save');
+  assert.ok(r.save.meta.recovery.some(x => /a404\.save -> a411\.save/.test(x.action)), 'rename recorded in meta.recovery');
+  assert.ok(r.notices.some(n => n.includes('改名前')), 'player is told');
+  // second load reads the new key only; no further backups or notices
+  const r2 = L.createStorage(ls).load();
+  assert.equal(r2.notices.length, 0); assert.equal(st.listBackups().filter(b => b.label === 'pre-rename-a404').length, 1);
+});
+
+test('rename: if writing the new key fails, the old save is still loaded, kept intact, and adopted on the next load', () => {
+  let fail = true;
+  const ls = memLS(k => fail && k.startsWith('a411.save')); ls.setItem('a404.save', OLD_EXPORT);
+  const r = L.createStorage(ls).load();
+  assert.ok(r.save && r.save.player.nickname === 'Alex', 'still playable from memory');
+  assert.ok(r.notices.some(n => n.includes('写入新位置失败')));
+  assert.equal(ls.getItem('a404.save'), OLD_EXPORT); assert.equal(ls.getItem('a411.save'), null);
+  fail = false;
+  const r2 = L.createStorage(ls).load();
+  assert.ok(r2.save && ls.getItem('a411.save')); assert.equal(ls.getItem('a404.save'), OLD_EXPORT);
+});
+
+test('rename: an existing a411.save wins over a404.save; legacy tmp-only and legacy v0 are adopted too', () => {
+  const ls = memLS(); const cur = L.newSave(); cur.player.nickname = 'New'; L.createStorage(ls).write(cur);
+  ls.setItem('a404.save', OLD_EXPORT);
+  assert.equal(L.createStorage(ls).load().save.player.nickname, 'New');
+  assert.equal(ls.getItem('a404.save'), OLD_EXPORT);
+
+  const ls2 = memLS(); ls2.setItem('a404.save.tmp', OLD_EXPORT);
+  const r2 = L.createStorage(ls2).load();
+  assert.equal(r2.save.player.nickname, 'Alex'); assert.ok(ls2.getItem('a411.save')); assert.equal(ls2.getItem('a404.save.tmp'), OLD_EXPORT);
+
+  const ls3 = memLS(); ls3.setItem('a404.save', JSON.stringify(V0));
+  const r3 = L.createStorage(ls3).load();
+  assert.equal(r3.save.schemaVersion, 1); assert.equal(r3.save.player.nickname, 'Mimi'); assert.ok(ls3.getItem('a411.save'));
+  assert.equal(ls3.getItem('a404.save'), JSON.stringify(V0));
+});
+
+test('rename: corrupt a404.save is backed up and not adopted; old key still untouched', () => {
+  const ls = memLS(); ls.setItem('a404.save', '{"schemaVersion":1,"trunc');
+  const st = L.createStorage(ls); const r = st.load();
+  assert.equal(r.save, null); assert.equal(ls.getItem('a404.save'), '{"schemaVersion":1,"trunc');
+  assert.ok(st.listBackups().some(b => b.label === 'corrupt-main'));
+});
+
+test('rename: old a404.backup.* entries are listed (restorable) but never pruned', () => {
+  const ls = memLS(); ls.setItem('a404.backup.1000.pre-import', OLD_EXPORT);
+  const st = L.createStorage(ls);
+  for (let i = 0; i < 8; i++) st.backup('t' + i, '{}');
+  const all = st.listBackups();
+  assert.equal(all.filter(b => !b.legacy).length, 5);
+  const old = all.find(b => b.legacy);
+  assert.ok(old && old.key === 'a404.backup.1000.pre-import' && ls.getItem(old.key) === OLD_EXPORT);
+  assert.ok(st.importText(st.readBackup(old.key), null).ok, 'legacy backup restorable');
+});
+
+test('rename: an old exported file (appartement-404-save-*.json, v0.1.0) imports losslessly', () => {
+  const ls = memLS(); const st = L.createStorage(ls);
+  const cur = L.newSave(); st.write(cur);
+  const r = st.importText(OLD_EXPORT, cur);
+  assert.equal(r.ok, true); assert.equal(r.migratedFrom, null);
+  const loaded = st.load().save;
+  const strip = x => { const c = JSON.parse(JSON.stringify(x)); delete c.updatedAt; return c; };
+  assert.deepEqual(strip(loaded), strip(JSON.parse(OLD_EXPORT)));
+  assert.equal(loaded.appVersion, '0.1.0', 'origin version kept honestly');
 });

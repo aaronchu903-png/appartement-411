@@ -1,11 +1,14 @@
-/* Appartement 404 — Day 1 authored content.
+/* L’Appartement 411 — Day 1 authored content.
  * French text follows CURRICULUM_WEEK_01.md (Day 1). Reviewed in the Experience pass
  * (AI review, not native-expert certification) — see docs/CONTENT_REVIEW.md.
  * NBSP (\u00A0) before ! and ? follows French typography and prevents orphaned marks. */
 (function (root) {
   'use strict';
   var NB = '\u00A0';
-  var CONTENT_VERSION = 'd1-2026-10-08a';
+  // 08b (2026-10-08): project renamed to L’Appartement 411 — only the apartment number in the Chinese
+  // narration (404 -> 411) changed. French lines, targets, probe items and help are identical to 08a,
+  // so learning evidence recorded under 08a stays comparable.
+  var CONTENT_VERSION = 'd1-2026-10-08b';
 
   // label: understand | atmosphere | baseline
   var LINES = {
@@ -56,7 +59,7 @@
 
   // Chronicle templates: rendered only from events that actually happened.
   var CHRONICLE = {
-    arrived: function () { return '你来到了 404 号公寓门口，敲了门。'; },
+    arrived: function () { return '你来到了 411 号公寓门口，敲了门。'; },
     greeted: function (p) { return p && p.choice === 'wave' ? '你向开门的人挥了挥手。' : '你回应了招呼：«' + (p && p.fr || '') + '»'; },
     met_camille: function () { return 'Camille 开了门：« Salut' + NB + '! Je m\u2019appelle Camille. »'; },
     met_noe: function () { return 'Noé 出现了：« Salut' + NB + '! Je m\u2019appelle Noé. »'; },
@@ -132,7 +135,7 @@
 
   var api = { CONTENT_VERSION: CONTENT_VERSION, LINES: LINES, SPEAKERS: SPEAKERS, BASELINE: BASELINE, PROBE: PROBE,
     CHRONICLE: CHRONICLE, DAYS: DAYS, SCENES: SCENES, ORDER: ORDER, SCENE_ZH: SCENE_ZH, TARGETS: TARGETS };
-  root.A404 = root.A404 || {};
-  root.A404.Content = api;
+  root.A411 = root.A411 || {};
+  root.A411.Content = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

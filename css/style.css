@@ -1,4 +1,4 @@
-/* Appartement 404 — phone-first styles. System fonts for readable accents and Chinese; pixel art only in the scene canvas. */
+/* L’Appartement 411 — phone-first styles. System fonts for readable accents and Chinese; pixel art only in the scene canvas. */
 :root { --bg:#f6f1e7; --ink:#1f1d1a; --muted:#5b554c; --card:#fffdf8; --line:#d9cfbf; --accent:#2f5d8a; --accent-ink:#fff; --warn:#8a3b12; --ok:#2f6e36; --cam:#2f7d5b; --noe:#b5521f; }
 * { box-sizing: border-box; }
 html, body { margin:0; background:var(--bg); color:var(--ink); }

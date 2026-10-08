@@ -2,7 +2,7 @@
 
 | Asset | Source | Licence / status |
 |---|---|---|
-| All pixel art (apartment building, doorway, 404 plaque digits, plant corner, plant states, living room, Camille, Noé, Croissant, diary desk, neutral speaker icon, night scene) | Authored in code in `js/art.js` for this project on 2026-10-08 (palette + character maps + rectangles). No reference images were traced or copied. | Original project work. |
+| All pixel art (apartment building, doorway, 411 plaque digits (3×5 pixel glyphs; “1” added 2026-10-08 for the rename), plant corner, plant states, living room, Camille, Noé, Croissant, diary desk, neutral speaker icon, night scene) | Authored in code in `js/art.js` for this project on 2026-10-08 (palette + character maps + rectangles). No reference images were traced or copied. | Original project work. |
 | Fonts | None bundled. Uses the device's system fonts (PingFang SC / Noto Sans CJK / Microsoft YaHei / system-ui) so French accents and Chinese render natively. | n/a |
 | French voice | The device's own speech engine via the Web Speech API (`speechSynthesis`), fr-FR voice when present. Nothing is recorded or bundled. | Device/OS voice; quality and availability vary per phone. |
 | Icons | Unicode emoji rendered by the device. | n/a |

@@ -1,14 +1,21 @@
-/* Appartement 404 — pure logic: save schema, validation, migration, storage,
+/* L’Appartement 411 — pure logic: save schema, validation, migration, storage,
  * world/plant/learning rules and summaries. No DOM access; runs in browser and Node. */
 (function (root) {
   'use strict';
-  var C = (root.A404 && root.A404.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
+  var C = (root.A411 && root.A411.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.1.0';
-  var KEY = 'a404.save';
-  var TMP_KEY = 'a404.save.tmp';
-  var BACKUP_PREFIX = 'a404.backup.';
+  var APP_VERSION = '0.1.1';
+  var KEY = 'a411.save';
+  var TMP_KEY = 'a411.save.tmp';
+  var BACKUP_PREFIX = 'a411.backup.';
+  // Keys used before the 2026-10-08 rename (v0.1.0, "Appartement 404"). Read-only: this app never
+  // writes or deletes them. They are adopted once into the new keys when no new save exists yet.
+  // (GitHub Pages serves both the old and new repo paths from the same origin, so a save made on
+  // /appartement-404/ is visible to /appartement-411/ under these keys.)
+  var LEGACY_KEY = 'a404.save';
+  var LEGACY_TMP_KEY = 'a404.save.tmp';
+  var LEGACY_BACKUP_PREFIX = 'a404.backup.';
   var MAX_BACKUPS = 5;
   var MAX_IMPORT_CHARS = 1000000;
 
@@ -205,7 +212,7 @@
       try {
         var key = BACKUP_PREFIX + Date.now() + '.' + label;
         ls.setItem(key, typeof raw === 'string' ? raw : JSON.stringify(raw));
-        var keys = listBackups();
+        var keys = listBackups().filter(function (b) { return !b.legacy; }); // legacy backups are never pruned
         while (keys.length > MAX_BACKUPS) { ls.removeItem(keys.shift().key); }
         return key;
       } catch (e) { return null; }
@@ -214,9 +221,11 @@
       var out = [];
       for (var i = 0; i < ls.length; i++) {
         var k = ls.key(i);
-        if (k && k.indexOf(BACKUP_PREFIX) === 0) {
-          var parts = k.slice(BACKUP_PREFIX.length).split('.');
-          out.push({ key: k, time: Number(parts[0]), label: parts.slice(1).join('.') });
+        var pre = k && k.indexOf(BACKUP_PREFIX) === 0 ? BACKUP_PREFIX : (k && k.indexOf(LEGACY_BACKUP_PREFIX) === 0 ? LEGACY_BACKUP_PREFIX : null);
+        if (pre) {
+          var parts = k.slice(pre.length).split('.');
+          var legacy = pre === LEGACY_BACKUP_PREFIX;
+          out.push({ key: k, time: Number(parts[0]), label: parts.slice(1).join('.') + (legacy ? '（改名前的旧备份）' : ''), legacy: legacy });
         }
       }
       return out.sort(function (a, b) { return a.time - b.time; });
@@ -239,6 +248,26 @@
       var raw = null;
       try { raw = ls.getItem(KEY); } catch (e) { return { save: null, notices: ['无法读取本机存储'], storageOk: false }; }
       var tmp = null; try { tmp = ls.getItem(TMP_KEY); } catch (e) { }
+      var fromLegacy = false;
+      if (!raw && !tmp) {
+        // Adopt a pre-rename save. Order: verbatim backup under the new prefix -> parse/validate (or v0
+        // migrate) -> verified write to the new key. The old keys are left untouched, so if any step
+        // fails the original is still there and the next load simply tries again.
+        var lraw = null, ltmp = null;
+        try { lraw = ls.getItem(LEGACY_KEY); ltmp = ls.getItem(LEGACY_TMP_KEY); } catch (e) { }
+        if (lraw || ltmp) {
+          fromLegacy = true;
+          backup('pre-rename-a404', lraw || ltmp);
+          raw = lraw; tmp = ltmp;
+        }
+      }
+      function adopted(save, via) {
+        if (!fromLegacy) return save;
+        save.meta.recovery = Array.isArray(save.meta.recovery) ? save.meta.recovery : [];
+        save.meta.recovery.push({ at: nowISO(now), action: 'storage key renamed ' + via + ' -> ' + KEY + ' (Appartement 404 -> L’Appartement 411); original left in place' });
+        notices.push('已沿用改名前（Appartement 404）的存档，进度不变。');
+        return save;
+      }
       function tryRaw(r) {
         if (!r) return null;
         var obj; try { obj = JSON.parse(r); } catch (e) { return { bad: true }; }
@@ -257,17 +286,21 @@
         return { bad: true };
       }
       var r = tryRaw(raw);
-      if (r && r.save) { if (r.migrated) write(r.save); return { save: r.save, notices: notices, storageOk: true }; }
+      if (r && r.save) {
+        if (fromLegacy) { adopted(r.save, LEGACY_KEY); var wl = write(r.save); if (!wl.ok) notices.push('旧存档已读取，但写入新位置失败——请先导出存档。'); }
+        else if (r.migrated) write(r.save);
+        return { save: r.save, notices: notices, storageOk: true };
+      }
       if (r && r.bad) {
         backup('corrupt-main', raw);
         var rt = tryRaw(tmp);
-        if (rt && rt.save) { notices.push('主存档损坏，已从临时副本恢复（损坏版本已备份）。'); write(rt.save); return { save: rt.save, notices: notices, storageOk: true }; }
+        if (rt && rt.save) { notices.push('主存档损坏，已从临时副本恢复（损坏版本已备份）。'); adopted(rt.save, LEGACY_TMP_KEY); write(rt.save); return { save: rt.save, notices: notices, storageOk: true }; }
         notices.push('存档无法读取，已备份损坏的数据并开始新游戏。');
         return { save: null, notices: notices, storageOk: true };
       }
       if (!raw && tmp) {
         var rt2 = tryRaw(tmp);
-        if (rt2 && rt2.save) { notices.push('已从未完成的写入中恢复存档。'); write(rt2.save); return { save: rt2.save, notices: notices, storageOk: true }; }
+        if (rt2 && rt2.save) { notices.push('已从未完成的写入中恢复存档。'); adopted(rt2.save, LEGACY_TMP_KEY); write(rt2.save); return { save: rt2.save, notices: notices, storageOk: true }; }
       }
       return { save: null, notices: notices, storageOk: true };
     }
@@ -437,7 +470,7 @@
     opts = opts || {};
     var L = [];
     var sc = save.progress.scene;
-    L.push('Appartement 404 · 反馈摘要');
+    L.push('L’Appartement 411 · 反馈摘要');
     L.push('版本：app ' + save.appVersion + ' · 内容 ' + save.contentVersion + ' · 存档 schema v' + save.schemaVersion);
     L.push('进度：Day ' + save.progress.episode + ' · ' + (C.SCENE_ZH[sc] || sc) + '（' + sc + ' 第 ' + (save.progress.step + 1) + ' 步）· ' + (save.progress.status === 'complete' ? '已完成' : '进行中'));
     var au = save.meta.audio || {};
@@ -488,14 +521,15 @@
   }
 
   var api = {
-    SCHEMA_VERSION: SCHEMA_VERSION, APP_VERSION: APP_VERSION, KEY: KEY, TMP_KEY: TMP_KEY, BACKUP_PREFIX: BACKUP_PREFIX, ENUM: ENUM,
+    SCHEMA_VERSION: SCHEMA_VERSION, APP_VERSION: APP_VERSION, KEY: KEY, TMP_KEY: TMP_KEY, BACKUP_PREFIX: BACKUP_PREFIX,
+    LEGACY_KEY: LEGACY_KEY, LEGACY_TMP_KEY: LEGACY_TMP_KEY, LEGACY_BACKUP_PREFIX: LEGACY_BACKUP_PREFIX, ENUM: ENUM,
     newSave: newSave, validateSave: validateSave, migrate: migrate, migrateV0toV1: migrateV0toV1, detectVersion: detectVersion,
     parseImport: parseImport, createStorage: createStorage, recordEvent: recordEvent, applySecretChoice: applySecretChoice,
     applyName: applyName, waterPlant: waterPlant, plantStatus: plantStatus, makeAttempt: makeAttempt, probeResultType: probeResultType,
     probeModality: probeModality, classifyNameResponse: classifyNameResponse, recommendSupport: recommendSupport,
     buildReview: buildReview, probeStats: probeStats, buildSummary: buildSummary, chronicleText: chronicleText, clone: clone, nowISO: nowISO
   };
-  root.A404 = root.A404 || {};
-  root.A404.Logic = api;
+  root.A411 = root.A411 || {};
+  root.A411.Logic = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

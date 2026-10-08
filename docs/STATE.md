@@ -2,15 +2,15 @@
 
 Working record. Replace unknowns with observed facts; preserve any established project state found during startup rather than resetting it to this template.
 
-Last updated: 2026-10-08 ~12:10 PT (America/Vancouver) — CTO + Experience passes for A404-001, performed by one Bot as separate role passes (no separate agents were available or created).
+Last updated: 2026-10-08 ~13:05 PT (America/Vancouver) — project renamed to L’Appartement 411 (v0.1.1). Task IDs are A411-00x; they were formerly A404-00x (A404-001 = A411-001, same task).
 
 | Field | Current record |
 |---|---|
 | Stage | 01 - Reliable first-week learning alpha. |
-| First task | A404-001 - Move-in day: **implemented, locally verified; awaiting first phone play.** |
-| Existing repository/workspace | Inspected 2026-10-08: nothing named appartement/a404 in `/workspace` or `/home/box` (only the spec pack in `/workspace/upload1/Appartement_404/`). `gh` CLI present but **not authenticated** → GitHub check skipped. Cursor "Origin" code host: no namespaces. Nothing to preserve; new project created. |
-| Stable version / entry point | **v0.1.0**, content `d1-2026-10-08a`, save schema v1. Local only. Entry: `/workspace/appartement-404/index.html` (multi-file) or `/workspace/appartement-404/dist/appartement-404.html` (single file, ~114 KB, everything inlined). |
-| Latest artifact | `/workspace/appartement-404/` (source, tests, docs, evidence); `dist/appartement-404.html`; `dist/appartement-404-v0.1.0.zip`. Local git repo in the project folder (no remote, nothing pushed). |
+| First task | A411-001 (formerly A404-001) - Move-in day: **implemented, locally verified; awaiting first phone play.** |
+| Existing repository/workspace | Inspected 2026-10-08: nothing named appartement/a404 in `/workspace` or `/home/box` (only the spec pack in `/workspace/upload1/Appartement_404/`, renamed 2026-10-08 to `/workspace/upload1/LAppartement_411/`). `gh` CLI present but **not authenticated** → GitHub check skipped. Cursor "Origin" code host: no namespaces. Nothing to preserve; new project created. |
+| Stable version / entry point | **v0.1.1**, content `d1-2026-10-08b`, save schema v1. Entry: `/workspace/appartement-411/index.html` (multi-file) or `/workspace/appartement-411/dist/appartement-411.html` (single file, everything inlined). Old path `/workspace/appartement-404` is a symlink. |
+| Latest artifact | `/workspace/appartement-411/` (source, tests, docs, evidence); `dist/appartement-411.html`; `dist/appartement-411-v0.1.1.zip`; `dist/LAppartement_411_docs.zip` (renamed original spec pack). Local git repo in the project folder (no remote). |
 | Tool/account capabilities | Box: Node 20, Chrome 154 (headless via `playwright-core`), Python 3, ffmpeg, sudo. No GitHub auth. No paid services used. `speech-dispatcher`/`espeak-ng` were installed on the box during an attempt to give headless Chrome a French voice (did not work; harmless, can be removed). |
 | Available quota / billing state | Additional spend: USD 0. No accounts created, no paid assets/services. |
 | Working collaborators | One Bot doing CTO + Experience passes. No independent reviewer; no human native-speaker review yet. |
@@ -23,11 +23,12 @@ Last updated: 2026-10-08 ~12:10 PT (America/Vancouver) — CTO + Experience pass
 
 ## Next action
 
-1. Founder decision on a $0 phone-accessible preview (below). Until then the founder can try the single file on Android Chrome (copy `dist/appartement-404.html` to the phone and open it); iPhone opening of a local HTML file is unreliable (Files/Quick Look does not run the game properly), so iPhone needs a hosted preview.
-2. First founder play of Day 1 on the phone → record: did French audio play (voice name shown in 设置 → 测试法语语音), readability, any stuck point, paste of the feedback summary.
-3. Use that feedback for the first feedback-led improvement (Stage 01 "Improvement" gate), then start A404-002 (Day 2) without resetting the founder's save.
+1. First founder play of Day 1 on the phone (preview URL below) → record: did French audio play (voice name shown in 设置 → 测试法语语音), readability, any stuck point, paste of the feedback summary.
+2. Use that feedback for the first feedback-led improvement (Stage 01 "Improvement" gate), then start A411-002 (Day 2) without resetting the founder's save. Saves made under v0.1.0 (`a404.save`) are adopted automatically into `a411.save`.
 
 ## Current blocker or decision
+
+**Resolved 2026-10-08:** founder approved GitHub Pages (option A below). The decision text is kept for the record.
 
 **One bundled decision for the founder:** approve a free, phone-reachable preview location for v0.1.0 (this is "first exposure"). Options at $0, none set up:
 
@@ -41,9 +42,9 @@ Proposed: **A** (or C immediately on Android while A is pending).
 
 ## Latest delivery and evidence
 
-**Artifact:** v0.1.0 / content `d1-2026-10-08a` / schema v1. Day 1 "Bienvenue chez nous": skippable baseline → doorway (Camille, Noé; speaker tag + replay) → "Tu t’appelles comment ?" (nickname / sentence / skip) → plant corner (water once or later; pause) → Camille leaves, Croissant, secrecy choice (keep / decline) → 4-trial neutral recognition check → diary (factual chronicle + optional verbatim journal) → end. Days 2–7 listed as "尚未开放" with no buttons. Title screen also offers a once-per-day plant quick visit.
+**Artifact (current): v0.1.1 / content `d1-2026-10-08b` / schema v1.** First delivered artifact was v0.1.0 / `d1-2026-10-08a`. Day 1 "Bienvenue chez nous": skippable baseline → doorway (Camille, Noé; speaker tag + replay) → "Tu t’appelles comment ?" (nickname / sentence / skip) → plant corner (water once or later; pause) → Camille leaves, Croissant, secrecy choice (keep / decline) → 4-trial neutral recognition check → diary (factual chronicle + optional verbatim journal) → end. Days 2–7 listed as "尚未开放" with no buttons. Title screen also offers a once-per-day plant quick visit.
 
-**Environment of checks:** headless Google Chrome 154.0.8037.57 on the Linux box, 390×844 @2x mobile emulation (touch), plus 375×667 for the alternate path; `file://` URLs. Unit tests: Node 20 `node:test`. Runs on 2026-10-08 ~12:02 PT. Results: `npm test` **18/18 pass**; `npm run e2e` **63/63 checks pass** (`evidence/e2e-results.json`).
+**Environment of checks:** headless Google Chrome 154.0.8037.57 on the Linux box, 390×844 @2x mobile emulation (touch), plus 375×667 for the alternate path; `file://` URLs. Unit tests: Node 20 `node:test`. v0.1.0 run (2026-10-08 ~12:02 PT): `npm test` 18/18, `npm run e2e` 63/63. **v0.1.1 re-run (2026-10-08 ~13:00 PT): `npm test` 25/25 pass; `npm run e2e` 72/72 pass** (`evidence/e2e-results.json`), including rename migration checks.
 
 | Gate | Result | Evidence / limits |
 |---|---|---|
@@ -65,7 +66,7 @@ Proposed: **A** (or C immediately on Android while A is pending).
 - No speech capture (by design; spoken production unverified).
 - Episode length not measured with a real player (auto path takes seconds; intended 10–15 min reading/listening).
 
-**Recovery / delivery status:** stable local version v0.1.0 committed in the local git repo. Nothing deployed. Rollback = previous commit / previous zip.
+**Recovery / delivery status:** stable version v0.1.1 committed in the local git repo and published to the preview. Rollback = previous commit / previous zip (v0.1.0 build kept as `tests/fixtures/legacy-v0.1.0-appartement-404.html`).
 
 ## Decisions that change the plan
 
@@ -76,9 +77,18 @@ Proposed: **A** (or C immediately on Android while A is pending).
 
 - Founder approved (chat, 2026-10-08) a free GitHub Pages preview.
 - gh CLI on the box logged in as `aaronchu903-png` via device flow (scopes: repo, workflow, gist, read:org).
-- Public repo `aaronchu903-png/appartement-404` contains ONLY the built single file (`index.html` = `dist/appartement-404.html` v0.1.0), `.nojekyll`, README. Spec docs, tests, evidence and source stay local in `/workspace/appartement-404` (local git) and are NOT published.
-- Preview URL: https://aaronchu903-png.github.io/appartement-404/ — served file byte-identical to local dist (cmp). Headless Chrome at 390x844 loaded it with 0 page errors (evidence/17-live-pages-390.png).
-- Deploy dir: `/workspace/a404-pages` (git, branch main). Rollback: `git revert`/reset to previous commit there and push.
+- Public repo was `aaronchu903-png/appartement-404` (v0.1.0), renamed 2026-10-08 to `aaronchu903-png/appartement-411`. It contains ONLY the built single file (`index.html` = `dist/appartement-411.html`), `.nojekyll`, README. Spec docs, tests, evidence and source stay local in `/workspace/appartement-411` (local git) and are NOT published.
+- Preview URL: https://aaronchu903-png.github.io/appartement-411/ — served file byte-identical to local dist (cmp). Headless Chrome at 390x844 loaded it with 0 page errors (evidence/19-live-pages-411-390.png). v0.1.0 evidence: evidence/17-live-pages-390.png.
+- Deploy dir: `/workspace/a411-pages` (git, branch main). `/workspace/a404-pages` is a symlink to it. Rollback: `git revert`/reset to previous commit there and push.
 - Real-phone audio, real-phone persistence: still untested; awaits founder play.
-- Repeat low-risk preview updates: not yet authorized; ask founder for narrow standing permission per CEO.md.
-- 2026-10-08 12:50 PT: Founder granted standing permission for small preview updates (bug fixes, text, new day) to this Pages URL; notify after each publish. Spend, new platforms, wider exposure still need approval.
+- 2026-10-08 12:50 PT: Founder granted standing permission for small preview updates (bug fixes, text, new day) to the Pages preview; notify after each publish. Spend, new platforms, wider exposure still need approval.
+
+## Rename (2026-10-08 ~12:52 PT, founder decision in chat)
+
+- Whole project renamed from **Appartement 404** to **L’Appartement 411** (typographic apostrophe U+2019 everywhere in UI and docs; slugs stay ASCII: `appartement-411`).
+- Task IDs A404-001/002/003 → **A411-001/002/003** (same tasks; "formerly A404").
+- App version **v0.1.0 → v0.1.1**. Content version **d1-2026-10-08a → d1-2026-10-08b**: the only content change is the apartment number in Chinese narration and the pixel door plaque (404 → 411). French lines, targets, probe items and help are unchanged, so learning evidence stays comparable.
+- Save schema stays **v1**. Storage keys moved `a404.save` / `a404.save.tmp` / `a404.backup.*` → `a411.*`. On load, when no new save exists, the old key is adopted: verbatim backup `a411.backup.<time>.pre-rename-a404` first, then a verified write to `a411.save`; the old keys are never written or deleted (a failed write leaves the original in place and retries next open). Old exported `appartement-404-save-*.json` files import unchanged. Because both Pages paths share the origin `aaronchu903-png.github.io`, a save made on the old URL is adopted by the new one.
+- Folders: `/workspace/appartement-411` and `/workspace/a411-pages`; `/workspace/appartement-404` and `/workspace/a404-pages` are symlinks. Original spec pack renamed `/workspace/upload1/LAppartement_411` (symlink at `Appartement_404`), and zipped to `dist/LAppartement_411_docs.zip`.
+- Verification (2026-10-08 ~13:00 PT): `npm test` 25/25 (7 new rename tests), `npm run e2e` 72/72 including the real v0.1.0 build writing `a404.save` and v0.1.1 resuming the exact line, plus old-file import via the 存档 panel. Screenshots evidence/01 (title shows 411), evidence/18 (resumed save, door plaque 411).
+- Old preview URL behaviour after the repo rename: see the note added below after the deploy check.

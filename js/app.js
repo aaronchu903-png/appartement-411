@@ -1,7 +1,7 @@
-/* Appartement 404 — Day 1 player (UI + scene engine). */
+/* L’Appartement 411 — Day 1 player (UI + scene engine). */
 (function () {
   'use strict';
-  var C = A404.Content, L = A404.Logic, Art = A404.Art, Au = A404.Audio;
+  var C = A411.Content, L = A411.Logic, Art = A411.Art, Au = A411.Audio;
   var $screen = document.getElementById('screen');
   var $overlay = document.getElementById('overlay');
   var $toast = document.getElementById('toast');
@@ -67,7 +67,7 @@
     return true;
   }
   function initStorage() {
-    try { var ls = window.localStorage; var k = 'a404.probe'; ls.setItem(k, '1'); ls.removeItem(k); storage = L.createStorage(ls); }
+    try { var ls = window.localStorage; var k = 'a411.probe'; ls.setItem(k, '1'); ls.removeItem(k); storage = L.createStorage(ls); }
     catch (e) { storage = null; storageOk = false; }
   }
 
@@ -181,9 +181,9 @@
   function renderTitle() {
     var hasSave = !!S && (S.progress.scene !== 'baseline' || S.progress.step > 0 || S.learning.baseline.status !== 'not_started');
     var wrap = h('div', { class: 'fade-in' });
-    wrap.appendChild(stage('title', { alt: '夜晚的公寓楼，404 号窗户亮着灯，窗台上有一盆植物' }));
+    wrap.appendChild(stage('title', { alt: '夜晚的公寓楼，411 号窗户亮着灯，窗台上有一盆植物' }));
     var main = h('div', { class: 'pad' },
-      h('h1', { lang: 'fr', text: 'Appartement 404' }),
+      h('h1', { lang: 'fr', text: 'L’Appartement 411' }),
       h('p', { class: 'muted' }, h('span', { lang: 'fr', text: 'Day 1 · Bienvenue chez nous' }), ' — 搬家第一天'));
     var col = h('div', { class: 'col' });
     if (hasSave && S.progress.status !== 'complete') {
@@ -455,7 +455,7 @@
   R.knock = function (step) {
     $screen.appendChild(stage('doorway', artFor(step)));
     $screen.appendChild(h('div', { class: 'dialogue fade-in' },
-      h('p', { text: '你拖着行李，来到 404 号公寓门口。今天开始，你是这里的第三位室友。' }),
+      h('p', { text: '你拖着行李，来到 411 号公寓门口。今天开始，你是这里的第三位室友。' }),
       h('div', { class: 'row' }, btn('🚪 敲门', function () { L.recordEvent(S, 'arrived'); next(); }, 'primary grow', { id: 'btnKnock' }))));
   };
 
@@ -752,7 +752,7 @@
         btn('⬇️ 导出存档（JSON 文件）', function () {
           persist('export');
           var d = new Date(); var stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
-          download('appartement-404-save-' + stamp + '.json', JSON.stringify(S, null, 2));
+          download('appartement-411-save-' + stamp + '.json', JSON.stringify(S, null, 2));
           toast('已导出。');
         }, 'primary', { id: 'btnExport' }),
         btn('📋 显示存档文本（可复制保存）', function () {
@@ -843,6 +843,6 @@
       if (ui.view !== 'title') rerenderStep();
     });
   }
-  window.A404.App = { state: function () { return S; }, render: render, persist: persist }; // debug/test hook
+  window.A411.App = { state: function () { return S; }, render: render, persist: persist }; // debug/test hook
   boot();
 })();

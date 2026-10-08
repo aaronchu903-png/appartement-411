@@ -1,4 +1,4 @@
-/* Appartement 404 — original pixel art, authored in code for this project (2026-10-08).
+/* L’Appartement 411 — original pixel art, authored in code for this project (2026-10-08).
  * No external images, fonts or assets. Provenance: docs/ASSETS.md. 96x64 logical pixels. */
 (function (root) {
   'use strict';
@@ -87,7 +87,7 @@
     }
   }
   // 3x5 digits for the door plaque
-  var DIG = { '4': ['1.1', '1.1', '111', '..1', '..1'], '0': ['111', '1.1', '1.1', '1.1', '111'] };
+  var DIG = { '4': ['1.1', '1.1', '111', '..1', '..1'], '0': ['111', '1.1', '1.1', '1.1', '111'], '1': ['.1.', '11.', '.1.', '.1.', '111'] };
   function digits(ctx, str, x, y, c) {
     for (var i = 0; i < str.length; i++) { var d = DIG[str[i]]; for (var r = 0; r < 5; r++) for (var k = 0; k < 3; k++) if (d[r][k] === '1') px(ctx, x + i * 4 + k, y + r, 1, 1, c); }
   }
@@ -164,13 +164,13 @@
         px(ctx, 23 + c * 14, 18 + r * 14, 9, 9, lit ? '#ffd77a' : '#3b4660');
         if (lit) { plant(ctx, 24 + c * 14, 18 + r * 14 - 2, true); }
       }
-      digits(ctx, '404', 42, 58, '#ffd77a');
+      digits(ctx, '411', 42, 58, '#ffd77a');
       return;
     }
     if (name === 'doorway') {
       room(ctx, '#c9b79a', '#8d7a63');
       door(ctx, 38, 6, st.door === 'open');
-      px(ctx, 62, 12, 9, 7, '#e8dcc0'); digits(ctx, '404', 61, 13, '#3a2a1e');
+      px(ctx, 60, 12, 13, 7, '#e8dcc0'); digits(ctx, '411', 61, 13, '#3a2a1e'); // plaque spans all three 3px digits + 1px margin
       if (st.door === 'open') {
         if (st.noe) { person(ctx, 'noe', st.noe, 50, 22); if (spk === 'noe') marker(ctx, 53, 17); }
         if (st.camille) { person(ctx, 'camille', st.camille, 40, 25); if (spk === 'camille') marker(ctx, 43, 20); }
@@ -233,6 +233,6 @@
   }
 
   var api = { W: W, H: H, scene: scene };
-  root.A404 = root.A404 || {};
-  root.A404.Art = api;
+  root.A411 = root.A411 || {};
+  root.A411.Art = api;
 })(typeof window !== 'undefined' ? window : globalThis);
