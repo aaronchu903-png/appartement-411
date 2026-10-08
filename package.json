@@ -1,9 +1,9 @@
 {
   "name": "appartement-411",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "L’Appartement 411 — Day 1 static browser game",
   "scripts": {
-    "test": "node --test tests/logic.test.js",
+    "test": "node --test tests/logic.test.js tests/audio.test.js",
     "e2e": "node tests/e2e.mjs",
     "build": "node tools/build.mjs"
   },

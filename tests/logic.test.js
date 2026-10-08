@@ -286,3 +286,30 @@ test('rename: an old exported file (appartement-404-save-*.json, v0.1.0) imports
   assert.deepEqual(strip(loaded), strip(JSON.parse(OLD_EXPORT)));
   assert.equal(loaded.appVersion, '0.1.0', 'origin version kept honestly');
 });
+
+test('v0.1.2: attempts carry the voice/rate that actually played; summary reports it honestly', () => {
+  const s = L.newSave();
+  s.meta.audio = { engine: 'speechSynthesis', status: 'available', voice: 'Marie (fr-FR)', voices: { camille: 'Marie (fr-FR)', noe: 'Thomas (fr-FR)' },
+    quality: { camille: 'standard', noe: 'standard' }, distinctVoices: true, rate: 0.9, frenchVoiceCount: 7, checkedAt: null };
+  s.learning.attempts.push(L.makeAttempt({ target: 'bonjour', modality: 'listening', audioStatus: 'played', audioVoice: { name: 'Marie (fr-FR)', quality: 'standard', rate: 0.9, pitch: 1 }, resultType: 'exposure' }));
+  s.learning.attempts.push(L.makeAttempt({ target: 'salut', modality: 'reading', audioStatus: 'unavailable', resultType: 'exposure' }));
+  s.learning.attempts.push(L.makeAttempt({ target: 'salut', modality: 'listening', audioStatus: 'played', resultType: 'exposure' })); // pre-0.1.2 style
+  assert.deepEqual(s.learning.attempts[0].audioVoice, { name: 'Marie (fr-FR)', quality: 'standard', rate: 0.9, pitch: 1 });
+  assert.equal(s.learning.attempts[1].audioVoice, null);
+  assert.equal(L.validateSave(s).ok, true);
+  const sum = L.buildSummary(s, {});
+  assert.match(sum, /Camille=Marie \(fr-FR\)（标准）· Noé=Thomas \(fr-FR\)（标准）/);
+  assert.match(sum, /语速 0\.9/);
+  assert.match(sum, /成功 2 · 失败\/不可用 1/);
+  assert.match(sum, /Marie \(fr-FR\)（标准，语速 0\.9） ×1/);
+  assert.match(sum, /未记录声音（v0\.1\.1 及以前） ×1/);
+  assert.equal(L.APP_VERSION, '0.1.2');
+});
+
+test('v0.1.2: a v0.1.1 save (no audioVoice fields, speechRate 0.85) still validates unchanged', () => {
+  const fs = require('node:fs'), path = require('node:path');
+  const old = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'export-v0.1.0-appartement-404.json'), 'utf8'));
+  const r = L.parseImport(JSON.stringify(old));
+  assert.equal(r.ok, true);
+  assert.equal(r.save.settings.speechRate, old.settings.speechRate);
+});

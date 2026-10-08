@@ -56,13 +56,30 @@ const FAKE_VOICE = () => {
   window.SpeechSynthesisUtterance = function (t) { this.text = t; };
 };
 
+// iPhone-like voice list (iOS 18 style: localised novelty + Eloquence voices listed before the real ones).
+const FAKE_IOS = () => {
+  const spoken = []; window.__spoken2 = spoken;
+  const mk = (name, lang, uri) => ({ name, lang, voiceURI: uri, default: true, localService: true });
+  const voices = [mk('Bonnes nouvelles', 'fr-FR', 'com.apple.speech.synthesis.voice.GoodNews'), mk('Eddy (français (France))', 'fr-FR', 'com.apple.eloquence.fr-FR.Eddy'),
+    mk('Grand-mère (français (France))', 'fr-FR', 'com.apple.eloquence.fr-FR.Grandma'), mk('Amélie', 'fr-CA', 'com.apple.voice.compact.fr-CA.Amelie'),
+    mk('Marie', 'fr-FR', 'com.apple.voice.compact.fr-FR.Marie'), mk('Thomas', 'fr-FR', 'com.apple.voice.compact.fr-FR.Thomas'), mk('Samantha', 'en-US', 'com.apple.voice.compact.en-US.Samantha')];
+  const fake = { speaking: false, _cur: null,
+    getVoices() { return voices; }, addEventListener() {}, removeEventListener() {},
+    cancel() { const u = this._cur; this._cur = null; if (u && u.onerror) setTimeout(() => u.onerror({ error: 'interrupted' }), 0); },
+    speak(u) { this._cur = u; spoken.push({ text: u.text, voice: u.voice && u.voice.name, rate: u.rate, pitch: u.pitch }); setTimeout(() => { if (this._cur !== u) return; u.onstart && u.onstart(); setTimeout(() => { if (this._cur !== u) return; this._cur = null; u.onend && u.onend(); }, 80); }, 20); },
+    pause() {}, resume() {} };
+  Object.defineProperty(window, 'speechSynthesis', { value: fake, configurable: true });
+  window.SpeechSynthesisUtterance = function (t) { this.text = t; };
+};
+const IPHONE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1';
+
 try {
   // ================= A. Main path, real headless Chrome (no French voice -> reading fallback) =================
   {
     const { ctx, page } = await newPage({ ctx: { permissions: ['clipboard-read', 'clipboard-write'] } });
     const audio = await page.evaluate(() => ({ status: A411.Audio.status, reason: A411.Audio.reason }));
     check('Audio', 'headless Chrome voice detection reported honestly', audio.status === 'unavailable', audio);
-    check('Usable entry', 'version visible on title', /App v0\.1\.1 · 内容 d1-2026-10-08b · 存档 schema v1/.test(await page.textContent('#versionFooter')));
+    check('Usable entry', 'version visible on title', /App v0\.1\.2 · 内容 d1-2026-10-08b · 存档 schema v1/.test(await page.textContent('#versionFooter')));
     await shot(page, '01-title-390.png');
     check('Mobile presentation', 'no horizontal overflow on title (390px)', await noOverflow(page));
     const naDays = await page.evaluate(() => [...document.querySelectorAll('.days li.na')].map(li => ({ t: li.textContent, buttons: li.querySelectorAll('button,a').length })));
@@ -177,7 +194,7 @@ try {
     const summary = await page.inputValue('#summaryText');
     check('Privacy', 'summary excludes private journal text and nickname by default', !summary.includes('chat secret') && !summary.includes('Alex') && summary.includes('私人日记：未包含'), null);
     check('Learning validity', 'summary reports the self-introduction as supported (help was used) and journal writing separately', summary.includes('自我介绍（打字）：完整句型') && /自我介绍.*有提示/.test(summary) && summary.includes('日记写作'));
-    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.1', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
+    check('Usable entry', 'summary carries version/episode/evidence/help/note', ['0.1.2', 'L’Appartement 411', 'Day 1', '小练习', '使用的帮助', 'Test note'].every(k => summary.includes(k)));
     await tap(page, '#btnCopySummary');
     const clip = await page.evaluate(() => navigator.clipboard.readText().catch(e => 'ERR ' + e.message));
     const shownNow = await page.inputValue('#summaryText');
@@ -191,7 +208,7 @@ try {
     const exportPath = path.join(EV, 'test-export-synthetic.json');
     await dl.saveAs(exportPath);
     const exported = JSON.parse(fs.readFileSync(exportPath, 'utf8'));
-    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.1' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
+    check('Recovery', 'export downloads valid JSON with schema/app version', exported.schemaVersion === 1 && exported.appVersion === '0.1.2' && dl.suggestedFilename().startsWith('appartement-411-save-'), dl.suggestedFilename());
     // bad imports on the existing save
     const before = await raw(page);
     const badFile = path.join(EV, '..', 'tests', 'fixtures', 'bad-truncated.json');
@@ -256,6 +273,55 @@ try {
     check('Audio', '[simulated voice] speech text uses plain apostrophes/spaces for TTS', (await page.evaluate(() => window.__spoken)).every(t => !/[\u2019\u00A0]/.test(t)));
     const spoken = await page.evaluate(() => window.__spoken);
     check('Audio', '[simulated voice] probe stimuli were sent to speech engine', spoken.length >= 5, spoken);
+    await ctx.close();
+  }
+
+  // ================= B2. v0.1.2 voice selection on an iPhone-like voice list (simulated) =================
+  {
+    const { ctx, page } = await newPage({ init: FAKE_IOS, ctx: { userAgent: IPHONE_UA } });
+    const asg = await page.evaluate(() => ({ cam: A411.Audio.assign.camille.name, noe: A411.Audio.assign.noe.name, distinct: A411.Audio.assign.distinct, rate: A411.Audio.rate(), n: A411.Audio.voices.length }));
+    check('Audio', '[v0.1.2 simulated iPhone] robotic Eloquence/novelty voices skipped; Camille=Marie (fr-FR), Noé=Thomas, distinct', asg.cam === 'Marie' && asg.noe === 'Thomas' && asg.distinct && asg.rate === 0.9 && asg.n === 6, asg);
+    await tap(page, '#btnStart'); await tap(page, '#btnBaselineSkip'); await tap(page, '#btnKnock');
+    await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('已播放'));
+    await lineNext(page); await tap(page, '#greetBonjour');
+    await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('已播放'));
+    await lineNext(page); // cam_intro
+    await page.waitForFunction(() => document.querySelector('#audioState') && document.querySelector('#audioState').textContent.includes('已播放'));
+    await lineNext(page); // noe_intro
+    const sp = await page.evaluate(() => window.__spoken2.slice());
+    check('Audio', '[v0.1.2 simulated iPhone] Camille lines spoken with Marie, Noé with Thomas, rate 0.9, pitch 1 (no pitch-shifting with distinct voices)',
+      sp[0].voice === 'Marie' && sp.find(x => /Noé/.test(x.text)).voice === 'Thomas' && sp.every(x => x.rate === 0.9 && x.pitch === 1) && sp.every(x => !/Eddy|Grand|nouvelles/.test(x.voice)), sp);
+    let s = await st(page);
+    const ex = s.learning.attempts.filter(a => a.evidenceKind === 'encounter');
+    check('Learning validity', '[v0.1.2] each heard line records the voice, quality and rate that played', ex.length === 3 && ex[0].audioVoice && ex[0].audioVoice.name === 'Marie (fr-FR)' && ex[0].audioVoice.rate === 0.9 && ex[2].audioVoice.name === 'Thomas (fr-FR)' && ex[2].audioVoice.quality === 'standard', ex.map(a => a.audioVoice));
+    // settings: voice picker + tip + speed
+    await tap(page, '#btnPause'); await page.locator('#overlay button', { hasText: '设置' }).click(); await page.waitForTimeout(100);
+    const tip = await page.textContent('#voiceTip');
+    const firstTip = await page.evaluate(() => document.querySelector('#voiceTip > .card').id);
+    check('Mobile presentation', '[v0.1.2] iPhone tip shown first, iOS path in English menu names, honest Safari caveat in Chinese', firstTip === 'voiceTipIos' && tip.includes('Settings › Accessibility › Spoken Content › Voices › French') && tip.includes('Enhanced') && tip.includes('Premium') && tip.includes('Apple 的限制'), firstTip);
+    const opts = await page.evaluate(() => [...document.querySelectorAll('#voice_noe option')].map(o => o.textContent));
+    check('Mobile presentation', '[v0.1.2] voice picker lists French voices with quality labels; robotic ones marked 不推荐', opts.length === 7 && opts[0].startsWith('自动') && opts.some(o => /Eddy.*不推荐/.test(o)) && !opts.some(o => /Samantha/.test(o)), opts);
+    await page.locator('#voiceSettings').scrollIntoViewIfNeeded();
+    await shot(page, '20-voice-settings-iphone.png');
+    check('Mobile presentation', '[v0.1.2] settings sheet: no horizontal overflow, controls ≥44px', (await noOverflow(page)) && (await touchTargetsOk(page)).length === 0, await touchTargetsOk(page));
+    const amKey = await page.evaluate(() => A411.Audio.voices.find(v => v.name === 'Amélie').key);
+    await page.selectOption('#voice_noe', amKey); await page.waitForTimeout(250);
+    await tap(page, '#rate075'); await page.waitForTimeout(250);
+    await tap(page, '#btnAudioTestNoe'); await page.waitForTimeout(250);
+    const last = await page.evaluate(() => window.__spoken2.at(-1));
+    check('Audio', '[v0.1.2] test line plays in the chosen voice at the chosen speed', last.voice === 'Amélie' && last.rate === 0.75 && /Noé/.test(last.text), last);
+    const resTxt = await page.textContent('#audioTestResult');
+    check('Audio', '[v0.1.2] test result names voice, quality and speed', resTxt.includes('Amélie') && resTxt.includes('0.75'), resTxt);
+    const dev = await page.evaluate(() => JSON.parse(localStorage.getItem('a411.device.audio')));
+    const saveRaw = await raw(page);
+    check('Persistence', '[v0.1.2] voice + speed stored per device (a411.device.audio), voice choice not inside the exportable save', dev.noe === amKey && dev.rate === 0.75 && !saveRaw.includes('com.apple.voice.compact.fr-CA.Amelie|'), dev);
+    await page.reload(); await page.waitForFunction(() => A411.Audio.status === 'available');
+    const after = await page.evaluate(() => ({ noe: A411.Audio.assign.noe.name, cam: A411.Audio.assign.camille.name, rate: A411.Audio.rate() }));
+    check('Persistence', '[v0.1.2] after reload the device keeps Noé=Amélie and speed 0.75', after.noe === 'Amélie' && after.cam === 'Marie' && after.rate === 0.75, after);
+    await tap(page, '#btnSummary');
+    const summ = await page.inputValue('#summaryText');
+    check('Usable entry', '[v0.1.2] feedback summary reports voices, quality, speed and voices actually played', summ.includes('Camille=Marie (fr-FR)') && summ.includes('Noé=Amélie (fr-CA)') && summ.includes('语速 0.75') && summ.includes('实际播放的声音：Marie (fr-FR)（标准，语速 0.9） ×2'), summ.split('\n').filter(l => /语音/.test(l)));
+    check('Mobile presentation', '[v0.1.2] no JS errors', page.errors.length === 0, page.errors);
     await ctx.close();
   }
 

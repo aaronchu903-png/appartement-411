@@ -52,7 +52,17 @@
   function level() { return S ? S.settings.supportLevel : 3; }
 
   // ---------- persistence ----------
-  function syncAudioMeta() { if (S && Au.status !== 'unknown') { S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = S.meta.audio.checkedAt || L.nowISO(); } }
+  function syncAudioMeta() { if (S && Au.status !== 'unknown') { setAudioMeta(); S.meta.audio.checkedAt = S.meta.audio.checkedAt || L.nowISO(); } }
+  // What the device offers now (not proof of what was heard; per-attempt voice/rate is recorded on each attempt).
+  function setAudioMeta() {
+    var m = S.meta.audio, a = Au.assign || {};
+    m.status = Au.status; m.voice = Au.voiceName;
+    m.voices = { camille: Au.label(a.camille), noe: Au.label(a.noe), neutral: Au.label(a.neutral) };
+    m.quality = { camille: a.camille ? a.camille.quality : null, noe: a.noe ? a.noe.quality : null };
+    m.distinctVoices = !!a.distinct; m.rate = Au.rate(); m.frenchVoiceCount = (Au.voices || []).length;
+    S.settings.speechRate = Au.rate();
+  }
+  function voiceFields(info) { return info ? { name: info.voice, quality: info.quality, rate: info.rate, pitch: info.pitch } : null; }
   function persist(reason) {
     if (!S) return true;
     if (S.meta.audio.status === 'unknown') syncAudioMeta();
@@ -119,9 +129,8 @@
   }
   function speakLine(lineId) {
     var line = C.LINES[lineId];
-    var sp = C.SPEAKERS[line.speaker] || C.SPEAKERS.neutral;
-    return Au.speak(line.fr.replace(/\u00A0/g, ' '), { rate: S.settings.speechRate, pitch: sp.pitch }).then(function (st) {
-      S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = L.nowISO();
+    return Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (st) {
+      setAudioMeta(); S.meta.audio.checkedAt = L.nowISO();
       return st;
     });
   }
@@ -274,7 +283,8 @@
       target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
       visibleSupport: { level: level(), subtitles: st.sub, chinese: st.zh, gesture: true, speakerVisible: true, label: line.label },
       replays: st.replays, firstListen: null, response: null, correct: null,
-      resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker
+      resultType: 'exposure', evidenceKind: 'encounter', context: 'd1.' + S.progress.scene + '.' + S.progress.step + '.' + step.line, speaker: line.speaker,
+      audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? st.voiceInfo : null)
     }));
     [line.target].concat(line.also || []).forEach(function (t) {
       if (!t) return;
@@ -287,6 +297,7 @@
     if (isReplay) { st.replays++; S.learning.helpLog.push({ kind: 'replay', context: 'd1.' + S.progress.scene + '.' + S.progress.step, target: C.LINES[step.line].target, at: L.nowISO() }); }
     var stEl = document.getElementById('audioState'); if (stEl) stEl.textContent = '🔊 播放中…';
     return speakLine(step.line).then(function (res) {
+      if (res === 'played' || (!st.voiceInfo && res === 'failed')) st.voiceInfo = Au.last;
       st.audio = bestAudio(st.audio === 'pending' ? 'not_used' : st.audio, res);
       if (res === 'stopped') return;
       if (res === 'failed' || res === 'unavailable') st.sub = true; // fallback: reveal text, never call it listening
@@ -380,9 +391,10 @@
       reading ? null : btn(t.plays ? '🔁 再听一次' : '🔊 播放', function () {
         if (t.plays) t.replays++;
         t.plays++;
-        Au.speak(line.fr.replace(/\u00A0/g, ' '), { rate: S.settings.speechRate, pitch: (C.SPEAKERS[line.speaker] || {}).pitch }).then(function (r) {
-          S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName;
+        Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+          setAudioMeta();
           if (r === 'stopped' || ui.trial !== t) return;
+          if (r === 'played' || !t.voiceInfo) t.voiceInfo = Au.last;
           if (r === 'played') t.audio = 'played'; else if (t.audio !== 'played') t.audio = 'failed';
           rerenderStep();
         });
@@ -400,10 +412,11 @@
     $screen.appendChild(card);
     if (ui.gesture && t.audio === 'pending' && Au.status === 'available' && !t.autoTried) {
       t.autoTried = true; t.plays++;
-      Au.speak(line.fr.replace(/\u00A0/g, ' '), { rate: S.settings.speechRate, pitch: (C.SPEAKERS[line.speaker] || {}).pitch }).then(function (r) {
-        S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName;
+      Au.speak(line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (r) {
+        setAudioMeta();
         if (ui.trial !== t) return;
         if (r === 'stopped') { t.plays--; t.autoTried = false; return; }
+        t.voiceInfo = Au.last;
         t.audio = r === 'played' ? 'played' : 'failed'; rerenderStep();
       });
     }
@@ -425,7 +438,8 @@
         var correct = resp === 'unsure' ? null : resp === item.answer;
         var rec = { target: line.target, lesson: 'd1', modality: modality, audioStatus: t.audio === 'pending' ? 'not_used' : t.audio,
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false }, replays: t.replays, firstListen: t.replays === 0,
-          response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line };
+          response: resp, correct: correct, resultType: 'baseline', evidenceKind: 'baseline', context: 'd1.baseline.' + item.line, speaker: 'neutral', stimulus: item.line,
+          audioVoice: voiceFields(t.audio === 'played' || t.audio === 'failed' ? t.voiceInfo : null) };
         S.learning.attempts.push(L.makeAttempt(rec));
         S.learning.baseline.items.push({ line: item.line, response: resp, correct: correct, modality: modality, replays: t.replays, help: t.sub || t.zh });
         b.index++; ui.trial = null; ui.gesture = true; persist('baseline'); render();
@@ -610,7 +624,8 @@
           target: line.target, lesson: 'd1', modality: modality, audioStatus: audio,
           visibleSupport: { level: level(), subtitles: t.sub, chinese: t.zh, gesture: false, speakerVisible: false, nameHighlight: false },
           replays: t.replays, firstListen: t.replays === 0, response: resp, correct: resp === 'unsure' ? null : resp === line.func,
-          resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId
+          resultType: rt, evidenceKind: 'discrimination', context: 'd1.probe.t' + (p.index + 1) + '.' + line.speaker, speaker: line.speaker, stimulus: lineId,
+          audioVoice: voiceFields(audio === 'played' || audio === 'failed' ? t.voiceInfo : null)
         }));
         p.index++; ui.trial = null; ui.gesture = true;
         if (p.index >= p.order.length) { L.recordEvent(S, 'probe_done'); S.review = L.buildReview(S, new Date()); next(); }
@@ -711,29 +726,103 @@
     rm.addEventListener('change', function () { S.settings.reducedMotion = rm.checked; persist('settings'); applySettings(); });
     var lt = h('input', { type: 'checkbox', id: 'optLarge' }); lt.checked = !!S.settings.largeText;
     lt.addEventListener('change', function () { S.settings.largeText = lt.checked; persist('settings'); applySettings(); });
-    var slow = h('input', { type: 'checkbox', id: 'optSlow' }); slow.checked = S.settings.speechRate < 0.8;
-    slow.addEventListener('change', function () { S.settings.speechRate = slow.checked ? 0.7 : 0.85; persist('settings'); });
-    box.appendChild(h('h3', { text: '显示与声音' }));
+    box.appendChild(h('h3', { text: '显示' }));
     box.appendChild(h('label', { class: 'check' }, rm, '减少动画'));
     box.appendChild(h('label', { class: 'check' }, lt, '大字体'));
-    box.appendChild(h('label', { class: 'check' }, slow, '语速更慢'));
-    var st = h('p', { id: 'audioTestResult', class: 'muted', text: '法语语音：' + audioStatusText() });
-    box.appendChild(st);
-    box.appendChild(btn('🔊 测试法语语音', function () {
-      Au.init().then(function () {
-        S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = L.nowISO();
-        if (Au.status !== 'available') { st.textContent = '法语语音：' + audioStatusText(); persist('audio'); return; }
-        st.textContent = '播放中…';
-        return Au.speak('Bonjour ! Je m\u2019appelle Camille.', { rate: S.settings.speechRate }).then(function (r) {
-          st.textContent = r === 'played' ? '✓ 浏览器报告已播放（' + Au.voiceName + '）。如果没听到声音，请检查静音开关和音量。' : '⚠️ 播放失败——游戏会显示文字（阅读模式）。';
-          persist('audio');
-        });
-      });
-    }, 'small', { id: 'btnAudioTest' }));
+    box.appendChild(voiceSettings());
     openOverlay(sheet('⚙️ 设置', box));
   }
+  // ---------- voice settings (device-level: stored in a411.device.audio, not in the save) ----------
+  var TEST_LINES = { camille: 'Bonjour\u00A0! Je m\u2019appelle Camille.', noe: 'Salut\u00A0! Je m\u2019appelle Noé.' };
+  function voiceTip() {
+    var pf = Au.platform();
+    var ios = h('div', { class: 'card', id: 'voiceTipIos' },
+      h('b', { text: '📱 iPhone / iPad' }),
+      h('p', { text: '如果法语听起来很机械，可以试着下载更好的法语声音（需要 Wi‑Fi，每个声音约 100 MB 以上）：' }),
+      h('p', { lang: 'en', class: 'path', text: 'Settings › Accessibility › Spoken Content › Voices › French' }),
+      h('p', { text: '选一个法国法语（France）的声音，例如 Audrey 或 Thomas，下载它的 Enhanced 或 Premium 版本。下载后完全关闭 Safari 再打开游戏，回到这里点「🔄 重新检测声音」。' }),
+      h('p', { class: 'muted', text: '注意：根据目前公开的测试，iPhone 上的 Safari（以及 iPhone 上的其他浏览器）经常不会把下载的 Enhanced / Premium 声音提供给网页使用。如果下载后这里的列表没有出现它，这是 Apple 的限制，不是你操作错了。少数系统版本里，下载新版本后原来的法语声音反而在网页里消失——这时在同一页面把刚下载的声音左滑删除即可恢复。我们也在准备固定的高质量法语录音，让所有手机听到同样自然的声音。' }));
+    var android = h('div', { class: 'card', id: 'voiceTipAndroid' },
+      h('b', { text: '🤖 Android' }),
+      h('p', null, '在系统设置里搜索「文字转语音 / ', h('span', { lang: 'en', text: 'Text-to-speech' }), '」，首选引擎选 Google 语音服务，进入它的设置 → 安装语音数据 → 法语（法国），下载你喜欢的声音。不同品牌的菜单名称会略有不同。下载后重新打开浏览器，回到这里点「🔄 重新检测声音」。'));
+    var desktop = h('div', { class: 'card', id: 'voiceTipDesktop' },
+      h('b', { text: '💻 电脑' }),
+      h('p', { text: 'Microsoft Edge 自带高质量的法语 Natural 声音（如 Denise、Henri），Chrome 有「Google français」。Mac 上 Safari 往往用不到下载的高级声音，Chrome / Edge 一般可以。' }));
+    var first = pf === 'ios' ? ios : pf === 'android' ? android : desktop;
+    var rest = [ios, android, desktop].filter(function (x) { return x !== first; });
+    return h('div', { id: 'voiceTip' }, first, h('details', null, h('summary', { text: '其他设备怎么办' }), rest));
+  }
+  function voiceSettings() {
+    var wrap = h('div', { id: 'voiceSettings' });
+    wrap.appendChild(h('h3', { text: '🔊 法语声音（只保存在这台设备）' }));
+    var status = h('p', { id: 'audioTestResult', class: 'muted', text: '法语语音：' + audioStatusText() });
+    wrap.appendChild(status);
+    var lists = h('div', { id: 'voiceLists' });
+    wrap.appendChild(lists);
+    function voiceSelect(sp) {
+      var cur = (Au.prefs || {})[sp] || '';
+      var a = Au.assign || {};
+      var autoR = a[sp];
+      var sel = h('select', { id: 'voice_' + sp, 'aria-label': (sp === 'noe' ? 'Noé' : 'Camille') + ' 的声音' });
+      sel.appendChild(h('option', { value: '', text: '自动（推荐' + (autoR && !cur ? '：' + autoR.name : '') + '）' }));
+      Au.voices.forEach(function (r) {
+        var o = h('option', { value: r.key, text: r.name + ' · ' + r.lang + ' · ' + Au.qualityZh(r.quality) });
+        if (r.key === cur) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', function () {
+        var patch = {}; patch[sp] = sel.value || null; Au.savePrefs(patch);
+        setAudioMeta(); persist('voice'); renderLists();
+        testVoice(sp);
+      });
+      return sel;
+    }
+    function testVoice(sp) {
+      if (Au.status !== 'available') { status.textContent = '法语语音：' + audioStatusText(); return; }
+      status.textContent = '播放中…';
+      Au.speak(TEST_LINES[sp], { speaker: sp }).then(function (r) {
+        var info = Au.last || {};
+        status.textContent = r === 'played' ? '✓ 浏览器报告已播放（' + info.voice + ' · ' + Au.qualityZh(info.quality) + ' · 语速 ' + info.rate + '）。如果没听到声音，请检查静音开关和音量。'
+          : r === 'stopped' ? '已停止。' : '⚠️ 播放失败——游戏会显示文字（阅读模式）。';
+        persist('audio');
+      });
+    }
+    function renderLists() {
+      lists.innerHTML = '';
+      status.textContent = '法语语音：' + audioStatusText();
+      if (Au.status !== 'available') return;
+      var a = Au.assign;
+      lists.appendChild(h('label', { class: 'field' }, h('span', { text: 'Camille 的声音' }), voiceSelect('camille')));
+      lists.appendChild(h('div', { class: 'row' }, btn('▶ 试听 Camille', function () { testVoice('camille'); }, 'small grow', { id: 'btnAudioTest' })));
+      lists.appendChild(h('label', { class: 'field' }, h('span', { text: 'Noé 的声音' }), voiceSelect('noe')));
+      lists.appendChild(h('div', { class: 'row' }, btn('▶ 试听 Noé', function () { testVoice('noe'); }, 'small grow', { id: 'btnAudioTestNoe' })));
+      var good = Au.voices.filter(function (r) { return !r.robotic; });
+      lists.appendChild(h('p', { class: 'muted', id: 'voiceNote', text: a.distinct ? 'Camille 和 Noé 用两个不同的声音。'
+        : good.length <= 1 ? '这台设备只有一个合适的法语声音，所以 Camille 和 Noé 共用它（Noé 的音调稍低一点）。' : 'Camille 和 Noé 现在用同一个声音。' }));
+      var best = good[0];
+      if (!best || ['standard', 'compact'].indexOf(best.quality) >= 0) lists.appendChild(h('p', { class: 'muted', id: 'voiceQualityNote', text: '这台设备目前只有基础质量的法语声音，听起来可能有点机械。下面有改善办法。' }));
+    }
+    renderLists();
+    // speed
+    wrap.appendChild(h('h3', { text: '语速（这台设备记住）' }));
+    var rates = h('div', { class: 'row', role: 'radiogroup', 'aria-label': '语速' });
+    [[0.75, '慢 0.75'], [0.9, '稍慢 0.9'], [1.0, '正常 1.0']].forEach(function (rr) {
+      var r = h('input', { type: 'radio', name: 'rate', value: String(rr[0]), id: 'rate' + String(rr[0]).replace('.', '') });
+      r.checked = Au.rate() === rr[0];
+      r.addEventListener('change', function () { Au.savePrefs({ rate: rr[0] }); setAudioMeta(); persist('settings'); testVoice('camille'); });
+      rates.appendChild(h('label', { class: 'radio', for: r.id }, r, h('span', { text: rr[1] })));
+    });
+    wrap.appendChild(rates);
+    wrap.appendChild(h('div', { class: 'row' }, btn('🔄 重新检测声音', function () {
+      status.textContent = '检测中…';
+      Au.init().then(function () { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio'); renderLists(); });
+    }, 'small grow', { id: 'btnVoiceRescan' })));
+    wrap.appendChild(h('h3', { text: '想要更自然的声音？' }));
+    wrap.appendChild(voiceTip());
+    return wrap;
+  }
   function audioStatusText() {
-    return Au.status === 'available' ? '可用：' + Au.voiceName : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）→ 阅读模式' : '检测中…';
+    return Au.status === 'available' ? '可用（找到 ' + Au.voices.length + ' 个法语声音）' : Au.status === 'unavailable' ? '不可用（' + Au.reason + '）→ 阅读模式' : '检测中…';
   }
 
   function download(name, text) {
@@ -836,10 +925,11 @@
       if (S && S.plant) { var ps = L.plantStatus(S.plant, new Date()); if (ps !== S.plant.careState) { S.plant.careState = ps; persist('plant-thirst'); } }
     }
     applySettings();
+    Au.loadPrefs(S ? S.settings.speechRate : null);
     render();
     Au.init().then(function () {
       // only write when the device's audio situation actually changed (keeps reopen side-effect free)
-      if (S && (S.meta.audio.status !== Au.status || S.meta.audio.voice !== Au.voiceName)) { S.meta.audio.status = Au.status; S.meta.audio.voice = Au.voiceName; S.meta.audio.checkedAt = L.nowISO(); persist('audio-init'); }
+      if (S && (S.meta.audio.status !== Au.status || S.meta.audio.voice !== Au.voiceName)) { setAudioMeta(); S.meta.audio.checkedAt = L.nowISO(); persist('audio-init'); }
       if (ui.view !== 'title') rerenderStep();
     });
   }

@@ -65,3 +65,10 @@ pre.summary, textarea.summary { white-space:pre-wrap; font-family:inherit; font-
 body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::after { animation:none !important; transition:none !important; }
 .probe-opts .btn { background:#fff; color:var(--ink); } /* identical styling for every option: no answer cue */
 .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+/* v0.1.2 voice settings */
+label.field { display:flex; flex-direction:column; gap:4px; margin-top:10px; }
+select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid #2a2e3a; border-radius:4px; background:#fff; min-height:48px; max-width:100%; }
+#voiceSettings .card { margin:8px 0; }
+#voiceSettings .path { font-weight:bold; background:#fff; border:1px dashed #8a8170; padding:6px 8px; border-radius:4px; word-break:break-word; }
+#voiceSettings details summary { min-height:44px; display:flex; align-items:center; cursor:pointer; }
+#voiceSettings .row .radio { padding-right:8px; }
