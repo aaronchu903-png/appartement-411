@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.2.1 single-file build 2026-10-09T00:00:52.649Z -->
+<!-- L’Appartement 411 v0.2.2 single-file build 2026-10-09T00:08:48.334Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -279,7 +279,7 @@ select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid
   var C = (root.A411 && root.A411.Content) || (typeof require !== 'undefined' ? require('./content.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.2.1';
+  var APP_VERSION = '0.2.2';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -8052,6 +8052,15 @@ select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid
     box.appendChild(paste);
     function doImport(text) {
       if (!storage) { msg.className = 'banner warn'; msg.textContent = '本机存储不可用，无法导入。'; return; }
+      var seedObj = null; try { seedObj = JSON.parse(text); } catch (e) {}
+      if (seedObj && seedObj.kind === 'a411-personal-seed') {
+        if (!learnState || !A411.Learn || !A411.Deck) { msg.className = 'banner warn'; msg.textContent = '✗ 这是个人学习种子文件：请先选择档案（Jinyi / Yuechao），再导入。'; return; }
+        var sr = A411.Learn.importSeed(learnState, seedObj, A411.Deck, new Date());
+        if (!sr.ok) { msg.className = 'banner warn'; msg.textContent = '✗ 学习种子没有导入：' + sr.errors.slice(0, 4).join('；') + '（学习记录未改动）'; return; }
+        saveLearn();
+        msg.className = 'banner ok'; msg.textContent = '✓ 已导入 ' + profileId + ' 的个人学习种子，复习计划已按这份记录调整。游戏存档未改动。';
+        return;
+      }
       var r = storage.importText(text, S);
       if (!r.ok) { msg.className = 'banner warn'; msg.textContent = '✗ 没有导入：' + r.errors.slice(0, 4).join('；') + '（当前存档未改动）'; return; }
       S = r.save; ui.line = null; ui.trial = null;
