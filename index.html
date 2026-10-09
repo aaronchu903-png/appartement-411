@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.8.0 single-file build 2026-10-09T08:56:49.383Z -->
+<!-- L’Appartement 411 v0.9.0 single-file build 2026-10-09T13:50:20.608Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -261,6 +261,29 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 .timeline .slot-word { font-weight:700; min-width:5.2em; color:#5a3a24; }
 .timeline canvas.optimg, .timeline canvas.optimg.scene { width:48px; height:36px; }
 .picopt.used { opacity:.35; }
+/* v0.9.0 review tools, conjugation, automatic backup */
+.filters { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.filters input, .filters select { flex:1 1 30%; min-width:0; font:inherit; padding:6px; border:2px solid var(--line); border-radius:4px; background:#fff; }
+.card-list, .conj-list { list-style:none; padding:0; margin:6px 0; }
+.card-list li { margin:4px 0; }
+.btn.card-row { display:flex; flex-direction:column; align-items:flex-start; width:100%; text-align:left; gap:2px; }
+.btn.card-row .tags { display:flex; gap:4px; flex-wrap:wrap; }
+.tag.leech { background:#fdecd8; color:var(--warn); }
+.tag.st-suspended { color:var(--muted); }
+.btn.danger { border-color:#c0504d; color:#8a2d2a; }
+.heatmap { display:grid; grid-template-rows:repeat(7, 12px); grid-auto-flow:column; grid-auto-columns:12px; gap:2px; margin:6px 0; overflow-x:auto; }
+.heatmap .hm { display:block; width:12px; height:12px; border-radius:2px; background:#ece6da; }
+.heatmap .hm.l1 { background:#c9e2c2; } .heatmap .hm.l2 { background:#93c28c; } .heatmap .hm.l3 { background:#5d9d55; } .heatmap .hm.l4 { background:#2f6d2a; }
+.forecast-bars { display:flex; align-items:flex-end; gap:2px; height:64px; margin:6px 0; border-bottom:1px solid var(--line); }
+.forecast-bars .fbar { flex:1; background:#9ab8d4; min-height:2px; }
+#retRange { flex:1; }
+.conj h3 { margin:12px 0 4px; }
+.conj-list { display:grid; grid-template-columns:1fr; gap:3px; }
+.btn.conj-form { width:100%; text-align:left; padding:6px 8px; font-weight:400; }
+.conj .irr { font-weight:700; text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:3px; color:#7a2f8a; }
+.sync-status { margin:6px 12px; }
+#syncToken { width:100%; font:inherit; padding:6px; margin:4px 0; border:2px solid var(--line); border-radius:4px; }
+.row.wrap { flex-wrap:wrap; }
 
 </style>
 </head>
@@ -784,7 +807,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.8.0';
+  var APP_VERSION = '0.9.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -8482,15 +8505,37 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     return { adopted: true, save: legacy.save, notices: notices };
   }
 
+  // v0.9.0: per-profile edits of built-in cards (learn.overrides[id] = { zh, en, note }) are merged on read.
+  function withOverride(learn, it) {
+    var ov = it && learn && learn.overrides && learn.overrides[it.id];
+    if (!ov) return it;
+    var o = {}; Object.keys(it).forEach(function (k) { o[k] = it[k]; });
+    if (ov.fr) { o.fr = ov.fr; o.say = ov.fr; }
+    if (ov.zh != null) o.zh = ov.zh;
+    if (ov.en != null) o.en = ov.en;
+    if (ov.note != null) { o.noteZh = ov.note || null; o.noteEn = ov.note || null; }
+    o.edited = true;
+    return o;
+  }
   function itemById(deck, learn, id) {
-    if (deck && deck.byId && deck.byId[id]) return deck.byId[id];
+    if (deck && deck.byId && deck.byId[id]) return withOverride(learn, deck.byId[id]);
     var extra = (learn && learn.extraItems) || [];
-    for (var i = 0; i < extra.length; i++) if (extra[i].id === id) return extra[i];
+    for (var i = 0; i < extra.length; i++) if (extra[i].id === id) return withOverride(learn, extra[i]);
     return null;
   }
   function allItems(deck, learn) {
-    return (deck.ITEMS || []).concat((learn && learn.extraItems) || []);
+    var hid = (learn && learn.hidden) || {};
+    return (deck.ITEMS || []).concat((learn && learn.extraItems) || []).filter(function (it) { return !hid[it.id]; })
+      .map(function (it) { return withOverride(learn, it); });
   }
+  // v0.9.0: desired retention, 0.80–0.95 (default 0.90), used by every FSRS update and preview.
+  var RET_MIN = 0.8, RET_MAX = 0.95, RET_DEFAULT = 0.9;
+  function reqRet(learn) {
+    var r = learn && learn.settings && Number(learn.settings.requestRetention);
+    if (!r || isNaN(r)) return RET_DEFAULT;
+    return Math.min(RET_MAX, Math.max(RET_MIN, r));
+  }
+  var LEECH_LAPSES = 6;
   function modalitiesOf(deck, item) {
     if (deck.modalities) {
       var m = deck.modalities(item);
@@ -8529,11 +8574,11 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     return F.forgettingCurve(elapsed, card.stability);
   }
 
-  function applyGrade(card, grade, now) {
+  function applyGrade(card, grade, now, retention) {
     var elapsed = 0;
     if (card.lastReview) elapsed = Math.max(0, F.utcDayDiff(new Date(card.lastReview), now));
     var memory = card.reps ? { stability: card.stability, difficulty: card.difficulty } : { stability: 0, difficulty: 0 };
-    var choices = F.preview(memory, card.reps ? elapsed : 0, 0.9);
+    var choices = F.preview(memory, card.reps ? elapsed : 0, retention || RET_DEFAULT);
     var picked = choices.filter(function (c) { return c.grade === grade; })[0];
     var wasReview = card.reps > 0;
     card.stability = picked.stability;
@@ -8541,6 +8586,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     card.scheduledDays = picked.scheduledDays;
     card.reps += 1;
     if (grade === 1 && wasReview) card.lapses += 1;
+    if (card.lapses >= LEECH_LAPSES) card.leech = true;
     card.lastReview = now.toISOString();
     card.due = new Date(now.getTime() + picked.scheduledDays * DAY).toISOString();
     card.state = bucket(card);
@@ -8596,7 +8642,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var reviews = [];
     Object.keys(learn.cards).forEach(function (k) {
       var c = learn.cards[k];
-      if (!c.reps || !c.due) return;
+      if (!c.reps || !c.due || c.suspended) return;
       if (new Date(c.due).getTime() <= now.getTime()) {
         reviews.push({ key: k, due: c.due, r: retrievability(c, now) });
       }
@@ -8647,7 +8693,8 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   var STORY_NEW_CAP = 12;
   function storyPendingItems(learn, deck) {
     var have = introducedSet(learn);
-    return (learn.storyPending || []).map(function (x) { return itemById(deck, learn, x.itemId); })
+    var hid = learn.hidden || {};
+    return (learn.storyPending || []).filter(function (x) { return !hid[x.itemId]; }).map(function (x) { return itemById(deck, learn, x.itemId); })
       .filter(function (it, i, arr) { return it && !have[it.id] && arr.indexOf(it) === i; });
   }
   // Called when a story chapter finishes: its deck items become "story new" cards from this evening on.
@@ -8671,9 +8718,12 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var s = learn.session;
     if (!s || !s.queue[s.index]) return null;
     var entry = s.queue[s.index];
+    var prevCard = learn.cards[cardKey(entry.itemId, entry.modality)];
+    var undo = { key: cardKey(entry.itemId, entry.modality), card: prevCard ? clone(prevCard) : null, index: s.index, qlen: s.queue.length,
+      hints: s.hints, phase: 'rate', revealed: s.revealed, accent: s.accent, wrong: s.wrong, lastCorrect: s.lastCorrect, played: s.played, active: s.active };
     var card = ensureCard(learn, entry.itemId, entry.modality);
     var wasNew = card.reps === 0;
-    applyGrade(card, grade, now);
+    applyGrade(card, grade, now, reqRet(learn));
     if (!card.module) { var xi = (learn.extraItems || []).filter(function (x) { return x.id === entry.itemId; })[0]; card.module = meta.module || (xi && xi.module) || s.only || 'core'; }
     var suggested = meta.suggested;
     var ev = {
@@ -8690,13 +8740,17 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       resultType: resultTypeOf(meta),
       source: meta.source || 'review',
       audio: meta.audio || 'not_used',
-      module: card.module
+      module: card.module,
+      wasNew: wasNew
     };
+    if (card.leech) ev.leech = true;
     learn.evidence.push(ev);
     if (learn.evidence.length > 500) learn.evidence = learn.evidence.slice(-500);
     var dk = dayKey(now);
     var day = learn.days[dk] = learn.days[dk] || { reviews: 0, news: 0 };
     if (wasNew) day.news += 1; else day.reviews += 1;
+    undo.at = ev.at; undo.dk = dk; undo.wasNew = wasNew; undo.itemId = entry.itemId; undo.modality = entry.modality; undo.grade = grade;
+    learn.undo = undo;
     if (grade === 1) {
       s.queue.push({ itemId: entry.itemId, modality: entry.modality, key: entry.key, isNew: false, retry: true });
     }
@@ -8705,10 +8759,26 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     if (s.index >= s.queue.length) s.active = false;
     return ev;
   }
+  // v0.9.0: undo the last grade of the current session (one level): card, review log line, day count and queue position.
+  function canUndo(learn) { return !!(learn && learn.undo && learn.session && learn.session.queue && learn.session.queue.length >= learn.undo.qlen); }
+  function undoLast(learn) {
+    if (!canUndo(learn)) return null;
+    var u = learn.undo, s = learn.session;
+    if (u.card) learn.cards[u.key] = u.card; else delete learn.cards[u.key];
+    var ev = learn.evidence, last = ev[ev.length - 1];
+    if (last && last.at === u.at && last.itemId === u.itemId && last.modality === u.modality) ev.pop();
+    var day = learn.days[u.dk];
+    if (day) { if (u.wasNew) day.news = Math.max(0, day.news - 1); else day.reviews = Math.max(0, day.reviews - 1); }
+    s.queue = s.queue.slice(0, u.qlen);
+    s.index = u.index; s.active = true; s.phase = 'rate';
+    s.hints = u.hints || 0; s.revealed = !!u.revealed; s.accent = !!u.accent; s.wrong = !!u.wrong; s.lastCorrect = u.lastCorrect; s.played = u.played;
+    learn.undo = null;
+    return { itemId: u.itemId, modality: u.modality, grade: u.grade };
+  }
 
   function counts(learn) {
     var c = { new: 0, learning: 0, review: 0, mature: 0 };
-    Object.keys(learn.cards || {}).forEach(function (k) { c[bucket(learn.cards[k])] += 1; });
+    Object.keys(learn.cards || {}).forEach(function (k) { if (!learn.cards[k].suspended) c[bucket(learn.cards[k])] += 1; });
     return c;
   }
   function retention(learn, now) {
@@ -8721,15 +8791,15 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var sum = rs.reduce(function (a, b) { return a + b; }, 0);
     return sum / rs.length;
   }
-  function forecast(learn, now) {
+  function forecast(learn, now, nDays) {
     var days = [];
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < (nDays || 7); i++) {
       var start = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
       var end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i + 1);
       var n = 0;
       Object.keys(learn.cards || {}).forEach(function (k) {
         var c = learn.cards[k];
-        if (!c.due || !c.reps) return;
+        if (!c.due || !c.reps || c.suspended) return;
         var t = new Date(c.due).getTime();
         if (t >= start.getTime() && t < end.getTime()) n++;
       });
@@ -9010,7 +9080,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   // any hint or a revealed answer is 'supported', never independent.
   function gradeExternal(learn, itemId, modality, grade, meta, now) {
     var card = ensureCard(learn, itemId, modality);
-    applyGrade(card, grade, now);
+    applyGrade(card, grade, now, reqRet(learn));
     meta = meta || {};
     if (!card.module) card.module = meta.module || 'week1';
     var ev = { at: now.toISOString(), itemId: itemId, modality: modality, grade: grade, suggested: grade, overridden: false,
@@ -9034,7 +9104,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var elapsed = card.lastReview ? Math.max(0, F.utcDayDiff(new Date(card.lastReview), now)) : 0;
     var memory = card.reps ? { stability: card.stability, difficulty: card.difficulty } : { stability: 0, difficulty: 0 };
     var out = {};
-    F.preview(memory, card.reps ? elapsed : 0, 0.9).forEach(function (c) { out[c.grade] = c.scheduledDays; });
+    F.preview(memory, card.reps ? elapsed : 0, reqRet(learn)).forEach(function (c) { out[c.grade] = c.scheduledDays; });
     return out;
   }
 
@@ -9058,7 +9128,8 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     PLACEMENT: PLACEMENT, placementState: placementState, placementAnswer: placementAnswer, skipPlacement: skipPlacement,
     validateSeed: validateSeed, importSeed: importSeed, validateBundle: validateBundle, dayKey: dayKey, resultTypeOf: resultTypeOf,
     STORY_NEW_CAP: STORY_NEW_CAP, addStoryPending: addStoryPending, storyPendingItems: storyPendingItems, ensureGarden: ensureGarden,
-    RENAMED: RENAMED, moduleOf: moduleOf, migrateV04: migrateV04, gradeExternal: gradeExternal, gapGrade: gapGrade, previewIntervals: previewIntervals
+    RENAMED: RENAMED, moduleOf: moduleOf, migrateV04: migrateV04, gradeExternal: gradeExternal, gapGrade: gapGrade, previewIntervals: previewIntervals,
+    reqRet: reqRet, RET_MIN: RET_MIN, RET_MAX: RET_MAX, RET_DEFAULT: RET_DEFAULT, LEECH_LAPSES: LEECH_LAPSES, undoLast: undoLast, canUndo: canUndo, withOverride: withOverride
   };
   root.A411 = root.A411 || {};
   root.A411.Learn = api;
@@ -9873,6 +9944,349 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 
 </script>
 <script>
+/* L’Appartement 411 — v0.9.0 « Voir la conjugaison »: an offline French conjugator.
+ * Rules for regular -er (with the usual spelling changes), -ir (finir) and -re (vendre) verbs, plus a bundled table of
+ * common irregular verbs and their families. Pronominal verbs (se réveiller) supported. Also a small lemmatizer
+ * (form → infinitive) used by the wordbook. Pure logic, no DOM; runs in Node tests. No learner data here. */
+(function (root) {
+  'use strict';
+  var P = ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'];
+  var IMP_P = [1, 3, 4];
+  var VOW = /^[aeiouyàâäéèêëîïôöûùüœæh]/i;
+  var H_ASPIRE = { 'haïr': 1, hurler: 1, heurter: 1, hacher: 1, hausser: 1, hanter: 1, harceler: 1, hisser: 1, huer: 1, hâter: 1, hésiter: 0 };
+  function sp(s) { return s.split(' '); }
+  function elides(form, inf) { return VOW.test(form) && !(form[0] === 'h' && H_ASPIRE[inf]); }
+
+  // ---------- regular rules ----------
+  function erStem(inf) { return inf.slice(0, -2); }
+  // e/é + consonant(s) + er: which change applies on a mute ending
+  var KEEP_EL_ET = { acheter: 1, racheter: 1, geler: 1, dégeler: 1, congeler: 1, peler: 1, modeler: 1, haleter: 1, harceler: 1, ciseler: 1, marteler: 1, crocheter: 1, fureter: 1 };
+  function muteStem(inf) {
+    var st = erStem(inf), m;
+    if (/(oy|uy|ay)$/.test(st)) return st.slice(0, -1) + 'i';
+    if ((m = st.match(/^(.*)e(l|t)$/)) && !KEEP_EL_ET[inf.replace(/^(re|r)(?=.)/, '') ] && !KEEP_EL_ET[inf]) return st + st.slice(-1);
+    if ((m = st.match(/^(.*[^aeiouyéèê])[eé](ch|gn|[bcdfgjklmnpqrstvz][rl]?)$/))) return m[1] + 'è' + m[2];
+    return st;
+  }
+  function futStemEr(inf) {
+    if (inf === 'envoyer' || inf === 'renvoyer') return inf.replace(/voyer$/, 'verr');
+    var st = erStem(inf), ms = muteStem(inf);
+    if (/[^aeiouyéèê]é(ch|gn|[bcdfgjklmnpqrstvz][rl]?)$/.test(st)) return st + 'er'; // préférer → préférer-
+    return ms + 'er';
+  }
+  function soft(stem, end) { // manger/commencer before a/o; and back before i
+    if (/^[ao]/.test(end)) { if (/g$/.test(stem)) return stem + 'e' + end; if (/c$/.test(stem)) return stem.slice(0, -1) + 'ç' + end; }
+    if (/^i/.test(end)) { if (/ge$/.test(stem)) return stem.slice(0, -1) + end; if (/ç$/.test(stem)) return stem.slice(0, -1) + 'c' + end; }
+    return stem + end;
+  }
+  function regularSpec(inf) {
+    var s;
+    if (/er$/.test(inf)) {
+      var st = erStem(inf), ms = muteStem(inf);
+      return { p: [ms + 'e', ms + 'es', ms + 'e', soft(st, 'ons'), st + 'ez', ms + 'ent'], pp: st + 'é', f: futStemEr(inf), group: 'er' };
+    }
+    if (/ir$/.test(inf)) {
+      s = inf.slice(0, -2);
+      return { p: [s + 'is', s + 'is', s + 'it', s + 'issons', s + 'issez', s + 'issent'], pp: s + 'i', f: inf, group: 'ir' };
+    }
+    if (/re$/.test(inf)) {
+      s = inf.slice(0, -2);
+      return { p: [s + 's', s + 's', s, s + 'ons', s + 'ez', s + 'ent'], pp: s + 'u', f: inf.slice(0, -1), group: 're' };
+    }
+    return null;
+  }
+
+  // ---------- irregular table (présent, participe passé, futur stem, overrides) ----------
+  var T = {
+    'être': { p: 'suis es est sommes êtes sont', pp: 'été', f: 'ser', i: 'ét', s: 'sois sois soit soyons soyez soient', imp: 'sois soyons soyez' },
+    avoir: { p: 'ai as a avons avez ont', pp: 'eu', f: 'aur', s: 'aie aies ait ayons ayez aient', imp: 'aie ayons ayez' },
+    aller: { p: 'vais vas va allons allez vont', pp: 'allé', f: 'ir', s: 'aille ailles aille allions alliez aillent', imp: 'va allons allez', aux: 'être' },
+    faire: { p: 'fais fais fait faisons faites font', pp: 'fait', f: 'fer', s: 'fasse fasses fasse fassions fassiez fassent', imp: 'fais faisons faites' },
+    pouvoir: { p: 'peux peux peut pouvons pouvez peuvent', pp: 'pu', f: 'pourr', s: 'puisse puisses puisse puissions puissiez puissent', imp: '- - -' },
+    vouloir: { p: 'veux veux veut voulons voulez veulent', pp: 'voulu', f: 'voudr', s: 'veuille veuilles veuille voulions vouliez veuillent', imp: 'veuille veuillons veuillez' },
+    devoir: { p: 'dois dois doit devons devez doivent', pp: 'dû', f: 'devr', imp: '- - -' },
+    savoir: { p: 'sais sais sait savons savez savent', pp: 'su', f: 'saur', s: 'sache saches sache sachions sachiez sachent', imp: 'sache sachons sachez' },
+    valoir: { p: 'vaux vaux vaut valons valez valent', pp: 'valu', f: 'vaudr', s: 'vaille vailles vaille valions valiez vaillent' },
+    falloir: { p: '- - faut - - -', pp: 'fallu', f: 'faudr', i: 'fall', s: '- - faille - - -', imp: '- - -', impersonal: 1 },
+    pleuvoir: { p: '- - pleut - - -', pp: 'plu', f: 'pleuvr', i: 'pleuv', s: '- - pleuve - - -', imp: '- - -', impersonal: 1 },
+    voir: { p: 'vois vois voit voyons voyez voient', pp: 'vu', f: 'verr' },
+    prévoir: { p: 'prévois prévois prévoit prévoyons prévoyez prévoient', pp: 'prévu', f: 'prévoir' },
+    recevoir: { p: 'reçois reçois reçoit recevons recevez reçoivent', pp: 'reçu', f: 'recevr' },
+    apercevoir: { p: 'aperçois aperçois aperçoit apercevons apercevez aperçoivent', pp: 'aperçu', f: 'apercevr' },
+    'asseoir': { p: 'assieds assieds assied asseyons asseyez asseyent', pp: 'assis', f: 'assiér' },
+    dire: { p: 'dis dis dit disons dites disent', pp: 'dit', f: 'dir' },
+    interdire: { p: 'interdis interdis interdit interdisons interdisez interdisent', pp: 'interdit', f: 'interdir' },
+    lire: { p: 'lis lis lit lisons lisez lisent', pp: 'lu', f: 'lir' },
+    'écrire': { p: 'écris écris écrit écrivons écrivez écrivent', pp: 'écrit', f: 'écrir' },
+    rire: { p: 'ris ris rit rions riez rient', pp: 'ri', f: 'rir' },
+    boire: { p: 'bois bois boit buvons buvez boivent', pp: 'bu', f: 'boir' },
+    croire: { p: 'crois crois croit croyons croyez croient', pp: 'cru', f: 'croir' },
+    mettre: { p: 'mets mets met mettons mettez mettent', pp: 'mis', f: 'mettr' },
+    prendre: { p: 'prends prends prend prenons prenez prennent', pp: 'pris', f: 'prendr' },
+    venir: { p: 'viens viens vient venons venez viennent', pp: 'venu', f: 'viendr', aux: 'être' },
+    tenir: { p: 'tiens tiens tient tenons tenez tiennent', pp: 'tenu', f: 'tiendr' },
+    vivre: { p: 'vis vis vit vivons vivez vivent', pp: 'vécu', f: 'vivr' },
+    suivre: { p: 'suis suis suit suivons suivez suivent', pp: 'suivi', f: 'suivr' },
+    courir: { p: 'cours cours court courons courez courent', pp: 'couru', f: 'courr' },
+    mourir: { p: 'meurs meurs meurt mourons mourez meurent', pp: 'mort', f: 'mourr', aux: 'être' },
+    'naître': { p: 'nais nais naît naissons naissez naissent', pp: 'né', f: 'naîtr', aux: 'être' },
+    'connaître': { p: 'connais connais connaît connaissons connaissez connaissent', pp: 'connu', f: 'connaîtr' },
+    'paraître': { p: 'parais parais paraît paraissons paraissez paraissent', pp: 'paru', f: 'paraîtr' },
+    plaire: { p: 'plais plais plaît plaisons plaisez plaisent', pp: 'plu', f: 'plair' },
+    taire: { p: 'tais tais tait taisons taisez taisent', pp: 'tu', f: 'tair' },
+    battre: { p: 'bats bats bat battons battez battent', pp: 'battu', f: 'battr' },
+    rompre: { p: 'romps romps rompt rompons rompez rompent', pp: 'rompu', f: 'rompr' },
+    vaincre: { p: 'vaincs vaincs vainc vainquons vainquez vainquent', pp: 'vaincu', f: 'vaincr' },
+    'résoudre': { p: 'résous résous résout résolvons résolvez résolvent', pp: 'résolu', f: 'résoudr' },
+    coudre: { p: 'couds couds coud cousons cousez cousent', pp: 'cousu', f: 'coudr' },
+    fuir: { p: 'fuis fuis fuit fuyons fuyez fuient', pp: 'fui', f: 'fuir' },
+    'acquérir': { p: 'acquiers acquiers acquiert acquérons acquérez acquièrent', pp: 'acquis', f: 'acquerr' },
+    'haïr': { p: 'hais hais hait haïssons haïssez haïssent', pp: 'haï', f: 'haïr' },
+    envoyer: { p: 'envoie envoies envoie envoyons envoyez envoient', pp: 'envoyé', f: 'enverr' },
+    cueillir: { p: 'cueille cueilles cueille cueillons cueillez cueillent', pp: 'cueilli', f: 'cueiller' },
+    accueillir: { p: 'accueille accueilles accueille accueillons accueillez accueillent', pp: 'accueilli', f: 'accueiller' }
+  };
+  // families: generated from a model
+  function fam(model, list, fn) { list.forEach(function (v) { T[v] = fn(v, model); }); }
+  // partir / sortir / dormir / sentir / servir / mentir: pars, part, partons
+  fam(null, ['partir', 'sortir', 'dormir', 'sentir', 'servir', 'mentir', 'repartir', 'ressortir', 'endormir', 'rendormir', 'ressentir', 'consentir', 'desservir'], function (v) {
+    var st = v.slice(0, -2), sg = st.slice(0, -1);
+    return { p: [sg + 's', sg + 's', sg + 't', st + 'ons', st + 'ez', st + 'ent'].join(' '), pp: st + 'i', f: v,
+      aux: /^(partir|sortir|repartir|ressortir)$/.test(v) ? 'être' : null };
+  });
+  // ouvrir / offrir / souffrir / couvrir: ouvre, ouvert
+  fam(null, ['ouvrir', 'rouvrir', 'couvrir', 'découvrir', 'recouvrir', 'offrir', 'souffrir'], function (v) {
+    var st = v.slice(0, -2);
+    return { p: [st + 'e', st + 'es', st + 'e', st + 'ons', st + 'ez', st + 'ent'].join(' '), pp: st.slice(0, -1) + 'ert', f: v };
+  });
+  // conduire / construire / produire / traduire / cuire / détruire: conduis, conduisons, conduit
+  fam(null, ['conduire', 'construire', 'produire', 'traduire', 'réduire', 'détruire', 'cuire', 'instruire', 'introduire', 'séduire', 'reconstruire'], function (v) {
+    var st = v.slice(0, -2);
+    return { p: [st + 's', st + 's', st + 't', st + 'sons', st + 'sez', st + 'sent'].join(' '), pp: st + 't', f: v.slice(0, -1) };
+  });
+  // peindre / craindre / joindre / éteindre: peins, peignons, peint
+  fam(null, ['peindre', 'éteindre', 'atteindre', 'teindre', 'craindre', 'plaindre', 'contraindre', 'joindre', 'rejoindre'], function (v) {
+    var st = v.slice(0, -3);
+    return { p: [st + 's', st + 's', st + 't', st.slice(0, -1) + 'gnons', st.slice(0, -1) + 'gnez', st.slice(0, -1) + 'gnent'].join(' '), pp: st + 't', f: v.slice(0, -1) };
+  });
+  // prefixed members of irregular families
+  var DERIVED = {
+    prendre: ['comprendre', 'apprendre', 'reprendre', 'surprendre', 'entreprendre'],
+    mettre: ['permettre', 'promettre', 'admettre', 'remettre', 'soumettre', 'transmettre', 'commettre'],
+    venir: ['devenir', 'revenir', 'parvenir', 'souvenir', 'prévenir', 'convenir', 'intervenir'],
+    tenir: ['obtenir', 'retenir', 'maintenir', 'appartenir', 'contenir', 'entretenir', 'soutenir', 'détenir'],
+    voir: ['revoir', 'entrevoir'], 'écrire': ['décrire', 'inscrire', 'réécrire', 'prescrire'], lire: ['relire', 'élire'],
+    'connaître': ['reconnaître', 'méconnaître'], 'paraître': ['disparaître', 'apparaître', 'reparaître'],
+    faire: ['refaire', 'défaire', 'satisfaire'], courir: ['parcourir', 'secourir', 'accourir', 'recourir'], rire: ['sourire'],
+    battre: ['combattre', 'débattre', 'abattre'], vivre: ['survivre', 'revivre'], dire: ['redire'], suivre: ['poursuivre'],
+    vaincre: ['convaincre'], fuir: ['enfuir'], 'acquérir': ['conquérir'], envoyer: ['renvoyer'], cueillir: ['recueillir'], recevoir: ['décevoir', 'concevoir'],
+    plaire: ['déplaire'], 'asseoir': ['rasseoir']
+  };
+  var ETRE_FAMILY = { devenir: 1, revenir: 1, parvenir: 1, intervenir: 1, souvenir: 1 };
+  Object.keys(DERIVED).forEach(function (base) {
+    var b = T[base];
+    DERIVED[base].forEach(function (v) {
+      var pre = v.slice(0, v.length - base.length);
+      if (v.slice(pre.length) !== base) return;
+      function px(x) { return x.split(' ').map(function (f) { return f === '-' ? f : pre + f; }).join(' '); }
+      T[v] = { p: px(b.p), pp: pre + b.pp, f: pre + b.f, s: b.s ? px(b.s) : undefined, imp: b.imp && base !== 'faire' ? px(b.imp) : undefined,
+        aux: ETRE_FAMILY[v] ? 'être' : null, base: base };
+      if (base === 'faire') T[v].imp = px(b.imp);
+    });
+  });
+  T.satisfaire.p = 'satisfais satisfais satisfait satisfaisons satisfaites satisfont';
+  T.redire.p = 'redis redis redit redisons redites redisent';
+
+  // verbs conjugated with être in the passé composé (besides all pronominal verbs)
+  var ETRE = { aller: 1, venir: 1, arriver: 1, partir: 1, entrer: 1, rentrer: 1, sortir: 1, monter: 1, descendre: 1, 'naître': 1, mourir: 1, rester: 1,
+    tomber: 1, retourner: 1, passer: 0, devenir: 1, revenir: 1, repartir: 1, ressortir: 1, remonter: 1, redescendre: 1, retomber: 1, parvenir: 1, intervenir: 1, 'décéder': 1, souvenir: 1 };
+
+  // common regular verbs (for the lemmatizer; any -er/-ir/-re infinitive still conjugates by rule)
+  var COMMON = sp('aimer adorer détester parler regarder écouter chercher trouver donner montrer porter apporter ' +
+    'arroser jouer manger habiter travailler étudier penser demander répondre attendre entendre vendre perdre rendre descendre ' +
+    'finir choisir réussir réfléchir grandir remplir obéir rougir vieillir maigrir grossir ralentir punir bâtir agir ' +
+    'arriver entrer rentrer rester tomber retourner monter passer appeler acheter lever préférer espérer répéter ' +
+    'commencer manger nager voyager ranger changer bouger partager essayer payer nettoyer employer ennuyer ' +
+    'fermer ouvrir laisser garder sonner frapper sauter danser chanter marcher tourner traverser continuer ' +
+    'aider oublier rêver rencontrer raconter expliquer préparer cuisiner goûter laver lancer placer ' +
+    'réveiller coucher lever habiller doucher promener dépêcher inquiéter excuser asseoir installer occuper ' +
+    'arrêter retrouver visiter voler cacher miauler caresser nourrir griffer ronronner gronder crier pleurer ' +
+    'quitter utiliser fumer dîner déjeuner commander compter coûter oser accepter refuser décider ' +
+    'neiger geler jeter projeter rappeler épeler amener emmener mener peser semer soulever enlever ' +
+    'envoyer tutoyer vouvoyer appuyer essuyer balayer effrayer rayer ' +
+    'sembler tenter toucher trembler tirer pousser poser déposer composer proposer imaginer inviter ' +
+    'informer intéresser garer louer prêter emprunter rembourser signer copier crier marier remercier vérifier ' +
+    'défendre fondre mordre pendre répandre tendre tordre correspondre');
+  function isPronominal(inf) { return /^(se |s’|s')/.test(inf); }
+  function bare(inf) { return String(inf).trim().toLowerCase().replace(/^(se |s’|s')/, ''); }
+
+  function specFor(inf) {
+    var t = T[inf];
+    if (t) return { p: sp(t.p), pp: t.pp, f: t.f, i: t.i, s: t.s ? sp(t.s) : null, imp: t.imp ? sp(t.imp) : null,
+      aux: t.aux, table: true, impersonal: !!t.impersonal };
+    var r = regularSpec(inf);
+    if (!r) return null;
+    r.table = false;
+    return r;
+  }
+  function finishTenses(inf, sp1) {
+    var pr = sp1.p;
+    var iStem = sp1.i || (pr[3] !== '-' ? pr[3].replace(/ons$/, '') : null);
+    var E_IMP = sp('ais ais ait ions iez aient'), E_FUT = sp('ai as a ons ez ont'), E_SUB = sp('e es e ions iez ent');
+    var imparfait = E_IMP.map(function (e, k) { return pr[k] === '-' && sp1.impersonal ? '-' : soft(iStem, e); });
+    var futur = E_FUT.map(function (e, k) { return pr[k] === '-' && sp1.impersonal ? '-' : sp1.f + e; });
+    var cond = E_IMP.map(function (e, k) { return pr[k] === '-' && sp1.impersonal ? '-' : sp1.f + e; });
+    var subj = sp1.s || E_SUB.map(function (e, k) {
+      if (k === 3 || k === 4) return soft(iStem, e);
+      var st = pr[5].replace(/ent$/, '');
+      return st + e;
+    });
+    var imp = sp1.imp || [pr[1].replace(/es$/, 'e').replace(/^va$/, 'va'), pr[3], pr[4]];
+    if (!sp1.imp && /es$/.test(pr[1])) imp[0] = pr[1].slice(0, -1);
+    if (sp1.impersonal) { imparfait = imparfait.map(function (x, k) { return k === 2 ? x : '-'; }); futur = futur.map(function (x, k) { return k === 2 ? x : '-'; }); cond = cond.map(function (x, k) { return k === 2 ? x : '-'; }); }
+    return { present: pr, imparfait: imparfait, futur: futur, conditionnel: cond, subjonctif: subj, imperatif: imp };
+  }
+  var TENSES = [
+    ['present', 'Présent', '现在时', 'Present'], ['passe', 'Passé composé', '复合过去时', 'Perfect (passé composé)'],
+    ['imparfait', 'Imparfait', '未完成过去时', 'Imperfect'], ['futur', 'Futur simple', '简单将来时', 'Future'],
+    ['conditionnel', 'Conditionnel présent', '条件式现在时', 'Conditional'], ['subjonctif', 'Subjonctif présent', '虚拟式现在时', 'Subjunctive'],
+    ['imperatif', 'Impératif', '命令式', 'Imperative']];
+  var REFL = ['me', 'te', 'se', 'nous', 'vous', 'se'];
+  var AUX_E = sp('suis es est sommes êtes sont'), AUX_A = sp('ai as a avons avez ont');
+  function withPron(k, form, inf, refl, que) {
+    if (form === '-') return '-';
+    var lead = refl ? REFL[k] : null, body = form;
+    if (lead && (k === 0 || k === 1 || k === 2 || k === 5) && elides(form, inf)) body = lead[0] + '’' + form; else if (lead) body = lead + ' ' + form;
+    var pron = P[k];
+    var head = pron === 'je' && elides(body, inf) ? 'j’' : pron + ' ';
+    var q = que ? ((k === 2 || k === 5) ? 'qu’' : 'que ') : '';
+    return q + head + body;
+  }
+  function ppShow(pp, k, etre) {
+    if (!etre) return pp;
+    var s = /s$/.test(pp);
+    if (k < 3) return pp + '(e)';
+    if (k === 4) return pp + (s ? '(e)(s)' : '(e)(s)');
+    return pp + (s ? '(es)' : '(e)s');
+  }
+  function conjugate(input) {
+    var raw = String(input || '').trim().toLowerCase().replace(/'/g, '’');
+    var refl = isPronominal(raw), inf = bare(raw);
+    if (inf === 'souvenir' || inf === 'enfuir' || inf === 'taire' && refl) refl = true;
+    var spec = specFor(inf);
+    if (!spec) return null;
+    var reg = regularSpec(inf);
+    var base = finishTenses(inf, spec), regT = reg && !/oir$/.test(inf) ? finishTenses(inf, reg) : null;
+    var etre = refl || !!ETRE[inf] || spec.aux === 'être';
+    var aux = etre ? AUX_E : AUX_A;
+    var out = { infinitive: (refl ? (elides(inf, inf) ? 's’' : 'se ') : '') + inf, pronominal: refl, aux: etre ? 'être' : 'avoir', participle: spec.pp,
+      source: spec.table ? 'table' : 'rule', group: reg ? reg.group : 'oir', tenses: [] };
+    TENSES.forEach(function (t) {
+      var rows = [];
+      if (t[0] === 'passe') {
+        for (var k = 0; k < 6; k++) {
+          if (spec.impersonal && k !== 2) { rows.push({ person: P[k], form: '-', text: '-', irregular: false }); continue; }
+          var form = aux[k] + ' ' + ppShow(spec.pp, k, etre);
+          var regPP = regT ? reg.pp : null;
+          rows.push({ person: P[k], form: form, text: withPron(k, form, inf, refl, false), irregular: regPP ? regPP !== spec.pp : !!spec.table, speak: withPron(k, aux[k] + ' ' + spec.pp, inf, refl, false) });
+        }
+      } else if (t[0] === 'imperatif') {
+        base.imperatif.forEach(function (f, j) {
+          var k = IMP_P[j], txt = f === '-' ? '-' : (refl ? f + '-' + ['toi', 'nous', 'vous'][j] : f);
+          var irr = f !== '-' && (regT ? regT.imperatif[j] !== f : !!spec.table);
+          rows.push({ person: ['(tu)', '(nous)', '(vous)'][j], form: txt, text: txt, irregular: irr, speak: txt });
+        });
+      } else {
+        base[t[0]].forEach(function (f, k) {
+          var irr = f !== '-' && (regT ? regT[t[0]][k] !== f : !!spec.table);
+          var txt = withPron(k, f, inf, refl, t[0] === 'subjonctif');
+          rows.push({ person: P[k], form: f, text: txt, irregular: irr, speak: txt });
+        });
+      }
+      if (spec.impersonal) rows.forEach(function (r) { r.text = r.text.replace('il/elle', 'il'); if (r.speak) r.speak = r.speak.replace('il/elle', 'il'); if (r.person === 'il/elle') r.person = 'il'; });
+      out.tenses.push({ id: t[0], fr: t[1], zh: t[2], en: t[3], rows: rows });
+    });
+    return out;
+  }
+
+  // ---------- lemmatizer: inflected form → infinitive ----------
+  var INDEX = null;
+  function strip(f) { return String(f).replace(/\(e\)|\(es\)|\(s\)/g, ''); }
+  function addForms(idx, inf) {
+    var c = conjugate(inf); if (!c) return;
+    function put(f) { f = strip(f); if (f && f !== '-' && !idx[f]) idx[f] = inf; }
+    put(inf);
+    [c.participle, c.participle + 'e', c.participle + 's', c.participle + 'es'].forEach(function (pp) { if (/[éiu]$|[st]$/.test(c.participle)) put(pp); });
+    c.tenses.forEach(function (t) { if (t.id === 'passe') return; t.rows.forEach(function (r) { put(t.id === 'imperatif' ? r.form : (r.form || '')); }); });
+  }
+  function index() {
+    if (INDEX) return INDEX;
+    INDEX = {};
+    ['être', 'avoir', 'aller', 'faire', 'dire', 'pouvoir', 'vouloir', 'devoir', 'savoir', 'venir', 'prendre', 'mettre', 'voir'].forEach(function (v) { addForms(INDEX, v); });
+    Object.keys(T).forEach(function (v) { addForms(INDEX, v); });
+    COMMON.forEach(function (v) { addForms(INDEX, v); });
+    return INDEX;
+  }
+  // words that are far more often a noun/adjective/other word than a verb form: never turned into a verb lemma
+  var NOT_VERB = sp('porte ferme montre cuisine livre été marche sort danse tour place lit vis vers est fils plus son sur ' +
+    'bois cours tu plu ri nu devoir pouvoir savoir rire sourire sens nous vous ' +
+    'parle aime mange mot boîte tasse bouge sac fin tour chat vol garde sonne poste caresse jeu pense dîner déjeuner goûter part ' +
+    'rêve aide visite cache commande pose change compte appel copie cri signe touche tente rappel reste passe entrée arrivée tombe ' +
+    'coucher lever étude travail voyage marié mariée invité invitée occupé occupée occupés occupées fermé fermée fermés fermées');
+  var NV = {}; NOT_VERB.forEach(function (w) { NV[w] = 1; });
+  function lemmaOf(word, opts) {
+    var w = String(word || '').trim().toLowerCase().replace(/'/g, '’').replace(/^(j’|l’|qu’|n’)/, '');
+    var refl = false;
+    var m = w.match(/^(se |s’|m’|t’|me |te )(.+)$/); if (m) { refl = true; w = m[2]; }
+    w = w.replace(/-(toi|nous|vous|moi|le|la|les|lui|leur|en|y)$/, '');
+    if (!w) return null;
+    var idx = index();
+    var inf = idx[w];
+    if (!inf) {
+      // rule-based guesses for regular -er verbs (validated by regenerating the form)
+      var cands = [w.replace(/(é|ée|és|ées)$/, 'er'), w.replace(/(ais|ait|aient|ions|iez|ons|ez|ent|es|e)$/, 'er'), w.replace(/(erai|eras|era|erons|erez|eront|erais|erait|eraient)$/, 'er')];
+      for (var i = 0; i < cands.length && !inf; i++) {
+        var c = cands[i]; if (!/er$/.test(c) || c === w || c.length < 4) continue;
+        var tmp = {}; addForms(tmp, c); if (tmp[w] === c && (opts && opts.guess)) inf = c;
+      }
+    }
+    if (!inf) return null;
+    if (NV[w] && !(opts && opts.verbOnly)) return null;
+    return { infinitive: inf, pronominal: refl, form: w };
+  }
+  // verbs found in a French sentence (for « Voir la conjugaison » on sentence cards); auxiliaries are kept only if alone.
+  function verbsIn(text) {
+    var toks = String(text || '').toLowerCase().replace(/'/g, '’').replace(/s’il (te|vous) pla[iî]t/g, ' ').split(/[^a-zàâäéèêëîïôöûùüçœæ’\-]+/).filter(Boolean);
+    var out = [], aux = [];
+    toks.forEach(function (t, i) {
+      var tt = t.replace(/^(j’|l’|qu’|n’|d’|c’)/, '');
+      var prev = toks[i - 1] || '', prev2 = toks[i - 2] || '';
+      var impPron = /-(toi|vous|nous)$/.test(t) && !/-(vous|nous)$/.test(t) || /-toi$/.test(t);
+      var pron = impPron || /^(s’|m’|t’)/.test(tt) || /^(se|me|te)$/.test(prev) ||
+        (/^(suis|es|est|sommes|êtes|sont|étais|était|serai|sera)$/.test(prev.replace(/^(s’|m’|t’)/, '')) && (/^(s’|m’|t’)/.test(prev) || /^(se|me|te)$/.test(prev2)));
+      tt = tt.replace(/^(s’|m’|t’)/, '').replace(/-(toi|nous|vous|moi|le|la|les|lui|leur|en|y|je|tu|il|elle|on|ils|elles)$/, '');
+      if (tt.length < 2) return;
+      var l = lemmaOf(tt, { verbOnly: tt.length > 3 });
+      if (!l || NV[tt] && tt.length <= 3) return;
+      if (NV[tt] && i > 0 && /^(la|le|les|une|un|ma|sa|ta|mon|ton|son|cette|ce|des|du|de|notre|votre|leur|en)$/.test(toks[i - 1])) return;
+      if (/^(être|avoir)$/.test(l.infinitive)) pron = false;
+      var name = (pron ? (elides(l.infinitive, l.infinitive) ? 's’' : 'se ') : '') + l.infinitive;
+      var list = /^(être|avoir)$/.test(l.infinitive) ? aux : out;
+      if (list.indexOf(name) < 0) list.push(name);
+    });
+    return out.length ? out.slice(0, 4) : aux.slice(0, 2);
+  }
+  function isVerb(inf) { return !!conjugate(inf) && (!!T[bare(inf)] || COMMON.indexOf(bare(inf)) >= 0 || /(er|ir|re)$/.test(bare(inf))); }
+
+  var api = { conjugate: conjugate, lemmaOf: lemmaOf, verbsIn: verbsIn, isVerb: isVerb, TABLE: T, COMMON: COMMON, TENSES: TENSES,
+    irregularCount: function () { return Object.keys(T).length; } };
+  root.A411 = root.A411 || {};
+  root.A411.Conj = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* L’Appartement 411 — v0.5.0 « Mon carnet de mots » (per-profile wordbook). Pure logic, no DOM; runs in Node tests.
  * Lookup order: (1) the game's own glossary (key words of Days 1–3 + a small high-frequency list, authored for this project),
  * (2) the free Wiktionary REST API (en.wiktionary.org, CORS-enabled, no key) — ONLY the single looked-up word is sent,
@@ -9882,6 +10296,15 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   'use strict';
   var Wd = (root.A411 && root.A411.Words) || (typeof require === 'function' ? safeReq('./words.js') : null);
   function safeReq(p) { try { return require(p); } catch (e) { return null; } }
+  function Conj() { return (root.A411 && root.A411.Conj) || (typeof require === 'function' ? safeReq('./conjugate.js') : null); }
+  // v0.9.0: verbs are stored as their infinitive (« arrosé » → « arroser », « me réveille » → « se réveiller »).
+  function verbLemma(w) {
+    var C = Conj(); if (!C || !w) return null;
+    var l = C.lemmaOf(w);
+    if (!l) return null;
+    var inf = l.infinitive;
+    return { verb: inf, lemma: l.pronominal ? (/^[aeiouyéèêàâîïôûh]/.test(inf) ? 's’' : 'se ') + inf : inf };
+  }
 
   // Small high-frequency glossary for the words that appear most in Days 1–3 narration (beyond words.js key nouns).
   // [lemma, forms[], zh, en]
@@ -10075,24 +10498,30 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   }
   function slug(w) { return norm(w).normalize('NFD').replace(/\p{M}/gu, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40) || 'mot'; }
   function idFor(w) { return 'cw_' + slug(w); }
-  function has(learn, w) { var id = idFor(w); return ensure(learn).words.some(function (x) { return x.id === id; }); }
+  function has(learn, w) {
+    var vl = verbLemma(norm(w)), id = idFor(vl ? vl.lemma : w), lm = vl ? vl.lemma : null;
+    return ensure(learn).words.some(function (x) { return x.id === id || (lm && x.lemma === lm); });
+  }
   function itemFor(e) {
     var g = e.gloss || {};
     var meaningEn = g.en || (g.defs && g.defs[0] && g.defs[0].text) || '';
     return { id: e.id, origin: 'carnet', module: 'carnet', band: 'A1', grammar: 'carnet', speaker: 'neutral',
       fr: e.display || (e.lemma && e.lemma !== e.word ? e.word + ' (' + e.lemma + ')' : e.word), say: e.display || e.word,
       zh: g.zh || meaningEn || '—', en: meaningEn || g.zh || '—',
-      noteZh: e.sentence ? '« ' + e.sentence + ' »' : null, noteEn: e.sentence ? '« ' + e.sentence + ' »' : null };
+      noteZh: e.sentence ? '« ' + e.sentence + ' »' : null, noteEn: e.sentence ? '« ' + e.sentence + ' »' : null, verb: e.verb || null };
   }
   // entry: { word, lemma?, sentence?, source?, gloss?: { zh?, en?, fr?, defs? }, origin: 'game'|'wiktionary'|'none' }
   function addWord(learn, entry, now) {
     var c = ensure(learn), word = norm(entry.word);
     if (!word) return { added: false, reason: 'empty' };
-    var id = idFor(entry.lemma || word);
-    var ex = c.words.filter(function (x) { return x.id === id; })[0];
+    var vl = verbLemma(entry.lemma ? norm(entry.lemma) : word) || (entry.lemma ? verbLemma(word) : null);
+    var lemma = vl ? vl.lemma : (entry.lemma ? norm(entry.lemma) : word);
+    var id = idFor(lemma);
+    var ex = c.words.filter(function (x) { return x.id === id || (x.lemma && x.lemma === lemma); })[0];
     if (ex) return { added: false, reason: 'exists', entry: ex };
-    var e = { id: id, word: word, display: entry.display ? String(entry.display).slice(0, 60) : null, lemma: entry.lemma ? norm(entry.lemma) : word, sentence: entry.sentence ? String(entry.sentence).slice(0, 300) : null,
+    var e = { id: id, word: word, display: vl ? lemma : (entry.display ? String(entry.display).slice(0, 60) : null), lemma: lemma, sentence: entry.sentence ? String(entry.sentence).slice(0, 300) : null,
       source: entry.source || null, at: (now || new Date()).toISOString(), gloss: entry.gloss || null, origin: entry.origin || 'none' };
+    if (vl) e.verb = vl.verb;
     c.words.push(e);
     learn.extraItems = learn.extraItems || [];
     var it = itemFor(e);
@@ -10104,6 +10533,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var c = ensure(learn), n = c.words.length;
     c.words = c.words.filter(function (x) { return x.id !== id; });
     learn.extraItems = (learn.extraItems || []).filter(function (x) { return x.id !== id; });
+    learn.deleted = learn.deleted || {}; learn.deleted[id] = new Date().toISOString(); // v0.9.0 tombstone for sync merges
     learn.storyPending = (learn.storyPending || []).filter(function (x) { return x.itemId !== id; });
     Object.keys(learn.cards || {}).forEach(function (k) { if (learn.cards[k].itemId === id) delete learn.cards[k]; });
     if (learn.session && learn.session.queue) learn.session.queue = learn.session.queue.filter(function (q) { return q.itemId !== id; });
@@ -10112,12 +10542,19 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   // Make sure every saved word has its review item (e.g. after an import). Idempotent.
   function sync(learn) {
     var c = ensure(learn); learn.extraItems = learn.extraItems || [];
-    c.words.forEach(function (e) { if (!learn.extraItems.some(function (x) { return x.id === e.id; })) learn.extraItems.push(itemFor(e)); });
+    c.words.forEach(function (e) {
+      if (e.verb === undefined) { // v0.9.0: older entries — keep the id (review history), store the infinitive
+        var vl = verbLemma(e.lemma || e.word);
+        e.verb = vl ? vl.verb : null;
+        if (vl) { e.lemma = vl.lemma; e.display = vl.lemma; learn.extraItems = learn.extraItems.filter(function (x) { return x.id !== e.id; }); }
+      }
+      if (!learn.extraItems.some(function (x) { return x.id === e.id; })) learn.extraItems.push(itemFor(e));
+    });
     return c.words.length;
   }
 
   var api = { G: G, norm: norm, stripElision: stripElision, wordAt: wordAt, candidates: candidates, lookupGame: lookupGame, wiktionaryUrl: wiktionaryUrl,
-    parseWiktionary: parseWiktionary, lookupOnline: lookupOnline, ensure: ensure, addWord: addWord, removeWord: removeWord, itemFor: itemFor, sync: sync, idFor: idFor, has: has, API: API,
+    parseWiktionary: parseWiktionary, lookupOnline: lookupOnline, ensure: ensure, addWord: addWord, verbLemma: verbLemma, removeWord: removeWord, itemFor: itemFor, sync: sync, idFor: idFor, has: has, API: API,
     TITLE: 'Mon carnet de mots' };
   root.A411 = root.A411 || {};
   root.A411.Wordbook = api;
@@ -10508,6 +10945,789 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 
 </script>
 <script>
+/* L’Appartement 411 — v0.9.0 review tools (Anki-like): card browser, edits, suspend, delete, custom cards,
+ * leeches and statistics. Pure logic on the per-profile learn record; no DOM, runs in Node tests. No learner data here. */
+(function (root) {
+  'use strict';
+  var DAY = 86400000;
+  function L() { return root.A411 && root.A411.Learn ? root.A411.Learn : (typeof require === 'function' ? require('./learn.js') : null); }
+  function clamp(x, a, b) { return Math.min(b, Math.max(a, x)); }
+
+  function setRetention(learn, r) {
+    var Ln = L(); r = Number(r);
+    if (isNaN(r)) return Ln.reqRet(learn);
+    learn.settings.requestRetention = Math.round(clamp(r, Ln.RET_MIN, Ln.RET_MAX) * 100) / 100;
+    return learn.settings.requestRetention;
+  }
+  function cardsOf(learn, itemId) {
+    return Object.keys(learn.cards || {}).filter(function (k) { return learn.cards[k].itemId === itemId; }).map(function (k) { return learn.cards[k]; });
+  }
+  function itemState(learn, itemId) {
+    var cs = cardsOf(learn, itemId);
+    if (!cs.length) return 'new';
+    if (cs.every(function (c) { return c.suspended; })) return 'suspended';
+    var live = cs.filter(function (c) { return !c.suspended && c.reps; });
+    if (!live.length) return 'new';
+    var Ln = L(), order = { learning: 0, review: 1, mature: 2 }, low = 'mature';
+    live.forEach(function (c) { var b = Ln.bucket(c); if (b !== 'new' && order[b] < order[low]) low = b; });
+    return low;
+  }
+  function isLeech(learn, itemId) { return cardsOf(learn, itemId).some(function (c) { return c.leech; }); }
+  function fold(s) { return String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/\p{M}/gu, ''); }
+  // rows for the browser: one per item (its modality cards together). filter: { q, module, state } with state in
+  // new|learning|review|mature|suspended|leech|all.
+  function listCards(learn, deck, filter) {
+    var Ln = L(); filter = filter || {};
+    var q = fold(filter.q || '').trim();
+    var rows = Ln.allItems(deck, learn).filter(function (it) { return it.origin !== 'letter' || cardsOf(learn, it.id).length; }).map(function (it) {
+      var cs = cardsOf(learn, it.id);
+      var due = cs.filter(function (c) { return c.due && c.reps && !c.suspended; }).map(function (c) { return c.due; }).sort()[0] || null;
+      return { id: it.id, fr: it.fr, zh: it.zh, en: it.en, module: Ln.moduleOf(it), state: itemState(learn, it.id), leech: isLeech(learn, it.id),
+        lapses: cs.reduce(function (a, c) { return a + (c.lapses || 0); }, 0), reps: cs.reduce(function (a, c) { return a + (c.reps || 0); }, 0),
+        due: due, custom: it.origin === 'custom', edited: !!it.edited };
+    });
+    if (filter.module && filter.module !== 'all') rows = rows.filter(function (r) { return r.module === filter.module; });
+    if (filter.state && filter.state !== 'all') rows = rows.filter(function (r) { return filter.state === 'leech' ? r.leech : r.state === filter.state; });
+    if (q) rows = rows.filter(function (r) { return fold(r.fr).indexOf(q) >= 0 || fold(r.zh).indexOf(q) >= 0 || fold(r.en).indexOf(q) >= 0 || fold(r.id).indexOf(q) >= 0; });
+    return rows;
+  }
+  function modules(learn, deck) {
+    var Ln = L(), seen = {};
+    Ln.allItems(deck, learn).forEach(function (it) { seen[Ln.moduleOf(it)] = 1; });
+    return Object.keys(seen).sort();
+  }
+  function dropFromSession(learn, itemId) {
+    var s = learn.session;
+    if (!s || !s.queue) return;
+    var cur = s.queue[s.index];
+    var before = s.queue.slice(0, s.index), after = s.queue.slice(s.index).filter(function (q) { return q.itemId !== itemId; });
+    s.queue = before.concat(after);
+    if (s.index >= s.queue.length) s.active = false;
+    if (cur && cur.itemId === itemId) { s.phase = 'ask'; s.hints = 0; s.revealed = false; s.wrong = false; }
+    learn.undo = null;
+  }
+  // Suspend: all modality cards of the item; an item not yet introduced gets blank suspended cards so it is never introduced.
+  function suspendItem(learn, deck, itemId) {
+    var Ln = L(), it = Ln.itemById(deck, learn, itemId);
+    if (!it) return false;
+    var ms = deck.modalities ? deck.modalities(it) : ['listening', 'reading'];
+    if (!cardsOf(learn, itemId).length) ms.forEach(function (m) { Ln.ensureCard(learn, itemId, m); });
+    cardsOf(learn, itemId).forEach(function (c) { c.suspended = true; });
+    dropFromSession(learn, itemId);
+    return true;
+  }
+  function unsuspendItem(learn, itemId) {
+    var n = 0;
+    Object.keys(learn.cards || {}).forEach(function (k) {
+      var c = learn.cards[k];
+      if (c.itemId !== itemId || !c.suspended) return;
+      delete c.suspended; n++;
+      if (!c.reps) delete learn.cards[k]; // never studied: back to the new-card pool
+    });
+    return n > 0;
+  }
+  // Delete (after the UI confirm): built-in items are hidden for this profile; custom and wordbook items are removed.
+  // The review log keeps its history lines.
+  function deleteItem(learn, deck, itemId) {
+    var Ln = L(), it = Ln.itemById(deck, learn, itemId);
+    if (!it) return false;
+    Object.keys(learn.cards || {}).forEach(function (k) { if (learn.cards[k].itemId === itemId) delete learn.cards[k]; });
+    learn.storyPending = (learn.storyPending || []).filter(function (x) { return x.itemId !== itemId; });
+    var isExtra = (learn.extraItems || []).some(function (x) { return x.id === itemId; });
+    if (isExtra) {
+      learn.extraItems = learn.extraItems.filter(function (x) { return x.id !== itemId; });
+      if (learn.carnet && Array.isArray(learn.carnet.words)) learn.carnet.words = learn.carnet.words.filter(function (w) { return w.id !== itemId; });
+    } else {
+      learn.hidden = learn.hidden || {}; learn.hidden[itemId] = true;
+    }
+    if (learn.overrides) delete learn.overrides[itemId];
+    learn.deleted = learn.deleted || {}; learn.deleted[itemId] = new Date().toISOString(); // tombstone for sync merges
+    dropFromSession(learn, itemId);
+    return true;
+  }
+  function clip(s, n) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().slice(0, n); }
+  // Edit: custom cards change in place; built-in and wordbook cards keep their French (audio matches it) and get an override for meaning/note.
+  function editItem(learn, deck, itemId, fields) {
+    var Ln = L(), it = Ln.itemById(deck, learn, itemId);
+    if (!it || !fields) return false;
+    var ex = (learn.extraItems || []).filter(function (x) { return x.id === itemId; })[0];
+    if (ex && ex.origin === 'custom') {
+      if (fields.fr != null && clip(fields.fr, 200)) { ex.fr = clip(fields.fr, 200); ex.say = ex.fr; }
+      if (fields.zh != null) ex.zh = clip(fields.zh, 300) || '—';
+      if (fields.en != null) ex.en = clip(fields.en, 300) || '—';
+      if (fields.note != null) { ex.noteZh = clip(fields.note, 300) || null; ex.noteEn = ex.noteZh; }
+      return true;
+    }
+    learn.overrides = learn.overrides || {};
+    var ov = learn.overrides[itemId] || {};
+    if (fields.zh != null) ov.zh = clip(fields.zh, 300);
+    if (fields.en != null) ov.en = clip(fields.en, 300);
+    if (fields.note != null) ov.note = clip(fields.note, 300);
+    learn.overrides[itemId] = ov;
+    return true;
+  }
+  function addCustom(learn, front, back, now) {
+    var fr = clip(front, 200), meaning = clip(back, 300);
+    if (!fr) return { ok: false, reason: 'empty' };
+    var Ln = L();
+    var dup = (learn.extraItems || []).filter(function (x) { return x.origin === 'custom' && Ln.checkAnswer(x.fr, [fr]).ok; })[0];
+    if (dup) return { ok: false, reason: 'exists', item: dup };
+    var t = (now || new Date()).getTime();
+    var id = 'cu_' + t.toString(36);
+    while ((learn.extraItems || []).some(function (x) { return x.id === id; })) id += 'x';
+    var it = { id: id, origin: 'custom', module: 'custom', band: 'A1', grammar: 'custom', speaker: 'neutral', priority: 1,
+      fr: fr, say: fr, zh: meaning || '—', en: meaning || '—', noteZh: null, noteEn: null, at: new Date(t).toISOString() };
+    learn.extraItems = learn.extraItems || [];
+    learn.extraItems.push(it);
+    return { ok: true, item: it };
+  }
+  function leeches(learn, deck) { return listCards(learn, deck, { state: 'leech' }); }
+
+  // ---------- statistics ----------
+  function heatmap(learn, now, nDays) {
+    var Ln = L(), out = [];
+    nDays = nDays || 84;
+    for (var i = nDays - 1; i >= 0; i--) {
+      var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+      var k = Ln.dayKey(d), day = (learn.days || {})[k] || {};
+      out.push({ day: k, count: (day.reviews || 0) + (day.news || 0) + (day.letter || 0) });
+    }
+    return out;
+  }
+  // True retention (Anki): of review answers on cards already learned (not first sight), the share not graded Again.
+  function trueRetention(learn, now, nDays) {
+    var since = now.getTime() - (nDays || 30) * DAY, seen = {}, n = 0, pass = 0;
+    (learn.evidence || []).forEach(function (e) {
+      if (!e || !e.itemId) return;
+      var k = e.itemId + '|' + e.modality, first = !seen[k]; seen[k] = 1;
+      if (e.source === 'placement') return;
+      var isNew = e.wasNew != null ? e.wasNew : first;
+      if (isNew || new Date(e.at).getTime() < since) return;
+      n++; if (e.grade > 1) pass++;
+    });
+    return { n: n, passed: pass, rate: n ? pass / n : null };
+  }
+  function cardCounts(learn) {
+    var Ln = L(), c = { new: 0, learning: 0, review: 0, mature: 0, suspended: 0, leech: 0, total: 0 };
+    Object.keys(learn.cards || {}).forEach(function (k) {
+      var x = learn.cards[k]; c.total++;
+      if (x.leech) c.leech++;
+      if (x.suspended) c.suspended++; else c[Ln.bucket(x)]++;
+    });
+    return c;
+  }
+  function stats(learn, now) {
+    var Ln = L();
+    return { heatmap: heatmap(learn, now, 84), trueRetention: trueRetention(learn, now, 30), counts: cardCounts(learn),
+      forecast: Ln.forecast(learn, now, 30), desired: Ln.reqRet(learn) };
+  }
+
+  var api = { setRetention: setRetention, listCards: listCards, modules: modules, itemState: itemState, isLeech: isLeech,
+    suspendItem: suspendItem, unsuspendItem: unsuspendItem, deleteItem: deleteItem, editItem: editItem, addCustom: addCustom,
+    leeches: leeches, heatmap: heatmap, trueRetention: trueRetention, cardCounts: cardCounts, stats: stats, cardsOf: cardsOf };
+  root.A411 = root.A411 || {};
+  root.A411.Review = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — v0.9.0 « Sauvegarde automatique »: per-profile backup to a PRIVATE GitHub repository through the
+ * GitHub contents API (api.github.com allows CORS). Each device stores one fine-grained token (only that repo, Contents
+ * read/write) in its own localStorage under a411.sync.token. The token is never logged, never exported, never put in a
+ * summary, and never part of a profile record. Files: sync/<profile>/learn.json, story.json, carnet.json, summary.md.
+ * Pure logic with injected fetch/localStorage so it runs in Node tests against a mocked API. No learner data here. */
+(function (root) {
+  'use strict';
+  var TOKEN_KEY = 'a411.sync.token';
+  var OWNER = 'aaronchu903-png', REPO = 'a411-sync', BRANCH = 'main', API = 'https://api.github.com';
+  var PROFILES = { jinyi: 1, yuechao: 1 };
+  var DAY = 86400000;
+
+  function okProfile(p) { return !!PROFILES[p]; }
+  function stateKey(p) { return 'a411.p.' + p + '.sync'; }
+  function pathOf(p, name) { if (!okProfile(p)) throw new Error('bad profile'); return 'sync/' + p + '/' + name; }
+  function tokenShapeOk(t) { return typeof t === 'string' && /^(github_pat_[A-Za-z0-9_]{40,}|ghp_[A-Za-z0-9]{30,})$/.test(t.trim()); }
+  function hash(s) { var h = 5381; for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36) + ':' + s.length; }
+  function b64enc(str) {
+    var bytes = new TextEncoder().encode(str), bin = '';
+    for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function b64dec(b64) {
+    var bin = atob(String(b64 || '').replace(/\s+/g, '')), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+  function clone(x) { return x == null ? x : JSON.parse(JSON.stringify(x)); }
+  function t(x) { var v = x ? Date.parse(x) : NaN; return isNaN(v) ? 0 : v; }
+
+  // ---------- merge (never silently drops data) ----------
+  function cardWins(a, b) { // true if card a should be kept over b
+    if (t(a.lastReview) !== t(b.lastReview)) return t(a.lastReview) > t(b.lastReview);
+    return (a.reps || 0) >= (b.reps || 0);
+  }
+  function mergeLearn(a, b) {
+    if (!a) return clone(b); if (!b) return clone(a);
+    if (a.profileId && b.profileId && a.profileId !== b.profileId) throw new Error('profile mismatch');
+    var newer = t(a.updatedAt) >= t(b.updatedAt) ? a : b, older = newer === a ? b : a;
+    var out = clone(newer);
+    var del = {}; [a.deleted, b.deleted].forEach(function (d) { Object.keys(d || {}).forEach(function (k) { if (!del[k] || t(d[k]) > t(del[k])) del[k] = d[k]; }); });
+    out.deleted = del;
+    out.hidden = {}; [a.hidden, b.hidden].forEach(function (h) { Object.keys(h || {}).forEach(function (k) { if (h[k]) out.hidden[k] = true; }); });
+    // cards: union, later review wins; leech/suspend flags survive from the winner
+    var cards = {};
+    [older.cards || {}, newer.cards || {}].forEach(function (cs) {
+      Object.keys(cs).forEach(function (k) { var c = cs[k]; if (!cards[k] || cardWins(c, cards[k])) cards[k] = clone(c); });
+    });
+    Object.keys(cards).forEach(function (k) { if (del[cards[k].itemId]) delete cards[k]; });
+    out.cards = cards;
+    // review log: union by identity, chronological, last 500
+    var seen = {}, ev = [];
+    (a.evidence || []).concat(b.evidence || []).forEach(function (e) { var k = e.at + '|' + e.itemId + '|' + e.modality + '|' + e.grade + '|' + (e.source || ''); if (!seen[k]) { seen[k] = 1; ev.push(e); } });
+    ev.sort(function (x, y) { return t(x.at) - t(y.at); });
+    out.evidence = clone(ev.slice(-500));
+    // day counters: max of each field
+    var days = {};
+    [a.days || {}, b.days || {}].forEach(function (ds) {
+      Object.keys(ds).forEach(function (k) { var d = days[k] = days[k] || {}; Object.keys(ds[k] || {}).forEach(function (f) { var v = ds[k][f]; if (typeof v === 'number') d[f] = Math.max(d[f] || 0, v); else if (d[f] == null) d[f] = clone(v); }); });
+    });
+    out.days = days;
+    function unionBy(x, y, key) { var m = {}, o = []; (y || []).concat(x || []).forEach(function (it) { var k = it && it[key]; if (k == null || m[k]) return; m[k] = 1; o.push(clone(it)); }); return o; }
+    out.extraItems = unionBy(newer.extraItems, older.extraItems, 'id').filter(function (it) { return !del[it.id]; });
+    var cw = unionBy(newer.carnet && newer.carnet.words, older.carnet && older.carnet.words, 'id').filter(function (w) { return !del[w.id]; });
+    out.carnet = { v: 1, words: cw.sort(function (x, y) { return t(x.at) - t(y.at); }) };
+    out.storyPending = unionBy(newer.storyPending, older.storyPending, 'itemId').filter(function (x) { return !del[x.itemId]; });
+    out.overrides = {}; [older.overrides || {}, newer.overrides || {}].forEach(function (o) { Object.keys(o).forEach(function (k) { out.overrides[k] = clone(o[k]); }); });
+    out.updatedAt = new Date(Math.max(t(a.updatedAt), t(b.updatedAt))).toISOString();
+    delete out.undo;
+    return out;
+  }
+  function isEmptyLearn(l) { return !l || (!Object.keys(l.cards || {}).length && !(l.evidence || []).length && !((l.carnet && l.carnet.words) || []).length); }
+  function isEmptyStory(s) { return !s || (!s.week && s.progress && s.progress.episode === 1 && s.progress.scene === 'baseline' && s.progress.step === 0); }
+
+  // ---------- human-readable summary for the tutor (sync/<profile>/summary.md) ----------
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function localStamp(d) {
+    var off = -d.getTimezoneOffset(), sg = off >= 0 ? '+' : '-'; off = Math.abs(off);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' (UTC' + sg + pad(Math.floor(off / 60)) + ':' + pad(off % 60) + ')';
+  }
+  function buildSummary(o) {
+    var Learn = o.Learn, Review = o.Review, learn = o.learn, now = o.now || new Date(), deck = o.deck, story = o.story || {};
+    var name = o.profileName || learn.profileId;
+    var dk = Learn.dayKey(now), today = (learn.days || {})[dk] || {};
+    var st = Review.stats(learn, now), c = st.counts, tr = st.trueRetention;
+    var L = [];
+    L.push('# L’Appartement 411 — ' + name + ' — ' + dk);
+    L.push('');
+    L.push('Updated ' + localStamp(now) + ' · app v' + (o.appVersion || '?') + '. Automatic backup; for the tutor. No journal text is included.');
+    L.push('');
+    L.push('## Story');
+    L.push('- Day: ' + (story.day ? 'Jour ' + story.day + (story.title ? ' · ' + story.title : '') + ' (' + (story.status || 'in progress') + ')' : 'not started'));
+    if (story.grammar) L.push('- Grammar point: ' + story.grammar);
+    if (story.letters != null) L.push('- Letters written: ' + story.letters);
+    L.push('');
+    L.push('## Today (' + dk + ')');
+    L.push('- Reviews: ' + (today.reviews || 0) + ' · new cards: ' + (today.news || 0) + ' · letter gaps: ' + (today.letter || 0));
+    var last7 = st.heatmap.slice(-7).map(function (d) { return d.day.slice(5) + ' ' + d.count; }).join(' · ');
+    L.push('- Last 7 days (answers): ' + last7);
+    L.push('');
+    L.push('## Retention');
+    L.push('- True retention, last 30 days: ' + (tr.rate == null ? 'not enough reviews yet' : Math.round(tr.rate * 100) + '% (' + tr.passed + '/' + tr.n + ' reviews not graded Again)'));
+    L.push('- Desired retention (FSRS): ' + Math.round(st.desired * 100) + '%');
+    var r = Learn.retention(learn, now);
+    if (r != null) L.push('- Predicted recall now (average): ' + Math.round(r * 100) + '%');
+    L.push('- Cards: new ' + c.new + ' · learning ' + c.learning + ' · review ' + c.review + ' · mature ' + c.mature + ' · suspended ' + c.suspended + ' · difficult ' + c.leech);
+    L.push('- Due in the next 7 days: ' + st.forecast.slice(0, 7).map(function (d) { return d.count; }).join(' / '));
+    L.push('');
+    L.push('## New wordbook words today');
+    var nw = ((learn.carnet && learn.carnet.words) || []).filter(function (w) { return w.at && Learn.dayKey(new Date(w.at)) === dk; });
+    if (!nw.length) L.push('- none');
+    nw.forEach(function (w) { var g = w.gloss || {}; L.push('- ' + (w.display || w.lemma || w.word) + (w.word && w.word !== (w.display || w.lemma) ? ' (seen as « ' + w.word + ' »)' : '') + (g.zh || g.en ? ' — ' + [g.zh, g.en].filter(Boolean).join(' / ') : '')); });
+    L.push('');
+    L.push('## Weak cards');
+    var rows = Review.listCards(learn, deck, {}).filter(function (x) { return x.reps > 0 && (x.lapses > 0 || x.leech); })
+      .sort(function (x, y) { return (y.leech - x.leech) || (y.lapses - x.lapses); }).slice(0, 10);
+    if (!rows.length) L.push('- none');
+    rows.forEach(function (x) { L.push('- ' + x.fr + ' — ' + (x.zh || '') + ' · lapses ' + x.lapses + (x.leech ? ' · difficult' : '') + (x.state === 'suspended' ? ' · suspended' : '')); });
+    L.push('');
+    return L.join('\n');
+  }
+
+  // ---------- the syncer ----------
+  // deps: { fetch, ls, now(), getLocal(p) → { learn, story }, setLocal(p, { learn?, story? }), backupLocal(p, label, { learn?, story? }),
+  //         summary(p) → string, appVersion, onChange(p) }
+  function create(deps) {
+    var fetchFn = deps.fetch, ls = deps.ls, nowFn = deps.now || function () { return new Date(); };
+    var inflight = {}, again = {}, timers = {}, checked = {}, attempts = {};
+    function token() { try { return ls.getItem(TOKEN_KEY) || null; } catch (e) { return null; } }
+    function setToken(v) { v = String(v || '').trim(); if (!tokenShapeOk(v)) return false; try { ls.setItem(TOKEN_KEY, v); return true; } catch (e) { return false; } }
+    function clearToken() { try { ls.removeItem(TOKEN_KEY); } catch (e) {} Object.keys(PROFILES).forEach(function (p) { var s = state(p); s.pending = false; s.lastError = null; save(p, s); }); }
+    function state(p) { var s = null; try { s = JSON.parse(ls.getItem(stateKey(p)) || 'null'); } catch (e) {} return s && typeof s === 'object' ? s : { shas: {}, hashes: {} }; }
+    function save(p, s) { try { ls.setItem(stateKey(p), JSON.stringify(s)); } catch (e) {} if (deps.onChange) try { deps.onChange(p); } catch (e) {} }
+    function req(method, path, body) {
+      var tok = token();
+      if (!tok) return Promise.resolve({ status: 0, error: 'no-token' });
+      var h = { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + tok, 'X-GitHub-Api-Version': '2022-11-28' };
+      if (body) h['Content-Type'] = 'application/json';
+      return fetchFn(API + path, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined, cache: 'no-store' }).then(function (r) {
+        return r.text().then(function (txt) { var j = null; try { j = txt ? JSON.parse(txt) : null; } catch (e) {} return { status: r.status, json: j }; });
+      }, function () { return { status: 0, error: 'offline' }; });
+    }
+    function errOf(r) {
+      if (!r || r.status === 0) return r && r.error === 'no-token' ? 'no-token' : 'offline';
+      if (r.status === 401) return 'auth';
+      if (r.status === 403) return (r.json && /rate limit/i.test(r.json.message || '')) ? 'rate' : 'forbidden';
+      if (r.status === 404) return 'not-found';
+      return 'http-' + r.status;
+    }
+    function contentsPath(path) { return '/repos/' + OWNER + '/' + REPO + '/contents/' + path.split('/').map(encodeURIComponent).join('/'); }
+    function getFile(path) {
+      return req('GET', contentsPath(path) + '?ref=' + BRANCH).then(function (r) {
+        if (r.status === 404) return { ok: true, missing: true };
+        if (r.status !== 200 || !r.json) return { ok: false, error: errOf(r) };
+        if (r.json.content && r.json.encoding === 'base64') return { ok: true, sha: r.json.sha, text: b64dec(r.json.content) };
+        return req('GET', '/repos/' + OWNER + '/' + REPO + '/git/blobs/' + r.json.sha).then(function (b) { // files over 1 MB
+          if (b.status !== 200 || !b.json) return { ok: false, error: errOf(b) };
+          return { ok: true, sha: r.json.sha, text: b64dec(b.json.content) };
+        });
+      });
+    }
+    function putFile(path, text, sha, msg) {
+      var body = { message: msg, content: b64enc(text), branch: BRANCH };
+      if (sha) body.sha = sha;
+      return req('PUT', contentsPath(path), body).then(function (r) {
+        if (r.status === 200 || r.status === 201) return { ok: true, sha: r.json && r.json.content && r.json.content.sha };
+        if (r.status === 409 || r.status === 422) return { ok: false, conflict: true };
+        return { ok: false, error: errOf(r) };
+      });
+    }
+    function envelope(p, kind, updatedAt, data) {
+      return JSON.stringify({ kind: 'a411-sync-' + kind, schema: 1, profileId: p, app: deps.appVersion || null, updatedAt: updatedAt || null, data: data }, null, 1);
+    }
+    function parse(text, p) {
+      var o = null; try { o = JSON.parse(text); } catch (e) { return null; }
+      if (!o || o.profileId !== p) return null; // never cross profiles
+      return o;
+    }
+    function files(p) {
+      var loc = deps.getLocal(p) || {};
+      var learn = loc.learn ? clone(loc.learn) : null; if (learn) delete learn.undo;
+      var out = [];
+      if (learn) out.push({ name: 'learn.json', kind: 'learn', text: envelope(p, 'learn', learn.updatedAt, learn) });
+      if (loc.story) out.push({ name: 'story.json', kind: 'story', text: envelope(p, 'story', loc.story.updatedAt, loc.story) });
+      if (learn) out.push({ name: 'carnet.json', kind: 'carnet', text: envelope(p, 'carnet', learn.updatedAt, learn.carnet || { v: 1, words: [] }) });
+      return out;
+    }
+    // Resolve a PUT conflict: refetch, merge, write back. Story saves cannot be merged: the newer one stays as story.json and
+    // the other one is kept both on this device (local backup) and in the repo under conflicts/.
+    function resolve(p, f, s) {
+      var path = pathOf(p, f.name);
+      return getFile(path).then(function (g) {
+        if (!g.ok) return { ok: false, error: g.error };
+        if (g.missing) return putFile(path, f.text, null, 'sync ' + p + ' ' + f.name);
+        var remote = parse(g.text, p);
+        var loc = deps.getLocal(p) || {};
+        if (f.kind === 'learn' || f.kind === 'carnet') {
+          var merged = mergeLearn(loc.learn, remote && remote.kind === 'a411-sync-learn' ? remote.data : null);
+          if (f.kind === 'carnet' && remote && remote.kind === 'a411-sync-carnet') {
+            var tmp = clone(loc.learn); tmp.carnet = remote.data; tmp.updatedAt = remote.updatedAt || tmp.updatedAt;
+            merged = mergeLearn(loc.learn, tmp);
+          }
+          if (JSON.stringify(merged) !== JSON.stringify(loc.learn)) deps.setLocal(p, { learn: merged });
+          var text = f.kind === 'learn' ? envelope(p, 'learn', merged.updatedAt, merged) : envelope(p, 'carnet', merged.updatedAt, merged.carnet);
+          return putFile(path, text, g.sha, 'sync ' + p + ' ' + f.name + ' (merged)').then(function (r) { r.text = text; return r; });
+        }
+        if (f.kind === 'story') {
+          var rs = remote && remote.data, ours = loc.story;
+          var stamp = nowFn().toISOString().replace(/[:.]/g, '-');
+          if (rs && t(rs.updatedAt) > t(ours && ours.updatedAt)) {
+            try { deps.backupLocal(p, 'pre-sync-conflict', { story: ours }); } catch (e) {}
+            s.storyConflict = { at: nowFn().toISOString(), remoteUpdatedAt: rs.updatedAt };
+            return putFile(pathOf(p, 'conflicts/story-' + stamp + '.json'), f.text, null, 'sync ' + p + ' story conflict (kept)').then(function (r) {
+              return { ok: r.ok, sha: g.sha, kept: 'remote', error: r.error, text: g.text };
+            });
+          }
+          return putFile(pathOf(p, 'conflicts/story-' + stamp + '.json'), g.text, null, 'sync ' + p + ' story conflict (kept)').then(function () {
+            return putFile(path, f.text, g.sha, 'sync ' + p + ' story.json').then(function (r) { r.text = f.text; return r; });
+          });
+        }
+        return putFile(path, f.text, g.sha, 'sync ' + p + ' ' + f.name).then(function (r) { r.text = f.text; return r; });
+      });
+    }
+    function pushNow(p, reason) {
+      if (!okProfile(p)) return Promise.resolve({ ok: false, error: 'bad-profile' });
+      if (!token()) return Promise.resolve({ ok: false, error: 'no-token' });
+      if (inflight[p]) { again[p] = true; return inflight[p]; }
+      var s = state(p); s.shas = s.shas || {}; s.hashes = s.hashes || {};
+      s.syncing = true; save(p, s);
+      var list = files(p), changed = list.some(function (f) { return s.hashes[f.name] !== hash(f.text); });
+      if (changed && deps.summary) { try { list.push({ name: 'summary.md', kind: 'summary', text: deps.summary(p) }); } catch (e) {} }
+      var pushed = [], err = null;
+      var chain = Promise.resolve();
+      list.forEach(function (f) {
+        chain = chain.then(function () {
+          if (err) return;
+          if (f.kind !== 'summary' && s.hashes[f.name] === hash(f.text)) return;
+          if (f.kind === 'story' && s.storyConflict) return; // the cloud has a newer story from another device: wait for the learner's choice
+          var path = pathOf(p, f.name);
+          return putFile(path, f.text, s.shas[f.name] || null, 'sync ' + p + ' ' + f.name + (reason ? ' (' + reason + ')' : '')).then(function (r) {
+            if (r.conflict) return resolve(p, f, s);
+            return r;
+          }).then(function (r) {
+            if (r && r.ok) {
+              s.shas[f.name] = r.sha || s.shas[f.name]; s.hashes[f.name] = hash(r.text || f.text); pushed.push(f.name);
+              if (f.kind === 'learn' || f.kind === 'story') { try { s.seen = s.seen || {}; s.seen[f.name] = JSON.parse(r.text || f.text).updatedAt || null; } catch (e) {} }
+            }
+            else err = (r && r.error) || 'conflict';
+          });
+        });
+      });
+      inflight[p] = chain.then(function () {
+        s = mergeState(p, s);
+        s.syncing = false;
+        if (err) { s.pending = true; s.lastError = err; s.lastErrorAt = nowFn().toISOString(); }
+        else { s.pending = false; s.lastError = null; if (pushed.length || !changed) s.lastPushAt = nowFn().toISOString(); attempts[p] = 0; }
+        save(p, s);
+        inflight[p] = null;
+        if (err && err !== 'auth' && err !== 'no-token' && err !== 'not-found' && err !== 'forbidden') backoff(p);
+        if (again[p]) { again[p] = false; return pushNow(p, 'again'); }
+        return { ok: !err, error: err, pushed: pushed };
+      });
+      return inflight[p];
+    }
+    function mergeState(p, s) { var cur = state(p); if (cur.restoredAt && cur.restoredAt !== s.restoredAt) { s.restoredAt = cur.restoredAt; s.storyConflict = null; } return s; }
+    function backoff(p) {
+      attempts[p] = (attempts[p] || 0) + 1;
+      if (attempts[p] > 5 || !deps.setTimeout) return;
+      var ms = Math.min(600000, 30000 * Math.pow(2, attempts[p] - 1));
+      if (timers[p]) deps.clearTimeout(timers[p]);
+      timers[p] = deps.setTimeout(function () { timers[p] = null; pushNow(p, 'retry'); }, ms);
+    }
+    // Triggers (session end, Bravo, review finished, page hidden) call this. Nothing is pushed for a profile until its
+    // remote copy has been checked on this device, so a fresh phone can never overwrite the cloud copy with an empty save.
+    function schedule(p, reason, delay) {
+      if (!token() || !okProfile(p)) return;
+      var s = state(p); s.pending = true; s.pendingReason = reason || null; save(p, s);
+      if (!checked[p]) return;
+      if (!deps.setTimeout || delay === 0) { pushNow(p, reason); return; }
+      if (timers[p]) deps.clearTimeout(timers[p]);
+      timers[p] = deps.setTimeout(function () { timers[p] = null; pushNow(p, reason); }, delay == null ? 1500 : delay);
+    }
+    // On open: compare the cloud copy with this device. Returns { offer: bool, reason, remote } for the UI.
+    function check(p) {
+      if (!token() || !okProfile(p)) return Promise.resolve({ ok: false, error: 'no-token' });
+      return Promise.all([getFile(pathOf(p, 'learn.json')), getFile(pathOf(p, 'story.json'))]).then(function (rs) {
+        var gl = rs[0], gs = rs[1];
+        if (!gl.ok || !gs.ok) { var s0 = state(p); s0.lastError = gl.error || gs.error; save(p, s0); return { ok: false, error: gl.error || gs.error }; }
+        var rl = gl.missing ? null : parse(gl.text, p), rst = gs.missing ? null : parse(gs.text, p);
+        var s = state(p); s.shas = s.shas || {}; s.hashes = s.hashes || {};
+        if (gl.sha) s.shas['learn.json'] = gl.sha; if (gs.sha) s.shas['story.json'] = gs.sha;
+        s.lastPullAt = nowFn().toISOString(); s.lastError = null;
+        save(p, s);
+        var loc = deps.getLocal(p) || {};
+        var remote = { learn: rl && rl.data, story: rst && rst.data, learnAt: rl && rl.updatedAt, storyAt: rst && rst.updatedAt };
+        var localEmpty = isEmptyLearn(loc.learn) && isEmptyStory(loc.story);
+        var remoteHas = !isEmptyLearn(remote.learn) || !isEmptyStory(remote.story);
+        var seen = s.seen || {};
+        // "newer" = another device pushed since this device last synced (local saves on open do not hide it)
+        function newerThan(at, seenAt, localAt) { return !!at && (seenAt ? t(at) > t(seenAt) : t(at) > t(localAt) + 1000); }
+        var learnNewer = remote.learn && newerThan(remote.learnAt, seen['learn.json'], loc.learn && loc.learn.updatedAt);
+        var storyNewer = remote.story && newerThan(remote.storyAt, seen['story.json'], loc.story && loc.story.updatedAt);
+        var merged = false;
+        if (learnNewer && !localEmpty && loc.learn) { // review records merge card by card: nothing to choose, nothing lost
+          try { deps.backupLocal(p, 'pre-sync-merge', { learn: loc.learn }); } catch (e) {}
+          deps.setLocal(p, { learn: mergeLearn(remote.learn, loc.learn) });
+          s = state(p); s.seen = s.seen || {}; s.seen['learn.json'] = remote.learnAt; save(p, s); merged = true;
+        }
+        var offer = remoteHas && (localEmpty || !!storyNewer);
+        if (!offer) checked[p] = true; // nothing to restore: pushing is safe
+        return { ok: true, offer: offer, reason: localEmpty ? 'local-empty' : storyNewer ? 'remote-newer' : null, remote: remote, localEmpty: localEmpty, merged: merged };
+      });
+    }
+    // Restore after backing up this device: the learn record is merged (nothing lost), the story save takes the cloud copy.
+    function restore(p, remote) {
+      var loc = deps.getLocal(p) || {};
+      deps.backupLocal(p, 'pre-sync-restore', { learn: loc.learn, story: loc.story });
+      var out = {};
+      if (remote.learn) { if (remote.learn.profileId && remote.learn.profileId !== p) throw new Error('profile mismatch'); out.learn = mergeLearn(remote.learn, loc.learn); }
+      if (remote.story && (!loc.story || t(remote.story.updatedAt) >= t(loc.story.updatedAt) || isEmptyStory(loc.story))) out.story = clone(remote.story);
+      deps.setLocal(p, out);
+      checked[p] = true;
+      var s = state(p); s.lastPullAt = nowFn().toISOString(); s.restoredAt = s.lastPullAt; s.storyConflict = null;
+      s.seen = { 'learn.json': remote.learnAt || null, 'story.json': remote.storyAt || null }; save(p, s);
+      return out;
+    }
+    // « Keep this device »: the cloud story is first copied to conflicts/ (nothing lost), then this device's copy is pushed.
+    function decline(p) {
+      checked[p] = true;
+      var path = pathOf(p, 'story.json');
+      return getFile(path).then(function (g) {
+        var stamp = nowFn().toISOString().replace(/[:.]/g, '-');
+        var keep = g.ok && !g.missing ? putFile(pathOf(p, 'conflicts/story-' + stamp + '.json'), g.text, null, 'sync ' + p + ' story kept before overwrite') : Promise.resolve({ ok: true });
+        return keep.then(function (k) {
+          if (!k.ok) return { ok: false, error: k.error };
+          var s = state(p); s.storyConflict = null; s.seen = s.seen || {}; if (g.ok && !g.missing) { try { s.seen['story.json'] = JSON.parse(g.text).updatedAt; } catch (e) {} } s.shas = s.shas || {}; if (g.sha) s.shas['story.json'] = g.sha; s.hashes = s.hashes || {}; delete s.hashes['story.json']; save(p, s);
+          return pushNow(p, 'keep-local');
+        });
+      });
+    }
+    function testConnection() {
+      if (!token()) return Promise.resolve({ ok: false, error: 'no-token' });
+      return req('GET', '/repos/' + OWNER + '/' + REPO).then(function (r) {
+        if (r.status !== 200 || !r.json) return { ok: false, error: errOf(r) };
+        var perm = r.json.permissions || {};
+        return { ok: true, private: !!r.json.private, canWrite: perm.push !== false, warning: r.json.private ? null : 'repo-public' };
+      });
+    }
+    function retryPending() { Object.keys(PROFILES).forEach(function (p) { var s = state(p); if (s.pending && checked[p]) pushNow(p, 'retry'); }); }
+    return { token: function () { return !!token(); }, setToken: setToken, clearToken: clearToken, state: state, pushNow: pushNow, schedule: schedule,
+      check: check, restore: restore, decline: decline, testConnection: testConnection, retryPending: retryPending,
+      markChecked: function (p) { checked[p] = true; }, isChecked: function (p) { return !!checked[p]; }, _files: files };
+  }
+  // Status line in the help-layer language: « 已备份 · 2 分钟前 » / « Backed up 2 min ago ».
+  function statusText(hasToken, s, now, en) {
+    function Z(zh, e) { return en ? e : zh; }
+    if (!hasToken) return Z('自动备份未开启', 'Automatic backup is off');
+    s = s || {};
+    if (s.syncing) return Z('正在备份…', 'Backing up…');
+    if (s.lastError === 'auth') return Z('备份失败：密钥无效或已过期，请重新粘贴', 'Backup failed: the token is invalid or expired; paste a new one');
+    if (s.lastError === 'not-found' || s.lastError === 'forbidden') return Z('备份失败：密钥没有这个私有仓库的读写权限', 'Backup failed: the token has no read/write access to the private repo');
+    if (s.pending && s.lastError) return Z('还没备份（离线或网络问题）· 会自动重试', 'Not backed up yet (offline or network problem) · will retry');
+    if (s.pending && !s.lastPushAt) return Z('等待第一次备份', 'Waiting for the first backup');
+    if (!s.lastPushAt) return Z('已连接，还没有备份', 'Connected; nothing backed up yet');
+    var min = Math.max(0, Math.round((now.getTime() - Date.parse(s.lastPushAt)) / 60000));
+    var ago = min < 1 ? Z('刚刚', 'just now') : min < 60 ? Z(min + ' 分钟前', min + ' min ago') : min < 1440 ? Z(Math.round(min / 60) + ' 小时前', Math.round(min / 60) + ' h ago') : Z(Math.round(min / 1440) + ' 天前', Math.round(min / 1440) + ' days ago');
+    return Z('已备份 · ' + ago, 'Backed up ' + ago) + (s.pending ? Z('（有新进度等待备份）', ' (newer progress waiting)') : '');
+  }
+
+  var api = { create: create, mergeLearn: mergeLearn, buildSummary: buildSummary, statusText: statusText, tokenShapeOk: tokenShapeOk,
+    b64enc: b64enc, b64dec: b64dec, TOKEN_KEY: TOKEN_KEY, OWNER: OWNER, REPO: REPO, pathOf: pathOf, stateKey: stateKey, isEmptyLearn: isEmptyLearn, isEmptyStory: isEmptyStory };
+  root.A411 = root.A411 || {};
+  root.A411.Sync = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — v0.9.0 review tools UI: card browser, statistics, difficult cards, add a card, « Voir la conjugaison ».
+ * Minimal screens reached from Progress / the wordbook. French labels with a zh/en help line; no emoji. */
+(function (root) {
+  'use strict';
+  var Learn, Deck, R, Conj;
+  function bind() { Learn = root.A411.Learn; Deck = root.A411.Deck; R = root.A411.Review; Conj = root.A411.Conj; }
+  function Zf(ctx) { var en = ctx.lang() === 'en'; return function (zh, e) { return en ? e : zh; }; }
+  var STATES = ['all', 'new', 'learning', 'review', 'mature', 'suspended', 'leech'];
+  function stateLabel(Z, s) {
+    return { all: Z('全部状态', 'All states'), new: Z('新卡', 'New'), learning: Z('学习中', 'Learning'), review: Z('复习', 'Review'), mature: Z('熟练', 'Mature'),
+      suspended: Z('已暂停', 'Suspended'), leech: Z('难卡', 'Difficult') }[s] || s;
+  }
+  function moduleLabel(Z, m) {
+    return { all: Z('全部模块', 'All modules'), core: Z('基础卡组', 'Core deck'), week1: Z('故事第一周', 'Story week 1'), carnet: Z('生词本', 'Wordbook'), custom: Z('自己添加', 'My own cards') }[m] || m;
+  }
+  function frHead(ctx, frText, help) {
+    return ctx.h('div', { class: 'fr-head' }, ctx.h('h2', { lang: 'fr', text: frText }), help ? ctx.h('p', { class: 'muted small', text: help }) : null);
+  }
+  function meaning(ctx, it) { return ctx.lang() === 'en' ? it.en : it.zh; }
+
+  // ---------- card browser ----------
+  function renderCards(ctx) {
+    bind();
+    var Z = Zf(ctx), h = ctx.h, learn = ctx.learn, f = ctx.ui.cardFilter = ctx.ui.cardFilter || { q: '', module: 'all', state: 'all' };
+    var wrap = h('div', { class: 'pad', id: 'cardsScreen' });
+    wrap.appendChild(frHead(ctx, 'Mes cartes', Z('卡片浏览器：搜索、筛选、编辑、暂停、删除', 'Card browser: search, filter, edit, suspend, delete')));
+    wrap.appendChild(h('div', { class: 'row' },
+      ctx.btn(Z('返回', 'Back'), function () { ctx.go('progress'); }, '', { id: 'btnCardsBack' }),
+      ctx.btn([h('span', { lang: 'fr', text: 'Ajouter une carte' })], function () { openAddCard(ctx); }, 'small', { id: 'btnAddCard' })));
+    var q = h('input', { type: 'search', id: 'cardSearch', value: f.q, placeholder: Z('搜索法语或意思', 'Search French or meaning'), 'aria-label': Z('搜索', 'Search') });
+    var ms = h('select', { id: 'cardModule', 'aria-label': Z('模块', 'Module') });
+    ['all'].concat(R.modules(learn, Deck)).forEach(function (m) { var o = h('option', { value: m, text: moduleLabel(Z, m) }); if (m === f.module) o.selected = true; ms.appendChild(o); });
+    var ss = h('select', { id: 'cardState', 'aria-label': Z('状态', 'State') });
+    STATES.forEach(function (s) { var o = h('option', { value: s, text: stateLabel(Z, s) }); if (s === f.state) o.selected = true; ss.appendChild(o); });
+    wrap.appendChild(h('div', { class: 'filters' }, q, ms, ss));
+    var count = h('p', { class: 'muted small', id: 'cardCount' });
+    var list = h('ul', { class: 'card-list', id: 'cardList' });
+    wrap.appendChild(count); wrap.appendChild(list);
+    function draw() {
+      list.innerHTML = '';
+      var rows = R.listCards(learn, Deck, f);
+      count.textContent = Z(rows.length + ' 张', rows.length + ' cards');
+      rows.slice(0, 200).forEach(function (r) {
+        list.appendChild(h('li', null, ctx.btn([
+          h('span', { class: 'fr', lang: 'fr', text: r.fr }),
+          h('span', { class: 'muted small', text: (ctx.lang() === 'en' ? r.en : r.zh) || '' }),
+          h('span', { class: 'tags' }, h('span', { class: 'tag st-' + r.state, text: stateLabel(Z, r.state) }), r.leech ? h('span', { class: 'tag leech', text: stateLabel(Z, 'leech') }) : null,
+            r.edited || r.custom ? h('span', { class: 'tag', text: r.custom ? Z('自建', 'mine') : Z('已改', 'edited') }) : null)
+        ], function () { openCardEditor(ctx, r.id); }, 'card-row', { 'data-card': r.id })));
+      });
+      if (rows.length > 200) list.appendChild(h('li', { class: 'muted small', text: Z('只显示前 200 张；请搜索。', 'Showing the first 200; search to narrow.') }));
+    }
+    q.addEventListener('input', function () { f.q = q.value; draw(); });
+    ms.addEventListener('change', function () { f.module = ms.value; draw(); });
+    ss.addEventListener('change', function () { f.state = ss.value; draw(); });
+    draw();
+    ctx.screen.appendChild(wrap);
+  }
+  function openCardEditor(ctx, id) {
+    bind();
+    var Z = Zf(ctx), h = ctx.h, learn = ctx.learn, it = Learn.itemById(Deck, learn, id);
+    if (!it) return;
+    var custom = it.origin === 'custom';
+    var box = h('div', { class: 'pad', id: 'cardEditor', 'data-card': id });
+    box.appendChild(h('div', { class: 'fr big', lang: 'fr', text: it.fr }));
+    box.appendChild(ctx.btn([ctx.icon('sound'), ' ', h('span', { lang: 'fr', text: 'Écouter' })], function () { ctx.playItem(it); }, 'small', { id: 'btnEdPlay' }));
+    var cs = R.cardsOf(learn, id);
+    box.appendChild(h('p', { class: 'muted small', id: 'edStats', text: cs.length ? cs.map(function (c) { return c.modality + ' · ' + Z('复习 ', 'reps ') + c.reps + ' · ' + Z('遗忘 ', 'lapses ') + c.lapses + (c.due && c.reps ? ' · ' + c.due.slice(0, 10) : ''); }).join(' / ') : Z('还没学过。', 'Not studied yet.') }));
+    var fFr = custom ? h('input', { type: 'text', id: 'edFr', value: it.fr, lang: 'fr' }) : null;
+    var fZh = h('input', { type: 'text', id: 'edZh', value: it.zh || '' });
+    var fEn = h('input', { type: 'text', id: 'edEn', value: it.en || '', lang: 'en' });
+    var fNote = h('textarea', { id: 'edNote', rows: '2' }); fNote.value = (ctx.lang() === 'en' ? it.noteEn : it.noteZh) || '';
+    if (fFr) box.appendChild(h('label', { class: 'field' }, h('span', { lang: 'fr', text: 'Recto (français)' }), fFr));
+    if (ctx.lang() !== 'en') box.appendChild(h('label', { class: 'field' }, '中文意思', fZh));
+    box.appendChild(h('label', { class: 'field' }, Z('英文意思', 'English meaning'), fEn));
+    box.appendChild(h('label', { class: 'field' }, Z('备注', 'Note'), fNote));
+    if (!custom) box.appendChild(h('p', { class: 'muted small', text: Z('内置卡的法语保持不变（和录音一致），只能改意思和备注。', 'Built-in cards keep their French (it matches the recording); you can edit the meaning and the note.') }));
+    var verbs = verbsFor(it);
+    var col = h('div', { class: 'col' });
+    col.appendChild(ctx.btn(Z('保存修改', 'Save changes'), function () {
+      var fields = { en: fEn.value, note: fNote.value };
+      if (ctx.lang() !== 'en') fields.zh = fZh.value;
+      if (fFr) fields.fr = fFr.value;
+      R.editItem(learn, Deck, id, fields); ctx.save(); ctx.closeSheet(); ctx.toast(Z('已保存。', 'Saved.')); ctx.render();
+    }, 'primary', { id: 'btnEdSave' }));
+    if (verbs.length) col.appendChild(ctx.btn([h('span', { lang: 'fr', text: 'Voir la conjugaison' })], function () { openConjugation(ctx, verbs); }, '', { id: 'btnEdConj' }));
+    var st = R.itemState(learn, id);
+    col.appendChild(st === 'suspended'
+      ? ctx.btn(Z('恢复复习', 'Unsuspend'), function () { R.unsuspendItem(learn, id); ctx.save(); ctx.closeSheet(); ctx.render(); }, '', { id: 'btnEdUnsuspend' })
+      : ctx.btn(Z('暂停（不再出现在复习里）', 'Suspend (keep out of reviews)'), function () { R.suspendItem(learn, Deck, id); ctx.save(); ctx.closeSheet(); ctx.render(); }, '', { id: 'btnEdSuspend' }));
+    var del = ctx.btn(Z('删除这张卡', 'Delete this card'), function () {
+      if (del.getAttribute('data-confirm') !== '1') { del.setAttribute('data-confirm', '1'); del.textContent = Z('确定删除？再点一次（复习记录会删除）', 'Really delete? Tap again (its review history is removed)'); return; }
+      R.deleteItem(learn, Deck, id); ctx.save(); ctx.closeSheet(); ctx.toast(Z('已删除。', 'Deleted.')); ctx.render();
+    }, 'danger', { id: 'btnEdDelete' });
+    col.appendChild(del);
+    box.appendChild(col);
+    ctx.openSheet(Z('编辑卡片', 'Edit card'), box);
+  }
+  function verbsFor(it) {
+    bind();
+    if (!Conj || !it) return [];
+    if (it.verb) return [it.verb];
+    if (it.origin === 'carnet' || it.origin === 'custom') { var l = Conj.lemmaOf(String(it.fr || '').split(/\s*\(/)[0].trim(), { verbOnly: true }); if (l) return [(l.pronominal ? 'se ' : '') + l.infinitive]; }
+    return Conj.verbsIn(it.say || it.fr);
+  }
+
+  // ---------- add a card ----------
+  function openAddCard(ctx) {
+    bind();
+    var Z = Zf(ctx), h = ctx.h;
+    var fr = h('input', { type: 'text', id: 'addFront', lang: 'fr', placeholder: 'Il fait beau aujourd’hui.' });
+    var back = h('input', { type: 'text', id: 'addBack', placeholder: Z('意思（中文或英文）', 'Meaning') });
+    var msg = h('p', { class: 'muted small', id: 'addMsg' });
+    var box = h('div', { class: 'pad', id: 'addCardSheet' },
+      h('p', { class: 'muted small', text: Z('正面写法语，背面写意思。发音用设备自带的法语语音。', 'French on the front, meaning on the back. Audio uses the device’s French voice.') }),
+      h('label', { class: 'field' }, h('span', { lang: 'fr', text: 'Recto (français)' }), fr),
+      h('label', { class: 'field' }, h('span', { lang: 'fr', text: 'Verso' }), back),
+      h('div', { class: 'row' },
+        ctx.btn([ctx.icon('sound'), ' ', h('span', { lang: 'fr', text: 'Écouter' })], function () { if (fr.value.trim()) ctx.playText(fr.value.trim(), 'neutral', 'custom-preview'); }, 'small', { id: 'btnAddPlay' }),
+        ctx.btn(Z('添加', 'Add'), function () {
+          var r = R.addCustom(ctx.learn, fr.value, back.value, new Date());
+          if (!r.ok) { msg.textContent = r.reason === 'exists' ? Z('已经有这张卡了。', 'You already have this card.') : Z('请先写法语。', 'Write the French first.'); return; }
+          ctx.save(); ctx.closeSheet(); ctx.toast(Z('已添加，会出现在复习里。', 'Added; it will appear in your reviews.')); ctx.render();
+        }, 'primary grow', { id: 'btnAddSave' })),
+      msg);
+    ctx.openSheet('Ajouter une carte', box);
+  }
+
+  // ---------- statistics ----------
+  function renderStats(ctx) {
+    bind();
+    var Z = Zf(ctx), h = ctx.h, learn = ctx.learn, now = new Date();
+    var st = R.stats(learn, now);
+    var wrap = h('div', { class: 'pad', id: 'statsScreen' });
+    wrap.appendChild(frHead(ctx, 'Statistiques', Z('复习统计', 'Review statistics')));
+    wrap.appendChild(ctx.btn(Z('返回', 'Back'), function () { ctx.go('progress'); }, '', { id: 'btnStatsBack' }));
+    // heatmap: 12 weeks
+    wrap.appendChild(h('h3', { text: Z('每天复习（最近 12 周）', 'Daily reviews (last 12 weeks)') }));
+    var max = Math.max.apply(null, st.heatmap.map(function (d) { return d.count; }).concat([1]));
+    var hm = h('div', { class: 'heatmap', id: 'heatmap', role: 'img', 'aria-label': Z('复习热力图', 'Review heatmap') });
+    st.heatmap.forEach(function (d) {
+      var lv = d.count === 0 ? 0 : Math.min(4, 1 + Math.floor(3 * d.count / max));
+      hm.appendChild(h('span', { class: 'hm l' + lv, title: d.day + ' · ' + d.count, 'data-day': d.day }));
+    });
+    wrap.appendChild(hm);
+    var tr = st.trueRetention;
+    wrap.appendChild(h('h3', { text: Z('真实保持率（30 天）', 'True retention (30 days)') }));
+    wrap.appendChild(h('p', { id: 'trueRetention', text: tr.rate == null ? Z('复习次数还不够。', 'Not enough reviews yet.') : Math.round(tr.rate * 100) + '% · ' + Z(tr.passed + '/' + tr.n + ' 次复习没有选「Again」', tr.passed + '/' + tr.n + ' reviews not graded Again') }));
+    wrap.appendChild(h('p', { class: 'muted small', text: Z('只算已经学过的卡（第一次见不算）。', 'Only cards already learned count (first sight excluded).') }));
+    // desired retention
+    wrap.appendChild(h('h3', { text: Z('目标保持率', 'Desired retention') }));
+    var cur = Learn.reqRet(learn);
+    var val = h('b', { id: 'retValue', text: Math.round(cur * 100) + '%' });
+    var rng = h('input', { type: 'range', id: 'retRange', min: '0.80', max: '0.95', step: '0.01', value: String(cur), 'aria-label': Z('目标保持率', 'Desired retention') });
+    rng.addEventListener('input', function () { val.textContent = Math.round(Number(rng.value) * 100) + '%'; });
+    rng.addEventListener('change', function () { R.setRetention(learn, rng.value); ctx.save(); ctx.toast(Z('已保存：', 'Saved: ') + Math.round(Learn.reqRet(learn) * 100) + '%'); });
+    wrap.appendChild(h('div', { class: 'row' }, rng, val));
+    wrap.appendChild(h('p', { class: 'muted small', text: Z('越高 = 复习越频繁、记得越牢；越低 = 每天复习更少。默认 90%。', 'Higher = more frequent reviews and better recall; lower = fewer reviews per day. Default 90%.') }));
+    // counts
+    var c = st.counts;
+    wrap.appendChild(h('h3', { text: Z('卡片数量', 'Cards by state') }));
+    var ul = h('ul', { class: 'days', id: 'stateCounts' });
+    ['new', 'learning', 'review', 'mature', 'suspended', 'leech'].forEach(function (k) { ul.appendChild(h('li', null, h('span', { text: stateLabel(Z, k) }), h('span', { text: String(c[k]) }))); });
+    wrap.appendChild(ul);
+    // forecast
+    wrap.appendChild(h('h3', { text: Z('未来 30 天到期', 'Due in the next 30 days') }));
+    var fmax = Math.max.apply(null, st.forecast.map(function (d) { return d.count; }).concat([1]));
+    var fc = h('div', { class: 'forecast-bars', id: 'forecast30' });
+    st.forecast.forEach(function (d) { fc.appendChild(h('span', { class: 'fbar', title: '+' + d.offset + ' · ' + d.count, style: 'height:' + Math.max(2, Math.round(60 * d.count / fmax)) + 'px' })); });
+    wrap.appendChild(fc);
+    wrap.appendChild(h('p', { class: 'muted small', text: Z('今天 ', 'Today ') + st.forecast[0].count + ' · ' + Z('7 天内 ', 'next 7 days ') + st.forecast.slice(0, 7).reduce(function (a, d) { return a + d.count; }, 0) + ' · ' + Z('30 天内 ', 'next 30 days ') + st.forecast.reduce(function (a, d) { return a + d.count; }, 0) }));
+    // difficult cards
+    wrap.appendChild(h('h3', { lang: 'fr', text: 'Cartes difficiles' }));
+    wrap.appendChild(h('p', { class: 'muted small', text: Z('忘了 ' + Learn.LEECH_LAPSES + ' 次以上的卡。可以改写备注、暂停，或者先放一放。', 'Cards forgotten ' + Learn.LEECH_LAPSES + '+ times. Rewrite the note, suspend them, or let them rest.') }));
+    var lx = R.leeches(learn, Deck), dl = h('ul', { class: 'card-list', id: 'leechList' });
+    if (!lx.length) dl.appendChild(h('li', { class: 'muted', text: '—' }));
+    lx.forEach(function (r) {
+      dl.appendChild(h('li', null, ctx.btn([h('span', { class: 'fr', lang: 'fr', text: r.fr }), h('span', { class: 'muted small', text: Z('遗忘 ', 'lapses ') + r.lapses + (r.state === 'suspended' ? ' · ' + stateLabel(Z, 'suspended') : '') })],
+        function () { openCardEditor(ctx, r.id); }, 'card-row', { 'data-leech': r.id })));
+    });
+    wrap.appendChild(dl);
+    ctx.screen.appendChild(wrap);
+  }
+
+  // ---------- « Voir la conjugaison » ----------
+  function openConjugation(ctx, verbs, pick) {
+    bind();
+    var Z = Zf(ctx), h = ctx.h, en = ctx.lang() === 'en';
+    var v = pick || verbs[0], c = Conj.conjugate(v);
+    var box = h('div', { class: 'pad conj', id: 'conjSheet', 'data-verb': v });
+    if (verbs.length > 1) {
+      var row = h('div', { class: 'row wrap', id: 'conjVerbs' });
+      verbs.forEach(function (x) { row.appendChild(ctx.btn(h('span', { lang: 'fr', text: x }), function () { openConjugation(ctx, verbs, x); }, 'small' + (x === v ? ' primary' : ''), { 'data-verb': x })); });
+      box.appendChild(row);
+    }
+    if (!c) { box.appendChild(h('p', { text: Z('这个词没有变位表。', 'No conjugation for this word.') })); ctx.openSheet('Conjugaison', box); return; }
+    box.appendChild(h('p', { class: 'muted small', id: 'conjInfo' },
+      h('span', { lang: 'fr', text: c.infinitive + ' · participe passé : ' + c.participle + ' · auxiliaire : ' + c.aux }),
+      h('br'), Z('粗体加下划线 = 不规则形式。点一个形式听发音（设备语音）。', 'Bold underlined = irregular form. Tap a form to hear it (device voice).')));
+    c.tenses.forEach(function (t) {
+      box.appendChild(h('h3', null, h('span', { lang: 'fr', text: t.fr }), h('span', { class: 'muted small', text: ' · ' + (en ? t.en : t.zh) })));
+      var ul = h('ul', { class: 'conj-list', 'data-tense': t.id });
+      t.rows.forEach(function (r) {
+        if (r.form === '-') return;
+        ul.appendChild(h('li', null, ctx.btn(h('span', { lang: 'fr', class: r.irregular ? 'irr' : '', text: r.text }), function () { ctx.playText(r.speak || r.text, 'neutral', 'conj-' + v); }, 'conj-form', { 'data-irregular': r.irregular ? '1' : '0' })));
+      });
+      box.appendChild(ul);
+    });
+    box.appendChild(h('p', { class: 'muted small', text: c.source === 'table' ? Z('来自内置的不规则动词表。', 'From the built-in irregular verb table.') : Z('按规则变位（-er / -ir / -re）。', 'Conjugated by rule (-er / -ir / -re).') }));
+    ctx.openSheet('Conjugaison · ' + c.infinitive, box);
+  }
+
+  root.A411 = root.A411 || {};
+  root.A411.ReviewUI = { renderCards: renderCards, renderStats: renderStats, openCardEditor: openCardEditor, openAddCard: openAddCard, openConjugation: openConjugation, verbsFor: verbsFor };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* Study, placement, progress and profile gate. DOM only; rules live in learn.js. */
 (function (root) {
   'use strict';
@@ -10582,6 +11802,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     ctx.screen.appendChild(ctx.h('div', { class: 'pad' },
       ctx.h('div', { class: 'row' },
         ctx.btn(T('backHome'), ctx.closeStudy, '', { id: 'btnStudyHome' }),
+        Learn.canUndo && Learn.canUndo(learn) && ctx.onUndo ? ctx.btn([ctx.h('span', { lang: 'fr', text: 'Annuler' }), ctx.h('span', { class: 'bgloss', text: lang === 'en' ? 'undo last grade' : '撤销上一次评分' })], ctx.onUndo, 'small', { id: 'btnUndo' }) : null,
         ctx.h('span', { class: 'muted', id: 'studyPos', text: learn.session ? ((learn.session.index + 1) + ' / ' + learn.session.queue.length) : '' }))));
     if (!entry) {
       var c = Learn.counts(learn);
@@ -10589,6 +11810,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         ctx.h('h2', { text: T('doneToday') }),
         ctx.h('p', { text: T('cards') + ' · ' + countsText(T, c) }),
         ctx.sessionDoneExtra ? ctx.sessionDoneExtra() : null,
+        ctx.syncLine ? ctx.syncLine() : null,
         ctx.btn(T('backHome'), ctx.closeStudy, 'primary', { id: 'btnDoneHome' })));
       return;
     }
@@ -10635,6 +11857,12 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       back.appendChild(ctx.h('p', { id: 'backMeaning', text: meaning(item, lang) }));
       if (note(item, lang)) back.appendChild(ctx.h('p', { class: 'muted', id: 'backNote', text: note(item, lang) }));
       if (modality !== 'listening' && Au.canPlay && (Au.canPlay(item.id) || Au.status === 'available')) back.appendChild(ctx.btn(ctx.icon('sound'), function () { ctx.playItem(item); }, 'small', { id: 'btnPlayBack', 'aria-label': T('play') }));
+      var RU = root.A411.ReviewUI, verbs = RU ? RU.verbsFor(item) : [];
+      if (verbs.length && ctx.openConj) back.appendChild(ctx.btn(ctx.h('span', { lang: 'fr', text: 'Voir la conjugaison' }), function () { ctx.openConj(verbs); }, 'small', { id: 'btnConj' }));
+      var curCard = learn.cards[Learn.cardKey(entry.itemId, entry.modality)];
+      if (curCard && curCard.leech && ctx.onSuspend) back.appendChild(ctx.h('div', { class: 'banner warn', id: 'leechBanner' },
+        ctx.h('b', { lang: 'fr', text: 'Carte difficile' }), ' · ' + (lang === 'en' ? 'forgotten ' + curCard.lapses + ' times. ' : '已经忘了 ' + curCard.lapses + ' 次。'),
+        ctx.btn(lang === 'en' ? 'Suspend it' : '暂停这张卡', function () { ctx.onSuspend(item.id); }, 'small', { id: 'btnLeechSuspend' })));
       box.appendChild(back);
       var iv = {};
       try { iv = Learn.previewIntervals(learn, entry, new Date()); } catch (e) {}
@@ -10683,6 +11911,14 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     wrap.appendChild(ctx.h('p', { text: T('track') + (lang === 'en' ? ': ' : '：') + (!learn.settings.track || learn.settings.track === 'all' ? T('trackAll') : learn.settings.track) }));
     wrap.appendChild(ctx.h('p', { id: 'retentionLine', text: r == null ? T('retentionNone') : (T('retention') + ' ' + Math.round(r * 100) + '%') }));
     wrap.appendChild(ctx.h('p', { class: 'muted', text: T('notCert') }));
+    if (ctx.go) {
+      var tools = ctx.h('div', { class: 'col', id: 'reviewTools' });
+      tools.appendChild(ctx.btn([ctx.h('span', { lang: 'fr', class: 'frlab', text: 'Mes cartes' }), ctx.h('span', { class: 'bgloss', text: lang === 'en' ? 'browse, search, edit, suspend' : '浏览、搜索、编辑、暂停' })], function () { ctx.go('cards'); }, '', { id: 'btnCards' }));
+      tools.appendChild(ctx.btn([ctx.h('span', { lang: 'fr', class: 'frlab', text: 'Statistiques' }), ctx.h('span', { class: 'bgloss', text: lang === 'en' ? 'heatmap, true retention, forecast, difficult cards' : '热力图、真实保持率、预测、难卡' })], function () { ctx.go('stats'); }, '', { id: 'btnStats' }));
+      tools.appendChild(ctx.btn([ctx.h('span', { lang: 'fr', class: 'frlab', text: 'Ajouter une carte' }), ctx.h('span', { class: 'bgloss', text: lang === 'en' ? 'make your own card' : '自己做一张卡' })], function () { root.A411.ReviewUI.openAddCard(ctx); }, '', { id: 'btnAddCard2' }));
+      wrap.appendChild(tools);
+      wrap.appendChild(ctx.h('p', { class: 'muted small', id: 'desiredLine', text: (lang === 'en' ? 'Desired retention: ' : '目标保持率：') + Math.round(Learn.reqRet(learn) * 100) + '%' }));
+    }
     wrap.appendChild(ctx.h('h3', { text: T('mapTitle') }));
     var ul = ctx.h('ul', { class: 'days', id: 'grammarMap' });
     Learn.grammarMap(learn, Deck).forEach(function (g) {
@@ -11014,7 +12250,132 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       return false;
     }
     storageOk = true;
+    if (SYNC_TRIGGERS[reason]) syncSoon(reason);
     return true;
+  }
+  // =====================================================================
+  // v0.9.0 — « Sauvegarde automatique »: per-profile backup to the founder's PRIVATE GitHub repo (js/sync.js).
+  // The device token lives only in this browser (a411.sync.token); it is never shown again, logged or exported.
+  // =====================================================================
+  var SYNC_TRIGGERS = { 'review-done': 1, ritual: 1, 'chapter-done': 1, 'letter-done': 1, hidden: 1 };
+  var SY = null;
+  function syncLocal(p) {
+    if (p === profileId) return { learn: learnState, story: S };
+    var lr = A411.Learn.loadLearn(localStorage, p), st = A411.Learn.storyStore(localStorage, p, L).load(new Date());
+    return { learn: lr.learn || null, story: st.save || null };
+  }
+  function syncSet(p, o) {
+    if (o.learn) { if (p === profileId) { learnState = o.learn; saveLearn(); } else A411.Learn.saveLearn(localStorage, o.learn); }
+    if (o.story) { var stg = A411.Learn.storyStore(localStorage, p, L); stg.write(o.story); if (p === profileId) { S = o.story; } }
+  }
+  function syncBackup(p, label, o) {
+    var ts = Date.now();
+    if (o.learn) {
+      localStorage.setItem(A411.Learn.learnKey(p) + '.bk.' + ts + '.' + label, JSON.stringify(o.learn));
+      var ks = []; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(A411.Learn.learnKey(p) + '.bk.') === 0 && /pre-sync/.test(k)) ks.push(k); }
+      ks.sort(); while (ks.length > 3) localStorage.removeItem(ks.shift());
+    }
+    if (o.story) A411.Learn.storyStore(localStorage, p, L).backup(label, o.story);
+  }
+  function syncStoryInfo(p) {
+    if (p !== profileId || !S) return {};
+    var plan = currentPlan(), lt = null, LT = A411.Letters.LETTERS;
+    Object.keys(LT).forEach(function (k) { if (LT[k] && LT[k].n === plan.day) lt = LT[k]; });
+    var gcode = lt ? (/^pc-/.test(lt.grammar) ? 'passe-compose' : lt.grammar) : null;
+    var gname = gcode ? (A411.I18n.grammar ? A411.I18n.grammar('en', gcode) : gcode) : null;
+    return { day: plan.day, title: dayTitle(plan.day), status: plan.next === 'done' || plan.next === 'end' ? 'day finished' : 'in progress',
+      grammar: gname ? gname + (lt.grammar === 'pc-etre' ? ' with être' : lt.grammar === 'pc-avoir' ? ' with avoir' : '') + ' (letter ' + lt.n + ')' : null };
+  }
+  function syncSummary(p) {
+    var loc = syncLocal(p);
+    return A411.Sync.buildSummary({ Learn: A411.Learn, Review: A411.Review, deck: A411.Deck, learn: loc.learn, story: syncStoryInfo(p),
+      profileName: p === 'jinyi' ? 'Jinyi' : p === 'yuechao' ? 'Yuechao' : p, now: new Date(), appVersion: L.APP_VERSION });
+  }
+  function initSync() {
+    if (SY || !A411.Sync || !window.fetch) return;
+    try {
+      SY = A411.Sync.create({ fetch: window.fetch.bind(window), ls: localStorage, appVersion: L.APP_VERSION,
+        getLocal: syncLocal, setLocal: syncSet, backupLocal: syncBackup, summary: syncSummary,
+        setTimeout: function (f, ms) { return setTimeout(f, ms); }, clearTimeout: function (t) { clearTimeout(t); },
+        onChange: function () { refreshSyncEls(); } });
+    } catch (e) { SY = null; }
+    window.addEventListener('online', function () { if (SY && profileId) SY.retryPending(); });
+  }
+  function syncSoon(reason) { if (SY && profileId && SY.token()) SY.schedule(profileId, reason, reason === 'hidden' ? 0 : 1500); }
+  function syncStatusText() { return A411.Sync.statusText(!!(SY && SY.token()), SY && profileId ? SY.state(profileId) : null, new Date(), EN()); }
+  function syncStatusEl(id) { if (!SY) return null; return h('p', { class: 'muted small sync-status', id: id || 'syncStatus', 'data-sync': '1', text: syncStatusText() }); }
+  function refreshSyncEls() { try { var els = document.querySelectorAll('[data-sync]'); for (var i = 0; i < els.length; i++) els[i].textContent = syncStatusText(); } catch (e) {} }
+  setInterval(refreshSyncEls, 30000);
+  function syncOnOpen() {
+    if (!SY || !SY.token() || !profileId) return;
+    var p = profileId;
+    SY.check(p).then(function (res) {
+      if (p !== profileId || !res) return;
+      if (res.merged) { var lr = A411.Learn.loadLearn(localStorage, p); if (lr.learn) learnState = lr.learn; }
+      if (res.ok && res.offer) { ui.syncOffer = { p: p, res: res }; }
+      else if (res.ok) { var st = SY.state(p); if (st.pending || res.merged) SY.schedule(p, 'open', 1500); }
+      if (res.merged || res.offer) render(); else refreshSyncEls();
+    });
+  }
+  function syncOfferBanner() {
+    var o = ui.syncOffer; if (!o || o.p !== profileId) return null;
+    var at = o.res.remote.storyAt || o.res.remote.learnAt;
+    var when = at ? new Date(at).toLocaleString(EN() ? 'en-CA' : 'zh-CN') : '';
+    return h('div', { class: 'banner info', id: 'syncOffer' },
+      h('b', { lang: 'fr', text: 'Sauvegarde automatique · ' }),
+      o.res.localEmpty ? Z('云端有这个档案的进度（' + when + '）。这台设备上还是空的。要恢复吗？', 'The cloud has progress for this profile (' + when + '). This device is empty. Restore it?')
+        : Z('另一台设备有更新的故事进度（' + when + '）。要用云端的吗？这台设备的进度会先备份。', 'Another device has newer story progress (' + when + '). Use the cloud copy? This device’s progress is backed up first.'),
+      h('div', { class: 'row' },
+        btn(Z('恢复（先备份本机）', 'Restore (back up this device first)'), function () {
+          try { SY.restore(o.p, o.res.remote); } catch (e) { toast(Z('恢复失败。', 'Restore failed.')); return; }
+          ui.syncOffer = null; toast(Z('已恢复。本机原来的进度已备份。', 'Restored. This device’s previous progress was backed up.'), 3200);
+          chooseProfile(o.p); SY.schedule(o.p, 'restored', 1500);
+        }, 'primary small', { id: 'btnSyncRestore' }),
+        btn(Z('保留本机进度', 'Keep this device'), function () {
+          ui.syncOffer = null; SY.decline(o.p); render();
+        }, 'small', { id: 'btnSyncKeep' })));
+  }
+  function syncSettingsSection() {
+    var box = h('div', { id: 'syncSection' });
+    box.appendChild(h('h3', { lang: 'fr', text: 'Sauvegarde automatique' }));
+    box.appendChild(h('p', { class: 'muted small', text: Z('把这个档案的进度自动备份到一个私有的 GitHub 仓库（每个档案分开：Jinyi 和 Yuechao 互不影响）。每台手机粘贴一次密钥，密钥只存在这台设备的这个浏览器里。',
+      'Back up this profile’s progress to a private GitHub repository (each profile separately: Jinyi and Yuechao never touch each other). Paste a token once per phone; it stays only in this browser on this device.') }));
+    var st = h('p', { id: 'syncSettingsStatus', 'data-sync': '1', text: syncStatusText() });
+    box.appendChild(st);
+    var msg = h('p', { class: 'small', id: 'syncMsg', role: 'status' });
+    function errText(e) {
+      return { auth: Z('密钥无效或已过期。', 'The token is invalid or expired.'), 'not-found': Z('找不到仓库：密钥没有选这个私有仓库。', 'Repository not found: the token does not include this private repo.'),
+        forbidden: Z('权限不够：需要 Contents 读写。', 'Not allowed: Contents read/write is needed.'), offline: Z('现在离线。', 'Offline right now.'), rate: Z('请求太多，稍后再试。', 'Too many requests; try later.') }[e] || (Z('出错了：', 'Error: ') + e);
+    }
+    if (!SY) { box.appendChild(h('p', { class: 'muted', text: Z('这个浏览器不支持自动备份。', 'This browser can’t do automatic backup.') })); return box; }
+    if (!SY.token()) {
+      var inp = h('input', { type: 'password', id: 'syncToken', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', placeholder: 'github_pat_…', 'aria-label': Z('GitHub 密钥', 'GitHub token') });
+      box.appendChild(inp);
+      box.appendChild(btn(Z('保存并测试连接', 'Save and test connection'), function () {
+        var v = inp.value; inp.value = '';
+        if (!SY.setToken(v)) { msg.textContent = Z('这不像一个 GitHub 密钥（应以 github_pat_ 开头）。', 'That does not look like a GitHub token (it should start with github_pat_).'); return; }
+        msg.textContent = Z('正在测试…', 'Testing…');
+        SY.testConnection().then(function (r) {
+          if (!r.ok) { msg.textContent = errText(r.error); return; }
+          msg.textContent = r.private ? Z('连接成功：私有仓库，可以写入。', 'Connected: private repository, writable.') : Z('警告：仓库是公开的！请先改成私有。', 'Warning: the repository is public! Make it private first.');
+          closeOverlay(); openSettings(); syncOnOpen();
+        });
+      }, 'primary small', { id: 'btnSyncSave' }));
+    } else {
+      box.appendChild(h('div', { class: 'row wrap' },
+        btn(Z('测试连接', 'Test connection'), function () { msg.textContent = Z('正在测试…', 'Testing…'); SY.testConnection().then(function (r) { msg.textContent = r.ok ? (r.private ? Z('连接正常（私有仓库）。', 'Connection OK (private repository).') : Z('警告：仓库是公开的！', 'Warning: the repository is public!')) : errText(r.error); }); }, 'small', { id: 'btnSyncTest' }),
+        btn(Z('现在备份', 'Back up now'), function () {
+          if (!SY.isChecked(profileId)) { syncOnOpen(); msg.textContent = Z('先检查云端…', 'Checking the cloud first…'); return; }
+          SY.pushNow(profileId, 'manual').then(function (r) { msg.textContent = r.ok ? Z('已备份。', 'Backed up.') : errText(r.error); });
+        }, 'small', { id: 'btnSyncNow' }),
+        btn(Z('断开（删除本机密钥）', 'Disconnect (remove the token here)'), function () { SY.clearToken(); closeOverlay(); openSettings(); }, 'small', { id: 'btnSyncOff' })));
+    }
+    box.appendChild(msg);
+    box.appendChild(h('p', { class: 'muted small', text: Z('风险：任何拿到这台手机、能打开这个网页的人都能用这个密钥读写那个私有仓库（只有那一个仓库）。丢手机时请到 GitHub 撤销密钥。',
+      'Risk: anyone who can use this phone and open this page can read and write that one private repository with the token. If the phone is lost, revoke the token on GitHub.') }));
+    box.appendChild(h('p', { class: 'muted small', id: 'syncPrivacy', text: Z('备份内容：复习记录、生词本、故事存档（包括日记）和给老师看的每日摘要（不含日记）。仓库是私有的，只有仓库主人能看到。',
+      'What is backed up: review record, wordbook, story save (including the journal) and a daily summary for the tutor (no journal). The repository is private; only its owner can see it.') }));
+    return box;
   }
   function initStorage() {
     try { var ls = window.localStorage; var k = 'a411.probe'; ls.setItem(k, '1'); ls.removeItem(k); storage = L.createStorage(ls); }
@@ -11165,7 +12526,13 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         A411.Learn.startSession(learnState, A411.Deck, new Date(), opts || null);
         saveLearn(); ui.view = 'study'; render();
       },
-      save: saveLearn, render: render, tx: tx,
+      save: saveLearn, render: render, tx: tx, ui: ui,
+      go: function (v) { ui.view = v; render(); },
+      openSheet: function (title, body) { openOverlay(sheet(title, body)); }, closeSheet: closeOverlay,
+      openConj: function (verbs) { A411.ReviewUI.openConjugation(studyCtx(), verbs); },
+      onUndo: function () { var u = A411.Learn.undoLast(learnState); saveLearn(); if (u) toast(Z('已撤销上一次评分。', 'Last grade undone.')); ui.view = 'study'; render(); },
+      onSuspend: function (id) { A411.Review.suspendItem(learnState, A411.Deck, id); saveLearn(); toast(Z('已暂停这张卡。可以在「Mes cartes」里恢复。', 'Card suspended. Unsuspend it in « Mes cartes ».')); render(); },
+      syncLine: function () { return syncStatusEl('studySync'); },
       playItem: function (item) { Au.playLine(item.id, item.fr.replace(/\u00a0/g, ' '), { speaker: item.speaker }); },
       playText: function (fr, speaker, id) { Au.playLine(id, fr, { speaker: speaker }); },
       skipPlacement: function () { A411.Learn.skipPlacement(learnState); saveLearn(); ui.view = 'title'; render(); },
@@ -11202,7 +12569,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         var sess = learnState.session;
         A411.Learn.commit(learnState, grade, { suggested: suggested, hints: sess.hints, correct: suggested == null ? grade > 1 : !!sess.lastCorrect, accent: !!sess.accent, revealed: !!sess.revealed, audio: modality === 'listening' ? (sess.played ? 'played' : 'not_used') : 'not_used', source: 'review', mode: 'flip', module: A411.Learn.moduleOf(item) }, new Date());
         saveLearn();
-        if (learnState.session && !learnState.session.active) { if (S) { WL.noteActive(S, new Date()); persist('review-done'); } if (!learnState.session.only) waterToday('review'); }
+        if (learnState.session && !learnState.session.active) { if (S) { WL.noteActive(S, new Date()); persist('review-done'); } if (!learnState.session.only) waterToday('review'); syncSoon('review-done'); }
         render();
       },
       exportBundle: function () {
@@ -11225,6 +12592,8 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       if (ui.view === 'placement') { $topbar.hidden = true; A411.StudyUI.renderPlacement(studyCtx()); return; }
       if (ui.view === 'study') { $topbar.hidden = false; $where.textContent = (profileId || '') + ' · ' + T('today') + ' · v' + L.APP_VERSION; A411.StudyUI.renderSession(studyCtx()); return; }
       if (ui.view === 'progress') { $topbar.hidden = true; A411.StudyUI.renderProgress(studyCtx()); return; }
+      if (ui.view === 'cards') { $topbar.hidden = true; A411.ReviewUI.renderCards(studyCtx()); return; }
+      if (ui.view === 'stats') { $topbar.hidden = true; A411.ReviewUI.renderStats(studyCtx()); return; }
       if (ui.view === 'desk') { $topbar.hidden = false; renderDesk(); return; }
       if (ui.view === 'title' || !S) { $topbar.hidden = true; renderTitle(); return; }
       if (ui.view === 'chapter') { $topbar.hidden = false; renderChapter(); return; }
@@ -11276,6 +12645,8 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var ab = absenceBanner(); if (ab) wrap.appendChild(ab);
     if (!storage) wrap.appendChild(h('div', { class: 'banner warn', text: Z('这个浏览器不允许本机存储，进度不会被保存。请在菜单 →「存档」中导出。', 'This browser doesn’t allow local storage, so progress won’t be saved. Export from Menu → “Save”.') }));
     notices.forEach(function (n) { wrap.appendChild(h('div', { class: 'banner info', text: tx(n) })); });
+    var so = syncOfferBanner(); if (so) wrap.appendChild(so);
+    if (SY && SY.token()) wrap.appendChild(syncStatusEl('homeSync'));
     wrap.appendChild(h('div', { class: 'footer small', id: 'versionFooter' },
       'App v' + L.APP_VERSION + Z(' · 内容 ', ' · content ') + C.CONTENT_VERSION + ' + ' + W.CONTENT_VERSION + Z(' · 存档 schema v', ' · save schema v') + L.SCHEMA_VERSION));
     $screen.appendChild(wrap);
@@ -11284,11 +12655,11 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       var nw = h('div', { class: 'card fade-in whats-new', id: 'whatsNew' },
         h('h2', { lang: 'fr', text: 'Nouveau' + NB + '!' }),
         h('ul', { class: 'bravo-recap', lang: 'fr' },
-          h('li', null, icon('letter'), ' Jour 6' + NB + ': « Où est Croissant' + NB + '? ».'),
-          h('li', null, icon('sound'), ' Le haut-parleur lit le texte.'),
-          h('li', null, icon('wordbook'), ' Appuie longtemps sur un mot' + NB + ': Mon carnet de mots.'),
-          h('li', null, icon('paw'), ' Le soir' + NB + ': Croissant et « Bravo' + NB + '! »')),
-        qHelp(function () { return Z('新内容：第 6 天「Où est Croissant ?」（上街问路、听方向）和第 6 封信（比较级 plus / moins / aussi、meilleur / mieux）。第 4、5 天也可以玩。另外：每段旁白都有小喇叭（设备语音，可选）；长按任何法语单词可以查词、存进生词本；每天结束时有晚间小动画和 Bravo。', 'New: Day 6 « Où est Croissant ? » (asking the way in the street, following directions) and letter 6 (comparisons plus / moins / aussi, meilleur / mieux). Days 4 and 5 are there too. Also: a small speaker on every narration (device voice, optional); long-press any French word to look it up and save it; an evening scene and « Bravo ! » at the end of each day.'); }, { id: 'newsQ' }),
+          h('li', null, icon('wordbook'), ' Mes cartes, Statistiques, Cartes difficiles.'),
+          h('li', null, icon('letter'), ' Voir la conjugaison.'),
+          h('li', null, icon('sound'), ' Ajouter une carte (avec la voix de l’appareil).'),
+          h('li', null, icon('paw'), ' Sauvegarde automatique (facultatif).')),
+        qHelp(function () { return Z('新内容（复习工具）：卡片浏览器（搜索、筛选、编辑、暂停、删除）、统计（热力图、真实保持率、30 天预测）、难卡提醒、撤销上一次评分、自己添加卡片、可调的目标保持率。动词可以看完整变位（点一下听发音）；存进生词本的动词会存成原形。设置里可以开启自动备份到私有仓库。', 'New (review tools): a card browser (search, filter, edit, suspend, delete), statistics (heatmap, true retention, 30-day forecast), difficult-card alerts, undo the last grade, your own cards, and an adjustable desired retention. Verbs have a full conjugation view (tap a form to hear it); verbs saved to the wordbook are stored as the infinitive. Settings can turn on automatic backup to a private repository.'); }, { id: 'newsQ' }),
         h('div', { class: 'row' }, btn('OK', function () { try { localStorage.setItem('a411.news', L.APP_VERSION); } catch (e) { } nw.remove(); }, 'small', { id: 'btnNewsOk' })));
       $screen.appendChild(nw);
     }
@@ -11375,7 +12746,8 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         btn(Z('存档 / 导出 / 导入', 'Save / export / import'), openSave, '', { id: 'btnSave' }),
         btn(Z('反馈摘要', 'Feedback summary'), openSummary, '', { id: 'btnSummary' }),
         hasSave ? btn(Z('重新开始故事（会先备份）', 'Start the story over (backed up first)'), confirmNewGame, '', { id: 'btnNew' }) : null),
-      h('p', { class: 'footer', id: 'menuCredits' }, Z('存档只保存在这台设备的这个浏览器里，不会自动同步。清除浏览器数据会删除它——请定期导出。', 'Saves live only in this browser on this device and don’t sync. Clearing browser data deletes them — export regularly.'),
+      h('p', { class: 'footer', id: 'menuCredits' }, (SY && SY.token()) ? syncStatusText() + Z('（私有 GitHub 仓库，设置 →「Sauvegarde automatique」）。', ' (private GitHub repo; Settings → « Sauvegarde automatique »).')
+          : Z('存档只保存在这台设备的这个浏览器里。可以在设置 →「Sauvegarde automatique」开启自动备份；也请定期导出。', 'Saves live in this browser on this device. Turn on automatic backup in Settings → « Sauvegarde automatique »; exporting regularly also helps.'),
         h('br'), Z('像素画为本项目原创。法语语音：故事台词用固定录音（' + (Au.clipCredit || 'Qwen3-TTS') + '）；没有录音的句子或录音播放失败时，用设备自带的声音，再不行就显示文字。', 'Pixel art is original to this project. French audio: story lines use fixed recordings (' + (Au.clipCredit || 'Qwen3-TTS') + '); lines without a recording, or a failed clip, use the device voice, and otherwise the text is shown.')))));
   }
   function openArc() { var c = arcCard(); if (c) openOverlay(sheet('' + W.ARC_TITLE, h('div', { class: 'pad' }, c))); }
@@ -11407,7 +12779,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     openOverlay(box);
   }
   document.getElementById('btnPause').addEventListener('click', safe(openPause));
-  document.addEventListener('visibilitychange', function () { if (document.hidden && S) { Au.stop(); persist('hidden'); } });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && S) { Au.stop(); persist('hidden'); } else if (document.hidden) syncSoon('hidden'); });
 
   // ---------- Line (dialogue) ----------
   function recordLineExposure(step) {
@@ -13069,6 +14441,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
           }, 'small icon', { 'aria-label': Z('删除', 'Delete'), 'data-wbdel': e.id })),
         mean ? h('div', { class: 'small', text: mean }) : null,
         e.sentence ? h('div', { class: 'fr muted small', lang: 'fr', text: '« ' + e.sentence + ' »' }) : null,
+        e.verb ? btn(h('span', { lang: 'fr', text: 'Voir la conjugaison' }), function () { A411.ReviewUI.openConjugation(studyCtx(), [e.lemma || e.verb]); }, 'small', { 'data-wbconj': e.id }) : null,
         h('div', { class: 'muted small', text: (e.at || '').slice(0, 10) + (e.origin === 'wiktionary' ? ' · Wiktionary' : '') }));
       ul.appendChild(li);
     });
@@ -13106,6 +14479,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     rm.addEventListener('change', function () { S.settings.reducedMotion = rm.checked; persist('settings'); applySettings(); });
     var lt = h('input', { type: 'checkbox', id: 'optLarge' }); lt.checked = !!S.settings.largeText;
     lt.addEventListener('change', function () { S.settings.largeText = lt.checked; persist('settings'); applySettings(); });
+    if (profileId) box.appendChild(syncSettingsSection());
     box.appendChild(h('h3', { lang: 'fr', text: 'Aide' }));
     box.appendChild(h('p', { class: 'muted', text: Z('故事里：点高亮的词看图片和法语解释；点「?」看这一句的中文意思。翻译从不自动显示。', 'In the story: tap a highlighted word for a picture and a French explanation; tap « ? » for the meaning of the line. Translations never appear on their own.') }));
     box.appendChild(h('h3', { text: Z('显示', 'Display') }));
@@ -13378,10 +14752,14 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     if (id === 'yuechao' && learnState.settings.placement === 'not_started') ui.view = 'placement';
     else if (learnState.session && learnState.session.active) ui.view = 'study';
     else ui.view = 'title';
+    try { if (A411.Wordbook && (learnState.carnet && learnState.carnet.words || []).some(function (w) { return w.verb === undefined; })) { A411.Wordbook.sync(learnState); saveLearn(); } } catch (e) {}
+    if (ui.syncOffer && ui.syncOffer.p !== id) ui.syncOffer = null;
     render();
+    if (!chooseProfile._noSync) syncOnOpen();
   }
   function boot() {
     initStorage();
+    initSync();
     try { if (A411.Letters) A411.Letters.register(A411.Deck); } catch (e) {}
     try { if (A411.DECK_CLIPS && Au.useExtraClips) Au.useExtraClips(A411.DECK_CLIPS.files); } catch (e) {}
     try { if (A411.WEEK_CLIPS && Au.useExtraClips) Au.useExtraClips(A411.WEEK_CLIPS.files); } catch (e) {}
