@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.7.0 single-file build 2026-10-09T07:46:17.819Z -->
+<!-- L’Appartement 411 v0.8.0 single-file build 2026-10-09T08:56:49.383Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -608,7 +608,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var c = S.week && S.week.chapters[cid];
     return c && c.status === 'complete' ? c.completedDay : null;
   }
-  var PREREQ = { d2: 'd1', d3: 'd2', d4: 'd3', d5: 'd4' };
+  var PREREQ = { d2: 'd1', d3: 'd2', d4: 'd3', d5: 'd4', d6: 'd5', d7: 'd6' };
   // 'locked' (previous chapter not done) | 'tomorrow' (unlocks next local day; can open early) | 'open' | 'in_progress' | 'complete'
   function chapterStatus(S, cid, today) {
     var w = ensureWeek(S), c = w.chapters[cid];
@@ -784,7 +784,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.7.0';
+  var APP_VERSION = '0.8.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -1368,7 +1368,12 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     l: '#5a5a66', // glasses
     v: '#7a3f6e', // plum cardigan
     V: '#5e2f55',
-    q: '#3a3a48'  // skirt
+    q: '#3a3a48', // skirt
+    c: '#6a7488', C: '#4e5668', // v0.8.0 passer-by: grey coat
+    y: '#d8b46a', // passer-by: fair hair
+    t: '#2f4060', T: '#22304a', // v0.9.0 Madame Martin: navy coat
+    R: '#b04a3a', // her red scarf
+    d: '#5a4a40', D: '#9a9aa2' // her dark hair with grey
   };
   var SPR = {
     camille: [
@@ -1441,6 +1446,46 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       '...ss..ss...',
       '..bbb..bbb..'
     ],
+    passant: [ // v0.8.0 a passer-by in the street (neutral voice)
+      '...yyyy.....',
+      '..yyyyyy....',
+      '..ysssssy...',
+      '..ysesesy...',
+      '..ysssssy...',
+      '...ssmss....',
+      '....sss.....',
+      '..cccccccc..',
+      '..cccccccc..',
+      '..cccCcccc..',
+      '..cccCcccc..',
+      '..cccCcccc..',
+      '..cccCcccc..',
+      '..pppppppp..',
+      '..ppp..ppp..',
+      '..ppp..ppp..',
+      '..ppp..ppp..',
+      '..bbb..bbb..'
+    ],
+    martin: [ // v0.9.0 Madame Martin, the landlady (dark bob with grey, navy coat, red scarf)
+      '...ddddd....',
+      '..ddDdddd...',
+      '.ddsssssdd..',
+      '.ddsesesdd..',
+      '.ddsssssdd..',
+      '..dssmssd...',
+      '....sss.....',
+      '..RRRRRRRR..',
+      '..ttRRtttt..',
+      '..tttRtttt..',
+      '..tttttttt..',
+      '..ttTttTtt..',
+      '..tttttttt..',
+      '..tttttttt..',
+      '...pp..pp...',
+      '...ss..ss...',
+      '...ss..ss...',
+      '..bbb..bbb..'
+    ],
     catPeek: [
       'o.....o',
       'oo...oo',
@@ -1463,7 +1508,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 
   // Arms per pose (drawn after body). x,y = sprite origin. Skin-coloured hands, sleeve colour from sprite.
   function arms(ctx, who, pose, x, y) {
-    var sl = who === 'camille' ? PAL.g : who === 'voisine' ? PAL.v : PAL.o, sk = PAL.s;
+    var sl = who === 'camille' ? PAL.g : who === 'voisine' ? PAL.v : who === 'passant' ? PAL.c : who === 'martin' ? PAL.t : PAL.o, sk = PAL.s;
     // left arm (viewer's left)
     function leftDown() { px(ctx, x + 1, y + 9, 1, 4, sl); px(ctx, x + 1, y + 13, 1, 1, sk); }
     function rightDown() { px(ctx, x + 10, y + 9, 1, 4, sl); px(ctx, x + 10, y + 13, 1, 1, sk); }
@@ -1586,7 +1631,18 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     catbed: ['YY......YY', 'YyY....YyY', 'YyynnnnyyY', 'YyyyyyyyyY', '.YYYYYYYY.'],
     hook: ['ddddddd', 'ddkdddd', '..k....', '.zzz...', 'z..rz..', 'z...z..', '.zzz...', '..r....'],
     poubelle: ['..kkkk..', 'MMMMMMMM', '.mMmMmM.', '.mMmMmM.', '.mMmMmM.', '.mMmMmM.', '..mmmm..'],
-    board: ['pppppppppppp', 'pkkpppkkpppp', 'pppkkpppkkpp', 'pppppppppppp', 'prrrrrrrrrrp', 'pppppppppppp']
+    board: ['pppppppppppp', 'pkkpppkkpppp', 'pppkkpppkkpp', 'pppppppppppp', 'prrrrrrrrrrp', 'pppppppppppp'],
+    // v0.8.0 Day 6
+    arrowL: ['...k......', '..kk......', '.kkkkkkkkk', 'kkkkkkkkkk', '.kkkkkkkkk', '..kk......', '...k......'],
+    arrowR: ['......k...', '......kk..', 'kkkkkkkkk.', 'kkkkkkkkkk', 'kkkkkkkkk.', '......kk..', '......k...'],
+    arrowU: ['...kk...', '..kkkk..', '.kkkkkk.', 'kkkkkkkk', '..kkkk..', '..kkkk..', '..kkkk..', '..kkkk..', '..kkkk..'],
+    catroux: ['o.....o...', 'oo...oo...', 'ooooooo...', 'okoooko..o', 'ooonooo..o', '.ooooooo.o', '.oOoOoOoo.', '.o.o..o.o.'], // Croissant: small, orange
+    catgros: ['e.......e.....', 'ee.....ee.....', 'eeeeeeeee.....', 'ekeeeeeke...e.', 'eeeenneee...e.', 'eeeeeeeee...e.', '.eeeeeeeeeeee.', 'eeqeeqeeqeeeee', 'eeeeeeeeeeeeee', '.e.e....e.e...'], // a big grey cat
+    catnoir: ['f.....f...', 'ff...ff...', 'fffffff...', 'fufffuf..f', 'fffnfff..f', '.fffffff.f', '.fffffffff.', '.f.f..f.f.'],
+    jambon: ['..nnnnnn..', '.nnhnnnnn.', 'nnnnnnhnnh', 'nnhnnnnnnh', '.nnnnnnnh.', '..hhhhhh..'],
+    shopfront: ['rrrrrrrrrr', 'rhrrhrrhrr', 'hrhhrhhrhh', 'bbbbkbbbbb', 'bhbbkbbhbb', 'bbbbkbbbbb', 'dddddddddd'],
+    tree: ['...gggg...', '.gggGggg..', 'ggGgggggg.', 'gggggGggg.', '.ggggggg..', '...gddg...', '....dd....', '....dd....', '...dddd...'],
+    roof: ['....ee....', '...eeee...', '..eeeeee..', '.eeeeeeee.', 'eeeeeeeeee', '.dddddddd.', '.dhdddhdd.', '.dddddddd.']
   };
   function drawProp(ctx, id, x, y, scale) {
     var map = PROPS[id]; if (!map) return;
@@ -1660,6 +1716,9 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     doorway: { porte: [36, 4, 24, 40], appartement: [58, 10, 17, 11], voisine: [39, 19, 18, 24] },
     night: { moon: [6, 4, 16, 16] },
     rain: { pluie: [24, 4, 48, 32] },
+    street: { rue: [0, 40, 96, 24], 'supérette': [60, 10, 36, 36], passant: [40, 27, 16, 22] },
+    parc: { parc: [0, 0, 96, 64], banc: [42, 32, 30, 18] },
+    balcon: { balcon: [42, 2, 44, 28], immeuble: [0, 0, 96, 52] },
     name: { fenetre: [5, 6, 23, 19] },
     plant: { plante: [12, 20, 16, 20], fenetre: [7, 5, 29, 26], eau: [36, 30, 16, 12] },
     cat: { canape: [49, 28, 46, 17], porte: [2, 4, 24, 40] },
@@ -1735,6 +1794,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         if (st.camille) { person(ctx, 'camille', st.camille, 40, 25); if (spk === 'camille') marker(ctx, 43, 20); }
       }
       px(ctx, 30, 58, 36, 4, '#7a3b3b'); // doormat
+      if (st.cat) sprite(ctx, SPR.cat, 58, 48); // v0.8.0: Croissant back on the landing
       if (st.night && st.door === 'open') { px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.38)'); px(ctx, 38, 6, 20, 38, 'rgba(255,215,122,0.18)'); } // v0.7.0: door open at night, light from the flat
       else if (st.night) { px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.62)'); px(ctx, 38, 44, 20, 1, '#ffd77a'); } // v0.6.0: dark landing, light under the door
       return;
@@ -1865,6 +1925,42 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       if (st.noe) { person(ctx, 'noe', st.noe, 42, 38); if (spk === 'noe') marker(ctx, 45, 33); }
       return;
     }
+    if (name === 'street') { // v0.8.0: a Paris street — facades, the corner shop, the pavement (Day 6)
+      px(ctx, 0, 0, W, H, '#bcd3e6');
+      px(ctx, 0, 4, 60, 44, '#e6d8bc'); px(ctx, 0, 4, 60, 2, '#cdbd9c');
+      for (var fy = 0; fy < 3; fy++) for (var fx = 0; fx < 5; fx++) { px(ctx, 4 + fx * 11, 9 + fy * 11, 6, 8, '#7d98ad'); px(ctx, 3 + fx * 11, 17 + fy * 11, 8, 1, '#2a2a2a'); }
+      px(ctx, 60, 4, 36, 44, '#ddd0b4');
+      px(ctx, 62, 12, 32, 6, '#c0392b'); px(ctx, 64, 14, 28, 2, '#f6efdc'); // sign
+      for (var aw = 0; aw < 8; aw++) px(ctx, 62 + aw * 4, 19, 4, 4, aw % 2 ? '#f6efdc' : '#c0392b'); // awning
+      px(ctx, 63, 24, 30, 20, '#9fd0ea'); px(ctx, 77, 24, 2, 22, '#7a5a3e'); px(ctx, 66, 30, 6, 6, '#e2873a'); px(ctx, 84, 32, 6, 5, '#5cb85c'); // shop window
+      px(ctx, 0, 46, W, 10, '#b8b0a2'); px(ctx, 0, 46, W, 1, '#8f877a'); px(ctx, 0, 56, W, 8, '#5a5a62'); for (var lx = 4; lx < W; lx += 16) px(ctx, lx, 60, 8, 1, '#e8e2d0');
+      if (st.camille) { person(ctx, 'camille', st.camille, 8, 30); if (spk === 'camille') marker(ctx, 11, 25); }
+      if (st.noe) { person(ctx, 'noe', st.noe, 22, 29); if (spk === 'noe') marker(ctx, 25, 24); }
+      if (st.passant) { person(ctx, 'passant', st.passant, 42, 29); if (spk === 'neutral') marker(ctx, 45, 24); }
+      return;
+    }
+    if (name === 'parc') { // v0.8.0: the little park, a tree and a bench
+      px(ctx, 0, 0, W, H, '#cfe3ef'); px(ctx, 0, 40, W, 24, '#7fb069'); px(ctx, 0, 40, W, 1, '#5f8f4f');
+      px(ctx, 0, 52, W, 5, '#d8c9a6');
+      px(ctx, 76, 18, 4, 24, '#6b4430'); px(ctx, 66, 6, 24, 14, '#4f9a4a'); px(ctx, 70, 2, 16, 6, '#5fae5a'); px(ctx, 64, 12, 4, 6, '#2f6e36');
+      px(ctx, 44, 40, 26, 2, '#8a5a3a'); px(ctx, 44, 35, 26, 2, '#8a5a3a'); px(ctx, 46, 42, 2, 6, '#5a3b26'); px(ctx, 66, 42, 2, 6, '#5a3b26'); // bench
+      if (st.camille) { person(ctx, 'camille', st.camille, 6, 28); if (spk === 'camille') marker(ctx, 9, 23); }
+      if (st.noe) { person(ctx, 'noe', st.noe, 22, 27); if (spk === 'noe') marker(ctx, 25, 22); }
+      return;
+    }
+    if (name === 'balcon') { // v0.8.0: our building from the street; the first-floor balcony is Madame Lefèvre's
+      px(ctx, 0, 0, W, H, '#e2d4b8');
+      px(ctx, 6, 30, 16, 22, '#5a3b26'); px(ctx, 8, 32, 12, 20, '#7a5236'); // street door
+      px(ctx, 28, 6, 10, 14, '#7d98ad'); px(ctx, 88, 6, 8, 14, '#7d98ad');
+      px(ctx, 52, 4, 20, 22, st.voisine ? '#f3e3c3' : '#7d98ad'); px(ctx, 51, 3, 22, 1, '#6b4f3a'); // balcony window (open = lit)
+      if (st.voisine) { person(ctx, 'voisine', st.voisine, 55, 9); if (spk === 'lefevre') marker(ctx, 58, 4); }
+      if (st.cat) sprite(ctx, SPR.cat, 72, 18);
+      px(ctx, 44, 26, 40, 2, '#8f877a'); px(ctx, 44, 17, 40, 1, '#2a2a2a'); for (var rx2 = 44; rx2 < 84; rx2 += 3) px(ctx, rx2, 17, 1, 9, '#2a2a2a'); // balcony + railing
+      px(ctx, 0, 52, W, 12, '#b8b0a2'); px(ctx, 0, 52, W, 1, '#8f877a');
+      if (st.camille) { person(ctx, 'camille', st.camille, 26, 36); if (spk === 'camille') marker(ctx, 29, 31); }
+      if (st.noe) { person(ctx, 'noe', st.noe, 38, 35); if (spk === 'noe') marker(ctx, 41, 30); }
+      return;
+    }
     if (name === 'night') {
       px(ctx, 0, 0, W, H, '#1f2a44');
       crescent(ctx, 14, 12, 5, '#f5e6a8', '#1f2a44'); // v0.6.0: a round crescent (was an L-shaped block)
@@ -1910,7 +2006,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     if (st.lightsOff) px(ctx, 0, 0, W, H, 'rgba(20,24,48,0.55)');
   }
   // ---- v0.5.0: end-of-day ritual animations (one per day, tied to that day's story). t = seconds since start. ----
-  var RITUALS = { 1: 'd1-course', 2: 'd2-sac', 3: 'd3-colis', 4: 'd4-chut', 5: 'd5-toits' };
+  var RITUALS = { 1: 'd1-course', 2: 'd2-sac', 3: 'd3-colis', 4: 'd4-chut', 5: 'd5-toits', 6: 'd6-clic' };
   function catAt(ctx, x, y, flip) {
     var m = SPR.cat;
     for (var r = 0; r < m.length; r++) for (var c = 0; c < m[r].length; c++) {
@@ -1959,6 +2055,16 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       if (u < 3) { var mx = 6 + u * 12; drawProp(ctx, 'mouse', mx + 10, fy + 2); catAt(ctx, mx - 4, fy - Math.abs(Math.sin(t * 10)) * 2, false); }
       else if (u < 4.2) { drawProp(ctx, 'mouse', 44, fy + 2); catAt(ctx, 32, fy, false); if (Math.sin(t * 30) > -0.3) drawProp(ctx, 'noise', 34, 6); px(ctx, 0, 31, 48, 1, 'rgba(255,215,122,0.6)'); }
       else { var bx2 = 32 - (u - 4.2) * 8; catAt(ctx, bx2, fy + (Math.sin(t * 3) > 0 ? 1 : 0), true); drawProp(ctx, 'mouse', 44, fy + 2); if (u > 5.6) { px(ctx, bx2 + 11, fy - 4, 2, 1, '#c9d3ff'); px(ctx, bx2 + 13, fy - 6, 2, 1, '#c9d3ff'); } }
+    } else if (id === 'd6-clic') { // the front door, locked this time (the key turns: clic), then Croissant asleep in his basket on the sofa side
+      var u6 = t % 7;
+      drawProp(ctx, 'hook', 8, 34);
+      if (u6 < 2.4) { drawProp(ctx, 'keyr', 16 + (u6 > 1.2 ? 1 : 0), 46); if (u6 > 1.2) { px(ctx, 25, 43, 1, 1, '#fff7c2'); px(ctx, 27, 45, 1, 1, '#fff7c2'); px(ctx, 25, 47, 1, 1, '#fff7c2'); } }
+      else drawProp(ctx, 'keyr', 10, 37);
+      drawProp(ctx, 'catbed', 34, 23);
+      catAt(ctx, 34, 17 + (Math.sin(t * 2) > 0 ? 0 : 1), false);
+      px(ctx, 35, 20, 1, 1, PAL.o); px(ctx, 39, 20, 1, 1, PAL.o); px(ctx, 35, 21, 1, 1, PAL.O); px(ctx, 39, 21, 1, 1, PAL.O); // eyes closed
+      if (u6 > 3) { px(ctx, 45, 13, 2, 1, '#6b7a99'); px(ctx, 47, 11, 2, 1, '#6b7a99'); px(ctx, 49, 9, 3, 1, '#6b7a99'); }
+      px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.28)');
     } else { // d3-colis: a parcel on the salon floor; it shakes, the lid pops, Croissant peeks out, then sleeps in it
       var q = t % 6, bxX = 34, bxY = 21;
       var sh = q < 2 ? Math.round(Math.sin(t * 20)) : 0;
@@ -2038,7 +2144,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 (function (root) {
   'use strict';
   root.A411 = root.A411 || {};
-  root.A411.DECK_CLIPS = { source: 'recording:qwen3-tts', files: {"a_bientot":"audio/deck/a_bientot.mp3","a_cote_de":"audio/deck/a_cote_de.mp3","a_droite":"audio/deck/a_droite.mp3","a_gauche":"audio/deck/a_gauche.mp3","amis_occupes":"audio/deck/amis_occupes.mp3","assieds_toi":"audio/deck/assieds_toi.mp3","attends_moi":"audio/deck/attends_moi.mp3","bien_que":"audio/deck/bien_que.mp3","bonjour":"audio/deck/bonjour.mp3","bonne_journee":"audio/deck/bonne_journee.mp3","bonsoir":"audio/deck/bonsoir.mp3","cafe_meilleur":"audio/deck/cafe_meilleur.mp3","ce_verre":"audio/deck/ce_verre.mp3","cest_combien":"audio/deck/cest_combien.mp3","cest_ta_plante":"audio/deck/cest_ta_plante.mp3","cest_un_appartement":"audio/deck/cest_un_appartement.mp3","cestait_calme":"audio/deck/cestait_calme.mp3","cet_homme":"audio/deck/cet_homme.mp3","cette_annee":"audio/deck/cette_annee.mp3","cles_seront":"audio/deck/cles_seront.mp3","colis_livre":"audio/deck/colis_livre.mp3","dans_la_cuisine":"audio/deck/dans_la_cuisine.mp3","de_leau":"audio/deck/de_leau.mp3","de_rien":"audio/deck/de_rien.mp3","derriere_le_canape":"audio/deck/derriere_le_canape.mp3","dont_jai_besoin":"audio/deck/dont_jai_besoin.mp3","dont_voisine":"audio/deck/dont_voisine.mp3","du_cafe":"audio/deck/du_cafe.mp3","du_the":"audio/deck/du_the.mp3","elle_est_partie":"audio/deck/elle_est_partie.mp3","elle_lisait":"audio/deck/elle_lisait.mp3","elle_va_rentrer":"audio/deck/elle_va_rentrer.mp3","elle_viendra":"audio/deck/elle_viendra.mp3","en_train":"audio/deck/en_train.mp3","enchante":"audio/deck/enchante.mp3","envie":"audio/deck/envie.mp3","etait_ouverte":"audio/deck/etait_ouverte.mp3","etait_partie":"audio/deck/etait_partie.mp3","fleurs_belles":"audio/deck/fleurs_belles.mp3","froid_manteau":"audio/deck/froid_manteau.mp3","futur_proche_vais":"audio/deck/futur_proche_vais.mp3","ici":"audio/deck/ici.mp3","il_est_gentil":"audio/deck/il_est_gentil.mp3","il_faut_que":"audio/deck/il_faut_que.mp3","il_pleuvait":"audio/deck/il_pleuvait.mp3","il_va_falloir":"audio/deck/il_va_falloir.mp3","il_y_a_deux_colis":"audio/deck/il_y_a_deux_colis.mp3","il_y_a_du_bruit":"audio/deck/il_y_a_du_bruit.mp3","il_y_a_un_chat":"audio/deck/il_y_a_un_chat.mp3","ils_habitent":"audio/deck/ils_habitent.mp3","jai_achete":"audio/deck/jai_achete.mp3","jai_elision":"audio/deck/jai_elision.mp3","jai_faim":"audio/deck/jai_faim.mp3","jai_fait":"audio/deck/jai_fait.mp3","jai_froid":"audio/deck/jai_froid.mp3","jai_laisse":"audio/deck/jai_laisse.mp3","jai_mal":"audio/deck/jai_mal.mp3","jai_pas_compris":"audio/deck/jai_pas_compris.mp3","jai_perdu_la_cle":"audio/deck/jai_perdu_la_cle.mp3","jai_trouve":"audio/deck/jai_trouve.mp3","jai_une_cle":"audio/deck/jai_une_cle.mp3","jai_vu":"audio/deck/jai_vu.mp3","jaurais_voulu":"audio/deck/jaurais_voulu.mp3","je_buvais":"audio/deck/je_buvais.mp3","je_cherche_chat":"audio/deck/je_cherche_chat.mp3","je_cherche_cles":"audio/deck/je_cherche_cles.mp3","je_cherche_colis":"audio/deck/je_cherche_colis.mp3","je_cherche_poste":"audio/deck/je_cherche_poste.mp3","je_lai_trouvee":"audio/deck/je_lai_trouvee.mp3","je_lui_ai_parle":"audio/deck/je_lui_ai_parle.mp3","je_m_en_souviens":"audio/deck/je_m_en_souviens.mp3","je_mappelle":"audio/deck/je_mappelle.mp3","je_ne_sais_pas":"audio/deck/je_ne_sais_pas.mp3","je_parlerai":"audio/deck/je_parlerai.mp3","je_suis":"audio/deck/je_suis.mp3","je_suis_desole":"audio/deck/je_suis_desole.mp3","je_suis_etudiant":"audio/deck/je_suis_etudiant.mp3","je_suis_rentre":"audio/deck/je_suis_rentre.mp3","je_vais_acheter":"audio/deck/je_vais_acheter.mp3","je_vais_le":"audio/deck/je_vais_le.mp3","je_veux_la_voir":"audio/deck/je_veux_la_voir.mp3","je_veux_que":"audio/deck/je_veux_que.mp3","je_voudrais_cafe":"audio/deck/je_voudrais_cafe.mp3","je_voudrais_pol":"audio/deck/je_voudrais_pol.mp3","je_voudrais_the":"audio/deck/je_voudrais_the.mp3","jhabite_paris":"audio/deck/jhabite_paris.mp3","la_proprietaire":"audio/deck/la_proprietaire.mp3","le_plus_calme":"audio/deck/le_plus_calme.mp3","lettre_envoyee":"audio/deck/lettre_envoyee.mp3","meilleur_et_mieux":"audio/deck/meilleur_et_mieux.mp3","merci":"audio/deck/merci.mp3","mise_au_sport":"audio/deck/mise_au_sport.mp3","moi_cest":"audio/deck/moi_cest.mp3","moins_cher":"audio/deck/moins_cher.mp3","mon_appartement":"audio/deck/mon_appartement.mp3","ne_parle_pas":"audio/deck/ne_parle_pas.mp3","ne_veux_pas":"audio/deck/ne_veux_pas.mp3","nous_arriverons":"audio/deck/nous_arriverons.mp3","nous_finissons":"audio/deck/nous_finissons.mp3","nous_sommes_alles":"audio/deck/nous_sommes_alles.mp3","on_va_prendre":"audio/deck/on_va_prendre.mp3","ou_est_colis":"audio/deck/ou_est_colis.mp3","ou_est_metro":"audio/deck/ou_est_metro.mp3","ou_sont_cles":"audio/deck/ou_sont_cles.mp3","parce_quil":"audio/deck/parce_quil.mp3","pardon":"audio/deck/pardon.mp3","parle_mieux":"audio/deck/parle_mieux.mp3","pas_de_croquettes":"audio/deck/pas_de_croquettes.mp3","pas_de_pain":"audio/deck/pas_de_pain.mp3","pc_imp_choice":"audio/deck/pc_imp_choice.mp3","pc_imp_pluie":"audio/deck/pc_imp_pluie.mp3","plante_soif":"audio/deck/plante_soif.mp3","plus_calme":"audio/deck/plus_calme.mp3","porte_ouverte":"audio/deck/porte_ouverte.mp3","pouvez_mindiquer":"audio/deck/pouvez_mindiquer.mp3","quand_j_aurai":"audio/deck/quand_j_aurai.mp3","quand_tu_auras":"audio/deck/quand_tu_auras.mp3","que_je_vois":"audio/deck/que_je_vois.mp3","quelquun_courait":"audio/deck/quelquun_courait.mp3","quest_ce_que":"audio/deck/quest_ce_que.mp3","quest_ce_qui":"audio/deck/quest_ce_qui.mp3","qui_parle":"audio/deck/qui_parle.mp3","rue_ou":"audio/deck/rue_ou.mp3","s_il_vous_plait":"audio/deck/s_il_vous_plait.mp3","salut":"audio/deck/salut.mp3","samedi_je_viens":"audio/deck/samedi_je_viens.mp3","ses_cles":"audio/deck/ses_cles.mp3","si_imparfait":"audio/deck/si_imparfait.mp3","si_pqp":"audio/deck/si_pqp.mp3","son_telephone":"audio/deck/son_telephone.mp3","sous_la_table":"audio/deck/sous_la_table.mp3","superette":"audio/deck/superette.mp3","sur_la_table":"audio/deck/sur_la_table.mp3","sur_pas_dans":"audio/deck/sur_pas_dans.mp3","the_ou_cafe":"audio/deck/the_ou_cafe.mp3","tout_droit":"audio/deck/tout_droit.mp3","tu_es_nouveau":"audio/deck/tu_es_nouveau.mp3","tu_habites":"audio/deck/tu_habites.mp3","tu_peux_repeter":"audio/deck/tu_peux_repeter.mp3","tu_tappelles_comment":"audio/deck/tu_tappelles_comment.mp3","un_sac_de":"audio/deck/un_sac_de.mp3","va_mieux":"audio/deck/va_mieux.mp3","viens_de":"audio/deck/viens_de.mp3","vient_de_partir":"audio/deck/vient_de_partir.mp3","vous_pouvez_repeter":"audio/deck/vous_pouvez_repeter.mp3"} };
+  root.A411.DECK_CLIPS = { source: 'recording:qwen3-tts', files: {"a_bientot":"audio/deck/a_bientot.mp3","a_cote_de":"audio/deck/a_cote_de.mp3","a_droite":"audio/deck/a_droite.mp3","a_gauche":"audio/deck/a_gauche.mp3","amis_occupes":"audio/deck/amis_occupes.mp3","assieds_toi":"audio/deck/assieds_toi.mp3","attends_moi":"audio/deck/attends_moi.mp3","bien_que":"audio/deck/bien_que.mp3","bonjour":"audio/deck/bonjour.mp3","bonne_journee":"audio/deck/bonne_journee.mp3","bonsoir":"audio/deck/bonsoir.mp3","cafe_meilleur":"audio/deck/cafe_meilleur.mp3","ce_verre":"audio/deck/ce_verre.mp3","cest_combien":"audio/deck/cest_combien.mp3","cest_ta_plante":"audio/deck/cest_ta_plante.mp3","cest_un_appartement":"audio/deck/cest_un_appartement.mp3","cestait_calme":"audio/deck/cestait_calme.mp3","cet_homme":"audio/deck/cet_homme.mp3","cette_annee":"audio/deck/cette_annee.mp3","cles_seront":"audio/deck/cles_seront.mp3","colis_livre":"audio/deck/colis_livre.mp3","dans_la_cuisine":"audio/deck/dans_la_cuisine.mp3","de_leau":"audio/deck/de_leau.mp3","de_rien":"audio/deck/de_rien.mp3","derriere_le_canape":"audio/deck/derriere_le_canape.mp3","dont_jai_besoin":"audio/deck/dont_jai_besoin.mp3","dont_voisine":"audio/deck/dont_voisine.mp3","du_cafe":"audio/deck/du_cafe.mp3","du_the":"audio/deck/du_the.mp3","elle_est_partie":"audio/deck/elle_est_partie.mp3","elle_lisait":"audio/deck/elle_lisait.mp3","elle_va_rentrer":"audio/deck/elle_va_rentrer.mp3","elle_viendra":"audio/deck/elle_viendra.mp3","en_train":"audio/deck/en_train.mp3","enchante":"audio/deck/enchante.mp3","envie":"audio/deck/envie.mp3","etait_ouverte":"audio/deck/etait_ouverte.mp3","etait_partie":"audio/deck/etait_partie.mp3","fleurs_belles":"audio/deck/fleurs_belles.mp3","froid_manteau":"audio/deck/froid_manteau.mp3","futur_proche_vais":"audio/deck/futur_proche_vais.mp3","ici":"audio/deck/ici.mp3","il_est_gentil":"audio/deck/il_est_gentil.mp3","il_faut_que":"audio/deck/il_faut_que.mp3","il_pleuvait":"audio/deck/il_pleuvait.mp3","il_va_falloir":"audio/deck/il_va_falloir.mp3","il_y_a_deux_colis":"audio/deck/il_y_a_deux_colis.mp3","il_y_a_du_bruit":"audio/deck/il_y_a_du_bruit.mp3","il_y_a_un_chat":"audio/deck/il_y_a_un_chat.mp3","ils_habitent":"audio/deck/ils_habitent.mp3","jai_achete":"audio/deck/jai_achete.mp3","jai_elision":"audio/deck/jai_elision.mp3","jai_faim":"audio/deck/jai_faim.mp3","jai_fait":"audio/deck/jai_fait.mp3","jai_froid":"audio/deck/jai_froid.mp3","jai_laisse":"audio/deck/jai_laisse.mp3","jai_mal":"audio/deck/jai_mal.mp3","jai_pas_compris":"audio/deck/jai_pas_compris.mp3","jai_perdu_la_cle":"audio/deck/jai_perdu_la_cle.mp3","jai_trouve":"audio/deck/jai_trouve.mp3","jai_une_cle":"audio/deck/jai_une_cle.mp3","jai_vu":"audio/deck/jai_vu.mp3","jambon_meilleur":"audio/deck/jambon_meilleur.mp3","jaurais_voulu":"audio/deck/jaurais_voulu.mp3","je_buvais":"audio/deck/je_buvais.mp3","je_cherche_chat":"audio/deck/je_cherche_chat.mp3","je_cherche_cles":"audio/deck/je_cherche_cles.mp3","je_cherche_colis":"audio/deck/je_cherche_colis.mp3","je_cherche_poste":"audio/deck/je_cherche_poste.mp3","je_lai_trouvee":"audio/deck/je_lai_trouvee.mp3","je_lai_vu":"audio/deck/je_lai_vu.mp3","je_lui_ai_parle":"audio/deck/je_lui_ai_parle.mp3","je_m_en_souviens":"audio/deck/je_m_en_souviens.mp3","je_mappelle":"audio/deck/je_mappelle.mp3","je_ne_sais_pas":"audio/deck/je_ne_sais_pas.mp3","je_parlerai":"audio/deck/je_parlerai.mp3","je_peux_le_garder":"audio/deck/je_peux_le_garder.mp3","je_suis":"audio/deck/je_suis.mp3","je_suis_desole":"audio/deck/je_suis_desole.mp3","je_suis_etudiant":"audio/deck/je_suis_etudiant.mp3","je_suis_rentre":"audio/deck/je_suis_rentre.mp3","je_vais_acheter":"audio/deck/je_vais_acheter.mp3","je_vais_le":"audio/deck/je_vais_le.mp3","je_veux_la_voir":"audio/deck/je_veux_la_voir.mp3","je_veux_que":"audio/deck/je_veux_que.mp3","je_voudrais_cafe":"audio/deck/je_voudrais_cafe.mp3","je_voudrais_pol":"audio/deck/je_voudrais_pol.mp3","je_voudrais_the":"audio/deck/je_voudrais_the.mp3","jhabite_paris":"audio/deck/jhabite_paris.mp3","la_proprietaire":"audio/deck/la_proprietaire.mp3","le_plus_calme":"audio/deck/le_plus_calme.mp3","lettre_envoyee":"audio/deck/lettre_envoyee.mp3","meilleur_et_mieux":"audio/deck/meilleur_et_mieux.mp3","merci":"audio/deck/merci.mp3","mise_au_sport":"audio/deck/mise_au_sport.mp3","moi_cest":"audio/deck/moi_cest.mp3","moins_cher":"audio/deck/moins_cher.mp3","mon_appartement":"audio/deck/mon_appartement.mp3","ne_parle_pas":"audio/deck/ne_parle_pas.mp3","ne_veux_pas":"audio/deck/ne_veux_pas.mp3","nous_arriverons":"audio/deck/nous_arriverons.mp3","nous_finissons":"audio/deck/nous_finissons.mp3","nous_sommes_alles":"audio/deck/nous_sommes_alles.mp3","on_va_prendre":"audio/deck/on_va_prendre.mp3","ou_est_colis":"audio/deck/ou_est_colis.mp3","ou_est_metro":"audio/deck/ou_est_metro.mp3","ou_sont_cles":"audio/deck/ou_sont_cles.mp3","parce_quil":"audio/deck/parce_quil.mp3","pardon":"audio/deck/pardon.mp3","parle_mieux":"audio/deck/parle_mieux.mp3","pas_de_croquettes":"audio/deck/pas_de_croquettes.mp3","pas_de_pain":"audio/deck/pas_de_pain.mp3","pc_imp_choice":"audio/deck/pc_imp_choice.mp3","pc_imp_pluie":"audio/deck/pc_imp_pluie.mp3","plante_soif":"audio/deck/plante_soif.mp3","plus_calme":"audio/deck/plus_calme.mp3","plus_gros_que":"audio/deck/plus_gros_que.mp3","porte_ouverte":"audio/deck/porte_ouverte.mp3","pouvez_mindiquer":"audio/deck/pouvez_mindiquer.mp3","quand_j_aurai":"audio/deck/quand_j_aurai.mp3","quand_tu_auras":"audio/deck/quand_tu_auras.mp3","que_je_vois":"audio/deck/que_je_vois.mp3","quelquun_courait":"audio/deck/quelquun_courait.mp3","quest_ce_que":"audio/deck/quest_ce_que.mp3","quest_ce_qui":"audio/deck/quest_ce_qui.mp3","qui_parle":"audio/deck/qui_parle.mp3","rue_ou":"audio/deck/rue_ou.mp3","s_il_vous_plait":"audio/deck/s_il_vous_plait.mp3","salut":"audio/deck/salut.mp3","samedi_je_viens":"audio/deck/samedi_je_viens.mp3","ses_cles":"audio/deck/ses_cles.mp3","si_imparfait":"audio/deck/si_imparfait.mp3","si_pqp":"audio/deck/si_pqp.mp3","son_telephone":"audio/deck/son_telephone.mp3","sous_la_table":"audio/deck/sous_la_table.mp3","superette":"audio/deck/superette.mp3","sur_la_table":"audio/deck/sur_la_table.mp3","sur_pas_dans":"audio/deck/sur_pas_dans.mp3","the_ou_cafe":"audio/deck/the_ou_cafe.mp3","tout_droit":"audio/deck/tout_droit.mp3","tu_es_nouveau":"audio/deck/tu_es_nouveau.mp3","tu_habites":"audio/deck/tu_habites.mp3","tu_peux_repeter":"audio/deck/tu_peux_repeter.mp3","tu_tappelles_comment":"audio/deck/tu_tappelles_comment.mp3","un_sac_de":"audio/deck/un_sac_de.mp3","va_mieux":"audio/deck/va_mieux.mp3","viens_de":"audio/deck/viens_de.mp3","vient_de_partir":"audio/deck/vient_de_partir.mp3","vous_avez_vu_un_chat":"audio/deck/vous_avez_vu_un_chat.mp3","vous_pouvez_repeter":"audio/deck/vous_pouvez_repeter.mp3"} };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.A411.DECK_CLIPS;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -2048,7 +2154,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 (function (root) {
   'use strict';
   root.A411 = root.A411 || {};
-  root.A411.WEEK_CLIPS = { source: 'recording:qwen3-tts', files: {"abs_noe":"audio/w1/abs_noe.mp3","d2_cam_bruit":"audio/w1/d2_cam_bruit.mp3","d2_cam_cafe":"audio/w1/d2_cam_cafe.mp3","d2_cam_faim":"audio/w1/d2_cam_faim.mp3","d2_cam_merci":"audio/w1/d2_cam_merci.mp3","d2_cam_non":"audio/w1/d2_cam_non.mp3","d2_cam_salut":"audio/w1/d2_cam_salut.mp3","d2_cam_travail":"audio/w1/d2_cam_travail.mp3","d2_clerk_bonjour":"audio/w1/d2_clerk_bonjour.mp3","d2_clerk_bye":"audio/w1/d2_clerk_bye.mp3","d2_clerk_chat":"audio/w1/d2_clerk_chat.mp3","d2_clerk_dacc":"audio/w1/d2_clerk_dacc.mp3","d2_clerk_lait":"audio/w1/d2_clerk_lait.mp3","d2_clerk_prix":"audio/w1/d2_clerk_prix.mp3","d2_clerk_voila":"audio/w1/d2_clerk_voila.mp3","d2_hook_1":"audio/w1/d2_hook_1.mp3","d2_hook_2":"audio/w1/d2_hook_2.mp3","d2_hook_3":"audio/w1/d2_hook_3.mp3","d2_noe_acheter":"audio/w1/d2_noe_acheter.mp3","d2_noe_aide":"audio/w1/d2_noe_aide.mp3","d2_noe_aide_moi":"audio/w1/d2_noe_aide_moi.mp3","d2_noe_bol":"audio/w1/d2_noe_bol.mp3","d2_noe_bonjour":"audio/w1/d2_noe_bonjour.mp3","d2_noe_bravo":"audio/w1/d2_noe_bravo.mp3","d2_noe_camille":"audio/w1/d2_noe_camille.mp3","d2_noe_chut":"audio/w1/d2_noe_chut.mp3","d2_noe_cond_b":"audio/w1/d2_noe_cond_b.mp3","d2_noe_croq":"audio/w1/d2_noe_croq.mp3","d2_noe_et_toi":"audio/w1/d2_noe_et_toi.mp3","d2_noe_faim":"audio/w1/d2_noe_faim.mp3","d2_noe_lait":"audio/w1/d2_noe_lait.mp3","d2_noe_liste":"audio/w1/d2_noe_liste.mp3","d2_noe_merci":"audio/w1/d2_noe_merci.mp3","d2_noe_pain":"audio/w1/d2_noe_pain.mp3","d2_noe_regarde":"audio/w1/d2_noe_regarde.mp3","d2_noe_retard":"audio/w1/d2_noe_retard.mp3","d2_noe_sms":"audio/w1/d2_noe_sms.mp3","d2_noe_superette2":"audio/w1/d2_noe_superette2.mp3","d2_noe_the_ou_cafe":"audio/w1/d2_noe_the_ou_cafe.mp3","d2_noe_tresbien":"audio/w1/d2_noe_tresbien.mp3","d2_noe_ventre":"audio/w1/d2_noe_ventre.mp3","d2_noe_voila_cafe":"audio/w1/d2_noe_voila_cafe.mp3","d2_noe_voila_eau":"audio/w1/d2_noe_voila_eau.mp3","d2_noe_voila_the":"audio/w1/d2_noe_voila_the.mp3","d2_req_cafe":"audio/w1/d2_req_cafe.mp3","d2_req_eau":"audio/w1/d2_req_eau.mp3","d2_req_the":"audio/w1/d2_req_the.mp3","d3_call_allo":"audio/w1/d3_call_allo.mp3","d3_call_derriere":"audio/w1/d3_call_derriere.mp3","d3_call_deuxieme":"audio/w1/d3_call_deuxieme.mp3","d3_call_laisse":"audio/w1/d3_call_laisse.mp3","d3_call_marseille":"audio/w1/d3_call_marseille.mp3","d3_call_trouve":"audio/w1/d3_call_trouve.mp3","d3_cam_colis":"audio/w1/d3_cam_colis.mp3","d3_cam_quoi":"audio/w1/d3_cam_quoi.mp3","d3_cam_rentree":"audio/w1/d3_cam_rentree.mp3","d3_found_cat":"audio/w1/d3_found_cat.mp3","d3_loc_dans":"audio/w1/d3_loc_dans.mp3","d3_loc_derriere":"audio/w1/d3_loc_derriere.mp3","d3_loc_devant":"audio/w1/d3_loc_devant.mp3","d3_loc_sous":"audio/w1/d3_loc_sous.mp3","d3_loc_sur":"audio/w1/d3_loc_sur.mp3","d3_noe_arbre":"audio/w1/d3_noe_arbre.mp3","d3_noe_boite":"audio/w1/d3_noe_boite.mp3","d3_noe_cacher":"audio/w1/d3_noe_cacher.mp3","d3_noe_croissant":"audio/w1/d3_noe_croissant.mp3","d3_noe_deux":"audio/w1/d3_noe_deux.mp3","d3_noe_jsp":"audio/w1/d3_noe_jsp.mp3","d3_noe_lesquels":"audio/w1/d3_noe_lesquels.mp3","d3_noe_livre_b":"audio/w1/d3_noe_livre_b.mp3","d3_noe_livreur":"audio/w1/d3_noe_livreur.mp3","d3_noe_ou":"audio/w1/d3_noe_ou.mp3","d3_noe_parfait":"audio/w1/d3_noe_parfait.mp3","d3_noe_question":"audio/w1/d3_noe_question.mp3","d3_noe_retard":"audio/w1/d3_noe_retard.mp3","d3_room_chambre":"audio/w1/d3_room_chambre.mp3","d3_room_cuisine":"audio/w1/d3_room_cuisine.mp3","d3_room_salon":"audio/w1/d3_room_salon.mp3","d3_room_sdb":"audio/w1/d3_room_sdb.mp3","d4_cam_chat":"audio/w1/d4_cam_chat.mp3","d4_cam_chat2":"audio/w1/d4_cam_chat2.mp3","d4_cam_dont":"audio/w1/d4_cam_dont.mp3","d4_cam_equipe":"audio/w1/d4_cam_equipe.mp3","d4_cam_interdit":"audio/w1/d4_cam_interdit.mp3","d4_cam_mot":"audio/w1/d4_cam_mot.mp3","d4_cam_ok":"audio/w1/d4_cam_ok.mp3","d4_cam_pardon":"audio/w1/d4_cam_pardon.mp3","d4_cam_parfait":"audio/w1/d4_cam_parfait.mp3","d4_cam_secret":"audio/w1/d4_cam_secret.mp3","d4_gag_attention":"audio/w1/d4_gag_attention.mp3","d4_gag_boum":"audio/w1/d4_gag_boum.mp3","d4_gag_bruit":"audio/w1/d4_gag_bruit.mp3","d4_gag_courait":"audio/w1/d4_gag_courait.mp3","d4_gag_lent":"audio/w1/d4_gag_lent.mp3","d4_gag_martin":"audio/w1/d4_gag_martin.mp3","d4_gag_seule":"audio/w1/d4_gag_seule.mp3","d4_martin_cle":"audio/w1/d4_martin_cle.mp3","d4_noe_aie":"audio/w1/d4_noe_aie.mp3","d4_noe_chut":"audio/w1/d4_noe_chut.mp3","d4_noe_cles":"audio/w1/d4_noe_cles.mp3","d4_noe_faute":"audio/w1/d4_noe_faute.mp3","d4_noe_gentil":"audio/w1/d4_noe_gentil.mp3","d4_noe_qui":"audio/w1/d4_noe_qui.mp3","d4_noe_stp":"audio/w1/d4_noe_stp.mp3","d5_cam_attends":"audio/w1/d5_cam_attends.mp3","d5_cam_enquete":"audio/w1/d5_cam_enquete.mp3","d5_cam_fermer":"audio/w1/d5_cam_fermer.mp3","d5_cam_ou":"audio/w1/d5_cam_ou.mp3","d5_cam_panier":"audio/w1/d5_cam_panier.mp3","d5_cam_parfait":"audio/w1/d5_cam_parfait.mp3","d5_cam_porte":"audio/w1/d5_cam_porte.mp3","d5_cam_samedi":"audio/w1/d5_cam_samedi.mp3","d5_cam_toi":"audio/w1/d5_cam_toi.mp3","d5_cam_vues":"audio/w1/d5_cam_vues.mp3","d5_gag_bonsoir":"audio/w1/d5_gag_bonsoir.mp3","d5_gag_chat":"audio/w1/d5_gag_chat.mp3","d5_gag_essaye":"audio/w1/d5_gag_essaye.mp3","d5_gag_gentil":"audio/w1/d5_gag_gentil.mp3","d5_gag_quatre":"audio/w1/d5_gag_quatre.mp3","d5_gag_sport":"audio/w1/d5_gag_sport.mp3","d5_noe_attention":"audio/w1/d5_noe_attention.mp3","d5_noe_cherche":"audio/w1/d5_noe_cherche.mp3","d5_noe_couche":"audio/w1/d5_noe_couche.mp3","d5_noe_crochet":"audio/w1/d5_noe_crochet.mp3","d5_noe_croissant":"audio/w1/d5_noe_croissant.mp3","d5_noe_descendu":"audio/w1/d5_noe_descendu.mp3","d5_noe_jouait":"audio/w1/d5_noe_jouait.mp3","d5_noe_manque":"audio/w1/d5_noe_manque.mp3","d5_noe_mescles":"audio/w1/d5_noe_mescles.mp3","d5_noe_ou":"audio/w1/d5_noe_ou.mp3","d5_noe_pleuvait":"audio/w1/d5_noe_pleuvait.mp3","d5_noe_poche":"audio/w1/d5_noe_poche.mp3","d5_noe_pose":"audio/w1/d5_noe_pose.mp3","d5_noe_quatre":"audio/w1/d5_noe_quatre.mp3","d5_noe_rentre":"audio/w1/d5_noe_rentre.mp3","d5_noe_ruban":"audio/w1/d5_noe_ruban.mp3","d5_noe_sais":"audio/w1/d5_noe_sais.mp3","d5_noe_trouvee":"audio/w1/d5_noe_trouvee.mp3","l_martin_1":"audio/w1/l_martin_1.mp3","l_martin_2":"audio/w1/l_martin_2.mp3","l_martin_3":"audio/w1/l_martin_3.mp3","l_martin_4":"audio/w1/l_martin_4.mp3","l_martin_5":"audio/w1/l_martin_5.mp3","l_martin_b":"audio/w1/l_martin_b.mp3","l_noe_1":"audio/w1/l_noe_1.mp3","l_noe_2":"audio/w1/l_noe_2.mp3","l_noe_3":"audio/w1/l_noe_3.mp3","l_noe_4":"audio/w1/l_noe_4.mp3","l_noe_5":"audio/w1/l_noe_5.mp3","l_noe_animal":"audio/w1/l_noe_animal.mp3","l_noe_cache":"audio/w1/l_noe_cache.mp3","pr2_ask":"audio/w1/pr2_ask.mp3","pr2_cafe":"audio/w1/pr2_cafe.mp3","pr2_croq":"audio/w1/pr2_croq.mp3","pr2_the":"audio/w1/pr2_the.mp3","pr3_chambre":"audio/w1/pr3_chambre.mp3","pr3_cuisine":"audio/w1/pr3_cuisine.mp3","pr3_sous":"audio/w1/pr3_sous.mp3","pr3_sur":"audio/w1/pr3_sur.mp3","pr4_bruit":"audio/w1/pr4_bruit.mp3","pr4_desole":"audio/w1/pr4_desole.mp3","pr4_gentil":"audio/w1/pr4_gentil.mp3","pr4_repeter":"audio/w1/pr4_repeter.mp3","pr5_chaussettes":"audio/w1/pr5_chaussettes.mp3","pr5_cle":"audio/w1/pr5_cle.mp3","pr5_pluie":"audio/w1/pr5_pluie.mp3","pr5_rentre":"audio/w1/pr5_rentre.mp3","w_arbre":"audio/w1/w_arbre.mp3","w_bol":"audio/w1/w_bol.mp3","w_bruit":"audio/w1/w_bruit.mp3","w_canape":"audio/w1/w_canape.mp3","w_chat":"audio/w1/w_chat.mp3","w_cle":"audio/w1/w_cle.mp3","w_colis":"audio/w1/w_colis.mp3","w_croquettes":"audio/w1/w_croquettes.mp3","w_eau":"audio/w1/w_eau.mp3","w_lettre":"audio/w1/w_lettre.mp3","w_nuit":"audio/w1/w_nuit.mp3","w_pain":"audio/w1/w_pain.mp3","w_panier":"audio/w1/w_panier.mp3","w_plante":"audio/w1/w_plante.mp3","w_pluie":"audio/w1/w_pluie.mp3","w_porte":"audio/w1/w_porte.mp3","w_tasse":"audio/w1/w_tasse.mp3","w_veste":"audio/w1/w_veste.mp3","w_voisine":"audio/w1/w_voisine.mp3"} };
+  root.A411.WEEK_CLIPS = { source: 'recording:qwen3-tts', files: {"abs_noe":"audio/w1/abs_noe.mp3","d2_cam_bruit":"audio/w1/d2_cam_bruit.mp3","d2_cam_cafe":"audio/w1/d2_cam_cafe.mp3","d2_cam_faim":"audio/w1/d2_cam_faim.mp3","d2_cam_merci":"audio/w1/d2_cam_merci.mp3","d2_cam_non":"audio/w1/d2_cam_non.mp3","d2_cam_salut":"audio/w1/d2_cam_salut.mp3","d2_cam_travail":"audio/w1/d2_cam_travail.mp3","d2_clerk_bonjour":"audio/w1/d2_clerk_bonjour.mp3","d2_clerk_bye":"audio/w1/d2_clerk_bye.mp3","d2_clerk_chat":"audio/w1/d2_clerk_chat.mp3","d2_clerk_dacc":"audio/w1/d2_clerk_dacc.mp3","d2_clerk_lait":"audio/w1/d2_clerk_lait.mp3","d2_clerk_prix":"audio/w1/d2_clerk_prix.mp3","d2_clerk_voila":"audio/w1/d2_clerk_voila.mp3","d2_hook_1":"audio/w1/d2_hook_1.mp3","d2_hook_2":"audio/w1/d2_hook_2.mp3","d2_hook_3":"audio/w1/d2_hook_3.mp3","d2_noe_acheter":"audio/w1/d2_noe_acheter.mp3","d2_noe_aide":"audio/w1/d2_noe_aide.mp3","d2_noe_aide_moi":"audio/w1/d2_noe_aide_moi.mp3","d2_noe_bol":"audio/w1/d2_noe_bol.mp3","d2_noe_bonjour":"audio/w1/d2_noe_bonjour.mp3","d2_noe_bravo":"audio/w1/d2_noe_bravo.mp3","d2_noe_camille":"audio/w1/d2_noe_camille.mp3","d2_noe_chut":"audio/w1/d2_noe_chut.mp3","d2_noe_cond_b":"audio/w1/d2_noe_cond_b.mp3","d2_noe_croq":"audio/w1/d2_noe_croq.mp3","d2_noe_et_toi":"audio/w1/d2_noe_et_toi.mp3","d2_noe_faim":"audio/w1/d2_noe_faim.mp3","d2_noe_lait":"audio/w1/d2_noe_lait.mp3","d2_noe_liste":"audio/w1/d2_noe_liste.mp3","d2_noe_merci":"audio/w1/d2_noe_merci.mp3","d2_noe_pain":"audio/w1/d2_noe_pain.mp3","d2_noe_regarde":"audio/w1/d2_noe_regarde.mp3","d2_noe_retard":"audio/w1/d2_noe_retard.mp3","d2_noe_sms":"audio/w1/d2_noe_sms.mp3","d2_noe_superette2":"audio/w1/d2_noe_superette2.mp3","d2_noe_the_ou_cafe":"audio/w1/d2_noe_the_ou_cafe.mp3","d2_noe_tresbien":"audio/w1/d2_noe_tresbien.mp3","d2_noe_ventre":"audio/w1/d2_noe_ventre.mp3","d2_noe_voila_cafe":"audio/w1/d2_noe_voila_cafe.mp3","d2_noe_voila_eau":"audio/w1/d2_noe_voila_eau.mp3","d2_noe_voila_the":"audio/w1/d2_noe_voila_the.mp3","d2_req_cafe":"audio/w1/d2_req_cafe.mp3","d2_req_eau":"audio/w1/d2_req_eau.mp3","d2_req_the":"audio/w1/d2_req_the.mp3","d3_call_allo":"audio/w1/d3_call_allo.mp3","d3_call_derriere":"audio/w1/d3_call_derriere.mp3","d3_call_deuxieme":"audio/w1/d3_call_deuxieme.mp3","d3_call_laisse":"audio/w1/d3_call_laisse.mp3","d3_call_marseille":"audio/w1/d3_call_marseille.mp3","d3_call_trouve":"audio/w1/d3_call_trouve.mp3","d3_cam_colis":"audio/w1/d3_cam_colis.mp3","d3_cam_quoi":"audio/w1/d3_cam_quoi.mp3","d3_cam_rentree":"audio/w1/d3_cam_rentree.mp3","d3_found_cat":"audio/w1/d3_found_cat.mp3","d3_loc_dans":"audio/w1/d3_loc_dans.mp3","d3_loc_derriere":"audio/w1/d3_loc_derriere.mp3","d3_loc_devant":"audio/w1/d3_loc_devant.mp3","d3_loc_sous":"audio/w1/d3_loc_sous.mp3","d3_loc_sur":"audio/w1/d3_loc_sur.mp3","d3_noe_arbre":"audio/w1/d3_noe_arbre.mp3","d3_noe_boite":"audio/w1/d3_noe_boite.mp3","d3_noe_cacher":"audio/w1/d3_noe_cacher.mp3","d3_noe_croissant":"audio/w1/d3_noe_croissant.mp3","d3_noe_deux":"audio/w1/d3_noe_deux.mp3","d3_noe_jsp":"audio/w1/d3_noe_jsp.mp3","d3_noe_lesquels":"audio/w1/d3_noe_lesquels.mp3","d3_noe_livre_b":"audio/w1/d3_noe_livre_b.mp3","d3_noe_livreur":"audio/w1/d3_noe_livreur.mp3","d3_noe_ou":"audio/w1/d3_noe_ou.mp3","d3_noe_parfait":"audio/w1/d3_noe_parfait.mp3","d3_noe_question":"audio/w1/d3_noe_question.mp3","d3_noe_retard":"audio/w1/d3_noe_retard.mp3","d3_room_chambre":"audio/w1/d3_room_chambre.mp3","d3_room_cuisine":"audio/w1/d3_room_cuisine.mp3","d3_room_salon":"audio/w1/d3_room_salon.mp3","d3_room_sdb":"audio/w1/d3_room_sdb.mp3","d4_cam_chat":"audio/w1/d4_cam_chat.mp3","d4_cam_chat2":"audio/w1/d4_cam_chat2.mp3","d4_cam_dont":"audio/w1/d4_cam_dont.mp3","d4_cam_equipe":"audio/w1/d4_cam_equipe.mp3","d4_cam_interdit":"audio/w1/d4_cam_interdit.mp3","d4_cam_mot":"audio/w1/d4_cam_mot.mp3","d4_cam_ok":"audio/w1/d4_cam_ok.mp3","d4_cam_pardon":"audio/w1/d4_cam_pardon.mp3","d4_cam_parfait":"audio/w1/d4_cam_parfait.mp3","d4_cam_secret":"audio/w1/d4_cam_secret.mp3","d4_gag_attention":"audio/w1/d4_gag_attention.mp3","d4_gag_boum":"audio/w1/d4_gag_boum.mp3","d4_gag_bruit":"audio/w1/d4_gag_bruit.mp3","d4_gag_courait":"audio/w1/d4_gag_courait.mp3","d4_gag_lent":"audio/w1/d4_gag_lent.mp3","d4_gag_martin":"audio/w1/d4_gag_martin.mp3","d4_gag_seule":"audio/w1/d4_gag_seule.mp3","d4_martin_cle":"audio/w1/d4_martin_cle.mp3","d4_noe_aie":"audio/w1/d4_noe_aie.mp3","d4_noe_chut":"audio/w1/d4_noe_chut.mp3","d4_noe_cles":"audio/w1/d4_noe_cles.mp3","d4_noe_faute":"audio/w1/d4_noe_faute.mp3","d4_noe_gentil":"audio/w1/d4_noe_gentil.mp3","d4_noe_qui":"audio/w1/d4_noe_qui.mp3","d4_noe_stp":"audio/w1/d4_noe_stp.mp3","d5_cam_attends":"audio/w1/d5_cam_attends.mp3","d5_cam_enquete":"audio/w1/d5_cam_enquete.mp3","d5_cam_fermer":"audio/w1/d5_cam_fermer.mp3","d5_cam_ou":"audio/w1/d5_cam_ou.mp3","d5_cam_panier":"audio/w1/d5_cam_panier.mp3","d5_cam_parfait":"audio/w1/d5_cam_parfait.mp3","d5_cam_porte":"audio/w1/d5_cam_porte.mp3","d5_cam_samedi":"audio/w1/d5_cam_samedi.mp3","d5_cam_toi":"audio/w1/d5_cam_toi.mp3","d5_cam_vues":"audio/w1/d5_cam_vues.mp3","d5_gag_bonsoir":"audio/w1/d5_gag_bonsoir.mp3","d5_gag_chat":"audio/w1/d5_gag_chat.mp3","d5_gag_essaye":"audio/w1/d5_gag_essaye.mp3","d5_gag_gentil":"audio/w1/d5_gag_gentil.mp3","d5_gag_quatre":"audio/w1/d5_gag_quatre.mp3","d5_gag_sport":"audio/w1/d5_gag_sport.mp3","d5_noe_attention":"audio/w1/d5_noe_attention.mp3","d5_noe_cherche":"audio/w1/d5_noe_cherche.mp3","d5_noe_couche":"audio/w1/d5_noe_couche.mp3","d5_noe_crochet":"audio/w1/d5_noe_crochet.mp3","d5_noe_croissant":"audio/w1/d5_noe_croissant.mp3","d5_noe_descendu":"audio/w1/d5_noe_descendu.mp3","d5_noe_jouait":"audio/w1/d5_noe_jouait.mp3","d5_noe_manque":"audio/w1/d5_noe_manque.mp3","d5_noe_mescles":"audio/w1/d5_noe_mescles.mp3","d5_noe_ou":"audio/w1/d5_noe_ou.mp3","d5_noe_pleuvait":"audio/w1/d5_noe_pleuvait.mp3","d5_noe_poche":"audio/w1/d5_noe_poche.mp3","d5_noe_pose":"audio/w1/d5_noe_pose.mp3","d5_noe_quatre":"audio/w1/d5_noe_quatre.mp3","d5_noe_rentre":"audio/w1/d5_noe_rentre.mp3","d5_noe_ruban":"audio/w1/d5_noe_ruban.mp3","d5_noe_sais":"audio/w1/d5_noe_sais.mp3","d5_noe_trouvee":"audio/w1/d5_noe_trouvee.mp3","d6_cam_bien":"audio/w1/d6_cam_bien.mp3","d6_cam_chut":"audio/w1/d6_cam_chut.mp3","d6_cam_merci":"audio/w1/d6_cam_merci.mp3","d6_cam_peur":"audio/w1/d6_cam_peur.mp3","d6_cam_retour":"audio/w1/d6_cam_retour.mp3","d6_cam_rue":"audio/w1/d6_cam_rue.mp3","d6_cam_surprise":"audio/w1/d6_cam_surprise.mp3","d6_clerk_croq":"audio/w1/d6_clerk_croq.mp3","d6_clerk_droite":"audio/w1/d6_clerk_droite.mp3","d6_clerk_parc":"audio/w1/d6_clerk_parc.mp3","d6_gag_arrive":"audio/w1/d6_gag_arrive.mp3","d6_gag_avous":"audio/w1/d6_gag_avous.mp3","d6_gag_demain":"audio/w1/d6_gag_demain.mp3","d6_gag_dormi":"audio/w1/d6_gag_dormi.mp3","d6_gag_garder":"audio/w1/d6_gag_garder.mp3","d6_gag_meilleur":"audio/w1/d6_gag_meilleur.mp3","d6_gag_seule":"audio/w1/d6_gag_seule.mp3","d6_gag_sport":"audio/w1/d6_gag_sport.mp3","d6_gag_verite":"audio/w1/d6_gag_verite.mp3","d6_mar_demain":"audio/w1/d6_mar_demain.mp3","d6_mar_surprise":"audio/w1/d6_mar_surprise.mp3","d6_noe_amoi":"audio/w1/d6_noe_amoi.mp3","d6_noe_appelle":"audio/w1/d6_noe_appelle.mp3","d6_noe_clic":"audio/w1/d6_noe_clic.mp3","d6_noe_croissants":"audio/w1/d6_noe_croissants.mp3","d6_noe_equipe":"audio/w1/d6_noe_equipe.mp3","d6_noe_faute":"audio/w1/d6_noe_faute.mp3","d6_noe_gros":"audio/w1/d6_noe_gros.mp3","d6_noe_la":"audio/w1/d6_noe_la.mp3","d6_noe_pardon":"audio/w1/d6_noe_pardon.mp3","d6_noe_raison":"audio/w1/d6_noe_raison.mp3","d6_pas_non":"audio/w1/d6_pas_non.mp3","d6_pas_tu":"audio/w1/d6_pas_tu.mp3","d6_pas_vu":"audio/w1/d6_pas_vu.mp3","l_martin_1":"audio/w1/l_martin_1.mp3","l_martin_2":"audio/w1/l_martin_2.mp3","l_martin_3":"audio/w1/l_martin_3.mp3","l_martin_4":"audio/w1/l_martin_4.mp3","l_martin_5":"audio/w1/l_martin_5.mp3","l_martin_b":"audio/w1/l_martin_b.mp3","l_noe_1":"audio/w1/l_noe_1.mp3","l_noe_2":"audio/w1/l_noe_2.mp3","l_noe_3":"audio/w1/l_noe_3.mp3","l_noe_4":"audio/w1/l_noe_4.mp3","l_noe_5":"audio/w1/l_noe_5.mp3","l_noe_animal":"audio/w1/l_noe_animal.mp3","l_noe_cache":"audio/w1/l_noe_cache.mp3","pr2_ask":"audio/w1/pr2_ask.mp3","pr2_cafe":"audio/w1/pr2_cafe.mp3","pr2_croq":"audio/w1/pr2_croq.mp3","pr2_the":"audio/w1/pr2_the.mp3","pr3_chambre":"audio/w1/pr3_chambre.mp3","pr3_cuisine":"audio/w1/pr3_cuisine.mp3","pr3_sous":"audio/w1/pr3_sous.mp3","pr3_sur":"audio/w1/pr3_sur.mp3","pr4_bruit":"audio/w1/pr4_bruit.mp3","pr4_desole":"audio/w1/pr4_desole.mp3","pr4_gentil":"audio/w1/pr4_gentil.mp3","pr4_repeter":"audio/w1/pr4_repeter.mp3","pr5_chaussettes":"audio/w1/pr5_chaussettes.mp3","pr5_cle":"audio/w1/pr5_cle.mp3","pr5_pluie":"audio/w1/pr5_pluie.mp3","pr5_rentre":"audio/w1/pr5_rentre.mp3","pr6_droit":"audio/w1/pr6_droit.mp3","pr6_droite":"audio/w1/pr6_droite.mp3","pr6_gauche":"audio/w1/pr6_gauche.mp3","pr6_roux":"audio/w1/pr6_roux.mp3","w_arbre":"audio/w1/w_arbre.mp3","w_balcon":"audio/w1/w_balcon.mp3","w_bol":"audio/w1/w_bol.mp3","w_bruit":"audio/w1/w_bruit.mp3","w_canape":"audio/w1/w_canape.mp3","w_chat":"audio/w1/w_chat.mp3","w_cle":"audio/w1/w_cle.mp3","w_colis":"audio/w1/w_colis.mp3","w_croquettes":"audio/w1/w_croquettes.mp3","w_eau":"audio/w1/w_eau.mp3","w_jambon":"audio/w1/w_jambon.mp3","w_lettre":"audio/w1/w_lettre.mp3","w_nuit":"audio/w1/w_nuit.mp3","w_pain":"audio/w1/w_pain.mp3","w_panier":"audio/w1/w_panier.mp3","w_plante":"audio/w1/w_plante.mp3","w_pluie":"audio/w1/w_pluie.mp3","w_porte":"audio/w1/w_porte.mp3","w_roux":"audio/w1/w_roux.mp3","w_rue":"audio/w1/w_rue.mp3","w_tasse":"audio/w1/w_tasse.mp3","w_veste":"audio/w1/w_veste.mp3","w_voisine":"audio/w1/w_voisine.mp3"} };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.A411.WEEK_CLIPS;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -7996,6 +8102,201 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
    ]
   },
   "story": "d5"
+ },
+ {
+  "id": "vous_avez_vu_un_chat",
+  "grammar": "passe_compose",
+  "band": "A1",
+  "speaker": "noe",
+  "fr": "Pardon, Madame. Vous avez vu un chat ?",
+  "zh": "打扰一下，女士。您看见一只猫了吗？",
+  "en": "Excuse me, Madame. Have you seen a cat?",
+  "noteZh": "对陌生人用 vous；先说 Pardon 再问。",
+  "noteEn": "Use vous with strangers; start with Pardon.",
+  "listen": {
+   "answer": "ask",
+   "options": [
+    {
+     "id": "ask",
+     "zh": "在问有没有看见猫",
+     "en": "asking if someone saw a cat"
+    },
+    {
+     "id": "tell",
+     "zh": "在说自己看见了猫",
+     "en": "saying they saw a cat"
+    },
+    {
+     "id": "buy",
+     "zh": "在买猫粮",
+     "en": "buying cat food"
+    }
+   ]
+  },
+  "produce": {
+   "accept": [
+    "Pardon, Madame. Vous avez vu un chat ?",
+    "Pardon Madame, vous avez vu un chat",
+    "Vous avez vu un chat ?",
+    "Vous avez vu un chat"
+   ]
+  },
+  "story": "d6"
+ },
+ {
+  "id": "je_lai_vu",
+  "grammar": "pronoms_cod",
+  "band": "A2",
+  "speaker": "neutral",
+  "fr": "Un chat roux ? Oui, je l'ai vu !",
+  "zh": "橘猫？对，我看见它了！",
+  "en": "A ginger cat? Yes, I saw him!",
+  "noteZh": "l' 代替 le chat（阳性），所以 vu 不加 -e。",
+  "noteEn": "l' stands for le chat (masculine), so vu takes no -e.",
+  "listen": {
+   "answer": "seen",
+   "options": [
+    {
+     "id": "seen",
+     "zh": "看见过那只猫",
+     "en": "has seen the cat"
+    },
+    {
+     "id": "notseen",
+     "zh": "没看见那只猫",
+     "en": "has not seen the cat"
+    },
+    {
+     "id": "own",
+     "zh": "那是自己的猫",
+     "en": "it is their own cat"
+    }
+   ]
+  },
+  "produce": {
+   "accept": [
+    "Un chat roux ? Oui, je l'ai vu !",
+    "Un chat roux ? Oui, je l’ai vu !",
+    "Oui, je l'ai vu",
+    "Je l'ai vu",
+    "Je l’ai vu"
+   ]
+  },
+  "story": "d6"
+ },
+ {
+  "id": "plus_gros_que",
+  "grammar": "comparatifs",
+  "band": "A2",
+  "speaker": "noe",
+  "fr": "Ce chat est plus gros que Croissant.",
+  "zh": "这只猫比 Croissant 胖。",
+  "en": "This cat is bigger than Croissant.",
+  "noteZh": "plus + 形容词 + que = 比……更……",
+  "noteEn": "plus + adjective + que = more … than.",
+  "listen": {
+   "answer": "bigger",
+   "options": [
+    {
+     "id": "bigger",
+     "zh": "这只猫更胖",
+     "en": "this cat is bigger"
+    },
+    {
+     "id": "smaller",
+     "zh": "这只猫更小",
+     "en": "this cat is smaller"
+    },
+    {
+     "id": "same",
+     "zh": "两只猫一样大",
+     "en": "the cats are the same size"
+    }
+   ]
+  },
+  "produce": {
+   "accept": [
+    "Ce chat est plus gros que Croissant",
+    "Ce chat est plus gros que Croissant."
+   ]
+  },
+  "story": "d6"
+ },
+ {
+  "id": "jambon_meilleur",
+  "grammar": "comparatifs",
+  "band": "A2",
+  "speaker": "lefevre",
+  "fr": "Mon jambon est meilleur que vos croquettes.",
+  "zh": "我的火腿比你们的猫粮好吃。",
+  "en": "My ham is better than your cat food.",
+  "noteZh": "bon 的比较级是 meilleur，不说 plus bon。",
+  "noteEn": "The comparative of bon is meilleur, never plus bon.",
+  "listen": {
+   "answer": "better",
+   "options": [
+    {
+     "id": "better",
+     "zh": "火腿比猫粮好吃",
+     "en": "the ham is better than the cat food"
+    },
+    {
+     "id": "worse",
+     "zh": "猫粮比火腿好吃",
+     "en": "the cat food is better than the ham"
+    },
+    {
+     "id": "price",
+     "zh": "火腿比猫粮贵",
+     "en": "the ham is more expensive"
+    }
+   ]
+  },
+  "produce": {
+   "accept": [
+    "Mon jambon est meilleur que vos croquettes",
+    "Mon jambon est meilleur que vos croquettes."
+   ]
+  },
+  "story": "d6"
+ },
+ {
+  "id": "je_peux_le_garder",
+  "grammar": "pronoms_cod",
+  "band": "A2",
+  "speaker": "lefevre",
+  "fr": "Je peux le garder chez moi.",
+  "zh": "我可以把他留在我家。",
+  "en": "I can keep him at my place.",
+  "noteZh": "le 放在不定式 garder 前面：je peux le garder。",
+  "noteEn": "le goes before the infinitive garder: je peux le garder.",
+  "listen": {
+   "answer": "keep",
+   "options": [
+    {
+     "id": "keep",
+     "zh": "可以帮忙照看",
+     "en": "offering to keep him"
+    },
+    {
+     "id": "give",
+     "zh": "要把他送走",
+     "en": "giving him away"
+    },
+    {
+     "id": "find",
+     "zh": "在找他",
+     "en": "looking for him"
+    }
+   ]
+  },
+  "produce": {
+   "accept": [
+    "Je peux le garder chez moi",
+    "Je peux le garder chez moi."
+   ]
+  },
+  "story": "d6"
  }
 ];
   var byId = {};
@@ -8006,7 +8307,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     if ((it.produce && it.produce.accept && it.produce.accept.length) || (it.cloze && it.cloze.accept && it.cloze.accept.length)) m.push('production');
     return m;
   }
-  var api = { ITEMS: ITEMS, byId: byId, modalities: modalities, version: 'deck-2026-10-09a' };
+  var api = { ITEMS: ITEMS, byId: byId, modalities: modalities, version: 'deck-2026-10-09b' };
   root.A411 = root.A411 || {};
   root.A411.Deck = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -8773,7 +9074,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 (function (root) {
   'use strict';
   var NB = '\u00A0';
-  var CONTENT_VERSION = 'w1-2026-10-09b';
+  var CONTENT_VERSION = 'w1-2026-10-09c';
   var ARC_TITLE = 'Protège Croissant';
 
   // speaker: camille | noe | neutral | martin | lefevre. label: understand | atmosphere. bonus: optional extra line shown to everyone, never tested.
@@ -8955,6 +9256,46 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     pr5_pluie: { speaker: 'neutral', fr: 'Il pleuvait.', zh: '当时在下雨。', en: 'It was raining.', target: 'il_pleuvait', label: 'probe' },
     pr5_rentre: { speaker: 'neutral', fr: 'Je suis rentré à la maison.', zh: '我回到家了。', en: 'I came back home.', label: 'probe' },
     pr5_chaussettes: { speaker: 'neutral', fr: 'Il y a trois chaussettes.', zh: '有三只袜子。', en: 'There are three socks.', label: 'probe' },
+
+    // ---- Day 6: Où est Croissant ? (v0.8.0) ----
+    d6_noe_appelle: { speaker: 'noe', fr: 'Croissant' + NB + '! Croissant' + NB + '! Tu es où' + NB + '?', tts: 'Croissant ! Croissant ! Tu es où ?', zh: 'Croissant！Croissant！你在哪儿？', en: 'Croissant! Croissant! Where are you?', label: 'understand' },
+    d6_cam_chut: { speaker: 'camille', fr: 'Chut, Noé… Les voisins dorment' + NB + '!', tts: 'Chut, Noé… Les voisins dorment !', zh: '嘘，Noé……邻居们在睡觉！', en: 'Shh, Noé… The neighbours are asleep!', label: 'atmosphere' },
+    d6_noe_raison: { speaker: 'noe', fr: 'Tu avais raison, hier. C\u2019est ma clé, c\u2019est ma porte… c\u2019est ma faute.', tts: "Tu avais raison, hier. C'est ma clé, c'est ma porte… c'est ma faute.", zh: '你昨天说得对。是我的钥匙，是我的门……是我的错。', en: 'You were right yesterday. It’s my key, my door… my fault.', label: 'atmosphere' },
+    d6_noe_faute: { speaker: 'noe', fr: 'C\u2019est ma faute. Je n\u2019ai pas fermé la porte à clé.', tts: "C'est ma faute. Je n'ai pas fermé la porte à clé.", zh: '是我的错。我没有把门锁上。', en: 'It’s my fault. I didn’t lock the door.', label: 'understand' },
+    d6_cam_rue: { speaker: 'camille', fr: 'Bon. On va dans la rue. On demande aux gens.', tts: 'Bon. On va dans la rue. On demande aux gens.', zh: '好。我们去街上，问问路人。', en: 'Right. We go out into the street. We ask people.', label: 'understand' },
+    d6_noe_pardon: { speaker: 'noe', fr: 'Pardon, Madame. Je cherche mon chat. Il est petit et roux.', tts: 'Pardon, Madame. Je cherche mon chat. Il est petit et roux.', zh: '打扰一下，女士。我在找我的猫。它小小的，橘色的。', en: 'Excuse me, Madame. I’m looking for my cat. He’s small and ginger.', target: 'je_cherche_chat', label: 'understand' },
+    d6_pas_non: { speaker: 'neutral', fr: 'Un chat roux' + NB + '? Non, désolée.', tts: 'Un chat roux ? Non, désolée.', zh: '橘猫？没有，抱歉。', en: 'A ginger cat? No, sorry.', label: 'understand' },
+    d6_pas_vu: { speaker: 'neutral', fr: 'Un petit chat roux' + NB + '? Oui, je l\u2019ai vu' + NB + '! Hier, devant la supérette.', tts: "Un petit chat roux ? Oui, je l'ai vu ! Hier, devant la supérette.", zh: '一只橘色小猫？对，我看见过！昨天，在小超市门口。', en: 'A small ginger cat? Yes, I saw him! Yesterday, in front of the corner shop.', label: 'understand' },
+    d6_pas_tu: { speaker: 'neutral', fr: 'Euh… On se connaît' + NB + '?', tts: 'Euh… On se connaît ?', zh: '呃……我们认识吗？', en: 'Er… Do we know each other?', label: 'atmosphere' },
+    d6_clerk_croq: { speaker: 'neutral', fr: 'Ah, bonjour' + NB + '! Les croquettes, c\u2019était pour ce chat, alors' + NB + '?', tts: "Ah, bonjour ! Les croquettes, c'était pour ce chat, alors ?", zh: '啊，你好！那些猫粮，原来是给这只猫的？', en: 'Ah, hello! So the cat food was for this cat?', label: 'atmosphere' },
+    d6_clerk_droite: { speaker: 'neutral', fr: 'Oui, je l\u2019ai vu, hier soir. Il est allé tout droit… puis à droite.', tts: "Oui, je l'ai vu, hier soir. Il est allé tout droit… puis à droite.", zh: '对，我昨晚看见它了。它一直往前走……然后往右拐了。', en: 'Yes, I saw him last night. He went straight on… then right.', target: 'je_lai_vu', label: 'understand' },
+    d6_clerk_parc: { speaker: 'neutral', fr: 'À droite, c\u2019est votre rue. Mais à gauche, il y a le parc… Les chats adorent le parc.', tts: "À droite, c'est votre rue. Mais à gauche, il y a le parc… Les chats adorent le parc.", zh: '右边是你们那条街。可是左边有个公园……猫最喜欢公园了。', en: 'On the right, that’s your street. But on the left there’s the park… Cats love the park.', label: 'understand' },
+    d6_noe_gros: { speaker: 'noe', fr: 'Non… Ce chat est plus gros que Croissant. Et il est gris.', tts: 'Non… Ce chat est plus gros que Croissant. Et il est gris.', zh: '不对……这只猫比 Croissant 胖。而且它是灰色的。', en: 'No… This cat is bigger than Croissant. And he’s grey.', target: 'plus_gros_que', label: 'understand' },
+    d6_cam_retour: { speaker: 'camille', fr: 'On retourne. À droite, vite' + NB + '!', tts: 'On retourne. À droite, vite !', zh: '我们回去。往右，快！', en: 'Let’s go back. Right, quick!', label: 'atmosphere' },
+    d6_cam_bien: { speaker: 'camille', fr: 'Notre rue… Bonne idée. Écoutez' + NB + '!', tts: 'Notre rue… Bonne idée. Écoutez !', zh: '我们那条街……好主意。你们听！', en: 'Our street… Good idea. Listen!', label: 'atmosphere' },
+    d6_noe_la: { speaker: 'noe', fr: 'Là' + NB + '! Sur le balcon' + NB + '! C\u2019est Croissant' + NB + '!', tts: "Là ! Sur le balcon ! C'est Croissant !", zh: '那儿！阳台上！是 Croissant！', en: 'There! On the balcony! It’s Croissant!', label: 'understand' },
+    d6_gag_verite: { speaker: 'lefevre', fr: 'Ah, c\u2019est vous. L\u2019autre jour, vous m\u2019avez dit la vérité. Le voilà, votre chat.', tts: "Ah, c'est vous. L'autre jour, vous m'avez dit la vérité. Le voilà, votre chat.", zh: '啊，是你们。那天你们跟我说了实话。喏，你们的猫在这儿。', en: 'Ah, it’s you. The other day, you told me the truth. Here he is, your cat.', label: 'atmosphere' },
+    d6_gag_sport: { speaker: 'lefevre', fr: 'Ah… Voilà votre « sport » de la nuit, je pense' + NB + '?', tts: 'Ah… Voilà votre sport de la nuit, je pense ?', zh: '啊……这就是你们夜里的“运动”吧？', en: 'Ah… So this is your night-time “sport”, I suppose?', label: 'atmosphere' },
+    d6_gag_avous: { speaker: 'lefevre', fr: 'Bonjour. Ce petit chat roux… il est à vous, je crois' + NB + '?', tts: 'Bonjour. Ce petit chat roux… il est à vous, je crois ?', zh: '你们好。这只橘色小猫……是你们的吧？', en: 'Hello. This little ginger cat… he’s yours, I think?', label: 'atmosphere' },
+    d6_gag_arrive: { speaker: 'lefevre', fr: 'Il est arrivé hier soir, par les toits. Il a mangé mon jambon' + NB + '!', tts: 'Il est arrivé hier soir, par les toits. Il a mangé mon jambon !', zh: '他昨晚从屋顶上过来的。他把我的火腿吃了！', en: 'He arrived last night, over the rooftops. He ate my ham!', label: 'understand' },
+    d6_gag_meilleur: { speaker: 'lefevre', fr: 'Mon jambon est meilleur que vos croquettes, hein' + NB + '?', tts: 'Mon jambon est meilleur que vos croquettes, hein ?', zh: '我的火腿比你们的猫粮好吃，是吧？', en: 'My ham is better than your cat food, eh?', target: 'jambon_meilleur', label: 'atmosphere' },
+    d6_noe_amoi: { speaker: 'noe', fr: 'Pardon, Madame. Il est à moi. C\u2019est ma faute.', tts: "Pardon, Madame. Il est à moi. C'est ma faute.", zh: '对不起，女士。猫是我的。是我的错。', en: 'Sorry, Madame. He’s mine. It’s my fault.', label: 'understand' },
+    d6_gag_dormi: { speaker: 'lefevre', fr: 'Il a dormi avec moi, sur mon lit.', tts: 'Il a dormi avec moi, sur mon lit.', zh: '他跟我一起睡的，在我床上。', en: 'He slept with me, on my bed.', label: 'understand' },
+    d6_gag_seule: { speaker: 'lefevre', fr: 'Cette nuit… je n\u2019étais pas seule.', tts: "Cette nuit… je n'étais pas seule.", zh: '昨天夜里……我不是一个人。', en: 'Last night… I wasn’t alone.', label: 'atmosphere' },
+    d6_cam_merci: { speaker: 'camille', fr: 'Merci, Madame Lefèvre' + NB + '! Merci beaucoup' + NB + '!', tts: 'Merci, Madame Lefèvre ! Merci beaucoup !', zh: '谢谢您，Lefèvre 太太！太感谢了！', en: 'Thank you, Madame Lefèvre! Thank you so much!', label: 'atmosphere' },
+    d6_gag_demain: { speaker: 'lefevre', fr: 'Madame Martin vient demain, non' + NB + '?', tts: 'Madame Martin vient demain, non ?', zh: 'Martin 太太明天要来，对吧？', en: 'Madame Martin is coming tomorrow, isn’t she?', label: 'understand' },
+    d6_gag_garder: { speaker: 'lefevre', fr: 'Je peux le garder chez moi, demain matin. Pendant la visite.', tts: 'Je peux le garder chez moi, demain matin. Pendant la visite.', zh: '明天上午我可以把他留在我家。在她来看房的时候。', en: 'I can keep him at my place tomorrow morning. During the visit.', target: 'je_peux_le_garder', label: 'understand' },
+    d6_cam_peur: { speaker: 'camille', fr: 'J\u2019ai peur, tu sais. Cet appartement… c\u2019est ma maison, à Paris.', tts: "J'ai peur, tu sais. Cet appartement… c'est ma maison, à Paris.", zh: '我很害怕，你知道吗。这间公寓……是我在巴黎的家。', en: 'I’m scared, you know. This apartment… it’s my home, in Paris.', label: 'atmosphere' },
+    d6_noe_equipe: { speaker: 'noe', fr: 'On est une équipe, Camille. Tous les quatre.', tts: 'On est une équipe, Camille. Tous les quatre.', zh: '我们是一个团队，Camille。我们四个。', en: 'We’re a team, Camille. All four of us.', label: 'atmosphere' },
+    d6_noe_clic: { speaker: 'noe', fr: 'Cette fois, je ferme à clé' + NB + '!', tts: 'Cette fois, je ferme à clé !', zh: '这次我把门锁上！', en: 'This time, I’m locking the door!', label: 'atmosphere' },
+    d6_mar_demain: { speaker: 'martin', fr: 'Bonsoir' + NB + '! Demain, dix heures. J\u2019apporte des croissants' + NB + '!', tts: "Bonsoir ! Demain, dix heures. J'apporte des croissants !", zh: '晚上好！明天十点。我带可颂来！', en: 'Good evening! Tomorrow, ten o’clock. I’m bringing croissants!', label: 'understand' },
+    d6_noe_croissants: { speaker: 'noe', fr: '… Des croissants' + NB + '?', tts: '… Des croissants ?', zh: '……可颂？', en: '… Croissants?', label: 'atmosphere' },
+    d6_mar_surprise: { speaker: 'martin', fr: 'P.-S. J\u2019ai aussi une petite surprise pour vous.', tts: "Post-scriptum. J'ai aussi une petite surprise pour vous.", zh: '附言：我还给你们准备了一个小惊喜。', en: 'P.S. I also have a little surprise for you.', label: 'understand' },
+    d6_cam_surprise: { speaker: 'camille', fr: 'Une surprise' + NB + '? … Quelle surprise' + NB + '?', tts: 'Une surprise ? … Quelle surprise ?', zh: '惊喜？……什么惊喜？', en: 'A surprise? … What surprise?', label: 'atmosphere' },
+    pr6_gauche: { speaker: 'neutral', fr: 'Tournez à gauche.', zh: '向左转。', en: 'Turn left.', target: 'a_gauche', label: 'probe' },
+    pr6_droite: { speaker: 'neutral', fr: 'Tournez à droite.', zh: '向右转。', en: 'Turn right.', target: 'a_droite', label: 'probe' },
+    pr6_droit: { speaker: 'neutral', fr: 'Allez tout droit.', zh: '一直往前走。', en: 'Go straight on.', target: 'tout_droit', label: 'probe' },
+    pr6_roux: { speaker: 'neutral', fr: 'C\u2019est un petit chat roux.', tts: "C'est un petit chat roux.", zh: '是一只橘色的小猫。', en: 'It’s a small ginger cat.', label: 'probe' },
 
     // ---- missed-day return ----
     abs_noe: { speaker: 'noe', fr: 'Te voilà' + NB + '! Croissant a fait une bêtise…', tts: 'Te voilà ! Croissant a fait une bêtise…', zh: '你回来了！Croissant 闯了个小祸……', en: 'There you are! Croissant got up to some mischief…', label: 'atmosphere' }
@@ -9302,9 +9643,91 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         L('d5_noe_ou', { scene: 'cat', night: true, door: 'open', noe: 'sad', camille: 'sad', props: [['catbed', 66, 50]] }),
         { t: 'done', art: { scene: 'cat', night: true, door: 'open', props: [['catbed', 66, 50]] }, hook: { fr: 'La porte était ouverte. Le canapé est vide. Où est Croissant' + NB + '? Et samedi, Madame Martin arrive…', zh: '门是开着的。沙发空了。Croissant 去哪儿了？而星期六，Martin 太太就要来了……', en: 'The door was open. The sofa is empty. Where is Croissant? And on Saturday, Madame Martin arrives…' } }
       ]
+    },
+    d6: {
+      id: 'd6', n: 6, title: 'Où est Croissant' + NB + '?', lesson: 'd6',
+      mission: { fr: 'Mission : retrouver Croissant', zh: '在街上问路、听方向，把 Croissant 找回来。', en: 'Ask people in the street, follow the directions, and find Croissant.' },
+      deck: ['je_cherche_chat', 'a_gauche', 'a_droite', 'tout_droit', 'jai_vu', 'je_lai_vu', 'plus_gros_que', 'jambon_meilleur', 'je_peux_le_garder'],
+      steps: [
+        n('n_d6_escalier', 'La nuit. La porte du 411 est ouverte. Noé descend l\u2019escalier, en chaussettes.', '夜里。411 的门开着。Noé 穿着袜子跑下楼梯。', 'Night. The door of 411 is open. Noé runs down the stairs in his socks.', { sfx: 'steps', scene: 'doorway', night: true, door: 'open', noe: 'sad' }),
+        L('d6_noe_appelle', { scene: 'doorway', night: true, door: 'open', noe: 'ask' }),
+        L('d6_cam_chut', { scene: 'doorway', night: true, door: 'open', noe: 'sad', camille: 'shh' }),
+        n('n_d6_rien', 'Rien. Pas un miaou. Toute la nuit, toute la journée de jeudi… rien.', '什么都没有。一声喵都没有。整整一夜，整个星期四……什么都没有。', 'Nothing. Not one meow. All night, all of Thursday… nothing.', { scene: 'cat', night: true, door: 'open', props: [['catbed', 66, 50]] }),
+        n('n_d6_matin', 'Vendredi matin. Samedi, c\u2019est demain.', '星期五早上。星期六就是明天。', 'Friday morning. Saturday is tomorrow.', { sfx: 'paper', scene: 'cat', noe: 'sad', camille: 'sad', props: [['calendar', 70, 8, 'hl'], ['catbed', 66, 50]] }),
+        { t: 'line', id: 'd6_noe_raison', when: { k: 'd5_noe', v: ['own'] }, art: { scene: 'cat', noe: 'sad', camille: 'idle', props: [['hook', 30, 10]] } },
+        { t: 'line', id: 'd6_noe_faute', when: { k: 'd5_noe', v: ['cover', 'poches', null] }, art: { scene: 'cat', noe: 'sad', camille: 'idle', props: [['hook', 30, 10]] } },
+        L('d6_cam_rue', { scene: 'cat', noe: 'sad', camille: 'point' }),
+        n('n_d6_rue', 'Dans la rue. Les gens passent vite. Noé montre une photo de Croissant.', '街上。行人走得很快。Noé 拿出 Croissant 的照片给人看。', 'In the street. People walk by fast. Noé shows a photo of Croissant.', { scene: 'street', noe: 'ask', camille: 'idle', passant: 'idle' }),
+        F('rue', { scene: 'street', noe: 'idle', camille: 'idle', focus: 'rue' }),
+        { t: 'say', key: 'd6_ask', fr: 'Tu demandes à une dame. Tu dis…', zh: '你去问一位女士。你会怎么说？', en: 'You ask a woman. What do you say?', art: { scene: 'street', noe: 'idle', camille: 'idle', passant: 'idle' },
+          opts: [{ id: 'vous', fr: 'Pardon, Madame. Vous avez vu un chat' + NB + '?', target: 'vous_avez_vu_un_chat' }, { id: 'tu', fr: 'Salut' + NB + '! Tu as vu un chat' + NB + '?' }, { id: 'chat', fr: 'Un chat' + NB + '! Où' + NB + '?' }] },
+        { t: 'line', id: 'd6_pas_tu', when: { k: 'd6_ask', v: ['tu'] }, art: { scene: 'street', noe: 'idle', camille: 'idle', passant: 'ask' } },
+        L('d6_noe_pardon', { scene: 'street', noe: 'ask', camille: 'idle', passant: 'idle', props: [['catroux', 34, 14, 'hl']] }),
+        F('roux', { scene: 'street', noe: 'ask', camille: 'idle', passant: 'idle', props: [['catroux', 34, 14]], focus: 'catroux' }),
+        L('d6_pas_non', { scene: 'street', noe: 'sad', camille: 'idle', passant: 'idle' }),
+        { t: 'pick', key: 'd6_quel', mode: 'task', scene: 'street', art: { noe: 'ask', camille: 'idle' }, fr: 'Écoute Noé. Croissant, c\u2019est quel chat' + NB + '?', zh: '听 Noé 说。Croissant 是哪只猫？', en: 'Listen to Noé. Which cat is Croissant?', items: [{ line: 'd6_noe_pardon', answer: 'roux' }],
+          opts: [{ id: 'roux', fr: 'un petit chat roux', img: { prop: 'catroux' }, zh: '一只橘色小猫', en: 'a small ginger cat' }, { id: 'gros', fr: 'un gros chat gris', img: { prop: 'catgros' }, zh: '一只灰色胖猫', en: 'a big grey cat' }, { id: 'noir', fr: 'un chat noir', img: { prop: 'catnoir' }, zh: '一只黑猫', en: 'a black cat' }] },
+        L('d6_pas_vu', { scene: 'street', noe: 'happy', camille: 'happy', passant: 'pointPlant' }),
+        { t: 'pick', key: 'd6_ou', mode: 'task', scene: 'street', art: { noe: 'ask', camille: 'ask', passant: 'idle' }, fr: 'Écoute la dame. Elle a vu Croissant où' + NB + '?', zh: '听那位女士说。她在哪儿看见了 Croissant？', en: 'Listen to the woman. Where did she see Croissant?', items: [{ line: 'd6_pas_vu', answer: 'superette' }],
+          opts: [{ id: 'superette', fr: 'devant la supérette', img: { prop: 'shopfront' }, zh: '在小超市门口', en: 'in front of the corner shop' }, { id: 'parc', fr: 'dans le parc', img: { prop: 'tree' }, zh: '在公园里', en: 'in the park' }, { id: 'toit', fr: 'sur un toit', img: { prop: 'roof' }, zh: '在屋顶上', en: 'on a roof' }] },
+        n('n_d6_superette', 'La supérette du coin. Le vendeur te reconnaît.', '街角的小超市。店员认出了你。', 'The corner shop. The shopkeeper recognises you.', { sfx: 'door', scene: 'shop' }),
+        L('d6_clerk_croq', { scene: 'shop' }),
+        L('d6_clerk_droite', { scene: 'shop', props: [['arrowU', 20, 46], ['arrowR', 32, 46, 'hl']] }),
+        { t: 'pick', key: 'd6_dir', mode: 'task', scene: 'shop', fr: 'Écoute le vendeur. Croissant est allé où, après' + NB + '?', zh: '听店员说。Croissant 后来往哪边走了？', en: 'Listen to the shopkeeper. Which way did Croissant go after that?', items: [{ line: 'd6_clerk_droite', answer: 'droite' }],
+          opts: [{ id: 'gauche', fr: 'à gauche', img: { prop: 'arrowL' }, zh: '往左', en: 'left' }, { id: 'droite', fr: 'à droite', img: { prop: 'arrowR' }, zh: '往右', en: 'right' }, { id: 'droit', fr: 'tout droit', img: { prop: 'arrowU' }, zh: '一直往前', en: 'straight on' }] },
+        L('d6_clerk_parc', { scene: 'shop', props: [['arrowR', 20, 46], ['arrowL', 44, 46], ['tree', 56, 44]] }),
+        { t: 'choice', key: 'd6_route', fr: 'À gauche, le parc. À droite, notre rue. Tu vas où' + NB + '?', zh: '左边是公园，右边是我们那条街。你往哪儿走？（剧情选择，没有对错）', en: 'Left: the park. Right: our street. Which way? (A story choice, not a test.)', art: { scene: 'street', noe: 'ask', camille: 'ask' },
+          opts: [{ id: 'gauche', fr: 'À gauche' + NB + ': le parc', img: { prop: 'arrowL' }, zh: '往左：公园', en: 'Left: the park', after: { fr: 'Vous allez au parc, vite.', zh: '你们快步走向公园。', en: 'You hurry to the park.' } },
+                 { id: 'droite', fr: 'À droite' + NB + ': notre rue', img: { prop: 'arrowR' }, zh: '往右：我们那条街', en: 'Right: our street', after: { fr: 'Vous rentrez dans votre rue.', zh: '你们拐回了自己那条街。', en: 'You head back into your own street.' } }] },
+        { t: 'narr', id: 'n_d6_parc', when: { k: 'd6_route', v: ['gauche'] }, fr: 'Le parc. Sous le banc… un chat' + NB + '!', zh: '公园。长椅下面……有一只猫！', en: 'The park. Under the bench… a cat!', art: { sfx: 'meow', scene: 'parc', noe: 'happy', camille: 'happy', props: [['catgros', 50, 44, 'hl']] } },
+        { t: 'line', id: 'd6_noe_gros', when: { k: 'd6_route', v: ['gauche'] }, art: { scene: 'parc', noe: 'sad', camille: 'idle', props: [['catgros', 50, 44]] } },
+        { t: 'line', id: 'd6_cam_retour', when: { k: 'd6_route', v: ['gauche'] }, art: { scene: 'parc', noe: 'sad', camille: 'point', props: [['catgros', 50, 44], ['arrowR', 80, 46]] } },
+        { t: 'line', id: 'd6_cam_bien', when: { k: 'd6_route', v: ['droite', null] }, art: { scene: 'street', noe: 'idle', camille: 'point' } },
+        n('n_d6_immeuble', 'Devant votre immeuble. Et là-haut… « Miaou' + NB + '! »', '在你们楼前。从上面传来……“喵！”', 'In front of your building. And up there… « Miaou ! »', { sfx: 'meow', scene: 'balcon', noe: 'ask', camille: 'ask', cat: 1 }),
+        L('d6_noe_la', { scene: 'balcon', noe: 'pointUp', camille: 'happy', cat: 1 }),
+        F('balcon', { scene: 'balcon', noe: 'pointUp', camille: 'happy', cat: 1, focus: 'balcon' }),
+        n('n_d6_jambon', 'Sur le balcon du premier étage, Croissant mange… du jambon.', '二楼的阳台上，Croissant 正在吃……火腿。', 'On the first-floor balcony, Croissant is eating… ham.', { scene: 'balcon', noe: 'ask', camille: 'ask', cat: 1, props: [['jambon', 64, 22, 'hl']] }),
+        F('jambon', { scene: 'balcon', noe: 'ask', camille: 'ask', cat: 1, props: [['jambon', 64, 22]], focus: 'jambon' }),
+        n('n_d6_fenetre', 'La fenêtre s\u2019ouvre. Ce balcon… c\u2019est le balcon de Madame Lefèvre.', '窗户开了。这个阳台……是 Lefèvre 太太家的阳台。', 'The window opens. This balcony… it’s Madame Lefèvre’s balcony.', { sfx: 'door', scene: 'balcon', voisine: 'idle', noe: 'sad', camille: 'sad', cat: 1 }),
+        { t: 'line', id: 'd6_gag_verite', when: { k: 'd4_explain', v: ['chat'] }, art: { scene: 'balcon', voisine: 'idle', noe: 'sad', camille: 'idle', cat: 1 } },
+        { t: 'line', id: 'd6_gag_sport', when: { k: 'd4_explain', v: ['sport'] }, art: { scene: 'balcon', voisine: 'cross', noe: 'sad', camille: 'idle', cat: 1 } },
+        { t: 'line', id: 'd6_gag_avous', when: { k: 'd4_explain', v: ['desole', null] }, art: { scene: 'balcon', voisine: 'idle', noe: 'sad', camille: 'idle', cat: 1 } },
+        L('d6_gag_arrive', { scene: 'balcon', voisine: 'pointUp', noe: 'sad', camille: 'sad', cat: 1, props: [['jambon', 64, 22]] }),
+        L('d6_noe_amoi', { scene: 'balcon', voisine: 'cross', noe: 'point', camille: 'sad', cat: 1 }),
+        L('d6_gag_meilleur', { scene: 'balcon', voisine: 'happy', noe: 'sad', camille: 'idle', cat: 1, props: [['jambon', 64, 22]] }),
+        n('n_d6_descend', 'Madame Lefèvre descend, avec Croissant dans les bras.', 'Lefèvre 太太抱着 Croissant 下楼来了。', 'Madame Lefèvre comes down with Croissant in her arms.', { sfx: 'steps', scene: 'doorway', door: 'open', voisine: 'idle', noe: 'happy', camille: 'happy', cat: 1 }),
+        L('d6_gag_dormi', { scene: 'doorway', door: 'open', voisine: 'idle', noe: 'happy', camille: 'idle', cat: 1 }),
+        L('d6_gag_seule', { scene: 'doorway', door: 'open', voisine: 'sad', noe: 'idle', camille: 'idle', cat: 1 }),
+        L('d6_cam_merci', { scene: 'doorway', door: 'open', voisine: 'happy', noe: 'happy', camille: 'happy', cat: 1 }),
+        L('d6_gag_demain', { scene: 'doorway', door: 'open', voisine: 'idle', noe: 'idle', camille: 'idle', cat: 1, props: [['calendar', 80, 30]] }),
+        L('d6_gag_garder', { scene: 'doorway', door: 'open', voisine: 'point', noe: 'ask', camille: 'ask', cat: 1 }),
+        { t: 'choice', key: 'd6_offre', fr: 'Madame Lefèvre peut garder Croissant pendant la visite. Tu réponds…', zh: 'Lefèvre 太太可以在房东来访时帮忙看着 Croissant。你怎么回答？（剧情选择，没有对错）', en: 'Madame Lefèvre can keep Croissant during the visit. What do you answer? (A story choice, not a test.)', art: { scene: 'doorway', door: 'open', voisine: 'idle', noe: 'ask', camille: 'ask', cat: 1 },
+          opts: [{ id: 'oui', fr: 'Oui, merci, Madame' + NB + '! C\u2019est très gentil.', zh: '好的，谢谢您！您真好。', en: 'Yes, thank you, Madame! That’s very kind.', after: { fr: 'Madame Lefèvre sourit. « Dix heures moins le quart, chez moi. »', zh: 'Lefèvre 太太笑了：「九点四十五，到我家来。」', en: 'Madame Lefèvre smiles: « A quarter to ten, at my place. »' } },
+                 { id: 'reflechir', fr: 'Merci, Madame… On va réfléchir.', zh: '谢谢您……我们再想想。', en: 'Thank you, Madame… We’ll think about it.', after: { fr: 'Elle hoche la tête. « Comme vous voulez. Ma porte est ouverte. »', zh: '她点点头：「随你们。我家门开着。」', en: 'She nods: « As you like. My door is open. »' } },
+                 { id: 'verite', fr: 'Merci. Mais on va dire la vérité à Madame Martin.', zh: '谢谢。不过我们打算跟 Martin 太太说实话。', en: 'Thank you. But we’re going to tell Madame Martin the truth.', after: { fr: 'Madame Lefèvre te regarde longtemps. « Courageux… »', zh: 'Lefèvre 太太看了你很久：「有勇气……」', en: 'Madame Lefèvre looks at you for a long time: « Brave… »' } }] },
+        n('n_d6_maison', 'À la maison. Croissant retrouve son panier.', '回到家。Croissant 回到了它的窝里。', 'Back home. Croissant finds his basket again.', { sfx: 'purr', scene: 'cat', noe: 'happy', camille: 'idle', props: [['catbed', 66, 50, 'hl']], cat: 'sit' }),
+        L('d6_cam_peur', { scene: 'cat', noe: 'idle', camille: 'sad', cat: 'sit' }),
+        L('d6_noe_equipe', { scene: 'cat', noe: 'point', camille: 'happy', cat: 'sit' }),
+        L('d6_noe_clic', { scene: 'cat', noe: 'happy', camille: 'happy', cat: 'sit', props: [['hook', 30, 10, 'hl']] }),
+        { t: 'chips', key: 'd6_affiche', target: 'je_lai_vu', fr: 'Un mot pour le tableau de l\u2019immeuble' + NB + ': « Chat retrouvé ».', zh: '给楼里的公告栏写张纸条：“猫找到了”。把词块排好：', en: 'A note for the building’s notice board: « Chat retrouvé » (cat found). Put the blocks in order:', art: { scene: 'cat', camille: 'ask', noe: 'idle', cat: 'sit', props: [['board', 62, 6, 'hl']] },
+          answer: ['Chat retrouvé' + NB + '!', 'Il est petit', 'et roux.', 'Merci, Madame Lefèvre' + NB + '!'], extra: ['Il est gros'], accept: ['Chat retrouvé Il est petit et roux Merci Madame Lefèvre'] },
+        { t: 'mission' },
+        { t: 'probe', key: 'd6_probe', items: ['pr6_gauche', 'pr6_droite', 'pr6_droit', 'pr6_roux'],
+          answers: { pr6_gauche: 'gauche', pr6_droite: 'droite', pr6_droit: 'droit', pr6_roux: 'roux' },
+          opts: [{ id: 'gauche', fr: 'à gauche', img: { prop: 'arrowL' }, zh: '往左', en: 'left' }, { id: 'droite', fr: 'à droite', img: { prop: 'arrowR' }, zh: '往右', en: 'right' }, { id: 'droit', fr: 'tout droit', img: { prop: 'arrowU' }, zh: '一直往前', en: 'straight on' }, { id: 'roux', fr: 'un petit chat roux', img: { prop: 'catroux' }, zh: '一只橘色小猫', en: 'a small ginger cat' }] },
+        { t: 'diary' },
+        n('n_d6_soir', 'Le soir. Croissant dort. Tout le monde est fatigué.', '晚上。Croissant 睡着了。大家都累坏了。', 'Evening. Croissant is asleep. Everyone is tired.', { scene: 'cat', night: true, noe: 'idle', camille: 'idle', cat: 'sit' }),
+        n('n_d6_bip', 'Bip bip' + NB + '! Un message de Madame Martin.', '哔哔！Martin 太太发来一条消息。', 'Beep beep! A message from Madame Martin.', { sfx: 'notif', scene: 'phone' }),
+        L('d6_mar_demain', { scene: 'phone' }),
+        L('d6_noe_croissants', { scene: 'cat', night: true, noe: 'sad', camille: 'idle', cat: 'sit' }),
+        n('n_d6_tete', 'Sur le canapé, Croissant lève la tête.', '沙发上，Croissant 抬起了头。', 'On the sofa, Croissant lifts his head.', { scene: 'cat', night: true, cat: 'peek' }),
+        L('d6_mar_surprise', { scene: 'phone' }),
+        L('d6_cam_surprise', { scene: 'cat', night: true, noe: 'ask', camille: 'ask', cat: 'peek' }),
+        { t: 'done', art: { scene: 'phone' }, hook: { fr: 'Demain, dix heures. Madame Martin arrive, avec des croissants… et une surprise. Et Croissant est là, sur le canapé.', zh: '明天十点。Martin 太太要来了，带着可颂……还有一个惊喜。而 Croissant 就在这儿，趴在沙发上。', en: 'Tomorrow, ten o’clock. Madame Martin is coming, with croissants… and a surprise. And Croissant is right here, on the sofa.' } }
+      ]
     }
   };
-  var CHAPTER_ORDER = ['d2', 'd3', 'd4', 'd5'];
+  var CHAPTER_ORDER = ['d2', 'd3', 'd4', 'd5', 'd6'];
 
   // v0.5.0: 8 traces of Croissant (was 12; founder feedback 2026-10-08 22:17 PT). Each one is a pixel object in a corner of the
   // apartment ('apart' scene, art.js): the player discovers it by zooming into that corner, sees the object and hears/reads the
@@ -9347,7 +9770,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 
 </script>
 <script>
-/* L’Appartement 411 — v0.4.1 key words for Days 1–5 (attention-directed ostension).
+/* L’Appartement 411 — v0.4.1 key words for Days 1–6 (attention-directed ostension).
  * Each word: fr (with article), forms (surface forms matched in story French, longest first), focus (scene region or prop ids
  * the camera / pulse can point at, see art.js region()), prop (picture for the word card when the scene has none),
  * para (short French paraphrase shown on tap), zh/en (meaning, only behind « ? »).
@@ -9408,7 +9831,12 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     pluie: w('la pluie', ['pluie', 'pleuvait', 'pleut'], ['pluie', 'rain'], 'rain', 'L\u2019eau qui tombe du ciel' + NB + ': il pleut.', '雨 / 下雨', 'rain / it rains', { by: 'neutral', tts: 'La pluie… il pleuvait.' }),
     panier: w('le panier', ['panier'], ['catbed'], 'catbed', 'Le petit lit de Croissant.', '（猫）窝 / 篮子', 'basket / cat bed', { by: 'camille', tts: 'Le panier… le panier de Croissant.' }),
     chaussettes: w('les chaussettes', ['chaussettes', 'chaussette'], ['sock'], 'sock', 'On les met aux pieds.', '袜子', 'socks'),
-    crochet: w('le crochet', ['crochet'], ['hook'], 'hook', 'Pour accrocher la clé au mur.', '挂钩', 'hook')
+    crochet: w('le crochet', ['crochet'], ['hook'], 'hook', 'Pour accrocher la clé au mur.', '挂钩', 'hook'),
+    // v0.8.0 Day 6
+    rue: w('la rue', ['rue'], ['rue'], 'shopfront', 'Dehors, devant les maisons et les magasins.', '街道', 'street', { by: 'camille', tts: 'La rue… dans la rue.' }),
+    roux: w('roux', ['roux', 'rousse'], ['catroux'], 'catroux', 'De la couleur orange, comme Croissant.', '（毛色）橘色的、红棕色的', 'ginger (red-orange hair or fur)', { by: 'noe', tts: 'Roux… un chat roux.' }),
+    balcon: w('le balcon', ['balcon'], ['balcon'], null, 'Dehors, devant la fenêtre, en haut.', '阳台', 'balcony', { by: 'noe', tts: 'Le balcon… sur le balcon.' }),
+    jambon: w('le jambon', ['jambon'], ['jambon'], 'jambon', 'De la viande rose, pour le sandwich.', '火腿', 'ham', { by: 'lefevre', tts: 'Le jambon… mon jambon.' })
   };
   // longest forms first, so « arbre à chat » wins over « chat »
   var FORMS = [];
@@ -9792,6 +10220,22 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
           zh: '大家都在睡觉。突然，Croissant 跳上了桌子。', en: 'Everyone was asleep. Suddenly, Croissant jumped onto the table.', why: { zh: '“突然”是一次性的动作 → 复合过去时 a sauté。', en: '“Suddenly” marks a one-off event → passé composé a sauté.' } }
       ]
     },
+    'comparatifs': {
+      title: 'Plus, moins, aussi… meilleur, mieux',
+      zh: '比较：plus（更）/ moins（更不）/ aussi（一样）+ 形容词 + que。形容词照常配合：Camille est plus grande. bon 的比较级不规则：meilleur（更好的，形容名词，要配合：meilleure, meilleurs）；bien 的比较级是 mieux（更好地 / 好些了，不变）。不说 plus bon、plus bien。',
+      en: 'Comparing: plus (more) / moins (less) / aussi (as) + adjective + que. The adjective still agrees: Camille est plus grande. bon has an irregular comparative: meilleur (better, describes a noun and agrees: meilleure, meilleurs); bien becomes mieux (better, well, does not change). Never plus bon or plus bien.',
+      ex: ['Ce chat est plus gros que Croissant.', 'Croissant est moins gros.', 'Le jambon est meilleur que les croquettes.'],
+      steps: [
+        { kind: 'example', prof: 'Regarde. Deux chats' + NB + '!', ex: ['Ce chat est plus gros que Croissant.', 'Croissant est moins gros que ce chat.'], mark: ['plus gros que', 'moins gros que'],
+          zh: '公园里那只猫更胖；Croissant 没那么胖。', en: 'The park cat is bigger; Croissant is less big.' },
+        { kind: 'pattern', prof: 'plus · moins · aussi + adjectif + que', pattern: ['plus gros que', 'moins gros que', 'aussi gros que'], arrow: 'Camille est plus grande que Noé.',
+          zh: 'plus 更……，moins 没那么……，aussi 一样……；形容词照常配合（grande 加 e）。', en: 'plus = more, moins = less, aussi = as; the adjective still agrees (grande takes -e).' },
+        { kind: 'pattern', prof: 'Attention' + NB + ': bon → meilleur, bien → mieux' + NB + '!', pattern: ['bon → meilleur', 'bien → mieux', 'Croissant va mieux.'], arrow: 'plus bon · plus bien',
+          zh: 'bon 的比较级是 meilleur（形容东西），bien 的是 mieux（说状态、做得怎么样）。不说 plus bon / plus bien。', en: 'bon → meilleur (describes a thing), bien → mieux (how something is or goes). Never plus bon / plus bien.' },
+        { kind: 'try', prof: 'À toi' + NB + '!', q: 'Le jambon est ___ que les croquettes.', options: ['meilleur', 'mieux', 'plus bon'], answer: 'meilleur',
+          zh: '火腿比猫粮好吃。', en: 'Ham is better than cat food.', why: { zh: '形容“火腿”这个东西 → bon 的比较级 meilleur。', en: 'It describes a thing (the ham) → bon becomes meilleur.' } }
+      ]
+    },
     'pronoms-cod': {
       title: 'Le, la, les',
       zh: '宾语代词 le / la / les 代替前面提过的“东西或人”，避免重复：le 代阳性单数，la 代阴性单数，les 代复数。它们放在动词前面（复合过去时放在 avoir 前面）。在元音前 le / la 变成 l’。复合过去时里，如果 la / les 在 avoir 前面，过去分词要配合：la clé → je l’ai trouvée；les chaussettes → il les a cachées。',
@@ -9985,10 +10429,44 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
           h1: { zh: '代替 le chat（阳性单数）。', en: 'It stands for le chat (masculine singular).' },
           h2: { zh: '阳性单数 → l…', en: 'Masculine singular → l…' } }
       }
+    },
+    6: {
+      n: 6, ch: 'd6', kind: 'Carte', to: 'Mamie', grammar: 'comparatifs', band: 'A2',
+      intro: { zh: '今晚你给奶奶写一张卡片。猫走丢了，又找到了——今天你学会了“比较”。', en: 'Tonight you write a card to Grandma. The cat was lost and found again — and today you learned to compare.' },
+      body: [
+        ['Chère Mamie,'],
+        ['Mercredi soir, le chat de mon colocataire a disparu' + NB + '! Nous l\u2019avons cherché dans la rue. Dans le parc, il y avait un chat ', { gap: 'plusgros' }, ' que lui… ce n\u2019était pas notre chat' + NB + '!'],
+        ['Il était chez la voisine, Madame Lefèvre. Elle est ', { gap: 'gentille' }, ' que je pensais' + NB + '!'],
+        ['Son jambon' + NB + '? Le chat pense qu\u2019il est ', { gap: 'meilleur' }, ' que ses croquettes' + NB + '!'],
+        ['Ce soir, il dort et tout le monde va ', { gap: 'mieux' }, '. Mais demain, la propriétaire arrive… Je suis ', { gap: 'moins' }, ' calme que le chat' + NB + '!'],
+        ['Je t\u2019embrasse fort.']
+      ],
+      gaps: {
+        plusgros: { type: 'mc', answer: 'plus gros', options: ['plus gros', 'moins gros', 'gros plus'],
+          fr: 'Dans le parc, il y avait un chat plus gros que lui.', zh: '公园里有一只比它胖的猫。', en: 'In the park there was a cat bigger than him.',
+          h1: { zh: '公园里那只猫更胖。“更”= plus。', en: 'The park cat was bigger. “More” = plus.' },
+          h2: { zh: '顺序：plus + 形容词 + que。', en: 'Order: plus + adjective + que.' } },
+        gentille: { type: 'type', answer: 'plus gentille', accept: ['plus gentille'],
+          fr: 'Elle est plus gentille que je pensais.', zh: '她比我想的更和善。', en: 'She is kinder than I thought.',
+          h1: { zh: '比我想的“更”和善 → plus + 形容词。', en: 'Kinder than I thought → plus + adjective.' },
+          h2: { zh: 'Madame Lefèvre 是女性 → gentil 要变阴性：gentille。plus gentille', en: 'Madame Lefèvre is a woman → gentil becomes gentille. plus gentille' } },
+        meilleur: { type: 'mc', answer: 'meilleur', options: ['meilleur', 'mieux', 'plus bon'],
+          fr: 'Le chat pense que le jambon est meilleur que ses croquettes.', zh: '猫觉得火腿比它的猫粮好吃。', en: 'The cat thinks the ham is better than his cat food.',
+          h1: { zh: '形容“火腿”这个东西有多好 → bon 的比较级。', en: 'It describes the ham (a thing) → the comparative of bon.' },
+          h2: { zh: '不说 plus bon。m e i l …', en: 'Never plus bon. m e i l …' } },
+        mieux: { type: 'mc', answer: 'mieux', options: ['mieux', 'meilleur', 'plus bien'],
+          fr: 'Ce soir, tout le monde va mieux.', zh: '今晚大家都好多了。', en: 'Tonight everyone is feeling better.',
+          h1: { zh: 'aller bien（状态好）→ 比较级用 bien 的形式。', en: 'aller bien (to be well) → use the comparative of bien.' },
+          h2: { zh: 'bien → mieux，不说 plus bien。', en: 'bien → mieux, never plus bien.' } },
+        moins: { type: 'type', answer: 'moins', accept: ['moins'],
+          fr: 'Je suis moins calme que le chat.', zh: '我没有猫那么镇定。', en: 'I am less calm than the cat.',
+          h1: { zh: '我“没那么”镇定 → 和 plus 相反的词。', en: 'I am “less” calm → the opposite of plus.' },
+          h2: { zh: 'm o i … （5 个字母）', en: 'm o i … (5 letters)' } }
+      }
     }
   };
-  // Sketch only (not playable yet): Day 6 comparatives meilleur/mieux, Day 7 subjonctif after il faut que / je veux que. See docs/WEEK1_STORY.md §4.2.
-  var ORDER = [1, 2, 3, 4, 5];
+  // Day 7: subjonctif after il faut que (v0.9.0). See docs/WEEK1_STORY.md §4.2.
+  var ORDER = [1, 2, 3, 4, 5, 6];
 
   // FSRS items for the gaps: id lt<n>_<gap>. They are only introduced by writing the letter (origin 'letter').
   function itemsFor(n) {
@@ -10806,11 +11284,11 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       var nw = h('div', { class: 'card fade-in whats-new', id: 'whatsNew' },
         h('h2', { lang: 'fr', text: 'Nouveau' + NB + '!' }),
         h('ul', { class: 'bravo-recap', lang: 'fr' },
-          h('li', null, icon('letter'), ' Jour 5' + NB + ': « La clé perdue ».'),
+          h('li', null, icon('letter'), ' Jour 6' + NB + ': « Où est Croissant' + NB + '? ».'),
           h('li', null, icon('sound'), ' Le haut-parleur lit le texte.'),
           h('li', null, icon('wordbook'), ' Appuie longtemps sur un mot' + NB + ': Mon carnet de mots.'),
           h('li', null, icon('paw'), ' Le soir' + NB + ': Croissant et « Bravo' + NB + '! »')),
-        qHelp(function () { return Z('新内容：第 5 天「La clé perdue」（排时间线的小调查）和第 5 封信（宾语代词 le / la / les）。第 4 天「La voisine en colère」也可以玩。另外：每段旁白都有小喇叭（设备语音，可选）；长按任何法语单词可以查词、存进生词本；每天结束时有晚间小动画和 Bravo。', 'New: Day 5 « La clé perdue » (a small timeline investigation) and letter 5 (object pronouns le / la / les). Day 4 « La voisine en colère » is there too. Also: a small speaker on every narration (device voice, optional); long-press any French word to look it up and save it; an evening scene and « Bravo ! » at the end of each day.'); }, { id: 'newsQ' }),
+        qHelp(function () { return Z('新内容：第 6 天「Où est Croissant ?」（上街问路、听方向）和第 6 封信（比较级 plus / moins / aussi、meilleur / mieux）。第 4、5 天也可以玩。另外：每段旁白都有小喇叭（设备语音，可选）；长按任何法语单词可以查词、存进生词本；每天结束时有晚间小动画和 Bravo。', 'New: Day 6 « Où est Croissant ? » (asking the way in the street, following directions) and letter 6 (comparisons plus / moins / aussi, meilleur / mieux). Days 4 and 5 are there too. Also: a small speaker on every narration (device voice, optional); long-press any French word to look it up and save it; an evening scene and « Bravo ! » at the end of each day.'); }, { id: 'newsQ' }),
         h('div', { class: 'row' }, btn('OK', function () { try { localStorage.setItem('a411.news', L.APP_VERSION); } catch (e) { } nw.remove(); }, 'small', { id: 'btnNewsOk' })));
       $screen.appendChild(nw);
     }
@@ -11505,6 +11983,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     3: { fr: 'Un colis bouge… C\u2019est Croissant' + NB + '! Il dort dans la boîte. Chut…', zh: '一个箱子在动……是 Croissant！它在箱子里睡着了。嘘……', en: 'A box is moving… it’s Croissant! He’s asleep in the box. Shh…', sfx: ['parcel', 'purr'] },
     4: { fr: 'Trois heures du matin. Croissant joue avec sa souris… Boum' + NB + '! Chut, Croissant' + NB + '! Il retourne sur le canapé, sur la pointe des pattes.', zh: '凌晨三点。Croissant 追着玩具老鼠跑……咚！嘘，Croissant！它踮着爪子溜回了沙发。', en: 'Three in the morning. Croissant chases his toy mouse… Boom! Shh, Croissant! He tiptoes back to the sofa.', sfx: ['steps', 'meow'] },
     5: { fr: 'Cette nuit, quelque part dans Paris… un petit chat roux marche sur les toits. Il regarde la lune.', zh: '今夜，巴黎的某个地方……一只橘色小猫走在屋顶上。它望着月亮。', en: 'Tonight, somewhere in Paris… a small orange cat walks along the rooftops. He looks at the moon.', sfx: ['meow'] },
+    6: { fr: 'Ce soir, Noé ferme la porte à clé. Clic' + NB + '! Croissant dort dans son panier. Demain, dix heures…', zh: '今晚，Noé 把门锁上了。咔哒！Croissant 在自己的窝里睡着了。明天，十点……', en: 'Tonight, Noé locks the door. Click! Croissant is asleep in his basket. Tomorrow, ten o’clock…', sfx: ['click', 'purr'] },
   };
   function openRitual(n) { Au.stop(); ui.view = 'ritual'; ui.ritual = { n: n, phase: 'building', at: Date.now() }; ui.zoom = null; render(); }
   function ritualNext(phase) { if (ui.view !== 'ritual' || !ui.ritual) return; ui.ritual.phase = phase; ui.ritual.at = Date.now(); render(); }
@@ -11924,12 +12403,20 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 
   // ---------- chapter engine ----------
   function chState() { var w = WL.ensureWeek(S); return w.chapters[ui.cid]; }
+  // v0.8.0: an earlier choice, wherever it was stored (Day 1 world choices, or any Week 1 chapter's own choices).
+  // (v0.7.0 only read the world choices, so Day 5 always played the default Lefèvre variant.)
+  function choiceVal(k) {
+    var v = S.world.choices[k]; if (v != null) return v;
+    var chs = (S.week && S.week.chapters) || {};
+    for (var cid in chs) if (chs[cid] && chs[cid].choices && chs[cid].choices[k] != null) return chs[cid].choices[k];
+    return null;
+  }
   function stepVisible(st) {
     if (!st.when) return true;
     var sec = S.world.choices.d1_secret;
     if (st.when === 'declined') return sec !== 'keep';
     if (st.when === 'kept') return sec === 'keep';
-    if (typeof st.when === 'object') { var v = S.world.choices[st.when.k]; return st.when.v.indexOf(v == null ? null : v) >= 0; } // v0.7.0: lines that remember an earlier choice
+    if (typeof st.when === 'object') { var v = choiceVal(st.when.k); return st.when.v.indexOf(v == null ? null : v) >= 0; } // v0.7.0: lines that remember an earlier choice
     return true;
   }
   function chNext() {
@@ -12052,7 +12539,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     $screen.appendChild(card);
   };
   WR.say = function (st, c, ch) {
-    $screen.appendChild(wkStage({ scene: 'kitchen', noe: 'ask', cups: 1 }));
+    $screen.appendChild(wkStage(st.art || { scene: 'kitchen', noe: 'ask', cups: 1 }));
     var picked = c.choices[st.key];
     var card = h('div', { class: 'dialogue fade-in' }, progressNote(c, ch), narFr(st.fr, st.zh, st.en, { id: 'sayPrompt' }));
     if (picked) {
@@ -12365,6 +12852,11 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       add('À trois heures du matin, Madame Lefèvre a rapporté les clés de Noé.', '凌晨三点，Lefèvre 太太把 Noé 的钥匙送了回来。', 'At 3 a.m., Madame Lefèvre brought back Noé’s keys.');
       if (ch.d5_noe) add(({ own: 'J\u2019ai dit à Noé' + NB + ': « C\u2019est ta clé. »', cover: 'J\u2019ai dit à Noé' + NB + ': « On cherche ensemble. »', poches: 'J\u2019ai dit' + NB + ': « Croissant n\u2019a pas de poches' + NB + '! »' })[ch.d5_noe] || '', '你对 Noé 说的话。', 'What you said to Noé.');
       add('Avec Camille, on a fait une enquête. J\u2019ai trouvé la clé dans le panier de Croissant.', '你和 Camille 一起调查，在 Croissant 的窝里找到了钥匙。', 'You investigated with Camille and found the key in Croissant’s basket.');
+    } else if (cid === 'd6') {
+      add('Croissant est parti. Avec Noé et Camille, on l\u2019a cherché dans la rue.', '你和 Noé、Camille 一起上街找 Croissant。', 'With Noé and Camille, you searched the street for Croissant.');
+      if (ch.d6_route) add(ch.d6_route === 'gauche' ? 'Je suis allé(e) à gauche, au parc' + NB + ': un gros chat gris… pas Croissant.' : 'Je suis allé(e) à droite, dans notre rue.', '你选的路线。', 'The way you chose.');
+      add('Il était sur le balcon de Madame Lefèvre. Il a mangé son jambon' + NB + '!', '它在 Lefèvre 太太家的阳台上，还吃了她的火腿。', 'He was on Madame Lefèvre’s balcony, eating her ham.');
+      if (ch.d6_offre) add(({ oui: 'Madame Lefèvre va garder Croissant demain matin.', reflechir: 'Madame Lefèvre peut garder Croissant. On va réfléchir.', verite: 'J\u2019ai dit' + NB + ': « On va dire la vérité à Madame Martin. »' })[ch.d6_offre] || '', '你对 Lefèvre 太太提议的回答。', 'Your answer to Madame Lefèvre’s offer.');
     } else add('Madame Martin vient samedi.', '房东星期六要来。', 'The landlady is coming on Saturday.');
     var box = h('div', null, ul, qHelp(function () { return gl.join(' ') + Z('（游戏自动记录，只写你亲历的事。）', ' (Recorded by the game; only what you saw.)'); }, { id: 'chronQ', btnId: 'chronQBtn' }));
     return box;
