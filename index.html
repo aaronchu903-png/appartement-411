@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.9.0 single-file build 2026-10-09T13:50:20.608Z -->
+<!-- L’Appartement 411 v0.9.1 single-file build 2026-10-09T14:13:03.500Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -284,6 +284,16 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
 .sync-status { margin:6px 12px; }
 #syncToken { width:100%; font:inherit; padding:6px; margin:4px 0; border:2px solid var(--line); border-radius:4px; }
 .row.wrap { flex-wrap:wrap; }
+/* v0.9.1 — music mute button (always reachable, above sheets) + mixer */
+.mu-fab { position:fixed; right:max(10px, env(safe-area-inset-right)); bottom:calc(10px + env(safe-area-inset-bottom)); z-index:30; width:44px; height:44px;
+  border-radius:8px; border:2px solid #2a2a2a; background:#f6efdc; color:#2f5d50; box-shadow:0 2px 0 #2a2a2a; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; }
+.mu-fab .pxicon { width:24px; height:24px; }
+.mu-fab.muted { color:#9a3b3b; background:#efe6d2; }
+.overlay { padding-bottom:72px; }
+.mix-row { margin:8px 0; }
+.mix-row .row { align-items:center; gap:8px; }
+.mix-row input[type=range] { flex:1; min-height:44px; accent-color:#2f5d50; }
+.mix-val { min-width:3.2em; text-align:right; }
 
 </style>
 </head>
@@ -807,7 +817,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.9.0';
+  var APP_VERSION = '0.9.1';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -2383,7 +2393,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         synth.cancel();
         var u = new root.SpeechSynthesisUtterance(String(text).replace(/\u00A0/g, ' ').replace(/[\u2019\u2018]/g, "'"));
         u.voice = r.v; u.lang = r.v.lang || 'fr-FR';
-        u.rate = rate; u.pitch = pitch;
+        u.rate = rate; u.pitch = pitch; u.volume = A.voiceVol != null ? A.voiceVol : 1;
         u.onstart = function () { started = true; };
         u.onend = function () { fin('played'); };
         u.onerror = function (ev) { fin(ev && (ev.error === 'interrupted' || ev.error === 'canceled') ? 'stopped' : 'failed'); };
@@ -2449,6 +2459,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
         a.onended = function () { fin(started || a.currentTime > 0 ? 'played' : 'failed'); };
         a.onerror = function () { fin('failed'); };
         a.muted = false;
+        if (A.routeEl) A.routeEl(a, 'voice'); else if (A.voiceVol != null) a.volume = A.voiceVol;
         a.src = clipUrl(id);
         try { a.preservesPitch = true; a.webkitPreservesPitch = true; a.mozPreservesPitch = true; } catch (e) { }
         a.defaultPlaybackRate = rate; a.playbackRate = rate;
@@ -2536,9 +2547,14 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var entry = { id: id, at: Date.now(), result: 'skipped' };
     A.sfxLog.push(entry);
     if (!A.sfxOn || !SF || !SF.files[id] || typeof root.Audio !== 'function' || root.A411_NO_CLIPS) return Promise.resolve('skipped');
+    var vol = A.sfxVol != null ? A.sfxVol : 0.7;
+    if (vol <= 0) { entry.result = 'muted'; return Promise.resolve('muted'); }
+    // v0.9.1: with a running Web Audio context, play through a gain node (iOS ignores element volume)
+    var viaGain = A.sfxBuffer && A.sfxBuffer(SF.files[id], vol);
+    if (viaGain) return viaGain.then(function (r) { entry.result = r; return r; });
     return new Promise(function (resolve) {
       try {
-        var a = new root.Audio(SF.files[id]); a.volume = 0.7;
+        var a = new root.Audio(SF.files[id]); a.volume = vol;
         a.onended = function () { entry.result = 'played'; resolve('played'); };
         a.onerror = function () { entry.result = 'failed'; resolve('failed'); };
         var p = a.play(); if (p && p.then) p.then(function () { entry.result = 'playing'; }, function () { entry.result = 'failed'; resolve('failed'); });
@@ -2557,6 +2573,198 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   root.A411 = root.A411 || {};
   root.A411.Audio = A;
   if (typeof module !== 'undefined' && module.exports) module.exports = A;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* L’Appartement 411 — v0.9.1 background music (founder-generated Suno tracks, see docs/ASSETS.md) and the device mixer
+ * (music / voice / sound-effect volumes). Music starts only after a user tap (iOS autoplay), fades on scene changes,
+ * and ducks under every voice line, narration and sound effect. Volumes go through Web Audio gain nodes where
+ * available (iOS ignores HTMLMediaElement.volume). Settings are per device: localStorage 'a411.device.mix'. */
+(function (root) {
+  'use strict';
+  var MIX_KEY = 'a411.device.mix';
+  var TRACKS = {
+    'matin-cafe': { title: 'Matin de Café', mood: 'cafe' },
+    'matin-coif': { title: 'Matin Coif', mood: 'cafe' },
+    'matin-coquin': { title: 'Matin Coquin', mood: 'cafe' },
+    'apres-midi-parisien': { title: 'Après-midi parisien', mood: 'calm' },
+    'promenade-passy': { title: 'Promenade de Passy', mood: 'street' }
+  };
+  var MOODS = { cafe: ['matin-cafe', 'matin-coif', 'matin-coquin'], calm: ['apres-midi-parisien'], street: ['promenade-passy'] };
+  var DEFAULTS = { music: 0.35, voice: 1, sfx: 0.7, muted: false };
+  var MUSIC_SCALE = 0.6, DUCK = 0.22, FADE_MS = 1200, XFADE_S = 3;
+  var STREET_SCENES = { street: 1, shop: 1, parc: 1, balcon: 1, superette: 1, rue: 1, marche: 1 };
+  var CALM_VIEWS = { letter: 1, desk: 1, study: 1, progress: 1, cards: 1, stats: 1, placement: 1, lesson: 1 };
+
+  // pure: which music fits this screen (null = silence)
+  function moodFor(view, scene) {
+    if (!view || view === 'gate') return null;
+    if (CALM_VIEWS[view]) return 'calm';
+    if ((view === 'chapter' || view === 'play') && scene && STREET_SCENES[scene]) return 'street';
+    return 'cafe';
+  }
+  function clamp01(x) { x = Number(x); return isNaN(x) ? 0 : Math.max(0, Math.min(1, x)); }
+  function loadMix(ls) {
+    var p = null; try { p = JSON.parse((ls && ls.getItem(MIX_KEY)) || 'null'); } catch (e) {}
+    p = p && typeof p === 'object' ? p : {};
+    return { music: p.music != null ? clamp01(p.music) : DEFAULTS.music, voice: p.voice != null ? clamp01(p.voice) : DEFAULTS.voice,
+      sfx: p.sfx != null ? clamp01(p.sfx) : DEFAULTS.sfx, muted: !!p.muted, rot: p.rot | 0 };
+  }
+  function musicGain(mix, ducked) { return mix.muted ? 0 : mix.music * MUSIC_SCALE * (ducked ? DUCK : 1); }
+
+  var M = { TRACKS: TRACKS, MOODS: MOODS, DEFAULTS: DEFAULTS, MIX_KEY: MIX_KEY, moodFor: moodFor, loadMix: loadMix, musicGain: musicGain,
+    base: 'audio/music/', log: [] };
+  function ls() { try { return root.localStorage || null; } catch (e) { return null; } }
+  M.mix = loadMix(ls());
+  function saveMix() { try { ls().setItem(MIX_KEY, JSON.stringify(M.mix)); } catch (e) {} }
+  var ctx = null, unlocked = false, mood = null, deck = [], cur = null, ducks = 0, hiddenNow = false, listeners = [];
+  function audioOk() { return typeof root.Audio === 'function' && !root.A411_NO_MUSIC; }
+  function ensureCtx() {
+    if (ctx || !root.AudioContext && !root.webkitAudioContext) return ctx;
+    try { ctx = new (root.AudioContext || root.webkitAudioContext)(); } catch (e) { ctx = null; }
+    return ctx;
+  }
+  M.context = function () { return ctx; };
+  // route an element through a gain node (once per element); returns a setter for its volume
+  function routed(el) {
+    if (el._a411set) return el._a411set;
+    var c = ensureCtx(), g = null;
+    if (c) { try { var src = c.createMediaElementSource(el); g = c.createGain(); src.connect(g); g.connect(c.destination); } catch (e) { g = null; } }
+    el._a411set = function (v) { if (g) { g.gain.value = v; el.volume = 1; } else { try { el.volume = v; } catch (e) {} } };
+    el._a411gain = g;
+    return el._a411set;
+  }
+  M.routeEl = function (el, kind) { // used by audio.js for voice clips / sound effects
+    var v = M.mix.voice;
+    if (v >= 0.999 && !el._a411set) { try { el.volume = 1; } catch (e) {} return; } // full volume: leave the element untouched
+    if (!ctx || ctx.state !== 'running') { try { el.volume = v; } catch (e) {} return; }
+    routed(el)(v);
+  };
+  // sound effects through Web Audio (decoded once, small files); returns null when not possible so audio.js falls back
+  var sfxCache = {};
+  M.sfxBuffer = function (url, vol) {
+    if (!ctx || ctx.state !== 'running' || typeof root.fetch !== 'function' || !ctx.decodeAudioData) return null;
+    var c = ctx;
+    if (!sfxCache[url]) sfxCache[url] = root.fetch(url).then(function (r) { return r.arrayBuffer(); }).then(function (b) {
+      return new Promise(function (ok, no) { var q = c.decodeAudioData(b, ok, no); if (q && q.then) q.then(ok, no); });
+    });
+    return sfxCache[url].then(function (buf) {
+      return new Promise(function (resolve) {
+        var src = c.createBufferSource(), g = c.createGain(); g.gain.value = vol;
+        src.buffer = buf; src.connect(g); g.connect(c.destination);
+        var t = setTimeout(function () { resolve('played'); }, Math.min(4000, buf.duration * 1000 + 300));
+        src.onended = function () { clearTimeout(t); resolve('played'); };
+        src.start(0);
+      });
+    }, function () { delete sfxCache[url]; return 'failed'; });
+  };
+  function emit() { listeners.forEach(function (f) { try { f(M.state()); } catch (e) {} }); }
+  M.onChange = function (f) { listeners.push(f); };
+  M.state = function () { return { unlocked: unlocked, mood: mood, track: cur && cur.id, muted: M.mix.muted, playing: !!(cur && cur.el && !cur.el.paused), ducked: ducks > 0, gain: musicGain(M.mix, ducks > 0) }; };
+
+  // ---------- players with fades ----------
+  function ramp(p, to, ms, done) {
+    clearInterval(p.timer);
+    var from = p.level, t0 = Date.now();
+    p.timer = setInterval(function () {
+      var k = Math.min(1, (Date.now() - t0) / Math.max(1, ms));
+      p.level = from + (to - from) * k; apply(p);
+      if (k >= 1) { clearInterval(p.timer); p.timer = null; if (done) done(); }
+    }, 50);
+  }
+  function apply(p) { if (p && p.set) p.set(p.level * musicGain(M.mix, ducks > 0)); }
+  function applyAll() { if (cur) apply(cur); if (M._old) apply(M._old); }
+  function nextTrack() {
+    var list = MOODS[mood] || [];
+    if (!list.length) return null;
+    if (list.length === 1) return list[0];
+    M.mix.rot = (M.mix.rot + 1) % list.length; saveMix();
+    return list[M.mix.rot];
+  }
+  function start(id) {
+    if (!audioOk() || !id) return;
+    var el = new root.Audio(M.base + id + '.mp3');
+    el.preload = 'auto'; try { el.setAttribute('playsinline', ''); } catch (e) {}
+    el.loop = (MOODS[mood] || []).length === 1;
+    var p = { id: id, el: el, level: 0, timer: null, set: routed(el) };
+    p.set(0);
+    if (!el.loop) {
+      el.addEventListener('timeupdate', function () {
+        if (cur !== p || p.leaving) return;
+        if (el.duration && el.duration - el.currentTime < XFADE_S) { p.leaving = true; switchTo(nextTrack(), XFADE_S * 1000); }
+      });
+    }
+    el.addEventListener('error', function () { M.log.push({ id: id, ev: 'error' }); });
+    var pr = el.play(); if (pr && pr.catch) pr.catch(function () { M.log.push({ id: id, ev: 'play-blocked' }); });
+    M.log.push({ id: id, ev: 'start', at: Date.now() });
+    return p;
+  }
+  function stopPlayer(p, ms) { if (!p) return; ramp(p, 0, ms, function () { try { p.el.pause(); p.el.removeAttribute('src'); p.el.load(); } catch (e) {} if (M._old === p) M._old = null; }); }
+  function switchTo(id, ms) {
+    var old = cur;
+    if (M._old && M._old !== old) stopPlayer(M._old, 200);
+    M._old = old; stopPlayer(old, ms || FADE_MS);
+    cur = start(id) || null;
+    if (cur) ramp(cur, 1, ms || FADE_MS);
+    emit();
+  }
+  function wantPlay() { return unlocked && !hiddenNow && !M.mix.muted && mood && audioOk(); }
+  function sync() {
+    if (!wantPlay()) {
+      if (cur) { var c = cur; cur = null; stopPlayer(c, M.mix.muted ? 400 : FADE_MS); emit(); }
+      return;
+    }
+    if (cur && TRACKS[cur.id].mood === mood) { if (cur.el.paused) { var pr = cur.el.play(); if (pr && pr.catch) pr.catch(function () {}); } return; }
+    switchTo(nextTrack(), FADE_MS);
+  }
+  M.setMood = function (m) { if (m === mood) { if (wantPlay() && !cur) sync(); return; } mood = m; sync(); };
+  // first tap anywhere: create/resume the audio context and start the current mood
+  M.unlock = function () {
+    var c = ensureCtx();
+    if (c && c.state !== 'running') { try { c.resume(); } catch (e) {} }
+    if (!unlocked) { unlocked = true; sync(); emit(); }
+    else if (cur && cur.el.paused && wantPlay()) { var pr = cur.el.play(); if (pr && pr.catch) pr.catch(function () {}); }
+  };
+  M.toggleMute = function () { M.mix.muted = !M.mix.muted; saveMix(); M.unlock(); sync(); applyAll(); emit(); return M.mix.muted; };
+  M.setVolume = function (kind, v) {
+    if (kind !== 'music' && kind !== 'voice' && kind !== 'sfx') return;
+    M.mix[kind] = clamp01(v); saveMix();
+    if (kind === 'music') { if (M.mix.music > 0 && M.mix.muted) M.mix.muted = false; applyAll(); sync(); }
+    var A = root.A411 && root.A411.Audio; if (A) { A.voiceVol = M.mix.voice; A.sfxVol = M.mix.sfx; }
+    emit();
+  };
+  // ducking: any voice line, narration or sound effect lowers the music while it plays
+  M.duck = function (on) { ducks = Math.max(0, ducks + (on ? 1 : -1)); applyAll(); };
+  function wrap(A, name) {
+    var f = A[name]; if (typeof f !== 'function' || f._a411duck) return;
+    var g = function () {
+      M.duck(true); var released = false; function rel() { if (!released) { released = true; M.duck(false); } }
+      var r; try { r = f.apply(A, arguments); } catch (e) { rel(); throw e; }
+      if (r && typeof r.then === 'function') r.then(rel, rel);
+      else if (r && r.done && typeof r.done.then === 'function') r.done.then(rel, rel);
+      else rel();
+      return r;
+    };
+    g._a411duck = true; A[name] = g;
+  }
+  M.attach = function (A) {
+    if (!A) return;
+    A.voiceVol = M.mix.voice; A.sfxVol = M.mix.sfx; A.routeEl = M.routeEl; A.sfxBuffer = M.sfxBuffer;
+    ['playLine', 'speak', 'speakChunks', 'sfx'].forEach(function (n) { wrap(A, n); });
+  };
+  if (root.document && root.document.addEventListener) {
+    ['touchend', 'pointerdown', 'click', 'keydown'].forEach(function (ev) { root.document.addEventListener(ev, function () { M.unlock(); }, { capture: true, passive: true }); });
+    root.document.addEventListener('visibilitychange', function () {
+      hiddenNow = !!root.document.hidden;
+      if (hiddenNow) { if (cur) try { cur.el.pause(); } catch (e) {} }
+      else if (wantPlay()) { if (ctx && ctx.state !== 'running') try { ctx.resume(); } catch (e) {} sync(); }
+    });
+  }
+  if (root.A411 && root.A411.Audio) M.attach(root.A411.Audio);
+  root.A411 = root.A411 || {};
+  root.A411.Music = M;
+  if (typeof module !== 'undefined' && module.exports) module.exports = M;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -12419,6 +12627,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     document.body.classList.toggle('large-text', !!(S && S.settings.largeText));
     Au.sfxOn = !(S && S.settings.sfx === false);
     wordbookFab();
+    musicFab();
   }
 
   // ---------- audio helpers ----------
@@ -12584,6 +12793,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     if (ui.paused) return; // nothing re-renders behind the pause sheet
     try {
       applySettings();
+      updateMusic();
       document.documentElement.lang = EN() ? 'en' : 'zh-Hans';
       var bp = document.getElementById('btnPause');
       if (bp) { bp.textContent = ''; bp.appendChild(icon('pause')); bp.setAttribute('aria-label', Z('暂停', 'Pause')); }
@@ -12655,11 +12865,12 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
       var nw = h('div', { class: 'card fade-in whats-new', id: 'whatsNew' },
         h('h2', { lang: 'fr', text: 'Nouveau' + NB + '!' }),
         h('ul', { class: 'bravo-recap', lang: 'fr' },
+          h('li', null, icon('sound'), ' Musique d’ambiance (le petit haut-parleur coupe le son).'),
           h('li', null, icon('wordbook'), ' Mes cartes, Statistiques, Cartes difficiles.'),
           h('li', null, icon('letter'), ' Voir la conjugaison.'),
           h('li', null, icon('sound'), ' Ajouter une carte (avec la voix de l’appareil).'),
           h('li', null, icon('paw'), ' Sauvegarde automatique (facultatif).')),
-        qHelp(function () { return Z('新内容（复习工具）：卡片浏览器（搜索、筛选、编辑、暂停、删除）、统计（热力图、真实保持率、30 天预测）、难卡提醒、撤销上一次评分、自己添加卡片、可调的目标保持率。动词可以看完整变位（点一下听发音）；存进生词本的动词会存成原形。设置里可以开启自动备份到私有仓库。', 'New (review tools): a card browser (search, filter, edit, suspend, delete), statistics (heatmap, true retention, 30-day forecast), difficult-card alerts, undo the last grade, your own cards, and an adjustable desired retention. Verbs have a full conjugation view (tap a form to hear it); verbs saved to the wordbook are stored as the infinitive. Settings can turn on automatic backup to a private repository.'); }, { id: 'newsQ' }),
+        qHelp(function () { return Z('新内容：背景音乐（右下角的小喇叭一键静音；设置里可以分别调音乐、人声、音效的音量）。复习工具：卡片浏览器（搜索、筛选、编辑、暂停、删除）、统计（热力图、真实保持率、30 天预测）、难卡提醒、撤销上一次评分、自己添加卡片、可调的目标保持率。动词可以看完整变位（点一下听发音）；存进生词本的动词会存成原形。设置里可以开启自动备份到私有仓库。', 'New: background music (the small speaker at the bottom right mutes it in one tap; Settings has separate music, voice and sound-effect volumes). Review tools: a card browser (search, filter, edit, suspend, delete), statistics (heatmap, true retention, 30-day forecast), difficult-card alerts, undo the last grade, your own cards, and an adjustable desired retention. Verbs have a full conjugation view (tap a form to hear it); verbs saved to the wordbook are stored as the infinitive. Settings can turn on automatic backup to a private repository.'); }, { id: 'newsQ' }),
         h('div', { class: 'row' }, btn('OK', function () { try { localStorage.setItem('a411.news', L.APP_VERSION); } catch (e) { } nw.remove(); }, 'small', { id: 'btnNewsOk' })));
       $screen.appendChild(nw);
     }
@@ -14269,6 +14480,61 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
   // Lookup: game glossary → Wiktionary (only the single word is sent) → offline hint (system Look Up).
   // Saved words become FSRS cards (module 'carnet') in this profile's review.
   // =====================================================================
+  // =====================================================================
+  // v0.9.1 — background music (founder-generated Suno tracks) + device mixer: music / voice / sound effects.
+  // Mute is always one tap away (pixel speaker, bottom right); volumes live in Settings › Son.
+  // =====================================================================
+  var MU = A411.Music;
+  function musicScene() {
+    if (ui.view === 'play' && S) return S.progress.scene;
+    if (ui.view === 'chapter' && ui.cid && W.CHAPTERS[ui.cid] && S) {
+      var c = chState(); if (!c) return null;
+      var steps = W.CHAPTERS[ui.cid].steps, st = steps[Math.min(c.step, steps.length - 1)];
+      return (st && st.art && st.art.scene) || lastScene(c);
+    }
+    return null;
+  }
+  function updateMusic() {
+    if (!MU) return;
+    var v = !S && ['play', 'chapter', 'letter', 'desk', 'ritual'].indexOf(ui.view) >= 0 ? 'title' : ui.view;
+    var sc = null; try { sc = musicScene(); } catch (e) { sc = null; }
+    MU.setMood(MU.moodFor(v, sc));
+  }
+  function musicFab() {
+    if (!MU) return;
+    var b = document.getElementById('btnMusic');
+    if (!b) {
+      b = h('button', { type: 'button', id: 'btnMusic', class: 'mu-fab', onclick: function (ev) { ev.stopPropagation(); MU.toggleMute(); musicFab(); var m = document.getElementById('mixMusicMuted'); if (m) m.checked = MU.mix.muted; } });
+      document.getElementById('app').appendChild(b);
+    }
+    var muted = MU.mix.muted || MU.mix.music <= 0;
+    b.textContent = ''; b.appendChild(icon(muted ? 'mute' : 'sound'));
+    b.setAttribute('aria-pressed', muted ? 'true' : 'false');
+    b.setAttribute('aria-label', muted ? Z('音乐已静音，点一下打开', 'Music muted, tap to turn on') : Z('音乐，点一下静音', 'Music, tap to mute'));
+    b.title = muted ? Z('打开音乐', 'Music on') : Z('音乐静音', 'Mute music');
+    b.classList.toggle('muted', muted);
+  }
+  function mixerSection() {
+    var wrap = h('div', { id: 'mixer' });
+    wrap.appendChild(h('h3', { lang: 'fr', text: 'Son' }));
+    function slider(kind, fr, gloss, test) {
+      var r = h('input', { type: 'range', id: 'mix' + kind[0].toUpperCase() + kind.slice(1), min: '0', max: '100', step: '5', value: String(Math.round(MU.mix[kind] * 100)) });
+      var out = h('span', { class: 'muted small mix-val', text: Math.round(MU.mix[kind] * 100) + '%' });
+      r.setAttribute('aria-label', fr + ' (' + gloss + ')');
+      r.addEventListener('input', function () { MU.setVolume(kind, Number(r.value) / 100); out.textContent = r.value + '%'; if (kind === 'music') { var m = document.getElementById('mixMusicMuted'); if (m) m.checked = MU.mix.muted; musicFab(); } });
+      if (test) r.addEventListener('change', test);
+      return h('div', { class: 'mix-row' }, h('label', { for: r.id }, h('span', { lang: 'fr', text: fr }), h('span', { class: 'muted small', text: ' · ' + gloss })), h('div', { class: 'row' }, r, out));
+    }
+    var mm = h('input', { type: 'checkbox', id: 'mixMusicMuted' }); mm.checked = MU.mix.muted;
+    mm.addEventListener('change', function () { if (mm.checked !== MU.mix.muted) MU.toggleMute(); musicFab(); });
+    wrap.appendChild(slider('music', 'Musique', Z('背景音乐', 'background music')));
+    wrap.appendChild(h('label', { class: 'check' }, mm, Z('音乐静音（右下角的小喇叭也可以一键静音）', 'Mute music (the small speaker at the bottom right does this in one tap)')));
+    wrap.appendChild(slider('voice', 'Voix', Z('人物说话和朗读', 'characters and read-aloud'), function () { safe(function () { Au.speak('Bonjour\u00A0!', { speaker: 'camille' }); })(); }));
+    wrap.appendChild(slider('sfx', 'Effets sonores', Z('敲门、猫叫……', 'knock, meow…'), function () { safe(function () { Au.sfx('knock'); })(); }));
+    wrap.appendChild(h('p', { class: 'muted small', id: 'mixNote', text: Z('只保存在这台设备上。有人说话或有音效时，音乐会自动变小。音乐由创作者用 Suno 生成。', 'Saved on this device only. Music gets quieter whenever someone speaks or a sound effect plays. Music generated by the creator with Suno.') }));
+    return wrap;
+  }
+
   var WB = A411.Wordbook;
   function wordbookFab() {
     var b = document.getElementById('btnWordbook');
@@ -14488,6 +14754,7 @@ body:has(#screen [data-option]) .wb-fab, body:has(#placement) .wb-fab { display:
     var sf = h('input', { type: 'checkbox', id: 'optSfx' }); sf.checked = S.settings.sfx !== false;
     sf.addEventListener('change', function () { S.settings.sfx = sf.checked; persist('settings'); applySettings(); });
     box.appendChild(h('label', { class: 'check' }, sf, Z('音效（敲门、猫叫……）', 'Sound effects (knock, meow…)')));
+    box.appendChild(mixerSection());
     box.appendChild(voiceSettings());
     openOverlay(sheet(Z('设置', 'Settings'), box));
   }
