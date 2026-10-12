@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.10.0 single-file build 2026-10-12T06:36:00.304Z -->
+<!-- L’Appartement 411 v0.10.1 single-file build 2026-10-12T16:38:09.573Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -49,6 +49,7 @@ p { margin:.4em 0; }
 .btn.small { min-height:44px; padding:6px 12px; font-size:.9em; }
 .btn.grow { flex:1 1 auto; }
 .btn[disabled] { opacity:.55; cursor:not-allowed; }
+.btn.saved[disabled] { background:#e4e0d8; color:#6a645c; box-shadow:none; opacity:1; }
 .btn.choice { text-align:left; width:100%; }
 .banner { margin:10px 12px; padding:8px 10px; border-radius:4px; font-size:.92em; }
 .banner.warn { background:#fdecd8; border:2px solid #e0a46b; color:var(--warn); }
@@ -937,7 +938,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.10.0';
+  var APP_VERSION = '0.10.1';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -9314,6 +9315,57 @@ function getLang(ls, id) {
     return s;
   }
 
+  // Same word/lemma = same item. Listening, reading and production (and any other forms of that item)
+  // are siblings. At least SIBLING_GAP other cards must sit between them. Cards that cannot be placed
+  // are left out of this session; review cards stay due (FSRS is not touched). New cards that do not
+  // fit are remembered on learn.siblingHold so a later session can still introduce them.
+  var SIBLING_GAP = 1;
+  function siblingFits(placed, card, gap) {
+    var from = Math.max(0, placed.length - gap);
+    for (var i = from; i < placed.length; i++) {
+      if (placed[i].itemId === card.itemId && placed[i].key !== card.key) return false;
+    }
+    return true;
+  }
+  function spaceSiblings(queue, gap) {
+    gap = gap == null ? SIBLING_GAP : gap;
+    var placed = [], rest = queue.slice();
+    while (rest.length) {
+      var pick = -1;
+      for (var i = 0; i < rest.length; i++) {
+        if (siblingFits(placed, rest[i], gap)) { pick = i; break; }
+      }
+      if (pick < 0) break;
+      placed.push(rest.splice(pick, 1)[0]);
+    }
+    return { placed: placed, deferred: rest };
+  }
+  // One modality from each item, then the next modality, so a small cap is not spent on one word's siblings.
+  function roundNews(learn, deck, items, cap, story) {
+    var buckets = [];
+    items.forEach(function (it) {
+      var mods = modalitiesOf(deck, it).filter(function (m) { return !learn.cards[cardKey(it.id, m)]; });
+      buckets.push(mods.map(function (m) {
+        var e = { itemId: it.id, modality: m, key: cardKey(it.id, m), isNew: true };
+        if (story) e.story = true;
+        return e;
+      }));
+    });
+    var news = [], guard = 0, moved = true;
+    while (news.length < cap && moved && guard++ < 80) {
+      moved = false;
+      for (var i = 0; i < buckets.length && news.length < cap; i++) {
+        if (buckets[i].length) { news.push(buckets[i].shift()); moved = true; }
+      }
+    }
+    var rest = [];
+    buckets.forEach(function (b, i) {
+      if (!b.length) return;
+      var id = items[i].id;
+      if (news.some(function (q) { return q.itemId === id; })) rest = rest.concat(b);
+    });
+    return { news: news, rest: rest };
+  }
   function buildQueue(learn, deck, now, opts) {
     opts = opts || {};
     var reviewCap = opts.reviewCap != null ? opts.reviewCap : learn.settings.reviewCap;
@@ -9335,40 +9387,51 @@ function getLang(ls, id) {
     var fresh = allItems(deck, learn).filter(function (it) { return it.origin !== 'letter' && bandOk(track, it.band) && !have[it.id]; }); // v0.4.0: letter-gap cards are only introduced by writing the letter
     function pr(it) { return (learn.priorities && learn.priorities[it.id]) || it.priority || 0; }
     fresh.sort(function (a, b) { return pr(b) - pr(a) || (a.band < b.band ? -1 : a.band > b.band ? 1 : 0); });
-    var news = [];
+    var news = [], rest = [];
     // v0.3.0: cards met in a finished story chapter come first, with their own cap (12 cards/day; quick mode keeps its cap).
     // While story cards are pending, the generic new-card cap is skipped so a story day stays about 12 new cards.
     var pend = storyPendingItems(learn, deck);
     if (pend.length && !opts.noStory) {
       var sCap = opts.newCap != null ? opts.newCap : STORY_NEW_CAP;
-      for (var j = 0; j < pend.length && news.length < sCap; j++) {
-        modalitiesOf(deck, pend[j]).forEach(function (mod) {
-          if (news.length < sCap) news.push({ itemId: pend[j].id, modality: mod, key: cardKey(pend[j].id, mod), isNew: true, story: true });
-        });
-      }
+      var storyRound = roundNews(learn, deck, pend, sCap, true);
+      news = storyRound.news;
+      rest = storyRound.rest;
       fresh = [];
-    }
-    for (var i = 0; i < fresh.length && news.length < newCap; i++) {
-      modalitiesOf(deck, fresh[i]).forEach(function (mod) {
-        if (news.length < newCap) news.push({ itemId: fresh[i].id, modality: mod, key: cardKey(fresh[i].id, mod), isNew: true });
+    } else if (newCap > 0) {
+      // Modalities deferred from an earlier session come back before brand-new words, still inside the new-card cap.
+      var owed = (learn.siblingHold || []).filter(function (e) { return e && e.key && !learn.cards[e.key]; }).map(function (e) {
+        return { itemId: e.itemId, modality: e.modality, key: e.key, isNew: true, story: !!e.story, held: true };
       });
+      var take = owed.slice(0, newCap);
+      var freshRound = roundNews(learn, deck, fresh, newCap - take.length, false);
+      news = take.concat(freshRound.news);
+      rest = freshRound.rest.concat(owed.slice(take.length));
     }
     var queue = reviews.map(function (r) {
       var c = learn.cards[r.key];
       return { itemId: c.itemId, modality: c.modality, key: r.key, isNew: false };
     }).concat(news);
+    var seenQ = {};
+    queue = queue.filter(function (q) { if (!q || seenQ[q.key]) return false; seenQ[q.key] = 1; return true; });
     if (opts.only) { // v0.5.0: e.g. only the wordbook (module 'carnet'); its own small queue, never waters the plant
       var mod = opts.only, ok = function (q) { var it = itemById(deck, learn, q.itemId); return it && moduleOf(it) === mod; };
       queue = queue.filter(ok);
+      rest = rest.filter(ok);
       if (!queue.length) {
+        rest = [];
         var have2 = introducedSet(learn);
         allItems(deck, learn).filter(function (it) { return moduleOf(it) === mod && !have2[it.id]; }).slice(0, 6).forEach(function (it) {
           modalitiesOf(deck, it).forEach(function (m) { queue.push({ itemId: it.id, modality: m, key: cardKey(it.id, m), isNew: true }); });
         });
       }
     }
-    if (totalCap != null && queue.length > totalCap) queue = queue.slice(0, totalCap);
-    return { queue: queue, overdue: overdue, reviewCap: reviewCap, newCap: newCap, newAvailable: fresh.length };
+    var spaced = spaceSiblings(queue, SIBLING_GAP);
+    var deferred = spaced.deferred.concat(rest);
+    if (totalCap != null && spaced.placed.length > totalCap) {
+      spaced.placed.slice(totalCap).forEach(function (e) { if (e.isNew) deferred.push(e); });
+      spaced.placed = spaced.placed.slice(0, totalCap);
+    }
+    return { queue: spaced.placed, deferred: deferred, overdue: overdue, reviewCap: reviewCap, newCap: newCap, newAvailable: fresh.length };
   }
 
   var STORY_NEW_CAP = 12;
@@ -9389,8 +9452,25 @@ function getLang(ls, id) {
     });
     return added;
   }
+  function rememberSiblings(learn, placed, deferred) {
+    var drop = {};
+    (placed || []).forEach(function (e) { if (e && e.isNew && e.key) drop[e.key] = 1; });
+    var next = [], have = {};
+    (learn.siblingHold || []).forEach(function (e) {
+      if (!e || !e.key || drop[e.key] || learn.cards[e.key] || have[e.key]) return;
+      have[e.key] = 1;
+      next.push({ itemId: e.itemId, modality: e.modality, key: e.key, story: !!e.story });
+    });
+    (deferred || []).forEach(function (e) {
+      if (!e || !e.isNew || !e.key || drop[e.key] || learn.cards[e.key] || have[e.key]) return;
+      have[e.key] = 1;
+      next.push({ itemId: e.itemId, modality: e.modality, key: e.key, story: !!e.story });
+    });
+    if (next.length) learn.siblingHold = next; else delete learn.siblingHold;
+  }
   function startSession(learn, deck, now, opts) {
     var q = buildQueue(learn, deck, now, opts);
+    rememberSiblings(learn, q.queue, q.deferred);
     learn.session = q.queue.length ? { active: true, queue: q.queue, index: 0, hints: 0, wrong: false, revealed: false, accent: false, phase: 'ask', quick: !!(opts && opts.totalCap), only: (opts && opts.only) || null } : null;
     return { queue: q, session: learn.session };
   }
@@ -9433,7 +9513,9 @@ function getLang(ls, id) {
     undo.at = ev.at; undo.dk = dk; undo.wasNew = wasNew; undo.itemId = entry.itemId; undo.modality = entry.modality; undo.grade = grade;
     learn.undo = undo;
     if (grade === 1) {
-      s.queue.push({ itemId: entry.itemId, modality: entry.modality, key: entry.key, isNew: false, retry: true });
+      var retry = { itemId: entry.itemId, modality: entry.modality, key: entry.key, isNew: false, retry: true };
+      // The same card may return at the end of the queue. A different form of that word may not sit beside it.
+      if (siblingFits(s.queue, retry, SIBLING_GAP)) s.queue.push(retry);
     }
     s.index += 1;
     s.hints = 0; s.wrong = false; s.revealed = false; s.accent = false; s.phase = 'ask';
@@ -9810,6 +9892,7 @@ function getLang(ls, id) {
     itemById: itemById, allItems: allItems, cardKey: cardKey, ensureCard: ensureCard, bucket: bucket,
     retrievability: retrievability, applyGrade: applyGrade, checkAnswer: checkAnswer, suggestRating: suggestRating,
     buildQueue: buildQueue, startSession: startSession, commit: commit, counts: counts, retention: retention,
+    spaceSiblings: spaceSiblings, SIBLING_GAP: SIBLING_GAP,
     forecast: forecast, grammarMap: grammarMap, noteStory: noteStory, bandOk: bandOk,
     PLACEMENT: PLACEMENT, placementState: placementState, placementAnswer: placementAnswer, skipPlacement: skipPlacement,
     validateSeed: validateSeed, importSeed: importSeed, validateBundle: validateBundle, dayKey: dayKey, resultTypeOf: resultTypeOf,
@@ -15111,6 +15194,13 @@ function getLang(ls, id) {
     var checks = [a.week1Check, b.week1Check].filter(function (x) { return x && x.at; });
     if (checks.length) { checks.sort(function (x, y) { return t(y.at) - t(x.at); }); out.week1Check = clone(checks[0]); }
     out.storyPending = unionBy(newer.storyPending, older.storyPending, 'itemId').filter(function (x) { return !del[x.itemId]; });
+    var held = [], heldSeen = {};
+    (a.siblingHold || []).concat(b.siblingHold || []).forEach(function (e) {
+      if (!e || !e.key || heldSeen[e.key] || (out.cards && out.cards[e.key]) || del[e.itemId]) return;
+      heldSeen[e.key] = 1;
+      held.push(clone(e));
+    });
+    if (held.length) out.siblingHold = held; else delete out.siblingHold;
     out.overrides = {}; [older.overrides || {}, newer.overrides || {}].forEach(function (o) { Object.keys(o).forEach(function (k) { out.overrides[k] = clone(o[k]); }); });
     out.updatedAt = new Date(Math.max(t(a.updatedAt), t(b.updatedAt))).toISOString();
     delete out.undo;
@@ -16388,6 +16478,28 @@ function getLang(ls, id) {
     });
   }
   // Word card: a pixel close-up of the object (cropped from the current scene when it is there), the word, a French paraphrase; « ? » for the meaning.
+  function wordBase(w) { return w.fr.replace(/^(l[’']|le |la |les |un |une |des |avoir )/i, ''); }
+  // Same button node for the life of the card. Rebuilding it under a finger drops the tap.
+  function paintWordAdd(b, saved) {
+    var label = saved ? '✓ Dans le carnet' : 'Ajouter au carnet';
+    b.disabled = !!saved;
+    b.classList.toggle('saved', !!saved);
+    b.setAttribute('aria-pressed', saved ? 'true' : 'false');
+    b.textContent = '';
+    if (!saved) { var ic = icon('plus'); if (ic) b.appendChild(ic); b.appendChild(document.createTextNode(' ')); }
+    b.appendChild(h('span', { lang: 'fr', text: label }));
+  }
+  function wordAddButton(w) {
+    var base = wordBase(w);
+    var b = btn(' ', function () {
+      if (b.disabled || !learnState) return;
+      var r = wbAdd({ word: base, sentence: null, source: helpKey() }, { src: 'game', lemma: base, display: w.fr, zh: w.zh, en: w.en, para: w.para });
+      toast(r.added ? 'Ajouté ! ✓' : 'Déjà dans le carnet ✓', 1400);
+      paintWordAdd(b, !!(r && r.entry) || WB.has(learnState, base));
+    }, 'small', { id: 'btnWordAdd' });
+    paintWordAdd(b, !!(learnState && WB.has(learnState, base)));
+    return b;
+  }
   function openWord(id) {
     var w = Wd.WORDS[id]; if (!w) return;
     if (S && S.learning) { S.learning.helpLog.push({ kind: 'word', word: id, context: helpKey(), at: L.nowISO() }); persist('word'); }
@@ -16397,11 +16509,7 @@ function getLang(ls, id) {
       h('p', { class: 'fr word-para', lang: 'fr', text: '= ' + w.para }),
       w.say ? h('div', { class: 'row' }, btn([icon('sound'), ' ', h('span', { lang: 'fr', text: w.fr })], function () { Au.playLine('w_' + id, w.say.tts, { speaker: w.say.by }); }, 'small', { id: 'btnWordPlay' })) : null,
       qHelp(function () { return Z(w.zh, w.en); }, { id: 'wordQ', target: null }),
-      h('div', { class: 'row' }, learnState ? btn([icon('plus'), ' ', h('span', { lang: 'fr', text: WB.has(learnState, w.fr.replace(/^(l[’']|le |la |les |un |une |des |avoir )/i, '')) ? 'Dans le carnet ✓' : 'Ajouter au carnet' })], function () {
-        var base = w.fr.replace(/^(l[’']|le |la |les |un |une |des |avoir )/i, '');
-        var r = wbAdd({ word: base, sentence: null, source: helpKey() }, { src: 'game', lemma: base, display: w.fr, zh: w.zh, en: w.en, para: w.para });
-        toast(r.added ? 'Ajouté ! ✓' : 'Déjà dans le carnet ✓', 1400); closeOverlay();
-      }, 'small', { id: 'btnWordAdd' }) : null, btn('OK', closeOverlay, 'primary grow', { id: 'btnWordOk' })));
+      h('div', { class: 'row' }, learnState ? wordAddButton(w) : null, btn('OK', closeOverlay, 'primary grow', { id: 'btnWordOk' })));
     openOverlay(sheet(w.fr, box));
   }
   function closeUp(w) {
@@ -18900,8 +19008,10 @@ function getLang(ls, id) {
   }
   function frHost(node) {
     var el = node && (node.nodeType === 1 ? node : node.parentElement);
+    // Buttons are controls. A press on « Ajouter au carnet » must not be read as the word « au »
+    // and rebuild the card under the finger — that drops the tap that was meant to save.
+    if (el && el.closest && el.closest('button, input, textarea, .wb-pop, #wordbookSheet')) return null;
     while (el && el !== document.body) {
-      if (el.matches && el.matches('input, textarea, .wb-pop, #wordbookSheet')) return null;
       if (el.getAttribute && el.getAttribute('lang') === 'fr') return el;
       el = el.parentElement;
     }
@@ -18940,7 +19050,9 @@ function getLang(ls, id) {
   document.addEventListener('pointermove', function (ev) { if (lp && (Math.abs(ev.clientX - lp.x) > 10 || Math.abs(ev.clientY - lp.y) > 10)) lpCancel(); }, true);
   ['pointerup', 'pointercancel', 'scroll'].forEach(function (k) { document.addEventListener(k, lpCancel, true); });
   // the click that ends a long-press must not also press the button / open the word card underneath
-  document.addEventListener('click', function (ev) { if (ui.suppressClick && Date.now() - ui.suppressClick < 1500) { ui.suppressClick = 0; ev.preventDefault(); ev.stopPropagation(); } }, true);
+  document.addEventListener('click', function (ev) {
+    if (ui.suppressClick && Date.now() - ui.suppressClick < 1500) { ui.suppressClick = 0; ev.preventDefault(); ev.stopPropagation(); }
+  }, true);
   document.addEventListener('contextmenu', function (ev) { if (frHost(ev.target) && ui.suppressClick) ev.preventDefault(); }, true);
   // Text selection (desktop double-click, or any selection): a small « + Carnet » chip for a single French word.
   document.addEventListener('selectionchange', function () {
@@ -19018,15 +19130,37 @@ function getLang(ls, id) {
     var look = lookupLocal(hit);
     var status = h('div', { id: 'lookupStatus', 'data-status': look ? look.src : 'loading' });
     var addRow = h('div', { class: 'row' });
+    var addCur = null;
+    // Keep #btnWbAdd in the document. Replacing it when a lookup result arrives
+    // drops a tap that already started on the previous button.
     function drawAdd(cur) {
-      addRow.innerHTML = '';
-      var ex = WB.has(learnState, (cur && cur.lemma) || hit.word);
-      addRow.appendChild(btn([icon('plus'), ' ', h('span', { lang: 'fr', text: ex ? 'Déjà dans le carnet ✓' : 'Ajouter au carnet' })], function () {
-        var r = wbAdd(hit, cur);
-        toast(r.added ? 'Ajouté ! ✓' : 'Déjà dans le carnet ✓', 1400);
-        drawAdd(cur);
-      }, ex ? 'grow' : 'primary grow', { id: 'btnWbAdd', disabled: ex }));
-      addRow.appendChild(btn('OK', closeOverlay, 'grow', { id: 'btnWbClose' }));
+      addCur = cur || null;
+      var ex = !!WB.has(learnState, (addCur && addCur.lemma) || hit.word);
+      var label = ex ? '✓ Dans le carnet' : 'Ajouter au carnet';
+      var existing = addRow.querySelector('#btnWbAdd');
+      if (existing) {
+        var span = existing.querySelector('span[lang=fr]');
+        if (existing.disabled === ex && span && span.textContent === label) return;
+        if (existing.matches(':active')) {
+          if (existing._deferAdd) return;
+          existing._deferAdd = true;
+          setTimeout(function () { existing._deferAdd = false; if (addRow.isConnected) drawAdd(addCur); }, 30);
+          return;
+        }
+      } else {
+        existing = btn(' ', function () {
+          var r = wbAdd(hit, addCur);
+          toast(r.added ? 'Ajouté ! ✓' : 'Déjà dans le carnet ✓', 1400);
+          drawAdd(addCur);
+        }, 'primary grow', { id: 'btnWbAdd' });
+        addRow.appendChild(existing);
+        if (!addRow.querySelector('#btnWbClose')) addRow.appendChild(btn('OK', closeOverlay, 'grow', { id: 'btnWbClose' }));
+      }
+      existing.disabled = ex;
+      existing.className = 'btn ' + (ex ? 'grow saved' : 'primary grow');
+      existing.textContent = '';
+      if (!ex) { var ic = icon('plus'); if (ic) existing.appendChild(ic); existing.appendChild(document.createTextNode(' ')); }
+      existing.appendChild(h('span', { lang: 'fr', text: label }));
     }
     box.appendChild(h('div', { class: 'row wb-head' },
       h('span', { class: 'fr wb-word', lang: 'fr', id: 'lookupWord', text: hit.word }),
