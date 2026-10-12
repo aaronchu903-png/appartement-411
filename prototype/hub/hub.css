@@ -1,0 +1,99 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #f6f1e7;
+  color: #1f1d1a;
+  font-family: system-ui, sans-serif;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+#top {
+  height: 44px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  gap: 8px;
+}
+#title {
+  margin: 0;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+#times {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+#times button {
+  height: 32px;
+  box-sizing: border-box;
+  border: 2px solid #2a2e3a;
+  background: #fffdf8;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  padding: 0 8px;
+}
+#times button[aria-pressed="true"] {
+  background: #f6a54a;
+}
+#stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#zones {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(384px, 100%);
+  display: flex;
+  gap: 4px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+#zones[hidden] { display: none; }
+#zones button {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  padding: 2px;
+  border: 2px solid #2a2e3a;
+  background: #243038;
+  color: #f6f1e7;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.1;
+}
+#zones button[aria-pressed="true"] {
+  background: #f6a54a;
+  color: #1f1d1a;
+}
+canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  touch-action: none;
+}
+#hook {
+  height: 32px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px 12px 0;
+  text-align: center;
+  font-size: 17px;
+  line-height: 24px;
+}

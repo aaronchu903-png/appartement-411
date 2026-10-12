@@ -1,0 +1,702 @@
+{
+ "fridge": {
+  "size": [
+   16,
+   40
+  ],
+  "anchor": [
+   8,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    1,
+    2
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "placed_at": [
+   24,
+   63
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "counter": {
+  "size": [
+   64,
+   30
+  ],
+  "anchor": [
+   32,
+   29
+  ],
+  "footprint_tiles": [
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    5,
+    3
+   ]
+  ],
+  "placed_at": [
+   64,
+   63
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "basil": {
+  "size": [
+   12,
+   14
+  ],
+  "anchor": [
+   6,
+   13
+  ],
+  "footprint_tiles": [
+   [
+    3,
+    2
+   ]
+  ],
+  "placed_at": [
+   56,
+   38
+  ],
+  "note": "y-sorted by placed_at[1]; animated frames furniture/basil_0..3.png"
+ },
+ "bar": {
+  "size": [
+   96,
+   24
+  ],
+  "anchor": [
+   48,
+   23
+  ],
+  "footprint_tiles": [
+   [
+    1,
+    8
+   ],
+   [
+    2,
+    8
+   ],
+   [
+    3,
+    8
+   ],
+   [
+    4,
+    8
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    6,
+    8
+   ]
+  ],
+  "placed_at": [
+   64,
+   143
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "stool_a": {
+  "size": [
+   12,
+   16
+  ],
+  "anchor": [
+   6,
+   15
+  ],
+  "footprint_tiles": [
+   [
+    2,
+    9
+   ]
+  ],
+  "placed_at": [
+   40,
+   156
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "stool_b": {
+  "size": [
+   12,
+   16
+  ],
+  "anchor": [
+   6,
+   15
+  ],
+  "footprint_tiles": [
+   [
+    5,
+    9
+   ]
+  ],
+  "placed_at": [
+   88,
+   156
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "table": {
+  "size": [
+   32,
+   26
+  ],
+  "anchor": [
+   16,
+   25
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    5
+   ],
+   [
+    9,
+    5
+   ]
+  ],
+  "placed_at": [
+   144,
+   95
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "kchair": {
+  "size": [
+   14,
+   18
+  ],
+  "anchor": [
+   7,
+   17
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    6
+   ],
+   [
+    9,
+    6
+   ]
+  ],
+  "placed_at": [
+   144,
+   108
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "kplant": {
+  "size": [
+   20,
+   34
+  ],
+  "anchor": [
+   10,
+   33
+  ],
+  "footprint_tiles": [
+   [
+    9,
+    2
+   ],
+   [
+    10,
+    2
+   ],
+   [
+    11,
+    2
+   ],
+   [
+    9,
+    3
+   ],
+   [
+    10,
+    3
+   ],
+   [
+    11,
+    3
+   ]
+  ],
+  "placed_at": [
+   168,
+   63
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "sofa": {
+  "size": [
+   48,
+   30
+  ],
+  "anchor": [
+   24,
+   29
+  ],
+  "footprint_tiles": [
+   [
+    1,
+    11
+   ],
+   [
+    2,
+    11
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    1,
+    12
+   ],
+   [
+    2,
+    12
+   ],
+   [
+    3,
+    12
+   ]
+  ],
+  "placed_at": [
+   40,
+   207
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "rug": {
+  "size": [
+   64,
+   40
+  ],
+  "anchor": [
+   32,
+   39
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   48,
+   248
+  ],
+  "note": "decal: drawn under actors, walkable"
+ },
+ "ctable": {
+  "size": [
+   30,
+   18
+  ],
+  "anchor": [
+   15,
+   17
+  ],
+  "footprint_tiles": [
+   [
+    2,
+    14
+   ],
+   [
+    3,
+    14
+   ]
+  ],
+  "placed_at": [
+   48,
+   236
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "box": {
+  "size": [
+   18,
+   16
+  ],
+  "anchor": [
+   9,
+   15
+  ],
+  "footprint_tiles": [
+   [
+    3,
+    12
+   ],
+   [
+    4,
+    12
+   ],
+   [
+    5,
+    12
+   ]
+  ],
+  "placed_at": [
+   72,
+   207
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "cushion": {
+  "size": [
+   18,
+   10
+  ],
+  "anchor": [
+   9,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   104,
+   218
+  ],
+  "note": "decal: drawn under actors, walkable"
+ },
+ "scratcher": {
+  "size": [
+   14,
+   30
+  ],
+  "anchor": [
+   7,
+   29
+  ],
+  "footprint_tiles": [
+   [
+    10,
+    16
+   ],
+   [
+    10,
+    17
+   ]
+  ],
+  "placed_at": [
+   168,
+   287
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "bowls": {
+  "size": [
+   18,
+   8
+  ],
+  "anchor": [
+   9,
+   7
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   152,
+   300
+  ],
+  "note": "decal: drawn under actors, walkable"
+ },
+ "desk": {
+  "size": [
+   36,
+   30
+  ],
+  "anchor": [
+   18,
+   29
+  ],
+  "footprint_tiles": [
+   [
+    7,
+    10
+   ],
+   [
+    8,
+    10
+   ],
+   [
+    9,
+    10
+   ],
+   [
+    10,
+    10
+   ],
+   [
+    7,
+    11
+   ],
+   [
+    8,
+    11
+   ],
+   [
+    9,
+    11
+   ],
+   [
+    10,
+    11
+   ]
+  ],
+  "placed_at": [
+   144,
+   191
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "dchair": {
+  "size": [
+   14,
+   18
+  ],
+  "anchor": [
+   7,
+   17
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    12
+   ],
+   [
+    9,
+    12
+   ]
+  ],
+  "placed_at": [
+   144,
+   204
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "shelf": {
+  "size": [
+   32,
+   40
+  ],
+  "anchor": [
+   16,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    9,
+    10
+   ],
+   [
+    10,
+    10
+   ],
+   [
+    11,
+    10
+   ],
+   [
+    9,
+    11
+   ],
+   [
+    10,
+    11
+   ],
+   [
+    11,
+    11
+   ]
+  ],
+  "placed_at": [
+   168,
+   191
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "splant": {
+  "size": [
+   20,
+   34
+  ],
+  "anchor": [
+   10,
+   33
+  ],
+  "footprint_tiles": [
+   [
+    0,
+    17
+   ],
+   [
+    1,
+    17
+   ],
+   [
+    2,
+    17
+   ],
+   [
+    0,
+    18
+   ],
+   [
+    1,
+    18
+   ],
+   [
+    2,
+    18
+   ]
+  ],
+  "placed_at": [
+   24,
+   303
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "coat": {
+  "size": [
+   14,
+   34
+  ],
+  "anchor": [
+   7,
+   33
+  ],
+  "footprint_tiles": [
+   [
+    4,
+    18
+   ],
+   [
+    4,
+    19
+   ]
+  ],
+  "placed_at": [
+   72,
+   319
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "door": {
+  "size": [
+   32,
+   40
+  ],
+  "anchor": [
+   16,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    5,
+    19
+   ],
+   [
+    6,
+    19
+   ],
+   [
+    5,
+    20
+   ],
+   [
+    6,
+    20
+   ]
+  ],
+  "placed_at": [
+   96,
+   335
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "mat": {
+  "size": [
+   28,
+   10
+  ],
+  "anchor": [
+   14,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   96,
+   318
+  ],
+  "note": "decal: drawn under actors, walkable"
+ },
+ "lamp": {
+  "size": [
+   12,
+   36
+  ],
+  "anchor": [
+   6,
+   35
+  ],
+  "footprint_tiles": [
+   [
+    4,
+    10
+   ],
+   [
+    5,
+    10
+   ],
+   [
+    4,
+    11
+   ],
+   [
+    5,
+    11
+   ]
+  ],
+  "placed_at": [
+   76,
+   191
+  ],
+  "note": "y-sorted by placed_at[1]"
+ }
+}

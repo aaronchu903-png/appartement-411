@@ -1,0 +1,209 @@
+{
+  "id": "appartement-411",
+  "title": "L’Appartement 411",
+  "fromDay": 8,
+  "defaultStyle": "A",
+  "tile": 16,
+  "cols": 12,
+  "rows": 24,
+  "spawn": { "col": 7, "row": 14, "facing": "down" },
+  "timing": { "ambientMs": 150, "ambientFrames": 16, "walkFrameMs": 90, "stepMs": 180 },
+  "footShadow": { "color": [43, 30, 47], "alpha": 110, "w": 12, "h": 4 },
+  "dropBakedShadows": [[120, 108], [88, 268], [120, 236], [104, 217]],
+  "sprites": {
+    "dir": "assets/characters/",
+    "player": {
+      "anchor": [9, 31],
+      "idle": "player_idle_{facing}_{frame}.png",
+      "walk": "player_walk_{facing}_{frame}.png",
+      "frames": 4
+    },
+    "croissant": {
+      "anchor": [9, 14],
+      "idle": "croissant_idle_{frame}.png",
+      "walk": "croissant_walk_{facing}_{frame}.png",
+      "frames": 4
+    }
+  },
+  "actors": [
+    { "id": "croissant", "sprite": "croissant", "foot": [72, 208] }
+  ],
+  "aliases": { "D": "M" },
+  "times": [
+    { "id": "A", "label": "Jour" },
+    { "id": "E", "label": "Soir" },
+    { "id": "M", "label": "Nuit" }
+  ],
+  "scene": {
+    "lights": {
+      "M": ["desk_lamp", "sofa_lamp", "kitchen_pendant", "window_moon", "door_spill"]
+    }
+  },
+  "ambient": {
+    "paper": [255, 248, 236],
+    "steam": [{ "x": 151, "y": 172 }, { "x": 56, "y": 222 }],
+    "dust": { "styles": ["A"], "count": 14, "seed": 4, "x0": 54, "x1": 96, "y0": 52, "y1": 128, "top": 52, "span": 80 }
+  },
+  "hotspots": {
+    "desk": {
+      "id": "desk",
+      "label": "Le bureau",
+      "approach": [
+        { "col": 7, "row": 12, "face": "up" },
+        { "col": 6, "row": 11, "face": "right" },
+        { "col": 6, "row": 10, "face": "right" },
+        { "col": 10, "row": 12, "face": "up" }
+      ]
+    },
+    "basil": {
+      "id": "basilic",
+      "label": "Le basilic",
+      "hit": [44, 16, 28, 28],
+      "approach": [
+        { "col": 3, "row": 4, "face": "up" },
+        { "col": 2, "row": 4, "face": "up" },
+        { "col": 4, "row": 4, "face": "up" }
+      ]
+    },
+    "sofa": {
+      "id": "sofa",
+      "label": "Le canapé",
+      "approach": [
+        { "col": 1, "row": 13, "face": "up" },
+        { "col": 2, "row": 13, "face": "up" },
+        { "col": 3, "row": 13, "face": "up" }
+      ]
+    },
+    "box": {
+      "id": "croissant_box",
+      "label": "La boîte de Croissant",
+      "approach": [
+        { "col": 4, "row": 13, "face": "up" },
+        { "col": 5, "row": 13, "face": "up" },
+        { "col": 6, "row": 12, "face": "left" }
+      ]
+    },
+    "fridge": {
+      "id": "fridge",
+      "label": "Le frigo",
+      "approach": [
+        { "col": 1, "row": 4, "face": "up" }
+      ]
+    },
+    "door": {
+      "id": "stairs",
+      "label": "L'escalier",
+      "exit": "stairs_down",
+      "approach": [
+        { "col": 5, "row": 18, "face": "down" },
+        { "col": 6, "row": 18, "face": "down" }
+      ]
+    }
+  },
+  "styles": {
+    "A": {
+      "label": "Jour",
+      "dir": "assets/A/",
+      "floor": "floor_walls.png",
+      "furniture": "furniture.json",
+      "walkable": "walkable.json",
+      "curtains": [
+        { "pattern": "anim/curtain_l_{frame}.png", "x": 43, "y": 0, "frames": 8 },
+        { "pattern": "anim/curtain_r_{frame}.png", "x": 76, "y": 0, "frames": 8 }
+      ],
+      "spriteFrames": {
+        "basil": { "pattern": "furniture/basil_{frame}.png", "frames": 8 }
+      },
+      "overhead": [
+        { "src": "furniture/pendant.png", "x": 134, "y": 58 }
+      ],
+      "light": {
+        "under": [
+          { "src": "light/window_patch.png" },
+          { "src": "light/shadow.png", "contactShadow": true }
+        ],
+        "over": [
+          { "src": "light/warm_grade.png" }
+        ]
+      }
+    },
+    "E": {
+      "label": "Soir",
+      "dir": "assets/E_evening/",
+      "floor": "floor_walls.png",
+      "furniture": "furniture.json",
+      "walkable": "walkable.json",
+      "curtains": [
+        { "pattern": "anim/curtain_l_{frame}.png", "x": 43, "y": 0, "frames": 8 },
+        { "pattern": "anim/curtain_r_{frame}.png", "x": 76, "y": 0, "frames": 8 }
+      ],
+      "spriteFrames": {
+        "basil": { "pattern": "furniture/basil_{frame}.png", "frames": 8 }
+      },
+      "overhead": [],
+      "light": {
+        "under": [
+          { "src": "light/shadow.png", "contactShadow": true }
+        ],
+        "multiply": {
+          "src": "light/light_multiplier_half.png",
+          "cool": [0.26, 0.29, 0.45],
+          "warm": [0.95, 0.70, 0.36],
+          "cap": 1.2,
+          "lamps": [
+            { "id": "floor_lamp", "x": 76, "y": 191, "r": 42, "s": 1.0 },
+            { "id": "desk", "x": 144, "y": 191, "r": 34, "s": 0.9 },
+            { "id": "kitchen", "x": 64, "y": 32, "r": 40, "s": 0.6 },
+            { "id": "dining", "x": 144, "y": 95, "r": 36, "s": 0.7 },
+            { "id": "door", "x": 96, "y": 335, "r": 30, "s": 0.5 }
+          ],
+          "window": { "x": 51, "y": 17, "w": 26, "h": 18, "color": [60, 50, 110], "mix": 0.7 }
+        }
+      }
+    },
+    "M": {
+      "label": "Nuit",
+      "dir": "assets/M_midnight/",
+      "floor": "floor_walls.png",
+      "furniture": "furniture.json",
+      "walkable": "walkable.json",
+      "curtains": [
+        { "pattern": "anim/curtain_l_{frame}.png", "x": 43, "y": 0, "frames": 8 },
+        { "pattern": "anim/curtain_r_{frame}.png", "x": 76, "y": 0, "frames": 8 }
+      ],
+      "spriteFrames": {
+        "basil": { "pattern": "furniture/basil_{frame}.png", "frames": 8 }
+      },
+      "overhead": [
+        { "src": "furniture/pendant.png", "x": 134, "y": 58 }
+      ],
+      "light": {
+        "under": [
+          { "src": "light/shadow.png", "contactShadow": true }
+        ],
+        "beforeGrade": [
+          { "src": "light/window_night.png" }
+        ],
+        "grade": {
+          "blend": "normal",
+          "maxAlpha": 250,
+          "mul": [0.035, 0.055, 0.07],
+          "lift": 0.3,
+          "add": [5, 14, 18],
+          "glow": 0.42,
+          "glowPower": 1.4
+        },
+        "zones": {
+          "fadeMs": 700,
+          "items": [
+            { "id": "desk_lamp", "label": "Bureau", "src": "light/zones/desk_lamp.png", "frames": 16, "framePattern": "light/zones/desk_lamp_f{frame}.png" },
+            { "id": "sofa_lamp", "label": "Canapé", "src": "light/zones/sofa_lamp.png", "frames": 16, "framePattern": "light/zones/sofa_lamp_f{frame}.png" },
+            { "id": "kitchen_pendant", "label": "Cuisine", "src": "light/zones/kitchen_pendant.png" },
+            { "id": "window_moon", "label": "Lune", "src": "light/zones/window_moon.png" },
+            { "id": "door_spill", "label": "Porte", "src": "light/zones/door_spill.png", "frames": 16, "framePattern": "light/zones/door_spill_f{frame}.png" }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>L’Appartement 411</title>
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <header id="top">
+    <h1 id="title">L’Appartement 411</h1>
+    <div id="times" role="group" aria-label="Moment de la journée"></div>
+  </header>
+  <main id="stage">
+    <canvas id="view" width="192" height="384"></canvas>
+    <div id="zones" role="group" aria-label="Lumières" hidden></div>
+  </main>
+  <p id="hook" aria-live="polite">Touchez pour marcher.</p>
+  <script src="path.js"></script>
+  <script src="lights.js"></script>
+  <script src="hub.js"></script>
+</body>
+</html>
