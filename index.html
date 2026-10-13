@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.11.0 single-file build 2026-10-13T02:13:32.550Z -->
+<!-- L’Appartement 411 v0.12.0 garden replan -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -19,7 +19,7 @@
 :root { --bg:#f6f1e7; --ink:#1f1d1a; --muted:#5b554c; --card:#fffdf8; --line:#d9cfbf; --accent:#2f5d8a; --accent-ink:#fff; --warn:#8a3b12; --ok:#2f6e36; --cam:#2f7d5b; --noe:#b5521f; }
 * { box-sizing: border-box; }
 html, body { margin:0; background:var(--bg); color:var(--ink); }
-body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%; }
+body { font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%; }
 body.large-text { font-size:20px; }
 .app { max-width:480px; margin:0 auto; min-height:100vh; padding-bottom:env(safe-area-inset-bottom); }
 #hubMount { position:fixed; left:0; right:0; bottom:0; top:42px; z-index:2; background:#241c18; display:flex; }
@@ -338,6 +338,38 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
 .hub-tile:active { transform:translateY(2px); box-shadow:0 0 0 #2a2a2a; }
 /* the wordbook icon stays on every screen; it only fades + lets taps through while it would cover an answer option */
 .wb-fab.over-option { opacity:.35; pointer-events:none; }
+@font-face { font-family: "Noto Sans"; src: url("fonts/NotoSans-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Noto Sans"; src: url("fonts/NotoSans-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+body.garden-fixed { overflow: hidden; height: 100vh; }
+.rooftop, .pot-screen, .pot-sheet { font-family: "Noto Sans", system-ui, sans-serif; }
+.rooftop { position: relative; margin: 0; min-height: calc(100vh - 48px); background: linear-gradient(#9ec9ef, #d7ecfb 42%, #c4b49a 42%, #8d9a62 100%); overflow: hidden; padding: 12px; }
+.rooftop.night { background: linear-gradient(#1b2438, #3a4664 46%, #2a241c 46%, #1a1814 100%); color: #f6f1e7; }
+.rooftop-label { margin: 0 0 8px; font-size: .85em; letter-spacing: .02em; }
+.rooftop-pots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ph { display: flex; align-items: center; justify-content: center; min-height: 64px; margin-top: 8px; border: 2px dashed #2a2e3a; background: #fffdf8cc; color: #1f1d1a; border-radius: 8px; font: inherit; font-size: .85em; }
+.rooftop.night .ph { background: #2a241ccc; color: #f6f1e7; border-color: #d9cfbf; }
+.ph.pot { min-height: 72px; }
+.ph[data-prop="pot_empty"] { outline: 3px solid #f0b429; }
+.roof-light { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #6fcf97; right: 18%; top: 28%; box-shadow: 0 0 0 3px #6fcf9733; }
+.pot-screen { position: relative; height: calc(100vh - 48px); overflow: hidden; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; padding: 8px 6px 10px; align-items: end; background: linear-gradient(#d7ecfb, #e7f0d8 38%, #c4b49a 38%); }
+.pot { appearance: none; border: 0; background: transparent; color: inherit; font: inherit; padding: 0; min-width: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.pot .cap { font-size: .68em; line-height: 1.15; text-align: center; margin-top: 4px; }
+.pot .name { font-weight: 700; font-size: .78em; text-align: center; }
+.pot .where { font-size: .62em; color: #5b554c; }
+.leaves { position: relative; width: 100%; height: 92px; }
+.leaf { position: absolute; width: 16px; height: 10px; border-radius: 10px 2px; background: #2f7d5b; }
+.leaves-full .leaf { background: #2f7d5b; }
+.leaves-wilting .leaf { background: #8a9a3a; transform: rotate(28deg); }
+.leaves-dormant .leaf, .leaves-empty .leaf { display: none; }
+.leaf.yellow { background: #e0b333; animation: leafFlash 2.5s ease; }
+@keyframes leafFlash { from { transform: scale(1.2); } to { transform: none; } }
+.stem { width: 4px; background: #3d6b32; border-radius: 2px; margin: 0 auto; }
+.roots { height: 14px; display: flex; justify-content: center; gap: 2px; align-items: flex-end; }
+.roots i { display: block; width: 2px; background: #6b4a2a; border-radius: 1px; }
+.clay { width: 70%; height: 22px; background: #b5521f; border-radius: 3px 3px 8px 8px; border: 2px solid #2a2e3a; }
+.pot-sheet { position: absolute; left: 6px; right: 6px; bottom: 6px; max-height: 46%; overflow: auto; background: #fffdf8; border: 2px solid #2a2e3a; border-radius: 8px; padding: 8px 10px; }
+.pot-sheet ul { margin: .3em 0; padding-left: 1.1em; }
+.pot-sheet li { margin: .2em 0; }
 
 </style>
 </head>
@@ -623,6 +655,10 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   function stageOf(peak) { var s = 0; for (var i = 0; i < STAGES.length; i++) if (peak >= STAGES[i]) s = i; return s; }
   // Applies death if 7 full days passed. Returns true when the garden changed.
   function refresh(g, today) {
+    if (g.v >= 3) {
+      if (g.plant && g.plant.dead) { g.plant.dead = false; g.plant.dormant = true; return true; }
+      return false;
+    }
     if (g.plant.dead) return false;
     if (missedDays(g, today) >= DEAD_AFTER) {
       g.plant.dead = true; g.plant.diedOn = addDays(lastCare(g), DEAD_AFTER + 1);
@@ -633,7 +669,9 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   }
   function status(g, today) {
     var m = missedDays(g, today);
-    var health = g.plant.dead || m >= DEAD_AFTER ? 'dead' : m >= WILT_AFTER ? 'wilted' : m >= YELLOW_AFTER ? 'yellow' : 'healthy';
+    var health = g.v >= 3
+      ? ((g.plant && g.plant.dormant) ? 'dormant' : m >= WILT_AFTER ? 'wilted' : m >= YELLOW_AFTER ? 'yellow' : 'healthy')
+      : (g.plant.dead || m >= DEAD_AFTER ? 'dead' : m >= WILT_AFTER ? 'wilted' : m >= YELLOW_AFTER ? 'yellow' : 'healthy');
     var streak = currentStreak(g, today);
     return {
       health: health, missed: m, streak: streak, best: Math.max(g.bestStreak, streak), stage: stageOf(g.plant.peakStreak),
@@ -649,7 +687,8 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     if (g.allWaterDays.length > 800) g.allWaterDays = g.allWaterDays.slice(-800);
     var s = currentStreak(g, today);
     g.bestStreak = Math.max(g.bestStreak, s);
-    if (g.plant.dead) return { counted: true, plant: false, reason: 'dead', streak: s };
+    if (g.v >= 3 && g.plant) { g.plant.dead = false; g.plant.dormant = false; g.forceDormant = {}; }
+    else if (g.plant.dead) return { counted: true, plant: false, reason: 'dead', streak: s };
     g.plant.waterDays.push(today);
     g.plant.peakStreak = Math.max(g.plant.peakStreak, s);
     return { counted: true, plant: true, streak: s };
@@ -718,7 +757,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     var c = S.week && S.week.chapters[cid];
     return c && c.status === 'complete' ? c.completedDay : null;
   }
-  var PREREQ = { d2: 'd1', d3: 'd2', d4: 'd3', d5: 'd4', d6: 'd5', d7: 'd6', d8: 'd7', d9: 'd8' };
+  var PREREQ = { d2: 'd1', d3: 'd2', d4: 'd3', d5: 'd4', d6: 'd5', d7: 'd6', d8: 'd7', d9: 'd8', d10: 'd9' };
   // 'locked' (previous chapter not done) | 'tomorrow' (unlocks next local day; can open early) | 'open' | 'in_progress' | 'complete'
   function chapterStatus(S, cid, today) {
     var w = ensureWeek(S), c = w.chapters[cid];
@@ -945,7 +984,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.11.0';
+  var APP_VERSION = '0.12.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -9622,6 +9661,7 @@ function getLang(ls, id) {
   }
 
   function applyGrade(card, grade, now, retention) {
+    if (typeof card.successes !== 'number') card.successes = Math.max(0, (card.reps || 0) - (card.lapses || 0));
     var elapsed = 0;
     if (card.lastReview) elapsed = Math.max(0, F.utcDayDiff(new Date(card.lastReview), now));
     var memory = card.reps ? { stability: card.stability, difficulty: card.difficulty } : { stability: 0, difficulty: 0 };
@@ -9633,6 +9673,7 @@ function getLang(ls, id) {
     card.scheduledDays = picked.scheduledDays;
     card.reps += 1;
     if (grade === 1 && wasReview) card.lapses += 1;
+    if (grade > 1) card.successes += 1;
     if (card.lapses >= LEECH_LAPSES) card.leech = true;
     card.lastReview = now.toISOString();
     card.due = new Date(now.getTime() + picked.scheduledDays * DAY).toISOString();
@@ -10167,16 +10208,19 @@ function getLang(ls, id) {
     var WL = root.A411 && root.A411.WeekLogic;
     if (!WL && typeof require !== 'undefined') WL = require('./weeklogic.js');
     var today = WL.dayKey(now);
-    if (learn.garden && (learn.garden.v === 1 || learn.garden.v === 2)) {
-      var changed = WL.refresh(learn.garden, today);
+    var created = false, changed = false, bk = null;
+    if (!learn.garden) {
+      if (ls) { try { bk = learnKey(learn.profileId) + '.bk.' + now.getTime() + '.pre-garden'; ls.setItem(bk, JSON.stringify(learn)); } catch (e) { return { created: false, error: 'backup failed' }; } }
+      learn.garden = WL.migrateGarden(learn, story, today);
+      created = true; changed = true;
+    } else if (learn.garden.v === 1 || learn.garden.v === 2) {
+      if (WL.refresh(learn.garden, today)) changed = true;
       if (learn.garden.v !== 2 && ls) { try { ls.setItem(learnKey(learn.profileId) + '.bk.' + now.getTime() + '.pre-v0.5.0', JSON.stringify(learn)); } catch (e) { } }
       if (WL.migratePlants(learn.garden, today)) changed = true;
-      return { created: false, changed: changed };
     }
-    var bk = null;
-    if (ls) { try { bk = learnKey(learn.profileId) + '.bk.' + now.getTime() + '.pre-garden'; ls.setItem(bk, JSON.stringify(learn)); } catch (e) { return { created: false, error: 'backup failed' }; } }
-    learn.garden = WL.migrateGarden(learn, story, today);
-    return { created: true, changed: true, backupKey: bk };
+    var Pots = root.A411 && root.A411.Pots;
+    if (Pots && Pots.migrateGarden(learn.garden, today, learn)) changed = true;
+    return { created: created, changed: changed, backupKey: bk };
   }
 
   // ---------- v0.4.0 ----------
@@ -11331,7 +11375,13 @@ function getLang(ls, id) {
     return out;
   }
   function wordsIn(text) { var s = {}; segments(text).forEach(function (g) { if (g.word) s[g.word] = 1; }); return Object.keys(s); }
-  var api = { WORDS: WORDS, segments: segments, wordsIn: wordsIn };
+  function add(id, rec) {
+    if (!id || !rec || WORDS[id]) return;
+    WORDS[id] = rec;
+    (rec.forms || []).forEach(function (f) { FORMS.push({ f: f, id: id }); });
+    FORMS.sort(function (a, b) { return b.f.length - a.f.length; });
+  }
+  var api = { WORDS: WORDS, segments: segments, wordsIn: wordsIn, add: add };
   root.A411 = root.A411 || {};
   root.A411.Words = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -18338,12 +18388,19 @@ function getLang(ls, id) {
     return !!done[id];
   }
   function nextId(day, done) {
-    var list = ORDER[day === 8 || day === 'd8' ? 'd8' : day === 9 || day === 'd9' ? 'd9' : day] || [];
+    var key = day === 8 || day === 'd8' ? 'd8' : day === 9 || day === 'd9' ? 'd9' : day === 10 || day === 'd10' ? 'd10' : day;
+    var list = ORDER[key] || [];
     for (var i = 0; i < list.length; i++) if (!has(done, list[i])) return list[i];
     return null;
   }
   function meta(id) { return META[id] || null; }
-  function dayKey(day) { return day === 8 || day === 'd8' ? 8 : 9; }
+  function dayKey(day) {
+    if (day === 8 || day === 'd8') return 8;
+    if (day === 9 || day === 'd9') return 9;
+    if (day === 10 || day === 'd10') return 10;
+    if (typeof day === 'number') return day;
+    return 9;
+  }
   function roomKey(engineId) {
     if (!engineId || engineId === 'apt' || engineId === 'appartement-411') return 'apt';
     return engineId;
@@ -18364,9 +18421,15 @@ function getLang(ls, id) {
     day = dayKey(day);
     room = roomKey(room);
     hook = hook || {};
-    if (isRoof(hook)) return room === 'stairwell' ? { rattle: true } : null;
     var next = nextId(day, done);
-    var storyOver = day === 8 ? has(done, 'd8_H') : has(done, 'd9_J');
+    if (day === 10 && next === 'd10_climb' && isRoof(hook) && (room === 'stairwell' || hook.room === 'stairwell')) return { beat: 'd10_climb' };
+    if (day === 10 && room === 'rooftop') {
+      if (next === 'd10_plant' && (hook.id === 'pot_empty' || hook.object === 'pot_empty')) return { beat: 'd10_plant' };
+      if (next === 'd10_water' && (hook.id === 'watering_can' || hook.object === 'watering_can')) return { beat: 'd10_water' };
+      return null;
+    }
+    if (isRoof(hook)) return room === 'stairwell' ? { rattle: true } : null;
+    var storyOver = day === 8 ? has(done, 'd8_H') : day === 10 ? has(done, 'd10_done') : has(done, 'd9_J');
     if (storyOver) {
       if (room !== 'apt') return null;
       if (isDesk(hook)) return { close: 'desk' };
@@ -18422,6 +18485,11 @@ function getLang(ls, id) {
       else if (!has(done, 'd9_I')) room = 'lefevre';
       else room = 'apt';
     }
+    if (day === 10) {
+      if (next === 'd10_climb' || next === 'd10_down') room = 'stairwell';
+      else if (next === 'd10_roof' || next === 'd10_plant' || next === 'd10_say' || next === 'd10_water') room = 'rooftop';
+      else room = 'apt';
+    }
     var bureau = choices.d8_plante === 'bureau' && has(done, 'd8_B');
     var hidden = ['plantp_desk', 'basil_few'];
     if (bureau) hidden = ['plantp_table', 'basil_few'];
@@ -18443,6 +18511,14 @@ function getLang(ls, id) {
       actors.push(actor('camille', 'camille', [80, 300], 'down'));
       actors.push(actor('noe', 'noe', [116, 300], 'down'));
       if (!croissantHidden(day, done)) actors.push(actor('croissant', 'croissant', [72, 208], 'down'));
+    } else if (day === 10 && room === 'apt') {
+      actors.push(actor('camille', 'camille', [88, 64], 'down'));
+      actors.push(actor('noe', 'noe', [120, 100], 'right'));
+      actors.push(actor('croissant', 'croissant', [136, 108], 'left'));
+    } else if (day === 10 && room === 'stairwell') {
+      actors.push(actor('croissant', 'croissant', [120, 140], 'up'));
+      actors.push(actor('noe', 'noe', [136, 200], 'up'));
+      actors.push(actor('camille', 'camille', [152, 220], 'up'));
     } else if (room === 'stairwell' && transit) {
       actors.push(actor('croissant', 'croissant', [136, 204], 'up'));
       actors.push(actor('noe', 'noe', [136, 268], 'up'));
@@ -18458,7 +18534,7 @@ function getLang(ls, id) {
       if (catChair) actors.push(actor('croissant', 'croissant_chair', [96, 114], 'down'));
     }
     var cues = [];
-    var storyOver = day === 8 ? has(done, 'd8_H') : has(done, 'd9_J');
+    var storyOver = day === 8 ? has(done, 'd8_H') : day === 10 ? has(done, 'd10_done') : has(done, 'd9_J');
     if (!storyOver && !transit) {
       if (next === 'd8_B') cues.push(cue(8, 5));
       else if (next === 'd8_D') cues.push(cue(6, 3));
@@ -18467,9 +18543,13 @@ function getLang(ls, id) {
       else if (next === 'd9_D') cues.push(cue(2, 19));
       else if (next === 'd9_F1') cues.push(cue(6, 10));
       else if (next === 'd9_I') cues.push(cue(5, 13));
+      else if (next === 'd10_climb') cues.push(cue(9, 3));
     }
     var spawn, spawnKey;
-    if (day === 8) { spawn = { col: 7, row: 6, facing: 'up' }; spawnKey = 'd8-apt'; }
+    if (day === 10 && room === 'stairwell' && next === 'd10_climb') { spawn = { col: 8, row: 8, facing: 'up' }; spawnKey = 'd10-climb'; }
+    else if (day === 10 && room === 'stairwell') { spawn = { col: 8, row: 12, facing: 'down' }; spawnKey = 'd10-down'; }
+    else if (day === 10) { spawn = { col: 7, row: 6, facing: 'up' }; spawnKey = 'd10-apt'; }
+    else if (day === 8) { spawn = { col: 7, row: 6, facing: 'up' }; spawnKey = 'd8-apt'; }
     else if (room === 'stairwell' && transit) { spawn = { col: 3, row: 19, facing: 'up' }; spawnKey = 'd9-stairs-up'; }
     else if (room === 'stairwell') { spawn = { col: 8, row: 15, facing: 'down' }; spawnKey = 'd9-stairs-down'; }
     else if (room === 'lefevre') { spawn = { col: 4, row: 12, facing: 'up' }; spawnKey = 'd9-lefevre'; }
@@ -18478,7 +18558,7 @@ function getLang(ls, id) {
     return {
       day: day,
       room: room,
-      style: day === 8 ? 'A' : 'E',
+      style: (day === 8 || (day === 10 && room === 'apt')) ? 'A' : 'E',
       spawn: spawn,
       spawnKey: spawnKey,
       hidden: hidden,
@@ -18509,6 +18589,11 @@ function getLang(ls, id) {
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script src="js/fr.js"></script>
+<script src="js/pots.js"></script>
+<script src="js/day10.js"></script>
+<script src="js/day12.js"></script>
+<script src="js/install-story.js"></script>
 <script>
 /* L’Appartement 411 — Day 1 player (UI + scene engine). */
 (function () {
@@ -19040,12 +19125,107 @@ function getLang(ls, id) {
   function goTitle() { Au.stop(); ui.view = 'title'; ui.line = null; ui.trial = null; render(); }
   function startPlay() { ui.view = 'play'; ui.gesture = true; render(); }
 
+  function roofGardenOpen() { return !!(S && WL.storyDone(S, 10)); }
+  function leafCaption(kind) {
+    if (kind === 'wilting') return 'Elle a soif.';
+    if (kind === 'dormant') return 'Elle dort.';
+    if (kind === 'empty') return '';
+    return 'Elle est bien.';
+  }
+  function sceneLabel(id) {
+    var m = /^d(\d+)$/.exec(id || '');
+    if (m) return 'Jour ' + m[1];
+    if (id === 'w1') return 'la semaine';
+    return id || '';
+  }
+  function rooftopPlaceholder(st) {
+    st = st || {};
+    var box = h('div', { class: 'rooftop' + (st.night ? ' night' : ''), id: 'rooftop', 'data-state': st.watered ? 'watered' : st.planted ? 'planted' : 'dry' });
+    box.appendChild(h('p', { class: 'rooftop-label', text: 'placeholder · rooftop ' + (st.night ? 'night' : 'day') }));
+    var pots = h('div', { class: 'rooftop-pots' });
+    for (var i = 0; i < 6; i++) {
+      var basil = i === 1 && st.planted;
+      var prop = basil ? 'basil_planted' : (i === 1 ? 'pot_empty' : 'pot_dry');
+      var el = h('button', { class: 'ph pot', type: 'button', 'data-prop': prop, text: prop });
+      if (i === 1 && !st.planted) el.addEventListener('click', function () { onHubHook({ id: 'pot_empty', object: 'pot_empty' }); });
+      pots.appendChild(el);
+    }
+    box.appendChild(pots);
+    box.appendChild(h('div', { class: 'ph', 'data-prop': 'weeds', text: 'weeds' }));
+    box.appendChild(h('div', { class: 'ph', 'data-prop': 'old_chair', text: 'old_chair' + (st.chairCat ? ' · Croissant' : '') }));
+    box.appendChild(h('div', { class: 'ph', 'data-prop': 'wood_sign', text: 'wood_sign' }));
+    var can = h('button', { class: 'ph', type: 'button', 'data-prop': 'watering_can', text: 'watering_can' });
+    can.addEventListener('click', function () { onHubHook({ id: 'watering_can', object: 'watering_can' }); });
+    box.appendChild(can);
+    return box;
+  }
+  function renderRooftopPreview() {
+    $where.textContent = 'Le toit';
+    $screen.appendChild(rooftopPlaceholder({}));
+  }
+  function renderPots() {
+    document.body.classList.add('garden-fixed');
+    $where.textContent = 'Le jardin';
+    var now = new Date();
+    var pots = A411.Pots.deriveAll(learnState, now);
+    var screen = h('div', { class: 'pot-screen', id: 'potScreen' });
+    pots.forEach(function (p) {
+      var lapse = A411.Pots.lapseActive(learnState, p.n, now);
+      var leaves = h('div', { class: 'leaves leaves-' + p.leaves });
+      var stemH = Math.max(8, Math.min(48, 8 + (p.stem || 0)));
+      leaves.appendChild(h('div', { class: 'stem', style: 'height:' + stemH + 'px' }));
+      if (p.leaves === 'full' || p.leaves === 'wilting') {
+        for (var i = 0; i < 3; i++) {
+          var lf = h('span', { class: 'leaf' + (lapse && i === 0 ? ' yellow' : ''), style: 'left:' + (18 + i * 16) + 'px;top:' + (8 + (i % 2) * 10) + 'px' });
+          leaves.appendChild(lf);
+        }
+      }
+      var roots = h('div', { class: 'roots', 'aria-hidden': 'true' });
+      var nRoot = Math.max(0, Math.min(5, Math.round(p.roots || 0)));
+      for (var r = 0; r < nRoot; r++) roots.appendChild(h('i', { style: 'height:' + (6 + r * 2) + 'px' }));
+      var cap = leafCaption(p.leaves);
+      var btnEl = h('button', { class: 'pot', type: 'button', 'data-pot': String(p.n), 'data-leaves': p.leaves, 'data-grown': p.grown ? '1' : '0' },
+        leaves, roots, h('div', { class: 'clay' }),
+        h('div', { class: 'name', lang: 'fr', text: p.fr }),
+        p.indoor ? h('div', { class: 'where', lang: 'fr', text: 'sur le bureau' }) : null,
+        cap ? h('div', { class: 'cap', lang: 'fr', text: cap }) : null);
+      btnEl.addEventListener('click', function () { ui.pot = p.n; render(); });
+      screen.appendChild(btnEl);
+    });
+    if (ui.pot) {
+      var pot = A411.Pots.BY_N[ui.pot];
+      var sheet = h('div', { class: 'pot-sheet', id: 'potSheet' });
+      sheet.appendChild(h('div', { class: 'row' }, h('b', { lang: 'fr', text: pot.fr }), h('span', { class: 'grow' }), btn('Fermer', function () { ui.pot = null; render(); }, 'small', { id: 'btnPotClose' })));
+      var ul = h('ul', { lang: 'fr' });
+      var any = false;
+      pot.items.forEach(function (it) {
+        var st = A411.Pots.itemState(learnState, it, now);
+        if (!st.unlocked) return;
+        any = true;
+        var scenes = (st.scenes || []).map(sceneLabel).filter(Boolean).join(', ');
+        ul.appendChild(h('li', null, h('span', { text: it.fr }), scenes ? h('span', { class: 'muted', text: ' · ' + scenes }) : null));
+      });
+      if (!any) ul.appendChild(h('li', { class: 'muted', text: 'Elle attend.' }));
+      sheet.appendChild(ul);
+      sheet.appendChild(btn('Arroser ce pot', function () { beginReview({ pot: pot.n }); }, 'small', { id: 'btnPotWater' }));
+      screen.appendChild(sheet);
+    }
+    screen.appendChild(h('button', { class: 'btn small', type: 'button', id: 'btnPotsHome', style: 'position:absolute;top:6px;right:6px;z-index:2', onclick: function () { goTitle(); } }, Z('首页', 'Home')));
+    $screen.appendChild(screen);
+  }
+  function openGarden() {
+    if (roofGardenOpen()) { ui.view = 'pots'; ui.pot = null; render(); return; }
+    openDesk('plant');
+  }
+
   // ---------- rendering ----------
   // v0.4.1 stage: canvas inside a frame. art.focus → the camera zooms in on that object (attention-directed ostension);
   // the next step without focus zooms back out. art.pulse → a gentle highlight on objects named in the current line.
   function stage(sceneName, st) {
     st = st || {};
+    if (sceneName === 'rooftop' || st.placeholder) return rooftopPlaceholder(st);
     var wrap = h('div', { class: 'stage-wrap' });
+    if (st.roofLight) wrap.appendChild(h('div', { class: 'roof-light', title: 'placeholder · basil on the roof' }));
     var c = h('canvas', { class: 'stage', width: Art.W, height: Art.H, role: 'img', 'aria-label': st.alt || Z('像素场景', 'Pixel scene') });
     Art.scene(c.getContext('2d'), sceneName, st);
     wrap.appendChild(c);
@@ -19098,7 +19278,7 @@ function getLang(ls, id) {
       onChoose: function (id) { chooseProfile(id); },
       openStudy: function () { ui.view = 'study'; render(); },
       closeStudy: function () { ui.view = 'title'; render(); },
-      sessionDoneExtra: function () { var st = gardenStatus(); return st ? plantPanel(st, null) : null; },
+      sessionDoneExtra: function () { if (roofGardenOpen()) return null; var st = gardenStatus(); return st ? plantPanel(st, null) : null; },
       openProgress: function () { ui.view = 'progress'; render(); },
       beginStudy: function (opts) {
         A411.Learn.startSession(learnState, A411.Deck, new Date(), opts || null);
@@ -19147,6 +19327,24 @@ function getLang(ls, id) {
         entry.modality = modality;
         var sess = learnState.session;
         A411.Learn.commit(learnState, grade, { suggested: suggested, hints: sess.hints, correct: suggested == null ? grade > 1 : !!sess.lastCorrect, accent: !!sess.accent, revealed: !!sess.revealed, audio: modality === 'listening' ? (sess.played ? 'played' : 'not_used') : 'not_used', source: 'review', mode: 'flip', module: A411.Learn.moduleOf(item) }, new Date());
+        if (A411.Pots) {
+          var potN = A411.Pots.potOfItem(item.id);
+          if (grade === 1) {
+            A411.Pots.noteLapse(learnState, potN, new Date());
+            toast('On l\u2019arrose bient\u00f4t.');
+          } else if (potN) A411.Pots.clearForce(learnState, potN);
+          if (potN && learnState.garden) {
+            var pot = A411.Pots.BY_N[potN];
+            var match = pot && pot.items.filter(function (x) { return x.id === item.id || (x.deck || []).indexOf(item.id) >= 0; })[0];
+            if (match) {
+              learnState.garden.contexts = learnState.garden.contexts || {};
+              var ctx = learnState.garden.contexts[match.id] || (match.scenes || []).slice(0, 1);
+              var scene = item.story || 'review';
+              if (ctx.indexOf(scene) < 0) ctx.push(scene);
+              learnState.garden.contexts[match.id] = ctx;
+            }
+          }
+        }
         saveLearn();
         if (learnState.session && !learnState.session.active) { if (S) { WL.noteActive(S, new Date()); persist('review-done'); } if (!learnState.session.only) waterToday('review'); syncSoon('review-done'); }
         render();
@@ -19173,6 +19371,7 @@ function getLang(ls, id) {
       var bp = document.getElementById('btnPause');
       if (bp) { bp.textContent = ''; bp.appendChild(icon('pause')); bp.setAttribute('aria-label', Z('暂停', 'Pause')); }
       $screen.innerHTML = '';
+      document.body.classList.toggle('garden-fixed', ui.view === 'pots' || ui.view === 'rooftop');
       var hubMount = document.getElementById('hubMount');
       if (hubMount) hubMount.hidden = ui.view !== 'hub';
       if (ui.view === 'gate') { $topbar.hidden = true; A411.StudyUI.renderGate(studyCtx()); return; }
@@ -19181,6 +19380,8 @@ function getLang(ls, id) {
       if (ui.view === 'progress') { $topbar.hidden = true; A411.StudyUI.renderProgress(studyCtx()); return; }
       if (ui.view === 'cards') { $topbar.hidden = true; A411.ReviewUI.renderCards(studyCtx()); return; }
       if (ui.view === 'stats') { $topbar.hidden = true; A411.ReviewUI.renderStats(studyCtx()); return; }
+      if (ui.view === 'pots') { $topbar.hidden = false; renderPots(); return; }
+      if (ui.view === 'rooftop') { $topbar.hidden = false; renderRooftopPreview(); return; }
       if (ui.view === 'desk') { $topbar.hidden = false; renderDesk(); return; }
       if (ui.view === 'title' || !S) { $topbar.hidden = true; renderTitle(); return; }
       if (ui.view === 'hub') { $topbar.hidden = false; renderHub(); return; }
@@ -19222,10 +19423,10 @@ function getLang(ls, id) {
     if (act) col.appendChild(frBtn(act.fr, act.gloss, act.fn, 'primary big', { id: act.id, 'data-next': plan.next }));
     if ((plan.next === 'done' || plan.next === 'end') && !ritualDue(plan)) {
       col.appendChild(h('div', { class: 'banner ok', id: 'dayDone' }, h('b', { lang: 'fr', text: '✓ Journée terminée. ' }),
-        plan.next === 'done' ? Z('下一章已经可以玩了——现在继续，或者留到明天，都可以。', 'The next chapter is ready — go on now, or keep it for tomorrow.') : plan.day >= 9 ? Z('Jour 9 完成了。第二周的其余几天还在制作中。', 'Jour 9 is done. The rest of week 2 is still being made.') : weekDone() ? Z('第一周完成！第二周还在制作中。', 'Week 1 complete! Week 2 is still in production.') : Z('Jour ' + (plan.day + 1) + ' 还在制作中。', 'Jour ' + (plan.day + 1) + ' is still in production.')));
+        plan.next === 'done' ? Z('下一章已经可以玩了——现在继续，或者留到明天，都可以。', 'The next chapter is ready — go on now, or keep it for tomorrow.') : plan.day >= 10 ? Z('Jour 10 完成了。后面的日子还在制作中。', 'Jour 10 is done. Later days are still being made.') : plan.day >= 9 ? Z('Jour 9 完成了。第二周的其余几天还在制作中。', 'Jour 9 is done. The rest of week 2 is still being made.') : weekDone() ? Z('第一周完成！第二周还在制作中。', 'Week 1 complete! Week 2 is still in production.') : Z('Jour ' + (plan.day + 1) + ' 还在制作中。', 'Jour ' + (plan.day + 1) + ' is still in production.')));
       if (weekDone()) col.appendChild(frBtn('Récap de la semaine 1', Z('回顾这一周', 'look back on the week'), openRecap, '', { id: 'btnHomeRecap' }));
       if (weekDone()) col.appendChild(frBtn('Bilan', Z('第一周的小检查（不打分）', 'a short week-1 check (not graded)'), openWeekCheck, 'small', { id: 'btnHomeCheck' }));
-      if (plan.plantDue || plan.replantDue) { var q0 = queueNow(); col.appendChild(frBtn(plan.replantDue ? 'Replanter' : 'Arroser la plante', plan.replantDue ? Z('植物枯死了——种一盆新的', 'the plant died — plant a new one') : Z('可选 · 复习 = 浇水（' + q0.queue.length + ' 张卡片）', 'optional · review = watering (' + q0.queue.length + ' cards)'), function () { openDesk('plant'); }, '', { id: 'btnHomePlant' })); }
+      if (plan.plantDue || plan.replantDue) { var q0 = queueNow(); col.appendChild(frBtn(plan.replantDue ? 'Replanter' : 'Arroser la plante', plan.replantDue ? Z('植物枯死了——种一盆新的', 'the plant died — plant a new one') : Z('可选 · 复习 = 浇水（' + q0.queue.length + ' 张卡片）', 'optional · review = watering (' + q0.queue.length + ' cards)'), function () { openGarden(); }, '', { id: 'btnHomePlant' })); }
       if (WL.ritualSeen(S, plan.day)) col.appendChild(frBtn('Revoir la soirée', null, function () { openRitual(plan.day); }, 'small', { id: 'btnRitualAgain' }));
       if (plan.early) col.appendChild(frBtn('On continue' + NB + '? Jour ' + chDay(plan.early), Z('打开下一章（或者明天再来）', 'open the next chapter (or come back tomorrow)'), function () { openEarly(plan.early); }, 'small', { id: 'btnEarly' }));
     }
@@ -19248,6 +19449,7 @@ function getLang(ls, id) {
       var nw = h('div', { class: 'card fade-in whats-new', id: 'whatsNew' },
         h('h2', { lang: 'fr', text: 'Nouveau' + NB + '!' }),
         h('ul', { class: 'bravo-recap', lang: 'fr' },
+          h('li', null, icon('letter'), ' Jour 10' + NB + ': « La clé ». Le jardin est sur le toit.'),
           h('li', null, icon('letter'), ' Jour 9' + NB + ': « Six heures ». On dîne chez Madame Lefèvre.'),
           h('li', null, icon('paw'), ' Croissant a choisi sa chaise.'),
           h('li', null, icon('bulb'), ' Petites ampoules : garde les points de grammaire.'),
@@ -19299,7 +19501,7 @@ function getLang(ls, id) {
       openChapter('d' + plan.day); return;
     }
     if (plan.next === 'desk') {
-      if (plan.day === 8 || plan.day === 9) { ui.hubDay = plan.day; ui.cid = 'd' + plan.day; enterHub(); return; }
+      if (plan.day === 8 || plan.day === 9 || plan.day === 10) { ui.hubDay = plan.day; ui.cid = 'd' + plan.day; enterHub(); return; }
       openLetter(plan.day); return;
     }
     if (ritualDue(plan)) { openRitual(plan.day); return; }
@@ -19995,6 +20197,11 @@ function getLang(ls, id) {
   }
   function healthText(st) {
     if (!st) return '';
+    if (garden() && garden().v >= 3) {
+      if (st.health === 'dormant') return Z('它在睡觉。浇水就能醒来。复习记录都还在。', 'It is asleep. Water brings it back. Your reviews are kept.');
+      if (st.health === 'wilted' || st.health === 'yellow') return Z('它有点渴。', 'It is thirsty.');
+      return st.wateredToday ? Z('精神很好，今天已经浇过水。', 'Healthy, and watered today.') : Z('精神很好。今天还没浇水。', 'Healthy. Not watered yet today.');
+    }
     if (st.health === 'dead') return Z('枯死了（连续 7 天没有浇水）。救不回来了，但所有复习记录都还在。', 'Dead (7 days without water). It can’t be saved, but all your review records are kept.');
     if (st.health === 'wilted') return Z('枯萎了：' + st.missed + ' 天没浇水。再过 ' + st.daysToDeath + ' 天不浇就会死。今天复习一下就能救活。', 'Wilted: ' + st.missed + ' days without water. ' + st.daysToDeath + ' more and it dies. A review today saves it.');
     if (st.health === 'yellow') return Z('叶子有点黄：昨天没浇水。今天复习就会好起来。', 'Yellow leaves: no water yesterday. A review today brings it back.');
@@ -20035,9 +20242,20 @@ function getLang(ls, id) {
         h('div', { class: 'muted', id: 'plantHealth', text: healthText(st) })));
   }
   function beginReview(opts) {
-    A411.Learn.startSession(learnState, A411.Deck, new Date(), opts || null);
+    opts = opts || null;
+    A411.Learn.startSession(learnState, A411.Deck, new Date(), opts && opts.pot ? null : opts);
+    if (opts && opts.pot && learnState.session && A411.Pots && A411.Pots.BY_N[opts.pot]) {
+      var ids = {};
+      A411.Pots.BY_N[opts.pot].items.forEach(function (it) {
+        ids[it.id] = 1;
+        (it.deck || []).forEach(function (id) { ids[id] = 1; });
+      });
+      learnState.session.queue = learnState.session.queue.filter(function (q) { return ids[q.itemId]; });
+      learnState.session.index = 0;
+      if (!learnState.session.queue.length) learnState.session = null;
+    }
     saveLearn();
-    if (!learnState.session) { if (!(opts && opts.only)) waterToday('checkin'); else toast(Z('现在没有要复习的生词。', 'No wordbook cards due right now.')); render(); return; }
+    if (!learnState.session || learnState.session.active === false) { if (!(opts && (opts.only || opts.pot))) waterToday('checkin'); else toast(Z('现在没有要复习的生词。', 'No wordbook cards due right now.')); render(); return; }
     ui.view = 'study'; render();
   }
 
@@ -20054,6 +20272,8 @@ function getLang(ls, id) {
     /*<D7>*/ 7: { fr: 'Samedi soir. Croissant dort entre les plantes. La nouvelle plante fleurit. Bienvenue chez toi, Croissant.', zh: '星期六晚上。Croissant 睡在两盆植物中间。新的那盆开花了。欢迎回家，Croissant。', en: 'Saturday night. Croissant sleeps between the plants. The new plant is flowering. Welcome home, Croissant.', sfx: ['purr'] }, /*</D7>*/
     8: { fr: 'Deux pots sur la table. Croissant sent le basilic. Sur un papier' + NB + ': « 18 h ».', zh: '桌上两盆。Croissant 闻着罗勒。纸条上写着：「18 h」。', en: 'Two pots on the table. Croissant sniffs the basil. On a slip of paper: « 18 h ».', sfx: ['meow'] },
     9: { fr: 'La nuit. En haut, Croissant dort sur le canapé. En bas, quatre assiettes. Sur le frigo' + NB + ': « Jeudi ».', zh: '夜里。楼上，Croissant 睡在沙发上。楼下，四个盘子。冰箱上写着：「星期四」。', en: 'Night. Upstairs, Croissant sleeps on the sofa. Downstairs, four plates. On the fridge: « Thursday ».', sfx: ['purr'] },
+    10: A411.Day10 ? A411.Day10.RITUAL : { fr: 'La nuit, sur le toit.', zh: '夜里，楼顶上。', en: 'Night, on the roof.', sfx: ['purr'] },
+    12: A411.Day12 ? A411.Day12.EVE : { fr: 'La nuit. Le basilic, sous la lune.', zh: '夜里。月光下的罗勒。', en: 'Night. The basil under the moon.', sfx: ['purr'] },
     6: { fr: 'Ce soir, Noé ferme la porte à clé. Clic' + NB + '! Croissant dort dans son panier. Demain, dix heures…', zh: '今晚，Noé 把门锁上了。咔哒！Croissant 在自己的窝里睡着了。明天，十点……', en: 'Tonight, Noé locks the door. Click! Croissant is asleep in his basket. Tomorrow, ten o’clock…', sfx: ['click', 'purr'] },
   };
   function openRitual(n) { Au.stop(); ui.view = 'ritual'; ui.ritual = { n: n, phase: 'building', at: Date.now() }; ui.zoom = null; render(); }
@@ -20076,6 +20296,14 @@ function getLang(ls, id) {
       return;
     }
     if (R0.phase === 'anim') {
+      if (n >= 10) {
+        wrap.appendChild(rooftopPlaceholder({ night: true, planted: true, watered: n === 10, chairCat: n === 10 }));
+        wrap.appendChild(h('div', { class: 'narr' }, richFr(txt.fr, 'fr narr-fr'), h('div', { class: 'narr-tools' }, sayBtn(txt.fr, { id: 'ritualSay', ctx: 'ritual' }), qHelp(function () { return Z(txt.zh, txt.en); }, { id: 'ritualQ' }))));
+        wrap.appendChild(h('div', { class: 'row' }, skip('bravo')));
+        $screen.appendChild(wrap);
+        R0.t = setTimeout(function () { if (ui.ritual === R0) ritualNext('bravo'); }, rm ? 1200 : 2800);
+        return;
+      }
       var cw = h('div', { class: 'stage-wrap' });
       var c = h('canvas', { class: 'stage', width: Art.W, height: Art.H, role: 'img', 'aria-label': txt.fr, id: 'ritualCanvas' });
       cw.appendChild(c); wrap.appendChild(cw);
@@ -20110,8 +20338,8 @@ function getLang(ls, id) {
       h('p', { class: 'muted', text: Z('今天的主线完成了。下面都是可选的：', 'Today’s main path is done. Everything below is optional:') }));
     if (pl.early) menu.appendChild(h('p', { class: 'muted small', id: 'bravoTomorrow' }, h('span', { lang: 'fr', text: 'La suite est prête. Maintenant, ou demain' + NB + '? ' }),
       h('span', { text: Z('（下一章随时可以开始；每天一章，复习更有时间沉淀。）', '(The next chapter is open any time; one a day gives reviews time to settle.)') })));
-    if (gst && gst.health === 'dead') menu.appendChild(frBtn('Replanter', Z('种一盆新的植物', 'plant a new one'), function () { openDesk('plant'); }, '', { id: 'btnAfterReplant' }));
-    else if (gst && !gst.wateredToday) menu.appendChild(frBtn('Arroser la plante', Z('复习 = 浇水（保持连续天数）', 'review = watering (keeps your streak)'), function () { openDesk('plant'); }, 'primary', { id: 'btnAfterPlant' }));
+    if (gst && gst.health === 'dead') menu.appendChild(frBtn('Replanter', Z('种一盆新的植物', 'plant a new one'), function () { openGarden(); }, '', { id: 'btnAfterReplant' }));
+    else if (gst && !gst.wateredToday) menu.appendChild(frBtn('Arroser la plante', Z('复习 = 浇水（保持连续天数）', 'review = watering (keeps your streak)'), function () { openGarden(); }, 'primary', { id: 'btnAfterPlant' }));
     else if (gst) menu.appendChild(h('div', { class: 'banner ok', id: 'afterWatered', text: Z('✓ 今天已经浇过水了。', '✓ Watered today.') }));
     if (weekDone()) menu.appendChild(frBtn('Récap de la semaine 1', Z('回顾这一周', 'look back on the week'), openRecap, 'primary', { id: 'btnAfterRecap' }));
     // v0.9.2 hub: charming pixel tiles (icon + one short word), everything visible, no « Plus ».
@@ -20126,7 +20354,7 @@ function getLang(ls, id) {
     if (S.week && S.week.letterSeen) tiles.appendChild(tile('btnAfterTraces', 'paw', 'Traces', Z('看看屋里还剩哪些痕迹', 'see which traces are left'), openArc, 't-moss'));
     tiles.appendChild(tile('btnAfterHome', 'home', 'Accueil', Z('回到首页', 'back to the home screen'), function () {
       var n = ui.ritual && ui.ritual.n;
-      if (n === 8 || n === 9) { ui.hubDay = n; ui.cid = 'd' + n; enterHub(); return; }
+      if (n === 8 || n === 9 || n === 10) { ui.hubDay = n; ui.cid = 'd' + n; enterHub(); return; }
       goTitle();
     }, 't-grey'));
     tiles.appendChild(tile('btnAfterFeedback', 'ask', 'Note', Z('写一条笔记（可选）', 'leave a note (optional)'), openFeedback, 't-grey'));
@@ -20140,13 +20368,20 @@ function getLang(ls, id) {
   }
 
   // ---------- « Au bureau »: the desk, with the plant beside it ----------
-  function openDesk(focus) { Au.stop(); ui.view = 'desk'; ui.deskFocus = focus || null; render(); }
+  function openDesk(focus) {
+    Au.stop();
+    if (focus === 'plant' && roofGardenOpen()) { ui.view = 'pots'; ui.pot = null; render(); return; }
+    ui.view = 'desk'; ui.deskFocus = focus || null; render();
+  }
   function renderDesk() {
     $where.textContent = 'Au bureau' + verBit();
     var st = gardenStatus(), plan = currentPlan();
     $screen.appendChild(stage('diary', { watered: !!(st && st.wateredToday), cat: !!(S && S.world.facts.catInApartment), alt: Z('书桌，旁边是你的植物', 'The desk, with your plant beside it') }));
     var card = h('div', { class: 'card fade-in', id: 'deskView' }, h('h2', { lang: 'fr', text: '' + A411.Letters.DESK_TITLE }));
-    if (st) {
+    if (st && roofGardenOpen()) {
+      card.appendChild(h('p', { lang: 'fr', id: 'roofGardenNote', text: 'Le jardin est sur le toit. La plante de Madame Martin reste sur le bureau.' }));
+      card.appendChild(frBtn('Le jardin', Z('楼顶上的五盆', 'the five pots on the roof'), function () { openGarden(); }, 'primary', { id: 'btnRoofGarden' }));
+    } else if (st) {
       var dead = st.health === 'dead';
       var q = queueNow();
       var startWater = function () { if (dead) return; if (q.queue.length) beginReview(null); else { waterToday('checkin'); render(); } };
@@ -20222,7 +20457,7 @@ function getLang(ls, id) {
       openJournal(day);
       return;
     }
-    if (kind === 'plant') { openDesk('plant'); return; }
+    if (kind === 'plant') { openGarden(); return; }
     if (kind === 'box') {
       var today = todayKey();
       var hit = (S.week && S.week.cleared || []).filter(function (c) { return c && c.day === today; })[0];
@@ -20257,7 +20492,8 @@ function getLang(ls, id) {
   function onHubHook(detail) {
     if (ui.view !== 'hub' || !S || !A411.HubStory) return;
     var HS = A411.HubStory;
-    var act = HS.action(ui.hubDay, hubBeats(), detail, HS.roomKey(window.Hub && Hub.roomId ? Hub.roomId() : 'apt'));
+    var room = ui.hubRoom || HS.roomKey(window.Hub && Hub.roomId ? Hub.roomId() : 'apt');
+    var act = HS.action(ui.hubDay, hubBeats(), detail, room);
     if (!act) return;
     if (act.rattle) { rattleLocked(); return; }
     if (act.optional) { noteHubBeat(ui.cid, act.optional); render(); return; }
@@ -20276,6 +20512,13 @@ function getLang(ls, id) {
     var HS = A411.HubStory;
     var gst = gardenStatus();
     var spec = HS.view(day, hubBeats(), { d8_plante: choiceVal('d8_plante') }, { plantHealthy: !!(gst && gst.wateredToday), transit: ui.transit === 'd9_I' });
+    ui.hubRoom = spec.room;
+    if (spec.room === 'rooftop') {
+      if (mount) mount.hidden = true;
+      var beats = hubBeats();
+      $screen.appendChild(rooftopPlaceholder({ planted: beats.indexOf('d10_plant') >= 0, watered: beats.indexOf('d10_water') >= 0 }));
+      return;
+    }
     var urls = { apt: 'room.json', stairwell: 'stairwell.json', lefevre: 'lefevre.json' };
     ui.hubGen = (ui.hubGen || 0) + 1;
     var gen = ui.hubGen;
@@ -20362,7 +20605,7 @@ function getLang(ls, id) {
     if (cid !== 'letter' && !w.letterSeen) { ui.afterLetter = cid; cid = 'letter'; }
     WL.startChapter(S, cid, new Date());
     persist('chapter-start');
-    if (cid === 'd8' || cid === 'd9') { ui.hubDay = chDay(cid); ui.cid = cid; enterHub(); return; }
+    if (cid === 'd8' || cid === 'd9' || cid === 'd10') { ui.hubDay = chDay(cid); ui.cid = cid; enterHub(); return; }
     ui.view = 'chapter'; ui.cid = cid; ui.gesture = true; ui.line = null; ui.trial = null; ui.wk = null;
     render();
   }
@@ -20695,7 +20938,7 @@ function getLang(ls, id) {
     var cur = steps[c.step];
     var i = c.step + 1;
     while (i < steps.length && !stepVisible(steps[i])) i++;
-    if (cur && cur.beat && (ui.cid === 'd8' || ui.cid === 'd9') && (i >= steps.length || !steps[i] || steps[i].beat !== cur.beat)) {
+    if (cur && cur.beat && (ui.cid === 'd8' || ui.cid === 'd9' || ui.cid === 'd10') && (i >= steps.length || !steps[i] || steps[i].beat !== cur.beat)) {
       noteHubBeat(ui.cid, cur.beat);
       ui.hubDay = chDay(ui.cid);
       enterHub();
@@ -20748,7 +20991,7 @@ function getLang(ls, id) {
     var s = ui.line, ln = wLine(lineId);
     if (isReplay) { s.replays++; S.learning.helpLog.push({ kind: 'replay', context: ui.cid + '.' + chState().step, target: ln.target || null, at: L.nowISO() }); }
     var stEl = document.getElementById('audioState'); if (stEl) stEl.textContent = '…';
-    return Au.playLine(lineId, (ln.tts || ln.fr).replace(/\u00A0/g, ' '), { speaker: ln.speaker }).then(function (res) {
+    return Au.playLine(lineId, (ln.tts || ln.fr).replace(/[\u00A0\u202F]/g, ' '), { speaker: ln.speaker }).then(function (res) {
       setAudioMeta();
       if (res === 'played' || (!s.voiceInfo && res === 'failed')) s.voiceInfo = Au.last;
       s.audio = bestAudio(s.audio === 'pending' ? 'not_used' : s.audio, res);
@@ -21150,7 +21393,7 @@ function getLang(ls, id) {
     return box;
   }
   WR.done = function (st, c, ch) {
-    if ((ui.cid === 'd8' || ui.cid === 'd9') && st.beat) noteHubBeat(ui.cid, st.beat);
+    if ((ui.cid === 'd8' || ui.cid === 'd9' || ui.cid === 'd10') && st.beat) noteHubBeat(ui.cid, st.beat);
     var first = c.status !== 'complete';
     if (first) {
       WL.completeChapter(S, ui.cid, new Date());
@@ -22125,6 +22368,7 @@ function getLang(ls, id) {
     learnState = lr.learn || A411.Learn.emptyLearn(id, new Date());
     try { var mv = A411.Learn.migrateV04(lr.learn ? localStorage : null, learnState, new Date(), A411.Deck); if (mv.changed || !lr.learn) saveLearn(); } catch (e) {}
     try { var gr = A411.Learn.ensureGarden(localStorage, learnState, S, new Date()); if (gr.changed || !lr.learn) saveLearn(); } catch (e) { if (!lr.learn) saveLearn(); }
+    try { if (A411.Pots) A411.Pots.bind(function () { return learnState; }); } catch (e) {}
     // v0.9.2: traces follow the story, not real dates — recompute old saves once (backup first)
     if (S && S.week && S.week.traceRule !== 'story') {
       var bk92 = false; try { bk92 = !!storage.backup('pre-v0.9.2', JSON.stringify(S)); } catch (e) { bk92 = false; }
@@ -22186,7 +22430,31 @@ function getLang(ls, id) {
       navigator.serviceWorker.register('sw.js?v=' + encodeURIComponent(L.APP_VERSION)).catch(function () {});
     } catch (e) {}
   }
+  function previewQuery() {
+    var q;
+    try { q = new URLSearchParams(location.search); } catch (e) { return null; }
+    var kind = q.get('preview');
+    if (kind !== 'rooftop' && kind !== 'pots') return null;
+    return q;
+  }
+  function bootPreview(q) {
+    S = L.newSave({ reducedMotion: true, now: new Date() });
+    S.settings.reducedMotion = true;
+    learnState = A411.Learn.emptyLearn('jinyi', new Date());
+    profileId = 'jinyi';
+    if (A411.Pots) A411.Pots.bind(function () { return learnState; });
+    if (q.get('preview') === 'pots') {
+      A411.Pots.fillPreview(learnState, q.get('leaves') || 'full');
+      ui.view = 'pots';
+    } else ui.view = 'rooftop';
+    $topbar.hidden = false;
+    applySettings();
+    render();
+  }
   function boot() {
+    try { if (A411.installStory) A411.installStory(); } catch (e) {}
+    var pq = previewQuery();
+    if (pq) { bootPreview(pq); return; }
     initStorage();
     initSync();
     registerSW();
