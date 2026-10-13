@@ -26,17 +26,17 @@ Leaves follow the mean FSRS retrievability `R` of the pot’s unlocked items. `R
 
 `R = 0.9` is full. `R = 0.85` is steady. `R = 0.5` is still wilting, because dormant starts below 0.5.
 
-The stem follows the median stability `S` of unlocked items. The v2 sprites have four heights (`stem_1` … `stem_4`): stage 1 when `S < 2`, stage 2 when `S < 7`, stage 3 when `S < 21`, and stage 4 otherwise. Roots follow how many distinct scenes those words have been met in: none below 1, `roots_1` below 2, `roots_2` below 4, and `roots_3` from 4 up. Both are visual only. The screen never shows `R`, `S`, or a score.
+The stem follows the median stability `S` of unlocked items. The sprites have four heights (`stem_1` … `stem_4`): stage 1 when `S < 2`, stage 2 when `S < 7`, stage 3 when `S < 21`, and stage 4 otherwise. The leaf file uses that same stage. Roots follow how many distinct scenes those words have been met in: none below 1, `roots_1` below 2, `roots_2` below 4, and `roots_3` from 4 up. Both are visual only. The screen never shows `R`, `S`, or a score.
 
 Steady leaves use the full leaf sprite. The pack has drawings for full, wilting and dormant, and the steady caption stays « Elle tient. ». Wilting uses the drooping stem. Dormant is a bare stem with one bud. A missed answer swaps in `leaves_flash_N` for a moment.
 
 ## Art
 
-Pixel Studio’s garden v2 lives in `art/garden/` (`manifest.json` is the source of positions). Parts are a 24×66 canvas, drawn at 96×264 with the pivot (12, 66) on the pot-bottom centres (39, 720), (117, 720), (195, 720), (273, 720) and (351, 720). The canvas top-lefts are (−9, 456), (69, 456), (147, 456), (225, 456) and (303, 456). Scaling is nearest-neighbour.
+Pixel Studio’s garden v1 lives in `art/garden/`. `manifest.json` is the source of part sizes, prop anchors, and the five slot positions. Parts share an 18×52 canvas, drawn at 72×208 with nearest-neighbour scaling. The pivot (9, 52) sits on the pot-bottom centres (39, 720), (117, 720), (195, 720), (273, 720) and (351, 720). Layers are `pot_back`, then `roots_1`–`roots_3`, then the stem, then the leaves of the same stage, then `pot_front`. Labels are Noto Sans in each slot’s label area, from y = 740.
 
-At night the background is `garden_bg_night_390x844.png` and the pot stack is multiplied by (0.62, 0.55, 0.62). Labels stay in each slot’s `label_area` and are shifted up with the frame so they clear the wordbook and speaker buttons. The typeface is Noto Sans.
+The five-pot screen uses `garden_bg_390x844.png`. This pack has no night plate for that screen. A later manifest can name `garden_bg_night` and a `pot_tint_multiply_rgb`, and the painter will use them.
 
-The rooftop scenes are the precomposed `rooftop_{day,night}_{firstvisit,tidy}.png` files. Prop hit targets use `manifest.rooftop.scenes`. `rooftop/walkable.json` is a 12×16 grid (12 columns, 16 rows) with entry tile (15, 5), the left half of the hatch. That grid samples props too thinly, so `GardenArt.correctWalkable` blocks the rest of the chair, the sign and the watering can. The entry stays (15, 5) because that tile touches the door. Croissant has no sprite in this pack.
+The rooftop backgrounds are `rooftop_day.png` and `rooftop_night.png` (192×256). Props are drawn on top from bottom-centre anchors. The first visit and the tidy roof are placed in `GardenArt.ROOF_LAYOUT` until the manifest grows a `rooftop.scenes` table and composed files (`rooftop_day_firstvisit`, `rooftop_night_tidy`, and the other two). A composed file replaces the code placement for that scene. Walkable tiles are y ≥ 96 and x 4..187. Props block their tiles, and the hatch at (84, 236) stays open. The entry is (15, 5), the left tile of that door. A shipped `rooftop/walkable.json` replaces the generated grid. Croissant has no sprite in this pack. The wood sign is blank.
 
 A failed recall (FSRS grade 1, Again) turns one leaf yellow for a moment and says « On l’arrose bientôt. » There is no red X on the garden.
 

@@ -18,17 +18,10 @@
   "wood_sign": "props/wood_sign.png",
   "watering_can": "props/watering_can.png",
   "weeds": "props/weeds.png",
-  "rooftop_day_firstvisit": "rooftop/rooftop_day_firstvisit.png",
-  "rooftop_night_firstvisit": "rooftop/rooftop_night_firstvisit.png",
-  "rooftop_day_tidy": "rooftop/rooftop_day_tidy.png",
-  "rooftop_night_tidy": "rooftop/rooftop_night_tidy.png",
-  "rooftop_walkable": "rooftop/walkable.json",
   "garden_bg": "garden_screen/garden_bg_390x844.png",
-  "garden_bg_night": "garden_screen/garden_bg_night_390x844.png",
   "demo_full": "garden_screen/demo_full.png",
   "demo_mixed": "garden_screen/demo_mixed.png",
-  "demo_dormant": "garden_screen/demo_dormant.png",
-  "demo_mixed_night": "garden_screen/demo_mixed_night.png"
+  "demo_dormant": "garden_screen/demo_dormant.png"
  },
  "rooftop": {
   "size": [
@@ -84,139 +77,7 @@
     99
    ]
   ],
-  "night": "baked D-style (cool [0.26,0.29,0.45] + warm [0.95,0.70,0.36], cap 1.2); warm pools centred 9px below each bulb, sigma 9x7",
-  "scenes": {
-   "firstvisit": {
-    "pot_dry_1@0": {
-     "bottom_center": [
-      28,
-      112
-     ]
-    },
-    "pot_dry_2@1": {
-     "bottom_center": [
-      46,
-      112
-     ]
-    },
-    "pot_dry_3@2": {
-     "bottom_center": [
-      64,
-      112
-     ]
-    },
-    "pot_dry_4@3": {
-     "bottom_center": [
-      82,
-      112
-     ]
-    },
-    "pot_dry_5@4": {
-     "bottom_center": [
-      100,
-      112
-     ]
-    },
-    "pot_dry_6@5": {
-     "bottom_center": [
-      118,
-      112
-     ]
-    },
-    "old_chair@0": {
-     "bottom_center": [
-      156,
-      140
-     ]
-    },
-    "weeds@0": {
-     "bottom_center": [
-      40,
-      170
-     ]
-    },
-    "weeds@1": {
-     "bottom_center": [
-      140,
-      206
-     ]
-    },
-    "weeds@2": {
-     "bottom_center": [
-      70,
-      128
-     ]
-    },
-    "wood_sign@0": {
-     "bottom_center": [
-      150,
-      112
-     ]
-    },
-    "watering_can@0": {
-     "bottom_center": [
-      30,
-      214
-     ]
-    }
-   },
-   "tidy": {
-    "basil_planted@0": {
-     "bottom_center": [
-      28,
-      112
-     ]
-    },
-    "basil_planted@1": {
-     "bottom_center": [
-      46,
-      112
-     ]
-    },
-    "basil_planted@2": {
-     "bottom_center": [
-      64,
-      112
-     ]
-    },
-    "basil_planted@3": {
-     "bottom_center": [
-      82,
-      112
-     ]
-    },
-    "basil_planted@4": {
-     "bottom_center": [
-      100,
-      112
-     ]
-    },
-    "pot_empty@0": {
-     "bottom_center": [
-      118,
-      112
-     ]
-    },
-    "old_chair@0": {
-     "bottom_center": [
-      156,
-      140
-     ]
-    },
-    "wood_sign@0": {
-     "bottom_center": [
-      150,
-      112
-     ]
-    },
-    "watering_can@0": {
-     "bottom_center": [
-      138,
-      112
-     ]
-    }
-   }
-  }
+  "night": "baked D-style (cool [0.26,0.29,0.45] + warm [0.95,0.70,0.36], cap 1.2)"
  },
  "props": {
   "pot_dry_1": {
@@ -341,34 +202,32 @@
   }
  },
  "garden_parts": {
-  "version": 2,
   "canvas_native": [
-   24,
-   66
+   18,
+   52
   ],
   "scale_to_pt": 4,
   "canvas_pt": [
-   96,
-   264
+   72,
+   208
   ],
   "pivot_native": [
-   12,
-   66
-  ],
-  "v1_to_v2": "canvas grew 18x52 -> 24x66 (72x208 -> 96x264 pt); pivot = pot base centre, so slot anchor_pt is unchanged; canvas_topleft_pt changed",
-  "pivot_note": "all parts share one canvas; place canvas so pivot (pot base centre) lands on the slot anchor",
-  "soil_top_native": 44,
-  "stem_heights_native": [
    9,
-   16,
-   24,
-   31
+   52
   ],
-  "root_strands": {
-   "1": 1,
-   "2": 2,
-   "3": 4
-  },
+  "pivot_note": "all parts share one canvas; place canvas so pivot (pot base centre) lands on the slot anchor",
+  "soil_top_native": 30,
+  "stem_heights_native": [
+   6,
+   11,
+   16,
+   21
+  ],
+  "root_lengths_native": [
+   5,
+   10,
+   16
+  ],
   "z_order": [
    "pot_back",
    "roots_{1..3}",
@@ -379,8 +238,8 @@
   "states": {
    "full": "stem_N + leaves_full_N",
    "wilting": "stem_wilting_N + leaves_wilting_N",
-   "dormant": "stem_dormant_N + leaves_dormant_N (bare stem + bud, never dead)",
-   "flash": "stem_N + leaves_flash_N for ~250 ms on a missed answer, then back"
+   "dormant": "stem_dormant_N + leaves_dormant_N (bare stem, never dead)",
+   "flash": "leaves_flash_N swapped in for ~250 ms on a missed answer, then back"
   },
   "leaves_index_must_match_stem_index": true,
   "files": {
@@ -390,29 +249,29 @@
    "roots_2": "garden_parts/roots_2.png",
    "roots_3": "garden_parts/roots_3.png",
    "stem_1": "garden_parts/stem_1.png",
-   "stem_wilting_1": "garden_parts/stem_wilting_1.png",
+   "stem_2": "garden_parts/stem_2.png",
+   "stem_3": "garden_parts/stem_3.png",
+   "stem_4": "garden_parts/stem_4.png",
    "stem_dormant_1": "garden_parts/stem_dormant_1.png",
+   "stem_wilting_1": "garden_parts/stem_wilting_1.png",
    "leaves_full_1": "garden_parts/leaves_full_1.png",
    "leaves_wilting_1": "garden_parts/leaves_wilting_1.png",
    "leaves_dormant_1": "garden_parts/leaves_dormant_1.png",
    "leaves_flash_1": "garden_parts/leaves_flash_1.png",
-   "stem_2": "garden_parts/stem_2.png",
-   "stem_wilting_2": "garden_parts/stem_wilting_2.png",
    "stem_dormant_2": "garden_parts/stem_dormant_2.png",
+   "stem_wilting_2": "garden_parts/stem_wilting_2.png",
    "leaves_full_2": "garden_parts/leaves_full_2.png",
    "leaves_wilting_2": "garden_parts/leaves_wilting_2.png",
    "leaves_dormant_2": "garden_parts/leaves_dormant_2.png",
    "leaves_flash_2": "garden_parts/leaves_flash_2.png",
-   "stem_3": "garden_parts/stem_3.png",
-   "stem_wilting_3": "garden_parts/stem_wilting_3.png",
    "stem_dormant_3": "garden_parts/stem_dormant_3.png",
+   "stem_wilting_3": "garden_parts/stem_wilting_3.png",
    "leaves_full_3": "garden_parts/leaves_full_3.png",
    "leaves_wilting_3": "garden_parts/leaves_wilting_3.png",
    "leaves_dormant_3": "garden_parts/leaves_dormant_3.png",
    "leaves_flash_3": "garden_parts/leaves_flash_3.png",
-   "stem_4": "garden_parts/stem_4.png",
-   "stem_wilting_4": "garden_parts/stem_wilting_4.png",
    "stem_dormant_4": "garden_parts/stem_dormant_4.png",
+   "stem_wilting_4": "garden_parts/stem_wilting_4.png",
    "leaves_full_4": "garden_parts/leaves_full_4.png",
    "leaves_wilting_4": "garden_parts/leaves_wilting_4.png",
    "leaves_dormant_4": "garden_parts/leaves_dormant_4.png",
@@ -438,12 +297,12 @@
      720
     ],
     "canvas_topleft_pt": [
-     -9,
-     456
+     3,
+     512
     ],
     "canvas_size_pt": [
-     96,
-     264
+     72,
+     208
     ],
     "safe_rect_pt": [
      0,
@@ -465,12 +324,12 @@
      720
     ],
     "canvas_topleft_pt": [
-     69,
-     456
+     81,
+     512
     ],
     "canvas_size_pt": [
-     96,
-     264
+     72,
+     208
     ],
     "safe_rect_pt": [
      78,
@@ -492,12 +351,12 @@
      720
     ],
     "canvas_topleft_pt": [
-     147,
-     456
+     159,
+     512
     ],
     "canvas_size_pt": [
-     96,
-     264
+     72,
+     208
     ],
     "safe_rect_pt": [
      156,
@@ -519,12 +378,12 @@
      720
     ],
     "canvas_topleft_pt": [
-     225,
-     456
+     237,
+     512
     ],
     "canvas_size_pt": [
-     96,
-     264
+     72,
+     208
     ],
     "safe_rect_pt": [
      234,
@@ -546,12 +405,12 @@
      720
     ],
     "canvas_topleft_pt": [
-     303,
-     456
+     315,
+     512
     ],
     "canvas_size_pt": [
-     96,
-     264
+     72,
+     208
     ],
     "safe_rect_pt": [
      312,
@@ -567,15 +426,6 @@
     ]
    }
   ],
-  "night": {
-   "bg": "garden_screen/garden_bg_night_390x844.png",
-   "pot_tint_multiply_rgb": [
-    0.62,
-    0.55,
-    0.62
-   ],
-   "note": "at night draw the pot stack, then multiply by pot_tint_multiply_rgb (demo_mixed_night does this)"
-  },
-  "note": "pot canvases (96 pt wide) overlap neighbours by 9 pt each side, transparent; visible plant stays inside the 78 pt slot. Labels: Noto Sans, code-drawn, in label_area"
+  "note": "pot canvases span y 512..720 pt; labels (Noto Sans, code-drawn) go in label_area under the shelf, within the 810 safe bottom"
  }
 }

@@ -347,7 +347,7 @@ body.garden-fixed .screen { flex: 1; min-height: 0; padding: 0; overflow: hidden
 .rooftop { position: relative; margin: 0; flex: 1; min-height: 0; background: #c4b49a; overflow: hidden; }
 .rooftop.night { background: #1b2438; color: #f6f1e7; }
 .roof-frame { position: relative; width: 100%; max-width: 480px; margin: 0 auto; }
-.roof-frame img { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
+.roof-frame img, .roof-frame canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
 .roof-hit { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; color: transparent; font-size: 0; }
 .roof-light { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #6fcf97; right: 18%; top: 28%; box-shadow: 0 0 0 3px #6fcf9733; }
 .pot-screen { position: relative; flex: 1; min-height: 0; width: 100%; overflow: hidden; background: #9bb4c8; }
@@ -19144,13 +19144,16 @@ function getLang(ls, id) {
   }
   function loadGardenPack() {
     if (!gardenPack) {
-      gardenPack = Promise.all([
-        fetch('art/garden/manifest.json').then(function (r) { return r.json(); }),
-        fetch('art/garden/rooftop/walkable.json').then(function (r) { return r.json(); })
-      ]).then(function (xs) {
-        var fixed = A411.GardenArt.correctWalkable(xs[1], xs[0]);
-        A411.walkableRoof = fixed;
-        return { manifest: xs[0], walkable: fixed };
+      gardenPack = fetch('art/garden/manifest.json').then(function (r) { return r.json(); }).then(function (manifest) {
+        return fetch('art/garden/rooftop/walkable.json').then(function (r) {
+          if (!r.ok) return null;
+          return r.json();
+        }, function () { return null; }).then(function (shipped) {
+          var walk = shipped || A411.GardenArt.baseWalkable(manifest);
+          var fixed = A411.GardenArt.correctWalkable(walk, manifest);
+          A411.walkableRoof = fixed;
+          return { manifest: manifest, walkable: fixed };
+        });
       });
     }
     return gardenPack;
@@ -19188,24 +19191,33 @@ function getLang(ls, id) {
       'data-scene': scene, 'data-night': night ? '1' : '0'
     });
     var frame = h('div', { class: 'roof-frame' });
-    var img = h('img', { alt: night ? 'Le toit, la nuit' : 'Le toit, le jour', width: '192', height: '256' });
-    frame.appendChild(img);
+    var canvas = h('canvas', { id: 'roofCanvas', width: '192', height: '256' });
+    frame.appendChild(canvas);
     box.appendChild(frame);
     loadGardenPack().then(function (pack) {
       if (!box.isConnected) return;
       var GA = A411.GardenArt;
       var man = pack.manifest;
-      img.src = GA.roofSrc(scene, night);
+      var props = GA.sceneProps(man, scene, st);
+      var composed = GA.composedSrc(man, scene, night);
+      var bg = composed || GA.roofBg(man, night);
+      box.setAttribute('data-bg', bg);
+      box.setAttribute('data-composed', composed ? '1' : '0');
       var entry = pack.walkable.entry_tile;
       box.setAttribute('data-entry', entry[0] + ',' + entry[1]);
-      var props = man.rooftop.scenes[scene] || {};
       var keys = Object.keys(props).sort(function (a, b) {
         return props[a].bottom_center[1] - props[b].bottom_center[1];
       });
+      var srcs = [bg];
       keys.forEach(function (key) {
         var base = key.split('@')[0];
         var prop = man.props[base];
         if (!prop) return;
+        var file = man.files[base];
+        if (!composed && file) {
+          var src = 'art/garden/' + file;
+          if (srcs.indexOf(src) < 0) srcs.push(src);
+        }
         var rect = GA.propRect(prop, props[key].bottom_center);
         var attr = base.indexOf('pot_dry') === 0 ? 'pot_dry' : base;
         var plantTarget = scene === 'firstvisit' && !st.planted && key === 'pot_dry_2@1';
@@ -19217,9 +19229,26 @@ function getLang(ls, id) {
         if (base === 'watering_can') el.addEventListener('click', function () { onHubHook({ id: 'watering_can', object: 'watering_can' }); });
         frame.appendChild(el);
       });
-      function mark() { if (box.isConnected) box.setAttribute('data-ready', '1'); }
-      if (img.complete && img.naturalWidth) mark();
-      else img.addEventListener('load', mark, { once: true });
+      whenImages(srcs, function () {
+        if (!box.isConnected) return;
+        var ctx = canvas.getContext('2d');
+        crisp(ctx);
+        var bgIm = gardenImg(bg);
+        if (bgIm.naturalWidth) ctx.drawImage(bgIm, 0, 0, 192, 256);
+        if (!composed) {
+          keys.forEach(function (key) {
+            var base = key.split('@')[0];
+            var prop = man.props[base];
+            var file = man.files[base];
+            if (!prop || !file) return;
+            var im = gardenImg('art/garden/' + file);
+            if (!im.naturalWidth) return;
+            var rect = GA.propRect(prop, props[key].bottom_center);
+            ctx.drawImage(im, rect.x, rect.y);
+          });
+        }
+        box.setAttribute('data-ready', '1');
+      });
     });
     return box;
   }
@@ -19245,24 +19274,27 @@ function getLang(ls, id) {
   function paintGarden(canvas, pack, pots, night) {
     var ctx = canvas.getContext('2d');
     crisp(ctx);
-    var bg = gardenImg(A411.GardenArt.gardenBg(night));
+    var GA = A411.GardenArt;
+    var box = GA.partBox(pack.manifest);
+    var bg = gardenImg(GA.gardenBg(pack.manifest, night));
     ctx.clearRect(0, 0, 390, 844);
-    ctx.drawImage(bg, 0, 0, 390, 844);
-    var tint = pack.manifest.garden_screen.night.pot_tint_multiply_rgb;
+    if (bg.naturalWidth) ctx.drawImage(bg, 0, 0, 390, 844);
+    var nightSpec = pack.manifest.garden_screen.night;
+    var tint = night && nightSpec && nightSpec.pot_tint_multiply_rgb;
     pots.forEach(function (p, i) {
       var slot = pack.manifest.garden_screen.slots[i];
       var lapse = A411.Pots.lapseActive(learnState, p.n, new Date());
-      var names = A411.GardenArt.partNames(p, lapse);
+      var names = GA.partNames(p, lapse);
       var off = document.createElement('canvas');
-      off.width = 96; off.height = 264;
+      off.width = box.w; off.height = box.h;
       var o = off.getContext('2d');
       crisp(o);
       names.forEach(function (name) {
-        var im = gardenImg(A411.GardenArt.partSrc(name));
-        if (im.naturalWidth) o.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight, 0, 0, 96, 264);
+        var im = gardenImg(GA.partSrc(name));
+        if (im.naturalWidth) o.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight, 0, 0, box.w, box.h);
       });
-      if (night) {
-        var id = o.getImageData(0, 0, 96, 264);
+      if (tint) {
+        var id = o.getImageData(0, 0, box.w, box.h);
         var d = id.data;
         var k;
         for (k = 0; k < d.length; k += 4) {
@@ -19337,7 +19369,7 @@ function getLang(ls, id) {
     loadGardenPack().then(function (pack) {
       if (!screen.isConnected) return;
       place(pack);
-      var srcs = [A411.GardenArt.gardenBg(night)];
+      var srcs = [A411.GardenArt.gardenBg(pack.manifest, night)];
       pots.forEach(function (p) {
         var lapse = A411.Pots.lapseActive(learnState, p.n, now);
         A411.GardenArt.partNames(p, lapse).forEach(function (name) {

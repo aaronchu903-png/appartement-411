@@ -37,8 +37,8 @@ async function stemInSoil(page) {
     var ctx = canvas.getContext('2d');
     var anchors = [39, 117, 195, 273, 351];
     return anchors.every(function (x) {
-      var stem = ctx.getImageData(x + 1, 617, 1, 1).data;
-      var pot = ctx.getImageData(x + 1, 657, 1, 1).data;
+      var stem = ctx.getImageData(x, 600, 1, 1).data;
+      var pot = ctx.getImageData(x, 708, 1, 1).data;
       return stem[3] > 200 && pot[3] > 200 && pot[0] > pot[2];
     });
   });
@@ -54,8 +54,9 @@ test('rooftop first visit uses the day scene', async ({ page }) => {
   await expect(roof).toHaveAttribute('data-scene', 'firstvisit');
   await expect(roof).toHaveAttribute('data-night', '0');
   await expect(roof).toHaveAttribute('data-entry', '15,5');
-  await expect(roof.locator('img')).toHaveAttribute('src', /rooftop_day_firstvisit\.png$/);
-  const rendering = await roof.locator('img').evaluate(function (el) { return getComputedStyle(el).imageRendering; });
+  await expect(roof).toHaveAttribute('data-bg', /rooftop_day\.png$/);
+  await expect(roof).toHaveAttribute('data-composed', '0');
+  const rendering = await roof.locator('canvas').evaluate(function (el) { return getComputedStyle(el).imageRendering; });
   expect(rendering).toMatch(/pixelated|crisp-edges/);
   await expect(page.locator('[data-prop="pot_dry"]').first()).toBeVisible();
   await expect(page.locator('[data-prop="pot_empty"]')).toBeVisible();
@@ -77,7 +78,8 @@ test('tidy rooftop at night', async ({ page }) => {
   await expect(roof).toHaveAttribute('data-ready', '1');
   await expect(roof).toHaveAttribute('data-scene', 'tidy');
   await expect(roof).toHaveAttribute('data-night', '1');
-  await expect(roof.locator('img')).toHaveAttribute('src', /rooftop_night_tidy\.png$/);
+  await expect(roof).toHaveAttribute('data-bg', /rooftop_night\.png$/);
+  await expect(roof).toHaveAttribute('data-composed', '0');
   await expect(page.locator('[data-prop="weeds"]')).toHaveCount(0);
   await expect(page.locator('[data-prop="basil_planted"]').first()).toBeVisible();
   await expect(page.locator('[data-prop="watering_can"]')).toBeVisible();
@@ -128,10 +130,9 @@ test('five pots at night', async ({ page }) => {
   await onePause(page);
   await labelsClearFabs(page);
   await stemInSoil(page);
-  const darker = await page.locator('#gardenCanvas').evaluate(function (canvas) {
-    var px = canvas.getContext('2d').getImageData(39, 657, 1, 1).data;
-    return px[0] < 160;
+  const dayClay = await page.locator('#gardenCanvas').evaluate(function (canvas) {
+    var px = canvas.getContext('2d').getImageData(39, 708, 1, 1).data;
+    return px[3] > 200 && px[0] > 100 && px[0] > px[2];
   });
-  expect(darker).toBe(true);
-  await page.screenshot({ path: out + '/pots-night.png' });
+  expect(dayClay).toBe(true);
 });

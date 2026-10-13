@@ -210,28 +210,44 @@ test('Act I is five pots and 160 words, each in one pot', function () {
   assert.equal(Pots.potOfItem('il_faut_de_leau'), 0);
 });
 
-test('the rooftop walk grid blocks the props the sampler missed', function () {
+test('the v1 rooftop walk grid starts at y≥96 and blocks the placed props', function () {
   var manifest = JSON.parse(fs.readFileSync('art/garden/manifest.json', 'utf8'));
-  var walk = JSON.parse(fs.readFileSync('art/garden/rooftop/walkable.json', 'utf8'));
-  assert.deepEqual(walk.entry_tile, [15, 5]);
+  assert.deepEqual(manifest.garden_parts.canvas_native, [18, 52]);
+  assert.deepEqual(manifest.garden_parts.pivot_native, [9, 52]);
+  assert.equal(manifest.garden_parts.leaves_index_must_match_stem_index, true);
+  assert.deepEqual(manifest.garden_screen.slots.map(function (s) { return s.anchor_pt; }), [[39, 720], [117, 720], [195, 720], [273, 720], [351, 720]]);
+  assert.ok(manifest.garden_screen.slots.every(function (s) { return s.label_area_pt[1] >= 740; }));
+  assert.equal(manifest.rooftop.scenes, undefined);
+  assert.equal(GardenArt.composedSrc(manifest, 'firstvisit', false), null);
+  assert.equal(GardenArt.roofBg(manifest, false), 'art/garden/rooftop/rooftop_day.png');
+  assert.equal(GardenArt.roofBg(manifest, true), 'art/garden/rooftop/rooftop_night.png');
+  assert.equal(GardenArt.partBox(manifest).w, 72);
+  assert.equal(GardenArt.partBox(manifest).h, 208);
+  var dry = GardenArt.sceneProps(manifest, 'firstvisit', {});
+  assert.ok(dry['pot_dry_2@1']);
+  var planted = GardenArt.sceneProps(manifest, 'firstvisit', { planted: true });
+  assert.equal(planted['pot_dry_2@1'], undefined);
+  assert.deepEqual(planted['basil_planted@1'].bottom_center, dry['pot_dry_2@1'].bottom_center);
+  var walk = GardenArt.baseWalkable(manifest);
   assert.equal(walk.cols, 12);
   assert.equal(walk.rows, 16);
+  assert.deepEqual(walk.entry_tile, [15, 5]);
+  assert.equal(walk.layouts.firstvisit[5][3], 0);
+  assert.equal(walk.layouts.firstvisit[6][3], 1);
   var fixed = GardenArt.correctWalkable(walk, manifest);
   assert.equal(fixed.entryAdjusted, false);
   assert.deepEqual(fixed.entry_tile, [15, 5]);
   assert.equal(fixed.layouts.firstvisit[15][5], 1);
   assert.equal(fixed.layouts.firstvisit[15][6], 1);
-  [[6, 10], [7, 9], [7, 10], [12, 1], [12, 2]].forEach(function (cell) {
-    assert.equal(walk.layouts.firstvisit[cell[0]][cell[1]], 1, 'shipped ' + cell);
-    assert.equal(fixed.layouts.firstvisit[cell[0]][cell[1]], 0, 'fixed ' + cell);
-  });
-  [[6, 10], [7, 9], [7, 10]].forEach(function (cell) {
-    assert.equal(fixed.layouts.tidy[cell[0]][cell[1]], 0);
-  });
+  assert.equal(fixed.layouts.firstvisit[12][1], 0);
+  assert.equal(fixed.layouts.tidy[12][1], 0);
+  assert.equal(fixed.layouts.empty[12][1], 1);
+  assert.equal(fixed.layouts.tidy[10][9], 0);
+  assert.equal(fixed.layouts.empty[10][9], 1);
   assert.equal(fixed.layouts.empty[10][3], 1);
   for (var c = 0; c < 12; c++) assert.equal(fixed.layouts.firstvisit[4][c], 0);
   var door = {
-    rooftop: { door: [84, 236, 24, 20], scenes: { empty: {} } },
+    rooftop: { door: [84, 236, 24, 20] },
     props: {}
   };
   var moved = GardenArt.correctWalkable({
