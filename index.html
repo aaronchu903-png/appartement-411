@@ -24,8 +24,10 @@ body.large-text { font-size:20px; }
 .app { max-width:480px; margin:0 auto; min-height:100vh; padding-bottom:env(safe-area-inset-bottom); }
 #hubMount { position:fixed; left:0; right:0; bottom:0; top:42px; z-index:2; background:#241c18; display:flex; }
 #hubMount[hidden] { display:none !important; }
-#hubStage { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; min-width:0; }
+#hubStage { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; min-width:0; position:relative; }
 #hubCanvas { image-rendering:pixelated; image-rendering:crisp-edges; touch-action:none; }
+.hub-prompt { position:fixed; z-index:16; transform:translate(-50%, -130%); min-width:44px; min-height:44px; padding:8px 12px; border:2px solid #2a2e3a; border-radius:8px; background:#f6a54a; color:#1f1d1a; font:inherit; font-weight:700; box-shadow:0 3px 0 #2a2e3a; touch-action:manipulation; }
+.hub-prompt[hidden] { display:none !important; }
 .topbar[hidden] { display:none; }
 .topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#2a2e3a; color:#fff; }
 .topbar .where { font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1913,7 +1915,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   };
   var PEOPLE = { // sprite origins per scene (see sceneBase)
     doorway: { camille: [40, 25], noe: [50, 22] }, name: { camille: [36, 26], noe: [58, 25] }, plant: { camille: [48, 26] },
-    cat: { camille: [8, 24], noe: [36, 25] }, kitchen: { camille: [12, 24], noe: [70, 24] }
+    cat: { camille: [8, 24], noe: [36, 25], martin: [66, 25] }, kitchen: { camille: [12, 24], noe: [70, 24] }
   };
   function pad(r, p) { return [r[0] - p, r[1] - p, r[2] + 2 * p, r[3] + 2 * p]; }
   // name: a region name, a prop id present in st.props, 'camille' | 'noe', 'chat' (the cat), 'colis' (the box in the loc scene)
@@ -2204,13 +2206,14 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       room(ctx, '#e3d3c6', '#9d8064');
       door(ctx, 4, 6, st.door === 'open');
       if (st.camille) { person(ctx, 'camille', st.camille, 8, 24); if (spk === 'camille') marker(ctx, 11, 19); }
-      if (st.martin) { person(ctx, 'martin', st.martin, 70, 14); if (spk === 'martin') marker(ctx, 73, 9); } // v0.9.0: Madame Martin, behind the sofa
-      px(ctx, 52, 34, 40, 10, '#5b6fa0'); px(ctx, 52, 30, 40, 5, '#4b5d8a'); px(ctx, 50, 32, 3, 12, '#4b5d8a'); px(ctx, 91, 32, 3, 12, '#4b5d8a');
       if (st.noe) {
         var pose = st.noe;
         person(ctx, 'noe', pose, 36, 25); if (spk === 'noe') marker(ctx, 39, 20);
       }
+      px(ctx, 52, 34, 40, 10, '#5b6fa0'); px(ctx, 52, 30, 40, 5, '#4b5d8a'); px(ctx, 50, 32, 3, 12, '#4b5d8a'); px(ctx, 91, 32, 3, 12, '#4b5d8a');
       if (st.cat === 'peek') sprite(ctx, SPR.catPeek, 60, 26);
+      // Feet on the floor line, in front of the sofa (same origin row as Noé). Drawn after the sofa so she is not standing on its back.
+      if (st.martin) { person(ctx, 'martin', st.martin, 66, 25); if (spk === 'martin') marker(ctx, 69, 20); }
       if (st.cat === 'sit') sprite(ctx, SPR.cat, 52, 44);
       if (st.night) px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.45)');
       return;
@@ -17599,6 +17602,61 @@ function getLang(ls, id) {
     return { c: state.c, r: state.r };
   }
 
+  function chebyshev(a, b) {
+    return Math.max(Math.abs(a.c - b.c), Math.abs(a.r - b.r));
+  }
+
+  function activeCues() {
+    return (state && state.cues) || [];
+  }
+
+  function hotspotForCue(cue) {
+    if (!active || !cue) return null;
+    var spots = [];
+    for (var i = 0; i < active.spots.length; i++) if (spotLive(active.spots[i])) spots.push(active.spots[i]);
+    var s, a;
+    for (i = 0; i < spots.length; i++) {
+      s = spots[i];
+      for (a = 0; a < s.approach.length; a++) {
+        if (s.approach[a].c === cue.c && s.approach[a].r === cue.r) return s;
+      }
+    }
+    var cx = cue.c * tile + tile / 2, cy = cue.r * tile + tile / 2;
+    for (i = 0; i < spots.length; i++) {
+      s = spots[i];
+      var h = s.hit;
+      if (cx >= h.x && cy >= h.y && cx < h.x + h.w && cy < h.y + h.h) return s;
+    }
+    var best = null, bestD = 99;
+    for (i = 0; i < spots.length; i++) {
+      s = spots[i];
+      for (a = 0; a < s.approach.length; a++) {
+        var d = chebyshev(s.approach[a], cue);
+        if (d < bestD) { bestD = d; best = s; }
+      }
+    }
+    return bestD <= 1 ? best : null;
+  }
+
+  function cueNear(c, r) {
+    var cues = activeCues();
+    var at = { c: c, r: r };
+    for (var i = 0; i < cues.length; i++) if (chebyshev(cues[i], at) <= 1) return cues[i];
+    return null;
+  }
+
+  function maybeProxHook() {
+    if (!state) return;
+    var cue = cueNear(state.c, state.r);
+    if (!cue) { state.proxHook = null; return; }
+    var spot = hotspotForCue(cue);
+    if (!spot) return;
+    var key = spot.id + '@' + state.c + ',' + state.r;
+    if (state.proxHook === key) return;
+    state.proxHook = key;
+    emitHook(spot);
+  }
+
   function takeStep() {
     if (!state.path.length) {
       state.step = null;
@@ -17606,6 +17664,7 @@ function getLang(ls, id) {
       var fn = state.arrive;
       state.arrive = null;
       if (fn) fn();
+      else maybeProxHook();
       return;
     }
     var next = state.path.shift();
@@ -17658,8 +17717,10 @@ function getLang(ls, id) {
   function interact(spot) {
     var approach = HubPath.pickApproach(active.grid, navFrom(), spot.approach);
     if (!approach) return;
+    state.interactAt = performance.now();
     goTo(approach, function () {
       state.facing = approach.face;
+      state.proxHook = spot.id + '@' + state.c + ',' + state.r;
       emitHook(spot);
     });
   }
@@ -17669,6 +17730,7 @@ function getLang(ls, id) {
     var now = performance.now();
     if (now - lastTap < 40) return;
     lastTap = now;
+    if (!active || !canvas) return;
     var rect = canvas.getBoundingClientRect();
     var mx = (cx - rect.left) * (mapW / rect.width);
     var my = (cy - rect.top) * (mapH / rect.height);
@@ -17683,8 +17745,80 @@ function getLang(ls, id) {
       }
     }
     var c = Math.floor(mx / tile), r = Math.floor(my / tile);
+    var cues = activeCues();
+    for (var q = 0; q < cues.length; q++) {
+      if (cues[q].c === c && cues[q].r === r) {
+        var spot = hotspotForCue(cues[q]);
+        if (spot) { interact(spot); return; }
+      }
+    }
     if (!HubPath.isWalkable(active.grid, c, r)) return;
+    if (state.arrive && state.interactAt && now - state.interactAt < 450) return;
     goTo({ c: c, r: r }, null);
+  }
+
+  var promptAt = 0;
+  function promptActivate(ev) {
+    if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+    var now = performance.now();
+    if (now - promptAt < 400) return;
+    promptAt = now;
+    var cues = activeCues();
+    if (!cues.length || !state) return;
+    var spot = hotspotForCue(cues[0]);
+    if (!spot) return;
+    var near = chebyshev({ c: state.c, r: state.r }, cues[0]) <= 1;
+    if (!near) {
+      for (var i = 0; i < spot.approach.length; i++) {
+        if (chebyshev({ c: state.c, r: state.r }, spot.approach[i]) <= 1) { near = true; break; }
+      }
+    }
+    if (near) {
+      state.path = [];
+      state.step = null;
+      state.arrive = null;
+      state.marker = null;
+      if (spot.approach[0]) state.facing = spot.approach[0].face;
+      state.proxHook = spot.id + '@' + state.c + ',' + state.r;
+      emitHook(spot);
+      return;
+    }
+    interact(spot);
+  }
+
+  function ensurePrompt() {
+    var btn = document.getElementById('hubInteract');
+    if (btn) return btn;
+    var host = document.getElementById('app') || document.body;
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'hubInteract';
+    btn.className = 'hub-prompt';
+    btn.hidden = true;
+    btn.textContent = 'Regarder';
+    btn.addEventListener('click', promptActivate);
+    host.appendChild(btn);
+    return btn;
+  }
+
+  function syncPrompt() {
+    var btn = ensurePrompt();
+    var mount = document.getElementById('hubMount');
+    var cues = activeCues();
+    if (!btn || !state || !canvas || !active || !cues.length || (mount && mount.hidden)) {
+      if (btn) btn.hidden = true;
+      return;
+    }
+    var spot = hotspotForCue(cues[0]);
+    btn.hidden = false;
+    btn.textContent = (spot && spot.label) || 'Regarder';
+    var rect = canvas.getBoundingClientRect();
+    var mx = cues[0].c * tile + tile / 2;
+    var my = cues[0].r * tile + tile / 2;
+    var top = rect.top + (my / mapH) * rect.height;
+    btn.style.left = (rect.left + (mx / mapW) * rect.width) + 'px';
+    btn.style.top = top + 'px';
+    btn.style.transform = top < 140 ? 'translate(-50%, 16%)' : 'translate(-50%, -130%)';
   }
 
   function update(now) {
@@ -17945,7 +18079,7 @@ function getLang(ls, id) {
   }
 
   function draw(now) {
-    if (!active || !worldCtx) return;
+    if (!active || !worldCtx) { syncPrompt(); return; }
     var f = Math.floor(now / room.timing.ambientMs);
     if (f < 0) f = 0;
     syncLights(now);
@@ -17978,9 +18112,6 @@ function getLang(ls, id) {
       var decImg = objectImage(dec, f);
       if (decImg) blit(decImg, dec.placed_at[0] - dec.anchor[0], dec.placed_at[1] - dec.anchor[1]);
     }
-    drawMarker();
-    var cues = state.cues || [];
-    for (var q = 0; q < cues.length; q++) drawCueTile(cues[q].c, cues[q].r);
     var items = yItems(f, now);
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
@@ -18011,10 +18142,14 @@ function getLang(ls, id) {
       worldCtx.putImageData(new ImageData(graded, mapW, mapH), 0, 0);
     }
     for (var o = 0; o < active.over.length; o++) blit(active.over[o].img, 0, 0);
-    if (scale < 1) return;
+    var cues = state.cues || [];
+    for (var q = 0; q < cues.length; q++) drawCueTile(cues[q].c, cues[q].r);
+    drawMarker();
+    if (scale < 1) { syncPrompt(); return; }
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(world, 0, 0, mapW * scale, mapH * scale);
+    syncPrompt();
   }
 
   function fit() {
@@ -18133,7 +18268,7 @@ function getLang(ls, id) {
   }
 
   function freshState(spawn) {
-    state = { step: null, path: [], arrive: null, marker: null, hook: null, hidden: {}, variants: {}, cues: [], actors: null, fast: false, plantHealthy: false, showPlayer: true };
+    state = { step: null, path: [], arrive: null, marker: null, hook: null, hidden: {}, variants: {}, cues: [], actors: null, fast: false, plantHealthy: false, showPlayer: true, proxHook: null, interactAt: 0 };
     placeFrom(spawn);
   }
 
@@ -18145,14 +18280,20 @@ function getLang(ls, id) {
   function bindInput() {
     if (inputBound || !canvas) return;
     inputBound = true;
-    canvas.addEventListener('pointerup', function (e) {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      onTap(e.clientX, e.clientY);
+    ensurePrompt();
+    // One stream only. pointerup and touchend both fire on iPhone, and the second tap
+    // was replacing an in-progress interact with a plain floor walk, so the hook never ran.
+    var tapEv = window.PointerEvent ? 'pointerup' : 'touchend';
+    canvas.addEventListener(tapEv, function (e) {
+      if (tapEv === 'pointerup') {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        onTap(e.clientX, e.clientY);
+      } else {
+        if (!e.changedTouches || !e.changedTouches.length) return;
+        var t = e.changedTouches[0];
+        onTap(t.clientX, t.clientY);
+      }
     });
-    canvas.addEventListener('touchend', function (e) {
-      if (!e.changedTouches || !e.changedTouches.length) return;
-      onTap(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-    }, { passive: true });
     window.addEventListener('resize', function () { fit(); draw(performance.now()); });
     if (window.ResizeObserver) {
       var stage = stageEl || document.getElementById('stage');
@@ -18205,6 +18346,7 @@ function getLang(ls, id) {
     state.variants = cfg.variants || {};
     state.actors = cfg.actors || [];
     state.cues = cfg.cues || [];
+    state.proxHook = null;
     state.plantHealthy = !!cfg.plantHealthy;
     state.showPlayer = cfg.player !== false;
   }
@@ -20268,6 +20410,7 @@ function getLang(ls, id) {
   function renderHub() {
     var day = ui.hubDay, cid = 'd' + day;
     ui.cid = cid;
+    $where.dataset.cid = cid;
     $where.textContent = 'Jour ' + day + ' · ' + chTitle(cid) + verBit();
     var mount = document.getElementById('hubMount');
     var bar = document.getElementById('topbar');
@@ -20719,6 +20862,7 @@ function getLang(ls, id) {
     var steps = ch.steps;
     if (c.step >= steps.length) c.step = steps.length - 1;
     while (c.step < steps.length - 1 && !stepVisible(steps[c.step])) c.step++;
+    $where.dataset.cid = ui.cid;
     $where.textContent = 'Jour ' + chDay(ui.cid) + ' · ' + ch.title + verBit();
     var st = steps[c.step];
     var fn = WR[st.t];
@@ -21388,9 +21532,13 @@ function getLang(ls, id) {
   }
   function frHost(node) {
     var el = node && (node.nodeType === 1 ? node : node.parentElement);
-    // Buttons are controls. A press on « Ajouter au carnet » must not be read as the word « au »
-    // and rebuild the card under the finger — that drops the tap that was meant to save.
-    if (el && el.closest && el.closest('button, input, textarea, .wb-pop, #wordbookSheet')) return null;
+    if (!el || !el.closest) return null;
+    // Inputs and the lookup card stay controls. Story answers keep French lookup (v0.9.2):
+    // a long-press on a word inside an option must not be thrown away just because it sits on a button.
+    // Other buttons, including « Ajouter au carnet », stay controls so « au » is not read as the word.
+    if (el.closest('input, textarea, .wb-pop, #wordbookSheet')) return null;
+    var button = el.closest('button');
+    if (button && !button.matches('.choice, [data-opt], [data-option], [data-try], [data-gapopt]')) return null;
     while (el && el !== document.body) {
       if (el.getAttribute && el.getAttribute('lang') === 'fr') return el;
       el = el.parentElement;
@@ -22212,7 +22360,7 @@ function getLang(ls, id) {
       if (ui.view === 'play') rerenderStep();
     });
   }
-  window.A411.App = { state: function () { return S; }, render: render, persist: persist, openLetter: function (n, ro) { openLetter(n, ro); }, openRitual: function (n) { openRitual(n); }, learn: function () { return learnState; }, summaryText: function () { return syncSummary(profileId); } }; // debug/test hook
+  window.A411.App = { state: function () { return S; }, render: render, persist: persist, openChapter: function (cid) { openChapter(cid); }, openLetter: function (n, ro) { openLetter(n, ro); }, openRitual: function (n) { openRitual(n); }, learn: function () { return learnState; }, summaryText: function () { return syncSummary(profileId); } }; // debug/test hook
   window.A411.HubPlay = {
     status: function () {
       var HS = A411.HubStory;
