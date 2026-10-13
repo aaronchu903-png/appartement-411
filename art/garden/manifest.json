@@ -1,0 +1,431 @@
+{
+ "generator": "make_garden.py",
+ "palette_source": "appartement-411/js/art.js",
+ "text_in_art": false,
+ "tile": 16,
+ "files": {
+  "rooftop_day": "rooftop/rooftop_day.png",
+  "rooftop_night": "rooftop/rooftop_night.png",
+  "pot_dry_1": "props/pot_dry_1.png",
+  "pot_dry_2": "props/pot_dry_2.png",
+  "pot_dry_3": "props/pot_dry_3.png",
+  "pot_dry_4": "props/pot_dry_4.png",
+  "pot_dry_5": "props/pot_dry_5.png",
+  "pot_dry_6": "props/pot_dry_6.png",
+  "pot_empty": "props/pot_empty.png",
+  "basil_planted": "props/basil_planted.png",
+  "old_chair": "props/old_chair.png",
+  "wood_sign": "props/wood_sign.png",
+  "watering_can": "props/watering_can.png",
+  "weeds": "props/weeds.png",
+  "garden_bg": "garden_screen/garden_bg_390x844.png",
+  "demo_full": "garden_screen/demo_full.png",
+  "demo_mixed": "garden_screen/demo_mixed.png",
+  "demo_dormant": "garden_screen/demo_dormant.png"
+ },
+ "rooftop": {
+  "size": [
+   192,
+   256
+  ],
+  "tiles": [
+   12,
+   16
+  ],
+  "walkable_rows": "y>=96 (tile rows 6..15), x 4..187",
+  "door": [
+   84,
+   236,
+   24,
+   20
+  ],
+  "string_light_bulbs": [
+   [
+    16,
+    99
+   ],
+   [
+    36,
+    102
+   ],
+   [
+    56,
+    102
+   ],
+   [
+    76,
+    100
+   ],
+   [
+    96,
+    97
+   ],
+   [
+    116,
+    100
+   ],
+   [
+    136,
+    102
+   ],
+   [
+    156,
+    102
+   ],
+   [
+    176,
+    99
+   ]
+  ],
+  "night": "baked D-style (cool [0.26,0.29,0.45] + warm [0.95,0.70,0.36], cap 1.2)"
+ },
+ "props": {
+  "pot_dry_1": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "pot_dry_2": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "pot_dry_3": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "pot_dry_4": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "pot_dry_5": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "pot_dry_6": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "pot_empty": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "basil_planted": {
+   "size": [
+    16,
+    16
+   ],
+   "anchor_bottom_center": [
+    8,
+    16
+   ]
+  },
+  "old_chair": {
+   "size": [
+    16,
+    24
+   ],
+   "anchor_bottom_center": [
+    8,
+    24
+   ]
+  },
+  "wood_sign": {
+   "size": [
+    24,
+    20
+   ],
+   "anchor_bottom_center": [
+    12,
+    20
+   ]
+  },
+  "watering_can": {
+   "size": [
+    18,
+    14
+   ],
+   "anchor_bottom_center": [
+    9,
+    14
+   ]
+  },
+  "weeds": {
+   "size": [
+    16,
+    10
+   ],
+   "anchor_bottom_center": [
+    8,
+    10
+   ]
+  }
+ },
+ "garden_parts": {
+  "canvas_native": [
+   18,
+   52
+  ],
+  "scale_to_pt": 4,
+  "canvas_pt": [
+   72,
+   208
+  ],
+  "pivot_native": [
+   9,
+   52
+  ],
+  "pivot_note": "all parts share one canvas; place canvas so pivot (pot base centre) lands on the slot anchor",
+  "soil_top_native": 30,
+  "stem_heights_native": [
+   6,
+   11,
+   16,
+   21
+  ],
+  "root_lengths_native": [
+   5,
+   10,
+   16
+  ],
+  "z_order": [
+   "pot_back",
+   "roots_{1..3}",
+   "stem_{1..4} | stem_wilting_{1..4} | stem_dormant_{1..4}",
+   "leaves_{state}_{1..4}",
+   "pot_front"
+  ],
+  "states": {
+   "full": "stem_N + leaves_full_N",
+   "wilting": "stem_wilting_N + leaves_wilting_N",
+   "dormant": "stem_dormant_N + leaves_dormant_N (bare stem, never dead)",
+   "flash": "leaves_flash_N swapped in for ~250 ms on a missed answer, then back"
+  },
+  "leaves_index_must_match_stem_index": true,
+  "files": {
+   "pot_back": "garden_parts/pot_back.png",
+   "pot_front": "garden_parts/pot_front.png",
+   "roots_1": "garden_parts/roots_1.png",
+   "roots_2": "garden_parts/roots_2.png",
+   "roots_3": "garden_parts/roots_3.png",
+   "stem_1": "garden_parts/stem_1.png",
+   "stem_2": "garden_parts/stem_2.png",
+   "stem_3": "garden_parts/stem_3.png",
+   "stem_4": "garden_parts/stem_4.png",
+   "stem_dormant_1": "garden_parts/stem_dormant_1.png",
+   "stem_wilting_1": "garden_parts/stem_wilting_1.png",
+   "leaves_full_1": "garden_parts/leaves_full_1.png",
+   "leaves_wilting_1": "garden_parts/leaves_wilting_1.png",
+   "leaves_dormant_1": "garden_parts/leaves_dormant_1.png",
+   "leaves_flash_1": "garden_parts/leaves_flash_1.png",
+   "stem_dormant_2": "garden_parts/stem_dormant_2.png",
+   "stem_wilting_2": "garden_parts/stem_wilting_2.png",
+   "leaves_full_2": "garden_parts/leaves_full_2.png",
+   "leaves_wilting_2": "garden_parts/leaves_wilting_2.png",
+   "leaves_dormant_2": "garden_parts/leaves_dormant_2.png",
+   "leaves_flash_2": "garden_parts/leaves_flash_2.png",
+   "stem_dormant_3": "garden_parts/stem_dormant_3.png",
+   "stem_wilting_3": "garden_parts/stem_wilting_3.png",
+   "leaves_full_3": "garden_parts/leaves_full_3.png",
+   "leaves_wilting_3": "garden_parts/leaves_wilting_3.png",
+   "leaves_dormant_3": "garden_parts/leaves_dormant_3.png",
+   "leaves_flash_3": "garden_parts/leaves_flash_3.png",
+   "stem_dormant_4": "garden_parts/stem_dormant_4.png",
+   "stem_wilting_4": "garden_parts/stem_wilting_4.png",
+   "leaves_full_4": "garden_parts/leaves_full_4.png",
+   "leaves_wilting_4": "garden_parts/leaves_wilting_4.png",
+   "leaves_dormant_4": "garden_parts/leaves_dormant_4.png",
+   "leaves_flash_4": "garden_parts/leaves_flash_4.png"
+  }
+ },
+ "garden_screen": {
+  "size_pt": [
+   390,
+   844
+  ],
+  "safe_insets_pt": {
+   "top": 59,
+   "bottom": 34,
+   "left": 0,
+   "right": 0
+  },
+  "slots": [
+   {
+    "slot": 0,
+    "anchor_pt": [
+     39,
+     720
+    ],
+    "canvas_topleft_pt": [
+     3,
+     512
+    ],
+    "canvas_size_pt": [
+     72,
+     208
+    ],
+    "safe_rect_pt": [
+     0,
+     59,
+     78,
+     751
+    ],
+    "label_area_pt": [
+     2,
+     740,
+     74,
+     60
+    ]
+   },
+   {
+    "slot": 1,
+    "anchor_pt": [
+     117,
+     720
+    ],
+    "canvas_topleft_pt": [
+     81,
+     512
+    ],
+    "canvas_size_pt": [
+     72,
+     208
+    ],
+    "safe_rect_pt": [
+     78,
+     59,
+     78,
+     751
+    ],
+    "label_area_pt": [
+     80,
+     740,
+     74,
+     60
+    ]
+   },
+   {
+    "slot": 2,
+    "anchor_pt": [
+     195,
+     720
+    ],
+    "canvas_topleft_pt": [
+     159,
+     512
+    ],
+    "canvas_size_pt": [
+     72,
+     208
+    ],
+    "safe_rect_pt": [
+     156,
+     59,
+     78,
+     751
+    ],
+    "label_area_pt": [
+     158,
+     740,
+     74,
+     60
+    ]
+   },
+   {
+    "slot": 3,
+    "anchor_pt": [
+     273,
+     720
+    ],
+    "canvas_topleft_pt": [
+     237,
+     512
+    ],
+    "canvas_size_pt": [
+     72,
+     208
+    ],
+    "safe_rect_pt": [
+     234,
+     59,
+     78,
+     751
+    ],
+    "label_area_pt": [
+     236,
+     740,
+     74,
+     60
+    ]
+   },
+   {
+    "slot": 4,
+    "anchor_pt": [
+     351,
+     720
+    ],
+    "canvas_topleft_pt": [
+     315,
+     512
+    ],
+    "canvas_size_pt": [
+     72,
+     208
+    ],
+    "safe_rect_pt": [
+     312,
+     59,
+     78,
+     751
+    ],
+    "label_area_pt": [
+     314,
+     740,
+     74,
+     60
+    ]
+   }
+  ],
+  "note": "pot canvases span y 512..720 pt; labels (Noto Sans, code-drawn) go in label_area under the shelf, within the 810 safe bottom"
+ }
+}
