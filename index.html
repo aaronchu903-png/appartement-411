@@ -362,8 +362,8 @@ body.reduced-motion .goal-glow { animation: none; box-shadow: 0 0 0 3px rgba(255
 .walk-goal button { pointer-events: auto; }
 .walk-goal { position: absolute; z-index: 4; max-width: 78%; background: #fffdf8; color: #1f1d1a; border: 2px solid #2a2e3a; border-radius: 8px; padding: 6px 8px; font-family: "Noto Sans", system-ui, sans-serif; font-size: 15px; line-height: 1.35; }
 .walk-goal .who { display: block; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
-.roof-player, .roof-npc { position: absolute; width: 36px; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; transform: translate(-50%, -100%); pointer-events: none; z-index: 3; }
-.roof-player.look { transform: translate(-50%, -100%) scaleX(-1); }
+.roof-frame img.roof-player, .roof-frame img.roof-npc { position: absolute; width: 36px; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; transform: translate(-50%, -100%); pointer-events: none; z-index: 3; }
+.roof-frame img.roof-player.look { transform: translate(-50%, -100%) scaleX(-1); }
 .roof-pigeon { position: absolute; z-index: 3; width: 8px; height: 5px; left: 14%; top: 40%; background: #3a3834; border-radius: 50% 50% 40% 40%; opacity: 0; pointer-events: none; }
 .roof-pigeon.go { animation: roofPigeon 1.2s steps(2, end) 1; }
 @keyframes roofPigeon { from { opacity: 1; left: 14%; } to { opacity: 1; left: 68%; } }
