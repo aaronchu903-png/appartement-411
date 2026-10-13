@@ -7,6 +7,7 @@ const Pots = require('../js/pots.js');
 const Day10 = require('../js/day10.js');
 const Day12 = require('../js/day12.js');
 const GardenArt = require('../js/garden-art.js');
+const HubPath = require('../prototype/hub/path.js');
 
 const NB = '\u202F';
 const AP = '\u2019';
@@ -15,11 +16,23 @@ function frenchBits(node, out) {
   if (typeof node === 'string') out.push(node);
   else if (Array.isArray(node)) node.forEach(function (x) { frenchBits(x, out); });
   else if (node && typeof node === 'object') {
-    ['fr', 'tts'].forEach(function (k) { if (typeof node[k] === 'string') out.push(node[k]); });
+    if (typeof node.fr === 'string') out.push(node.fr);
     Object.keys(node).forEach(function (k) {
-      if (k === 'zh' || k === 'en') return;
-      if (k === 'fr' || k === 'tts') return;
+      if (k === 'zh' || k === 'en' || k === 'tts') return;
+      if (k === 'fr') return;
       frenchBits(node[k], out);
+    });
+  }
+  return out;
+}
+
+function ttsBits(node, out) {
+  if (Array.isArray(node)) node.forEach(function (x) { ttsBits(x, out); });
+  else if (node && typeof node === 'object') {
+    if (typeof node.tts === 'string') out.push(node.tts);
+    Object.keys(node).forEach(function (k) {
+      if (k === 'tts') return;
+      ttsBits(node[k], out);
     });
   }
   return out;
@@ -33,6 +46,11 @@ test('new French uses a curly apostrophe and a narrow space before ? ! ; :', fun
   bits.forEach(function (s) {
     assert.equal(s.indexOf("'"), -1, s);
     assert.equal(/[ \u00A0][?!;:]/.test(s), false, s);
+  });
+  ttsBits(Day10.LINES, []).concat(ttsBits(Day10.STEPS, [])).forEach(function (s) {
+    assert.equal(s.indexOf("'"), -1, s);
+    assert.equal(s.indexOf(NB), -1, s);
+    assert.equal(s.indexOf('\u00A0'), -1, s);
   });
 });
 
@@ -89,6 +107,41 @@ test('Day 10 keeps the required beats and the five new chunks', function () {
     assert.equal(Day10.LINES[id].speaker, 'camille', id);
   });
   assert.deepEqual(Day10.STEPS.filter(function (st) { return st.id && st.id.indexOf('d10_cam_') === 0 && st.when; }).map(function (st) { return st.id + ':' + st.when.v[0]; }), ['d10_cam_a:A', 'd10_cam_b:B', 'd10_cam_c:C', 'd10_cam_null:null']);
+  var monte = Day10.STEPS.filter(function (st) { return st.id === 'n_d10_monte'; })[0];
+  assert.equal(monte.fr, 'La clé tourne. La porte s' + AP + 'ouvre.');
+  assert.equal(monte.fr.indexOf('petite porte'), -1);
+  assert.equal(Day10.LINES.d10_noe_ici.fr, 'Ici' + NB + '?');
+  assert.equal(Day10.LINES.d10_noe_ici.tts, 'Ici ?');
+  assert.equal(Day10.LINES.d10_noe_porte.fr, 'La petite porte, là-haut' + NB + '!');
+  assert.equal(Day10.LINES.d10_noe_porte.tts, 'La petite porte, là-haut !');
+  assert.equal(Day10.LINES.d10_noe_pot.fr, 'Un pot vide… là-bas' + NB + '!');
+  assert.equal(Day10.LINES.d10_noe_pot.tts, 'Un pot vide… là-bas !');
+  assert.equal(Day10.LINES.d10_cam_arrosoir.fr, 'L' + AP + 'arrosoir… près de la chaise.');
+  assert.equal(Day10.LINES.d10_cam_arrosoir.tts, 'L' + AP + 'arrosoir… près de la chaise.');
+  assert.equal(Day10.LINES.d10_cam_arrosoir.speaker, 'camille');
+  var choiceAt = Day10.STEPS.findIndex(function (st) { return st.key === 'd10_eau'; });
+  Day10.STEPS.forEach(function (st, i) {
+    if (i <= choiceAt) assert.equal(JSON.stringify(st).indexOf('arrosoir'), -1);
+  });
+  assert.ok(Day10.HUB.order.indexOf('d10_say') < Day10.HUB.order.indexOf('d10_water'));
+  assert.equal(Day10.HUB.meta.d10_say.goal, undefined);
+  assert.equal(Day10.HUB.meta.d10_climb.goal, 'd10_noe_porte');
+  assert.equal(Day10.HUB.meta.d10_plant.goal, 'd10_noe_pot');
+  assert.equal(Day10.HUB.meta.d10_plant.hotspot, 'pot_empty');
+  assert.equal(Day10.HUB.meta.d10_water.goal, 'd10_cam_arrosoir');
+  assert.equal(Day10.HUB.meta.d10_water.hotspot, 'watering_can');
+  var stair = JSON.parse(fs.readFileSync('prototype/hub/assets/stairwell/walkable.json', 'utf8'));
+  var climb = HubPath.findPath(stair.walkable, Day10.WALK.stair.spawn, Day10.WALK.stair.goal);
+  assert.ok(climb);
+  assert.ok(climb.length - 1 >= 1 && climb.length - 1 <= Day10.WALK.maxTiles);
+  var manifest = JSON.parse(fs.readFileSync('art/garden/manifest.json', 'utf8'));
+  var roof = GardenArt.correctWalkable(GardenArt.baseWalkable(manifest), manifest);
+  ['pot_empty', 'watering_can'].forEach(function (hotspot) {
+    var plan = GardenArt.planGoalWalk(manifest, roof, 'firstvisit', hotspot, Day10.WALK.maxTiles);
+    assert.ok(plan, hotspot);
+    assert.ok(plan.steps >= 1 && plan.steps <= 8, hotspot + ' ' + plan.steps);
+    assert.equal(plan.path.length - 1, plan.steps);
+  });
 });
 
 test('Day 12 apply inserts the pocket beat and rewrites the final lines', function () {

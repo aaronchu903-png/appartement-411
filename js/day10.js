@@ -34,7 +34,10 @@
     d10_lef_allez: { speaker: 'lefevre', fr: fr('Allez-y. Moi… pas encore.'), zh: '你们去吧。我……还不行。', en: 'Go ahead. Me… not yet.', label: 'understand' },
     d10_cam_toit: { speaker: 'camille', fr: fr('Le toit… C’est beau.'), zh: '楼顶……真美。', en: 'The roof… It’s beautiful.', label: 'understand' },
     d10_noe_sec: { speaker: 'noe', fr: fr('Tout est sec. Le jardin dort.'), zh: '全都干了。花园在睡觉。', en: 'Everything is dry. The garden is asleep.', label: 'understand' },
-    d10_noe_ici: { speaker: 'noe', fr: fr('Ici ? Dans ce pot ?'), zh: '放这里？种在这个盆里？', en: 'Here? In this pot?', label: 'understand' },
+    d10_noe_porte: { speaker: 'noe', fr: 'La petite porte, là-haut' + NB + '!', tts: 'La petite porte, là-haut !', zh: '上面那扇小门！', en: 'The little door, up there!', label: 'understand' },
+    d10_noe_pot: { speaker: 'noe', fr: 'Un pot vide… là-bas' + NB + '!', tts: 'Un pot vide… là-bas !', zh: '那边……有个空盆！', en: 'An empty pot… over there!', label: 'understand' },
+    d10_noe_ici: { speaker: 'noe', fr: fr('Ici ?'), tts: 'Ici ?', zh: '这里？', en: 'Here?', label: 'understand' },
+    d10_cam_arrosoir: { speaker: 'camille', fr: fr('L’arrosoir… près de la chaise.'), tts: 'L’arrosoir… près de la chaise.', zh: '水壶……在椅子旁边。', en: 'The watering can… by the chair.', label: 'understand' },
     d10_cam_idee: { speaker: 'camille', fr: fr('C’est une bonne idée.'), zh: '这是个好主意。', en: 'It’s a good idea.', label: 'understand', target: 'cest_une_bonne_idee' }
   };
 
@@ -80,7 +83,7 @@
     line('d10_noe_jardin', Object.assign({}, door, { noe: 'ask' }), 'd10_knock'),
     line('d10_lef_allez', door, 'd10_knock'),
     narr('n_d10_descend', 'Elle descend. Sa porte se ferme. Doucement.', '她下楼了。她的门轻轻关上。', 'She goes down. Her door closes. Softly.', { scene: 'stairs', sfx: 'door' }, 'd10_knock'),
-    narr('n_d10_monte', 'La petite porte, en haut. La clé tourne.', '顶上的小门。钥匙转动了。', 'The little door, at the top. The key turns.', { scene: 'stairs', focus: 'porte' }, 'd10_climb'),
+    narr('n_d10_monte', 'La clé tourne. La porte s’ouvre.', '钥匙转动了。门开了。', 'The key turns. The door opens.', { scene: 'stairs', focus: 'porte' }, 'd10_climb'),
     { t: 'focus', w: 'toit', art: roof, beat: 'd10_roof' },
     line('d10_cam_toit', roof, 'd10_roof'),
     line('d10_noe_sec', roof, 'd10_roof'),
@@ -112,11 +115,11 @@
     meta: {
       d10_kitchen: { auto: true, scene: true },
       d10_knock: { auto: true, scene: true },
-      d10_climb: { scene: true, hotspot: 'rooftop' },
+      d10_climb: { scene: true, hotspot: 'rooftop', goal: 'd10_noe_porte', glow: 'door_rooftop', spot: 'locked', ambient: 'overtake' },
       d10_roof: { auto: true, scene: true },
-      d10_plant: { scene: true, hotspot: 'pot_empty' },
+      d10_plant: { scene: true, hotspot: 'pot_empty', goal: 'd10_noe_pot', glow: 'pot_empty', ambient: 'pigeon' },
       d10_say: { auto: true, scene: true },
-      d10_water: { scene: true, hotspot: 'watering_can' },
+      d10_water: { scene: true, hotspot: 'watering_can', goal: 'd10_cam_arrosoir', glow: 'watering_can', ambient: 'paws' },
       d10_down: { auto: true, scene: true },
       d10_done: { auto: true, scene: true, done: true }
     }
@@ -154,10 +157,16 @@
 
   var RITUAL = { fr: fr('La nuit, sur le toit. Le basilic a bu. Croissant dort sur la vieille chaise.'), zh: '夜里，楼顶上。罗勒喝过水了。Croissant 睡在那把旧椅子上。', en: 'Night, on the roof. The basil has had water. Croissant sleeps on the old chair.', sfx: ['purr'] };
 
+  /* First rooftop visit only. One spoken goal, then a walk of at most 8 tiles. */
+  var WALK = {
+    maxTiles: 8,
+    stair: { spawn: { c: 8, r: 8 }, goal: { c: 9, r: 3 } }
+  };
+
   var REQUIRED_IDS = ['n_d10_matin', 'd10_cam_liste', 'd10_cam_frigo', 'd10_cam_vaisselle', 'd10_noe_vaisselle', 'd10_regle', 'n_d10_noe_ecrit', 'd10_cam_chat', 'n_d10_toc', 'n_d10_lef_porte', 'd10_cam_cafe', 'd10_lef_bonjour', 'n_d10_cle', 'd10_lef_toi', 'd10_pourmoi', 'd10_lef_jardin', 'd10_noe_jardin', 'd10_lef_allez', 'n_d10_descend', 'n_d10_monte', 'd10_cam_toit', 'd10_noe_sec', 'n_d10_basilic', 'd10_noe_ici', 'n_d10_plante', 'd10_eau', 'n_d10_arrose', 'd10_cam_idee', 'n_d10_regard'];
 
   var api = {
-    LINES: LINES, STEPS: STEPS, CHAPTER: CHAPTER, HUB: HUB, WORDS: WORDS, DECK: DECK,
+    LINES: LINES, STEPS: STEPS, CHAPTER: CHAPTER, HUB: HUB, WALK: WALK, WORDS: WORDS, DECK: DECK,
     LETTER: LetterPack.LETTER, LESSON: LetterPack.LESSON, RITUAL: RITUAL, REQUIRED_IDS: REQUIRED_IDS, NB: NB
   };
   root.A411 = root.A411 || {};

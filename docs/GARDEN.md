@@ -54,7 +54,7 @@ Before Day 10 is finished, the desk still shows the old windowsill. After `story
 
 ## Day 10 and Day 12
 
-Day 10 « La clé » is the first visit: dry pots, weeds, an old chair, a faded sign with no readable text, then the basil in pot ②. Day 12’s final line edits live in `js/day12.js` and are applied when that episode exists. This build does not include the supérette arc.
+Day 10 « La clé » is the first visit: dry pots, weeds, an old chair, a faded sign with no readable text, then the basil in pot ②. The visit walks in three goals, one at a time. Noé stands by the rooftop door and says « La petite porte, là-haut ! »; the door glows, the climb from the spawn is at most 8 tiles, and Croissant runs ahead once. On the roof he says « Un pot vide… là-bas ! » at the empty pot. After the player chooses a line for the dry soil, Camille points and says « L’arrosoir… près de la chaise. » Each roof walk is at most 8 tiles, with one small event on the way. A tap that is not the goal gets a glance and a soft sound, and no hint. The narration at the door is « La clé tourne. La porte s’ouvre. » Noé’s line at the pot is « Ici ? ». Day 12’s final line edits live in `js/day12.js` and are applied when that episode exists. This build does not include the supérette arc.
 
 ## Day 10 band lines and letter 10
 

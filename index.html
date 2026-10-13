@@ -348,7 +348,26 @@ body.garden-fixed .screen { flex: 1; min-height: 0; padding: 0; overflow: hidden
 .rooftop.night { background: #1b2438; color: #f6f1e7; }
 .roof-frame { position: relative; width: 100%; max-width: 480px; margin: 0 auto; }
 .roof-frame img, .roof-frame canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
-.roof-hit { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; color: transparent; font-size: 0; }
+.roof-hit { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; color: transparent; font-size: 0; z-index: 2; }
+.goal-glow { animation: goalGlow .8s steps(2, end) infinite; }
+@keyframes goalGlow {
+  from { box-shadow: 0 0 0 0 rgba(255, 220, 140, .2); background: rgba(255, 226, 160, .06); }
+  to { box-shadow: 0 0 12px 4px rgba(255, 214, 120, .9); background: rgba(255, 226, 160, .34); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .goal-glow { animation: none; box-shadow: 0 0 0 3px rgba(255, 214, 120, .8); background: rgba(255, 226, 160, .22); }
+}
+body.reduced-motion .goal-glow { animation: none; box-shadow: 0 0 0 3px rgba(255, 214, 120, .8); background: rgba(255, 226, 160, .22); }
+.walk-goal { pointer-events: none; }
+.walk-goal button { pointer-events: auto; }
+.walk-goal { position: absolute; z-index: 4; max-width: 78%; background: #fffdf8; color: #1f1d1a; border: 2px solid #2a2e3a; border-radius: 8px; padding: 6px 8px; font-family: "Noto Sans", system-ui, sans-serif; font-size: 15px; line-height: 1.35; }
+.walk-goal .who { display: block; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+.roof-player, .roof-npc { position: absolute; width: 36px; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; transform: translate(-50%, -100%); pointer-events: none; z-index: 3; }
+.roof-player.look { transform: translate(-50%, -100%) scaleX(-1); }
+.roof-pigeon { position: absolute; z-index: 3; width: 8px; height: 5px; left: 14%; top: 40%; background: #3a3834; border-radius: 50% 50% 40% 40%; opacity: 0; pointer-events: none; }
+.roof-pigeon.go { animation: roofPigeon 1.2s steps(2, end) 1; }
+@keyframes roofPigeon { from { opacity: 1; left: 14%; } to { opacity: 1; left: 68%; } }
+#hubStage { position: relative; }
 .roof-light { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #6fcf97; right: 18%; top: 28%; box-shadow: 0 0 0 3px #6fcf9733; }
 .pot-screen { position: relative; flex: 1; min-height: 0; width: 100%; overflow: hidden; background: #9bb4c8; }
 .garden-frame { position: absolute; left: 0; top: 0; }
@@ -17672,7 +17691,20 @@ function getLang(ls, id) {
     state.marker = { c: goal.c, r: goal.r };
     state.path = path.slice(1);
     if (!state.step) takeStep();
+    armAmbient();
     return true;
+  }
+
+  function armAmbient() {
+    if (!state || !state.ambient || state.ambientPlayed) return;
+    if (!(state.step || (state.path && state.path.length))) return;
+    state.ambientPlayed = true;
+    if (state.ambient === 'overtake') {
+      var cast = liveActors();
+      for (var i = 0; i < cast.length; i++) {
+        if (cast[i].id === 'croissant') state.croiss = { actor: cast[i], left: 4, t: performance.now() };
+      }
+    }
   }
 
   function objectVisible(obj) {
@@ -17722,12 +17754,19 @@ function getLang(ls, id) {
       var h = spots[i].hit;
       if (mx >= h.x && my >= h.y && mx < h.x + h.w && my < h.y + h.h) {
         if (!spotLive(spots[i])) continue;
+        if (state.onProbe && state.onProbe(spots[i]) === false) {
+          if (state.onMiss) state.onMiss();
+          return;
+        }
         interact(spots[i]);
         return;
       }
     }
     var c = Math.floor(mx / tile), r = Math.floor(my / tile);
-    if (!HubPath.isWalkable(active.grid, c, r)) return;
+    if (!HubPath.isWalkable(active.grid, c, r)) {
+      if (state.onMiss) state.onMiss();
+      return;
+    }
     goTo({ c: c, r: r }, null);
   }
 
@@ -17747,6 +17786,11 @@ function getLang(ls, id) {
       state.r = step.r;
       state.step = null;
       takeStep();
+    }
+    if (state.croiss && state.croiss.left > 0 && now - state.croiss.t >= (reduced || state.fast ? 0 : 160)) {
+      state.croiss.actor.foot[1] -= 16;
+      state.croiss.left--;
+      state.croiss.t = now;
     }
   }
 
@@ -17866,6 +17910,24 @@ function getLang(ls, id) {
     }
   }
 
+  function drawObjectGlow(now) {
+    var obj = active && active.byName && active.byName[state.glow];
+    if (!obj || !obj.placed_at) return;
+    var x = obj.placed_at[0] - obj.anchor[0];
+    var y = obj.placed_at[1] - obj.anchor[1];
+    var w = obj.size[0], h = obj.size[1];
+    var frame = reduced ? 1 : (Math.floor(now / 360) % 2);
+    worldCtx.save();
+    worldCtx.fillStyle = '#ffe3a1';
+    worldCtx.globalAlpha = frame ? 0.34 : 0.1;
+    worldCtx.fillRect(x, y, w, h);
+    worldCtx.strokeStyle = '#ffe3a1';
+    worldCtx.globalAlpha = frame ? 0.9 : 0.35;
+    worldCtx.lineWidth = 2;
+    worldCtx.strokeRect(x - 1, y - 1, w + 2, h + 2);
+    worldCtx.restore();
+  }
+
   function drawCueTile(c, r) {
     var x0 = c * tile, y0 = r * tile;
     for (var i = 2; i < tile - 2; i += 2) {
@@ -17942,7 +18004,7 @@ function getLang(ls, id) {
       if (!aim) continue;
       items.push({
         y: actor.foot[1], tie: 2, img: aim,
-        x: actor.foot[0] - def.anchor[0],
+        x: actor.foot[0] - def.anchor[0] + ((state.ear && actor.id === 'croissant' && (now - state.ear) < 280 && Math.floor(now / 80) % 2) ? 1 : 0),
         y0: actor.foot[1] - def.anchor[1]
       });
     }
@@ -18054,6 +18116,7 @@ function getLang(ls, id) {
       var graded = HubLights.applyGrade(pixels.data, mapW, mapH, prep.alpha, prep, active.grade);
       worldCtx.putImageData(new ImageData(graded, mapW, mapH), 0, 0);
     }
+    if (state.glow) drawObjectGlow(now);
     for (var o = 0; o < active.over.length; o++) blit(active.over[o].img, 0, 0);
     if (scale < 1) return;
     ctx.imageSmoothingEnabled = false;
@@ -18235,6 +18298,13 @@ function getLang(ls, id) {
       openRoom: openRoom,
       configure: configure,
       place: function (col, row, facing) { placeFrom({ col: col, row: row, facing: facing || state.facing }); },
+      glance: function () {
+        if (!state) return;
+        var back = state.facing;
+        state.facing = back === 'left' ? 'right' : 'left';
+        state.ear = performance.now();
+        setTimeout(function () { if (state && state.facing === (back === 'left' ? 'right' : 'left')) state.facing = back; }, 280);
+      },
       setFast: function (v) { if (state) state.fast = !!v; },
       roomId: function () { return room && room.id; },
       actors: function () { return liveActors().map(function (a) { return { id: a.id, sprite: a.sprite, foot: a.foot }; }); }
@@ -18251,6 +18321,14 @@ function getLang(ls, id) {
     state.cues = cfg.cues || [];
     state.plantHealthy = !!cfg.plantHealthy;
     state.showPlayer = cfg.player !== false;
+    var keepAmbient = state.ambientKey && state.ambientKey === cfg.ambientKey && state.ambientPlayed;
+    state.glow = cfg.glow || null;
+    state.ambient = cfg.ambient || null;
+    state.ambientKey = cfg.ambientKey || null;
+    state.ambientPlayed = !!keepAmbient;
+    state.onProbe = cfg.onProbe || null;
+    state.onMiss = cfg.onMiss || null;
+    state.croiss = null;
   }
 
   async function mount(opts) {
@@ -18509,6 +18587,10 @@ function getLang(ls, id) {
       actors.push(actor('camille', 'camille', [88, 64], 'down'));
       actors.push(actor('noe', 'noe', [120, 100], 'right'));
       actors.push(actor('croissant', 'croissant', [136, 108], 'left'));
+    } else if (day === 10 && room === 'stairwell' && next === 'd10_climb') {
+      actors.push(actor('noe', 'noe', [136, 76], 'up'));
+      actors.push(actor('camille', 'camille', [152, 168], 'up'));
+      actors.push(actor('croissant', 'croissant', [104, 156], 'up'));
     } else if (day === 10 && room === 'stairwell') {
       actors.push(actor('croissant', 'croissant', [120, 140], 'up'));
       actors.push(actor('noe', 'noe', [136, 200], 'up'));
@@ -18569,7 +18651,14 @@ function getLang(ls, id) {
       visual: !!(next && META[next] && META[next].visual),
       optional: day === 9 && room === 'apt' && !has(done, 'd9_A2') && !has(done, 'd9_B'),
       transit: transit,
-      croissantHidden: croissantHidden(day, done) && room !== 'lefevre'
+      croissantHidden: croissantHidden(day, done) && room !== 'lefevre',
+      goal: (day === 10 && next && META[next] && META[next].goal && !storyOver) ? {
+        line: META[next].goal,
+        glow: META[next].glow || null,
+        spot: META[next].spot || null,
+        ambient: META[next].ambient || null,
+        hotspot: META[next].hotspot || null
+      } : null
     };
   }
 
@@ -19179,6 +19268,103 @@ function getLang(ls, id) {
     ctx.mozImageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
   }
+  function roofTileStyle(c, r) {
+    var x = (c + 0.5) * 16;
+    var y = (r + 0.5) * 16;
+    return 'left:' + (x / 192 * 100) + '%;top:' + (y / 256 * 100) + '%';
+  }
+  function softBlip() {
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      var ac = softBlip.ac || (softBlip.ac = new Ctx());
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine';
+      o.frequency.value = 480;
+      g.gain.value = 0.012;
+      o.connect(g); g.connect(ac.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.07);
+      o.stop(ac.currentTime + 0.08);
+    } catch (e) {}
+  }
+  function day10Glance() {
+    window.__a411Glance = (window.__a411Glance || 0) + 1;
+    if (window.Hub && Hub.glance) Hub.glance();
+    softBlip();
+  }
+  function day10Probe(spot) {
+    if (!A411.HubStory) return true;
+    var act = A411.HubStory.action(ui.hubDay, hubBeats(), { id: spot.id, object: spot.object, exit: spot.exit }, ui.hubRoom);
+    return !!act;
+  }
+  function walkGoalBox(line) {
+    var box = h('div', { class: 'walk-goal', 'data-line': line && line.fr ? '1' : '0' });
+    box.appendChild(h('span', { class: 'who', lang: 'fr', text: line.speaker === 'camille' ? 'Camille' : 'Noé' }));
+    var row = h('div', { class: 'row' });
+    row.appendChild(h('span', { lang: 'fr', text: line.fr }));
+    row.appendChild(qHelp(function () { return Z(line.zh, line.en || line.zh); }));
+    row.appendChild(sayBtn(line.tts || line.fr, { speaker: line.speaker }));
+    box.appendChild(row);
+    return box;
+  }
+  function mountRoofWalk(frame, box, pack, st) {
+    var walk = st.walk;
+    if (!walk || !walk.line) return;
+    var plan = A411.GardenArt.planGoalWalk(pack.manifest, pack.walkable, 'firstvisit', walk.prop, A411.Day10.WALK.maxTiles);
+    if (!plan) return;
+    box.setAttribute('data-walk', walk.prop);
+    box.setAttribute('data-steps', String(plan.steps));
+    box.setAttribute('data-glances', '0');
+    box.setAttribute('data-ambient', walk.ambient || '');
+    var face = plan.face || 'up';
+    var npcName = walk.line.speaker === 'camille' ? 'camille' : 'noe';
+    var npc = h('img', { class: 'roof-npc', alt: '', src: 'prototype/hub/assets/characters/' + npcName + '_idle_' + face + '_0.png', style: roofTileStyle(plan.goal.c, plan.goal.r) });
+    var player = h('img', { class: 'roof-player', alt: '', src: 'prototype/hub/assets/characters/player_idle_up_0.png', style: roofTileStyle(plan.spawn.c, plan.spawn.r) });
+    var pigeon = walk.ambient === 'pigeon' ? h('div', { class: 'roof-pigeon', 'aria-hidden': 'true' }) : null;
+    var said = walkGoalBox(walk.line);
+    said.style.cssText = roofTileStyle(plan.goal.c, plan.goal.r) + ';transform:translate(-20%, -130%)';
+    frame.appendChild(npc);
+    frame.appendChild(player);
+    if (pigeon) frame.appendChild(pigeon);
+    said.addEventListener('click', function (ev) { ev.stopPropagation(); });
+    frame.appendChild(said);
+    var walking = false;
+    function glance() {
+      box.setAttribute('data-glances', String(Number(box.getAttribute('data-glances') || '0') + 1));
+      player.classList.add('look');
+      setTimeout(function () { player.classList.remove('look'); }, 280);
+      softBlip();
+    }
+    function arrive(hook) {
+      box.setAttribute('data-arrived', '1');
+      onHubHook(hook);
+    }
+    frame.addEventListener('click', function () { if (!walking) glance(); });
+    box._roofWalk = {
+      plan: plan,
+      glance: glance,
+      start: function (hook) {
+        if (walking) return;
+        walking = true;
+        if (pigeon) pigeon.classList.add('go');
+        if (walk.ambient === 'paws') softBlip();
+        var reduced = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || document.body.classList.contains('reduced-motion');
+        var i = 0;
+        function step() {
+          var p = plan.path[i];
+          var prev = i > 0 ? plan.path[i - 1] : p;
+          var dir = p.c > prev.c ? 'right' : p.c < prev.c ? 'left' : p.r > prev.r ? 'down' : 'up';
+          player.src = 'prototype/hub/assets/characters/player_idle_' + dir + '_0.png';
+          player.style.cssText = roofTileStyle(p.c, p.r);
+          if (i >= plan.path.length - 1) { arrive(hook); return; }
+          i++;
+          setTimeout(step, reduced ? 0 : 160);
+        }
+        step();
+      }
+    };
+  }
   function roofSceneOf(st) {
     if (st.scene === 'tidy' || st.scene === 'firstvisit') return st.scene;
     if (st.night && st.planted) return 'tidy';
@@ -19226,12 +19412,24 @@ function getLang(ls, id) {
         var plantTarget = scene === 'firstvisit' && !st.planted && key === 'pot_dry_2@1';
         if (plantTarget) attr = 'pot_empty';
         var style = 'left:' + (rect.x / 192 * 100) + '%;top:' + (rect.y / 256 * 100) + '%;width:' + (rect.w / 192 * 100) + '%;height:' + (rect.h / 256 * 100) + '%';
-        var tap = plantTarget || base === 'watering_can';
-        var el = h(tap ? 'button' : 'div', { class: 'roof-hit', 'data-prop': attr, style: style, type: tap ? 'button' : null, 'aria-label': attr });
-        if (plantTarget) el.addEventListener('click', function () { onHubHook({ id: 'pot_empty', object: 'pot_empty' }); });
-        if (base === 'watering_can') el.addEventListener('click', function () { onHubHook({ id: 'watering_can', object: 'watering_can' }); });
+        var goalProp = st.walk && st.walk.prop;
+        var tap = plantTarget || base === 'watering_can' || (goalProp && attr === goalProp);
+        var isGoal = goalProp && attr === goalProp;
+        var el = h(tap ? 'button' : 'div', { class: 'roof-hit' + (isGoal ? ' goal-glow' : ''), 'data-prop': attr, style: style, type: tap ? 'button' : null, 'aria-label': attr });
+        if (tap) el.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          if (st.walk) {
+            if (!isGoal) { if (box._roofWalk) box._roofWalk.glance(); return; }
+            var hook = plantTarget || attr === 'pot_empty' ? { id: 'pot_empty', object: 'pot_empty' } : { id: 'watering_can', object: 'watering_can' };
+            if (box._roofWalk) box._roofWalk.start(hook);
+            return;
+          }
+          if (plantTarget) onHubHook({ id: 'pot_empty', object: 'pot_empty' });
+          if (base === 'watering_can') onHubHook({ id: 'watering_can', object: 'watering_can' });
+        });
         frame.appendChild(el);
       });
+      if (st.walk) mountRoofWalk(frame, box, pack, st);
       whenImages(srcs, function () {
         if (!box.isConnected) return;
         var ctx = canvas.getContext('2d');
@@ -19257,7 +19455,18 @@ function getLang(ls, id) {
   }
   function renderRooftopPreview() {
     $where.textContent = 'Le toit';
-    $screen.appendChild(rooftopPlaceholder({ scene: ui.roofScene || 'firstvisit', night: !!ui.roofNight }));
+    var walk = null;
+    if (ui.roofWalk && A411.Day10) {
+      walk = ui.roofWalk === 'can'
+        ? { prop: 'watering_can', line: A411.Day10.LINES.d10_cam_arrosoir, ambient: 'paws' }
+        : { prop: 'pot_empty', line: A411.Day10.LINES.d10_noe_pot, ambient: 'pigeon' };
+    }
+    $screen.appendChild(rooftopPlaceholder({
+      scene: ui.roofScene || 'firstvisit',
+      night: !!ui.roofNight,
+      planted: ui.roofWalk === 'can',
+      walk: walk
+    }));
   }
   function layoutGarden(frame, screen) {
     var W = screen.clientWidth;
@@ -20683,12 +20892,33 @@ function getLang(ls, id) {
     var HS = A411.HubStory;
     var room = ui.hubRoom || HS.roomKey(window.Hub && Hub.roomId ? Hub.roomId() : 'apt');
     var act = HS.action(ui.hubDay, hubBeats(), detail, room);
-    if (!act) return;
+    if (!act) { if (ui.hubDay === 10) day10Glance(); return; }
     if (act.rattle) { rattleLocked(); return; }
     if (act.optional) { noteHubBeat(ui.cid, act.optional); render(); return; }
     if (act.close) { hubClose(act.close); return; }
     if (act.transit) { beginTransit(); return; }
     if (act.beat) startHubScene(act.beat);
+  }
+  function placeStairGoal(spec) {
+    var old = document.getElementById('hubGoal');
+    if (old) old.remove();
+    if (!spec || !spec.goal || spec.room !== 'stairwell' || !A411.Day10) return;
+    var line = A411.Day10.LINES[spec.goal.line];
+    if (!line) return;
+    var stage = document.getElementById('hubStage');
+    if (!stage) return;
+    var box = walkGoalBox(line);
+    box.id = 'hubGoal';
+    stage.appendChild(box);
+    function place() {
+      if (!box.isConnected || !window.Hub || !Hub.hotspotClientPoint) return;
+      var pt = Hub.hotspotClientPoint(spec.goal.spot || 'locked');
+      if (!pt) return;
+      var rect = stage.getBoundingClientRect();
+      box.style.left = Math.max(8, pt.x - rect.left - 40) + 'px';
+      box.style.top = Math.max(8, pt.y - rect.top - 72) + 'px';
+    }
+    requestAnimationFrame(place);
   }
   function renderHub() {
     var day = ui.hubDay, cid = 'd' + day;
@@ -20697,6 +20927,8 @@ function getLang(ls, id) {
     var mount = document.getElementById('hubMount');
     var bar = document.getElementById('topbar');
     if (mount && bar && !bar.hidden) mount.style.top = bar.offsetHeight + 'px';
+    var staleGoal = document.getElementById('hubGoal');
+    if (staleGoal) staleGoal.remove();
     if (!window.Hub || !A411.HubStory) return;
     var HS = A411.HubStory;
     var gst = gardenStatus();
@@ -20705,7 +20937,12 @@ function getLang(ls, id) {
     if (spec.room === 'rooftop') {
       if (mount) mount.hidden = true;
       var beats = hubBeats();
-      $screen.appendChild(rooftopPlaceholder({ planted: beats.indexOf('d10_plant') >= 0, watered: beats.indexOf('d10_water') >= 0 }));
+      var meta = HS.meta(spec.next);
+      var walk = null;
+      if (day === 10 && meta && meta.goal && A411.Day10) {
+        walk = { prop: meta.hotspot, line: A411.Day10.LINES[meta.goal], ambient: meta.ambient || '' };
+      }
+      $screen.appendChild(rooftopPlaceholder({ planted: beats.indexOf('d10_plant') >= 0, watered: beats.indexOf('d10_water') >= 0, walk: walk }));
       return;
     }
     var urls = { apt: 'room.json', stairwell: 'stairwell.json', lefevre: 'lefevre.json' };
@@ -20727,8 +20964,14 @@ function getLang(ls, id) {
       if (window.A411_HUB_FAST || (S.settings && S.settings.reducedMotion)) Hub.setFast(true);
       Hub.configure({
         hidden: spec.hidden, variants: spec.variants, actors: spec.actors,
-        player: true, cues: spec.cues, plantHealthy: spec.plantHealthy
+        player: true, cues: spec.cues, plantHealthy: spec.plantHealthy,
+        glow: day === 10 && spec.goal ? spec.goal.glow : null,
+        ambient: day === 10 && spec.goal ? spec.goal.ambient : null,
+        ambientKey: day === 10 && spec.goal ? spec.next : null,
+        onProbe: day === 10 ? day10Probe : null,
+        onMiss: day === 10 ? day10Glance : null
       });
+      if (day === 10) placeStairGoal(spec);
     }).catch(function (err) { console.error(err); });
   }
   function enterHub() {
@@ -22657,6 +22900,7 @@ function getLang(ls, id) {
     } else {
       ui.roofScene = q.get('scene') === 'tidy' ? 'tidy' : 'firstvisit';
       ui.roofNight = q.get('night') === '1';
+      ui.roofWalk = q.get('walk') === 'can' ? 'can' : q.get('walk') === 'pot' ? 'pot' : '';
       ui.view = 'rooftop';
     }
     $topbar.hidden = false;

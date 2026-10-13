@@ -71,6 +71,42 @@ test('rooftop first visit uses the day scene', async ({ page }) => {
   await page.screenshot({ path: out + '/rooftop-first-visit.png' });
 });
 
+test('Day 10 roof goals glow and stay within 8 tiles', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/index.html?preview=rooftop&walk=pot');
+  const roof = page.locator('#rooftop');
+  await expect(roof).toHaveAttribute('data-ready', '1');
+  await expect(roof).toHaveAttribute('data-walk', 'pot_empty');
+  const steps = Number(await roof.getAttribute('data-steps'));
+  expect(steps).toBeGreaterThan(0);
+  expect(steps).toBeLessThanOrEqual(8);
+  await expect(page.locator('.goal-glow')).toHaveCount(1);
+  await expect(page.locator('.goal-glow')).toHaveAttribute('data-prop', 'pot_empty');
+  await expect(page.locator('.walk-goal')).toContainText('Un pot vide');
+  await expect(roof).not.toContainText('arrosoir');
+  await page.locator('.walk-goal button.qbtn').click();
+  await expect(page.locator('.walk-goal')).toContainText('那边');
+  await page.locator('[data-prop="old_chair"]').click();
+  await expect(roof).toHaveAttribute('data-glances', '1');
+  await expect(roof).not.toContainText('arrosoir');
+  await page.screenshot({ path: out + '/rooftop-pot-goal.png' });
+  await page.locator('.goal-glow').click();
+  await expect(roof).toHaveAttribute('data-arrived', '1');
+  await expect(page.locator('.roof-pigeon')).toHaveClass(/go/);
+
+  await page.goto('/index.html?preview=rooftop&walk=can');
+  const can = page.locator('#rooftop');
+  await expect(can).toHaveAttribute('data-ready', '1');
+  await expect(can).toHaveAttribute('data-walk', 'watering_can');
+  const canSteps = Number(await can.getAttribute('data-steps'));
+  expect(canSteps).toBeGreaterThan(0);
+  expect(canSteps).toBeLessThanOrEqual(8);
+  await expect(page.locator('.goal-glow')).toHaveAttribute('data-prop', 'watering_can');
+  await expect(page.locator('.walk-goal')).toContainText('arrosoir');
+  await expect(page.locator('.walk-goal')).not.toContainText('pot vide');
+  await page.screenshot({ path: out + '/rooftop-can-goal.png' });
+});
+
 test('tidy rooftop at night', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/index.html?preview=rooftop&scene=tidy&night=1');

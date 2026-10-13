@@ -230,6 +230,119 @@
     };
   }
 
+  var WALK_DIRS = [
+    { c: 0, r: -1 },
+    { c: 1, r: 0 },
+    { c: 0, r: 1 },
+    { c: -1, r: 0 }
+  ];
+
+  function cellWalkable(grid, c, r) {
+    return !!(grid && r >= 0 && c >= 0 && r < grid.length && grid[r] && c < grid[r].length && (grid[r][c] === 1 || grid[r][c] === true));
+  }
+
+  function propCells(prop, bottom, tile, cols, rows) {
+    var rct = propRect(prop, bottom);
+    var x0 = rct.x + 1;
+    var y0 = rct.y + 1;
+    var x1 = rct.x + rct.w - 1;
+    var y1 = rct.y + rct.h - 1;
+    var c0 = Math.floor(x0 / tile);
+    var c1 = Math.floor((x1 - 1) / tile);
+    var r0 = Math.floor(y0 / tile);
+    var r1 = Math.floor((y1 - 1) / tile);
+    var cells = [];
+    var rr, cc;
+    for (rr = r0; rr <= r1; rr++) {
+      for (cc = c0; cc <= c1; cc++) {
+        if (rr < 0 || rr >= rows || cc < 0 || cc >= cols) continue;
+        cells.push({ c: cc, r: rr });
+      }
+    }
+    return cells;
+  }
+
+  function faceToward(from, to) {
+    if (Math.abs(to.c - from.c) > Math.abs(to.r - from.r)) return to.c < from.c ? 'left' : 'right';
+    return to.r < from.r ? 'up' : 'down';
+  }
+
+  /* Spawn within maxTiles steps of a walkable tile beside the prop.
+   * The longest such path wins, so the walk is short and never over the cap. */
+  function planGoalWalk(manifest, walkable, scene, hotspot, maxTiles) {
+    var cap = maxTiles == null ? 8 : maxTiles;
+    var key = hotspot === 'pot_empty' ? 'pot_dry_2@1' : hotspot === 'watering_can' ? 'watering_can@0' : hotspot;
+    var place = (roofScenes(manifest)[scene] || {})[key];
+    var prop = manifest.props && manifest.props[key.split('@')[0]];
+    var grid = walkable && walkable.layouts && walkable.layouts[scene];
+    if (!place || !prop || !grid) return null;
+    var tile = walkable.tile || 16;
+    var blocked = propCells(prop, place.bottom_center, tile, walkable.cols, walkable.rows);
+    var seen = {};
+    var approaches = [];
+    blocked.forEach(function (cell) {
+      WALK_DIRS.forEach(function (d) {
+        var n = { c: cell.c + d.c, r: cell.r + d.r };
+        var id = n.r + ',' + n.c;
+        if (seen[id] || !cellWalkable(grid, n.c, n.r)) return;
+        seen[id] = 1;
+        approaches.push(n);
+      });
+    });
+    var best = null;
+    approaches.forEach(function (goal) {
+      var parent = {};
+      var dist = {};
+      var q = [goal];
+      var gk = goal.r + ',' + goal.c;
+      dist[gk] = 0;
+      var qi = 0;
+      while (qi < q.length) {
+        var cur = q[qi++];
+        var ck = cur.r + ',' + cur.c;
+        WALK_DIRS.forEach(function (d) {
+          var n = { c: cur.c + d.c, r: cur.r + d.r };
+          var nk = n.r + ',' + n.c;
+          if (dist[nk] != null || !cellWalkable(grid, n.c, n.r)) return;
+          dist[nk] = dist[ck] + 1;
+          parent[nk] = ck;
+          q.push(n);
+        });
+      }
+      var spawn = null;
+      Object.keys(dist).forEach(function (id) {
+        var d = dist[id];
+        if (d < 1 || d > cap) return;
+        var parts = id.split(',');
+        var cand = { c: +parts[1], r: +parts[0], d: d };
+        if (!spawn || cand.d > spawn.d || (cand.d === spawn.d && (cand.r > spawn.r || (cand.r === spawn.r && cand.c > spawn.c)))) spawn = cand;
+      });
+      if (!spawn) return;
+      var path = [];
+      var k = spawn.r + ',' + spawn.c;
+      var guard = 0;
+      while (k && guard++ < 64) {
+        var bits = k.split(',');
+        path.push({ r: +bits[0], c: +bits[1] });
+        if (k === gk) break;
+        k = parent[k];
+      }
+      if (!path.length || path[path.length - 1].r !== goal.r || path[path.length - 1].c !== goal.c) return;
+      var steps = path.length - 1;
+      var plan = {
+        hotspot: hotspot,
+        key: key,
+        goal: { c: goal.c, r: goal.r },
+        spawn: { c: spawn.c, r: spawn.r },
+        steps: steps,
+        path: path,
+        face: faceToward(goal, blocked[0] || goal)
+      };
+      if (!best || plan.steps > best.steps || (plan.steps === best.steps && (plan.goal.r > best.goal.r || (plan.goal.r === best.goal.r && plan.goal.c > best.goal.c)))) best = plan;
+    });
+    return best;
+  }
+
   var api = {
     spriteLeaf: spriteLeaf,
     partNames: partNames,
@@ -243,6 +356,7 @@
     propRect: propRect,
     baseWalkable: baseWalkable,
     correctWalkable: correctWalkable,
+    planGoalWalk: planGoalWalk,
     ROOF_LAYOUT: ROOF_LAYOUT
   };
   root.A411 = root.A411 || {};
