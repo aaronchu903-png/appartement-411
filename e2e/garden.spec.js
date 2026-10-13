@@ -84,10 +84,17 @@ test('Day 10 roof goals glow and stay within 8 tiles', async ({ page }) => {
   await expect(page.locator('.goal-glow')).toHaveAttribute('data-prop', 'pot_empty');
   await expect(page.locator('.walk-goal')).toContainText('Un pot vide');
   await expect(roof).not.toContainText('arrosoir');
+  await expect(page.locator('.tap-hand')).toBeVisible();
+  await page.waitForFunction(function () { return localStorage.getItem('a411.p.jinyi.tapHand') === '1'; });
+  await expect(page.locator('.tap-hand')).toHaveCount(0);
   await page.locator('.walk-goal button.qbtn').click();
   await expect(page.locator('.walk-goal')).toContainText('那边');
   await page.locator('[data-prop="old_chair"]').click();
-  await expect(roof).toHaveAttribute('data-glances', '1');
+  await expect(roof).toHaveAttribute('data-feedback', '1');
+  const before = await roof.getAttribute('data-player');
+  const canvasBox = await page.locator('#roofCanvas').boundingBox();
+  await page.mouse.click(canvasBox.x + canvasBox.width * (112 / 192), canvasBox.y + canvasBox.height * (236 / 256));
+  await expect(roof).not.toHaveAttribute('data-player', before);
   await expect(roof).not.toContainText('arrosoir');
   await page.screenshot({ path: out + '/rooftop-pot-goal.png' });
   await page.locator('.goal-glow').click();
@@ -98,6 +105,7 @@ test('Day 10 roof goals glow and stay within 8 tiles', async ({ page }) => {
   const can = page.locator('#rooftop');
   await expect(can).toHaveAttribute('data-ready', '1');
   await expect(can).toHaveAttribute('data-walk', 'watering_can');
+  await expect(page.locator('.tap-hand')).toHaveCount(0);
   const canSteps = Number(await can.getAttribute('data-steps'));
   expect(canSteps).toBeGreaterThan(0);
   expect(canSteps).toBeLessThanOrEqual(8);
@@ -105,6 +113,17 @@ test('Day 10 roof goals glow and stay within 8 tiles', async ({ page }) => {
   await expect(page.locator('.walk-goal')).toContainText('arrosoir');
   await expect(page.locator('.walk-goal')).not.toContainText('pot vide');
   await page.screenshot({ path: out + '/rooftop-can-goal.png' });
+});
+
+test('Day 10 tap guide shows the hand, the glow and the cat', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/index.html?preview=rooftop&walk=pot&tapIdle=0');
+  const roof = page.locator('#rooftop');
+  await expect(roof).toHaveAttribute('data-ready', '1');
+  await expect(page.locator('.tap-hand')).toBeVisible();
+  await expect(page.locator('.goal-glow')).toHaveAttribute('data-prop', 'pot_empty');
+  await expect(page.locator('[data-cat="sit"].look-right')).toBeVisible();
+  await page.screenshot({ path: out + '/rooftop-tap-guide.png' });
 });
 
 test('tidy rooftop at night', async ({ page }) => {
