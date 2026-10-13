@@ -1,0 +1,11 @@
+{
+  "name": "appartement-411",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}
