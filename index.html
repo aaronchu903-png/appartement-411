@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.12.1 single-file build 2026-10-13T20:13:43.884Z -->
+<!-- L’Appartement 411 v0.12.2 single-file build 2026-10-13T22:43:09.333Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -31,14 +31,15 @@ body.large-text { font-size:20px; }
 .hub-prompt[hidden] { display:none !important; }
 .hub-goal { position:absolute; z-index:4; top:8px; left:50%; transform:translateX(-50%); max-width:calc(100% - 24px); padding:6px 12px; border:2px solid #2a2e3a; border-radius:999px; background:#fff7e6; color:#1f1d1a; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-weight:700; font-size:.95rem; text-align:center; box-shadow:0 0 0 4px rgba(246,165,74,.45); pointer-events:none; }
 .hub-goal[hidden] { display:none !important; }
-.dev-badge { position:fixed; z-index:40; top:6px; right:6px; background:#8a3b12; color:#fff; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-size:11px; font-weight:700; letter-spacing:.04em; padding:2px 6px; border-radius:4px; pointer-events:none; }
-.dev-back { position:fixed; z-index:41; top:4px; left:6px; min-height:32px; padding:4px 8px; font-size:.8rem; }
+.dev-badge { position:fixed; z-index:16; left:max(10px, env(safe-area-inset-left)); bottom:calc(62px + env(safe-area-inset-bottom)); top:auto; right:auto; background:#8a3b12; color:#fff; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-size:10px; font-weight:700; letter-spacing:.04em; line-height:1.2; padding:1px 4px; border-radius:3px; pointer-events:none; }
+.dev-back { position:static; flex:0 0 auto; align-self:center; z-index:1; min-height:32px; min-width:0; padding:4px 8px; font-size:.8rem; }
+body > .dev-back { position:fixed; z-index:41; top:8px; right:52px; left:auto; }
 .pq-tabs { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
 .pq-tabs .btn.on { background:#2f5d8a; color:#fff; }
 .aha-tip { margin-top:6px; }
 .topbar[hidden] { display:none; }
 .topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#2a2e3a; color:#fff; }
-.topbar .where { font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.topbar .where { flex:1; min-width:0; font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .screen { padding:0 0 16px; }
 .pad { padding:12px 14px; }
 canvas.stage { display:block; width:100%; aspect-ratio:3/2; image-rendering:pixelated; image-rendering:crisp-edges; background:#222; }
@@ -960,7 +961,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.12.1';
+  var APP_VERSION = '0.12.2';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -2676,7 +2677,21 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
     if (health === 'yellow') { px(ctx, cx - 6, 37, 2, 1, '#c9b23a'); }
   }
 
-  var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait: portrait, SPOTS: SPOTS, garden: garden, PROPS: PROPS, ICONS: ICONS, drawProp: drawProp, propCard: propCard, figCard: figCard, propSize: propSize, region: region, REGIONS: REGIONS, actors: actors, ROOM_FLOOR: ROOM_FLOOR, PERSON_W: PERSON_W, PERSON_H: PERSON_H, day9px: { pal: DAY9_PAL, chair: DAY9_CHAIR, paw: DAY9_PAW } };
+  // v0.12.2: entrance hop/slide is a one-time arrival. A camera re-cut of people already
+// in the chapter gets no entry class and no motion plan.
+var ENTRY_CLASS = 'cast-enter';
+function entryPlan(seen, cast) {
+  var enter = [];
+  (cast || []).forEach(function (a) {
+    if (a && a.id && !seen[a.id]) enter.push(a.id);
+  });
+  return { enter: enter, className: enter.length ? ENTRY_CLASS : '' };
+}
+function markEntered(seen, cast) {
+  (cast || []).forEach(function (a) { if (a && a.id) seen[a.id] = 1; });
+  return seen;
+}
+var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait: portrait, SPOTS: SPOTS, garden: garden, PROPS: PROPS, ICONS: ICONS, drawProp: drawProp, propCard: propCard, figCard: figCard, propSize: propSize, region: region, REGIONS: REGIONS, actors: actors, ROOM_FLOOR: ROOM_FLOOR, PERSON_W: PERSON_W, PERSON_H: PERSON_H, day9px: { pal: DAY9_PAL, chair: DAY9_CHAIR, paw: DAY9_PAW }, ENTRY_CLASS: ENTRY_CLASS, entryPlan: entryPlan, markEntered: markEntered };
   root.A411 = root.A411 || {};
   root.A411.Art = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -17374,6 +17389,8 @@ function getLang(ls, id) {
   var looping = false;
   var inputBound = false;
   var actorAnim = {};
+  var castChapter = '';
+  var enteredCast = {};
   var drawNow = 0;
 
   function assetUrl(src) {
@@ -18116,19 +18133,40 @@ function getLang(ls, id) {
     return room.actors || [];
   }
 
+  // A new room may hop its cast in once. Coming back from a dialogue cut must not.
+  function armChapter(id) {
+    id = id || '';
+    if (castChapter === id) return;
+    castChapter = id;
+    enteredCast = {};
+    actorAnim = {};
+  }
+
   function posedFoot(actor) {
     var id = actor.id || actor.sprite || 'a';
     var tx = actor.foot[0], ty = actor.foot[1];
     var now = drawNow || 0;
     if (stillMotion()) return { x: tx, y: ty };
     var rec = actorAnim[id];
-    if (!rec) rec = actorAnim[id] = { x: tx, y: ty, tx: tx, ty: ty, born: now, t0: 0 };
+    if (!rec) {
+      var enter = !enteredCast[id];
+      enteredCast[id] = 1;
+      rec = actorAnim[id] = { x: tx, y: ty, tx: tx, ty: ty, born: enter ? now : now - 1000, t0: 0, enter: enter };
+    }
     if (rec.tx !== tx || rec.ty !== ty) {
-      rec.fromX = rec.x;
-      rec.fromY = rec.y;
-      rec.t0 = now;
+      var sliding = rec.enter && (now - rec.born) < 340;
       rec.tx = tx;
       rec.ty = ty;
+      if (sliding) {
+        rec.fromX = rec.x;
+        rec.fromY = rec.y;
+        rec.t0 = now;
+      } else {
+        rec.x = tx;
+        rec.y = ty;
+        rec.t0 = 0;
+        rec.enter = false;
+      }
     }
     if (rec.t0) {
       var u = Math.min(1, (now - rec.t0) / 300);
@@ -18137,7 +18175,7 @@ function getLang(ls, id) {
       if (u >= 1) rec.t0 = 0;
     }
     var age = now - rec.born;
-    var hop = age >= 0 && age < 340 ? -Math.round(4 * Math.sin(Math.PI * (age / 340))) : 0;
+    var hop = rec.enter && age >= 0 && age < 340 ? -Math.round(4 * Math.sin(Math.PI * (age / 340))) : 0;
     var breath = Math.sin(now / 540 + id.length) > 0.2 ? -1 : 0;
     return { x: rec.x, y: rec.y + hop + breath };
   }
@@ -18594,6 +18632,7 @@ function getLang(ls, id) {
       mount: mount,
       openRoom: openRoom,
       configure: configure,
+      armChapter: armChapter,
       place: function (col, row, facing) { placeFrom({ col: col, row: row, facing: facing || state.facing }); },
       setFast: function (v) { if (state) state.fast = !!v; },
       roomId: function () { return room && room.id; },
@@ -19417,9 +19456,11 @@ function getLang(ls, id) {
   // ---------- overlay ----------
   function openOverlay(node) { $overlay.innerHTML = ''; $overlay.appendChild(node); $overlay.hidden = false; var f = $overlay.querySelector('button'); if (f) f.focus(); }
   function closeOverlay() { $overlay.hidden = true; $overlay.innerHTML = ''; if (ui.paused && !closeOverlay._inner) { closeOverlay._inner = true; try { openPause(); } finally { closeOverlay._inner = false; } } }
-  function sheet(title, body) {
+  function sheet(title, body, closeId) {
+    var closeAttr = { 'aria-label': Z('关闭', 'Close') };
+    if (closeId) closeAttr.id = closeId;
     return h('div', { class: 'sheet' },
-      h('div', { class: 'head' }, h('h2', { text: title }), btn(Z('关闭', 'Close'), closeOverlay, 'small', { 'aria-label': Z('关闭', 'Close') })),
+      h('div', { class: 'head' }, h('h2', { text: title }), btn(Z('关闭', 'Close'), closeOverlay, 'small', closeAttr)),
       body);
   }
 
@@ -19554,21 +19595,34 @@ function getLang(ls, id) {
     if (S && S.settings && S.settings.reducedMotion) return true;
     try { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
   }
+  // Entrance is once per character per chapter. Camera cuts and step re-renders snap to the slot.
+  function castSeen() {
+    var key = ui.view === 'chapter' ? ('ch:' + (ui.cid || '')) : (ui.view === 'play' ? 'd1' : ('v:' + (ui.view || '')));
+    if (ui.castSeenKey !== key) { ui.castSeenKey = key; ui.castSeen = {}; }
+    return ui.castSeen;
+  }
   function startStageMotion(canvas, sceneName, st) {
     var token = ++stageMotionToken;
-    var born = {}, from = {}, speak = st.speaker || '', speakAt = Date.now(), started = Date.now();
+    var speak = st.speaker || '', speakAt = Date.now(), started = Date.now();
     var cast = Art.actors(sceneName, st);
+    var seen = castSeen();
+    var plan = Art.entryPlan(seen, cast);
+    var entering = {};
+    plan.enter.forEach(function (id) { entering[id] = true; });
+    Art.markEntered(seen, cast);
+    var wrap = canvas.parentNode;
+    if (wrap) {
+      wrap.classList.toggle(Art.ENTRY_CLASS, plan.enter.length > 0);
+      if (plan.enter.length) wrap.setAttribute('data-enter', plan.enter.join(' '));
+      else wrap.removeAttribute('data-enter');
+    }
     var prev = (ui.motScene === sceneName && ui.motCast) ? ui.motCast : [];
     var leaving = [];
     prev.forEach(function (p) {
       if (!cast.some(function (a) { return a.id === p.id; })) leaving.push({ actor: p, at: started });
     });
-    cast.forEach(function (a) {
-      var old = null;
-      for (var i = 0; i < prev.length; i++) if (prev[i].id === a.id) old = prev[i];
-      born[a.id] = old ? (ui.motBorn && ui.motBorn[a.id]) || started : started;
-      if (old && (old.x !== a.x || old.y !== a.y)) from[a.id] = { x: old.x, y: old.y, at: started };
-    });
+    var born = {};
+    cast.forEach(function (a) { born[a.id] = entering[a.id] ? started : (started - 1000); });
     ui.motScene = sceneName;
     ui.motCast = cast;
     ui.motBorn = born;
@@ -19578,15 +19632,8 @@ function getLang(ls, id) {
       var nudge = {}, blink = {};
       cast.forEach(function (a, i) {
         var age = now - (born[a.id] || started);
-        var hop = age < 340 ? Math.round(-6 * (1 - age / 340)) : 0;
-        var step = age < 340 ? Math.round((a.x < 48 ? -1 : 1) * 5 * (1 - age / 340)) : 0;
-        var slideX = 0, slideY = 0;
-        if (from[a.id]) {
-          var u = Math.min(1, (now - from[a.id].at) / 300);
-          slideX = Math.round((from[a.id].x - a.x) * (1 - u));
-          slideY = Math.round((from[a.id].y - a.y) * (1 - u));
-          if (u >= 1) delete from[a.id];
-        }
+        var hop = entering[a.id] && age < 340 ? Math.round(-6 * (1 - age / 340)) : 0;
+        var step = entering[a.id] && age < 340 ? Math.round((a.x < 48 ? -1 : 1) * 5 * (1 - age / 340)) : 0;
         var breath = Math.sin(now / 540 + i * 1.3) > 0.25 ? -1 : 0;
         var bounce = 0;
         if (st.speaker && a.speaker === st.speaker) {
@@ -19594,7 +19641,7 @@ function getLang(ls, id) {
           if (speak !== st.speaker) { speak = st.speaker; speakAt = now; bs = 0; }
           if (bs < 240) bounce = bs < 90 ? -2 : (bs < 160 ? 1 : 0);
         }
-        nudge[a.id] = { x: slideX + step, y: hop + breath + bounce + slideY };
+        nudge[a.id] = { x: step, y: hop + breath + bounce };
         blink[a.id] = ((now + i * 430) % 2900) < 130;
       });
       var ghosts = [];
@@ -20838,6 +20885,7 @@ function getLang(ls, id) {
     }).then(function () {
       if (gen !== ui.hubGen || ui.view !== 'hub' || !Hub.configure) return;
       if (window.A411_HUB_FAST || (S.settings && S.settings.reducedMotion)) Hub.setFast(true);
+      if (Hub.armChapter) Hub.armChapter(cid + ':' + spec.room);
       Hub.configure({
         hidden: spec.hidden, variants: spec.variants, actors: spec.actors,
         player: true, cues: spec.cues, plantHealthy: spec.plantHealthy
@@ -21018,13 +21066,11 @@ function getLang(ls, id) {
     box.appendChild(row);
     if (tab.kind === 'aha') box.appendChild(ahaPane(GR.byId(tab.id)));
     else box.appendChild(pqLessonPane(day, LT.LESSONS[tab.id], pq));
-    box.appendChild(h('div', { class: 'row' }, btn(Z('关闭', 'Close'), closeOverlay, '', { id: 'btnPourquoiClose' })));
-    openOverlay(sheet('Pourquoi ?', box));
+    openOverlay(sheet('Pourquoi ?', box, 'btnPourquoiClose'));
   }
   function ahaPane(p) {
     var body = h('div', { id: 'pqAha' });
     if (!p) return body;
-    body.appendChild(h('h2', { lang: 'fr', text: p.pattern }));
     var ul = h('ul', { class: 'examples' });
     (p.ex || []).forEach(function (e) {
       ul.appendChild(h('li', { lang: 'fr', class: 'fr' }, document.createTextNode(e[0] + ' '), sayBtn(e[0], { cls: 'inline', ctx: 'pourquoi' })));
@@ -21036,7 +21082,6 @@ function getLang(ls, id) {
   function pqLessonPane(day, les, pq) {
     var steps = les.steps || [], st = steps[Math.min(pq.step, Math.max(0, steps.length - 1))], last = !steps.length || pq.step >= steps.length - 1;
     var body = h('div', { id: 'pqLesson', 'data-kind': st ? st.kind : '' });
-    body.appendChild(h('h2', { lang: 'fr', text: les.title }));
     if (!st) return body;
     if (st.kind === 'example') {
       var ul = h('ul', { class: 'examples' });
@@ -22849,8 +22894,12 @@ function getLang(ls, id) {
     var back = document.getElementById('btnDevBack');
     if (!ui.founderDev) { if (el) el.remove(); if (back) back.remove(); return; }
     if (!el) { el = h('div', { id: 'devBadge', class: 'dev-badge', text: 'DEV' }); document.body.appendChild(el); }
-    if (ui.devReplay) { if (!back) document.body.appendChild(btn('Revenir', function () { goTitle(); }, 'small dev-back', { id: 'btnDevBack' })); }
-    else if (back) back.remove();
+    if (ui.devReplay) {
+      if (!back) back = btn('Revenir', function () { goTitle(); }, 'small dev-back', { id: 'btnDevBack' });
+      var bar = document.getElementById('topbar');
+      if (bar && !bar.hidden) bar.insertBefore(back, bar.firstChild);
+      else document.body.appendChild(back);
+    } else if (back) back.remove();
   }
   function boot() {
     try { ui.founderDev = !!(A411.FounderDev && A411.FounderDev.read(localStorage, location.search)); } catch (e) { ui.founderDev = false; }
