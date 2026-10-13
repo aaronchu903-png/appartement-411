@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.13.0 single-file build 2026-10-13T23:12:21.597Z -->
+<!-- L’Appartement 411 v0.13.1 single-file build 2026-10-13T23:50:55.007Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -31,7 +31,8 @@ body.large-text { font-size:20px; }
 .hub-prompt[hidden] { display:none !important; }
 .hub-goal { position:absolute; z-index:4; top:8px; left:50%; transform:translateX(-50%); max-width:calc(100% - 24px); padding:6px 12px; border:2px solid #2a2e3a; border-radius:999px; background:#fff7e6; color:#1f1d1a; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-weight:700; font-size:.95rem; text-align:center; box-shadow:0 0 0 4px rgba(246,165,74,.45); pointer-events:none; }
 .hub-goal[hidden] { display:none !important; }
-.dev-badge { position:fixed; z-index:16; left:max(10px, env(safe-area-inset-left)); bottom:calc(62px + env(safe-area-inset-bottom)); top:auto; right:auto; background:#8a3b12; color:#fff; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-size:10px; font-weight:700; letter-spacing:.04em; line-height:1.2; padding:1px 4px; border-radius:3px; pointer-events:none; }
+.dev-badge { position:fixed; z-index:40; top:8px; left:50%; right:auto; bottom:auto; transform:translateX(-50%); background:#8a3b12; color:#fff; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-size:10px; font-weight:700; letter-spacing:.04em; line-height:1.2; padding:1px 4px; border-radius:3px; pointer-events:none; }
+body:has(#topbar:not([hidden])) .dev-badge { top:58px; }
 .dev-back { position:static; flex:0 0 auto; align-self:center; z-index:1; min-height:32px; min-width:0; padding:4px 8px; font-size:.8rem; }
 body > .dev-back { position:fixed; z-index:41; top:8px; right:52px; left:auto; }
 .pq-tabs { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
@@ -369,13 +370,20 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
 .task-stage .task-art { width:288px; height:336px; max-width:100%; border:0; background:transparent; }
 .task-zone { position:absolute; margin:0; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; min-width:0; min-height:0; cursor:pointer; }
 .task-zone:focus-visible, .task-zone:active { background:rgba(242,201,76,.28); outline:2px solid #c9a227; }
+.task-stage.is-dragging .task-zone { outline:1px dashed rgba(90,60,30,.45); background:rgba(255,248,230,.12); }
+.task-zone.is-hot { outline:2px solid rgba(70,45,20,.55); background:rgba(255,248,230,.28); }
 .task-slots { display:flex; flex-direction:column; gap:8px; }
 .task-slot, .task-door { width:100%; text-align:left; }
-.task-ui.task-miss { box-shadow:inset 0 0 0 2px var(--warn); }
+.task-help { font-family:"Noto Sans SC", "Noto Sans", system-ui, sans-serif; font-size:13px; line-height:1.4; color:#6b5a48; margin:4px 0 8px; }
+.task-react { font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-size:1.15rem; line-height:1.4; margin:6px 0; color:#6b3a2a; }
+.task-say { align-self:flex-start; min-width:48px; min-height:48px; font-size:1.35rem; padding:8px 12px; }
+#btnTaskExit { margin-top:18px; }
+.task-art.task-shake { animation:task-shake 420ms ease; }
+@keyframes task-shake { 0%, 100% { transform:translateX(0); } 20% { transform:translateX(-4px); } 40% { transform:translateX(4px); } 60% { transform:translateX(-3px); } 80% { transform:translateX(2px); } }
 .handover { animation:task-hand .55s ease; }
 @keyframes task-hand { from { transform:translateY(10px); opacity:.35; } to { transform:none; opacity:1; } }
-@media (prefers-reduced-motion: reduce) { .handover { animation:none; } }
-body.reduced-motion .handover { animation:none; }
+@media (prefers-reduced-motion: reduce) { .handover, .task-art.task-shake { animation:none; } }
+body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animation:none; }
 /* the wordbook icon stays on every screen; it only fades + lets taps through while it would cover an answer option */
 .wb-fab.over-option { opacity:.35; pointer-events:none; }
 
@@ -794,6 +802,19 @@ body.reduced-motion .handover { animation:none; }
     return c;
   }
   // v0.9.2: derived from the story state (chapters + letters), never from real dates. Old saves are recomputed on load.
+  // A revealed answer and any hint both count as help. Independent means no hint and no reveal.
+  function letterTallies(gaps) {
+    var indep = 0, helped = 0, revealed = 0;
+    (gaps || []).forEach(function (x) {
+      if (!x) return;
+      var rev = !!x.revealed;
+      var hints = x.hints || 0;
+      if (rev) revealed++;
+      if (x.correct && !rev && !hints) indep++;
+      else if (rev || hints > 0 || (x.value != null && x.value !== '' && !x.correct)) helped++;
+    });
+    return { indep: indep, helped: helped, revealed: revealed };
+  }
   function letterCareful(r) {
     if (!r || r.status !== 'done' || !r.gaps) return false;
     var g = Object.keys(r.gaps).map(function (k) { return r.gaps[k]; });
@@ -970,7 +991,7 @@ body.reduced-motion .handover { animation:none; }
     newGarden: newGarden, currentStreak: currentStreak, missedDays: missedDays, stageOf: stageOf, refresh: refresh, status: status,
     water: water, replant: replant, migrateGarden: migrateGarden, migratePlants: migratePlants, longestRun: longestRun,
     ensureWeek: ensureWeek, chapterStatus: chapterStatus, unlockDay: unlockDay, openEarly: openEarly, startChapter: startChapter, previewEnding: previewEnding,
-    tracesLeft: tracesLeft, traceHudOn: traceHudOn, clearTrace: clearTrace, traceLedger: traceLedger, syncTraces: syncTraces, letterCareful: letterCareful, CARE_FOR: CARE_FOR, traceGone: traceGone, day7Band: day7Band, LEGACY_TRACE_MAX: LEGACY_TRACE_MAX, ritualSeen: ritualSeen, markRitual: markRitual, completeChapter: completeChapter,
+    tracesLeft: tracesLeft, traceHudOn: traceHudOn, clearTrace: clearTrace, traceLedger: traceLedger, syncTraces: syncTraces, letterCareful: letterCareful, letterTallies: letterTallies, CARE_FOR: CARE_FOR, traceGone: traceGone, day7Band: day7Band, LEGACY_TRACE_MAX: LEGACY_TRACE_MAX, ritualSeen: ritualSeen, markRitual: markRitual, completeChapter: completeChapter,
     checkAbsence: checkAbsence, noteActive: noteActive, validateWeek: validateWeek, completedDay: completedDay,
     storyDone: storyDone, deskDone: deskDone, letterTraceState: letterTraceState, startLetter: startLetter, completeLetter: completeLetter,
     dayPlan: dayPlan, migrateWeekV2: migrateWeekV2
@@ -990,7 +1011,7 @@ body.reduced-motion .handover { animation:none; }
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.13.0';
+  var APP_VERSION = '0.13.1';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -10435,6 +10456,12 @@ function getLang(ls, id) {
     return { ok: e.length === 0, errors: e };
   }
 
+  // The profile-start check already happened. Day 1 should not ask for the same kind of test again.
+  function storyBaselineRedundant(placement, baselineStatus) {
+    var took = placement === 'done' || placement === 'skipped';
+    return took && (baselineStatus == null || baselineStatus === 'not_started');
+  }
+
   var api = {
     PROFILES: PROFILES, LEARN_SCHEMA: LEARN_SCHEMA, DEFAULT_REVIEW_CAP: DEFAULT_REVIEW_CAP, DEFAULT_NEW_CAP: DEFAULT_NEW_CAP,
     emptyLearn: emptyLearn, loadLearn: loadLearn, saveLearn: saveLearn, getLang: getLang, setLang: setLang, uiMode: uiMode, setUiMode: setUiMode,
@@ -10444,7 +10471,7 @@ function getLang(ls, id) {
     buildQueue: buildQueue, startSession: startSession, commit: commit, counts: counts, retention: retention,
     spaceSiblings: spaceSiblings, SIBLING_GAP: SIBLING_GAP,
     forecast: forecast, grammarMap: grammarMap, noteStory: noteStory, bandOk: bandOk,
-    PLACEMENT: PLACEMENT, placementState: placementState, placementAnswer: placementAnswer, skipPlacement: skipPlacement,
+    PLACEMENT: PLACEMENT, placementState: placementState, placementAnswer: placementAnswer, skipPlacement: skipPlacement, storyBaselineRedundant: storyBaselineRedundant,
     validateSeed: validateSeed, importSeed: importSeed, validateBundle: validateBundle, dayKey: dayKey, resultTypeOf: resultTypeOf,
     STORY_NEW_CAP: STORY_NEW_CAP, addStoryPending: addStoryPending, storyPendingItems: storyPendingItems, ensureGarden: ensureGarden,
     RENAMED: RENAMED, moduleOf: moduleOf, migrateV04: migrateV04, gradeExternal: gradeExternal, gapGrade: gapGrade, previewIntervals: previewIntervals,
@@ -19305,14 +19332,18 @@ function getLang(ls, id) {
     { fr: 'Croissant' + NN + '! Pas sur le canapé' + NN + '!', need: ['p1_16'], pose: 'cat_paw' }
   ];
   var DT03_REPLIES = [
-    { id: 'faim', fr: 'Il a faim' + NN + '?', need: ['p2_16'], who: 'player' },
-    { id: 'fatigue', fr: 'Il est fatigué.', need: ['p5_25'], who: 'player', about: 'cat' }
+    { id: 'accord', fr: 'D’accord' + NN + '!', need: ['p5_18'], who: 'player', ok: true },
+    { id: 'faim', fr: 'Il a faim' + NN + '?', need: ['p2_16'], who: 'player', ok: true },
+    { id: 'fatigue', fr: 'Il est fatigué.', need: ['p5_25'], who: 'player', about: 'cat', ok: true },
+    { id: 'gentil', fr: 'Il est gentil.', need: ['p5_04'], who: 'player', ok: false }
   ];
   var DT03_POSES = ['cat_chair', 'cat_paw', 'sit_in_pot', 'smug'];
 
+  var DT04_PHOTO = 'Prends une photo de la plante.';
   var DT04_CAPTIONS = [
-    { id: 'plante', fr: 'Regardez, la plante' + NN + '!', need: ['p1_19'], recognition: false },
-    { id: 'feuille', fr: 'Regardez, une nouvelle feuille' + NN + '!', need: [], recognition: true }
+    { id: 'plante', fr: 'Regardez, la plante' + NN + '!', need: ['p1_19'], recognition: false, ok: true },
+    { id: 'feuille', fr: 'Regardez, une nouvelle feuille' + NN + '!', need: [], recognition: true, ok: true },
+    { id: 'canape', fr: 'Regardez, le canapé' + NN + '!', need: ['p1_16'], recognition: false, ok: false }
   ];
   var DT04_REPLIES = [
     { fr: 'C’est très bien.', need: [] },
@@ -19477,10 +19508,13 @@ function getLang(ls, id) {
     var givers = giversFor(BY_ID.DT01_petite_course, ctx);
     if (!givers.length) return null;
     var giver = pick(rng, givers);
-    var locs = BY_ID.DT01_petite_course.location.slice();
-    if (BY_ID.DT01_petite_course.variant && ctx.storyDay >= 15) locs = ['superette'];
     var ask = askLine(giver, target.fr_partitive);
     var unsure = entryMet('p3_12', ctx.storyDay);
+    var locs = BY_ID.DT01_petite_course.location.slice();
+    if (BY_ID.DT01_petite_course.variant && ctx.storyDay >= 15) locs = ['superette'];
+    else if (giver === 'lefevre') locs = ['lefevre_flat'];
+    else locs = locs.filter(function (id) { return id !== 'lefevre_flat'; });
+    if (!locs.length) locs = ['flat411_kitchen'];
     return {
       steps: [
         { type: 'line', who: giver, fr: ask, speak: ask, target: target.id, options: [
@@ -19538,18 +19572,28 @@ function getLang(ls, id) {
     };
   }
 
+  function dt03React(scold) {
+    if (scold.fr.indexOf('canapé') >= 0) return 'Non' + NN + '! Pas sur le canapé' + NN + '!';
+    return 'Non' + NN + '! Pas sur la table' + NN + '!';
+  }
+
   function prepareDT03(ctx) {
     var scolds = DT03_SCOLDS.filter(function (s) { return allMet(s.need, ctx.storyDay); });
     var replies = DT03_REPLIES.filter(function (s) { return allMet(s.need, ctx.storyDay); });
-    if (!scolds.length || !replies.length) return null;
+    var ok = replies.filter(function (r) { return r.ok !== false; });
+    var bad = replies.filter(function (r) { return r.ok === false; });
+    if (!scolds.length || !ok.length || !bad.length) return null;
     var rng = rngOf(ctx.seed + ':DT03');
     var scold = pick(rng, scolds);
     var pose = pick(rng, DT03_POSES);
     var giver = pick(rng, giversFor(BY_ID.DT03_croissant_betise, ctx).concat(['noe']));
+    var react = dt03React(scold);
     return {
       steps: [
         { type: 'line', who: giver === 'camille' ? 'camille' : 'noe', fr: scold.fr, speak: scold.fr, pose: pose },
-        { type: 'reply', fr: scold.fr, options: replies.map(function (r) { return { id: r.id, fr: r.fr, ok: true }; }), pose: pose }
+        { type: 'reply', fr: scold.fr, options: shuffle(rng, replies).map(function (r) {
+          return { id: r.id, fr: r.fr, ok: r.ok !== false, react: r.ok === false ? react : null };
+        }), pose: pose }
       ],
       giver: giver, location: 'flat411', pose: pose
     };
@@ -19560,12 +19604,17 @@ function getLang(ls, id) {
     var captions = DT04_CAPTIONS.filter(function (c) { return !c.need.length || allMet(c.need, ctx.storyDay); });
     var recog = captions.filter(function (c) { return c.recognition; });
     if (recog.length > 1) captions = captions.filter(function (c) { return !c.recognition; }).concat(recog.slice(0, 1));
+    var right = captions.filter(function (c) { return c.ok !== false; });
+    var wrong = captions.filter(function (c) { return c.ok === false; });
+    if (!right.length || !wrong.length) return null;
     var replies = DT04_REPLIES.filter(function (r) { return !r.need.length || allMet(r.need, ctx.storyDay); });
     var rng = rngOf(ctx.seed + ':DT04');
     var reply = pick(rng, replies);
     return {
       steps: [
-        { type: 'photo', captions: captions },
+        { type: 'photo', fr: DT04_PHOTO, captions: captions.map(function (c) {
+          return { id: c.id, fr: c.fr, recognition: !!c.recognition, ok: c.ok !== false };
+        }) },
         { type: 'line', who: 'martin', fr: reply.fr, speak: reply.fr }
       ],
       giver: 'martin', location: 'rooftop'
@@ -19612,21 +19661,31 @@ function getLang(ls, id) {
     var rng = rngOf((ctx.seed || ctx.dayKey || 'day') + ':offer');
     var playable = TEMPLATES.filter(function (t) { return t.playable && canFill(t.id, ctx); });
     var yesterday = ctx.yesterday || [];
+    var offered = ctx.offered || [];
+    var unseen = playable.filter(function (t) { return offered.indexOf(t.id) < 0; });
     var fresh = playable.filter(function (t) { return yesterday.indexOf(t.id) < 0; });
-    var pool = fresh.length >= Math.min(3, playable.length) ? fresh : playable;
-    var reused = pool !== fresh && fresh.length < playable.length;
-    var shuffled = shuffle(rng, pool);
-    var cap = shuffled.length < 3 ? shuffled.length : Math.min(shuffled.length, 3 + Math.floor(rng() * 3));
-    return { ids: shuffled.slice(0, cap).map(function (t) { return t.id; }), reusedYesterday: reused };
+    var unseenShuffled = shuffle(rng, unseen);
+    var freshRest = shuffle(rng, fresh.filter(function (t) { return unseen.indexOf(t) < 0; }));
+    var stale = shuffle(rng, playable.filter(function (t) { return unseen.indexOf(t) < 0 && fresh.indexOf(t) < 0; }));
+    var ordered = unseenShuffled.concat(freshRest);
+    var need = Math.min(3, playable.length);
+    if (ordered.length < need) ordered = ordered.concat(stale);
+    var cap = ordered.length < 3 ? ordered.length : Math.min(ordered.length, 3 + Math.floor(rng() * 3));
+    if (unseenShuffled.length && cap < unseenShuffled.length) cap = Math.min(5, unseenShuffled.length);
+    var ids = ordered.slice(0, cap).map(function (t) { return t.id; });
+    var reused = ids.some(function (id) { return yesterday.indexOf(id) >= 0; }) && fresh.length < playable.length;
+    return { ids: ids, reusedYesterday: reused };
   }
 
-  function begin() { return { step: 0, reveal: false, photo: false, wrongDoor: false }; }
+  function begin() { return { step: 0, reveal: false, photo: false, wrongDoor: false, placed: [] }; }
 
   function view(inst, state) {
-    if (!inst) return { done: true };
-    if (state.step >= inst.steps.length) return { done: true, title: inst.title };
+    state = state || {};
+    var placed = state.placed || [];
+    if (!inst) return { done: true, placed: placed };
+    if (state.step >= inst.steps.length) return { done: true, title: inst.title, placed: placed, giver: inst.giver, location: inst.location };
     var step = inst.steps[state.step];
-    return { done: false, title: inst.title, step: step, index: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: state.wrongDoor, giver: inst.giver, location: inst.location, pose: inst.pose || (step && step.pose) };
+    return { done: false, title: inst.title, step: step, index: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: state.wrongDoor, placed: placed, giver: inst.giver, location: inst.location, pose: inst.pose || (step && step.pose) };
   }
 
   // input: { choice, pick, slot, caption, door, next }
@@ -19635,11 +19694,12 @@ function getLang(ls, id) {
   function act(inst, state, input) {
     input = input || {};
     var step = inst.steps[state.step];
-    var next = { step: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: false };
+    var next = { step: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: false, placed: (state.placed || []).slice() };
     var encounters = [];
     var speak = null;
     if (!step) return { state: next, encounters: encounters, done: true };
     function hear(fr, target) { if (fr) encounters.push({ fr: fr, target: target || null, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false }); }
+    function miss(react) { return { state: next, encounters: [], miss: true, react: react, speak: react, done: false }; }
     if (step.type === 'line' && step.options && input.choice) {
       var opt = (step.options || []).filter(function (o) { return o.id === input.choice; })[0];
       if (!opt) return { state: next, encounters: [], done: false };
@@ -19648,8 +19708,12 @@ function getLang(ls, id) {
       next.step = state.step + 1;
     } else if (step.type === 'line' || step.type === 'drag') {
       if (input.next || input.slot) {
-        if (step.type === 'drag' && input.slot && input.slot !== step.place) return { state: next, encounters: [], miss: true, done: false };
-        if (step.type === 'drag') hear(step.fr, step.target);
+        if (step.type === 'drag' && input.slot && input.slot !== step.place) return miss('Non.');
+        if (step.type === 'drag') {
+          hear(step.fr, step.target);
+          next.placed = next.placed.filter(function (p) { return p.objectId !== step.objectId; });
+          next.placed.push({ objectId: step.objectId, icon: step.icon, place: step.place });
+        }
         next.step = state.step + 1;
       }
     } else if (step.type === 'choice') {
@@ -19671,19 +19735,21 @@ function getLang(ls, id) {
       } else if (input.pick) {
         var hit = (step.options || []).filter(function (o) { return o.id === input.pick; })[0];
         if (!hit) return { state: next, encounters: [], done: false };
-        if (!hit.correct) return { state: next, encounters: [], miss: true, done: false };
+        if (!hit.correct) return miss('Non.');
         hear(hit.fr_partitive, hit.id);
         next.step = state.step + 1;
       }
     } else if (step.type === 'reply') {
       var rep = (step.options || []).filter(function (o) { return o.id === input.choice; })[0];
       if (!rep) return { state: next, encounters: [], done: false };
+      if (rep.ok === false) return miss(rep.react || 'Non.');
       hear(rep.fr, null);
       next.step = state.step + 1;
     } else if (step.type === 'photo') {
       if (!state.photo && input.next) { next.photo = true; return { state: next, encounters: [], photo: true, done: false }; }
       var cap = (step.captions || []).filter(function (c) { return c.id === input.caption; })[0];
       if (!cap) return { state: next, encounters: [], done: false };
+      if (cap.ok === false) return miss('Non. La plante' + NN + '!');
       hear(cap.fr, cap.recognition ? null : 'p1_19');
       next.photo = false;
       next.step = state.step + 1;
@@ -19692,7 +19758,7 @@ function getLang(ls, id) {
       if (input.door !== step.recipient.door) {
         next.wrongDoor = true;
         hear(step.no, null);
-        return { state: next, encounters: encounters, speak: step.no, miss: true, done: false };
+        return { state: next, encounters: encounters, speak: step.no, react: step.no, miss: true, done: false };
       }
       hear(step.fr, null);
       hear(step.yes, 'p5_31');
@@ -19734,8 +19800,10 @@ function getLang(ls, id) {
     'Pardon' + NN + '?',
     'Il a faim' + NN + '?',
     'Il est fatigué.',
+    'Il est gentil.',
     'Regardez, la plante' + NN + '!',
     'Regardez, une nouvelle feuille' + NN + '!',
+    'Regardez, le canapé' + NN + '!',
     'C’est pour toi' + NN + '?',
     'C’est pour vous, madame' + NN + '?'
   ];
@@ -19796,6 +19864,9 @@ function getLang(ls, id) {
     var ctx = canvas.getContext('2d');
     var s = scale || 4;
     var sz = Art.propSize(icon);
+    var short = Math.min(sz[0], sz[1]);
+    var need = short > 0 ? short : Math.max(sz[0], sz[1]);
+    if (need > 0) while (need * s < 64) s++;
     var w = sz[0] * s + s * 2;
     var h = sz[1] * s + s * 2;
     canvas.width = w;
@@ -19817,7 +19888,7 @@ function getLang(ls, id) {
     'sous la table': { x: 36, y: 70, w: 32, h: 42 },
     'à côté du canapé': { x: 68, y: 70, w: 28, h: 42 }
   };
-  function paintTidy(canvas) {
+  function paintTidy(canvas, placed, Art) {
     var S = TIDY_S;
     canvas.width = TIDY_W * S;
     canvas.height = TIDY_H * S;
@@ -19830,10 +19901,16 @@ function getLang(ls, id) {
     px(6, 14, 28, 1, '#ffffff');
     px(19, 6, 1, 18, '#ffffff');
     px(4, 24, 32, 2, '#6b4f3a');
-    px(54, 14, 36, 3, '#8a5a3a');
-    px(56, 6, 7, 8, '#d9534f');
-    px(66, 5, 7, 9, '#e2873a');
-    px(76, 6, 7, 8, '#5cb85c');
+    // Kitchen counter in the upper-right drop zone (« dans la cuisine »).
+    px(50, 20, 42, 16, '#d7c4a2');
+    px(50, 18, 42, 3, '#8a5a3a');
+    px(52, 24, 18, 10, '#c4a882');
+    px(74, 24, 16, 10, '#c4a882');
+    px(60, 27, 2, 2, '#e0c060');
+    px(80, 27, 2, 2, '#e0c060');
+    px(56, 8, 7, 10, '#d9534f');
+    px(66, 7, 7, 11, '#e2873a');
+    px(78, 8, 7, 10, '#5cb85c');
     px(4, 58, 16, 42, '#6b4430');
     px(6, 60, 12, 38, '#a06a42');
     px(15, 76, 2, 2, '#e0c060');
@@ -19844,24 +19921,50 @@ function getLang(ls, id) {
     px(72, 82, 20, 7, '#4b5d8a');
     px(70, 84, 3, 16, '#4b5d8a');
     px(90, 84, 3, 16, '#4b5d8a');
+    (placed || []).forEach(function (p, i) {
+      var z = ZONES[p.place];
+      if (!z || !Art || !p.icon || !Art.propSize) return;
+      var sz = Art.propSize(p.icon);
+      var s = 2;
+      while (Math.max(sz[0], sz[1]) * s < 48) s++;
+      var cx = Math.round((z.x + z.w / 2) * S - (sz[0] * s) / 2 + (i % 3) * 6);
+      var cy = Math.round((z.y + z.h / 2) * S - (sz[1] * s) / 2);
+      Art.drawProp(ctx, p.icon, cx, cy, s);
+    });
+  }
+
+  function paintRooftop(canvas, Art) {
+    var ctx = canvas.getContext('2d');
+    var W = Art.W, H = Art.H;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.imageSmoothingEnabled = false;
+    function px(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+    px(0, 0, W, H, '#8ec8ef');
+    px(0, 18, W, 10, '#b7c6d6');
+    px(8, 8, 6, 12, '#7d8b9c');
+    px(7, 8, 8, 2, '#5c6a7a');
+    px(40, 6, 5, 14, '#7d8b9c');
+    px(39, 6, 7, 2, '#5c6a7a');
+    px(74, 10, 7, 10, '#7d8b9c');
+    px(73, 10, 9, 2, '#5c6a7a');
+    px(0, 36, W, H - 36, '#a36b45');
+    px(0, 34, W, 3, '#e7d3a1');
+    var i;
+    for (i = 0; i < 8; i++) px(i * 12, 42, 11, 2, '#8a5738');
+    for (i = 0; i < 8; i++) px(6 + i * 12, 50, 11, 2, '#8a5738');
+    if (Art.PROPS && Art.PROPS.plantp) Art.drawProp(ctx, 'plantp', 34, 20, 2);
+    if (Art.PROPS && Art.PROPS.phone) Art.drawProp(ctx, 'phone', 58, 18, 2);
   }
 
   function paintScene(canvas, inst, view, Art) {
     if (!Art) return;
-    if (inst.interaction === 'drag_to_slot') { paintTidy(canvas); return; }
+    if (inst.interaction === 'drag_to_slot') { paintTidy(canvas, view.placed, Art); return; }
     var ctx = canvas.getContext('2d');
     var pose = view.pose || (view.step && view.step.pose);
     var loc = view.location;
     canvas.width = Art.W; canvas.height = Art.H;
-    if (inst.interaction === 'photo' || loc === 'rooftop') {
-      ctx.fillStyle = '#9ec6ea';
-      ctx.fillRect(0, 0, Art.W, Art.H);
-      ctx.fillStyle = '#d8c9ad';
-      ctx.fillRect(0, 40, Art.W, 24);
-      if (Art.garden) { ctx.save(); ctx.translate(24, 8); Art.garden(ctx, 4, 'healthy', true); ctx.restore(); }
-      if (Art.PROPS.phone) Art.drawProp(ctx, 'phone', 62, 28, 2);
-      return;
-    }
+    if (inst.interaction === 'photo' || loc === 'rooftop') { paintRooftop(canvas, Art); return; }
     if (pose === 'cat_chair' || pose === 'cat_paw') { Art.scene(ctx, pose, {}); return; }
     if (pose === 'sit_in_pot') { Art.scene(ctx, 'plant', { watered: true }); return; }
     if (pose === 'smug') { Art.scene(ctx, 'cat', {}); return; }
@@ -19871,18 +19974,35 @@ function getLang(ls, id) {
     Art.scene(ctx, 'kitchen', {});
   }
 
+  function helpFor(step, photoTaken) {
+    if (!step) return '做完了。点返回。';
+    if (step.type === 'line' && step.options) return '先听这句话，再选「好的」或「没听清」。';
+    if (step.type === 'line') return '听完这句，再继续。';
+    if (step.type === 'fetch') return '点她要的那个东西。';
+    if (step.type === 'drag') return '把东西拖到她说的地方，或者点那个位置。';
+    if (step.type === 'reply') return '选一句合适的话。有一句是不对的。';
+    if (step.type === 'photo') return photoTaken ? '选一句和照片相符的话。' : '给屋顶上的植物拍一张照片。';
+    if (step.type === 'deliver') return '把包裹送到名字上的那个人门口。';
+    return '';
+  }
+
   function render(ctx) {
     var Tasks = ctx.Tasks, Art = ctx.Art, mount = ctx.mount;
     var inst = ctx.inst, state = ctx.state;
     mount.innerHTML = '';
     var v = Tasks.view(inst, state);
-    var rootEl = el('div', { class: 'task-ui', id: 'taskUi', lang: 'fr' });
+    var rootEl = el('div', { class: 'task-ui', id: 'taskUi', lang: 'fr', 'data-placed': String((v.placed || []).length) });
     rootEl.appendChild(el('p', { class: 'task-kicker', id: 'taskWhere', text: (WHO[v.giver] ? WHO[v.giver] + ' · ' : '') + (LOC[v.location] || '') }));
     var canvas = el('canvas', { class: 'task-art', id: 'taskArt', width: String(Art ? Art.W : 96), height: String(Art ? Art.H : 64) });
     rootEl.appendChild(canvas);
     paintScene(canvas, inst, v, Art);
     if (v.done) {
-      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: 'Merci' + Tasks.NN + '!' }));
+      var thanks = 'Merci' + Tasks.NN + '!';
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: thanks }));
+      rootEl.appendChild(el('p', { class: 'task-help', lang: 'zh-Hans', id: 'taskHelp', text: '做完了。点返回。' }));
+      var sayDone = btn('🔊', function () { if (ctx.speak) ctx.speak(thanks, v.giver); }, 'task-say', 'btnTaskSay');
+      sayDone.setAttribute('aria-label', 'Réécouter');
+      rootEl.appendChild(sayDone);
       rootEl.appendChild(btn('Retour', ctx.onExit, 'primary', 'btnTaskExit'));
       mount.appendChild(rootEl);
       if (ctx.onDone) ctx.onDone();
@@ -19895,6 +20015,7 @@ function getLang(ls, id) {
       var res = Tasks.act(inst, ctx.state, input);
       (res.encounters || []).forEach(function (enc) { if (ctx.onEncounter) ctx.onEncounter(enc); });
       ctx.miss = !!res.miss;
+      ctx.react = res.react || null;
       ctx.state = res.state;
       if (ctx.onState) ctx.onState(res.state);
       if (res.replay && ctx.speak) ctx.speak(res.speak || (inst.steps[0] && inst.steps[0].fr), step.who);
@@ -19952,25 +20073,29 @@ function getLang(ls, id) {
         s.style.width = (z.w * TIDY_S) + 'px';
         s.style.height = (z.h * TIDY_S) + 'px';
         s.addEventListener('click', function () { go({ slot: place }); });
-        s.addEventListener('dragover', function (ev) { ev.preventDefault(); });
-        s.addEventListener('drop', function (ev) { ev.preventDefault(); go({ slot: place }); });
+        s.addEventListener('mouseenter', function () { s.classList.add('is-hot'); });
+        s.addEventListener('mouseleave', function () { s.classList.remove('is-hot'); });
+        s.addEventListener('dragenter', function (ev) { ev.preventDefault(); s.classList.add('is-hot'); });
+        s.addEventListener('dragover', function (ev) { ev.preventDefault(); s.classList.add('is-hot'); });
+        s.addEventListener('dragleave', function () { s.classList.remove('is-hot'); });
+        s.addEventListener('drop', function (ev) { ev.preventDefault(); s.classList.remove('is-hot'); go({ slot: place }); });
         stage.appendChild(s);
       });
       var chip = el('canvas', { class: 'task-chip', id: 'taskChip', draggable: 'true' });
       paintIcon(chip, step.icon, Art, 4);
       chip.setAttribute('aria-label', step.fr);
-      chip.addEventListener('dragstart', function (ev) { try { ev.dataTransfer.setData('text/plain', 'item'); } catch (e) {} });
+      chip.addEventListener('dragstart', function (ev) {
+        try { ev.dataTransfer.setData('text/plain', 'item'); } catch (e) {}
+        stage.classList.add('is-dragging');
+      });
+      chip.addEventListener('dragend', function () { stage.classList.remove('is-dragging'); });
       actions.appendChild(chip);
     } else if (step.type === 'photo') {
-      if (!v.photo) {
-        rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: 'La plante.' }));
-        actions.appendChild(btn('La photo', function () { go({ next: true }); }, 'primary', 'btnPhoto'));
-      } else {
-        rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: '' }));
-        (step.captions || []).forEach(function (c) {
-          actions.appendChild(btn(c.fr, function () { go({ caption: c.id }); }, '', 'btnCap_' + c.id));
-        });
-      }
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr || 'Prends une photo de la plante.' }));
+      if (!v.photo) actions.appendChild(btn('La photo', function () { go({ next: true }); }, 'primary', 'btnPhoto'));
+      else (step.captions || []).forEach(function (c) {
+        actions.appendChild(btn(c.fr, function () { go({ caption: c.id }); }, '', 'btnCap_' + c.id));
+      });
     } else if (step.type === 'deliver') {
       var name = el('p', { class: 'parcel-name', id: 'parcelName', text: step.recipient.name });
       rootEl.appendChild(name);
@@ -19983,9 +20108,18 @@ function getLang(ls, id) {
         actions.appendChild(btn(d.fr, function () { go({ door: d.id }); }, 'task-door', 'btnDoor_' + d.id));
       });
     }
+    var spokenFr = step.type === 'deliver' ? (v.wrongDoor ? step.no : step.fr) : (step.fr || '');
+    var react = ctx.react || '';
+    ctx.react = null;
+    if (react && react !== spokenFr) rootEl.appendChild(el('p', { class: 'task-react', id: 'taskReact', text: react }));
+    var help = helpFor(step, !!v.photo);
+    if (help) rootEl.appendChild(el('p', { class: 'task-help', lang: 'zh-Hans', id: 'taskHelp', text: help }));
+    var say = btn('🔊', function () { if (ctx.speak && spokenFr) ctx.speak(spokenFr, step.who || v.giver); }, 'task-say', 'btnTaskSay');
+    say.setAttribute('aria-label', 'Réécouter');
+    rootEl.appendChild(say);
     rootEl.appendChild(actions);
     rootEl.appendChild(btn('Retour', ctx.onExit, 'small', 'btnTaskExit'));
-    if (ctx.miss) rootEl.classList.add('task-miss');
+    if (ctx.miss) canvas.classList.add('task-shake');
     ctx.miss = false;
     mount.appendChild(rootEl);
   }
@@ -21183,6 +21317,9 @@ function getLang(ls, id) {
   R.focus = function (step) { focusBeat(S.progress.scene, artFor(step), step.w, next, 'd1.' + S.progress.scene + '.' + S.progress.step); };
 
   R.baselineIntro = function () {
+    var placement = learnState && learnState.settings && learnState.settings.placement;
+    var baseStatus = S && S.learning && S.learning.baseline && S.learning.baseline.status;
+    if (A411.Learn.storyBaselineRedundant(placement, baseStatus)) { skipBaseline(); return; }
     $screen.appendChild(stage('baseline', { alt: Z('中性画面：一个扬声器图标', 'Neutral screen: a speaker icon') }));
     $screen.appendChild(h('div', { class: 'card fade-in' },
       h('h2', { text: Z('开始前的小测（可跳过）', 'A short check before we start (optional)') }),
@@ -21658,6 +21795,11 @@ function getLang(ls, id) {
     var dayKey = todayKey();
     var store = S && S.week && S.week.dailyTasks || {};
     var yKey = WL.addDays(dayKey, -1);
+    var offered = [];
+    Object.keys(store).forEach(function (k) {
+      if (k === dayKey) return;
+      ((store[k] && store[k].ids) || []).forEach(function (id) { if (offered.indexOf(id) < 0) offered.push(id); });
+    });
     return {
       storyDay: storyDay,
       seed: (profileId || 'player') + ':' + dayKey,
@@ -21665,6 +21807,7 @@ function getLang(ls, id) {
       contacts: (learnState && learnState.taskLog && learnState.taskLog.contacts) || {},
       dueIds: A411.Tasks && learnState ? A411.Tasks.dueEntryIds(learnState, new Date()) : [],
       yesterday: (store[yKey] && store[yKey].ids) || [],
+      offered: offered,
       absent: {}
     };
   }
@@ -21687,10 +21830,12 @@ function getLang(ls, id) {
     var off = todayOffer();
     if (!off || !off.ids || !off.ids.length) return null;
     var box = h('div', { class: 'task-offers', id: 'taskOffers', lang: 'fr' });
+    var doneIds = off.done || [];
     off.ids.forEach(function (id) {
       var t = A411.Tasks.BY_ID[id];
       if (!t) return;
-      box.appendChild(btn(t.title, function () { openTask(id); }, 'task-offer', { id: 'btnTask_' + id, lang: 'fr' }));
+      var done = doneIds.indexOf(id) >= 0;
+      box.appendChild(btn((done ? '✓ ' : '') + t.title, function () { openTask(id); }, 'task-offer' + (done ? ' is-done' : ''), { id: 'btnTask_' + id, lang: 'fr' }));
     });
     return box;
   }
@@ -21738,7 +21883,16 @@ function getLang(ls, id) {
       onState: function (st) { if (ui.task) ui.task.state = st; },
       onExit: function () { ui.task = null; goTitle(); },
       onEncounter: noteTaskEncounter,
-      onDone: function () {},
+      onDone: function () {
+        if (!S || !ui.task || ui.task.preview) return;
+        var w = WL.ensureWeek(S);
+        w.dailyTasks = w.dailyTasks || {};
+        var rec = w.dailyTasks[todayKey()];
+        if (!rec) return;
+        rec.done = rec.done || [];
+        if (rec.done.indexOf(ui.task.id) < 0) rec.done.push(ui.task.id);
+        persist('daily-task-done');
+      },
       speak: function (text, who) {
         try { Au.speak(text, { speaker: who === 'camille' || who === 'noe' || who === 'lefevre' || who === 'martin' ? who : 'neutral' }); } catch (e) {}
       }
@@ -22344,7 +22498,8 @@ function getLang(ls, id) {
   function renderLetterDone(card, n, r) {
     var Lt = LT.LETTERS[n], order = LT.gapOrder(n);
     var gaps = order.map(function (g) { return r.gaps[g] || {}; });
-    var indep = gaps.filter(function (x) { return x.correct; }).length, helped = gaps.filter(function (x) { return x.value != null && !x.correct && !x.revealed; }).length, rev = gaps.filter(function (x) { return x.revealed; }).length;
+    var tally = WL.letterTallies(gaps);
+    var indep = tally.indep, helped = tally.helped, rev = tally.revealed;
     var box = h('div', { id: 'letterDone' });
     if (r.status === 'migrated') box.appendChild(h('p', { class: 'muted', text: Z('（这封信来自旧版本的晚间任务，还没写过。可以从书桌重写。）', '(This day’s evening task was done in an older version; the letter itself was never written.)') }));
     else {
