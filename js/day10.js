@@ -1,5 +1,6 @@
 /* Day 10 « La clé » — DAY10_DRAFT_v2 (34 numbered steps + 12b).
- * Band lines follow the Day 8 A/B/C/null pattern: the v1 wording is not in this build. */
+ * PLACEHOLDER: d10_cam_a/b/c/null and letter 10. The v1 wording is not in this build.
+ * The Story Director will supply the real band lines and the real letter. */
 (function (root) {
   'use strict';
   var Fr = root.A411 && root.A411.Fr;
@@ -16,10 +17,11 @@
 
   var LINES = {
     d10_cam_liste: { speaker: 'camille', fr: fr('C’est une liste. La liste de la maison.'), zh: '这是一张清单。家里的清单。', en: 'It’s a list. The list for the house.', label: 'understand', target: 'cest_une_bonne_idee' },
-    d10_cam_a: { speaker: 'camille', fr: fr('Samedi, elle a souri. On fait attention.'), zh: '星期六她是笑着走的。我们小心一点。', en: 'On Saturday she left smiling. We are careful.', label: 'atmosphere' },
-    d10_cam_b: { speaker: 'camille', fr: fr('Elle revient dans un mois. Moins de bruit.'), zh: '她一个月后回来。少一点声音。', en: 'She comes back in a month. Less noise.', label: 'atmosphere' },
-    d10_cam_c: { speaker: 'camille', fr: fr('On écrit les règles. On fait très attention.'), zh: '我们把规矩写下来。我们会非常小心。', en: 'We write the rules. We are very careful.', label: 'atmosphere' },
-    d10_cam_null: { speaker: 'camille', fr: fr('C’est mardi. On écrit la liste.'), zh: '今天是星期二。我们写清单。', en: 'It’s Tuesday. We write the list.', label: 'atmosphere' },
+    /* PLACEHOLDER band lines — Story Director will replace these. */
+    d10_cam_a: { placeholder: true, speaker: 'camille', fr: fr('Samedi, elle a souri. On fait attention.'), zh: '星期六她是笑着走的。我们小心一点。', en: 'On Saturday she left smiling. We are careful.', label: 'atmosphere' },
+    d10_cam_b: { placeholder: true, speaker: 'camille', fr: fr('Elle revient dans un mois. Moins de bruit.'), zh: '她一个月后回来。少一点声音。', en: 'She comes back in a month. Less noise.', label: 'atmosphere' },
+    d10_cam_c: { placeholder: true, speaker: 'camille', fr: fr('On écrit les règles. On fait très attention.'), zh: '我们把规矩写下来。我们会非常小心。', en: 'We write the rules. We are very careful.', label: 'atmosphere' },
+    d10_cam_null: { placeholder: true, speaker: 'camille', fr: fr('C’est mardi. On écrit la liste.'), zh: '今天是星期二。我们写清单。', en: 'It’s Tuesday. We write the list.', label: 'atmosphere' },
     d10_cam_frigo: { speaker: 'camille', fr: fr('Le lait, ça va dans le frigo. Pas sur la table.'), zh: '牛奶放冰箱。不放桌上。', en: 'The milk goes in the fridge. Not on the table.', label: 'understand', target: 'le_lait_dans_le_frigo' },
     d10_cam_vaisselle: { speaker: 'camille', fr: fr('Noé, tu pourrais faire la vaisselle ?'), zh: 'Noé，你能洗一下碗吗？', en: 'Noé, could you do the dishes?', label: 'understand', target: 'tu_pourrais_vaisselle' },
     d10_noe_vaisselle: { speaker: 'noe', fr: fr('Je pourrais… Mais je ne voudrais pas.'), zh: '我可以……但我不想。', en: 'I could… But I wouldn’t want to.', label: 'understand' },
@@ -150,7 +152,10 @@
     deckCard('pas_de_nourriture_canape', 'Pas de nourriture sur le canapé.', '不许在沙发上吃东西。', 'No food on the sofa.', 'pas_de')
   ];
 
+  /* PLACEHOLDER letter 10 — reconstructed fridge list. Story Director will supply the real letter.
+   * Line 6 is the specified addition (« Le jardin : un peu d’eau. »). */
   var LETTER = {
+    placeholder: true,
     n: 10, ch: 'd10', kind: 'Liste', to: 'le frigo', grammar: 'conditionnel', band: 'A1',
     intro: { zh: '清单贴在冰箱上。你补上最后一行。', en: 'The list is on the fridge. You add the last line.' },
     body: [

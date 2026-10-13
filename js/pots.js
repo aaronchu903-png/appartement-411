@@ -268,11 +268,31 @@
     return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
   }
 
+  /* full R ≥ 0.9; steady (mid) 0.85 ≤ R < 0.9; wilting R < 0.85; dormant R < 0.5. */
   function leavesFromR(r) {
     if (r == null) return 'empty';
     if (r < 0.5) return 'dormant';
     if (r < 0.85) return 'wilting';
+    if (r < 0.9) return 'steady';
     return 'full';
+  }
+
+  /* v2 sprites: heights 9, 16, 24, 31 px. Cuts sit on the grown line (S = 7) and two neighbours. */
+  function stemStage(medianS) {
+    var s = medianS || 0;
+    if (s < 2) return 1;
+    if (s < 7) return 2;
+    if (s < 21) return 3;
+    return 4;
+  }
+
+  /* roots_1 is one strand, roots_2 is two, roots_3 is four. Zero draws no roots. */
+  function rootStage(meanScenes) {
+    var n = meanScenes || 0;
+    if (n < 1) return 0;
+    if (n < 2) return 1;
+    if (n < 4) return 2;
+    return 3;
   }
 
   function itemState(learn, it, now) {
@@ -318,6 +338,8 @@
     return {
       n: pot.n, id: pot.id, fr: pot.fr, indoor: !!pot.indoor,
       leaves: leaves, meanR: meanR, stem: stem, roots: roots,
+      stage: unlocked.length ? stemStage(stem) : 0,
+      rootStage: rootStage(roots),
       grown: grown, grownN: grownN, total: pot.items.length,
       unlocked: unlocked.length
     };
@@ -422,7 +444,8 @@
   var api = {
     POTS: POTS, BY_N: BY_N, BY_ID: BY_ID,
     GROWN_S: GROWN_S, GROWN_RATIO: GROWN_RATIO, GROWN_SUCCESSES: GROWN_SUCCESSES,
-    leavesFromR: leavesFromR, retrievability: retrievability, median: median,
+    leavesFromR: leavesFromR, stemStage: stemStage, rootStage: rootStage,
+    retrievability: retrievability, median: median,
     derivePot: derivePot, deriveAll: deriveAll, itemState: itemState,
     isPotGrown: isPotGrown, bind: bind, migrateGarden: migrateGarden,
     noteLapse: noteLapse, lapseActive: lapseActive, clearForce: clearForce,

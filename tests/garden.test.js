@@ -1,10 +1,12 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs');
 const Fr = require('../js/fr.js');
 const Pots = require('../js/pots.js');
 const Day10 = require('../js/day10.js');
 const Day12 = require('../js/day12.js');
+const GardenArt = require('../js/garden-art.js');
 
 const NB = '\u202F';
 const AP = '\u2019';
@@ -51,6 +53,10 @@ test('Day 10 keeps the required beats and the five new chunks', function () {
   assert.equal(/Hélène|C’était à lui|son jardin/i.test(blob), false);
   var letter = Day10.LETTER.body.map(function (p) { return p.map(function (x) { return typeof x === 'string' ? x : ''; }).join(''); }).join('\n');
   assert.ok(letter.indexOf('6. Le jardin' + NB + ': un peu d' + AP + 'eau.') >= 0);
+  ['d10_cam_a', 'd10_cam_b', 'd10_cam_c', 'd10_cam_null'].forEach(function (id) {
+    assert.equal(Day10.LINES[id].placeholder, true, id);
+  });
+  assert.equal(Day10.LETTER.placeholder, true);
 });
 
 test('Day 12 apply inserts the pocket beat and rewrites the final lines', function () {
@@ -87,8 +93,9 @@ test('Day 12 apply inserts the pocket beat and rewrites the final lines', functi
 test('leaves follow R, and a pot is grown at 80% even when it wilts', function () {
   assert.equal(Pots.leavesFromR(0.96), 'full');
   assert.equal(Pots.leavesFromR(0.9), 'full');
-  assert.equal(Pots.leavesFromR(0.87), 'full');
-  assert.equal(Pots.leavesFromR(0.85), 'full');
+  assert.equal(Pots.leavesFromR(0.899), 'steady');
+  assert.equal(Pots.leavesFromR(0.87), 'steady');
+  assert.equal(Pots.leavesFromR(0.85), 'steady');
   assert.equal(Pots.leavesFromR(0.849), 'wilting');
   assert.equal(Pots.leavesFromR(0.5), 'wilting');
   assert.equal(Pots.leavesFromR(0.49), 'dormant');
@@ -98,9 +105,24 @@ test('leaves follow R, and a pot is grown at 80% even when it wilts', function (
   var wilt = Pots.deriveAll(Pots.fillPreview({ cards: {} }, 'wilting'))[0];
   var dorm = Pots.deriveAll(Pots.fillPreview({ cards: {} }, 'dormant'))[0];
   assert.equal(full.leaves, 'full');
+  assert.equal(full.stage, 3);
   assert.equal(wilt.leaves, 'wilting');
+  assert.equal(wilt.stage, 3);
   assert.equal(wilt.grown, true);
   assert.equal(dorm.leaves, 'dormant');
+  assert.equal(dorm.stage, 2);
+  assert.equal(Pots.stemStage(1.9), 1);
+  assert.equal(Pots.stemStage(2), 2);
+  assert.equal(Pots.stemStage(7), 3);
+  assert.equal(Pots.stemStage(21), 4);
+  assert.equal(Pots.rootStage(0), 0);
+  assert.equal(Pots.rootStage(1), 1);
+  assert.equal(Pots.rootStage(2), 2);
+  assert.equal(Pots.rootStage(4), 3);
+  assert.equal(GardenArt.spriteLeaf('steady'), 'full');
+  assert.equal(GardenArt.spriteLeaf('wilting'), 'wilting');
+  assert.deepEqual(GardenArt.partNames({ leaves: 'dormant', stage: 2, rootStage: 0 }, false), ['pot_back', 'stem_dormant_2', 'leaves_dormant_2', 'pot_front']);
+  assert.deepEqual(GardenArt.partNames({ leaves: 'wilting', stage: 4, rootStage: 1 }, true), ['pot_back', 'roots_1', 'stem_4', 'leaves_flash_4', 'pot_front']);
   assert.equal(Pots.isPotGrown(1, Pots.fillPreview({ cards: {} }, 'wilting')), true);
   assert.equal(Pots.isPotGrown(3, Pots.fillPreview({ cards: {} }, 'dormant')), false);
 
@@ -155,4 +177,36 @@ test('Act I is five pots and 160 words, each in one pot', function () {
   assert.equal(n, 160);
   assert.equal(Pots.potOfItem('cest_une_bonne_idee'), 5);
   assert.equal(Pots.potOfItem('il_faut_de_leau'), 0);
+});
+
+test('the rooftop walk grid blocks the props the sampler missed', function () {
+  var manifest = JSON.parse(fs.readFileSync('art/garden/manifest.json', 'utf8'));
+  var walk = JSON.parse(fs.readFileSync('art/garden/rooftop/walkable.json', 'utf8'));
+  assert.deepEqual(walk.entry_tile, [15, 5]);
+  assert.equal(walk.cols, 12);
+  assert.equal(walk.rows, 16);
+  var fixed = GardenArt.correctWalkable(walk, manifest);
+  assert.equal(fixed.entryAdjusted, false);
+  assert.deepEqual(fixed.entry_tile, [15, 5]);
+  assert.equal(fixed.layouts.firstvisit[15][5], 1);
+  assert.equal(fixed.layouts.firstvisit[15][6], 1);
+  [[6, 10], [7, 9], [7, 10], [12, 1], [12, 2]].forEach(function (cell) {
+    assert.equal(walk.layouts.firstvisit[cell[0]][cell[1]], 1, 'shipped ' + cell);
+    assert.equal(fixed.layouts.firstvisit[cell[0]][cell[1]], 0, 'fixed ' + cell);
+  });
+  [[6, 10], [7, 9], [7, 10]].forEach(function (cell) {
+    assert.equal(fixed.layouts.tidy[cell[0]][cell[1]], 0);
+  });
+  assert.equal(fixed.layouts.empty[10][3], 1);
+  for (var c = 0; c < 12; c++) assert.equal(fixed.layouts.firstvisit[4][c], 0);
+  var door = {
+    rooftop: { door: [84, 236, 24, 20], scenes: { empty: {} } },
+    props: {}
+  };
+  var moved = GardenArt.correctWalkable({
+    tile: 16, cols: 12, rows: 16, entry_tile: [0, 0],
+    layouts: { empty: walk.layouts.empty }
+  }, door);
+  assert.equal(moved.entryAdjusted, true);
+  assert.deepEqual(moved.entry_tile, [15, 6]);
 });

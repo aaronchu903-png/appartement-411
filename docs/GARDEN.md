@@ -18,12 +18,25 @@ Plants never die. A missed day does not delete history and does not kill a pot.
 
 Leaves follow the mean FSRS retrievability `R` of the pot’s unlocked items. `R` is recomputed when the garden is opened, not on a timer.
 
-- full when `R ≥ 0.9` (the band from 0.85 up to 0.9 stays full)
-- wilting when `R < 0.85`
-- dormant (leaves fallen) when `R < 0.5`
+- full when `R ≥ 0.9` (« Elle est bien. »)
+- steady, the mid state, when `0.85 ≤ R < 0.9` (« Elle tient. »). This band is not full.
+- wilting when `R < 0.85` (« Elle a soif. »)
+- dormant (leaves fallen) when `R < 0.5` (« Elle dort. »)
 - empty when nothing in the pot is unlocked yet
 
-The stem follows the median stability `S` of unlocked items. Roots follow how many distinct scenes those words have been met in. Both are visual only. The screen never shows `R`, `S`, or a score.
+`R = 0.9` is full. `R = 0.85` is steady. `R = 0.5` is still wilting, because dormant starts below 0.5.
+
+The stem follows the median stability `S` of unlocked items. The v2 sprites have four heights (`stem_1` … `stem_4`): stage 1 when `S < 2`, stage 2 when `S < 7`, stage 3 when `S < 21`, and stage 4 otherwise. Roots follow how many distinct scenes those words have been met in: none below 1, `roots_1` below 2, `roots_2` below 4, and `roots_3` from 4 up. Both are visual only. The screen never shows `R`, `S`, or a score.
+
+Steady leaves use the full leaf sprite. The pack has drawings for full, wilting and dormant, and the steady caption stays « Elle tient. ». Wilting uses the drooping stem. Dormant is a bare stem with one bud. A missed answer swaps in `leaves_flash_N` for a moment.
+
+## Art
+
+Pixel Studio’s garden v2 lives in `art/garden/` (`manifest.json` is the source of positions). Parts are a 24×66 canvas, drawn at 96×264 with the pivot (12, 66) on the pot-bottom centres (39, 720), (117, 720), (195, 720), (273, 720) and (351, 720). The canvas top-lefts are (−9, 456), (69, 456), (147, 456), (225, 456) and (303, 456). Scaling is nearest-neighbour.
+
+At night the background is `garden_bg_night_390x844.png` and the pot stack is multiplied by (0.62, 0.55, 0.62). Labels stay in each slot’s `label_area` and are shifted up with the frame so they clear the wordbook and speaker buttons. The typeface is Noto Sans.
+
+The rooftop scenes are the precomposed `rooftop_{day,night}_{firstvisit,tidy}.png` files. Prop hit targets use `manifest.rooftop.scenes`. `rooftop/walkable.json` is a 12×16 grid (12 columns, 16 rows) with entry tile (15, 5), the left half of the hatch. That grid samples props too thinly, so `GardenArt.correctWalkable` blocks the rest of the chair, the sign and the watering can. The entry stays (15, 5) because that tile touches the door. Croissant has no sprite in this pack.
 
 A failed recall (FSRS grade 1, Again) turns one leaf yellow for a moment and says « On l’arrose bientôt. » There is no red X on the garden.
 
@@ -42,3 +55,7 @@ Before Day 10 is finished, the desk still shows the old windowsill. After `story
 ## Day 10 and Day 12
 
 Day 10 « La clé » is the first visit: dry pots, weeds, an old chair, a faded sign with no readable text, then the basil in pot ②. Day 12’s final line edits live in `js/day12.js` and are applied when that episode exists. This build does not include the supérette arc.
+
+## PLACEHOLDER copy
+
+`d10_cam_a`, `d10_cam_b`, `d10_cam_c`, and `d10_cam_null` are marked `placeholder: true` in `js/day10.js`. Letter 10 is marked `placeholder: true` as well. The Story Director will supply the real band lines and the real letter. Line 6 (« 6. Le jardin : un peu d’eau. ») is the specified addition; the rest of that letter body is not the v1 recording.

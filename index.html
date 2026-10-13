@@ -340,34 +340,24 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
 .wb-fab.over-option { opacity:.35; pointer-events:none; }
 @font-face { font-family: "Noto Sans"; src: url("fonts/NotoSans-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Noto Sans"; src: url("fonts/NotoSans-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
-body.garden-fixed { overflow: hidden; height: 100vh; }
+body.garden-fixed { overflow: hidden; height: 100dvh; }
+body.garden-fixed .app { height: 100dvh; min-height: 0; display: flex; flex-direction: column; }
+body.garden-fixed .screen { flex: 1; min-height: 0; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
 .rooftop, .pot-screen, .pot-sheet { font-family: "Noto Sans", system-ui, sans-serif; }
-.rooftop { position: relative; margin: 0; min-height: calc(100vh - 48px); background: linear-gradient(#9ec9ef, #d7ecfb 42%, #c4b49a 42%, #8d9a62 100%); overflow: hidden; padding: 12px; }
-.rooftop.night { background: linear-gradient(#1b2438, #3a4664 46%, #2a241c 46%, #1a1814 100%); color: #f6f1e7; }
-.rooftop-label { margin: 0 0 8px; font-size: .85em; letter-spacing: .02em; }
-.rooftop-pots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.ph { display: flex; align-items: center; justify-content: center; min-height: 64px; margin-top: 8px; border: 2px dashed #2a2e3a; background: #fffdf8cc; color: #1f1d1a; border-radius: 8px; font: inherit; font-size: .85em; }
-.rooftop.night .ph { background: #2a241ccc; color: #f6f1e7; border-color: #d9cfbf; }
-.ph.pot { min-height: 72px; }
-.ph[data-prop="pot_empty"] { outline: 3px solid #f0b429; }
+.rooftop { position: relative; margin: 0; flex: 1; min-height: 0; background: #c4b49a; overflow: hidden; }
+.rooftop.night { background: #1b2438; color: #f6f1e7; }
+.roof-frame { position: relative; width: 100%; max-width: 480px; margin: 0 auto; }
+.roof-frame img { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; }
+.roof-hit { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; color: transparent; font-size: 0; }
 .roof-light { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #6fcf97; right: 18%; top: 28%; box-shadow: 0 0 0 3px #6fcf9733; }
-.pot-screen { position: relative; height: calc(100vh - 48px); overflow: hidden; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; padding: 8px 6px 10px; align-items: end; background: linear-gradient(#d7ecfb, #e7f0d8 38%, #c4b49a 38%); }
-.pot { appearance: none; border: 0; background: transparent; color: inherit; font: inherit; padding: 0; min-width: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-.pot .cap { font-size: .68em; line-height: 1.15; text-align: center; margin-top: 4px; }
-.pot .name { font-weight: 700; font-size: .78em; text-align: center; }
-.pot .where { font-size: .62em; color: #5b554c; }
-.leaves { position: relative; width: 100%; height: 92px; }
-.leaf { position: absolute; width: 16px; height: 10px; border-radius: 10px 2px; background: #2f7d5b; }
-.leaves-full .leaf { background: #2f7d5b; }
-.leaves-wilting .leaf { background: #8a9a3a; transform: rotate(28deg); }
-.leaves-dormant .leaf, .leaves-empty .leaf { display: none; }
-.leaf.yellow { background: #e0b333; animation: leafFlash 2.5s ease; }
-@keyframes leafFlash { from { transform: scale(1.2); } to { transform: none; } }
-.stem { width: 4px; background: #3d6b32; border-radius: 2px; margin: 0 auto; }
-.roots { height: 14px; display: flex; justify-content: center; gap: 2px; align-items: flex-end; }
-.roots i { display: block; width: 2px; background: #6b4a2a; border-radius: 1px; }
-.clay { width: 70%; height: 22px; background: #b5521f; border-radius: 3px 3px 8px 8px; border: 2px solid #2a2e3a; }
-.pot-sheet { position: absolute; left: 6px; right: 6px; bottom: 6px; max-height: 46%; overflow: auto; background: #fffdf8; border: 2px solid #2a2e3a; border-radius: 8px; padding: 8px 10px; }
+.pot-screen { position: relative; flex: 1; min-height: 0; width: 100%; overflow: hidden; background: #9bb4c8; }
+.garden-frame { position: absolute; left: 0; top: 0; }
+.garden-frame canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+.pot { position: absolute; appearance: none; border: 0; background: transparent; color: #1f1d1a; font: inherit; padding: 0 2px 2px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; overflow: hidden; text-shadow: 0 1px 0 #fffdf8cc; z-index: 1; }
+.pot .cap { font-size: 11px; line-height: 1.15; text-align: center; }
+.pot .name { font-weight: 700; font-size: 12px; line-height: 1.15; text-align: center; }
+.pot .where { font-size: 11px; line-height: 1.15; color: #5b554c; text-align: center; }
+.pot-sheet { position: absolute; left: 6px; right: 6px; bottom: calc(72px + env(safe-area-inset-bottom)); max-height: 42%; overflow: auto; background: #fffdf8; border: 2px solid #2a2e3a; border-radius: 8px; padding: 8px 10px; z-index: 4; }
 .pot-sheet ul { margin: .3em 0; padding-left: 1.1em; }
 .pot-sheet li { margin: .2em 0; }
 
@@ -18594,6 +18584,7 @@ function getLang(ls, id) {
 <script src="js/day10.js"></script>
 <script src="js/day12.js"></script>
 <script src="js/install-story.js"></script>
+<script src="js/garden-art.js"></script>
 <script>
 /* L’Appartement 411 — Day 1 player (UI + scene engine). */
 (function () {
@@ -19129,6 +19120,7 @@ function getLang(ls, id) {
   function leafCaption(kind) {
     if (kind === 'wilting') return 'Elle a soif.';
     if (kind === 'dormant') return 'Elle dort.';
+    if (kind === 'steady') return 'Elle tient.';
     if (kind === 'empty') return '';
     return 'Elle est bien.';
   }
@@ -19138,60 +19130,171 @@ function getLang(ls, id) {
     if (id === 'w1') return 'la semaine';
     return id || '';
   }
+  var gardenPack = null;
+  var gardenImgs = {};
+  function gardenImg(src) {
+    if (!gardenImgs[src]) gardenImgs[src] = new Image();
+    if (!gardenImgs[src].src) gardenImgs[src].src = src;
+    return gardenImgs[src];
+  }
+  function loadGardenPack() {
+    if (!gardenPack) {
+      gardenPack = Promise.all([
+        fetch('art/garden/manifest.json').then(function (r) { return r.json(); }),
+        fetch('art/garden/rooftop/walkable.json').then(function (r) { return r.json(); })
+      ]).then(function (xs) {
+        var fixed = A411.GardenArt.correctWalkable(xs[1], xs[0]);
+        A411.walkableRoof = fixed;
+        return { manifest: xs[0], walkable: fixed };
+      });
+    }
+    return gardenPack;
+  }
+  function whenImages(srcs, done) {
+    var left = srcs.length;
+    if (!left) { done(); return; }
+    srcs.forEach(function (src) {
+      var im = gardenImg(src);
+      function fin() { if (--left === 0) done(); }
+      if (im.complete) fin();
+      else {
+        im.addEventListener('load', fin, { once: true });
+        im.addEventListener('error', fin, { once: true });
+      }
+    });
+  }
+  function crisp(ctx) {
+    ctx.imageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+  }
+  function roofSceneOf(st) {
+    if (st.scene === 'tidy' || st.scene === 'firstvisit') return st.scene;
+    if (st.night && st.planted) return 'tidy';
+    return 'firstvisit';
+  }
   function rooftopPlaceholder(st) {
     st = st || {};
-    var box = h('div', { class: 'rooftop' + (st.night ? ' night' : ''), id: 'rooftop', 'data-state': st.watered ? 'watered' : st.planted ? 'planted' : 'dry' });
-    box.appendChild(h('p', { class: 'rooftop-label', text: 'placeholder · rooftop ' + (st.night ? 'night' : 'day') }));
-    var pots = h('div', { class: 'rooftop-pots' });
-    for (var i = 0; i < 6; i++) {
-      var basil = i === 1 && st.planted;
-      var prop = basil ? 'basil_planted' : (i === 1 ? 'pot_empty' : 'pot_dry');
-      var el = h('button', { class: 'ph pot', type: 'button', 'data-prop': prop, text: prop });
-      if (i === 1 && !st.planted) el.addEventListener('click', function () { onHubHook({ id: 'pot_empty', object: 'pot_empty' }); });
-      pots.appendChild(el);
-    }
-    box.appendChild(pots);
-    box.appendChild(h('div', { class: 'ph', 'data-prop': 'weeds', text: 'weeds' }));
-    box.appendChild(h('div', { class: 'ph', 'data-prop': 'old_chair', text: 'old_chair' + (st.chairCat ? ' · Croissant' : '') }));
-    box.appendChild(h('div', { class: 'ph', 'data-prop': 'wood_sign', text: 'wood_sign' }));
-    var can = h('button', { class: 'ph', type: 'button', 'data-prop': 'watering_can', text: 'watering_can' });
-    can.addEventListener('click', function () { onHubHook({ id: 'watering_can', object: 'watering_can' }); });
-    box.appendChild(can);
+    var scene = roofSceneOf(st);
+    var night = !!st.night;
+    var box = h('div', {
+      class: 'rooftop' + (night ? ' night' : ''), id: 'rooftop',
+      'data-state': scene === 'tidy' ? 'tidy' : (st.watered ? 'watered' : st.planted ? 'planted' : 'dry'),
+      'data-scene': scene, 'data-night': night ? '1' : '0'
+    });
+    var frame = h('div', { class: 'roof-frame' });
+    var img = h('img', { alt: night ? 'Le toit, la nuit' : 'Le toit, le jour', width: '192', height: '256' });
+    frame.appendChild(img);
+    box.appendChild(frame);
+    loadGardenPack().then(function (pack) {
+      if (!box.isConnected) return;
+      var GA = A411.GardenArt;
+      var man = pack.manifest;
+      img.src = GA.roofSrc(scene, night);
+      var entry = pack.walkable.entry_tile;
+      box.setAttribute('data-entry', entry[0] + ',' + entry[1]);
+      var props = man.rooftop.scenes[scene] || {};
+      var keys = Object.keys(props).sort(function (a, b) {
+        return props[a].bottom_center[1] - props[b].bottom_center[1];
+      });
+      keys.forEach(function (key) {
+        var base = key.split('@')[0];
+        var prop = man.props[base];
+        if (!prop) return;
+        var rect = GA.propRect(prop, props[key].bottom_center);
+        var attr = base.indexOf('pot_dry') === 0 ? 'pot_dry' : base;
+        var plantTarget = scene === 'firstvisit' && !st.planted && key === 'pot_dry_2@1';
+        if (plantTarget) attr = 'pot_empty';
+        var style = 'left:' + (rect.x / 192 * 100) + '%;top:' + (rect.y / 256 * 100) + '%;width:' + (rect.w / 192 * 100) + '%;height:' + (rect.h / 256 * 100) + '%';
+        var tap = plantTarget || base === 'watering_can';
+        var el = h(tap ? 'button' : 'div', { class: 'roof-hit', 'data-prop': attr, style: style, type: tap ? 'button' : null, 'aria-label': attr });
+        if (plantTarget) el.addEventListener('click', function () { onHubHook({ id: 'pot_empty', object: 'pot_empty' }); });
+        if (base === 'watering_can') el.addEventListener('click', function () { onHubHook({ id: 'watering_can', object: 'watering_can' }); });
+        frame.appendChild(el);
+      });
+      function mark() { if (box.isConnected) box.setAttribute('data-ready', '1'); }
+      if (img.complete && img.naturalWidth) mark();
+      else img.addEventListener('load', mark, { once: true });
+    });
     return box;
   }
   function renderRooftopPreview() {
     $where.textContent = 'Le toit';
-    $screen.appendChild(rooftopPlaceholder({}));
+    $screen.appendChild(rooftopPlaceholder({ scene: ui.roofScene || 'firstvisit', night: !!ui.roofNight }));
+  }
+  function layoutGarden(frame, screen) {
+    var W = screen.clientWidth;
+    var H = screen.clientHeight;
+    if (!W || !H) return;
+    var scale = W / 390;
+    var fab = document.getElementById('btnWordbook') || document.getElementById('btnMusic');
+    var fabTop = H - 64;
+    if (fab) fabTop = fab.getBoundingClientRect().top - screen.getBoundingClientRect().top;
+    var top = (fabTop - 6) - 800 * scale;
+    if (top > 0) top = 0;
+    frame.style.left = '0px';
+    frame.style.top = top + 'px';
+    frame.style.width = (390 * scale) + 'px';
+    frame.style.height = (844 * scale) + 'px';
+  }
+  function paintGarden(canvas, pack, pots, night) {
+    var ctx = canvas.getContext('2d');
+    crisp(ctx);
+    var bg = gardenImg(A411.GardenArt.gardenBg(night));
+    ctx.clearRect(0, 0, 390, 844);
+    ctx.drawImage(bg, 0, 0, 390, 844);
+    var tint = pack.manifest.garden_screen.night.pot_tint_multiply_rgb;
+    pots.forEach(function (p, i) {
+      var slot = pack.manifest.garden_screen.slots[i];
+      var lapse = A411.Pots.lapseActive(learnState, p.n, new Date());
+      var names = A411.GardenArt.partNames(p, lapse);
+      var off = document.createElement('canvas');
+      off.width = 96; off.height = 264;
+      var o = off.getContext('2d');
+      crisp(o);
+      names.forEach(function (name) {
+        var im = gardenImg(A411.GardenArt.partSrc(name));
+        if (im.naturalWidth) o.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight, 0, 0, 96, 264);
+      });
+      if (night) {
+        var id = o.getImageData(0, 0, 96, 264);
+        var d = id.data;
+        var k;
+        for (k = 0; k < d.length; k += 4) {
+          d[k] = d[k] * tint[0];
+          d[k + 1] = d[k + 1] * tint[1];
+          d[k + 2] = d[k + 2] * tint[2];
+        }
+        o.putImageData(id, 0, 0);
+      }
+      var tl = slot.canvas_topleft_pt;
+      ctx.drawImage(off, tl[0], tl[1]);
+    });
   }
   function renderPots() {
     document.body.classList.add('garden-fixed');
     $where.textContent = 'Le jardin';
     var now = new Date();
     var pots = A411.Pots.deriveAll(learnState, now);
-    var screen = h('div', { class: 'pot-screen', id: 'potScreen' });
-    pots.forEach(function (p) {
-      var lapse = A411.Pots.lapseActive(learnState, p.n, now);
-      var leaves = h('div', { class: 'leaves leaves-' + p.leaves });
-      var stemH = Math.max(8, Math.min(48, 8 + (p.stem || 0)));
-      leaves.appendChild(h('div', { class: 'stem', style: 'height:' + stemH + 'px' }));
-      if (p.leaves === 'full' || p.leaves === 'wilting') {
-        for (var i = 0; i < 3; i++) {
-          var lf = h('span', { class: 'leaf' + (lapse && i === 0 ? ' yellow' : ''), style: 'left:' + (18 + i * 16) + 'px;top:' + (8 + (i % 2) * 10) + 'px' });
-          leaves.appendChild(lf);
-        }
-      }
-      var roots = h('div', { class: 'roots', 'aria-hidden': 'true' });
-      var nRoot = Math.max(0, Math.min(5, Math.round(p.roots || 0)));
-      for (var r = 0; r < nRoot; r++) roots.appendChild(h('i', { style: 'height:' + (6 + r * 2) + 'px' }));
+    var night = !!ui.potNight;
+    var screen = h('div', { class: 'pot-screen', id: 'potScreen', 'data-night': night ? '1' : '0' });
+    var frame = h('div', { class: 'garden-frame', id: 'gardenFrame' });
+    var canvas = h('canvas', { id: 'gardenCanvas', width: '390', height: '844' });
+    frame.appendChild(canvas);
+    pots.forEach(function (p, i) {
       var cap = leafCaption(p.leaves);
-      var btnEl = h('button', { class: 'pot', type: 'button', 'data-pot': String(p.n), 'data-leaves': p.leaves, 'data-grown': p.grown ? '1' : '0' },
-        leaves, roots, h('div', { class: 'clay' }),
+      var btnEl = h('button', {
+        class: 'pot', type: 'button', 'data-pot': String(p.n), 'data-leaves': p.leaves,
+        'data-art': A411.GardenArt.spriteLeaf(p.leaves) || 'empty',
+        'data-stage': String(p.stage || 0), 'data-grown': p.grown ? '1' : '0'
+      },
         h('div', { class: 'name', lang: 'fr', text: p.fr }),
         p.indoor ? h('div', { class: 'where', lang: 'fr', text: 'sur le bureau' }) : null,
         cap ? h('div', { class: 'cap', lang: 'fr', text: cap }) : null);
       btnEl.addEventListener('click', function () { ui.pot = p.n; render(); });
-      screen.appendChild(btnEl);
+      frame.appendChild(btnEl);
     });
+    screen.appendChild(frame);
     if (ui.pot) {
       var pot = A411.Pots.BY_N[ui.pot];
       var sheet = h('div', { class: 'pot-sheet', id: 'potSheet' });
@@ -19210,10 +19313,53 @@ function getLang(ls, id) {
       sheet.appendChild(btn('Arroser ce pot', function () { beginReview({ pot: pot.n }); }, 'small', { id: 'btnPotWater' }));
       screen.appendChild(sheet);
     }
-    var oldHome = document.getElementById('btnPotsHome');
-    if (oldHome) oldHome.remove();
-    $topbar.appendChild(h('button', { class: 'btn small', type: 'button', id: 'btnPotsHome', onclick: function () { goTitle(); } }, Z('首页', 'Home')));
     $screen.appendChild(screen);
+    function place(pack) {
+      if (!screen.isConnected) return;
+      var slots = pack.manifest.garden_screen.slots;
+      frame.querySelectorAll('button.pot').forEach(function (btnEl, i) {
+        var slot = slots[i];
+        var lab = slot.label_area_pt;
+        var top = slot.canvas_topleft_pt[1];
+        if (top < 0) top = 0;
+        btnEl.style.left = (slot.safe_rect_pt[0] / 390 * 100) + '%';
+        btnEl.style.width = (slot.safe_rect_pt[2] / 390 * 100) + '%';
+        btnEl.style.top = (top / 844 * 100) + '%';
+        btnEl.style.height = ((lab[1] + lab[3] - top) / 844 * 100) + '%';
+      });
+      layoutGarden(frame, screen);
+    }
+    loadGardenPack().then(function (pack) {
+      if (!screen.isConnected) return;
+      place(pack);
+      var srcs = [A411.GardenArt.gardenBg(night)];
+      pots.forEach(function (p) {
+        var lapse = A411.Pots.lapseActive(learnState, p.n, now);
+        A411.GardenArt.partNames(p, lapse).forEach(function (name) {
+          var src = A411.GardenArt.partSrc(name);
+          if (srcs.indexOf(src) < 0) srcs.push(src);
+        });
+      });
+      whenImages(srcs, function () {
+        if (!screen.isConnected) return;
+        paintGarden(canvas, pack, pots, night);
+        place(pack);
+        screen.setAttribute('data-ready', '1');
+      });
+    });
+    if (!window.__gardenResize) {
+      window.__gardenResize = function () {
+        var f = document.getElementById('gardenFrame');
+        var s = document.getElementById('potScreen');
+        if (f && s) layoutGarden(f, s);
+      };
+      window.addEventListener('resize', window.__gardenResize);
+    }
+    requestAnimationFrame(function () {
+      var f = document.getElementById('gardenFrame');
+      var s = document.getElementById('potScreen');
+      if (f && s && gardenPack) gardenPack.then(function () { if (f.isConnected) layoutGarden(f, s); });
+    });
   }
   function openGarden() {
     if (roofGardenOpen()) { ui.view = 'pots'; ui.pot = null; render(); return; }
@@ -22448,8 +22594,13 @@ function getLang(ls, id) {
     if (A411.Pots) A411.Pots.bind(function () { return learnState; });
     if (q.get('preview') === 'pots') {
       A411.Pots.fillPreview(learnState, q.get('leaves') || 'full');
+      ui.potNight = q.get('night') === '1';
       ui.view = 'pots';
-    } else ui.view = 'rooftop';
+    } else {
+      ui.roofScene = q.get('scene') === 'tidy' ? 'tidy' : 'firstvisit';
+      ui.roofNight = q.get('night') === '1';
+      ui.view = 'rooftop';
+    }
     $topbar.hidden = false;
     applySettings();
     render();
