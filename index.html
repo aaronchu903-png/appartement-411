@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.11.0 single-file build 2026-10-13T02:13:32.550Z -->
+<!-- L’Appartement 411 v0.12.0 single-file build 2026-10-13T08:34:04.687Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -19,7 +19,7 @@
 :root { --bg:#f6f1e7; --ink:#1f1d1a; --muted:#5b554c; --card:#fffdf8; --line:#d9cfbf; --accent:#2f5d8a; --accent-ink:#fff; --warn:#8a3b12; --ok:#2f6e36; --cam:#2f7d5b; --noe:#b5521f; }
 * { box-sizing: border-box; }
 html, body { margin:0; background:var(--bg); color:var(--ink); }
-body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%; }
+body { font-family: "Noto Sans", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%; }
 body.large-text { font-size:20px; }
 .app { max-width:480px; margin:0 auto; min-height:100vh; padding-bottom:env(safe-area-inset-bottom); }
 #hubMount { position:fixed; left:0; right:0; bottom:0; top:42px; z-index:2; background:#241c18; display:flex; }
@@ -27,7 +27,10 @@ body.large-text { font-size:20px; }
 #hubStage { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; min-width:0; position:relative; }
 #hubCanvas { image-rendering:pixelated; image-rendering:crisp-edges; touch-action:none; }
 .hub-prompt { position:fixed; z-index:16; transform:translate(-50%, -130%); min-width:44px; min-height:44px; padding:8px 12px; border:2px solid #2a2e3a; border-radius:8px; background:#f6a54a; color:#1f1d1a; font:inherit; font-weight:700; box-shadow:0 3px 0 #2a2e3a; touch-action:manipulation; }
+.hub-prompt.live { animation: a411next 1.8s ease-in-out infinite; }
 .hub-prompt[hidden] { display:none !important; }
+.hub-goal { position:absolute; z-index:4; top:8px; left:50%; transform:translateX(-50%); max-width:calc(100% - 24px); padding:6px 12px; border:2px solid #2a2e3a; border-radius:999px; background:#fff7e6; color:#1f1d1a; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-weight:700; font-size:.95rem; text-align:center; box-shadow:0 0 0 4px rgba(246,165,74,.45); pointer-events:none; }
+.hub-goal[hidden] { display:none !important; }
 .topbar[hidden] { display:none; }
 .topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#2a2e3a; color:#fff; }
 .topbar .where { font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -130,7 +133,7 @@ select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid
 .day-steps li[data-state="done"] { opacity:1; background:rgba(120,190,120,.22); }
 .home-status { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; justify-content:center; margin:.4rem 0; }
 .version-footer { text-align:center; font-size:.75rem; opacity:.6; margin-top:1rem; }
-.letter-paper { background:#fffaf0; color:#3a2e22; border:1px solid #d8c7a8; border-radius:8px; padding:.9rem 1rem; line-height:1.9; font-family: Georgia, 'Times New Roman', serif; box-shadow: 0 2px 0 rgba(0,0,0,.05); white-space:normal; }
+.letter-paper { background:#fffaf0; color:#3a2e22; border:1px solid #d8c7a8; border-radius:8px; padding:.9rem 1rem; line-height:1.9; font-family: "Noto Sans", "Noto Sans SC", system-ui, sans-serif; box-shadow: 0 2px 0 rgba(0,0,0,.05); white-space:normal; }
 .letter-paper.small { font-size:.92rem; white-space:pre-wrap; line-height:1.6; }
 .letter-paper p { margin:.3rem 0; }
 .gap { display:inline-block; min-width:4.5em; border-bottom:2px dashed #9b7b52; padding:0 .2em; color:#9b7b52; }
@@ -260,7 +263,7 @@ canvas.prof { width:64px; height:64px; image-rendering:pixelated; border:2px sol
 .confetti { position:absolute; inset:0; pointer-events:none; }
 .confetti i { position:absolute; top:-12px; width:8px; height:8px; animation:confetti 1.8s ease-in forwards; }
 @keyframes confetti { 0% { transform:translateY(0) rotate(0); opacity:1; } 100% { transform:translateY(220px) rotate(200deg); opacity:0; } }
-#screen { padding-bottom:64px; }
+#screen { padding-bottom:88px; }
 /* v0.7.0 Day 5 timeline (« L'enquête ») */
 .timeline { list-style:none; margin:.4em 0; padding:0; display:flex; flex-direction:column; gap:.25em; }
 .timeline li { display:flex; align-items:center; gap:.35em; padding:.3em .5em; border:2px dashed #b9ad94; border-radius:8px; min-height:2.2em; background:#fffdf7; }
@@ -326,8 +329,8 @@ canvas.prof { width:64px; height:64px; image-rendering:pixelated; border:2px sol
 /* v0.9.2: the obvious next step pulses gently when a new section opens */
 .next-pulse { animation: a411next 1.8s ease-in-out infinite; position:relative; }
 @keyframes a411next { 0%,100% { box-shadow:0 0 0 0 rgba(242,201,76,0), 0 2px 0 #2a2a2a; } 50% { box-shadow:0 0 0 7px rgba(242,201,76,.55), 0 2px 0 #2a2a2a; } }
-@media (prefers-reduced-motion: reduce) { .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,201,76,.7), 0 2px 0 #2a2a2a; } }
-body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,201,76,.7), 0 2px 0 #2a2a2a; }
+@media (prefers-reduced-motion: reduce) { .next-pulse, .hub-prompt.live { animation:none; box-shadow:0 0 0 4px rgba(242,201,76,.7), 0 2px 0 #2a2a2a; } }
+body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animation:none; box-shadow:0 0 0 4px rgba(242,201,76,.7), 0 2px 0 #2a2a2a; }
 /* v0.9.2 after-Bravo hub: pixel tiles, icon + one word */
 .hub-tiles { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin:.3em 0; }
 .hub-tile { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-height:74px; padding:8px 2px; border:2px solid #2a2a2a; border-radius:8px; box-shadow:0 2px 0 #2a2a2a; font-size:.76em; min-width:0; line-height:1.1; }
@@ -947,7 +950,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.11.0';
+  var APP_VERSION = '0.12.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -1698,11 +1701,26 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       default: leftDown(); rightDown();
     }
   }
-  function person(ctx, who, pose, x, y) {
+  function person(ctx, who, pose, x, y, blink) {
     if (!pose) return;
     px(ctx, x + 1, y + 18, 11, 1, 'rgba(0,0,0,0.18)'); // shadow
     sprite(ctx, SPR[who], x, y);
+    if (blink) closeEyes(ctx, who, x, y);
     arms(ctx, who, pose, x, y);
+  }
+  function closeEyes(ctx, who, x, y) {
+    var map = SPR[who]; if (!map) return;
+    for (var r = 0; r < map.length; r++) for (var c = 0; c < map[r].length; c++) {
+      if (map[r][c] === 'e') px(ctx, x + c, y + r, 1, 1, PAL.S);
+    }
+  }
+  function drawCat(ctx, map, x, y, tail) {
+    tail = tail || 0;
+    for (var r = 0; r < map.length; r++) for (var c = 0; c < map[r].length; c++) {
+      var col = PAL[map[r][c]]; if (!col) continue;
+      var dy = (tail && c === map[r].length - 1) ? tail : 0;
+      px(ctx, x + c, y + r + dy, 1, 1, col);
+    }
   }
   function marker(ctx, x, y) { // speaker marker: a small down-pointing triangle (shape, not colour only)
     px(ctx, x, y, 5, 1, '#fff7c2'); px(ctx, x + 1, y + 1, 3, 1, '#fff7c2'); px(ctx, x + 2, y + 2, 1, 1, '#fff7c2');
@@ -1913,10 +1931,142 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     cat_chair: { key: [60, 36, 18, 12], chaise: [74, 26, 18, 22] },
     cat_paw: { key: [28, 34, 48, 20] }
   };
-  var PEOPLE = { // sprite origins per scene (see sceneBase)
-    doorway: { camille: [40, 25], noe: [50, 22] }, name: { camille: [36, 26], noe: [58, 25] }, plant: { camille: [48, 26] },
-    cat: { camille: [8, 24], noe: [36, 25], martin: [66, 25] }, kitchen: { camille: [12, 24], noe: [70, 24] }
-  };
+  var PERSON_W = 12, PERSON_H = 19;
+  // Interior rooms share one floor: the shoe pixel sits on the baseboard (y=43); the floor fill starts at y=44.
+  var ROOM_FLOOR = 43;
+  function stand(id, sprite, pose, x, feet, opt) {
+    if (!pose) return null;
+    opt = opt || {};
+    return {
+      id: id, sprite: sprite || id, pose: pose, kind: 'person', perch: false,
+      x: x, y: feet - (PERSON_H - 1), w: PERSON_W, h: PERSON_H,
+      feet: feet, floor: opt.floor != null ? opt.floor : feet,
+      layer: opt.layer || 0, order: opt.order || 0,
+      speaker: opt.speaker || (id === 'voisine' ? 'lefevre' : id === 'passant' ? 'neutral' : id)
+    };
+  }
+  function perchCat(x, y, w, h, opt) {
+    opt = opt || {};
+    return {
+      id: 'cat', sprite: opt.peek ? 'catPeek' : 'cat', peek: !!opt.peek, kind: 'cat', perch: true,
+      pose: opt.peek ? 'peek' : 'sit', x: x, y: y, w: w, h: h,
+      feet: y + h - 1, floor: opt.floor != null ? opt.floor : (y + h - 1),
+      layer: opt.layer || 0, order: opt.order || 0, speaker: null
+    };
+  }
+  function pushActor(list, actor) { if (actor) list.push(actor); }
+  // Named slots. Every standing person in a scene shares that scene's floor, except stairs and the balcony (each step is its own floor).
+  function actors(name, st) {
+    st = st || {};
+    var list = [], F = ROOM_FLOOR;
+    if (name === 'doorway' || name === 'lefevre_door') {
+      var open = st.door === 'open', visit = open && (st.voisine || st.martin);
+      if (visit) {
+        if (st.voisine && st.martin) {
+          pushActor(list, stand('voisine', 'voisine', st.voisine, 34, F, { order: 0 }));
+          pushActor(list, stand('martin', 'martin', st.martin, 50, F, { order: 1 }));
+        } else if (st.martin) pushActor(list, stand('martin', 'martin', st.martin, 42, F));
+        else pushActor(list, stand('voisine', 'voisine', st.voisine, 42, F));
+        pushActor(list, stand('camille', 'camille', st.camille, 4, F, { order: 2 }));
+        pushActor(list, stand('noe', 'noe', st.noe, 74, F, { order: 3 }));
+      } else if (open && st.camille && st.noe) {
+        pushActor(list, stand('camille', 'camille', st.camille, 36, F));
+        pushActor(list, stand('noe', 'noe', st.noe, 54, F, { order: 1 }));
+      } else if (open && st.camille) pushActor(list, stand('camille', 'camille', st.camille, 42, F));
+      else if (open && st.noe) pushActor(list, stand('noe', 'noe', st.noe, 42, F));
+      else {
+        pushActor(list, stand('camille', 'camille', st.camille, 4, F));
+        pushActor(list, stand('noe', 'noe', st.noe, 74, F, { order: 1 }));
+      }
+      if (st.cat) pushActor(list, perchCat(58, 48, 10, 8, { layer: 1, order: 4, floor: 55 }));
+      return list;
+    }
+    if (name === 'name') {
+      pushActor(list, stand('camille', 'camille', st.camille || 'idle', 36, F));
+      pushActor(list, stand('noe', 'noe', st.noe || 'idle', 58, F, { order: 1 }));
+      return list;
+    }
+    if (name === 'plant') {
+      pushActor(list, stand('camille', 'camille', st.camille, 48, F));
+      pushActor(list, stand('martin', 'martin', st.martin, 72, F, { order: 1 }));
+      return list;
+    }
+    if (name === 'cat') {
+      pushActor(list, stand('camille', 'camille', st.camille, 8, F, { layer: 0 }));
+      pushActor(list, stand('noe', 'noe', st.noe, 36, F, { layer: 0, order: 1 }));
+      if (st.cat === 'peek') pushActor(list, perchCat(56, 26, 7, 4, { peek: true, layer: 1, floor: 29 }));
+      pushActor(list, stand('martin', 'martin', st.martin, 66, F, { layer: 1, order: 1 }));
+      if (st.cat === 'sit') pushActor(list, perchCat(52, 44, 10, 8, { layer: 1, order: 2, floor: 51 }));
+      return list;
+    }
+    if (name === 'kitchen') {
+      pushActor(list, stand('martin', 'martin', st.martin, 34, F, { layer: 0 }));
+      pushActor(list, stand('camille', 'camille', st.camille, 6, F, { layer: 1 }));
+      pushActor(list, stand('noe', 'noe', st.noe, 62, F, { layer: 1, order: 1 }));
+      if (st.cat === 'under') pushActor(list, perchCat(44, 52, 7, 4, { peek: true, layer: 1, order: 2, floor: 55 }));
+      if (st.cat === 'sit') pushActor(list, perchCat(40, 48, 10, 8, { layer: 1, order: 3, floor: 55 }));
+      return list;
+    }
+    if (name === 'street') {
+      pushActor(list, stand('camille', 'camille', st.camille, 8, 46));
+      pushActor(list, stand('noe', 'noe', st.noe, 24, 46, { order: 1 }));
+      pushActor(list, stand('passant', 'passant', st.passant, 44, 46, { order: 2 }));
+      return list;
+    }
+    if (name === 'parc') {
+      pushActor(list, stand('camille', 'camille', st.camille, 6, 46));
+      pushActor(list, stand('noe', 'noe', st.noe, 24, 46, { order: 1 }));
+      return list;
+    }
+    if (name === 'balcon') {
+      pushActor(list, stand('voisine', 'voisine', st.voisine, 56, 26));
+      pushActor(list, stand('camille', 'camille', st.camille, 4, 52, { order: 1 }));
+      pushActor(list, stand('noe', 'noe', st.noe, 22, 52, { order: 2 }));
+      if (st.cat) pushActor(list, perchCat(72, 18, 10, 8, { order: 3, floor: 25 }));
+      return list;
+    }
+    if (name === 'rain') {
+      pushActor(list, stand('noe', 'noe', st.noe, 42, 56));
+      return list;
+    }
+    if (name === 'stairs') {
+      pushActor(list, stand('noe', 'noe', st.noe, 46, 38));
+      pushActor(list, stand('camille', 'camille', st.camille, 22, 44, { order: 1 }));
+      if (st.cat) pushActor(list, perchCat(8, 42, 10, 8, { order: 2, floor: 49 }));
+      return list;
+    }
+    if (name === 'lefevre_table') {
+      pushActor(list, stand('voisine', 'voisine', st.voisine, 2, F));
+      pushActor(list, stand('camille', 'camille', st.camille, 16, F, { order: 1 }));
+      pushActor(list, stand('noe', 'noe', st.noe, 64, F, { order: 2 }));
+      return list;
+    }
+    if (name === 'cat_chair') {
+      pushActor(list, stand('voisine', 'voisine', st.voisine, 0, 44));
+      pushActor(list, stand('camille', 'camille', st.camille, 20, 44, { order: 1 }));
+      pushActor(list, stand('noe', 'noe', st.noe, 42, 44, { order: 2 }));
+      return list;
+    }
+    if (name === 'night' && st.cat) pushActor(list, perchCat(36, 32, 10, 8, { floor: 39 }));
+    if (name === 'end' && st.cat) pushActor(list, perchCat(58, 48, 10, 8, { floor: 55 }));
+    if (name === 'diary' && st.cat) pushActor(list, perchCat(82, 37, 7, 4, { peek: true, floor: 40 }));
+    return list;
+  }
+  function drawPeople(ctx, cast, spk, layer, st) {
+    var motion = st && st.motion;
+    (cast || []).forEach(function (a) {
+      if ((a.layer || 0) !== layer) return;
+      var dx = 0, dy = 0, nudge = motion && !motion.still && motion.nudge && motion.nudge[a.id];
+      if (nudge) { dx = nudge.x || 0; dy = nudge.y || 0; }
+      var x = a.x + dx, y = a.y + dy;
+      if (a.kind === 'cat') {
+        drawCat(ctx, a.peek ? SPR.catPeek : SPR.cat, x, y, motion && !motion.still && !a.peek ? motion.tail : 0);
+        return;
+      }
+      person(ctx, a.sprite, a.pose, x, y, !!(motion && !motion.still && motion.blink && motion.blink[a.id]));
+      if (spk === a.speaker) marker(ctx, x + 3, y - 5);
+    });
+  }
   function pad(r, p) { return [r[0] - p, r[1] - p, r[2] + 2 * p, r[3] + 2 * p]; }
   // name: a region name, a prop id present in st.props, 'camille' | 'noe', 'chat' (the cat), 'colis' (the box in the loc scene)
   function region(name, sceneName, st) {
@@ -1925,11 +2075,10 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     for (var i = 0; i < props.length; i++) if (props[i][0] === name) { var sz = propSize(name); return pad([props[i][1], props[i][2], sz[0], sz[1]], 3); }
     var R = REGIONS[sceneName] || {};
     if (R[name]) return R[name];
-    var P = PEOPLE[sceneName] || {};
-    if ((name === 'camille' || name === 'noe') && P[name] && st[name]) return pad([P[name][0], P[name][1], 12, 19], 2);
-    if (name === 'chat' && st.cat) {
-      var c = { cat: { sit: [52, 44, 10, 8], peek: [60, 26, 7, 4] }, kitchen: { sit: [40, 48, 10, 8], under: [44, 52, 7, 4] }, end: { sit: [58, 48, 10, 8] } }[sceneName];
-      if (c && c[st.cat]) return pad(c[st.cat], 4);
+    var cast = actors(sceneName, st);
+    for (var ai = 0; ai < cast.length; ai++) {
+      var hit = cast[ai];
+      if (hit.id === name || (name === 'chat' && hit.id === 'cat')) return pad([hit.x, hit.y, hit.w, hit.h], hit.kind === 'cat' ? 4 : 2);
     }
     if (sceneName === 'loc' && name === 'bag' && st.what === 'bag' && st.pos === 'devant') return pad([40, 44, 10, 10], 4);
     if (sceneName === 'loc' && (name === 'colis' || name === 'boite' || name === 'chat') && st.what !== 'bag') {
@@ -2084,17 +2233,10 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       }
     }
   }
-  function day9People(ctx, st, spk, spots) {
-    ['voisine', 'camille', 'noe'].forEach(function (who) {
-      var p = spots[who]; if (!p || !st[who]) return;
-      person(ctx, who, st[who], p[0], p[1]);
-      if (spk === (who === 'voisine' ? 'lefevre' : who)) marker(ctx, p[0] + 3, p[1] - 5);
-    });
-  }
   function day9Scene(ctx, name, st, spk) {
     if (name === 'cat_chair') {
       blitRle(ctx, DAY9_CHAIR);
-      day9People(ctx, st, spk, { voisine: [0, 26], camille: [18, 28], noe: [40, 26] });
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return true;
     }
     if (name === 'cat_paw') { blitRle(ctx, DAY9_PAW); return true; }
@@ -2107,8 +2249,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       });
       px(ctx, 2, 18, 2, 40, '#6b4430'); px(ctx, 86, 14, 2, 22, '#6b4430'); px(ctx, 2, 18, 86, 2, '#8a5a3a');
       px(ctx, 0, 58, W, 6, '#8d6a48');
-      day9People(ctx, st, spk, { camille: [24, 30], noe: [48, 24] });
-      if (st.cat) sprite(ctx, SPR.cat, 8, 42);
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       if (st.night) px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.55)');
       return true;
     }
@@ -2116,9 +2257,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       room(ctx, '#e9d3b0', '#b98a5e');
       door(ctx, 36, 6, st.door === 'open');
       px(ctx, 8, 10, 14, 12, '#6b4430'); px(ctx, 10, 12, 10, 8, '#3a4a78'); px(ctx, 10, 15, 10, 1, '#2a3348'); px(ctx, 14, 12, 1, 8, '#2a3348');
-      if (st.door === 'open' && st.voisine) { person(ctx, 'voisine', st.voisine, 40, 22); if (spk === 'lefevre') marker(ctx, 43, 17); }
-      if (st.camille) { person(ctx, 'camille', st.camille, 14, 26); if (spk === 'camille') marker(ctx, 17, 21); }
-      if (st.noe) { person(ctx, 'noe', st.noe, 68, 25); if (spk === 'noe') marker(ctx, 71, 20); }
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       px(ctx, 30, 58, 32, 4, '#7a3b3b');
       return true;
     }
@@ -2137,7 +2276,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       px(ctx, 24, 36, 50, 8, '#f4efe6'); px(ctx, 28, 34, 42, 2, '#f4efe6'); px(ctx, 24, 44, 50, 1, '#cfc6b8');
       px(ctx, 47, 45, 2, 10, '#6b4430'); px(ctx, 42, 54, 12, 1, '#6b4430');
       [[30, 36], [45, 35], [60, 36], [66, 38]].forEach(function (q) { px(ctx, q[0], q[1], 6, 3, '#ffffff'); px(ctx, q[0], q[1] + 2, 6, 1, '#cfc6b8'); });
-      day9People(ctx, st, spk, { voisine: [2, 20], camille: [16, 24], noe: [46, 18] });
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return true;
     }
     return false;
@@ -2145,6 +2284,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   function scene(ctx, name, st) {
     sceneBase(ctx, name, st || {});
     if (st && st.props) drawProps(ctx, st.props);
+    if (st && st.motion && st.motion.ghosts && st.motion.ghosts.length) drawPeople(ctx, st.motion.ghosts, null, 0, st);
   }
   function sceneBase(ctx, name, st) {
     st = st || {};
@@ -2169,18 +2309,9 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       room(ctx, '#c9b79a', '#8d7a63');
       door(ctx, 38, 6, st.door === 'open');
       px(ctx, 60, 12, 13, 7, '#e8dcc0'); digits(ctx, '411', 61, 13, '#3a2a1e'); // plaque spans all three 3px digits + 1px margin
-      if (st.door === 'open' && (st.voisine || st.martin)) { // v0.6.0: Madame Lefèvre on the landing; flatmates step aside (v0.9.0: or Madame Martin)
-        if (st.voisine && st.martin) { person(ctx, 'voisine', st.voisine, 34, 22); if (spk === 'lefevre') marker(ctx, 37, 17); person(ctx, 'martin', st.martin, 50, 22); if (spk === 'martin') marker(ctx, 53, 17); }
-        else if (st.martin) { person(ctx, 'martin', st.martin, 42, 22); if (spk === 'martin') marker(ctx, 45, 17); }
-        else { person(ctx, 'voisine', st.voisine, 42, 22); if (spk === 'lefevre') marker(ctx, 45, 17); }
-        if (st.camille) { person(ctx, 'camille', st.camille, 16, 26); if (spk === 'camille') marker(ctx, 19, 21); }
-        if (st.noe) { person(ctx, 'noe', st.noe, 70, 25); if (spk === 'noe') marker(ctx, 73, 20); }
-      } else if (st.door === 'open') {
-        if (st.noe) { person(ctx, 'noe', st.noe, 50, 22); if (spk === 'noe') marker(ctx, 53, 17); }
-        if (st.camille) { person(ctx, 'camille', st.camille, 40, 25); if (spk === 'camille') marker(ctx, 43, 20); }
-      }
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       px(ctx, 30, 58, 36, 4, '#7a3b3b'); // doormat
-      if (st.cat) sprite(ctx, SPR.cat, 58, 48); // v0.8.0: Croissant back on the landing
+      drawPeople(ctx, actors(name, st), spk, 1, st);
       if (st.night && st.door === 'open') { px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.38)'); px(ctx, 38, 6, 20, 38, 'rgba(255,215,122,0.18)'); } // v0.7.0: door open at night, light from the flat
       else if (st.night) { px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.62)'); px(ctx, 38, 44, 20, 1, '#ffd77a'); } // v0.6.0: dark landing, light under the door
       return;
@@ -2188,8 +2319,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     if (name === 'name') {
       room(ctx, '#e8d9bd', '#a88a68');
       px(ctx, 6, 8, 20, 16, '#9fd0ea'); px(ctx, 6, 15, 20, 1, '#fff'); px(ctx, 15, 8, 1, 16, '#fff'); px(ctx, 5, 7, 22, 1, '#6b4f3a');
-      person(ctx, 'camille', st.camille || 'idle', 36, 26); if (spk === 'camille') marker(ctx, 39, 21);
-      person(ctx, 'noe', st.noe || 'idle', 58, 25); if (spk === 'noe') marker(ctx, 61, 20);
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     if (name === 'plant') {
@@ -2198,23 +2328,16 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       px(ctx, 10, 40, 22, 3, '#6b4f3a'); px(ctx, 12, 43, 2, 10, '#6b4f3a'); px(ctx, 28, 43, 2, 10, '#6b4f3a');
       plant(ctx, 16, 23, !!st.watered);
       if (st.drops) { px(ctx, 20, 18, 1, 2, '#4aa3df'); px(ctx, 23, 16, 1, 2, '#4aa3df'); px(ctx, 18, 15, 1, 2, '#4aa3df'); }
-      if (st.camille) { person(ctx, 'camille', st.camille, 48, 26); if (spk === 'camille') marker(ctx, 51, 21); }
-      if (st.martin) { person(ctx, 'martin', st.martin, 70, 25); if (spk === 'martin') marker(ctx, 73, 20); } // v0.9.0
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     if (name === 'cat') {
       room(ctx, '#e3d3c6', '#9d8064');
       door(ctx, 4, 6, st.door === 'open');
-      if (st.camille) { person(ctx, 'camille', st.camille, 8, 24); if (spk === 'camille') marker(ctx, 11, 19); }
-      if (st.noe) {
-        var pose = st.noe;
-        person(ctx, 'noe', pose, 36, 25); if (spk === 'noe') marker(ctx, 39, 20);
-      }
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       px(ctx, 52, 34, 40, 10, '#5b6fa0'); px(ctx, 52, 30, 40, 5, '#4b5d8a'); px(ctx, 50, 32, 3, 12, '#4b5d8a'); px(ctx, 91, 32, 3, 12, '#4b5d8a');
-      if (st.cat === 'peek') sprite(ctx, SPR.catPeek, 60, 26);
-      // Feet on the floor line, in front of the sofa (same origin row as Noé). Drawn after the sofa so she is not standing on its back.
-      if (st.martin) { person(ctx, 'martin', st.martin, 66, 25); if (spk === 'martin') marker(ctx, 69, 20); }
-      if (st.cat === 'sit') sprite(ctx, SPR.cat, 52, 44);
+      // Feet on the shared floor line. Martin is drawn after the sofa so she stands in front of it, not on its back.
+      drawPeople(ctx, actors(name, st), spk, 1, st);
       if (st.night) px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.45)');
       return;
     }
@@ -2225,7 +2348,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       for (var l = 0; l < 5; l++) { px(ctx, 28, 34 + l * 3, 16, 1, '#b9ad94'); px(ctx, 52, 34 + l * 3, 15, 1, '#b9ad94'); }
       px(ctx, 76, 12, 2, 28, '#c9a227'); px(ctx, 70, 8, 14, 6, '#e8c95a'); px(ctx, 66, 14, 22, 20, 'rgba(255,230,150,0.08)');
       plant(ctx, 8, 24, !!st.watered);
-      if (st.cat) sprite(ctx, SPR.catPeek, 82, 37);
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     if (name === 'probe' || name === 'baseline') { // neutral frame: no faces, no pointing
@@ -2238,7 +2361,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       px(ctx, 0, 0, W, H, '#1f2a44');
       px(ctx, 70, 8, 8, 8, '#f5e6a8'); px(ctx, 72, 8, 6, 6, '#1f2a44');
       plant(ctx, 42, 36, !!st.watered);
-      if (st.cat) sprite(ctx, SPR.cat, 58, 48);
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     // ---- v0.3.0 « Protège Croissant » scenes ----
@@ -2247,16 +2370,13 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       px(ctx, 4, 6, 30, 10, '#d9c49c'); px(ctx, 4, 16, 30, 1, '#8c6b4a'); // cupboards
       px(ctx, 8, 9, 6, 4, '#c4ad83'); px(ctx, 22, 9, 6, 4, '#c4ad83');
       px(ctx, 76, 6, 16, 36, '#dfe7ee'); px(ctx, 76, 22, 16, 1, '#9fb0bf'); // fridge
-      if (st.martin) { person(ctx, 'martin', st.martin, 46, 21); if (spk === 'martin') marker(ctx, 49, 16); } // v0.9.0: Madame Martin at the table
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       px(ctx, 26, 40, 44, 3, '#8a5a3a'); px(ctx, 28, 43, 2, 13, '#6b4430'); px(ctx, 66, 43, 2, 13, '#6b4430'); // table
       if (st.cups) {
         var cups = [['the', 34, '#7fae5a'], ['cafe', 46, '#5a3a24'], ['eau', 58, '#9fd0ea']];
         cups.forEach(function (c) { px(ctx, c[1], 35, 6, 5, '#f4efe6'); px(ctx, c[1] + 1, 36, 4, 2, c[2]); if (st.hl === c[0]) px(ctx, c[1] - 1, 33, 8, 1, '#ffd77a'); });
       }
-      if (st.camille) { person(ctx, 'camille', st.camille, 12, 24); if (spk === 'camille') marker(ctx, 15, 19); }
-      if (st.noe) { person(ctx, 'noe', st.noe, 70, 24); if (spk === 'noe') marker(ctx, 73, 19); }
-      if (st.cat === 'under') sprite(ctx, SPR.catPeek, 44, 52);
-      if (st.cat === 'sit') sprite(ctx, SPR.cat, 40, 48);
+      drawPeople(ctx, actors(name, st), spk, 1, st);
       return;
     }
     if (name === 'shop') {
@@ -2312,7 +2432,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       for (var wi = 0; wi < 10; wi++) px(ctx, 4 + (wi * 19) % 90, 18 + (wi * 11) % 30, 3, 3, wi % 3 ? '#ffd77a' : '#3b4660');
       px(ctx, 0, 56, W, 8, '#2a2e3a');
       for (var ri = 0; ri < 40; ri++) { var rx = (ri * 37) % W, ry = (ri * 23 + (st.t || 0)) % 56; px(ctx, rx, ry, 1, 3, 'rgba(159,208,234,0.7)'); }
-      if (st.noe) { person(ctx, 'noe', st.noe, 42, 38); if (spk === 'noe') marker(ctx, 45, 33); }
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     if (name === 'street') { // v0.8.0: a Paris street — facades, the corner shop, the pavement (Day 6)
@@ -2324,9 +2444,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       for (var aw = 0; aw < 8; aw++) px(ctx, 62 + aw * 4, 19, 4, 4, aw % 2 ? '#f6efdc' : '#c0392b'); // awning
       px(ctx, 63, 24, 30, 20, '#9fd0ea'); px(ctx, 77, 24, 2, 22, '#7a5a3e'); px(ctx, 66, 30, 6, 6, '#e2873a'); px(ctx, 84, 32, 6, 5, '#5cb85c'); // shop window
       px(ctx, 0, 46, W, 10, '#b8b0a2'); px(ctx, 0, 46, W, 1, '#8f877a'); px(ctx, 0, 56, W, 8, '#5a5a62'); for (var lx = 4; lx < W; lx += 16) px(ctx, lx, 60, 8, 1, '#e8e2d0');
-      if (st.camille) { person(ctx, 'camille', st.camille, 8, 30); if (spk === 'camille') marker(ctx, 11, 25); }
-      if (st.noe) { person(ctx, 'noe', st.noe, 22, 29); if (spk === 'noe') marker(ctx, 25, 24); }
-      if (st.passant) { person(ctx, 'passant', st.passant, 42, 29); if (spk === 'neutral') marker(ctx, 45, 24); }
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     if (name === 'parc') { // v0.8.0: the little park, a tree and a bench
@@ -2334,8 +2452,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       px(ctx, 0, 52, W, 5, '#d8c9a6');
       px(ctx, 76, 18, 4, 24, '#6b4430'); px(ctx, 66, 6, 24, 14, '#4f9a4a'); px(ctx, 70, 2, 16, 6, '#5fae5a'); px(ctx, 64, 12, 4, 6, '#2f6e36');
       px(ctx, 44, 40, 26, 2, '#8a5a3a'); px(ctx, 44, 35, 26, 2, '#8a5a3a'); px(ctx, 46, 42, 2, 6, '#5a3b26'); px(ctx, 66, 42, 2, 6, '#5a3b26'); // bench
-      if (st.camille) { person(ctx, 'camille', st.camille, 6, 28); if (spk === 'camille') marker(ctx, 9, 23); }
-      if (st.noe) { person(ctx, 'noe', st.noe, 22, 27); if (spk === 'noe') marker(ctx, 25, 22); }
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
     if (name === 'balcon') { // v0.8.0: our building from the street; the first-floor balcony is Madame Lefèvre's
@@ -2343,12 +2460,10 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       px(ctx, 6, 30, 16, 22, '#5a3b26'); px(ctx, 8, 32, 12, 20, '#7a5236'); // street door
       px(ctx, 28, 6, 10, 14, '#7d98ad'); px(ctx, 88, 6, 8, 14, '#7d98ad');
       px(ctx, 52, 4, 20, 22, st.voisine ? '#f3e3c3' : '#7d98ad'); px(ctx, 51, 3, 22, 1, '#6b4f3a'); // balcony window (open = lit)
-      if (st.voisine) { person(ctx, 'voisine', st.voisine, 55, 9); if (spk === 'lefevre') marker(ctx, 58, 4); }
-      if (st.cat) sprite(ctx, SPR.cat, 72, 18);
+      drawPeople(ctx, actors(name, st).filter(function (a) { return a.id === 'voisine' || a.id === 'cat'; }), spk, 0, st);
       px(ctx, 44, 26, 40, 2, '#8f877a'); px(ctx, 44, 17, 40, 1, '#2a2a2a'); for (var rx2 = 44; rx2 < 84; rx2 += 3) px(ctx, rx2, 17, 1, 9, '#2a2a2a'); // balcony + railing
       px(ctx, 0, 52, W, 12, '#b8b0a2'); px(ctx, 0, 52, W, 1, '#8f877a');
-      if (st.camille) { person(ctx, 'camille', st.camille, 26, 36); if (spk === 'camille') marker(ctx, 29, 31); }
-      if (st.noe) { person(ctx, 'noe', st.noe, 38, 35); if (spk === 'noe') marker(ctx, 41, 30); }
+      drawPeople(ctx, actors(name, st).filter(function (a) { return a.id !== 'voisine' && a.id !== 'cat'; }), spk, 0, st);
       return;
     }
     if (name === 'night') {
@@ -2357,7 +2472,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       for (var si = 0; si < 9; si++) px(ctx, 30 + (si * 29) % 62, 4 + (si * 13) % 20, 1, 1, '#c9d3ff');
       px(ctx, 30, 40, 40, 10, '#4b5d8a'); px(ctx, 30, 36, 40, 5, '#3c4b72');
       px(ctx, 60, 30, 8, 12, '#222'); px(ctx, 61, 31, 6, 9, '#ffd77a'); // phone glowing
-      if (st.cat) sprite(ctx, SPR.cat, 36, 30);
+      drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
     }
   }
@@ -2551,9 +2666,10 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     if (health === 'yellow') { px(ctx, cx - 6, 37, 2, 1, '#c9b23a'); }
   }
 
-  var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait: portrait, SPOTS: SPOTS, garden: garden, PROPS: PROPS, ICONS: ICONS, drawProp: drawProp, propCard: propCard, figCard: figCard, propSize: propSize, region: region, REGIONS: REGIONS, day9px: { pal: DAY9_PAL, chair: DAY9_CHAIR, paw: DAY9_PAW } };
+  var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait: portrait, SPOTS: SPOTS, garden: garden, PROPS: PROPS, ICONS: ICONS, drawProp: drawProp, propCard: propCard, figCard: figCard, propSize: propSize, region: region, REGIONS: REGIONS, actors: actors, ROOM_FLOOR: ROOM_FLOOR, PERSON_W: PERSON_W, PERSON_H: PERSON_H, day9px: { pal: DAY9_PAL, chair: DAY9_CHAIR, paw: DAY9_PAW } };
   root.A411 = root.A411 || {};
   root.A411.Art = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -17226,6 +17342,8 @@ function getLang(ls, id) {
   var onHook = null;
   var looping = false;
   var inputBound = false;
+  var actorAnim = {};
+  var drawNow = 0;
 
   function assetUrl(src) {
     if (!src || /^(https?:|data:|blob:)/.test(src) || src.charAt(0) === '/') return src;
@@ -17285,8 +17403,10 @@ function getLang(ls, id) {
     return names;
   }
 
+  function stillMotion() { return reduced || !!(state && state.fast); }
+
   function idleFrame(f) {
-    if (reduced) return 0;
+    if (stillMotion()) return 0;
     if (f % 16 === 14) return 3;
     return [0, 1, 2, 1][Math.floor(f / 2) % 4];
   }
@@ -17786,6 +17906,19 @@ function getLang(ls, id) {
     interact(spot);
   }
 
+  function ensureGoal() {
+    var el = document.getElementById('hubGoal');
+    if (el) return el;
+    var mount = document.getElementById('hubMount') || document.getElementById('app') || document.body;
+    el = document.createElement('div');
+    el.id = 'hubGoal';
+    el.className = 'hub-goal';
+    el.hidden = true;
+    el.setAttribute('aria-live', 'polite');
+    mount.appendChild(el);
+    return el;
+  }
+
   function ensurePrompt() {
     var btn = document.getElementById('hubInteract');
     if (btn) return btn;
@@ -17805,13 +17938,21 @@ function getLang(ls, id) {
     var btn = ensurePrompt();
     var mount = document.getElementById('hubMount');
     var cues = activeCues();
+    var goal = ensureGoal();
     if (!btn || !state || !canvas || !active || !cues.length || (mount && mount.hidden)) {
       if (btn) btn.hidden = true;
+      if (goal) goal.hidden = true;
       return;
     }
     var spot = hotspotForCue(cues[0]);
+    var label = (spot && spot.label) || 'Regarder';
     btn.hidden = false;
-    btn.textContent = (spot && spot.label) || 'Regarder';
+    btn.textContent = label;
+    btn.classList.toggle('live', !stillMotion());
+    if (goal) {
+      goal.hidden = false;
+      goal.textContent = 'Objectif : ' + label;
+    }
     var rect = canvas.getBoundingClientRect();
     var mx = cues[0].c * tile + tile / 2;
     var my = cues[0].r * tile + tile / 2;
@@ -17943,6 +18084,32 @@ function getLang(ls, id) {
     return room.actors || [];
   }
 
+  function posedFoot(actor) {
+    var id = actor.id || actor.sprite || 'a';
+    var tx = actor.foot[0], ty = actor.foot[1];
+    var now = drawNow || 0;
+    if (stillMotion()) return { x: tx, y: ty };
+    var rec = actorAnim[id];
+    if (!rec) rec = actorAnim[id] = { x: tx, y: ty, tx: tx, ty: ty, born: now, t0: 0 };
+    if (rec.tx !== tx || rec.ty !== ty) {
+      rec.fromX = rec.x;
+      rec.fromY = rec.y;
+      rec.t0 = now;
+      rec.tx = tx;
+      rec.ty = ty;
+    }
+    if (rec.t0) {
+      var u = Math.min(1, (now - rec.t0) / 300);
+      rec.x = rec.fromX + (tx - rec.fromX) * u;
+      rec.y = rec.fromY + (ty - rec.fromY) * u;
+      if (u >= 1) rec.t0 = 0;
+    }
+    var age = now - rec.born;
+    var hop = age >= 0 && age < 340 ? -Math.round(4 * Math.sin(Math.PI * (age / 340))) : 0;
+    var breath = Math.sin(now / 540 + id.length) > 0.2 ? -1 : 0;
+    return { x: rec.x, y: rec.y + hop + breath };
+  }
+
   function paintShadows() {
     shadowCtx.clearRect(0, 0, mapW, mapH);
     shadowCtx.drawImage(active.shadow, 0, 0);
@@ -17950,7 +18117,10 @@ function getLang(ls, id) {
     var feet = [];
     if (state.showPlayer !== false) feet.push({ x: state.x, y: state.y });
     var cast = liveActors();
-    for (var i = 0; i < cast.length; i++) feet.push({ x: cast[i].foot[0], y: cast[i].foot[1] });
+    for (var i = 0; i < cast.length; i++) {
+      var posed = posedFoot(cast[i]);
+      feet.push({ x: posed.x, y: posed.y });
+    }
     for (var f = 0; f < feet.length; f++) {
       shadowCtx.drawImage(ellipse, Math.round(feet[f].x - w / 2), Math.round(feet[f].y - h / 2));
     }
@@ -17958,11 +18128,22 @@ function getLang(ls, id) {
 
   function drawCueTile(c, r) {
     var x0 = c * tile, y0 = r * tile;
-    for (var i = 2; i < tile - 2; i += 2) {
-      fillMap(x0 + i, y0 + 1, '#f6a54a', 1);
-      fillMap(x0 + i, y0 + tile - 2, '#f6a54a', 1);
-      fillMap(x0 + 1, y0 + i, '#f6a54a', 1);
-      fillMap(x0 + tile - 2, y0 + i, '#f6a54a', 1);
+    var pulse = stillMotion() ? 0.5 : (0.35 + 0.45 * (0.5 + 0.5 * Math.sin(drawNow / 280)));
+    worldCtx.save();
+    worldCtx.globalAlpha = pulse * 0.5;
+    worldCtx.fillStyle = '#f6a54a';
+    worldCtx.fillRect(x0 + 2, y0 + 2, tile - 4, tile - 4);
+    worldCtx.restore();
+    var edge = (!stillMotion() && Math.sin(drawNow / 280) > 0) ? '#ffe7a8' : '#f6a54a';
+    for (var i = 1; i < tile - 1; i++) {
+      fillMap(x0 + i, y0, edge, 1);
+      fillMap(x0 + i, y0 + 1, edge, 0.85);
+      fillMap(x0 + i, y0 + tile - 1, edge, 1);
+      fillMap(x0 + i, y0 + tile - 2, edge, 0.85);
+      fillMap(x0, y0 + i, edge, 1);
+      fillMap(x0 + 1, y0 + i, edge, 0.85);
+      fillMap(x0 + tile - 1, y0 + i, edge, 1);
+      fillMap(x0 + tile - 2, y0 + i, edge, 0.85);
     }
   }
 
@@ -18030,20 +18211,22 @@ function getLang(ls, id) {
       if (!def) continue;
       var aim = spriteNamed(def.idle, actor.facing || 'down', idleFrame(f));
       if (!aim) continue;
+      var posed = posedFoot(actor);
       items.push({
         y: actor.foot[1], tie: 2, img: aim,
-        x: actor.foot[0] - def.anchor[0],
-        y0: actor.foot[1] - def.anchor[1]
+        x: posed.x - def.anchor[0],
+        y0: posed.y - def.anchor[1]
       });
     }
     if (state.showPlayer !== false) {
       var player = room.sprites.player;
       var pFrame = moving ? (Math.floor(now / room.timing.walkFrameMs) % player.frames) : idleFrame(f);
       var pImg = spriteNamed(moving ? player.walk : player.idle, state.facing, pFrame);
+      var breath = (!moving && !stillMotion() && Math.sin(now / 540) > 0.2) ? -1 : 0;
       items.push({
         y: state.y, tie: 3, img: pImg,
         x: state.x - player.anchor[0],
-        y0: state.y - player.anchor[1]
+        y0: state.y + breath - player.anchor[1]
       });
     }
     items.sort(function (a, b) { return a.y - b.y || a.tie - b.tie; });
@@ -18079,6 +18262,7 @@ function getLang(ls, id) {
   }
 
   function draw(now) {
+    drawNow = now || 0;
     if (!active || !worldCtx) { syncPrompt(); return; }
     var f = Math.floor(now / room.timing.ambientMs);
     if (f < 0) f = 0;
@@ -18268,6 +18452,7 @@ function getLang(ls, id) {
   }
 
   function freshState(spawn) {
+    actorAnim = {};
     state = { step: null, path: [], arrive: null, marker: null, hook: null, hidden: {}, variants: {}, cues: [], actors: null, fast: false, plantHealthy: false, showPlayer: true, proxHook: null, interactAt: 0 };
     placeFrom(spawn);
   }
@@ -18577,21 +18762,21 @@ function getLang(ls, id) {
     if (catChair) hidden.push('chair_4_n');
     var actors = [];
     if (room === 'apt' && day === 8) {
-      actors.push(actor('noe', 'noe', [120, 100], 'right'));
-      if (choices.d8_plante === 'chat' && has(done, 'd8_B')) actors.push(actor('croissant', 'croissant', [48, 230], 'left'));
-      else actors.push(actor('croissant', 'croissant', [136, 108], 'left'));
-      if (has(done, 'd8_C')) actors.push(actor('camille', 'camille', [88, 64], 'up'));
+      actors.push(actor('noe', 'noe', [24, 124], 'right'));
+      if (choices.d8_plante === 'chat' && has(done, 'd8_B')) actors.push(actor('croissant', 'croissant', [72, 232], 'left'));
+      else actors.push(actor('croissant', 'croissant', [72, 120], 'left'));
+      if (has(done, 'd8_C')) actors.push(actor('camille', 'camille', [88, 88], 'down'));
     } else if (room === 'apt' && day === 9) {
       actors.push(actor('camille', 'camille', [80, 300], 'down'));
       actors.push(actor('noe', 'noe', [116, 300], 'down'));
       if (!croissantHidden(day, done)) actors.push(actor('croissant', 'croissant', [72, 208], 'down'));
     } else if (room === 'stairwell' && transit) {
       actors.push(actor('croissant', 'croissant', [136, 204], 'up'));
-      actors.push(actor('noe', 'noe', [136, 268], 'up'));
-      actors.push(actor('camille', 'camille', [152, 284], 'up'));
+      actors.push(actor('noe', 'noe', [136, 236], 'up'));
+      actors.push(actor('camille', 'camille', [152, 300], 'up'));
     } else if (room === 'stairwell') {
+      actors.push(actor('camille', 'camille', [152, 232], 'down'));
       actors.push(actor('noe', 'noe', [136, 268], 'down'));
-      actors.push(actor('camille', 'camille', [152, 252], 'down'));
       actors.push(actor('lefevre', 'lefevre', [64, 308], 'left'));
     } else if (room === 'lefevre') {
       actors.push(actor('noe', 'noe', [40, 140], 'right'));
@@ -18611,9 +18796,12 @@ function getLang(ls, id) {
       else if (next === 'd9_I') cues.push(cue(5, 13));
     }
     var spawn, spawnKey;
-    if (day === 8) { spawn = { col: 7, row: 6, facing: 'up' }; spawnKey = 'd8-apt'; }
+    if (day === 8 && next === 'd8_F') { spawn = { col: 6, row: 16, facing: 'up' }; spawnKey = 'd8-door'; }
+    else if (day === 8 && next === 'd8_G') { spawn = { col: 2, row: 4, facing: 'up' }; spawnKey = 'd8-basil'; }
+    else if (day === 8) { spawn = { col: 7, row: 6, facing: 'up' }; spawnKey = 'd8-apt'; }
     else if (room === 'stairwell' && transit) { spawn = { col: 3, row: 19, facing: 'up' }; spawnKey = 'd9-stairs-up'; }
-    else if (room === 'stairwell') { spawn = { col: 8, row: 15, facing: 'down' }; spawnKey = 'd9-stairs-down'; }
+    else if (next === 'd9_D' && room === 'stairwell') { spawn = { col: 5, row: 19, facing: 'left' }; spawnKey = 'd9-lef-door'; }
+    else if (room === 'stairwell') { spawn = { col: 8, row: 20, facing: 'up' }; spawnKey = 'd9-stairs-down'; }
     else if (room === 'lefevre') { spawn = { col: 4, row: 12, facing: 'up' }; spawnKey = 'd9-lefevre'; }
     else if (has(done, 'd9_I')) { spawn = { col: 5, row: 16, facing: 'up' }; spawnKey = 'd9-apt-back'; }
     else { spawn = { col: 5, row: 16, facing: 'down' }; spawnKey = 'd9-apt-out'; }
@@ -19193,7 +19381,7 @@ function getLang(ls, id) {
     wrap.appendChild(c);
     ui.stageArt = { scene: sceneName, st: st };
     if (st.sfx) { var sk = sfxKey(); sfxWords(wrap, st.sfx, ui.sfxPlayed !== sk); ui.sfxPlayed = sk; }
-    var rm = !!(S && S.settings.reducedMotion);
+    var rm = prefersStill();
     var r = st.focus ? Art.region(st.focus, sceneName, st) : null;
     var prev = ui.zoom;
     c.style.transformOrigin = '0 0';
@@ -19221,7 +19409,72 @@ function getLang(ls, id) {
           style: 'left:' + (q[0] / Art.W * 100) + '%;top:' + (q[1] / Art.H * 100) + '%;width:' + (q[2] / Art.W * 100) + '%;height:' + (q[3] / Art.H * 100) + '%' }));
       });
     }
+    if (!rm) startStageMotion(c, sceneName, st);
     return wrap;
+  }
+  var stageMotionToken = 0;
+  function prefersStill() {
+    if (S && S.settings && S.settings.reducedMotion) return true;
+    try { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+  function startStageMotion(canvas, sceneName, st) {
+    var token = ++stageMotionToken;
+    var born = {}, from = {}, speak = st.speaker || '', speakAt = Date.now(), started = Date.now();
+    var cast = Art.actors(sceneName, st);
+    var prev = (ui.motScene === sceneName && ui.motCast) ? ui.motCast : [];
+    var leaving = [];
+    prev.forEach(function (p) {
+      if (!cast.some(function (a) { return a.id === p.id; })) leaving.push({ actor: p, at: started });
+    });
+    cast.forEach(function (a) {
+      var old = null;
+      for (var i = 0; i < prev.length; i++) if (prev[i].id === a.id) old = prev[i];
+      born[a.id] = old ? (ui.motBorn && ui.motBorn[a.id]) || started : started;
+      if (old && (old.x !== a.x || old.y !== a.y)) from[a.id] = { x: old.x, y: old.y, at: started };
+    });
+    ui.motScene = sceneName;
+    ui.motCast = cast;
+    ui.motBorn = born;
+    function frame() {
+      if (token !== stageMotionToken || !canvas.isConnected) return;
+      var now = Date.now();
+      var nudge = {}, blink = {};
+      cast.forEach(function (a, i) {
+        var age = now - (born[a.id] || started);
+        var hop = age < 340 ? Math.round(-6 * (1 - age / 340)) : 0;
+        var step = age < 340 ? Math.round((a.x < 48 ? -1 : 1) * 5 * (1 - age / 340)) : 0;
+        var slideX = 0, slideY = 0;
+        if (from[a.id]) {
+          var u = Math.min(1, (now - from[a.id].at) / 300);
+          slideX = Math.round((from[a.id].x - a.x) * (1 - u));
+          slideY = Math.round((from[a.id].y - a.y) * (1 - u));
+          if (u >= 1) delete from[a.id];
+        }
+        var breath = Math.sin(now / 540 + i * 1.3) > 0.25 ? -1 : 0;
+        var bounce = 0;
+        if (st.speaker && a.speaker === st.speaker) {
+          var bs = now - speakAt;
+          if (speak !== st.speaker) { speak = st.speaker; speakAt = now; bs = 0; }
+          if (bs < 240) bounce = bs < 90 ? -2 : (bs < 160 ? 1 : 0);
+        }
+        nudge[a.id] = { x: slideX + step, y: hop + breath + bounce + slideY };
+        blink[a.id] = ((now + i * 430) % 2900) < 130;
+      });
+      var ghosts = [];
+      leaving.forEach(function (g) {
+        var age = now - g.at;
+        if (age > 320) return;
+        var k = age / 320;
+        ghosts.push(g.actor);
+        nudge[g.actor.id] = { x: Math.round((g.actor.x < 48 ? -10 : 10) * k), y: Math.round(-6 * Math.sin(k * Math.PI)) };
+      });
+      var tail = Math.sin(now / 170) > 0 ? -1 : 1;
+      try {
+        Art.scene(canvas.getContext('2d'), sceneName, Object.assign({}, st, { motion: { nudge: nudge, blink: blink, tail: tail, ghosts: ghosts } }));
+      } catch (e) { return; }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
   // objects named in a French line that are visible in this scene → pulse them while the line is spoken
   function pulseFor(text, sceneName, art) {
@@ -19304,7 +19557,11 @@ function getLang(ls, id) {
   function render() {
     if (ui.paused) return; // nothing re-renders behind the pause sheet
     render0();
-    try { var k = sectionKey(); if (k && k !== ui.lastSection) pulseFirst($screen); ui.lastSection = k || ui.view; } catch (e) { }
+    try {
+      var k = sectionKey();
+      if (inStory() || (k && k !== ui.lastSection)) pulseFirst($screen);
+      ui.lastSection = k || ui.view;
+    } catch (e) { }
     try { requestAnimationFrame(fabGuard); } catch (e) { }
   }
   function render0() {
@@ -19390,14 +19647,10 @@ function getLang(ls, id) {
       var nw = h('div', { class: 'card fade-in whats-new', id: 'whatsNew' },
         h('h2', { lang: 'fr', text: 'Nouveau' + NB + '!' }),
         h('ul', { class: 'bravo-recap', lang: 'fr' },
-          h('li', null, icon('letter'), ' Jour 9' + NB + ': « Six heures ». On dîne chez Madame Lefèvre.'),
-          h('li', null, icon('paw'), ' Croissant a choisi sa chaise.'),
-          h('li', null, icon('bulb'), ' Petites ampoules : garde les points de grammaire.'),
-          h('li', null, icon('wordbook'), ' Dictionnaire : forme → base, en trois lignes.'),
-          h('li', null, icon('letter'), ' Conjugaison : participe passé et présent.'),
-          h('li', null, icon('pen'), ' Mon journal (après Bravo) et Question pour Prof Neng.'),
-          h('li', null, icon('paw'), ' Les traces suivent l’histoire.')),
-        qHelp(function () { return Z('新内容：故事里个别句子旁有小灯泡，点开看语法点，按「Garder」存进「Mes points de grammaire」，之后会出现在复习里。查词时显示「形式 → 原形」和时态/人称，释义整理成中文、英文、简单法语三行。变位表加了过去分词、现在分词和副动词。写日记改成可选的「Mon journal」（Bravo 之后，有「Coup de pouce」提示，不打分）。书桌的信和 Prof Neng 的小课里可以记下「Question pour Prof Neng」。少见的词（比如 croquettes、placard）只要求认得，不考拼写。Croissant 的痕迹跟着故事走，不再按日期计算。', 'New: some story lines have a small lightbulb. Tap it to see the grammar point, and « Garder » saves it to « Mes points de grammaire » (it then joins your reviews). Looking up a word shows « form → base » with tense/person, and the meaning in three short lines: Chinese, English, simple French. The conjugation view adds the past and present participles and the gérondif. Free writing is now the optional « Mon journal » after Bravo (with a « Coup de pouce » panel; not graded). At the desk letter and in Prof Neng’s lessons you can jot a « Question pour Prof Neng ». Rare words (like croquettes, placard) are recognition-only; no spelling test. Croissant’s traces follow the story, not the calendar.'); }, { id: 'newsQ' }),
+          h('li', null, icon('paw'), ' Les personnages respirent, clignent des yeux, et marchent jusqu’à leur place.'),
+          h('li', null, icon('check'), ' Tout le monde a les pieds par terre.'),
+          h('li', null, icon('plant'), ' Dans l’appartement, l’objectif brille. Le bouton pour continuer aussi.')),
+        qHelp(function () { return Z('人物会轻轻呼吸、眨眼，走进画面时会迈一小步，不再突然出现。每个人都站在地板上。公寓里，当前目标会发光，提示从一开始就看得见。继续按钮会轻轻闪一下。中文和英文说明仍然可以点问号打开。', 'Characters breathe, blink, and take a small step into place. Everyone stands on the floor. In the apartment the current goal glows, and its prompt is visible from the start. The continue button pulses gently. Chinese and English hints still open from the question mark.'); }, { id: 'newsQ' }),
         h('div', { class: 'row' }, btn('OK', function () { try { localStorage.setItem('a411.news', L.APP_VERSION); } catch (e) { } nw.remove(); }, 'small', { id: 'btnNewsOk' })));
       $screen.appendChild(nw);
     }
@@ -19410,7 +19663,7 @@ function getLang(ls, id) {
       var state = plan.steps[s[0]];
       ol.appendChild(h('li', { class: 'step ' + state, 'data-step': s[0], 'data-state': state, 'aria-current': state === 'current' ? 'step' : null },
         h('span', { class: 'dot', text: state === 'done' ? '✓' : String(i + 1) }),
-        h('span', { class: 'lbl' }, h('span', { lang: 'fr', text: s[1] + ' ' + s[2] }), h('span', { class: 'bgloss', text: s[3] }))));
+        h('span', { class: 'lbl', title: s[3] }, h('span', { lang: 'fr', text: s[2] }))));
     });
     return ol;
   }
@@ -21533,7 +21786,7 @@ function getLang(ls, id) {
   function frHost(node) {
     var el = node && (node.nodeType === 1 ? node : node.parentElement);
     if (!el || !el.closest) return null;
-    // Inputs and the lookup card stay controls. Story answers keep French lookup (v0.9.2):
+    // Inputs and the lookup card stay controls. Story answers keep French lookup (v0.11.1):
     // a long-press on a word inside an option must not be thrown away just because it sits on a button.
     // Other buttons, including « Ajouter au carnet », stay controls so « au » is not read as the word.
     if (el.closest('input, textarea, .wb-pop, #wordbookSheet')) return null;
