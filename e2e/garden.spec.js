@@ -31,11 +31,13 @@ for (const leaves of ['full', 'wilting', 'dormant']) {
     expect(fits).toBe(true);
     const font = await screen.evaluate(function (el) { return getComputedStyle(el).fontFamily; });
     expect(font.toLowerCase()).toContain('noto sans');
+    await page.screenshot({ path: out + '/pots-' + leaves + '.png' });
     if (leaves === 'full') {
       await screen.locator('button.pot').nth(1).click();
       await expect(page.locator('#potSheet')).toBeVisible();
       await expect(page.locator('#potSheet')).toContainText('À table');
+      await expect(page.locator('#potSheet')).toContainText('Jour 10');
+      await page.screenshot({ path: out + '/pots-words.png' });
     }
-    await page.screenshot({ path: out + '/pots-' + leaves + '.png' });
   });
 }

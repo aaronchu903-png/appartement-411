@@ -19210,7 +19210,9 @@ function getLang(ls, id) {
       sheet.appendChild(btn('Arroser ce pot', function () { beginReview({ pot: pot.n }); }, 'small', { id: 'btnPotWater' }));
       screen.appendChild(sheet);
     }
-    screen.appendChild(h('button', { class: 'btn small', type: 'button', id: 'btnPotsHome', style: 'position:absolute;top:6px;right:6px;z-index:2', onclick: function () { goTitle(); } }, Z('首页', 'Home')));
+    var oldHome = document.getElementById('btnPotsHome');
+    if (oldHome) oldHome.remove();
+    $topbar.appendChild(h('button', { class: 'btn small', type: 'button', id: 'btnPotsHome', onclick: function () { goTitle(); } }, Z('首页', 'Home')));
     $screen.appendChild(screen);
   }
   function openGarden() {
@@ -19372,6 +19374,7 @@ function getLang(ls, id) {
       if (bp) { bp.textContent = ''; bp.appendChild(icon('pause')); bp.setAttribute('aria-label', Z('暂停', 'Pause')); }
       $screen.innerHTML = '';
       document.body.classList.toggle('garden-fixed', ui.view === 'pots' || ui.view === 'rooftop');
+      if (ui.view !== 'pots') { var oldHome = document.getElementById('btnPotsHome'); if (oldHome) oldHome.remove(); }
       var hubMount = document.getElementById('hubMount');
       if (hubMount) hubMount.hidden = ui.view !== 'hub';
       if (ui.view === 'gate') { $topbar.hidden = true; A411.StudyUI.renderGate(studyCtx()); return; }
