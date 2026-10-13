@@ -19,11 +19,11 @@ test('letter 10 is the note under the door, without the cafe P.S.', async ({ pag
   expect(text).toContain('Merci pour la clé. Le basilic est sur le toit, dans un pot.');
   expect(text).toContain('Il a de l' + AP + 'eau. Une feuille se redresse' + NB + '!');
   expect(text).toContain('Vous voudriez une photo du basilic' + NB + '?');
-  expect(text).toContain('Je pourrais vous apporter une feuille, jeudi.');
+  expect(text).toContain('Je pourrais vous apporter des feuilles, jeudi.');
   expect(text).toContain('Et un jour, vous pourriez monter… si vous voulez.');
   expect(text).toContain('À jeudi' + NB + '!');
-  expect(text).toContain('le 411 (et Croissant)');
-  expect(text).not.toContain('P.S.');
+  expect(text).toContain('Le 411 (et Croissant)');
+  expect(text).not.toContain('P.-S.');
   expect(text).not.toContain('6. Le jardin');
   await expect(page.locator('[data-gap="voudriez"]')).toHaveText('voudriez');
   await expect(page.locator('[data-gap="pourrais"]')).toHaveText('pourrais');
@@ -37,8 +37,8 @@ test('letter 10 adds the cafe P.S. after the signature', async ({ page }) => {
   const paper = page.locator('#letterPaper');
   await expect(paper).toBeVisible();
   const text = await paper.innerText();
-  const sig = text.indexOf('le 411 (et Croissant)');
-  const ps = text.indexOf('P.S. Noé voudrait du café. Toujours.');
+  const sig = text.indexOf('Le 411 (et Croissant)');
+  const ps = text.indexOf('P.-S. Noé voudrait du café. Toujours.');
   expect(sig).toBeGreaterThan(-1);
   expect(ps).toBeGreaterThan(sig);
   await page.screenshot({ path: out + '/letter10-ps.png', fullPage: true });
@@ -66,8 +66,10 @@ test('the polite-conditional card leads into the three gaps', async ({ page }) =
   await expect(page.locator('#gapPanel')).toHaveAttribute('data-gap', 'pourrais');
   await page.locator('[data-gapopt="pourrais"]').click();
   await expect(page.locator('#gapPanel')).toHaveAttribute('data-gap', 'pourriez');
+  await expect(page.locator('[data-gapopt="pourrait"]')).toBeVisible();
+  await expect(page.locator('[data-gapopt="pourrons"]')).toHaveCount(0);
   await page.locator('[data-gapopt="pourriez"]').click();
   await expect(page.locator('#letterDone')).toBeVisible();
-  await expect(page.locator('#letterPaper')).not.toContainText('P.S.');
-  await expect(page.locator('#letterPaper')).toContainText('le 411 (et Croissant)');
+  await expect(page.locator('#letterPaper')).not.toContainText('P.-S.');
+  await expect(page.locator('#letterPaper')).toContainText('Le 411 (et Croissant)');
 });

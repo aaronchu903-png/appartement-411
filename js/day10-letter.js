@@ -18,10 +18,10 @@
       ['Merci pour la clé. Le basilic est sur le toit, dans un pot.'],
       [fr("Il a de l'eau. Une feuille se redresse !")],
       ['Vous ', { gap: 'voudriez' }, fr(' une photo du basilic ?')],
-      ['Je ', { gap: 'pourrais' }, ' vous apporter une feuille, jeudi.'],
+      ['Je ', { gap: 'pourrais' }, ' vous apporter des feuilles, jeudi.'],
       ['Et un jour, vous ', { gap: 'pourriez' }, ' monter… si vous voulez.'],
       [fr('À jeudi !')],
-      ['le 411 (et Croissant)']
+      ['Le 411 (et Croissant)']
     ],
     gaps: {
       voudriez: { type: 'mc', answer: 'voudriez', options: ['voudriez', 'voudrais', 'voudrait'],
@@ -29,16 +29,16 @@
         h1: { zh: 'vous + 礼貌 → voudriez。', en: 'vous + polite → voudriez.' },
         h2: { zh: 'v o u d r i e z。', en: 'v o u d r i e z.' } },
       pourrais: { type: 'mc', answer: 'pourrais', options: ['pourrais', 'pourrait', 'pourriez'],
-        fr: fr('Je pourrais vous apporter une feuille, jeudi.'), zh: '我可以星期四给您带一片叶子。', en: 'I could bring you a leaf on Thursday.',
+        fr: fr('Je pourrais vous apporter des feuilles, jeudi.'), zh: '我可以星期四给您带几片叶子。', en: 'I could bring you some leaves on Thursday.',
         h1: { zh: 'je + 礼貌 → pourrais。', en: 'je + polite → pourrais.' },
         h2: { zh: 'p o u r r a i s。', en: 'p o u r r a i s.' } },
-      pourriez: { type: 'mc', answer: 'pourriez', options: ['pourriez', 'pourrais', 'pourrons'],
+      pourriez: { type: 'mc', answer: 'pourriez', options: ['pourriez', 'pourrais', 'pourrait'],
         fr: fr('Et un jour, vous pourriez monter… si vous voulez.'), zh: '有一天，您可以上来……如果您愿意。', en: 'And one day, you could come up… if you want.',
         h1: { zh: 'vous + 礼貌 → pourriez。', en: 'vous + polite → pourriez.' },
         h2: { zh: 'p o u r r i e z。', en: 'p o u r r i e z.' } }
     },
     /* After the signature, only when step 30 (d10_eau) was cafe. No reply is written. */
-    ps: { choice: 'd10_eau', value: 'cafe', fr: fr('P.S. Noé voudrait du café. Toujours.') }
+    ps: { choice: 'd10_eau', value: 'cafe', fr: fr('P.-S. Noé voudrait du café. Toujours.') }
   };
 
   LETTER.paragraphs = function (choice) {
