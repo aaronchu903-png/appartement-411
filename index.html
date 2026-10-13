@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.12.0 single-file build 2026-10-13T08:34:04.687Z -->
+<!-- L’Appartement 411 v0.12.1 single-file build 2026-10-13T20:13:43.884Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -24,13 +24,18 @@ body.large-text { font-size:20px; }
 .app { max-width:480px; margin:0 auto; min-height:100vh; padding-bottom:env(safe-area-inset-bottom); }
 #hubMount { position:fixed; left:0; right:0; bottom:0; top:42px; z-index:2; background:#241c18; display:flex; }
 #hubMount[hidden] { display:none !important; }
-#hubStage { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; min-width:0; position:relative; }
-#hubCanvas { image-rendering:pixelated; image-rendering:crisp-edges; touch-action:none; }
+#hubStage { flex:1; display:block; overflow:hidden; min-height:0; min-width:0; position:relative; }
+#hubCanvas { position:absolute; left:0; top:0; image-rendering:pixelated; image-rendering:crisp-edges; touch-action:none; }
 .hub-prompt { position:fixed; z-index:16; transform:translate(-50%, -130%); min-width:44px; min-height:44px; padding:8px 12px; border:2px solid #2a2e3a; border-radius:8px; background:#f6a54a; color:#1f1d1a; font:inherit; font-weight:700; box-shadow:0 3px 0 #2a2e3a; touch-action:manipulation; }
 .hub-prompt.live { animation: a411next 1.8s ease-in-out infinite; }
 .hub-prompt[hidden] { display:none !important; }
 .hub-goal { position:absolute; z-index:4; top:8px; left:50%; transform:translateX(-50%); max-width:calc(100% - 24px); padding:6px 12px; border:2px solid #2a2e3a; border-radius:999px; background:#fff7e6; color:#1f1d1a; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-weight:700; font-size:.95rem; text-align:center; box-shadow:0 0 0 4px rgba(246,165,74,.45); pointer-events:none; }
 .hub-goal[hidden] { display:none !important; }
+.dev-badge { position:fixed; z-index:40; top:6px; right:6px; background:#8a3b12; color:#fff; font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; font-size:11px; font-weight:700; letter-spacing:.04em; padding:2px 6px; border-radius:4px; pointer-events:none; }
+.dev-back { position:fixed; z-index:41; top:4px; left:6px; min-height:32px; padding:4px 8px; font-size:.8rem; }
+.pq-tabs { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.pq-tabs .btn.on { background:#2f5d8a; color:#fff; }
+.aha-tip { margin-top:6px; }
 .topbar[hidden] { display:none; }
 .topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#2a2e3a; color:#fff; }
 .topbar .where { font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -368,6 +373,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
 (function (root) {
   'use strict';
   var NB = '\u00A0';
+  var NNB = '\u202F';
   // 08b (2026-10-08): project renamed to L’Appartement 411 — only the apartment number in the Chinese
   // narration (404 -> 411) changed. French lines, targets, probe items and help are identical to 08a,
   // so learning evidence recorded under 08a stays comparable.
@@ -393,6 +399,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
     cam_moi: { speaker: 'camille', fr: 'Moi, je m\u2019appelle Camille. Et toi' + NB + '?', tts: "Moi, je m'appelle Camille. Et toi ?", zh: '我叫 Camille。你呢？', en: 'Me, my name is Camille. And you?', target: 'je_mappelle', label: 'understand' },
     cam_eau: { speaker: 'camille', fr: 'Elle a soif… Elle veut de l\u2019eau' + NB + '!', tts: "Elle a soif… Elle veut de l'eau !", zh: '它渴了……它想喝水！', en: 'It’s thirsty… It wants water!', target: null, label: 'atmosphere' },
     noe_chat: { speaker: 'noe', fr: 'C\u2019est mon chat. Il s\u2019appelle Croissant.', tts: "C'est mon chat. Il s'appelle Croissant.", zh: '这是我的猫。它叫 Croissant。', en: 'This is my cat. His name is Croissant.', target: null, label: 'atmosphere' },
+    d1_aha: { speaker: 'noe', aha: true, deviceTts: true, fr: 'Je m\u2019appelle Noé, tu t\u2019appelles {nom}\u2026 et lui, il s\u2019appelle Croissant' + NNB + '!', tts: "Je m'appelle Noé, tu t'appelles {nom}... et lui, il s'appelle Croissant !", zh: '我叫 Noé，你叫 {nom}……它叫 Croissant。', en: 'I\u2019m Noé, you\u2019re {nom}\u2026 and he is Croissant.', label: 'atmosphere' },
     noe_camille: { speaker: 'noe', fr: 'Camille ne sait pas. Chut' + NB + '!', tts: 'Camille ne sait pas. Chut !', zh: 'Camille 不知道。嘘！', en: 'Camille doesn’t know. Shh!', target: null, label: 'atmosphere' },
     // Probe stimuli (familiar language; one variant per item; speakers varied)
     pr_cam_ask: { speaker: 'camille', fr: 'Tu t\u2019appelles comment' + NB + '?', zh: '你叫什么名字？', target: 'tu_tappelles_comment', label: 'probe', func: 'asks' },
@@ -543,6 +550,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
       { type: 'line', line: 'noe_croissant', event: 'met_croissant', art: { noe: 'point', cat: 'sit', door: 'closed', sfx: 'purr' } },
       { type: 'focus', w: 'chat', art: { noe: 'point', cat: 'sit', door: 'closed', focus: 'chat' } },
       { type: 'line', line: 'noe_chat', art: { noe: 'happy', cat: 'sit', door: 'closed' } },
+      { type: 'line', line: 'd1_aha', aha: true, art: { noe: 'happy', cat: 'sit', door: 'closed' } },
       { type: 'line', line: 'noe_camille', art: { noe: 'shh', cat: 'sit', door: 'closed' } },
       { type: 'line', line: 'noe_secret', art: { noe: 'shh', cat: 'sit', door: 'closed' } },
       { type: 'secret', art: { noe: 'shh', cat: 'sit', door: 'closed' } },
@@ -771,6 +779,8 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
     return out.slice(0, TRACE_TOTAL);
   }
   function tracesLeft(S) { return TRACE_TOTAL - traceLedger(S).length; }
+  // The landlord visit on Day 7 ends the trace-cleaning arc. Days 1–7 keep the meters; Day 8+ does not.
+  function traceHudOn(day) { return day >= 1 && day <= 7; }
   // Rewrites w.cleared from the ledger (old date-based entries are kept once in w.clearedLegacy). Returns true when it changed.
   function syncTraces(S, now) {
     var w = ensureWeek(S), led = traceLedger(S);
@@ -930,7 +940,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
     newGarden: newGarden, currentStreak: currentStreak, missedDays: missedDays, stageOf: stageOf, refresh: refresh, status: status,
     water: water, replant: replant, migrateGarden: migrateGarden, migratePlants: migratePlants, longestRun: longestRun,
     ensureWeek: ensureWeek, chapterStatus: chapterStatus, unlockDay: unlockDay, openEarly: openEarly, startChapter: startChapter, previewEnding: previewEnding,
-    tracesLeft: tracesLeft, clearTrace: clearTrace, traceLedger: traceLedger, syncTraces: syncTraces, letterCareful: letterCareful, CARE_FOR: CARE_FOR, traceGone: traceGone, day7Band: day7Band, LEGACY_TRACE_MAX: LEGACY_TRACE_MAX, ritualSeen: ritualSeen, markRitual: markRitual, completeChapter: completeChapter,
+    tracesLeft: tracesLeft, traceHudOn: traceHudOn, clearTrace: clearTrace, traceLedger: traceLedger, syncTraces: syncTraces, letterCareful: letterCareful, CARE_FOR: CARE_FOR, traceGone: traceGone, day7Band: day7Band, LEGACY_TRACE_MAX: LEGACY_TRACE_MAX, ritualSeen: ritualSeen, markRitual: markRitual, completeChapter: completeChapter,
     checkAbsence: checkAbsence, noteActive: noteActive, validateWeek: validateWeek, completedDay: completedDay,
     storyDone: storyDone, deskDone: deskDone, letterTraceState: letterTraceState, startLetter: startLetter, completeLetter: completeLetter,
     dayPlan: dayPlan, migrateWeekV2: migrateWeekV2
@@ -950,7 +960,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.12.0';
+  var APP_VERSION = '0.12.1';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -10398,6 +10408,7 @@ function getLang(ls, id) {
 (function (root) {
   'use strict';
   var NB = '\u00A0';
+  var NNB = '\u202F';
   var CONTENT_VERSION = 'w1-2026-10-09d';
   var ARC_TITLE = 'Protège Croissant';
 
@@ -10454,6 +10465,7 @@ function getLang(ls, id) {
     d2_noe_croq: { speaker: 'noe', fr: 'Oh non' + NB + '! Il n\u2019y a pas de croquettes.', tts: "Oh non ! Il n'y a pas de croquettes.", zh: '糟了！没有猫粮了。', en: 'Oh no! There’s no cat food.', target: 'pas_de_croquettes', label: 'understand' },
     d2_noe_lait: { speaker: 'noe', fr: 'Et il n\u2019y a pas de lait non plus.', tts: "Et il n'y a pas de lait non plus.", zh: '也没有牛奶了。', en: 'And there’s no milk either.', label: 'atmosphere' },
     d2_noe_faim: { speaker: 'noe', fr: 'Croissant a faim.', zh: 'Croissant 饿了。', en: 'Croissant is hungry.', label: 'atmosphere' },
+    d2_aha: { speaker: 'noe', aha: true, deviceTts: true, fr: 'Il a faim, j\u2019ai faim\u2026 On dit \u00AB' + NNB + 'j\u2019ai faim' + NNB + '\u00BB, pas \u00AB' + NNB + 'je suis faim' + NNB + '\u00BB' + NNB + '!', tts: "Il a faim, j'ai faim... On dit \"j'ai faim\", pas \"je suis faim\" !", zh: '饿了要说 j\u2019ai faim，不说 je suis faim。', en: 'Hungry is j\u2019ai faim, not je suis faim.', label: 'atmosphere' },
     d2_noe_retard: { speaker: 'noe', fr: 'Je suis en retard. Tu peux aller à la supérette' + NB + '?', tts: 'Je suis en retard. Tu peux aller à la supérette ?', zh: '我要迟到了。你能去一下小超市吗？', en: 'I’m late. Can you go to the supérette (the little corner shop)?', label: 'atmosphere' },
     d2_noe_acheter: { speaker: 'noe', fr: 'Je vais acheter des croquettes… non, toi' + NB + '!', tts: 'Je vais acheter des croquettes… non, toi !', zh: '我去买猫粮……不对，你去！', en: 'I’m going to buy cat food… no, you are!', label: 'understand' },
     d2_noe_cond_b: { speaker: 'noe', fr: 'Si Camille voyait les croquettes, elle comprendrait tout.', zh: '要是 Camille 看到猫粮，她就全明白了。', en: 'If Camille saw the cat food, she would understand everything.', label: 'atmosphere', bonus: true },
@@ -10482,6 +10494,7 @@ function getLang(ls, id) {
     d3_noe_jsp: { speaker: 'noe', fr: 'Je ne sais pas' + NB + '!', tts: 'Je ne sais pas !', zh: '我不知道！', en: 'I don’t know!', target: 'je_ne_sais_pas', label: 'understand' },
     d3_noe_croissant: { speaker: 'noe', fr: 'Croissant adore les boîtes…', zh: 'Croissant 最爱箱子了……', en: 'Croissant loves boxes…', label: 'atmosphere' },
     d3_noe_retard: { speaker: 'noe', fr: 'Je suis en retard. Je t\u2019appelle' + NB + '!', tts: "Je suis en retard. Je t'appelle !", zh: '我要迟到了。我给你打电话！', en: 'I’m late. I’ll call you!', label: 'atmosphere' },
+    d3_f3: { speaker: 'noe', deviceTts: true, fr: 'Je vais être en retard' + NNB + '!', tts: 'Je vais être en retard !', zh: '我要迟到了！', en: 'I’m going to be late!', label: 'atmosphere' },
     d3_room_cuisine: { speaker: 'noe', fr: 'Ici, c\u2019est la cuisine.', tts: "Ici, c'est la cuisine.", zh: '这里是厨房。', en: 'This is the kitchen.', label: 'understand' },
     d3_room_salon: { speaker: 'noe', fr: 'Là, c\u2019est le salon.', tts: "Là, c'est le salon.", zh: '那里是客厅。', en: 'That’s the living room.', label: 'understand' },
     d3_room_chambre: { speaker: 'noe', fr: 'Ta chambre est là.', zh: '你的房间在那儿。', en: 'Your room is there.', label: 'understand' },
@@ -10506,6 +10519,7 @@ function getLang(ls, id) {
     d3_noe_livre_b: { speaker: 'noe', fr: 'Le colis a été livré ce matin.', zh: '包裹是今天早上送到的。', en: 'The parcel was delivered this morning.', target: 'colis_livre', label: 'atmosphere', bonus: true },
     d3_noe_question: { speaker: 'noe', fr: 'Alors' + NB + '? Où est l\u2019arbre à chat' + NB + '?', tts: "Alors ? Où est l'arbre à chat ?", zh: '怎么样？猫爬架在哪儿？', en: 'So? Where is the cat tree?', label: 'understand' },
     d3_noe_parfait: { speaker: 'noe', fr: 'Parfait' + NB + '! Tu es génial.', tts: 'Parfait ! Tu es génial.', zh: '完美！你太棒了。', en: 'Perfect! You’re brilliant.', label: 'atmosphere' },
+    d3_aha: { speaker: 'noe', aha: true, deviceTts: true, fr: 'Sur la table, sous la table, dans le placard\u2026 tu trouves tout' + NNB + '!', tts: 'Sur la table, sous la table, dans le placard... tu trouves tout !', zh: '在桌上、在桌下、在柜子里……你都找到了！', en: 'On the table, under the table, in the cupboard\u2026 you find everything!', label: 'atmosphere' },
     d3_cam_rentree: { speaker: 'camille', fr: 'Coucou' + NB + '! Je suis rentrée' + NB + '!', tts: 'Coucou ! Je suis rentrée !', zh: '嗨！我回来啦！', en: 'Hey! I’m home!', label: 'atmosphere' },
     d3_cam_colis: { speaker: 'camille', fr: 'Oh, mon colis' + NB + '! Merci' + NB + '!', tts: 'Oh, mon colis ! Merci !', zh: '哦，我的包裹！谢谢！', en: 'Oh, my parcel! Thanks!', label: 'atmosphere' },
     d3_cam_quoi: { speaker: 'camille', fr: 'Noé… C\u2019est QUOI, ça' + NB + '?!', tts: "Noé… C'est quoi, ça ?!", zh: 'Noé……这！是！什！么？！', en: 'Noé… WHAT is THAT?!', label: 'atmosphere' },
@@ -10533,6 +10547,7 @@ function getLang(ls, id) {
     d4_noe_aie: { speaker: 'noe', fr: 'Aïe… Elle connaît Madame Martin' + NB + '!', tts: 'Aïe… Elle connaît Madame Martin !', zh: '糟了……她认识 Martin 太太！', en: 'Ouch… She knows Madame Martin!', label: 'atmosphere' },
     d4_cam_mot: { speaker: 'camille', fr: 'On écrit un petit mot pour Madame Lefèvre' + NB + '? Avec « vous », hein' + NB + '!', tts: 'On écrit un petit mot pour Madame Lefèvre ? Avec vous, hein !', zh: '我们给 Lefèvre 太太写张小便条吧？要用 vous 哦！', en: 'Shall we write Madame Lefèvre a little note? With « vous », mind!', label: 'understand' },
     d4_cam_parfait: { speaker: 'camille', fr: 'Parfait. Ce soir, tu finis le mot au bureau.', zh: '很好。今晚你在书桌前把便条写完。', en: 'Perfect. Tonight you finish the note at the desk.', label: 'atmosphere' },
+    d4_aha: { speaker: 'camille', aha: true, deviceTts: true, fr: 'Entre nous, c\u2019est \u00AB' + NNB + 'tu' + NNB + '\u00BB' + NNB + '; avec Madame Lefèvre, c\u2019est \u00AB' + NNB + 'vous' + NNB + '\u00BB.', tts: 'Entre nous, c\'est "tu" ; avec Madame Lefèvre, c\'est "vous".', zh: '我们之间用 tu；对 Lefèvre 太太用 vous。', en: 'Between us it\u2019s tu; with Madame Lefèvre it\u2019s vous.', label: 'atmosphere' },
     d4_martin_cle: { speaker: 'martin', fr: 'J\u2019ai une clé de l\u2019appartement. Si vous n\u2019êtes pas là samedi, j\u2019entre.', tts: "J'ai une clé de l'appartement. Si vous n'êtes pas là samedi, j'entre.", zh: '我有公寓的钥匙。星期六如果你们不在，我就自己进去。', en: 'I have a key to the apartment. If you’re not there on Saturday, I’ll let myself in.', label: 'atmosphere' },
     d4_noe_cles: { speaker: 'noe', fr: 'Euh… quelqu\u2019un a vu mes clés' + NB + '?', tts: "Euh… quelqu'un a vu mes clés ?", zh: '呃……有人看到我的钥匙了吗？', en: 'Er… has anyone seen my keys?', label: 'atmosphere' },
     d4_noe_chut: { speaker: 'noe', fr: 'Chut' + NB + '! Croissant, pas maintenant' + NB + '!', tts: 'Chut ! Croissant, pas maintenant !', zh: '嘘！Croissant，别现在闹！', en: 'Shh! Croissant, not now!', label: 'atmosphere' },
@@ -10565,6 +10580,7 @@ function getLang(ls, id) {
     d5_noe_jouait: { speaker: 'noe', fr: 'Croissant jouait avec ma veste. Il adore ma veste.', zh: 'Croissant 在玩我的外套。它超喜欢我的外套。', en: 'Croissant was playing with my jacket. He loves my jacket.', label: 'understand' },
     d5_noe_descendu: { speaker: 'noe', fr: 'Après, j\u2019ai pris ma veste et je suis descendu, avec la poubelle.', tts: "Après, j'ai pris ma veste et je suis descendu, avec la poubelle.", zh: '然后，我拿上外套，提着垃圾下楼了。', en: 'Then I took my jacket and went downstairs with the rubbish.', label: 'understand' },
     d5_noe_couche: { speaker: 'noe', fr: 'Et puis, je me suis couché.', zh: '然后，我就睡觉了。', en: 'And then I went to bed.', label: 'understand' },
+    d5_aha: { speaker: 'camille', aha: true, deviceTts: true, fr: 'Il pleuvait, Croissant jouait\u2026 et toi, tu es descendu' + NNB + '!', tts: 'Il pleuvait, Croissant jouait... et toi, tu es descendu !', zh: '下雨、玩耍是背景；你下楼是一件完成的事。', en: 'It was raining, Croissant was playing\u2026 and you went down!', label: 'atmosphere' },
     d5_cam_attends: { speaker: 'camille', fr: 'Attends' + NB + '! Quand tu étais en bas, Croissant jouait avec ta veste' + NB + '?', tts: 'Attends ! Quand tu étais en bas, Croissant jouait avec ta veste ?', zh: '等等！你在楼下的时候，Croissant 在玩你的外套？', en: 'Wait! While you were downstairs, was Croissant playing with your jacket?', label: 'understand' },
     d5_noe_ruban: { speaker: 'noe', fr: 'La clé avec le ruban rouge… Croissant adore les rubans' + NB + '!', tts: 'La clé avec le ruban rouge… Croissant adore les rubans !', zh: '系红丝带的钥匙……Croissant 最爱丝带了！', en: 'The key with the red ribbon… Croissant loves ribbons!', label: 'understand' },
     d5_cam_panier: { speaker: 'camille', fr: 'Croissant cache tout dans son panier.', zh: 'Croissant 什么都藏在它的窝里。', en: 'Croissant hides everything in his basket.', label: 'understand' },
@@ -10603,7 +10619,8 @@ function getLang(ls, id) {
     d6_gag_avous: { speaker: 'lefevre', fr: 'Bonjour. Ce petit chat roux… il est à vous, je crois' + NB + '?', tts: 'Bonjour. Ce petit chat roux… il est à vous, je crois ?', zh: '你们好。这只橘色小猫……是你们的吧？', en: 'Hello. This little ginger cat… he’s yours, I think?', label: 'atmosphere' },
     d6_gag_arrive: { speaker: 'lefevre', fr: 'Il est arrivé hier soir, par les toits. Il a mangé mon jambon' + NB + '!', tts: 'Il est arrivé hier soir, par les toits. Il a mangé mon jambon !', zh: '他昨晚从屋顶上过来的。他把我的火腿吃了！', en: 'He arrived last night, over the rooftops. He ate my ham!', label: 'understand' },
     d6_gag_meilleur: { speaker: 'lefevre', fr: 'Mon jambon est meilleur que vos croquettes, hein' + NB + '?', tts: 'Mon jambon est meilleur que vos croquettes, hein ?', zh: '我的火腿比你们的猫粮好吃，是吧？', en: 'My ham is better than your cat food, eh?', target: 'jambon_meilleur', label: 'atmosphere' },
-    d6_noe_amoi: { speaker: 'noe', fr: 'Pardon, Madame. Il est à moi. C\u2019est ma faute.', tts: "Pardon, Madame. Il est à moi. C'est ma faute.", zh: '对不起，女士。猫是我的。是我的错。', en: 'Sorry, Madame. He’s mine. It’s my fault.', label: 'understand' },
+    d6_noe_amoi: { speaker: 'noe', fr: 'Pardon, Madame. Il est à moi. C\u2019est ma faute.', tts: "Pardon, Madame. Il est à moi. C'est ma faute.", zh: '对不起，女士。猫是我的。是我的错。', en: 'Sorry, Madame. He’s mine. It’s my fault.', label: 'understand', tip: { fr: 'mon chat · ma clé · ma faute', zh: 'mon / ma 跟后面的名词走，不跟“谁的”走。', en: 'mon / ma follow the noun, not the owner.' } },
+    d6_f6: { speaker: 'camille', deviceTts: true, fr: 'Croissant est plus petit. Et plus mignon' + NNB + '!', tts: 'Croissant est plus petit. Et plus mignon !', zh: 'Croissant 更小，也更可爱！', en: 'Croissant is smaller. And cuter!', label: 'atmosphere' },
     d6_gag_dormi: { speaker: 'lefevre', fr: 'Il a dormi avec moi, sur mon lit.', tts: 'Il a dormi avec moi, sur mon lit.', zh: '他跟我一起睡的，在我床上。', en: 'He slept with me, on my bed.', label: 'understand' },
     d6_gag_seule: { speaker: 'lefevre', fr: 'Cette nuit… je n\u2019étais pas seule.', tts: "Cette nuit… je n'étais pas seule.", zh: '昨天夜里……我不是一个人。', en: 'Last night… I wasn’t alone.', label: 'atmosphere' },
     d6_cam_merci: { speaker: 'camille', fr: 'Merci, Madame Lefèvre' + NB + '! Merci beaucoup' + NB + '!', tts: 'Merci, Madame Lefèvre ! Merci beaucoup !', zh: '谢谢您，Lefèvre 太太！太感谢了！', en: 'Thank you, Madame Lefèvre! Thank you so much!', label: 'atmosphere' },
@@ -10645,6 +10662,7 @@ function getLang(ls, id) {
     d7_mar_bonjour_chat: { speaker: 'martin', fr: 'Au fait… dites bonjour au chat.', zh: '对了……替我跟猫问声好。', en: 'By the way… say hello to the cat.', label: 'understand' },
     d7_mar_petite: { speaker: 'martin', fr: 'Quand j\u2019étais petite, j\u2019avais un chat roux, moi aussi.', tts: "Quand j'étais petite, j'avais un chat roux, moi aussi.", zh: '我小时候，也养过一只橘猫。', en: 'When I was little, I had a ginger cat too.', target: 'quand_jetais_petite', label: 'understand' },
     d7_mar_biscotte: { speaker: 'martin', fr: 'Il s\u2019appelait Biscotte.', tts: "Il s'appelait Biscotte.", zh: '它叫 Biscotte（面包干）。', en: 'His name was Biscotte.', label: 'atmosphere' },
+    d7_aha: { speaker: 'martin', aha: true, deviceTts: true, fr: 'Avant, moi, j\u2019avais Biscotte\u2026 Aujourd\u2019hui, vous, vous avez un chat.', tts: "Avant, moi, j'avais Biscotte... Aujourd'hui, vous, vous avez un chat.", zh: '以前她有 Biscotte；现在你们有一只猫。', en: 'Before, she had Biscotte\u2026 Today, you have a cat.', label: 'atmosphere' },
     d7_mar_rester: { speaker: 'martin', fr: 'Il peut rester. Mais pas de bruit la nuit, hein' + NB + '!', tts: 'Il peut rester. Mais pas de bruit la nuit, hein !', zh: '它可以留下。不过晚上不许吵哦！', en: 'He can stay. But no noise at night, eh!', label: 'understand' },
     d7_mar_essai: { speaker: 'martin', fr: 'Bon. Une période d\u2019essai' + NB + ': un mois. Il faut que le chat soit calme.', tts: "Bon. Une période d'essai : un mois. Il faut que le chat soit calme.", zh: '好吧。试用期：一个月。这只猫必须安安静静的。', en: 'Right. A trial period: one month. The cat has to be calm.', target: 'il_faut_que', label: 'understand' },
     d7_mar_instant: { speaker: 'martin', fr: 'Il reste… pour l\u2019instant. Mais il faut que vous m\u2019écriviez les règles. Lundi' + NB + '!', tts: "Il reste… pour l'instant. Mais il faut que vous m'écriviez les règles. Lundi !", zh: '它先留下……暂时的。但是你们得把规矩写给我。星期一交！', en: 'He stays… for now. But you must write me the rules. On Monday!', label: 'understand' },
@@ -10664,6 +10682,7 @@ function getLang(ls, id) {
 
     // ---- Day 8: Le basilic (Monday after the visit). No ending titles here. ----
     d8_noe_matin: { speaker: 'noe', fr: 'Lundi, sept heures et demie. Regarde la plante' + NB + '!', tts: 'Lundi, sept heures et demie. Regarde la plante !', zh: '星期一，七点半。你看这盆植物！', en: 'Monday, half past seven. Look at the plant!', label: 'understand' },
+    d8_f8: { speaker: 'noe', deviceTts: true, fr: 'Croissant dort depuis ce matin.', tts: 'Croissant dort depuis ce matin.', zh: 'Croissant 从今天早上起一直在睡。', en: 'Croissant has been asleep since this morning.', label: 'atmosphere' },
     d8_noe_chat: { speaker: 'noe', fr: 'Croissant regarde la plante. S\u2019il la renverse… oh non.', tts: "Croissant regarde la plante. S'il la renverse… oh non.", zh: 'Croissant 盯着那盆植物。要是它把盆打翻……哦不。', en: 'Croissant is looking at the plant. If he knocks it over… oh no.', label: 'atmosphere' },
     d8_cam_bonjour: { speaker: 'camille', fr: 'Bonjour. Le café est prêt.', zh: '早上好。咖啡好了。', en: 'Good morning. The coffee is ready.', label: 'atmosphere' },
     d8_cam_a: { speaker: 'camille', fr: 'Samedi, elle a souri. On fait attention, c\u2019est tout.', tts: "Samedi, elle a souri. On fait attention, c'est tout.", zh: '星期六她是笑着走的。我们小心一点就行。', en: 'On Saturday she left smiling. We just have to be careful.', label: 'understand' },
@@ -10675,6 +10694,7 @@ function getLang(ls, id) {
     d8_gag_basilic: { speaker: 'lefevre', fr: 'C\u2019est du basilic, pour la cuisine.', tts: "C'est du basilic, pour la cuisine.", zh: '这是罗勒，给厨房用的。', en: 'It’s basil, for the kitchen.', label: 'understand' },
     d8_gag_venez: { speaker: 'lefevre', fr: 'Venez chez moi à six heures. J\u2019ai une question.', tts: "Venez chez moi à six heures. J'ai une question.", zh: '六点到我家来。我有一个问题。', en: 'Come to my place at six. I have a question.', label: 'understand' },
     d8_noe_question: { speaker: 'noe', fr: 'Du basilic… et une question' + NB + '? Oh…', tts: 'Du basilic… et une question ? Oh…', zh: '罗勒……还有一个问题？哦……', en: 'Basil… and a question? Oh…', label: 'atmosphere' },
+    d8_aha: { speaker: 'noe', aha: true, deviceTts: true, fr: '\u00AB' + NNB + 'Venez' + NNB + '\u00BB' + NNB + ': c\u2019est pour nous trois, pas seulement pour toi' + NNB + '!', tts: '"Venez" : c\'est pour nous trois, pas seulement pour toi !', zh: 'Venez 是对你们三个人说的，不只是对你。', en: '\u201CVenez\u201D is for the three of us, not only for you!', label: 'atmosphere' },
 
     // ---- Day 9: Six heures (Monday 6 pm, downstairs). No ending titles here. ----
     d9_noe_chat: { speaker: 'noe', fr: 'Croissant reste en haut… normalement.', zh: 'Croissant 留在楼上……按理说是这样。', en: 'Croissant stays upstairs… normally.', label: 'atmosphere' },
@@ -10687,6 +10707,7 @@ function getLang(ls, id) {
     d9_lef_asseyez: { speaker: 'lefevre', fr: 'Asseyez-vous, s\u2019il vous plaît.', tts: "Asseyez-vous, s'il vous plaît.", zh: '请坐。', en: 'Please sit down.', target: 'asseyez_vous', label: 'understand' },
     d9_lef_soupe: { speaker: 'lefevre', fr: 'Vous voulez de la soupe' + NB + '?', tts: 'Vous voulez de la soupe ?', zh: '你们要喝汤吗？', en: 'Would you like some soup?', target: 'vous_voulez_de_la_soupe', label: 'understand' },
     d9_lef_place: { speaker: 'lefevre', fr: 'Bon… il a choisi sa place.', zh: '好吧……它挑好自己的座位了。', en: 'Well… he has chosen his place.', label: 'atmosphere' },
+    d9_aha: { speaker: 'noe', aha: true, deviceTts: true, fr: 'Elle dit \u00AB' + NNB + 'asseyez-vous' + NNB + '\u00BB\u2026 et lui, il s\u2019assoit' + NNB + '!', tts: 'Elle dit "asseyez-vous"... et lui, il s\'assoit !', zh: '她说请坐；他自己坐下了。', en: 'She says \u201Csit down\u201D\u2026 and he sits down!', label: 'atmosphere' },
     d9_noe_pain: { speaker: 'noe', fr: 'Moi, je voudrais du pain. Et du fromage' + NB + '!', tts: 'Moi, je voudrais du pain. Et du fromage !', zh: '我呢，想要面包。还有奶酪！', en: 'Me, I would like some bread. And some cheese!', target: 'je_voudrais_du_pain', label: 'understand' },
     d9_cam_noe: { speaker: 'camille', fr: 'Noé… doucement.', zh: 'Noé……慢一点。', en: 'Noé… gently.', label: 'atmosphere' },
     d9_lef_encore: { speaker: 'lefevre', fr: 'Encore un peu' + NB + '? Il y a beaucoup de soupe.', tts: 'Encore un peu ? Il y a beaucoup de soupe.', zh: '再来一点？汤有很多。', en: 'A little more? There is a lot of soup.', target: 'encore_un_peu', label: 'understand' },
@@ -10783,6 +10804,7 @@ function getLang(ls, id) {
         L('d2_noe_bol', { scene: 'kitchen', noe: 'point', cat: 'sit', props: [['bowl', 54, 56]], focus: 'bowl' }),
         L('d2_noe_lait', { scene: 'kitchen', noe: 'sad', cat: 'sit', props: [['bowl', 54, 56], ['milk', 80, 30]], focus: 'milk' }),
         L('d2_noe_faim', { scene: 'kitchen', noe: 'idle', cat: 'sit', props: [['bowl', 54, 56]] }),
+        L('d2_aha', { scene: 'kitchen', noe: 'point', cat: 'sit', props: [['bowl', 54, 56]] }),
         L('d2_noe_retard', { scene: 'kitchen', noe: 'ask', cat: 'sit', props: [['bowl', 54, 56]] }),
         L('d2_noe_superette2', { scene: 'shop' }),
         L('d2_noe_acheter', { scene: 'kitchen', noe: 'point', cat: 'sit', props: [['croq', 54, 52]], focus: 'croq' }),
@@ -10860,6 +10882,7 @@ function getLang(ls, id) {
         L('d3_loc_derriere', { scene: 'loc', pos: 'derriere', what: 'cat' }),
         L('d3_loc_devant', { scene: 'loc', pos: 'devant', what: 'bag' }),
         L('d3_noe_retard', { scene: 'cat', noe: 'wave', door: 'open' }),
+        L('d3_f3', { scene: 'cat', noe: 'wave', door: 'open' }),
         n('n_d3_seul', 'Noé part. Tu es seul à la maison. Le téléphone sonne.', 'Noé 出门了。现在你一个人在家。电话响了。', 'Noé has left. You’re alone in the apartment. The phone rings.', { sfx: 'phone', scene: 'cat', props: [['phone', 28, 48, 'hl']] }),
         L('d3_call_allo', { scene: 'phone' }),
         { t: 'pick', key: 'd3_find1', mode: 'task', scene: 'loc', fr: 'Écoute Noé. Où est le colis' + NB + '?', zh: '去哪儿找？', en: 'Where do you look?', items: [{ line: 'd3_call_derriere', answer: 'derriere' }],
@@ -10887,6 +10910,7 @@ function getLang(ls, id) {
         { t: 'chips', key: 'd3_report', target: null, fr: 'Réponds à Noé' + NB + ': l\u2019arbre à chat est dans le placard.', zh: '回答 Noé：猫爬架在你房间的柜子里。把词块排好：', en: 'Answer Noé: the cat tree is in the cupboard in your room. Put the blocks in order:', art: { scene: 'phone' },
           answer: ['L\u2019arbre à chat', 'est', 'dans le placard.'], extra: ['sous la table'], accept: ['L\'arbre à chat est dans le placard', 'Il est dans le placard', 'L\'arbre à chat est dans ma chambre, dans le placard', 'Il est dans ma chambre'] },
         L('d3_noe_parfait', { scene: 'phone' }),
+        L('d3_aha', { scene: 'phone' }),
         { t: 'mission' },
         { t: 'diary' },
         n('n_d3_retour', 'Il est presque six heures. La porte s\u2019ouvre. C\u2019est Camille… plus tôt que d\u2019habitude' + NB + '!', '傍晚六点前，门开了。是 Camille……比平时早！', 'Before six, the door opens. It’s Camille… earlier than usual!', { sfx: ['door', 'steps'], scene: 'cat', door: 'open', camille: 'wave', props: [['box', 60, 26]] }),
@@ -10950,6 +10974,7 @@ function getLang(ls, id) {
         { t: 'chips', key: 'd4_note', target: 'pardon', fr: 'Écris le début du mot. Pour une voisine, on dit « vous ».', zh: '写便条的开头。对邻居要礼貌。把词块排好：', en: 'Write the start of the note. Be polite with a neighbour. Put the blocks in order:', art: { scene: 'cat', camille: 'ask', props: [['letter', 26, 50, 'hl']] },
           answer: ['Chère Madame Lefèvre,', 'pardon', 'pour le bruit.'], extra: ['Salut,'], accept: ['Chère Madame Lefèvre, pardon pour le bruit', 'Madame Lefèvre, pardon pour le bruit', 'Pardon pour le bruit'] },
         L('d4_cam_parfait', { scene: 'cat', camille: 'happy', noe: 'happy', cat: 'sit', props: [['letter', 26, 50]] }),
+        L('d4_aha', { scene: 'cat', camille: 'point', noe: 'idle', cat: 'sit', props: [['letter', 26, 50]] }),
         { t: 'mission' },
         { t: 'probe', key: 'd4_probe', items: ['pr4_bruit', 'pr4_repeter', 'pr4_gentil', 'pr4_desole'],
           answers: { pr4_bruit: 'bruit', pr4_repeter: 'repeter', pr4_gentil: 'gentil', pr4_desole: 'desole' },
@@ -11016,6 +11041,7 @@ function getLang(ls, id) {
                  { id: 'pose', fr: 'Il a posé sa veste.', img: { prop: 'veste' }, zh: '他放下了外套。', en: 'He put his jacket down.' },
                  { id: 'descendu', fr: 'Il est descendu.', img: { prop: 'poubelle' }, zh: '他下楼了。', en: 'He went downstairs.' },
                  { id: 'couche', fr: 'Il s\u2019est couché.', img: { prop: 'bed' }, zh: '他睡觉了。', en: 'He went to bed.' }] },
+        L('d5_aha', { scene: 'cat', camille: 'point', noe: 'idle', cat: 'sit', props: [['board', 62, 6]] }),
         L('d5_cam_attends', { scene: 'cat', noe: 'ask', camille: 'point', cat: 'sit', props: [['veste', 66, 30]] }),
         L('d5_noe_ruban', { scene: 'cat', noe: 'happy', camille: 'idle', cat: 'sit', props: [['keyr', 70, 10, 'hl']] }),
         { t: 'pick', key: 'd5_ou', mode: 'task', scene: 'cat', art: { noe: 'idle', camille: 'point' }, fr: 'Écoute Camille. On cherche où' + NB + '?', zh: '听 Camille 的。去哪儿找？', en: 'Listen to Camille. Where do we look?', items: [{ line: 'd5_cam_panier', answer: 'panier' }],
@@ -11083,6 +11109,7 @@ function getLang(ls, id) {
         { t: 'line', id: 'd6_noe_gros', when: { k: 'd6_route', v: ['gauche'] }, art: { scene: 'parc', noe: 'sad', camille: 'idle', props: [['catgros', 50, 44]] } },
         { t: 'line', id: 'd6_cam_retour', when: { k: 'd6_route', v: ['gauche'] }, art: { scene: 'parc', noe: 'sad', camille: 'point', props: [['catgros', 50, 44], ['arrowR', 80, 46]] } },
         { t: 'line', id: 'd6_cam_bien', when: { k: 'd6_route', v: ['droite', null] }, art: { scene: 'street', noe: 'idle', camille: 'point' } },
+        L('d6_f6', { scene: 'street', camille: 'happy', noe: 'idle' }),
         n('n_d6_immeuble', 'Devant votre immeuble. Et là-haut… « Miaou' + NB + '! »', '在你们楼前。从上面传来……“喵！”', 'In front of your building. And up there… « Miaou ! »', { sfx: 'meow', scene: 'balcon', noe: 'ask', camille: 'ask', cat: 1 }),
         L('d6_noe_la', { scene: 'balcon', noe: 'pointUp', camille: 'happy', cat: 1 }),
         F('balcon', { scene: 'balcon', noe: 'pointUp', camille: 'happy', cat: 1, focus: 'balcon' }),
@@ -11181,6 +11208,7 @@ function getLang(ls, id) {
         { t: 'narr', id: 'n_d7_sourit', when: { k: 'd7_reponse', v: [null] }, fr: 'Personne ne dit rien. Madame Martin sourit.', zh: '谁也没说话。Martin 太太笑了。', en: 'Nobody says a word. Madame Martin smiles.', art: { scene: 'doorway', door: 'open', martin: 'happy', camille: 'ask', noe: 'ask' } },
         L('d7_mar_petite', { scene: 'cat', martin: 'happy', camille: 'idle', noe: 'idle', cat: 'sit', props: [['catroux', 84, 3]] }),
         L('d7_mar_biscotte', { scene: 'cat', martin: 'happy', camille: 'happy', noe: 'happy', cat: 'sit' }),
+        L('d7_aha', { scene: 'cat', martin: 'happy', camille: 'happy', noe: 'happy', cat: 'sit' }),
         { t: 'line', id: 'd7_mar_rester', when: { k: 'd7_band', v: ['A'] }, art: { scene: 'cat', martin: 'point', camille: 'happy', noe: 'happy', cat: 'sit' } },
         { t: 'line', id: 'd7_mar_essai', when: { k: 'd7_band', v: ['B'] }, art: { scene: 'cat', martin: 'point', camille: 'happy', noe: 'idle', cat: 'sit', props: [['calendar', 80, 30, 'hl']] } },
         { t: 'line', id: 'd7_mar_instant', when: { k: 'd7_band', v: ['C'] }, art: { scene: 'cat', martin: 'cross', camille: 'idle', noe: 'sad', cat: 'sit', props: [['letter', 80, 34, 'hl']] } },
@@ -11219,6 +11247,7 @@ function getLang(ls, id) {
       steps: [
         n('n_d8_matin', 'Lundi matin. Dans la cuisine, la plante de samedi est sur la table. Croissant la regarde.', '星期一早上。厨房里，星期六的那盆植物在桌上。Croissant 盯着它。', 'Monday morning. In the kitchen, Saturday’s plant is on the table. Croissant is looking at it.', { sfx: 'meow', scene: 'kitchen', noe: 'sad', cat: 'sit', props: [['plantp', 54, 28, 'hl']] }),
         L('d8_noe_matin', { scene: 'kitchen', noe: 'point', cat: 'sit', props: [['plantp', 54, 28]], focus: 'plantp' }),
+        L('d8_f8', { scene: 'kitchen', noe: 'point', cat: 'sit', props: [['plantp', 54, 28]] }),
         F('plante', { scene: 'kitchen', noe: 'point', cat: 'sit', props: [['plantp', 54, 28]], focus: 'plantp' }),
         L('d8_noe_chat', { scene: 'kitchen', noe: 'sad', cat: 'sit', props: [['plantp', 54, 28, 'hl']] }),
         { t: 'choice', key: 'd8_plante', fr: 'La plante est en danger. Tu fais quoi' + NB + '?', zh: '这盆植物有危险。你怎么办？（剧情选择，没有对错）', en: 'The plant is in danger. What do you do? (A story choice, not a test.)', art: { scene: 'kitchen', noe: 'ask', cat: 'sit', props: [['plantp', 54, 28]] },
@@ -11246,6 +11275,7 @@ function getLang(ls, id) {
         L('d8_gag_venez', { scene: 'doorway', door: 'open', voisine: 'idle', camille: 'idle' }),
         n('n_d8_partie', 'Elle ne rentre pas. Elle sourit, et elle part. La porte se ferme.', '她没有进来。她笑了笑，走了。门关上了。', 'She doesn’t come in. She smiles, and she leaves. The door closes.', { sfx: 'door', scene: 'doorway', door: 'closed', camille: 'idle', noe: 'ask' }),
         L('d8_noe_question', { scene: 'kitchen', noe: 'ask', camille: 'idle', cat: 'sit', props: [['basil', 40, 36], ['plantp', 62, 28]] }),
+        L('d8_aha', { scene: 'kitchen', noe: 'point', camille: 'idle', cat: 'sit', props: [['basil', 40, 36], ['plantp', 62, 28]] }),
         { t: 'done', art: { scene: 'kitchen', noe: 'ask', camille: 'idle', cat: 'sit', props: [['basil', 40, 36]] },
           hook: { fr: 'À six heures, chez Madame Lefèvre. Elle a une question… et elle ne la dit pas.', zh: '六点，在 Lefèvre 太太家。她有一个问题……可她没说。', en: 'At six, at Madame Lefèvre’s. She has a question… and she doesn’t say it.' } }
       ]
@@ -11270,6 +11300,7 @@ function getLang(ls, id) {
         L('d9_lef_soupe', { scene: 'lefevre_table', voisine: 'idle', camille: 'idle', noe: 'idle', props: [['soup', 40, 28, 'hl'], ['bread', 30, 32], ['cheese', 54, 32], ['key', 64, 40]] }),
         n('n_d9_croissant', 'Mais… Croissant est là' + NB + '! Sur la chaise vide' + NB + '!', '可是……Croissant 在这儿！就在那把空椅子上！', 'But… Croissant is here! On the empty chair!', { sfx: 'sfx_meow_small', scene: 'cat_chair', voisine: 'ask', camille: 'ask', noe: 'ask' }),
         L('d9_lef_place', { scene: 'cat_chair', voisine: 'happy', camille: 'idle', noe: 'idle' }),
+        L('d9_aha', { scene: 'cat_chair', noe: 'point', voisine: 'idle', camille: 'idle' }),
         { t: 'say', key: 'd9_soupe', fr: 'Madame Lefèvre te regarde. Tu dis quoi' + NB + '?', zh: 'Lefèvre 太太看着你。你说什么？（没有标准答案）', en: 'Madame Lefèvre looks at you. What do you say? (There is no right answer.)', art: { scene: 'cat_chair', voisine: 'ask', camille: 'idle', noe: 'idle' },
           opts: [{ id: 'oui', fr: 'Oui, merci, Madame.' }, { id: 'pain', fr: 'Je voudrais du pain, s\u2019il vous plaît.' }, { id: 'peu', fr: 'Un peu, s\u2019il vous plaît.' }] },
         L('d9_noe_pain', { scene: 'cat_chair', voisine: 'idle', camille: 'idle', noe: 'point', props: [['bread', 8, 46, 'hl']] }),
@@ -11340,8 +11371,8 @@ function getLang(ls, id) {
     var steps = CHAPTERS[cid].steps;
     ranges.forEach(function (r) { for (var i = r[0]; i <= r[1]; i++) steps[i].beat = r[2]; });
   }
-  stampBeats('d8', [[0, 0, 'd8_A'], [1, 4, 'd8_B'], [5, 10, 'd8_C'], [11, 11, 'd8_D'], [12, 20, 'd8_F'], [21, 21, 'd8_G'], [22, 22, 'd8_H']]);
-  stampBeats('d9', [[0, 1, 'd9_B'], [2, 7, 'd9_C'], [8, 9, 'd9_D'], [10, 11, 'd9_E'], [12, 13, 'd9_F1'], [14, 20, 'd9_F2'], [21, 27, 'd9_G'], [28, 33, 'd9_H'], [34, 34, 'd9_J']]);
+  stampBeats('d8', [[0, 0, 'd8_A'], [1, 5, 'd8_B'], [6, 11, 'd8_C'], [12, 12, 'd8_D'], [13, 21, 'd8_F'], [22, 23, 'd8_G'], [24, 24, 'd8_H']]);
+  stampBeats('d9', [[0, 1, 'd9_B'], [2, 7, 'd9_C'], [8, 9, 'd9_D'], [10, 11, 'd9_E'], [12, 13, 'd9_F1'], [14, 21, 'd9_F2'], [22, 28, 'd9_G'], [29, 34, 'd9_H'], [35, 35, 'd9_J']]);
 
   var api = { stepSigs: stepSigs, legacySig: legacySig, LEGACY_NARR: LEGACY_NARR, ARC_TITLE: ARC_TITLE, CONTENT_VERSION: CONTENT_VERSION, LINES: LINES, SPEAKERS: SPEAKERS, CHAPTERS: CHAPTERS, CHAPTER_ORDER: CHAPTER_ORDER, TRACES: TRACES };
   root.A411 = root.A411 || {};
@@ -14473,11 +14504,6 @@ function getLang(ls, id) {
       'Voilà = “here is / here you are”, when you hand over or point at something. With a pronoun it goes in front: Le voilà ! La voilà !',
       [['Voilà une tasse de thé.', '这是一杯茶。', 'Here’s a cup of tea.'], ['Le voilà, votre chat.', '您的猫在这儿。', 'Here he is, your cat.']],
       ['d2_noe_voila_the', 'd2_noe_voila_cafe', 'd2_clerk_voila', 'd6_gag_verite']),
-    P('si_imparfait', 2, 'Si + imparfait, conditionnel',
-      '假设（现在不是真的）：si + 未完成过去时，主句用条件式：Si Camille voyait…, elle comprendrait…',
-      'An imagined situation (not true now): si + imperfect, then the conditional: Si Camille voyait…, elle comprendrait…',
-      [['Si j’avais un chat, je serais content.', '要是我有只猫，我会很开心。', 'If I had a cat, I would be happy.'], ['Si Camille voyait les croquettes, elle comprendrait tout.', '要是 Camille 看到猫粮，她就全明白了。', 'If Camille saw the cat food, she would understand everything.']],
-      ['d2_noe_cond_b']),
     P('pc_avoir', 2, 'avoir (présent) + participe passé',
       '复合过去时（大多数动词）：avoir 的现在时 + 过去分词。-er 动词 → -é：commander → j’ai commandé。不规则：voir → vu、prendre → pris、dire → dit。',
       'Passé composé (most verbs): avoir in the present + past participle. -er verbs → -é: commander → j’ai commandé. Irregular: voir → vu, prendre → pris, dire → dit.',
@@ -14530,11 +14556,6 @@ function getLang(ls, id) {
       'In speech, on usually means “we”, with a 3rd-person singular verb: on est, on va, on fait.',
       [['On est une équipe.', '我们是一个团队。', 'We’re a team.'], ['On fait une enquête !', '我们来调查！', 'Let’s investigate!']],
       ['d4_cam_equipe', 'd5_cam_enquete', 'd6_noe_equipe', 'l_noe_4']),
-    P('dont', 4, 'dont = de qui / de quoi',
-      'dont 代替“de + 某人／某物”：parler de la voisine → la voisine dont je t’ai parlé（我跟你说过的那个邻居）。',
-      'dont replaces “de + someone / something”: parler de la voisine → la voisine dont je t’ai parlé (the neighbour I told you about).',
-      [['C’est la voisine dont je t’ai parlé.', '这就是我跟你说过的邻居。', 'That’s the neighbour I told you about.'], ['Le livre dont j’ai besoin.', '我需要的那本书。', 'The book I need.']],
-      ['d4_cam_dont']),
     P('connaitre_savoir', 4, 'connaître (une personne, un lieu) / savoir (une info, faire)',
       'connaître + 人／地方：Je connais Madame Martin。savoir + 信息或 + 动词原形：Je sais. Je ne sais pas où est la clé. Je sais nager.',
       'connaître + a person or place: Je connais Madame Martin. savoir + a fact, or + infinitive: Je sais. Je ne sais pas où est la clé. Je sais nager.',
@@ -15065,9 +15086,7 @@ function getLang(ls, id) {
         { kind: 'pattern', prof: 'avoir + -é', pattern: ['j\u2019ai', 'tu as', 'il / elle a', 'nous avons'], arrow: 'rencontrer → rencontré',
           zh: 'avoir 的现在时 + 过去分词。-er 动词：-er → -é。', en: 'avoir (present) + past participle. -er verbs: -er → -é.' },
         { kind: 'pattern', prof: 'Quelques verbes sont différents' + NB + '!', pattern: ['lire → lu', 'voir → vu', 'faire → fait', 'dire → dit'], arrow: 'Nous avons lu la lettre.',
-          zh: '几个常见的不规则过去分词。', en: 'A few common irregular participles.' },
-        { kind: 'try', prof: 'À toi' + NB + '!', q: 'Hier, Camille ___ la plante.', options: ['a arrosé', 'arrose', 'arrosé'], answer: 'a arrosé',
-          zh: '昨天，Camille 浇了植物。', en: 'Yesterday, Camille watered the plant.', why: { zh: 'avoir（a）+ arrosé。', en: 'avoir (a) + arrosé.' } }
+          zh: '几个常见的不规则过去分词。', en: 'A few common irregular participles.' }
       ]
     },
     'pc-etre': {
@@ -15145,9 +15164,7 @@ function getLang(ls, id) {
         { kind: 'pattern', prof: 'Verbes en -er' + NB + ': presque comme le présent', pattern: ['que je ferme', 'qu\u2019il ferme', 'que nous fermions', 'que vous fermiez'], arrow: 'nous fermons → que nous fermions',
           zh: 'je / tu / il 和现在时一样；nous / vous 加 i：fermions, fermiez。', en: 'je / tu / il look like the present; nous / vous add an i: fermions, fermiez.' },
         { kind: 'pattern', prof: 'Attention' + NB + ': être → soit' + NB + '!', pattern: ['que je sois', 'qu\u2019il soit', 'que nous soyons', 'que vous soyez'], arrow: 'il faut qu\u2019il est',
-          zh: 'être 的虚拟式完全不规则：sois, soit, soyons, soyez。不能说 il faut qu’il est。', en: 'être is fully irregular in the subjunctive: sois, soit, soyons, soyez. Never il faut qu’il est.' },
-        { kind: 'try', prof: 'À toi' + NB + '!', q: 'Il faut que Croissant ___ sage.', options: ['soit', 'est', 'être'], answer: 'soit',
-          zh: 'Croissant 必须乖乖的。', en: 'Croissant has to be good.', why: { zh: 'il faut que 后面用虚拟式：être → soit。', en: 'After il faut que, use the subjunctive: être → soit.' } }
+          zh: 'être 的虚拟式完全不规则：sois, soit, soyons, soyez。不能说 il faut qu’il est。', en: 'être is fully irregular in the subjunctive: sois, soit, soyons, soyez. Never il faut qu’il est.' }
       ]
     },
     'pronoms-cod': {
@@ -15506,6 +15523,19 @@ function getLang(ls, id) {
   };
   // Day 7: subjonctif after il faut que (v0.9.0). Day 8: depuis + present. Day 9: pronominal verbs. See docs/WEEK2_STORY.md.
   var ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  // v0.12.1: « Pourquoi ? » tabs. First tab is that day’s aha pattern (grammar.js id). Later tabs are letter lessons,
+  // including the ones moved off their original day (F1 pc-avoir → 3, F2 pc-etre → 5, F4 imparfait-pc → 5, F5 pronoms-cod → 6).
+  var POURQUOI = {
+    1: { aha: 'sappeler', lessons: [] },
+    2: { aha: 'avoir_nom', lessons: [] },
+    3: { aha: 'prepositions', lessons: ['futur-proche', 'pc-avoir'] },
+    4: { aha: 'vouvoiement', lessons: [] },
+    5: { aha: 'imparfait_pc', lessons: ['pc-etre', 'imparfait-pc'] },
+    6: { aha: 'possessifs', lessons: ['comparatifs', 'pronoms-cod'] },
+    7: { aha: 'quand_jetais', lessons: ['il-faut-que'] },
+    8: { aha: 'imperatif_vous', lessons: ['depuis'] },
+    9: { aha: 'pronominaux', lessons: ['pronominaux'] }
+  };
 
   // FSRS items for the gaps: id lt<n>_<gap>. They are only introduced by writing the letter (origin 'letter').
   function itemsFor(n) {
@@ -15539,7 +15569,7 @@ function getLang(ls, id) {
   }
   function gapOrder(n) { var o = []; LETTERS[n].body.forEach(function (p) { p.forEach(function (x) { if (typeof x !== 'string') o.push(x.gap); }); }); return o; }
 
-  var api = { LESSONS: LESSONS, LETTERS: LETTERS, ORDER: ORDER, itemsFor: itemsFor, allItems: allItems, register: register, fullText: fullText, gapOrder: gapOrder, DESK_TITLE: 'Au bureau', BOOKLET_TITLE: 'Carnet de cartes postales' };
+  var api = { LESSONS: LESSONS, LETTERS: LETTERS, ORDER: ORDER, POURQUOI: POURQUOI, itemsFor: itemsFor, allItems: allItems, register: register, fullText: fullText, gapOrder: gapOrder, DESK_TITLE: 'Au bureau', BOOKLET_TITLE: 'Carnet de cartes postales' };
   root.A411 = root.A411 || {};
   root.A411.Letters = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -17323,6 +17353,7 @@ function getLang(ls, id) {
  * Soir multiplies the unlit picture by a precomputed light map, then mixes the window.
  * Nuit grades with the v2.5 multiply + high-pass, then normal-blends its zones. */
 (function () {
+  var root = typeof window !== 'undefined' ? window : globalThis;
   var FACINGS = ['down', 'up', 'left', 'right'];
   var room, scale = 0, reduced = false;
   var mapW, mapH, tile;
@@ -17852,8 +17883,9 @@ function getLang(ls, id) {
     lastTap = now;
     if (!active || !canvas) return;
     var rect = canvas.getBoundingClientRect();
-    var mx = (cx - rect.left) * (mapW / rect.width);
-    var my = (cy - rect.top) * (mapH / rect.height);
+    var pt = mapPoint(cx, cy, rect, mapW, mapH);
+    var mx = pt.mx;
+    var my = pt.my;
     if (mx < 0 || my < 0 || mx >= mapW || my >= mapH) return;
     var spots = active.spots.slice().sort(function (a, b) { return b.footY - a.footY; });
     for (var i = 0; i < spots.length; i++) {
@@ -18331,25 +18363,68 @@ function getLang(ls, id) {
     drawMarker();
     if (scale < 1) { syncPrompt(); return; }
     ctx.imageSmoothingEnabled = false;
+    applyCamera();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(world, 0, 0, mapW * scale, mapH * scale);
     syncPrompt();
   }
 
-  function fit() {
-    var stage = stageEl || document.getElementById('stage');
-    var availW = (stage && stage.clientWidth) || window.innerWidth;
-    var availH = (stage && stage.clientHeight) || (window.innerHeight - 76);
-    var s = Math.floor(Math.min(availW / mapW, availH / mapH));
+  // Cover the stage: round the larger axis so a short phone does not drop to scale 1.
+  // Integer scale + imageSmoothingEnabled false keeps the pixels crisp.
+  function coverScale(availW, availH, mw, mh) {
+    if (!availW || !availH || !mw || !mh) return 1;
+    var s = Math.round(Math.max(availW / mw, availH / mh));
     if (s < 1) s = 1;
-    if (s > 5) s = 5;
-    if (s === scale && canvas.width === mapW * s) return;
-    scale = s;
-    canvas.width = mapW * scale;
-    canvas.height = mapH * scale;
-    canvas.style.width = canvas.width + 'px';
-    canvas.style.height = canvas.height + 'px';
-    canvas.dataset.scale = String(scale);
+    if (s > 8) s = 8;
+    return s;
+  }
+  // Canvas origin in the stage. When the scaled map overflows, keep the player in view.
+  function cameraOffset(viewW, viewH, mapPxW, mapPxH, playerX, playerY) {
+    var maxX = viewW - mapPxW, maxY = viewH - mapPxH;
+    if (maxX >= 0 && maxY >= 0) return { x: Math.round(maxX / 2), y: Math.round(maxY / 2) };
+    var x = Math.round(viewW / 2 - playerX);
+    var y = Math.round(viewH / 2 - playerY);
+    var minX = Math.min(0, maxX), minY = Math.min(0, maxY);
+    var hiX = Math.max(0, maxX), hiY = Math.max(0, maxY);
+    if (x > hiX) x = hiX;
+    if (y > hiY) y = hiY;
+    if (x < minX) x = minX;
+    if (y < minY) y = minY;
+    return { x: x, y: y };
+  }
+  function mapPoint(cx, cy, rect, mw, mh) {
+    return {
+      mx: (cx - rect.left) * (mw / rect.width),
+      my: (cy - rect.top) * (mh / rect.height)
+    };
+  }
+  function applyCamera() {
+    if (!canvas) return;
+    var stage = stageEl || (typeof document !== 'undefined' && document.getElementById('hubStage'));
+    var viewW = (stage && stage.clientWidth) || (typeof window !== 'undefined' ? window.innerWidth : mapW * scale);
+    var viewH = (stage && stage.clientHeight) || (typeof window !== 'undefined' ? window.innerHeight - 76 : mapH * scale);
+    var px = (state ? state.x : mapW / 2) * scale;
+    var py = (state ? state.y : mapH / 2) * scale;
+    var cam = cameraOffset(viewW, viewH, mapW * scale, mapH * scale, px, py);
+    canvas.style.left = cam.x + 'px';
+    canvas.style.top = cam.y + 'px';
+  }
+  function fit() {
+    if (!canvas) return;
+    var stage = stageEl || (typeof document !== 'undefined' && document.getElementById('hubStage')) || (typeof document !== 'undefined' && document.getElementById('stage'));
+    var availW = (stage && stage.clientWidth) || (typeof window !== 'undefined' ? window.innerWidth : mapW);
+    var availH = (stage && stage.clientHeight) || (typeof window !== 'undefined' ? window.innerHeight - 76 : mapH);
+    var s = coverScale(availW, availH, mapW, mapH);
+    if (s !== scale || canvas.width !== mapW * s) {
+      scale = s;
+      canvas.width = mapW * scale;
+      canvas.height = mapH * scale;
+      canvas.style.width = canvas.width + 'px';
+      canvas.style.height = canvas.height + 'px';
+      canvas.dataset.scale = String(scale);
+    }
+    if (ctx) ctx.imageSmoothingEnabled = false;
+    applyCamera();
   }
 
   function loop(now) {
@@ -18493,7 +18568,7 @@ function getLang(ls, id) {
   }
 
   function publishHub() {
-    window.Hub = {
+    root.Hub = {
       ready: false,
       mounted: !!(canvas && ctx),
       player: function () {
@@ -18513,6 +18588,9 @@ function getLang(ls, id) {
       },
       hotspotClientPoint: hotspotClientPoint,
       scale: function () { return scale; },
+      coverScale: coverScale,
+      cameraOffset: cameraOffset,
+      mapPoint: mapPoint,
       mount: mount,
       openRoom: openRoom,
       configure: configure,
@@ -18547,7 +18625,7 @@ function getLang(ls, id) {
     reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     bindInput();
     publishHub();
-    window.Hub.mounted = true;
+    root.Hub.mounted = true;
     startLoop();
   }
 
@@ -18560,7 +18638,7 @@ function getLang(ls, id) {
       active = null;
       setStyle(sameStyle);
       fit();
-      window.Hub.ready = true;
+      root.Hub.ready = true;
       return;
     }
     room = await fetchJson(url);
@@ -18575,7 +18653,7 @@ function getLang(ls, id) {
     active = null;
     setStyle(styleId);
     fit();
-    window.Hub.ready = true;
+    root.Hub.ready = true;
   }
 
   async function boot() {
@@ -18610,12 +18688,12 @@ function getLang(ls, id) {
     requestAnimationFrame(function () {
       fit();
       draw(performance.now());
-      window.Hub.ready = true;
+      root.Hub.ready = true;
     });
   }
 
   publishHub();
-  if (document.getElementById('view')) {
+  if (typeof document !== 'undefined' && document.getElementById && document.getElementById('view')) {
     boot().catch(function (err) {
       var hook = document.getElementById('hook');
       if (hook) hook.textContent = 'Impossible de charger la pièce.';
@@ -18698,7 +18776,7 @@ function getLang(ls, id) {
       if (room !== 'apt') return null;
       if (isDesk(hook)) return { close: 'desk' };
       if (isTable(hook)) return { close: 'plant' };
-      if (isBox(hook)) return { close: 'box' };
+      // Day 8+ : the trace-cleaning arc is over. The box stays furniture; it no longer opens a trace sheet.
       return null;
     }
     if (day === 9 && room === 'apt' && !has(done, 'd9_A2') && !has(done, 'd9_B') && isBasil(hook)) return { optional: 'd9_A2' };
@@ -18835,6 +18913,49 @@ function getLang(ls, id) {
   };
   root.A411 = root.A411 || {};
   root.A411.HubStory = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Founder replay. Not a player account and not the in-menu developer view (Learn.uiMode).
+ * Enable with ?dev=1 (stored in localStorage under a411.founderDev) until ?dev=0.
+ * The public menu has no toggle. Replay works on a clone; persist/saveLearn stay off, so the real save is never written. */
+(function (root) {
+  'use strict';
+  var KEY = 'a411.founderDev';
+  var BUILT = [
+    { id: 'd1', kind: 'day1' },
+    { id: 'letter', kind: 'chapter' },
+    { id: 'd2', kind: 'chapter' },
+    { id: 'd3', kind: 'chapter' },
+    { id: 'd4', kind: 'chapter' },
+    { id: 'd5', kind: 'chapter' },
+    { id: 'd6', kind: 'chapter' },
+    { id: 'd7', kind: 'chapter' },
+    { id: 'd8', kind: 'chapter' },
+    { id: 'd9', kind: 'chapter' }
+  ];
+  function param(search) {
+    if (search && typeof search.get === 'function') return search.get('dev');
+    var m = /(?:^|[?&])dev=([^&]*)/.exec(String(search || ''));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function read(storage, search) {
+    var q = param(search);
+    if (q === '1') { try { storage.setItem(KEY, '1'); } catch (e) {} return true; }
+    if (q === '0') { try { storage.removeItem(KEY); } catch (e2) {} return false; }
+    try { return storage.getItem(KEY) === '1'; } catch (e3) { return false; }
+  }
+  function snapshot(save, learn) {
+    return {
+      save: save ? JSON.parse(JSON.stringify(save)) : null,
+      learn: learn ? JSON.parse(JSON.stringify(learn)) : null
+    };
+  }
+  var api = { KEY: KEY, BUILT: BUILT, read: read, snapshot: snapshot };
+  root.A411 = root.A411 || {};
+  root.A411.FounderDev = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -19098,7 +19219,7 @@ function getLang(ls, id) {
       .replace(/数组/g, 'an array').replace(/（改名前的旧备份）/g, ' (backup from before the rename)').replace(/\s+/g, ' ').trim();
     return CJK.test(m) ? 'The file has a problem that prevents import.' : m;
   }
-  function saveLearn() { if (learnState && storageOk !== false) { try { A411.Learn.saveLearn(localStorage, learnState); } catch (e) {} } }
+  function saveLearn() { if (ui.devReplay) return; if (learnState && storageOk !== false) { try { A411.Learn.saveLearn(localStorage, learnState); } catch (e) {} } }
   function pushAttempt(fields) {
     var a = L.makeAttempt(fields);
     S.learning.attempts.push(a);
@@ -19124,6 +19245,7 @@ function getLang(ls, id) {
   // what was actually heard for this attempt: 'recording:qwen3-tts' | 'device:<voice>' | 'none' (only played audio counts)
   function audioSourceOf(audio, info) { return audio === 'played' && info ? (info.source || ('device:' + info.voice)) : 'none'; }
   function persist(reason) {
+    if (ui.devReplay) return true;
     if (!S) return true;
     if (S.meta.audio.status === 'unknown') syncAudioMeta();
     if (!storage) { storageOk = false; return false; }
@@ -19320,9 +19442,15 @@ function getLang(ls, id) {
     }
     return null;
   }
+  function fillSlot(s) {
+    if (!s || String(s).indexOf('{nom}') < 0) return s;
+    var n = S && S.player && String(S.player.nickname || '').trim();
+    return String(s).replace(/\{nom\}/g, n || 'comment ?');
+  }
+  function lineSay(line) { return fillSlot(line.tts || line.fr).replace(/\u00A0/g, ' ').replace(/\u202F/g, ' '); }
   function speakLine(lineId) {
     var line = C.LINES[lineId];
-    return Au.playLine(lineId, line.fr.replace(/\u00A0/g, ' '), { speaker: line.speaker }).then(function (st) {
+    return Au.playLine(lineId, lineSay(line), { speaker: line.speaker }).then(function (st) {
       setAudioMeta(); S.meta.audio.checkedAt = L.nowISO();
       return st;
     });
@@ -19367,7 +19495,16 @@ function getLang(ls, id) {
     persist('advance');
     render();
   }
-  function goTitle() { Au.stop(); ui.view = 'title'; ui.line = null; ui.trial = null; render(); }
+  function endDevReplay() {
+    if (!ui.devReplay) return;
+    if (ui.devBackup) {
+      S = ui.devBackup.save;
+      if (ui.devBackup.learn) learnState = ui.devBackup.learn;
+    }
+    ui.devBackup = null;
+    ui.devReplay = false;
+  }
+  function goTitle() { Au.stop(); endDevReplay(); ui.view = 'title'; ui.line = null; ui.trial = null; render(); }
   function startPlay() { ui.view = 'play'; ui.gesture = true; render(); }
 
   // ---------- rendering ----------
@@ -19557,6 +19694,7 @@ function getLang(ls, id) {
   function render() {
     if (ui.paused) return; // nothing re-renders behind the pause sheet
     render0();
+    try { syncDevBadge(); } catch (e) {}
     try {
       var k = sectionKey();
       if (inStory() || (k && k !== ui.lastSection)) pulseFirst($screen);
@@ -19638,6 +19776,7 @@ function getLang(ls, id) {
     if (!storage) wrap.appendChild(h('div', { class: 'banner warn', text: Z('这个浏览器不允许本机存储，进度不会被保存。请在菜单 →「存档」中导出。', 'This browser doesn’t allow local storage, so progress won’t be saved. Export from Menu → “Save”.') }));
     notices.forEach(function (n) { wrap.appendChild(h('div', { class: 'banner info', text: tx(n) })); });
     var so = syncOfferBanner(); if (so) wrap.appendChild(so);
+    if (ui.founderDev && S && A411.FounderDev) wrap.appendChild(founderPicker());
     if (devMode() && SY && SY.token()) wrap.appendChild(syncStatusEl('homeSync'));
     wrap.appendChild(h('div', { class: 'footer small', id: 'versionFooter' },
       devMode() ? ('App v' + L.APP_VERSION + Z(' · 内容 ', ' · content ') + C.CONTENT_VERSION + ' + ' + W.CONTENT_VERSION + Z(' · 存档 schema v', ' · save schema v') + L.SCHEMA_VERSION) : ''));
@@ -19708,13 +19847,16 @@ function getLang(ls, id) {
     if (st) p.appendChild(h('span', { id: 'homeStreak', text: Z('连续 ' + st.streak + ' 天', st.streak + '-day streak') }));
     if (w && w.letterSeen) {
       var nx = currentPlan();
-      p.appendChild(document.createTextNode(' · '));
-      p.appendChild(btn([icon('paw'), ' ', h('span', { lang: 'fr', text: '' + WL.tracesLeft(S) + '/' + WL.TRACE_TOTAL + ' · Samedi J-' + Math.max(1, 8 - nx.day) })], openArc, 'linkish', { id: 'btnArc', 'aria-label': Z('Croissant 的痕迹', 'Croissant’s traces') }));
+      if (WL.traceHudOn(nx.day)) {
+        p.appendChild(document.createTextNode(' · '));
+        p.appendChild(btn([icon('paw'), ' ', h('span', { lang: 'fr', text: '' + WL.tracesLeft(S) + '/' + WL.TRACE_TOTAL + ' · Samedi J-' + Math.max(1, 8 - nx.day) })], openArc, 'linkish', { id: 'btnArc', 'aria-label': Z('Croissant 的痕迹', 'Croissant’s traces') }));
+      }
     }
     return p.childNodes.length ? p : null;
   }
   function absenceBanner() {
     if (!S || !S.week) return null;
+    if (!WL.traceHudOn(currentPlan().day)) return null;
     var pend = S.week.absences.filter(function (a) { return !a.cleared; })[0];
     if (!pend) return null;
     if (!pend.seen) { pend.seen = true; persist('absence-seen'); }
@@ -19903,16 +20045,21 @@ function getLang(ls, id) {
     host.appendChild(h('div', { class: 'line-head' }, h('span', { class: 'speaker ' + ln.speaker, id: 'speakerTag', lang: 'fr' }, speakerName(ln.speaker)), ' ',
       ln.bonus ? h('span', { class: 'tag bonus', id: 'bonusTag', lang: 'fr', text: 'Bonus', title: Z('额外 · 不考', 'Bonus · not tested') }) : null, ' ',
       h('span', { class: 'muted', id: 'audioState', 'data-audio': s.audio || 'pending', text: audioStateText(s.audio) })));
-    host.appendChild(s.sub ? richFr(ln.fr, 'fr', 'subtitle') : h('p', { class: 'hidden-text', id: 'subtitle', text: '…' }));
+    host.appendChild(s.sub ? richFr(fillSlot(ln.fr), 'fr', 'subtitle') : h('p', { class: 'hidden-text', id: 'subtitle', text: '…' }));
+    if (ln.tip) {
+      host.appendChild(h('div', { class: 'aha-tip', id: 'ahaTip' },
+        btn(h('span', { lang: 'fr', text: ln.tip.fr }), function () { s.ahaTip = !s.ahaTip; s.sub = true; if (opts.refresh) opts.refresh(); }, 'small', { id: 'btnAhaTip', 'aria-expanded': s.ahaTip ? 'true' : 'false' }),
+        s.ahaTip ? h('p', { id: 'ahaTipGloss' }, h('span', { lang: 'fr', text: ln.tip.fr + ' ' }), h('span', { text: Z(ln.tip.zh, ln.tip.en) })) : null));
+    }
     var lid92 = lineIdOf(ln), pts92 = lid92 && GR ? GR.forLine(lid92) : [];
     if (s.sub && pts92.length && learnState) host.appendChild(h('div', { class: 'bulb-row' }, bulbBtn(pts92, { line: lid92, day: storyDayNow(), sentence: ln.fr })));
-    var q = qHelp(function () { return Z(ln.zh, ln.en || ln.zh); }, { id: 'lineQ', btnId: 'btnZh', textId: 'gloss', urgent: opts.urgent, target: ln.target || null, onOpen: function () { s.zh = true; s.sub = true; if (opts.onOpen) opts.onOpen(); } });
+    var q = qHelp(function () { return fillSlot(Z(ln.zh, ln.en || ln.zh)); }, { id: 'lineQ', btnId: 'btnZh', textId: 'gloss', urgent: opts.urgent, target: ln.target || null, onOpen: function () { s.zh = true; s.sub = true; if (opts.onOpen) opts.onOpen(); } });
     if (s.zh) { var gz = gloss(ln); gz.id = 'gloss'; q.querySelector('.qhelp-text').hidden = false; q.querySelector('.qhelp-text').appendChild(gz); q.querySelector('button').setAttribute('aria-expanded', 'true'); }
     host.appendChild(q);
   }
   function renderLineBody(step) {
     var host = document.getElementById('lineBody'); if (!host) return;
-    lineBodyInto(host, C.LINES[step.line], ui.line, { onOpen: function () { if (ui.line) { renderLineBody(step); } } });
+    lineBodyInto(host, C.LINES[step.line], ui.line, { refresh: function () { if (ui.line) renderLineBody(step); }, onOpen: function () { if (ui.line) { renderLineBody(step); } } });
   }
   function lineButtons(canPlayIt, onReplay, onSub) {
     return [btn(icon('replay', Z('重播', 'Replay')), onReplay, 'small icon', { id: 'btnReplay', 'aria-label': Z('重播', 'Replay'), disabled: !canPlayIt }),
@@ -20345,7 +20492,7 @@ function getLang(ls, id) {
       $screen.appendChild(stage('end', { watered: S.plant.careState === 'watered', cat: S.world.facts.catInApartment, alt: 'La nuit' }));
       $screen.appendChild(h('div', { class: 'card fade-in', id: 'endCard', 'data-beat': 'done' },
         h('h2', { lang: 'fr', text: 'Fin du jour 1' }),
-        h('div', { class: 'col' }, frBtn('Continuer', null, continueDay, 'primary', { id: 'btnEndNext' }), btn(icon('home'), goTitle, 'small icon', { id: 'btnEndHome', 'aria-label': Z('回到首页', 'Home') }))));
+        h('div', { class: 'col' }, frBtn('Continuer', null, continueDay, 'primary', { id: 'btnEndNext' }), pourquoiBtn(1), btn(icon('home'), goTitle, 'small icon', { id: 'btnEndHome', 'aria-label': Z('回到首页', 'Home') }))));
       return;
     }
     var beat = ui.endBeat === 1 ? 1 : 0;
@@ -20353,13 +20500,13 @@ function getLang(ls, id) {
       $screen.appendChild(stage('cat', { noe: 'wave', cat: 'sit', door: 'closed', night: true, alt: 'Le soir. Noé dit bonne nuit.' }));
       $screen.appendChild(h('div', { class: 'dialogue fade-in', id: 'endCard', 'data-beat': 'night' },
         narFr(C.NARR.night.fr, C.NARR.night.zh, C.NARR.night.en, { id: 'narr' }),
-        h('div', { class: 'row' }, frBtn('Bonne nuit' + NB + '!', null, function () { ui.endBeat = 1; ui.zoom = null; render(); }, 'primary grow', { id: 'btnEndNight' }))));
+        h('div', { class: 'row' }, frBtn('Bonne nuit' + NB + '!', null, function () { ui.endBeat = 1; ui.zoom = null; render(); }, 'primary grow', { id: 'btnEndNight' }), pourquoiBtn(1))));
       return;
     }
     $screen.appendChild(stage('letter', { props: [['letter', 30, 54, 'hl']], focus: 'porte', sfx: 'paper', alt: 'La porte, la nuit. Quelque chose glisse dessous.' }));
     $screen.appendChild(h('div', { class: 'dialogue fade-in', id: 'endCard', 'data-beat': 'paper' },
       narFr(C.NARR.paper.fr, C.NARR.paper.zh, C.NARR.paper.en, { id: 'narr' }),
-      h('div', { class: 'row' }, frBtn('Regarder', null, function () { ui.endBeat = 0; openChapter('letter'); }, 'primary grow', { id: 'btnEndLetter' }))));
+      h('div', { class: 'row' }, frBtn('Regarder', null, function () { ui.endBeat = 0; openChapter('letter'); }, 'primary grow', { id: 'btnEndLetter' }), pourquoiBtn(1))));
   };
 
   // =====================================================================
@@ -20497,7 +20644,7 @@ function getLang(ls, id) {
     bw.appendChild(h('ul', { class: 'bravo-recap', id: 'bravoRecap', lang: 'fr' },
       h('li', null, icon('check', '✓'), ' Jour ' + n + ' : l\u2019histoire'),
       lr && lr.status === 'done' ? h('li', null, icon('check', '✓'), ' La lettre') : null,
-      h('li', null, icon('paw'), ' Traces' + NB + ': ' + leftT + ' / ' + WL.TRACE_TOTAL),
+      n < 8 ? h('li', null, icon('paw'), ' Traces' + NB + ': ' + leftT + ' / ' + WL.TRACE_TOTAL) : null,
       WB.ensure(learnState || {}).words.length ? h('li', null, icon('wordbook'), ' Mon carnet' + NB + ': ' + WB.ensure(learnState).words.length + ' mot' + (WB.ensure(learnState).words.length > 1 ? 's' : '')) : null));
     if (!R0.bravoPlayed) { R0.bravoPlayed = true; Au.sfx('bravo'); }
     wrap.appendChild(bw);
@@ -20518,7 +20665,7 @@ function getLang(ls, id) {
     tiles.appendChild(tile('btnAfterGrammar', 'bulb', 'Grammaire', Z('你存下的语法小灯泡', 'the lightbulb points you kept'), openMyGrammar, 't-gold'));
     if (learnState && questionsOf().items.length) tiles.appendChild(tile('btnAfterQuestions', 'ask', 'Questions', Z('给 Prof Neng 的问题', 'your questions for Prof Neng'), openQuestions, 't-sky'));
     tiles.appendChild(tile('btnAfterLetters', 'letter', 'Lettres', Z('重读今天的信', 'reread today’s letters'), openCarnet, 't-sand'));
-    if (S.week && S.week.letterSeen) tiles.appendChild(tile('btnAfterTraces', 'paw', 'Traces', Z('看看屋里还剩哪些痕迹', 'see which traces are left'), openArc, 't-moss'));
+    if (n < 8 && S.week && S.week.letterSeen) tiles.appendChild(tile('btnAfterTraces', 'paw', 'Traces', Z('看看屋里还剩哪些痕迹', 'see which traces are left'), openArc, 't-moss'));
     tiles.appendChild(tile('btnAfterHome', 'home', 'Accueil', Z('回到首页', 'back to the home screen'), function () {
       var n = ui.ritual && ui.ritual.n;
       if (n === 8 || n === 9) { ui.hubDay = n; ui.cid = 'd' + n; enterHub(); return; }
@@ -20566,6 +20713,7 @@ function getLang(ls, id) {
     }
     card.appendChild(h('div', { class: 'col' },
       plan.next === 'desk' ? frBtn('Écrire la lettre du jour', Z('今天的信', 'today’s letter'), function () { openLetter(plan.day); }, '', { id: 'btnWriteLetter' }) : null,
+      pourquoiBtn(plan.day),
       frBtn('' + A411.Letters.BOOKLET_TITLE, null, openCarnet, 'small', { id: 'btnCarnet2' }),
       btn(Z('回到首页', 'Home'), goTitle, 'small', { id: 'btnDeskHome' })));
     $screen.appendChild(card);
@@ -20619,6 +20767,7 @@ function getLang(ls, id) {
     }
     if (kind === 'plant') { openDesk('plant'); return; }
     if (kind === 'box') {
+      if (!WL.traceHudOn(day)) return;
       var today = todayKey();
       var hit = (S.week && S.week.cleared || []).filter(function (c) { return c && c.day === today; })[0];
       if (hit && W.TRACES[hit.n]) openTraceZoom(hit.n);
@@ -20765,16 +20914,6 @@ function getLang(ls, id) {
   function openEarly(cid) { // v0.9.2: no calendar gate any more — open right away
     WL.openEarly(S, cid, new Date()); persist('open-next'); openChapter(cid);
   }
-  function openEarlyOld(cid) {
-    var box = h('div', { class: 'pad' },
-      h('p', { text: Z('每天开放一章，是为了让复习有时间沉淀。你可以现在就打开，但每天只有一封信能清除痕迹——星期六越来越近了。', 'One chapter a day gives reviews time to settle. You can open it now, but only one letter a day clears a trace — and Saturday is getting closer.') }),
-      h('div', { class: 'col' },
-        frBtn('Je ne peux pas attendre !', Z('现在就打开 Jour ' + chDay(cid), 'open Jour ' + chDay(cid) + ' now'), function () {
-          WL.openEarly(S, cid, new Date()); persist('open-early'); closeOverlay(); openChapter(cid);
-        }, 'primary', { id: 'btnConfirmEarly' }),
-        btn(Z('明天再玩', 'I’ll wait until tomorrow'), closeOverlay, '', { id: 'btnWait' })));
-    openOverlay(sheet('Jour ' + chDay(cid) + ' · ' + chTitle(cid), box));
-  }
 
   // ---------- title-screen cards ----------
   function arcCard() {
@@ -20784,7 +20923,7 @@ function getLang(ls, id) {
     var curDay = currentPlan().day;
     var card = h('div', { class: 'card', id: 'arcCard' },
       h('h3', { lang: 'fr', text: '' + W.ARC_TITLE }));
-    if (w.letterSeen) {
+    if (w.letterSeen && WL.traceHudOn(curDay)) {
       var left = WL.tracesLeft(S);
       card.appendChild(h('p', { id: 'arcCalendar' }, h('b', { lang: 'fr', text: 'Samedi : J-' + Math.max(1, 8 - curDay) }), ' · ',
         icon('paw'), ' ', h('b', { id: 'tracesLeft', text: '' + left + '/' + WL.TRACE_TOTAL }), ' ', h('span', { class: 'muted', text: Z('个 Croissant 的痕迹还在屋里', 'traces of Croissant still in the apartment') })));
@@ -20797,7 +20936,7 @@ function getLang(ls, id) {
       w.absences.forEach(function (a) { if (!a.cleared) grid.appendChild(h('span', { class: 'trace extra', lang: 'fr', 'aria-label': 'une chaussette dans le couloir' }, propIcon('sock'))); });
       card.appendChild(grid);
       card.appendChild(qHelp(function () { return Z(TRACE_RULES.zh, TRACE_RULES.en); }, { id: 'arcRulesQ' }));
-    } else card.appendChild(h('p', { class: 'muted', text: Z('门缝下面塞进来一封信……', 'A letter was slipped under the door…') }));
+    } else if (!w.letterSeen) card.appendChild(h('p', { class: 'muted', text: Z('门缝下面塞进来一封信……', 'A letter was slipped under the door…') }));
     var ul = h('ul', { class: 'days', id: 'chapterList', 'aria-label': Z('章节', 'Chapters') });
     function li(n, title, st, action) {
       ul.appendChild(h('li', { class: st === 'soon' || st === 'locked' ? 'na' : '', 'data-ch': 'd' + n },
@@ -20850,6 +20989,81 @@ function getLang(ls, id) {
   // v0.5.0: « Prof Neng » — one idea per step: example first, then the pattern, then one try. Light; deep grammar lives
   // with the separate tutor bot. Short helper text per step; French examples can be read aloud (device voice).
   function profPic() { var c = h('canvas', { class: 'prof', width: 16, height: 16, role: 'img', 'aria-label': 'Prof Neng' }); Art.portrait(c.getContext('2d'), 'prof'); return c; }
+  function pqTabs(day) {
+    var spec = LT.POURQUOI && LT.POURQUOI[day];
+    if (!spec || !GR) return null;
+    var tabs = [{ kind: 'aha', id: spec.aha }];
+    (spec.lessons || []).forEach(function (id) { if (LT.LESSONS[id]) tabs.push({ kind: 'lesson', id: id }); });
+    return tabs;
+  }
+  function pourquoiBtn(day) {
+    if (!pqTabs(day)) return null;
+    return frBtn('Pourquoi ?', Z('今天的句型', 'today’s pattern'), function () { openPourquoi(day); }, 'small', { id: 'btnPourquoi' });
+  }
+  function openPourquoi(day) {
+    var tabs = pqTabs(day);
+    if (!tabs) return;
+    if (!ui.pq || ui.pq.day !== day) ui.pq = { day: day, tab: 0, step: 0, picked: null };
+    var pq = ui.pq;
+    if (pq.tab >= tabs.length) pq.tab = 0;
+    var tab = tabs[pq.tab];
+    var box = h('div', { class: 'pad', id: 'pourquoiPanel', 'data-day': String(day) });
+    var row = h('div', { class: 'pq-tabs', id: 'pqTabs' });
+    tabs.forEach(function (t, i) {
+      var label = t.kind === 'aha' ? ((GR.byId(t.id) || {}).pattern || t.id) : LT.LESSONS[t.id].title;
+      row.appendChild(btn(h('span', { lang: 'fr', text: label }), function () {
+        pq.tab = i; pq.step = 0; pq.picked = null; openPourquoi(day);
+      }, 'small' + (i === pq.tab ? ' on' : ''), { 'data-pq': t.id }));
+    });
+    box.appendChild(row);
+    if (tab.kind === 'aha') box.appendChild(ahaPane(GR.byId(tab.id)));
+    else box.appendChild(pqLessonPane(day, LT.LESSONS[tab.id], pq));
+    box.appendChild(h('div', { class: 'row' }, btn(Z('关闭', 'Close'), closeOverlay, '', { id: 'btnPourquoiClose' })));
+    openOverlay(sheet('Pourquoi ?', box));
+  }
+  function ahaPane(p) {
+    var body = h('div', { id: 'pqAha' });
+    if (!p) return body;
+    body.appendChild(h('h2', { lang: 'fr', text: p.pattern }));
+    var ul = h('ul', { class: 'examples' });
+    (p.ex || []).forEach(function (e) {
+      ul.appendChild(h('li', { lang: 'fr', class: 'fr' }, document.createTextNode(e[0] + ' '), sayBtn(e[0], { cls: 'inline', ctx: 'pourquoi' })));
+    });
+    body.appendChild(ul);
+    body.appendChild(qHelp(function () { return Z(p.zh, p.en); }, { id: 'pqAhaQ' }));
+    return body;
+  }
+  function pqLessonPane(day, les, pq) {
+    var steps = les.steps || [], st = steps[Math.min(pq.step, Math.max(0, steps.length - 1))], last = !steps.length || pq.step >= steps.length - 1;
+    var body = h('div', { id: 'pqLesson', 'data-kind': st ? st.kind : '' });
+    body.appendChild(h('h2', { lang: 'fr', text: les.title }));
+    if (!st) return body;
+    if (st.kind === 'example') {
+      var ul = h('ul', { class: 'examples' });
+      st.ex.forEach(function (e) { ul.appendChild(h('li', { lang: 'fr', class: 'fr', text: e })); });
+      body.appendChild(ul);
+    } else if (st.kind === 'pattern') {
+      var pl = h('div', { class: 'pattern', lang: 'fr' });
+      st.pattern.forEach(function (x) { pl.appendChild(h('span', { class: 'pat', text: x })); });
+      body.appendChild(pl);
+      if (st.arrow) body.appendChild(h('p', { class: 'fr', lang: 'fr', text: st.arrow }));
+    } else if (st.kind === 'try') {
+      body.appendChild(h('p', { class: 'fr', lang: 'fr', id: 'lessonTryQ', text: st.q }));
+      var opts = h('div', { class: 'col' });
+      st.options.forEach(function (o) {
+        var picked = pq.picked === o, ok = o === st.answer;
+        opts.appendChild(btn(h('span', { lang: 'fr', text: o }), function () { pq.picked = o; openPourquoi(day); }, 'choice' + (picked ? (ok ? ' right' : ' wrong') : ''), { 'data-try': o }));
+      });
+      body.appendChild(opts);
+      if (pq.picked) body.appendChild(h('div', { class: 'banner ' + (pq.picked === st.answer ? 'ok' : 'warn'), id: 'lessonTryMsg' },
+        h('span', { lang: 'fr', text: (pq.picked === st.answer ? 'Oui' + NB + '! ' : 'Pas tout à fait… ') + st.q.replace('___', st.answer) })));
+    }
+    body.appendChild(qHelp(function () { return Z(st.zh, st.en); }, { id: 'pqLessonQ' }));
+    body.appendChild(h('div', { class: 'row' },
+      pq.step > 0 ? btn('←', function () { pq.step--; pq.picked = null; openPourquoi(day); }, 'small', { id: 'btnLessonBack', 'aria-label': Z('上一步', 'Back') }) : null,
+      last ? null : btn(h('span', { lang: 'fr', text: 'Suite' }), function () { pq.step++; pq.picked = null; openPourquoi(day); }, 'primary', { id: 'btnLessonNext' })));
+    return body;
+  }
   function lessonCard(n, again) {
     var Lt = LT.LETTERS[n], les = LT.LESSONS[Lt.grammar], steps = les.steps || [];
     if (!ui.lesson || ui.lesson.g !== Lt.grammar) ui.lesson = { g: Lt.grammar, i: 0, picked: null };
@@ -20905,15 +21119,15 @@ function getLang(ls, id) {
     if (!Lt || !r) { goTitle(); return; }
     $where.textContent = 'Au bureau · Jour ' + n + verBit();
     $screen.appendChild(stage('diary', { watered: !!(gardenStatus() && gardenStatus().wateredToday), cat: !!S.world.facts.catInApartment, alt: Z('书桌上的信纸', 'Writing paper on the desk') }));
-    if (!ui.letterRead && r.status !== 'done' && (!lessonSeen(Lt.grammar) || ui.showLesson)) { $screen.appendChild(lessonCard(n, lessonSeen(Lt.grammar))); return; }
     var order = LT.gapOrder(n);
     var cur = null; for (var i = 0; i < order.length; i++) if (!(r.gaps[order[i]] && r.gaps[order[i]].value != null)) { cur = order[i]; break; }
-    var les = LT.LESSONS[Lt.grammar];
+    var pq0 = LT.POURQUOI && LT.POURQUOI[n];
+    var ahaPt = pq0 && GR ? GR.byId(pq0.aha) : null;
     var card = h('div', { class: 'card fade-in', id: 'letterCard' },
       h('h2', { lang: 'fr', text: '' + Lt.kind + ' à ' + Lt.to + ' · Jour ' + n }),
       r.status === 'done' || ui.letterRead ? null : h('p', { class: 'muted', text: Z(Lt.intro.zh, Lt.intro.en) }),
-      h('p', { class: 'muted', id: 'grammarLine' }, Z('今天的语法：', 'Today’s grammar: '), h('span', { lang: 'fr', text: les.title + ' ' }),
-        btn(icon('book'), function () { ui.showLesson = true; render(); }, 'small icon', { id: 'btnLessonAgain', 'aria-label': Z('再看语法卡片', 'Show the grammar card again') })));
+      h('p', { class: 'muted', id: 'grammarLine' }, Z('今天的句型：', 'Today’s pattern: '), h('span', { lang: 'fr', text: (ahaPt ? ahaPt.pattern : '') + ' ' }),
+        pourquoiBtn(n)));
     card.appendChild(paper(n, r, cur));
     if (r.status === 'done' || ui.letterRead || !cur) { renderLetterDone(card, n, r); $screen.appendChild(card); return; }
     var g = Lt.gaps[cur], idx = order.indexOf(cur);
@@ -20981,7 +21195,7 @@ function getLang(ls, id) {
     else {
       box.appendChild(h('p', { id: 'letterStats', text: Z('独立答对 ' + indep + ' · 用了帮助 ' + helped + ' · 显示答案 ' + rev, 'Independent ' + indep + ' · with help ' + helped + ' · revealed ' + rev) }));
       var res = ui.letterResult && ui.letterN === n ? ui.letterResult : null;
-      if (res && res.first) {
+      if (res && res.first && WL.traceHudOn(n)) {
         var tr = r.trace != null ? W.TRACES[r.trace] : null;
         if (res.cleared) {
           var keepZ = ui.zoom, keepA = ui.stageArt; ui.zoom = null;
@@ -21139,13 +21353,13 @@ function getLang(ls, id) {
   function wkLineBody(lineId) {
     var host = document.getElementById('lineBody'); if (!host) return;
     var s = ui.line, ln = wLine(lineId);
-    lineBodyInto(host, ln, s, { urgent: !!ln.critical || !!s.urgent, onOpen: function () { if (ui.line === s) wkLineBody(lineId); } });
+    lineBodyInto(host, ln, s, { urgent: !!ln.critical || !!s.urgent, refresh: function () { if (ui.line === s) wkLineBody(lineId); }, onOpen: function () { if (ui.line === s) wkLineBody(lineId); } });
   }
   function wkPlay(lineId, isReplay) {
     var s = ui.line, ln = wLine(lineId);
     if (isReplay) { s.replays++; S.learning.helpLog.push({ kind: 'replay', context: ui.cid + '.' + chState().step, target: ln.target || null, at: L.nowISO() }); }
     var stEl = document.getElementById('audioState'); if (stEl) stEl.textContent = '…';
-    return Au.playLine(lineId, (ln.tts || ln.fr).replace(/\u00A0/g, ' '), { speaker: ln.speaker }).then(function (res) {
+    return Au.playLine(lineId, lineSay(ln), { speaker: ln.speaker }).then(function (res) {
       setAudioMeta();
       if (res === 'played' || (!s.voiceInfo && res === 'failed')) s.voiceInfo = Au.last;
       s.audio = bestAudio(s.audio === 'pending' ? 'not_used' : s.audio, res);
@@ -21564,6 +21778,8 @@ function getLang(ls, id) {
     var col = h('div', { class: 'col' });
     if (ui.cid === 'letter' && after && WL.chapterStatus(S, after, todayKey()) === 'open') col.appendChild(frBtn('Jour ' + chDay(after) + ' · ' + chTitle(after), Z('继续', 'continue'), function () { openChapter(after); }, 'primary', { id: 'btnAfterLetter' }));
     else col.appendChild(frBtn('Continuer', Z('下一步：书桌前写今天的信', 'next: write today’s letter at the desk'), continueDay, 'primary', { id: 'btnChNext' }));
+    var pqDay = chDay(ui.cid);
+    if (pqDay) col.appendChild(pourquoiBtn(pqDay));
     col.appendChild(btn(Z('回到首页', 'Home'), goTitle, 'small', { id: 'btnChHome' }));
     $screen.appendChild(h('div', { class: 'card fade-in', id: 'chapterEnd' },
       h('h2', { lang: 'fr', text: 'Fin : Jour ' + chDay(ui.cid) + ' · ' + ch.title }),
@@ -21572,7 +21788,7 @@ function getLang(ls, id) {
       ui.cid === 'd7' && WL.moduleDone(learnState && learnState.garden, 'week1') ? h('div', { class: 'banner ok', id: 'plantAward' }, h('b', { lang: 'fr', text: 'Plante n° 1 · Semaine 1 ✓ ' }), Z('第一周模块完成：你的植物开花了。', 'Week 1 module complete: your plant is in bloom.')) : null,
       ui.cid === 'letter' ? h('p', { lang: 'fr', class: 'fr', text: 'Samedi, Madame Martin arrive. Croissant a sept jours pour devenir invisible.' }) : null,
       h('p', { class: 'muted', id: 'pendingNote', text: Z('这一章的 ' + ch.deck.length + ' 张卡片已经加入你的复习，从今晚开始。', 'This chapter’s ' + ch.deck.length + ' cards are now in your review, starting tonight.') }),
-      h('p', { text: '' + WL.tracesLeft(S) + '/' + WL.TRACE_TOTAL }),
+      WL.traceHudOn(chDay(ui.cid)) ? h('p', { id: 'traceCount', text: '' + WL.tracesLeft(S) + '/' + WL.TRACE_TOTAL }) : null,
       col));
   };
   function canPreviewEnding() {
@@ -22587,7 +22803,57 @@ function getLang(ls, id) {
       navigator.serviceWorker.register('sw.js?v=' + encodeURIComponent(L.APP_VERSION)).catch(function () {});
     } catch (e) {}
   }
+  function founderLabel(entry) {
+    if (entry.id === 'd1') return 'Jour 1 · Bienvenue chez nous';
+    if (entry.id === 'letter') return 'Jour 1 · La lettre';
+    var ch = W.CHAPTERS[entry.id];
+    return 'Jour ' + (ch ? ch.n : '') + ' · ' + (ch ? ch.title : entry.id);
+  }
+  function founderPicker() {
+    var box = h('div', { class: 'card', id: 'founderPicker' }, h('h3', { text: 'DEV' }));
+    A411.FounderDev.BUILT.forEach(function (e) {
+      box.appendChild(btn(founderLabel(e), function () { startFounderReplay(e); }, 'small', { id: 'btnDev_' + e.id }));
+    });
+    return box;
+  }
+  function startFounderReplay(entry) {
+    if (!S || !A411.FounderDev) return;
+    if (!ui.devReplay) {
+      ui.devBackup = A411.FounderDev.snapshot(S, learnState);
+      ui.devReplay = true;
+      S = A411.FounderDev.snapshot(ui.devBackup.save, null).save;
+      if (ui.devBackup.learn) learnState = A411.FounderDev.snapshot(null, ui.devBackup.learn).learn;
+    }
+    if (entry.id === 'd1') {
+      S.progress.scene = 'baseline';
+      S.progress.step = 0;
+      S.progress.status = 'in_progress';
+      ui.view = 'play'; ui.gesture = true; ui.line = null; render();
+      return;
+    }
+    S.progress.status = 'complete';
+    var w = WL.ensureWeek(S);
+    if (entry.id === 'letter') {
+      w.letterSeen = false;
+      w.chapters.letter = { status: 'open' };
+      openChapter('letter');
+      return;
+    }
+    w.letterSeen = true;
+    w.chapters[entry.id] = { status: 'open', choices: {} };
+    if (entry.id === 'd8' || entry.id === 'd9') { w.hub = w.hub || {}; w.hub[entry.id] = { beats: [] }; }
+    openChapter(entry.id);
+  }
+  function syncDevBadge() {
+    var el = document.getElementById('devBadge');
+    var back = document.getElementById('btnDevBack');
+    if (!ui.founderDev) { if (el) el.remove(); if (back) back.remove(); return; }
+    if (!el) { el = h('div', { id: 'devBadge', class: 'dev-badge', text: 'DEV' }); document.body.appendChild(el); }
+    if (ui.devReplay) { if (!back) document.body.appendChild(btn('Revenir', function () { goTitle(); }, 'small dev-back', { id: 'btnDevBack' })); }
+    else if (back) back.remove();
+  }
   function boot() {
+    try { ui.founderDev = !!(A411.FounderDev && A411.FounderDev.read(localStorage, location.search)); } catch (e) { ui.founderDev = false; }
     initStorage();
     initSync();
     registerSW();
