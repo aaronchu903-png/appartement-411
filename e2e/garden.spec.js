@@ -96,7 +96,11 @@ for (const size of [{ width: 390, height: 844, name: '390' }, { width: 375, heig
       await expect(screen.locator('button.pot').first()).toHaveAttribute('data-leaves', leaves);
       const rendering = await screen.locator('canvas').evaluate(function (el) { return getComputedStyle(el).imageRendering; });
       expect(rendering).toMatch(/pixelated|crisp-edges/);
-      const fits = await screen.evaluate(function (el) { return el.scrollHeight <= el.clientHeight + 1; });
+      const fits = await page.evaluate(function () {
+        var screen = document.getElementById('potScreen');
+        var doc = document.scrollingElement;
+        return getComputedStyle(screen).overflow === 'hidden' && doc.scrollHeight <= window.innerHeight + 1;
+      });
       expect(fits).toBe(true);
       const font = await screen.evaluate(function (el) { return getComputedStyle(el).fontFamily; });
       expect(font.toLowerCase()).toContain('noto sans');
