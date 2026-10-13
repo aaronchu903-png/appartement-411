@@ -23,6 +23,30 @@
       "idle": "croissant_idle_{frame}.png",
       "walk": "croissant_walk_{facing}_{frame}.png",
       "frames": 4
+    },
+    "camille": {
+      "anchor": [9, 31],
+      "idle": "camille_idle_{facing}_{frame}.png",
+      "walk": "camille_walk_{facing}_{frame}.png",
+      "frames": 4
+    },
+    "noe": {
+      "anchor": [9, 31],
+      "idle": "noe_idle_{facing}_{frame}.png",
+      "walk": "noe_walk_{facing}_{frame}.png",
+      "frames": 4
+    },
+    "lefevre": {
+      "anchor": [9, 31],
+      "idle": "lefevre_idle_{facing}_{frame}.png",
+      "walk": "lefevre_walk_{facing}_{frame}.png",
+      "frames": 4
+    },
+    "croissant_chair": {
+      "anchor": [9, 29],
+      "idle": "croissant_chair_{frame}.png",
+      "walk": "croissant_chair_{frame}.png",
+      "frames": 4
     }
   },
   "actors": [
@@ -98,8 +122,67 @@
         { "col": 5, "row": 18, "face": "down" },
         { "col": 6, "row": 18, "face": "down" }
       ]
+    },
+    "table": {
+      "id": "plante",
+      "label": "La plante",
+      "approach": [
+        { "col": 7, "row": 5, "face": "right" },
+        { "col": 10, "row": 5, "face": "left" },
+        { "col": 7, "row": 4, "face": "down" }
+      ]
+    },
+    "calendar_wall": {
+      "id": "calendrier",
+      "label": "Le calendrier",
+      "hit": [90, 14, 16, 18],
+      "approach": [
+        { "col": 6, "row": 3, "face": "up" },
+        { "col": 7, "row": 3, "face": "up" }
+      ]
     }
   },
+  "extras": [
+    {
+      "name": "plantp_table",
+      "file": "assets/apartment_props/plantp.png",
+      "alt": "assets/apartment_props/plantp_ok.png",
+      "size": [12, 14],
+      "anchor": [6, 13],
+      "placed_at": [152, 86],
+      "sortY": 95.5,
+      "note": "overlay: table"
+    },
+    {
+      "name": "plantp_desk",
+      "file": "assets/apartment_props/plantp.png",
+      "alt": "assets/apartment_props/plantp_ok.png",
+      "size": [12, 14],
+      "anchor": [6, 13],
+      "placed_at": [148, 176],
+      "sortY": 191.5,
+      "note": "overlay: desk",
+      "startHidden": true
+    },
+    {
+      "name": "calendar_wall",
+      "file": "assets/apartment_props/calendar.png",
+      "size": [12, 15],
+      "anchor": [6, 14],
+      "placed_at": [98, 30],
+      "note": "wall decal"
+    },
+    {
+      "name": "basil_few",
+      "pattern": "assets/apartment_props/basil_few_{frame}.png",
+      "frames": 8,
+      "size": [16, 14],
+      "anchor": [6, 13],
+      "placed_at": [56, 38],
+      "note": "y-sorted by placed_at[1]",
+      "startHidden": true
+    }
+  ],
   "styles": {
     "A": {
       "label": "Jour",

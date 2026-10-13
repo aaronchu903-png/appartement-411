@@ -1,0 +1,38 @@
+{
+  "source": "pixel-studio",
+  "placeholder": false,
+  "lighting": "pr8-multiply",
+  "note": "Soir uses each room's light/soir.json and light/light_multiplier_half.png (decode ×2), the same multiply as the apartment prototype. light/zones/ is the unused v2.6 layer.",
+  "rooms": {
+    "stairwell": {
+      "file": "prototype/hub/stairwell.json",
+      "cols": 12,
+      "rows": 24,
+      "floor": "prototype/hub/assets/stairwell/floor_walls.png",
+      "walkable": "prototype/hub/assets/stairwell/walkable.json",
+      "light": "prototype/hub/assets/stairwell/light/soir.json"
+    },
+    "lefevre": {
+      "file": "prototype/hub/lefevre.json",
+      "cols": 12,
+      "rows": 16,
+      "floor": "prototype/hub/assets/lefevre/floor_walls.png",
+      "walkable": "prototype/hub/assets/lefevre/walkable.json",
+      "light": "prototype/hub/assets/lefevre/light/soir.json"
+    },
+    "apt": {
+      "file": "prototype/hub/room.json",
+      "cols": 12,
+      "rows": 24,
+      "props": "prototype/hub/assets/apartment_props/"
+    }
+  },
+  "characters": {
+    "player": "prototype/hub/assets/characters/player_*",
+    "camille": "prototype/hub/assets/characters/camille_*",
+    "noe": "prototype/hub/assets/characters/noe_*",
+    "lefevre": "prototype/hub/assets/characters/lefevre_*",
+    "croissant": "prototype/hub/assets/characters/croissant_*",
+    "croissant_chair": "prototype/hub/assets/characters/croissant_chair_*.png"
+  }
+}

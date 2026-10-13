@@ -1,0 +1,489 @@
+{
+ "rug": {
+  "size": [
+   84,
+   48
+  ],
+  "anchor": [
+   42,
+   24
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   96,
+   130
+  ],
+  "note": "decal"
+ },
+ "mat": {
+  "size": [
+   28,
+   10
+  ],
+  "anchor": [
+   14,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   96,
+   214
+  ],
+  "note": "decal"
+ },
+ "calendar": {
+  "size": [
+   12,
+   15
+  ],
+  "anchor": [
+   6,
+   14
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   70,
+   30
+  ],
+  "note": "wall decal: drawn on floor_walls, under sprites; Thursday circled, no text"
+ },
+ "stove": {
+  "size": [
+   24,
+   30
+  ],
+  "anchor": [
+   12,
+   29
+  ],
+  "footprint_tiles": [
+   [
+    0,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "placed_at": [
+   26,
+   63
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "sideboard": {
+  "size": [
+   44,
+   32
+  ],
+  "anchor": [
+   22,
+   31
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    2
+   ],
+   [
+    9,
+    2
+   ],
+   [
+    10,
+    2
+   ],
+   [
+    8,
+    3
+   ],
+   [
+    9,
+    3
+   ],
+   [
+    10,
+    3
+   ]
+  ],
+  "placed_at": [
+   150,
+   63
+  ],
+  "note": "y-sorted by placed_at[1]; drawer closed; hotspot drawer hit ~[143,24,16,9]"
+ },
+ "sideboard_open": {
+  "size": [
+   44,
+   32
+  ],
+  "anchor": [
+   22,
+   31
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    2
+   ],
+   [
+    9,
+    2
+   ],
+   [
+    10,
+    2
+   ],
+   [
+    8,
+    3
+   ],
+   [
+    9,
+    3
+   ],
+   [
+    10,
+    3
+   ]
+  ],
+  "placed_at": [
+   150,
+   63
+  ],
+  "note": "variant of sideboard: drawer open (swap in for d9_H only)"
+ },
+ "lamp_side": {
+  "size": [
+   10,
+   14
+  ],
+  "anchor": [
+   5,
+   13
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   172,
+   46
+  ],
+  "note": "overlay: sideboard (sort just after sideboard)"
+ },
+ "chair_1_s": {
+  "size": [
+   14,
+   18
+  ],
+  "anchor": [
+   7,
+   17
+  ],
+  "footprint_tiles": [
+   [
+    5,
+    9
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "placed_at": [
+   96,
+   154
+  ],
+  "note": "player seat \"chair\", back to camera"
+ },
+ "chair_2_w": {
+  "size": [
+   12,
+   20
+  ],
+  "anchor": [
+   5,
+   19
+  ],
+  "footprint_tiles": [
+   [
+    3,
+    8
+   ],
+   [
+    4,
+    8
+   ]
+  ],
+  "placed_at": [
+   58,
+   136
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "chair_3_e": {
+  "size": [
+   12,
+   20
+  ],
+  "anchor": [
+   6,
+   19
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    8
+   ]
+  ],
+  "placed_at": [
+   134,
+   136
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "chair_4_n": {
+  "size": [
+   14,
+   18
+  ],
+  "anchor": [
+   7,
+   17
+  ],
+  "footprint_tiles": [
+   [
+    5,
+    7
+   ],
+   [
+    6,
+    7
+   ]
+  ],
+  "placed_at": [
+   96,
+   114
+  ],
+  "note": "chair 4 facing the camera; swap for characters/croissant_chair_<f>.png (same anchor row: use anchor (9,29))"
+ },
+ "table": {
+  "size": [
+   52,
+   36
+  ],
+  "anchor": [
+   26,
+   35
+  ],
+  "footprint_tiles": [
+   [
+    4,
+    7
+   ],
+   [
+    5,
+    7
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    7,
+    7
+   ],
+   [
+    4,
+    8
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    7,
+    8
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    6,
+    6
+   ]
+  ],
+  "placed_at": [
+   96,
+   140
+  ],
+  "note": "round table with cloth, 4 plates, bread, cheese baked in; table_bare.png = same without dishes"
+ },
+ "table_bare": {
+  "size": [
+   52,
+   36
+  ],
+  "anchor": [
+   26,
+   35
+  ],
+  "footprint_tiles": [
+   [
+    4,
+    7
+   ],
+   [
+    5,
+    7
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    7,
+    7
+   ],
+   [
+    4,
+    8
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    7,
+    8
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    6,
+    6
+   ]
+  ],
+  "placed_at": [
+   96,
+   140
+  ],
+  "note": "variant of table"
+ },
+ "key": {
+  "size": [
+   8,
+   4
+  ],
+  "anchor": [
+   4,
+   3
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   97,
+   113
+  ],
+  "note": "overlay: table (on the cloth in front of chair 4; remove at d9_H)"
+ },
+ "door": {
+  "size": [
+   32,
+   40
+  ],
+  "anchor": [
+   16,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    5,
+    13
+   ],
+   [
+    6,
+    13
+   ],
+   [
+    5,
+    14
+   ],
+   [
+    6,
+    14
+   ]
+  ],
+  "placed_at": [
+   96,
+   239
+  ],
+  "note": "exit stairwell"
+ },
+ "coat": {
+  "size": [
+   16,
+   22
+  ],
+  "anchor": [
+   8,
+   21
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   140,
+   216
+  ],
+  "note": "wall decal: coat hook by the door"
+ },
+ "pendant": {
+  "size": [
+   20,
+   14
+  ],
+  "anchor": [
+   10,
+   13
+  ],
+  "footprint_tiles": [
+   [
+    5,
+    4
+   ],
+   [
+    6,
+    4
+   ]
+  ],
+  "placed_at": [
+   96,
+   70
+  ],
+  "note": "overhead: drawn after the y-sort"
+ }
+}

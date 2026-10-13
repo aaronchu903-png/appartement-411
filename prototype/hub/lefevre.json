@@ -1,0 +1,80 @@
+{
+  "id": "lefevre",
+  "title": "Chez Madame Lefèvre",
+  "fromDay": 9,
+  "defaultStyle": "E",
+  "tile": 16,
+  "cols": 12,
+  "rows": 16,
+  "spawn": { "col": 4, "row": 12, "facing": "up" },
+  "timing": { "ambientMs": 150, "ambientFrames": 16, "walkFrameMs": 90, "stepMs": 180 },
+  "footShadow": { "color": [43, 30, 47], "alpha": 110, "w": 12, "h": 4 },
+  "dropBakedShadows": [],
+  "sprites": {
+    "dir": "assets/characters/",
+    "player": { "anchor": [9, 31], "idle": "player_idle_{facing}_{frame}.png", "walk": "player_walk_{facing}_{frame}.png", "frames": 4 },
+    "croissant": { "anchor": [9, 14], "idle": "croissant_idle_{frame}.png", "walk": "croissant_walk_{facing}_{frame}.png", "frames": 4 },
+    "camille": { "anchor": [9, 31], "idle": "camille_idle_{facing}_{frame}.png", "walk": "camille_walk_{facing}_{frame}.png", "frames": 4 },
+    "noe": { "anchor": [9, 31], "idle": "noe_idle_{facing}_{frame}.png", "walk": "noe_walk_{facing}_{frame}.png", "frames": 4 },
+    "lefevre": { "anchor": [9, 31], "idle": "lefevre_idle_{facing}_{frame}.png", "walk": "lefevre_walk_{facing}_{frame}.png", "frames": 4 },
+    "croissant_chair": { "anchor": [9, 29], "idle": "croissant_chair_{frame}.png", "walk": "croissant_chair_{frame}.png", "frames": 4 }
+  },
+  "actors": [],
+  "ambient": { "paper": [255, 248, 236] },
+  "hotspots": {
+    "chair_1_s": {
+      "id": "chaise",
+      "label": "La chaise",
+      "approach": [
+        { "col": 6, "row": 10, "face": "up" },
+        { "col": 5, "row": 10, "face": "up" }
+      ]
+    },
+    "sideboard": {
+      "id": "drawer",
+      "label": null,
+      "hit": [143, 42, 16, 9],
+      "approach": [
+        { "col": 9, "row": 4, "face": "up" },
+        { "col": 8, "row": 5, "face": "up" }
+      ]
+    },
+    "door": {
+      "id": "stairwell",
+      "label": null,
+      "exit": "stairwell",
+      "approach": [
+        { "col": 5, "row": 13, "face": "down" },
+        { "col": 6, "row": 13, "face": "down" },
+        { "col": 4, "row": 13, "face": "down" }
+      ]
+    }
+  },
+  "styles": {
+    "E": {
+      "label": "Soir",
+      "dir": "assets/lefevre/",
+      "floor": "floor_walls.png",
+      "furniture": "furniture.json",
+      "walkable": "walkable.json",
+      "curtains": [],
+      "overhead": [],
+      "light": {
+        "under": [{ "src": "light/shadow.png", "contactShadow": true }],
+        "multiply": {
+          "src": "light/light_multiplier_half.png",
+          "cool": [0.26, 0.29, 0.45],
+          "warm": [0.95, 0.7, 0.36],
+          "cap": 1.2,
+          "lamps": [
+            { "id": "table_pendant", "x": 96, "y": 114, "r": 46, "s": 1.0 },
+            { "id": "sideboard_lamp", "x": 172, "y": 40, "r": 28, "s": 0.55 },
+            { "id": "stove", "x": 26, "y": 50, "r": 20, "s": 0.3 },
+            { "id": "door", "x": 96, "y": 226, "r": 24, "s": 0.35 }
+          ],
+          "window": { "x": 24, "y": 10, "w": 20, "h": 22, "color": [60, 50, 110], "mix": 0.7 }
+        }
+      }
+    }
+  }
+}

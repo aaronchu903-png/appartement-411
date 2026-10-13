@@ -1,0 +1,205 @@
+{
+ "door411": {
+  "size": [
+   32,
+   40
+  ],
+  "anchor": [
+   16,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    2,
+    8
+   ],
+   [
+    3,
+    8
+   ],
+   [
+    4,
+    8
+   ],
+   [
+    2,
+    7
+   ],
+   [
+    3,
+    7
+   ],
+   [
+    4,
+    7
+   ]
+  ],
+  "placed_at": [
+   56,
+   143
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "mat411": {
+  "size": [
+   28,
+   10
+  ],
+  "anchor": [
+   14,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   56,
+   152
+  ],
+  "note": "decal"
+ },
+ "door_lefevre": {
+  "size": [
+   32,
+   40
+  ],
+  "anchor": [
+   16,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    1,
+    17
+   ],
+   [
+    2,
+    17
+   ],
+   [
+    3,
+    17
+   ],
+   [
+    1,
+    18
+   ],
+   [
+    2,
+    18
+   ],
+   [
+    3,
+    18
+   ]
+  ],
+  "placed_at": [
+   40,
+   303
+  ],
+  "note": "y-sorted by placed_at[1]"
+ },
+ "mat_lefevre": {
+  "size": [
+   28,
+   10
+  ],
+  "anchor": [
+   14,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   40,
+   312
+  ],
+  "note": "decal"
+ },
+ "nameplate_lefevre": {
+  "size": [
+   12,
+   6
+  ],
+  "anchor": [
+   6,
+   5
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   70,
+   280
+  ],
+  "note": "wall decal: drawn on floor_walls, under sprites; blank brass plate (in-world name, no letters in the hub art)"
+ },
+ "door_rooftop": {
+  "size": [
+   24,
+   40
+  ],
+  "anchor": [
+   12,
+   39
+  ],
+  "footprint_tiles": [
+   [
+    8,
+    1
+   ],
+   [
+    9,
+    1
+   ],
+   [
+    10,
+    1
+   ],
+   [
+    8,
+    2
+   ],
+   [
+    9,
+    2
+   ],
+   [
+    10,
+    2
+   ]
+  ],
+  "placed_at": [
+   152,
+   47
+  ],
+  "note": "y-sorted by placed_at[1]; plain closed rooftop door, no glow, no sign"
+ },
+ "sconce_4": {
+  "size": [
+   10,
+   10
+  ],
+  "anchor": [
+   5,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   96,
+   118
+  ],
+  "note": "wall decal: stair-timer sconce"
+ },
+ "sconce_3": {
+  "size": [
+   10,
+   10
+  ],
+  "anchor": [
+   5,
+   9
+  ],
+  "footprint_tiles": [],
+  "placed_at": [
+   96,
+   278
+  ],
+  "note": "wall decal: stair-timer sconce"
+ }
+}

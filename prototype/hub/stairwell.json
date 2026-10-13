@@ -1,0 +1,78 @@
+{
+  "id": "stairwell",
+  "title": "L’escalier",
+  "fromDay": 9,
+  "defaultStyle": "E",
+  "tile": 16,
+  "cols": 12,
+  "rows": 24,
+  "spawn": { "col": 8, "row": 15, "facing": "down" },
+  "timing": { "ambientMs": 150, "ambientFrames": 16, "walkFrameMs": 90, "stepMs": 180 },
+  "footShadow": { "color": [43, 30, 47], "alpha": 110, "w": 12, "h": 4 },
+  "dropBakedShadows": [],
+  "sprites": {
+    "dir": "assets/characters/",
+    "player": { "anchor": [9, 31], "idle": "player_idle_{facing}_{frame}.png", "walk": "player_walk_{facing}_{frame}.png", "frames": 4 },
+    "croissant": { "anchor": [9, 14], "idle": "croissant_idle_{frame}.png", "walk": "croissant_walk_{facing}_{frame}.png", "frames": 4 },
+    "camille": { "anchor": [9, 31], "idle": "camille_idle_{facing}_{frame}.png", "walk": "camille_walk_{facing}_{frame}.png", "frames": 4 },
+    "noe": { "anchor": [9, 31], "idle": "noe_idle_{facing}_{frame}.png", "walk": "noe_walk_{facing}_{frame}.png", "frames": 4 },
+    "lefevre": { "anchor": [9, 31], "idle": "lefevre_idle_{facing}_{frame}.png", "walk": "lefevre_walk_{facing}_{frame}.png", "frames": 4 },
+    "croissant_chair": { "anchor": [9, 29], "idle": "croissant_chair_{frame}.png", "walk": "croissant_chair_{frame}.png", "frames": 4 }
+  },
+  "actors": [],
+  "ambient": { "paper": [255, 248, 236] },
+  "hotspots": {
+    "door411": {
+      "id": "apt411",
+      "label": null,
+      "exit": "apt411",
+      "approach": [
+        { "col": 3, "row": 9, "face": "up" },
+        { "col": 4, "row": 9, "face": "up" }
+      ]
+    },
+    "door_rooftop": {
+      "id": "locked",
+      "label": null,
+      "approach": [
+        { "col": 9, "row": 3, "face": "up" },
+        { "col": 8, "row": 3, "face": "up" }
+      ]
+    },
+    "door_lefevre": {
+      "id": "porte",
+      "label": "La porte",
+      "exit": "lefevre",
+      "approach": [
+        { "col": 2, "row": 19, "face": "up" },
+        { "col": 3, "row": 19, "face": "up" }
+      ]
+    }
+  },
+  "styles": {
+    "E": {
+      "label": "Soir",
+      "dir": "assets/stairwell/",
+      "floor": "floor_walls.png",
+      "furniture": "furniture.json",
+      "walkable": "walkable.json",
+      "curtains": [],
+      "overhead": [],
+      "light": {
+        "under": [{ "src": "light/shadow.png", "contactShadow": true }],
+        "multiply": {
+          "src": "light/light_multiplier_half.png",
+          "cool": [0.26, 0.29, 0.45],
+          "warm": [0.95, 0.7, 0.36],
+          "cap": 1.2,
+          "lamps": [
+            { "id": "landing4_timer", "x": 96, "y": 136, "r": 44, "s": 0.85 },
+            { "id": "landing3_timer", "x": 96, "y": 296, "r": 44, "s": 0.85 },
+            { "id": "stairs_spill", "x": 144, "y": 240, "r": 28, "s": 0.35 }
+          ],
+          "window": null
+        }
+      }
+    }
+  }
+}

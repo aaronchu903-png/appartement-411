@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.10.1 single-file build 2026-10-12T16:38:09.573Z -->
+<!-- L’Appartement 411 v0.11.0 single-file build 2026-10-13T02:13:32.550Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -22,6 +22,10 @@ html, body { margin:0; background:var(--bg); color:var(--ink); }
 body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%; }
 body.large-text { font-size:20px; }
 .app { max-width:480px; margin:0 auto; min-height:100vh; padding-bottom:env(safe-area-inset-bottom); }
+#hubMount { position:fixed; left:0; right:0; bottom:0; top:42px; z-index:2; background:#241c18; display:flex; }
+#hubMount[hidden] { display:none !important; }
+#hubStage { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; min-width:0; }
+#hubCanvas { image-rendering:pixelated; image-rendering:crisp-edges; touch-action:none; }
 .topbar[hidden] { display:none; }
 .topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#2a2e3a; color:#fff; }
 .topbar .where { font-size:.85em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -344,6 +348,9 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     <button class="btn small" id="btnPause" type="button" aria-label="Pause">Pause</button>
   </header>
   <main id="screen" class="screen"></main>
+  <div id="hubMount" hidden>
+    <div id="hubStage"><canvas id="hubCanvas" width="192" height="384"></canvas></div>
+  </div>
   <div id="overlay" class="overlay" hidden role="dialog" aria-modal="true"></div>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="pad">需要开启 JavaScript 才能玩。 / JavaScript is required to play.</p></noscript>
@@ -711,7 +718,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     var c = S.week && S.week.chapters[cid];
     return c && c.status === 'complete' ? c.completedDay : null;
   }
-  var PREREQ = { d2: 'd1', d3: 'd2', d4: 'd3', d5: 'd4', d6: 'd5', d7: 'd6', d8: 'd7' };
+  var PREREQ = { d2: 'd1', d3: 'd2', d4: 'd3', d5: 'd4', d6: 'd5', d7: 'd6', d8: 'd7', d9: 'd8' };
   // 'locked' (previous chapter not done) | 'tomorrow' (unlocks next local day; can open early) | 'open' | 'in_progress' | 'complete'
   function chapterStatus(S, cid, today) {
     var w = ensureWeek(S), c = w.chapters[cid];
@@ -938,7 +945,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.10.1';
+  var APP_VERSION = '0.11.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -1799,7 +1806,12 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     tree: ['...gggg...', '.gggGggg..', 'ggGgggggg.', 'gggggGggg.', '.ggggggg..', '...gddg...', '....dd....', '....dd....', '...dddd...'],
     // v0.9.0 Day 7
     croiss: ['....yyyy....', '..yYyYyYyy..', '.yYyYyYyYyy.', 'yYy......yYy', 'Yy........yY', 'wwwwwwwwwwww'], // a croissant (the pastry) on a plate
-    roof: ['....ee....', '...eeee...', '..eeeeee..', '.eeeeeeee.', 'eeeeeeeeee', '.dddddddd.', '.dhdddhdd.', '.dddddddd.']
+    roof: ['....ee....', '...eeee...', '..eeeeee..', '.eeeeeeee.', 'eeeeeeeeee', '.dddddddd.', '.dhdddhdd.', '.dddddddd.'],
+    // v0.11.0 Day 9
+    soup: ['..kkkkkk..', '.kMMMMMMk.', 'kMMhhhMMMk', 'kMMMMMMMMk', '.kkkkkkkk.'],
+    cheese: ['.uuu.', 'uuuu', 'uYYu', '.YY.'],
+    drawer: ['dddddddddddd', 'dDDDDDDDDDDd', 'dDDDDzDDDDDd', 'dDDDDDDDDDDd', 'dddddddddddd'],
+    chair_empty: ['D......D', 'D......D', 'DDDDDDDD', 'D......D', '........', '.dddddd.', 'd......d', 'D......D', 'D......D']
   };
   function drawProp(ctx, id, x, y, scale) {
     var map = PROPS[id]; if (!map) return;
@@ -1891,7 +1903,13 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     // v0.5.0 traces: one corner per trace (W.TRACES[].spot)
     apart: { poils: [8, 12, 26, 16], pattes: [30, 2, 16, 14], gamelle: [56, 20, 18, 11], brosse: [74, 2, 20, 12],
       griffure: [6, 38, 20, 16], souris: [16, 50, 16, 12], couverture: [36, 42, 24, 16], litiere: [74, 50, 20, 12],
-      salon: [0, 0, 48, 32], cuisine: [48, 0, 48, 32], entree: [0, 32, 32, 32], chambre: [32, 32, 32, 32], sdb: [64, 32, 32, 32] }
+      salon: [0, 0, 48, 32], cuisine: [48, 0, 48, 32], entree: [0, 32, 32, 32], chambre: [32, 32, 32, 32], sdb: [64, 32, 32, 32] },
+    // v0.11.0 Day 9
+    stairs: { escalier: [4, 18, 88, 42] },
+    lefevre_door: { porte: [34, 4, 24, 40] },
+    lefevre_table: { table: [24, 34, 52, 22], chaise: [74, 20, 18, 28] },
+    cat_chair: { key: [60, 36, 18, 12], chaise: [74, 26, 18, 22] },
+    cat_paw: { key: [28, 34, 48, 20] }
   };
   var PEOPLE = { // sprite origins per scene (see sceneBase)
     doorway: { camille: [40, 25], noe: [50, 22] }, name: { camille: [36, 26], noe: [58, 25] }, plant: { camille: [48, 26] },
@@ -1919,6 +1937,209 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     return null;
   }
 
+  // v0.11.0 Day 9: cat_chair and cat_paw are the 96×64 native frames, drawn with px()
+  // (horizontal runs). Croissant's eyes use the sprite eye PAL.k (#22303a), not the green in the source frames.
+  var DAY9_PAL = ['#e9d3b0', '#e2caa5', '#2a2a2a', '#6b4430', '#c0392b', '#3a4a78', '#fff7c2', '#8a5a3a', '#6f8fa6', '#e2873a', '#4f6b80', '#a8722e', '#f2d65c', '#d9a55a', '#cfc6b8', '#22303a', '#f4efe6', '#ffffff', '#e79aa0', '#b8642a', '#e0c060', '#a8862a', '#c9b08e', '#ad8056', '#b98a5e', '#ebe3d3', '#e4ddd0', '#f2e3a0', '#e2d9c8'];
+  var DAY9_CHAIR = [
+    '040001010b0001010b0001010b00010105000102050001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b00010105000102050001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b00010105000102050001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b00010105000102050001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b00010105000102050001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b00010105000102050001010b0001010b0001010b0001010700',
+    '0400010101001003060001010b00010102000704020001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b00010102000704020001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b00010102000704020001010b0001010b0001010b0001010700',
+    '0400010101000103070501030205020602050103060001010b00010103000506030001010b0001010b0001010b0001010700',
+    '0400010101000103070501030205020602050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '0400010101001003060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '04000101010001030705010306050103060001010b0001010b0001010b0001010b0001010b0001010700',
+    '0400010101001003060001010b0001010b0001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b0001010b0001010b0001010b0001010b0001010700',
+    '040001010b0001010b0001010b0001010b0001010b0001010b0001010b0001010700',
+    '040001010b0001010b000807040001010b000101050008070a0001010b0001010700',
+    '040001010b0001010b00010306000103040001010b000101050001030500010101030a0001010b0001010700',
+    '040001010b0001010b00010306000103040001010b000101050001030500010101030a00010101000807020001010700',
+    '040001010b0001010b00010306000103040001010b000101050001030500010101030a0001010100010306000103020001010700',
+    '040001010b0001010b000807040001010300020206000101050008070a0001010100010306000103020001010700',
+    '040001010b0001010b0001030600010303000c0801000101050001030500010101030a000101010901030400010901000103020001010700',
+    '040001010b0001010b0001030600010304000a0a02000101050001030500010101030a0001010209030702090207020001010700',
+    '040001010b0001010b0001030200050b0400010a0808010a020001010100020c020001030500010101030a000101070901000103020001010700',
+    '0400010104000107060001010b0001030100070d030e0a0a040e040c030e0300010101030a0001010109010f0309010f010901000103020001010700',
+    '0400010104000103060001010b00020e070d03100a0a01110310040c0310080e0700010103090112030901000103020001010700',
+    '0400010104000103060001010800030e021006110a10040e0a1006110310030e040001010100050902000103020001010700',
+    '0400010104000103060001010600020e0610040e1a10040e0710020e020001010109011303090113010901000103020001010700',
+    '0400010104000103060001010500010e2b1006110210010e01000101020901130209011302090103020001010700',
+    '0400010104000103060001010600010e2b10040e0210010e02000101080901030109010001010700',
+    '04000101040001030600010107002b100114051003000101010901130109011301090113020901030109010001010700',
+    '04000101040001030600010107002a10011401150514030001010100020902000509010001010700',
+    '04000101040001030600010107002f10011401100114020001010a07010001010700',
+    '091601030e16311004160a070916',
+    '0117071801170a070518311004180a03011801170718',
+    '0117071801170a070518310e051801030118011704180103021801170718',
+    '0117071801170a0305180117071801170718011706180203071801170718011707180117051801030118011704180103021801170718',
+    '0117071801170118010305180117010306180117071801170718011706180203071801170718011707180117051801030118011704180103021801170718',
+    '0117071801170118010305180117010306180117071801170718011706180203071801170718011707180117051801030118011704180103021801170718',
+    '0117071801170118010305180117010306180117071801170718011706180203071801170718011707180117051801030118011704180103021801170718',
+    '0117071801170118010305180117010306180117071801170718011706180203071801170718011707180117051801030118011704180103021801170718',
+    '011707180117011801030518011701030618011707180117071801170618020307180117071801170718011707180117071801170718',
+    '011707180117011801030518011701030618011707180117071801170618020307180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170618020307180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170618020307180117071801170718011707180117071801170718',
+    '0117071801170718011707180117071801170718011701180c0302180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+    '011707180117071801170718011707180117071801170718011707180117071801170718011707180117071801170718',
+  ];
+  var DAY9_PAW = [
+    '500001130f09',
+    '500001130f09',
+    '4f0001131009',
+    '4f0001131009',
+    '4f0001130d0902130109',
+    '4e0001130b0903130309',
+    '4e000113090902130609',
+    '4d0001131209',
+    '4d0001131209',
+    '4d0001131209',
+    '4c0001131309',
+    '4c0001131309',
+    '4c0001130c0902130509',
+    '4b0001130a0903130709',
+    '4b000113080902130a09',
+    '4b0001131409',
+    '4a00011314090100',
+    '4a00011313090200',
+    '4900011313090300',
+    '4900011313090300',
+    '490001130a09021306090400',
+    '480001130809031307090500',
+    '481601130609021309090616',
+    '4716011311090716',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119041001131009021001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119031001131009031001190510',
+    '4519011310090a19',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119021001131009041001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119011001131009051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119011310090119051001190510',
+    '0a0e0210011905100119051001190510011905100119051001190510011905100119051001190510011901130f0901100119051001190510',
+    '0a11050e0310011905100119051001190510011905100119051001190510011905100119051001130f0902100119051001190510',
+    '0f11030e2f19011310090e19',
+    '1211020e041001190510011905100119051001190510011905100119031002020119041001130f0903100119051001190510',
+    '1411020e02100119051001190510011905100119051001190510011905100119031001130f0904100119051001190510',
+    '091a0d11010e01100119051001190510011905100119051001190510011905100119031001130f0904100119051001190510',
+    '0911041a0a11010e01190510011905100119051001190510011905100119051001190210011301090713070905100119051001190510',
+    '0d11031a0811010e0510011905100119051001190510011905100119011002020210011901100313070903130309011905100119051001190510',
+    '1011011a0811010e09190515151901130d09011302091219',
+    '1111011a0811010e03100119021002150514021501190510011905100119051001130f0901130110011905100119051001190510',
+    '1211011a0711010e03100119011001150914011505100119051001190410011311090113011905100119051001190510',
+    '1211011a0711010e0310011901150b140115041001190510011904100113020902130109011301090213010901130109021303090113011905100119051001190510',
+    '1211011a0711010e031001150514031505140b1b0202021b01130109011302090313020903130209011302090113011905100119051001190510',
+    '1111011a0811010e031001150314021503100215131401130409011304090113040902130110011905100119051001190510',
+    '1011011a0811010e041901150314011505100115131401130409011304090113040901131419',
+    '0d11031a0811010e05100115031402150310021514140113020901130109011302090113010901130209011303100119020203100119051001190510',
+    '0911041a0a11010e01190510011505140315051412150213011409130410011905100119051001190510',
+    '091a0d11010e011001190510011901150b1401151e1c0410011905100119051001190510',
+    '1411020e021001190510011901100115091401150510011905100119051001190310031402100214011002140410011905100119051001190510',
+    '1211020e0410011905100119021002150514021501190510011905100119051001190310031402100214011001190510011905100119051001190510',
+    '0f11030e1119051518190315021902141919',
+    '0a11050e031001190510011905100e1c0410011905100119051001190510011902100214011001190510011905100119051001190510',
+    '0a0e0210011905100119051001190510011905100119051001190510011905100119051001190510011902100215011001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '6019',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+    '6019',
+    '01190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510011905100119051001190510',
+  ];
+  function blitRle(ctx, rows) {
+    for (var y = 0; y < rows.length; y++) {
+      var s = rows[y], x = 0, i = 0;
+      while (i < s.length) {
+        var n = parseInt(s.substr(i, 2), 16), pi = parseInt(s.substr(i + 2, 2), 16);
+        px(ctx, x, y, n, 1, DAY9_PAL[pi]);
+        x += n; i += 4;
+      }
+    }
+  }
+  function day9People(ctx, st, spk, spots) {
+    ['voisine', 'camille', 'noe'].forEach(function (who) {
+      var p = spots[who]; if (!p || !st[who]) return;
+      person(ctx, who, st[who], p[0], p[1]);
+      if (spk === (who === 'voisine' ? 'lefevre' : who)) marker(ctx, p[0] + 3, p[1] - 5);
+    });
+  }
+  function day9Scene(ctx, name, st, spk) {
+    if (name === 'cat_chair') {
+      blitRle(ctx, DAY9_CHAIR);
+      day9People(ctx, st, spk, { voisine: [0, 26], camille: [18, 28], noe: [40, 26] });
+      return true;
+    }
+    if (name === 'cat_paw') { blitRle(ctx, DAY9_PAW); return true; }
+    if (name === 'stairs') {
+      px(ctx, 0, 0, W, H, '#e9d3b0');
+      for (var sx = 4; sx < W; sx += 12) px(ctx, sx, 0, 1, 40, '#e2caa5');
+      px(ctx, 6, 6, 16, 14, '#6b4430'); px(ctx, 8, 8, 12, 10, '#3a4a78'); px(ctx, 8, 12, 12, 1, '#2a3348'); px(ctx, 13, 8, 1, 10, '#2a3348'); px(ctx, 14, 9, 1, 1, '#fff7c2');
+      [[4, 50, 22, 8], [20, 44, 22, 8], [36, 38, 22, 8], [52, 32, 22, 8], [68, 26, 22, 8]].forEach(function (t) {
+        px(ctx, t[0], t[1], t[2], t[3], '#b98a5e'); px(ctx, t[0], t[1], t[2], 1, '#d7b48a'); px(ctx, t[0], t[1] + t[3] - 2, t[2], 2, '#8a5a3a');
+      });
+      px(ctx, 2, 18, 2, 40, '#6b4430'); px(ctx, 86, 14, 2, 22, '#6b4430'); px(ctx, 2, 18, 86, 2, '#8a5a3a');
+      px(ctx, 0, 58, W, 6, '#8d6a48');
+      day9People(ctx, st, spk, { camille: [24, 30], noe: [48, 24] });
+      if (st.cat) sprite(ctx, SPR.cat, 8, 42);
+      if (st.night) px(ctx, 0, 0, W, H, 'rgba(20,24,58,0.55)');
+      return true;
+    }
+    if (name === 'lefevre_door') {
+      room(ctx, '#e9d3b0', '#b98a5e');
+      door(ctx, 36, 6, st.door === 'open');
+      px(ctx, 8, 10, 14, 12, '#6b4430'); px(ctx, 10, 12, 10, 8, '#3a4a78'); px(ctx, 10, 15, 10, 1, '#2a3348'); px(ctx, 14, 12, 1, 8, '#2a3348');
+      if (st.door === 'open' && st.voisine) { person(ctx, 'voisine', st.voisine, 40, 22); if (spk === 'lefevre') marker(ctx, 43, 17); }
+      if (st.camille) { person(ctx, 'camille', st.camille, 14, 26); if (spk === 'camille') marker(ctx, 17, 21); }
+      if (st.noe) { person(ctx, 'noe', st.noe, 68, 25); if (spk === 'noe') marker(ctx, 71, 20); }
+      px(ctx, 30, 58, 32, 4, '#7a3b3b');
+      return true;
+    }
+    if (name === 'lefevre_table') {
+      px(ctx, 0, 0, W, 43, '#e9d3b0');
+      for (var wx = 4; wx < W; wx += 12) px(ctx, wx, 0, 1, 43, '#e2caa5');
+      px(ctx, 0, 43, W, 1, '#c9b08e'); px(ctx, 0, 44, W, 20, '#b98a5e');
+      for (var fx = 0; fx < W; fx += 8) px(ctx, fx, 44, 1, 20, '#ad8056');
+      px(ctx, 6, 6, 16, 16, '#6b4430'); px(ctx, 8, 8, 12, 12, '#3a4a78'); px(ctx, 8, 13, 12, 1, '#2a3348'); px(ctx, 13, 8, 1, 12, '#2a3348'); px(ctx, 15, 9, 1, 1, '#fff7c2');
+      px(ctx, 46, 0, 1, 6, '#2a2a2a'); px(ctx, 43, 6, 7, 3, '#c0392b'); px(ctx, 44, 9, 5, 1, '#fff7c2');
+      var chairBack = function (x, y) { px(ctx, x, y, 1, 14, '#6b4430'); px(ctx, x + 8, y, 1, 14, '#6b4430'); px(ctx, x, y, 9, 1, '#6b4430'); px(ctx, x, y + 4, 9, 1, '#8a5a3a'); };
+      var chairSeat = function (x, y) { px(ctx, x - 1, y, 10, 2, '#8a5a3a'); px(ctx, x, y + 2, 1, 8, '#6b4430'); px(ctx, x + 7, y + 2, 1, 8, '#6b4430'); };
+      chairBack(28, 18); chairSeat(28, 32); chairBack(58, 18); chairSeat(58, 32); chairBack(78, 22); chairSeat(78, 36);
+      if (st.hl === 'chaise') px(ctx, 74, 20, 16, 24, 'rgba(255,215,122,0.45)');
+      chairSeat(10, 44); px(ctx, 9, 34, 1, 10, '#6b4430'); px(ctx, 8, 34, 3, 2, '#8a5a3a');
+      px(ctx, 24, 36, 50, 8, '#f4efe6'); px(ctx, 28, 34, 42, 2, '#f4efe6'); px(ctx, 24, 44, 50, 1, '#cfc6b8');
+      px(ctx, 47, 45, 2, 10, '#6b4430'); px(ctx, 42, 54, 12, 1, '#6b4430');
+      [[30, 36], [45, 35], [60, 36], [66, 38]].forEach(function (q) { px(ctx, q[0], q[1], 6, 3, '#ffffff'); px(ctx, q[0], q[1] + 2, 6, 1, '#cfc6b8'); });
+      day9People(ctx, st, spk, { voisine: [2, 20], camille: [16, 24], noe: [46, 18] });
+      return true;
+    }
+    return false;
+  }
   function scene(ctx, name, st) {
     sceneBase(ctx, name, st || {});
     if (st && st.props) drawProps(ctx, st.props);
@@ -1927,6 +2148,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     st = st || {};
     ctx.clearRect(0, 0, W, H);
     var spk = st.speaker;
+    if (day9Scene(ctx, name, st, spk)) return;
     if (name === 'title') {
       px(ctx, 0, 0, W, H, '#28324a');
       for (var i = 0; i < 18; i++) px(ctx, (i * 37) % W, (i * 23) % 26, 1, 1, '#c9d3ff');
@@ -2171,7 +2393,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     if (st.lightsOff) px(ctx, 0, 0, W, H, 'rgba(20,24,48,0.55)');
   }
   // ---- v0.5.0: end-of-day ritual animations (one per day, tied to that day's story). t = seconds since start. ----
-  var RITUALS = { 1: 'd1-course', 2: 'd2-sac', 3: 'd3-colis', 4: 'd4-chut', 5: 'd5-toits', 6: 'd6-clic', 7: 'd7-plante', 8: 'd8-basilic' };
+  var RITUALS = { 1: 'd1-course', 2: 'd2-sac', 3: 'd3-colis', 4: 'd4-chut', 5: 'd5-toits', 6: 'd6-clic', 7: 'd7-plante', 8: 'd8-basilic', 9: 'd9-jeudi' };
   function catAt(ctx, x, y, flip) {
     var m = SPR.cat;
     for (var r = 0; r < m.length; r++) for (var c = 0; c < m[r].length; c++) {
@@ -2224,6 +2446,22 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
       drawProp(ctx, 'basil', 32, 34);
       catAt(ctx, 46 + (u8 < 3 ? 0 : -2), 38 + (Math.sin(t * 3) > 0 ? 0 : 1), true);
       px(ctx, 70, 30, 12, 10, '#f4efe6'); px(ctx, 72, 33, 4, 1, '#2a2e3a'); px(ctx, 77, 33, 3, 1, '#2a2e3a'); px(ctx, 72, 36, 6, 1, '#2a2e3a');
+      if (st.dim) px(ctx, 0, 0, W, H, 'rgba(20,24,48,' + Math.min(0.6, st.dim) + ')');
+      return id;
+    }
+    if (id === 'd9-jeudi') { // stairwell at night: Croissant asleep upstairs, four plates and a closed drawer downstairs
+      px(ctx, 0, 0, W, 32, '#2a2f4a');
+      px(ctx, 4, 18, 40, 8, '#4b5d8a'); px(ctx, 4, 15, 40, 4, '#3c4b72');
+      catAt(ctx, 16, 8, false);
+      px(ctx, 17, 11, 1, 1, PAL.o); px(ctx, 21, 11, 1, 1, PAL.o); px(ctx, 17, 12, 1, 1, PAL.O); px(ctx, 21, 12, 1, 1, PAL.O);
+      px(ctx, 18, 12, 3, 2, PAL.o); // one paw over his nose
+      px(ctx, 0, 32, W, 32, '#3a2a22');
+      px(ctx, 6, 36, 16, 26, '#5a3b26'); px(ctx, 8, 38, 10, 22, '#f3e3c3'); px(ctx, 18, 38, 3, 22, '#8a5a3a');
+      px(ctx, 36, 44, 28, 3, '#f4efe6');
+      [38, 44, 50, 56].forEach(function (x) { px(ctx, x, 42, 4, 2, '#ffffff'); });
+      px(ctx, 66, 40, 12, 6, '#8a5a3a'); px(ctx, 67, 42, 10, 2, '#6b4430'); px(ctx, 71, 43, 2, 2, '#e0c060');
+      px(ctx, 78, 48, 12, 3, '#8a5a3a'); px(ctx, 80, 46, 8, 2, '#e79aa0');
+      px(ctx, 28, 34, 8, 12, '#dfe7ee'); px(ctx, 29, 36, 6, 5, '#f4efe6'); px(ctx, 30, 37, 4, 1, '#2a2a2a'); px(ctx, 30, 39, 3, 1, '#2a2a2a');
       if (st.dim) px(ctx, 0, 0, W, H, 'rgba(20,24,48,' + Math.min(0.6, st.dim) + ')');
       return id;
     }
@@ -2310,7 +2548,7 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
     if (health === 'yellow') { px(ctx, cx - 6, 37, 2, 1, '#c9b23a'); }
   }
 
-  var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait: portrait, SPOTS: SPOTS, garden: garden, PROPS: PROPS, ICONS: ICONS, drawProp: drawProp, propCard: propCard, figCard: figCard, propSize: propSize, region: region, REGIONS: REGIONS };
+  var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait: portrait, SPOTS: SPOTS, garden: garden, PROPS: PROPS, ICONS: ICONS, drawProp: drawProp, propCard: propCard, figCard: figCard, propSize: propSize, region: region, REGIONS: REGIONS, day9px: { pal: DAY9_PAL, chair: DAY9_CHAIR, paw: DAY9_PAW } };
   root.A411 = root.A411 || {};
   root.A411.Art = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -2362,10 +2600,16 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   var FX = {
     knock: { fr: 'Toc toc !' }, meow: { fr: 'Miaou !' }, purr: { fr: 'Rrrr…' }, water: { fr: 'Glou glou…' },
     door: { fr: 'Clac !' }, parcel: { fr: 'Boum !' }, steps: { fr: 'Tap, tap, tap…' }, phone: { fr: 'Driiing !' },
-    notif: { fr: 'Bip bip !' }, paper: { fr: 'Frrrt…' }, click: { fr: 'Clic !' }, bravo: { fr: 'Bravo !' }
+    notif: { fr: 'Bip bip !' }, paper: { fr: 'Frrrt…' }, click: { fr: 'Clic !' }, bravo: { fr: 'Bravo !' },
+    // v0.11.0 Day 9: named placeholders. Drop the mp3 at `file` later; do not add an empty file.
+    sfx_paws: { fr: 'Pat, pat…', placeholder: true, file: 'audio/sfx/sfx_paws.mp3' },
+    sfx_meow_small: { fr: 'Miaou…', placeholder: true, file: 'audio/sfx/sfx_meow_small.mp3' },
+    sfx_key_tap: { fr: 'Tic !', placeholder: true, file: 'audio/sfx/sfx_key_tap.mp3' },
+    sfx_drawer: { fr: 'Crrr…', placeholder: true, file: 'audio/sfx/sfx_drawer.mp3' },
+    sfx_locked: { fr: '…', placeholder: true, file: 'audio/sfx/sfx_locked.mp3' }
   };
   var files = {};
-  Object.keys(FX).forEach(function (id) { files[id] = 'audio/sfx/' + id + '.mp3'; });
+  Object.keys(FX).forEach(function (id) { if (!FX[id].placeholder) files[id] = 'audio/sfx/' + id + '.mp3'; });
   root.A411 = root.A411 || {};
   root.A411.SFX = { ids: Object.keys(FX), fx: FX, files: files, licence: 'CC0 1.0 (synthesised for this project, tools/make_sfx.py)' };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.A411.SFX;
@@ -8965,6 +9209,126 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
    ]
   },
   "story": "d8"
+ },
+ {
+  "id": "asseyez_vous",
+  "module": "week2",
+  "grammar": "pronominaux",
+  "band": "A1",
+  "speaker": "lefevre",
+  "fr": "Asseyez-vous, s'il vous plaît.",
+  "zh": "请坐。",
+  "en": "Please sit down.",
+  "noteZh": "命令式 vous：动词在前，vous 在后。动作回到自己身上。",
+  "noteEn": "The vous instruction: the verb first, vous after. The action comes back to the person.",
+  "listen": {
+   "answer": "sit",
+   "options": [
+    {"id": "sit", "zh": "请您坐下", "en": "asking you to sit down"},
+    {"id": "stand", "zh": "请您站起来", "en": "asking you to stand up"},
+    {"id": "leave", "zh": "请您离开", "en": "asking you to leave"}
+   ]
+  },
+  "produce": {
+   "accept": ["Asseyez-vous, s'il vous plaît.", "Asseyez-vous, s'il vous plaît", "Asseyez-vous."]
+  },
+  "story": "d9"
+ },
+ {
+  "id": "vous_voulez_de_la_soupe",
+  "module": "week2",
+  "grammar": "partitif",
+  "band": "A1",
+  "speaker": "lefevre",
+  "fr": "Vous voulez de la soupe ?",
+  "zh": "你们要喝汤吗？",
+  "en": "Would you like some soup?",
+  "noteZh": "de la + 阴性不可数名词：要一点汤。",
+  "noteEn": "de la + a feminine mass noun: some soup.",
+  "listen": {
+   "answer": "soup",
+   "options": [
+    {"id": "soup", "zh": "问你要不要汤", "en": "offering you some soup"},
+    {"id": "bread", "zh": "问你要不要面包", "en": "offering you some bread"},
+    {"id": "water", "zh": "问你要不要水", "en": "offering you some water"}
+   ]
+  },
+  "produce": {
+   "accept": ["Vous voulez de la soupe ?", "Vous voulez de la soupe?", "Vous voulez de la soupe"]
+  },
+  "story": "d9"
+ },
+ {
+  "id": "je_voudrais_du_pain",
+  "module": "week2",
+  "grammar": "voudrais",
+  "band": "A1",
+  "speaker": "noe",
+  "fr": "Je voudrais du pain, s'il vous plaît.",
+  "zh": "我想要点面包，谢谢。",
+  "en": "I would like some bread, please.",
+  "noteZh": "礼貌地要东西：je voudrais + du / de la。",
+  "noteEn": "A polite request: je voudrais + du / de la.",
+  "listen": {
+   "answer": "bread",
+   "options": [
+    {"id": "bread", "zh": "礼貌地要面包", "en": "politely asking for bread"},
+    {"id": "soup", "zh": "礼貌地要汤", "en": "politely asking for soup"},
+    {"id": "leave", "zh": "说自己要走了", "en": "saying you are leaving"}
+   ]
+  },
+  "produce": {
+   "accept": ["Je voudrais du pain, s'il vous plaît.", "Je voudrais du pain, s'il vous plaît", "Je voudrais du pain."]
+  },
+  "story": "d9"
+ },
+ {
+  "id": "encore_un_peu",
+  "module": "week2",
+  "grammar": "quantité",
+  "band": "A1",
+  "speaker": "lefevre",
+  "fr": "Encore un peu ?",
+  "zh": "再来一点？",
+  "en": "A little more?",
+  "noteZh": "请客时问还要不要一点。",
+  "noteEn": "When serving, asking if someone wants a little more.",
+  "listen": {
+   "answer": "more",
+   "options": [
+    {"id": "more", "zh": "再来一点吗", "en": "offering a little more"},
+    {"id": "stop", "zh": "不要了", "en": "saying that is enough"},
+    {"id": "who", "zh": "这是谁的", "en": "asking whose it is"}
+   ]
+  },
+  "produce": {
+   "accept": ["Encore un peu ?", "Encore un peu?", "Encore un peu"]
+  },
+  "story": "d9"
+ },
+ {
+  "id": "vous_voulez_venir_le_jeudi",
+  "module": "week2",
+  "grammar": "le + jour",
+  "band": "A1",
+  "speaker": "lefevre",
+  "fr": "Vous voulez venir manger le jeudi ?",
+  "zh": "你们愿意每个星期四来吃饭吗？",
+  "en": "Would you like to come and eat on Thursdays?",
+  "noteZh": "le + 星期几 = 每个这样的日子。",
+  "noteEn": "le + a weekday = every such day.",
+  "listen": {
+   "answer": "thursday",
+   "options": [
+    {"id": "thursday", "zh": "请你们每个星期四来吃饭", "en": "inviting you to eat every Thursday"},
+    {"id": "today", "zh": "请你们今天留下来", "en": "asking you to stay today"},
+    {"id": "never", "zh": "请你们不要再来", "en": "asking you not to come again"}
+   ]
+  },
+  "produce": {
+   "accept": ["Vous voulez venir manger le jeudi ?", "Vous voulez venir manger le jeudi?", "Vous voulez venir manger le jeudi"]
+  },
+  "story": "d9"
  }
 ];
   var byId = {};
@@ -8995,10 +9359,11 @@ body.reduced-motion .next-pulse { animation:none; box-shadow:0 0 0 4px rgba(242,
   }
   function modalities(it) {
     var m = ['listening', 'reading'];
+    if (it && it.mcOnly) return m;
     if (((it.produce && it.produce.accept && it.produce.accept.length) || (it.cloze && it.cloze.accept && it.cloze.accept.length)) && tier(it) !== 'rare') m.push('production');
     return m;
   }
-  var api = { ITEMS: ITEMS, byId: byId, modalities: modalities, rareWords: rareWords, tier: tier, version: 'deck-2026-10-09c' };
+  var api = { ITEMS: ITEMS, byId: byId, modalities: modalities, rareWords: rareWords, tier: tier, version: 'deck-2026-10-12a' };
   root.A411 = root.A411 || {};
   root.A411.Deck = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -10192,6 +10557,27 @@ function getLang(ls, id) {
     d8_gag_venez: { speaker: 'lefevre', fr: 'Venez chez moi à six heures. J\u2019ai une question.', tts: "Venez chez moi à six heures. J'ai une question.", zh: '六点到我家来。我有一个问题。', en: 'Come to my place at six. I have a question.', label: 'understand' },
     d8_noe_question: { speaker: 'noe', fr: 'Du basilic… et une question' + NB + '? Oh…', tts: 'Du basilic… et une question ? Oh…', zh: '罗勒……还有一个问题？哦……', en: 'Basil… and a question? Oh…', label: 'atmosphere' },
 
+    // ---- Day 9: Six heures (Monday 6 pm, downstairs). No ending titles here. ----
+    d9_noe_chat: { speaker: 'noe', fr: 'Croissant reste en haut… normalement.', zh: 'Croissant 留在楼上……按理说是这样。', en: 'Croissant stays upstairs… normally.', label: 'atmosphere' },
+    d9_cam_basilic: { speaker: 'camille', fr: 'On apporte un peu de basilic. Pour sa soupe.', zh: '我们带了一点罗勒，给她的汤用。', en: 'We are bringing a little basil. For her soup.', label: 'understand' },
+    d9_cam_a: { speaker: 'camille', fr: 'Ce soir, on est tranquilles.', zh: '今晚我们很安心。', en: 'Tonight, we are at ease.', label: 'understand' },
+    d9_cam_b: { speaker: 'camille', fr: 'Ce soir, pas de bruit chez elle.', zh: '今晚在她家别出声。', en: 'Tonight, no noise at her place.', label: 'understand' },
+    d9_cam_c: { speaker: 'camille', fr: 'Ce soir, on est très polis.', zh: '今晚我们要特别有礼貌。', en: 'Tonight, we are very polite.', label: 'understand' },
+    d9_cam_null: { speaker: 'camille', fr: 'Ce soir, on est polis.', zh: '今晚我们要有礼貌。', en: 'Tonight, we are polite.', label: 'understand' },
+    d9_lef_bonsoir: { speaker: 'lefevre', fr: 'Bonsoir' + NB + '! Entrez, entrez.', tts: 'Bonsoir ! Entrez, entrez.', zh: '晚上好！进来，进来。', en: 'Good evening! Come in, come in.', label: 'atmosphere' },
+    d9_lef_asseyez: { speaker: 'lefevre', fr: 'Asseyez-vous, s\u2019il vous plaît.', tts: "Asseyez-vous, s'il vous plaît.", zh: '请坐。', en: 'Please sit down.', target: 'asseyez_vous', label: 'understand' },
+    d9_lef_soupe: { speaker: 'lefevre', fr: 'Vous voulez de la soupe' + NB + '?', tts: 'Vous voulez de la soupe ?', zh: '你们要喝汤吗？', en: 'Would you like some soup?', target: 'vous_voulez_de_la_soupe', label: 'understand' },
+    d9_lef_place: { speaker: 'lefevre', fr: 'Bon… il a choisi sa place.', zh: '好吧……它挑好自己的座位了。', en: 'Well… he has chosen his place.', label: 'atmosphere' },
+    d9_noe_pain: { speaker: 'noe', fr: 'Moi, je voudrais du pain. Et du fromage' + NB + '!', tts: 'Moi, je voudrais du pain. Et du fromage !', zh: '我呢，想要面包。还有奶酪！', en: 'Me, I would like some bread. And some cheese!', target: 'je_voudrais_du_pain', label: 'understand' },
+    d9_cam_noe: { speaker: 'camille', fr: 'Noé… doucement.', zh: 'Noé……慢一点。', en: 'Noé… gently.', label: 'atmosphere' },
+    d9_lef_encore: { speaker: 'lefevre', fr: 'Encore un peu' + NB + '? Il y a beaucoup de soupe.', tts: 'Encore un peu ? Il y a beaucoup de soupe.', zh: '再来一点？汤有很多。', en: 'A little more? There is a lot of soup.', target: 'encore_un_peu', label: 'understand' },
+    d9_lef_question: { speaker: 'lefevre', fr: 'J\u2019ai une question.', tts: "J'ai une question.", zh: '我有一个问题。', en: 'I have a question.', label: 'understand' },
+    d9_lef_jeudi: { speaker: 'lefevre', fr: 'Vous voulez venir manger le jeudi' + NB + '?', tts: 'Vous voulez venir manger le jeudi ?', zh: '你们愿意每个星期四来吃饭吗？', en: 'Would you like to come and eat on Thursdays?', target: 'vous_voulez_venir_le_jeudi', label: 'understand' },
+    d9_lef_seule: { speaker: 'lefevre', fr: 'Je suis seule depuis l\u2019hiver. Le jeudi, c\u2019est long.', tts: "Je suis seule depuis l'hiver. Le jeudi, c'est long.", zh: '从冬天起我就一个人。星期四，日子很长。', en: 'I have been alone since the winter. Thursdays are long.', label: 'understand' },
+    d9_cam_jeudi: { speaker: 'camille', fr: 'Alors, à jeudi, Madame.', zh: '那么，星期四见，夫人。', en: 'Then, see you on Thursday, Madame.', label: 'understand' },
+    d9_lef_cle: { speaker: 'lefevre', fr: 'C\u2019est une clé. Une vieille clé.', tts: "C'est une clé. Une vieille clé.", zh: '这是一把钥匙。一把旧钥匙。', en: 'It is a key. An old key.', label: 'understand' },
+    d9_noe_cle: { speaker: 'noe', fr: 'C\u2019est pas ma clé… C\u2019est la clé de qui' + NB + '?', tts: "C'est pas ma clé… C'est la clé de qui ?", zh: '这不是我的钥匙……这是谁的钥匙？', en: 'It isn’t my key… Whose key is it?', label: 'understand' },
+
     // ---- missed-day return ----
     abs_noe: { speaker: 'noe', fr: 'Te voilà' + NB + '! Croissant a fait une bêtise…', tts: 'Te voilà ! Croissant a fait une bêtise…', zh: '你回来了！Croissant 闯了个小祸……', en: 'There you are! Croissant got up to some mischief…', label: 'atmosphere' }
   };
@@ -10744,9 +11130,58 @@ function getLang(ls, id) {
         { t: 'done', art: { scene: 'kitchen', noe: 'ask', camille: 'idle', cat: 'sit', props: [['basil', 40, 36]] },
           hook: { fr: 'À six heures, chez Madame Lefèvre. Elle a une question… et elle ne la dit pas.', zh: '六点，在 Lefèvre 太太家。她有一个问题……可她没说。', en: 'At six, at Madame Lefèvre’s. She has a question… and she doesn’t say it.' } }
       ]
+    },
+    d9: {
+      id: 'd9', n: 9, title: 'Six heures', lesson: 'd9',
+      deck: ['asseyez_vous', 'vous_voulez_de_la_soupe', 'je_voudrais_du_pain', 'encore_un_peu', 'vous_voulez_venir_le_jeudi'],
+      steps: [
+        n('n_d9_soir', 'Lundi soir. Six heures. Noé et Camille descendent l\u2019escalier.', '星期一晚上。六点。Noé 和 Camille 下楼。', 'Monday evening. Six o’clock. Noé and Camille go down the stairs.', { sfx: 'steps', scene: 'stairs', noe: 'idle', camille: 'idle' }),
+        L('d9_noe_chat', { sfx: 'sfx_paws', scene: 'stairs', noe: 'idle', camille: 'idle' }),
+        L('d9_cam_basilic', { scene: 'stairs', camille: 'idle', noe: 'idle', props: [['basil', 70, 40, 'hl']], focus: 'basil' }),
+        { t: 'focus', w: 'basilic', fr: 'Le basilic… du basilic.', art: { scene: 'stairs', camille: 'idle', noe: 'idle', props: [['basil', 70, 40]], focus: 'basil' } },
+        { t: 'line', id: 'd9_cam_a', when: { k: 'd7_band', v: ['A'] }, art: { scene: 'stairs', camille: 'happy', noe: 'idle' } },
+        { t: 'line', id: 'd9_cam_b', when: { k: 'd7_band', v: ['B'] }, art: { scene: 'stairs', camille: 'idle', noe: 'idle' } },
+        { t: 'line', id: 'd9_cam_c', when: { k: 'd7_band', v: ['C'] }, art: { scene: 'stairs', camille: 'idle', noe: 'sad' } },
+        { t: 'line', id: 'd9_cam_null', when: { k: 'd7_band', v: [null] }, art: { scene: 'stairs', camille: 'idle', noe: 'idle' } },
+        n('n_d9_porte', 'Toc toc. La porte s\u2019ouvre. Madame Lefèvre sourit.', '咚咚。门开了。Lefèvre 太太笑了。', 'Knock knock. The door opens. Madame Lefèvre smiles.', { sfx: ['knock', 'door'], scene: 'lefevre_door', door: 'open', voisine: 'happy', camille: 'idle', noe: 'idle' }),
+        L('d9_lef_bonsoir', { scene: 'lefevre_door', door: 'open', voisine: 'wave', camille: 'idle', noe: 'idle' }),
+        n('n_d9_table', 'Une petite table. Quatre assiettes. Quatre chaises.', '一张小桌子。四个盘子。四把椅子。', 'A small table. Four plates. Four chairs.', { scene: 'lefevre_table', voisine: 'idle', camille: 'idle', noe: 'idle', props: [['bread', 30, 32], ['cheese', 54, 32], ['soup', 40, 28], ['key', 64, 40]] }),
+        L('d9_lef_asseyez', { scene: 'lefevre_table', voisine: 'point', camille: 'idle', noe: 'idle', props: [['bread', 30, 32], ['cheese', 54, 32], ['soup', 40, 28], ['key', 64, 40]] }),
+        n('n_d9_chaise', 'Noé s\u2019assoit. Camille s\u2019assoit. Une chaise reste vide.', 'Noé 坐下。Camille 坐下。有一把椅子空着。', 'Noé sits down. Camille sits down. One chair stays empty.', { scene: 'lefevre_table', hl: 'chaise', voisine: 'idle', camille: 'happy', noe: 'happy', props: [['bread', 30, 32], ['cheese', 54, 32], ['soup', 40, 28], ['key', 64, 40]] }),
+        L('d9_lef_soupe', { scene: 'lefevre_table', voisine: 'idle', camille: 'idle', noe: 'idle', props: [['soup', 40, 28, 'hl'], ['bread', 30, 32], ['cheese', 54, 32], ['key', 64, 40]] }),
+        n('n_d9_croissant', 'Mais… Croissant est là' + NB + '! Sur la chaise vide' + NB + '!', '可是……Croissant 在这儿！就在那把空椅子上！', 'But… Croissant is here! On the empty chair!', { sfx: 'sfx_meow_small', scene: 'cat_chair', voisine: 'ask', camille: 'ask', noe: 'ask' }),
+        L('d9_lef_place', { scene: 'cat_chair', voisine: 'happy', camille: 'idle', noe: 'idle' }),
+        { t: 'say', key: 'd9_soupe', fr: 'Madame Lefèvre te regarde. Tu dis quoi' + NB + '?', zh: 'Lefèvre 太太看着你。你说什么？（没有标准答案）', en: 'Madame Lefèvre looks at you. What do you say? (There is no right answer.)', art: { scene: 'cat_chair', voisine: 'ask', camille: 'idle', noe: 'idle' },
+          opts: [{ id: 'oui', fr: 'Oui, merci, Madame.' }, { id: 'pain', fr: 'Je voudrais du pain, s\u2019il vous plaît.' }, { id: 'peu', fr: 'Un peu, s\u2019il vous plaît.' }] },
+        L('d9_noe_pain', { scene: 'cat_chair', voisine: 'idle', camille: 'idle', noe: 'point', props: [['bread', 8, 46, 'hl']] }),
+        L('d9_cam_noe', { scene: 'cat_chair', voisine: 'idle', camille: 'idle', noe: 'happy' }),
+        L('d9_lef_encore', { scene: 'cat_chair', voisine: 'happy', camille: 'idle', noe: 'idle', props: [['soup', 8, 46]] }),
+        { t: 'pick', key: 'd9_table', mode: 'task', scene: 'lefevre_table', art: { voisine: 'idle', camille: 'idle', noe: 'idle', props: [['bread', 30, 32, 'hl'], ['soup', 40, 28], ['basil', 8, 28]] }, fr: 'Écoute. Noé veut quoi' + NB + '?', zh: '听。Noé 想要什么？', en: 'Listen. What does Noé want?', items: [{ line: 'd9_noe_pain', answer: 'bread' }],
+          opts: [{ id: 'bread', fr: 'le pain', img: { prop: 'bread' }, zh: '面包', en: 'the bread' }, { id: 'soup', fr: 'la soupe', img: { prop: 'soup' }, zh: '汤', en: 'the soup' }, { id: 'basil', fr: 'le basilic', img: { prop: 'basil' }, zh: '罗勒', en: 'the basil' }] },
+        n('n_d9_silence', 'Madame Lefèvre regarde Croissant, sur la chaise. Un petit silence.', 'Lefèvre 太太看着椅子上的 Croissant。安静了一会儿。', 'Madame Lefèvre looks at Croissant, on the chair. A short silence.', { scene: 'cat_chair', voisine: 'idle', camille: 'idle', noe: 'idle' }),
+        L('d9_lef_question', { scene: 'cat_chair', voisine: 'ask', camille: 'idle', noe: 'idle' }),
+        L('d9_lef_jeudi', { scene: 'lefevre_table', voisine: 'point', camille: 'idle', noe: 'idle', props: [['calendar', 70, 8, 'hl']], focus: 'calendar' }),
+        L('d9_lef_seule', { scene: 'lefevre_table', voisine: 'idle', camille: 'idle', noe: 'idle', props: [['calendar', 70, 8]] }),
+        F('jeudi', { scene: 'lefevre_table', voisine: 'idle', camille: 'idle', noe: 'idle', props: [['calendar', 70, 8]], focus: 'calendar' }),
+        { t: 'choice', key: 'd9_jeudi', fr: 'Le jeudi, chez Madame Lefèvre. Tu réponds quoi' + NB + '?', zh: '每个星期四去 Lefèvre 太太家。你怎么回答？（剧情选择，没有对错）', en: 'Thursdays, at Madame Lefèvre’s. What do you answer? (A story choice, not a test.)', art: { scene: 'lefevre_table', voisine: 'ask', camille: 'idle', noe: 'idle', props: [['calendar', 70, 8]] },
+          opts: [
+            { id: 'oui', fr: 'Oui, avec plaisir, Madame' + NB + '!', zh: '好啊，很乐意！', en: 'Yes, with pleasure, Madame!', after: { fr: 'Elle sourit. « Merci. »', zh: '她笑了。「谢谢。」', en: 'She smiles. « Thank you. »' } },
+            { id: 'cuisine', fr: 'Oui' + NB + '! Et Noé fait la cuisine' + NB + '?', zh: '好！那 Noé 来做饭？', en: 'Yes! And Noé does the cooking?', after: { fr: 'Noé dit' + NB + ': « D\u2019accord' + NB + '! Je fais une tarte. »', zh: 'Noé 说：「好！我做个挞。」', en: 'Noé says: « All right! I’ll make a tart. »' } },
+            { id: 'parfois', fr: 'Un jeudi sur deux, c\u2019est possible' + NB + '?', zh: '隔一个星期四来，可以吗？', en: 'Every other Thursday, is that possible?', after: { fr: 'Elle dit' + NB + ': « Bien sûr. Un jeudi sur deux, c\u2019est déjà bien. »', zh: '她说：「当然。隔周一次就已经很好了。」', en: 'She says: « Of course. Every other Thursday is already good. »' } }
+          ] },
+        L('d9_cam_jeudi', { scene: 'lefevre_table', voisine: 'happy', camille: 'happy', noe: 'happy', props: [['calendar', 70, 8]] }),
+        n('n_d9_cle', 'Croissant touche la clé, sur la table.', 'Croissant 伸爪碰了碰桌上的钥匙。', 'Croissant touches the key, on the table.', { sfx: 'sfx_key_tap', scene: 'cat_paw' }),
+        L('d9_lef_cle', { sfx: 'sfx_drawer', scene: 'cat_chair', voisine: 'point', camille: 'idle', noe: 'idle', focus: 'key' }),
+        F('cle', { scene: 'cat_paw', focus: 'key' }),
+        n('n_d9_noe_poche', 'Noé touche sa poche. Sa clé est là, avec son ruban rouge.', 'Noé 摸摸口袋。他的钥匙在，系着红丝带。', 'Noé touches his pocket. His key is there, with its red ribbon.', { scene: 'cat_chair', voisine: 'idle', camille: 'idle', noe: 'point', props: [['keyr', 52, 40, 'hl'], ['drawer', 62, 38]] }),
+        L('d9_noe_cle', { scene: 'cat_chair', voisine: 'idle', camille: 'ask', noe: 'ask', props: [['keyr', 52, 40], ['drawer', 62, 38]] }),
+        n('n_d9_fin', 'Madame Lefèvre ne répond pas.', 'Lefèvre 太太没有回答。', 'Madame Lefèvre does not answer.', { scene: 'cat_chair', voisine: 'cross', camille: 'idle', noe: 'sad', props: [['drawer', 62, 38]] }),
+        { t: 'done', art: { scene: 'stairs', night: true, noe: 'ask', camille: 'idle', cat: 1 },
+          hook: { fr: 'Une vieille clé. Ce n\u2019est pas la clé de Noé. C\u2019est la clé de qui' + NB + '?', zh: '一把旧钥匙。不是 Noé 的钥匙。那是谁的钥匙？', en: 'An old key. It is not Noé’s key. Whose key is it?' } }
+      ]
     }
   };
-  var CHAPTER_ORDER = ['d2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8'];
+  var CHAPTER_ORDER = ['d2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9'];
 
   // v0.5.0: 8 traces of Croissant (was 12; founder feedback 2026-10-08 22:17 PT). Each one is a pixel object in a corner of the
   // apartment ('apart' scene, art.js): the player discovers it by zooming into that corner, sees the object and hears/reads the
@@ -10781,6 +11216,14 @@ function getLang(ls, id) {
     return m ? 'narr:' + ((LEGACY_NARR[cid] || [])[+m[1] - 1] || '') : sig;
   }
 
+  // Hub beat ids (data only). Step order and French text stay as written above.
+  function stampBeats(cid, ranges) {
+    var steps = CHAPTERS[cid].steps;
+    ranges.forEach(function (r) { for (var i = r[0]; i <= r[1]; i++) steps[i].beat = r[2]; });
+  }
+  stampBeats('d8', [[0, 0, 'd8_A'], [1, 4, 'd8_B'], [5, 10, 'd8_C'], [11, 11, 'd8_D'], [12, 20, 'd8_F'], [21, 21, 'd8_G'], [22, 22, 'd8_H']]);
+  stampBeats('d9', [[0, 1, 'd9_B'], [2, 7, 'd9_C'], [8, 9, 'd9_D'], [10, 11, 'd9_E'], [12, 13, 'd9_F1'], [14, 20, 'd9_F2'], [21, 27, 'd9_G'], [28, 33, 'd9_H'], [34, 34, 'd9_J']]);
+
   var api = { stepSigs: stepSigs, legacySig: legacySig, LEGACY_NARR: LEGACY_NARR, ARC_TITLE: ARC_TITLE, CONTENT_VERSION: CONTENT_VERSION, LINES: LINES, SPEAKERS: SPEAKERS, CHAPTERS: CHAPTERS, CHAPTER_ORDER: CHAPTER_ORDER, TRACES: TRACES };
   root.A411 = root.A411 || {};
   root.A411.Week = api;
@@ -10804,6 +11247,7 @@ function getLang(ls, id) {
     valise: w('la valise', ['valise'], ['suitcase'], 'suitcase', 'Un grand sac pour le voyage.', '行李箱', 'suitcase'),
     plante: w('la plante', ['plante'], ['plante'], 'plantp', 'Elle est verte, avec des feuilles.', '植物', 'plant', { by: 'camille', tts: 'La plante… ta plante.' }),
     basilic: w('le basilic', ['basilic'], ['basil'], 'basil', 'Une herbe verte, pour la cuisine.', '罗勒', 'basil', { by: 'lefevre', tts: 'Le basilic… du basilic.' }),
+    jeudi: w('jeudi', ['jeudi'], ['calendar'], 'calendar', 'Un jour' + NB + ': lundi, mardi, mercredi, jeudi…', '星期四', 'Thursday', { by: 'lefevre', tts: 'Le jeudi… le jeudi.' }),
     soif: w('avoir soif', ['soif'], ['plante'], 'eau', 'On veut boire.', '渴', 'to be thirsty'),
     eau: w('l\u2019eau', ['eau'], ['eau'], 'eau', 'On boit de l\u2019eau.', '水', 'water', { by: 'camille', tts: "L'eau… de l'eau." }),
     arrosoir: w('l\u2019arrosoir', ['arrosoir', 'arroses', 'arroser'], ['eau'], 'can', 'Pour donner de l\u2019eau à la plante.', '浇水壶 / 浇水', 'watering can / to water'),
@@ -10846,7 +11290,7 @@ function getLang(ls, id) {
     sdb: w('la salle de bain', ['salle de bain'], ['sdb'], null, 'La pièce pour se laver.', '浴室', 'bathroom'),
     faim: w('avoir faim', ['faim'], ['chat'], 'bowl', 'On veut manger.', '饿', 'to be hungry'),
     // v0.7.0 Day 5
-    cle: w('la clé', ['clés', 'clé'], ['keys', 'keyr', 'hook'], 'keyr', 'Pour ouvrir et fermer la porte.', '钥匙', 'key', { by: 'noe', tts: 'La clé… mes clés.' }),
+    cle: w('la clé', ['clés', 'clé'], ['keys', 'keyr', 'hook', 'key'], 'keyr', 'Pour ouvrir et fermer la porte.', '钥匙', 'key', { by: 'noe', tts: 'La clé… mes clés.' }),
     veste: w('la veste', ['veste'], ['veste'], 'veste', 'On la met sur le pull, pour sortir.', '外套 / 夹克', 'jacket', { by: 'noe', tts: 'La veste… ma veste.' }),
     pluie: w('la pluie', ['pluie', 'pleuvait', 'pleut'], ['pluie', 'rain'], 'rain', 'L\u2019eau qui tombe du ciel' + NB + ': il pleut.', '雨 / 下雨', 'rain / it rains', { by: 'neutral', tts: 'La pluie… il pleuvait.' }),
     panier: w('le panier', ['panier'], ['catbed'], 'catbed', 'Le petit lit de Croissant.', '（猫）窝 / 篮子', 'basket / cat bed', { by: 'camille', tts: 'Le panier… le panier de Croissant.' }),
@@ -14075,7 +14519,18 @@ function getLang(ls, id) {
       '对您说话的命令式：来 = Venez. Venez chez moi à six heures.',
       'A polite instruction, the vous form: come = Venez. Venez chez moi à six heures.',
       [['Venez chez moi à six heures.', '六点到我家来。', 'Come to my place at six.'], ['Entrez, s\u2019il vous plaît.', '请进。', 'Come in, please.']],
-      ['d8_gag_venez'])
+      ['d8_gag_venez']),
+    // ---- Day 9 (Monday evening). No Day 7 ending titles in these strings. ----
+    P('pronominaux', 9, 'se + verbe · asseyez-vous',
+      '有些动词前面有一个小词，动作回到自己身上：Je me lève. Asseyez-vous. 主语换了，小词也换：me, te, se, nous, vous。il s’assoit 和 il s’assied 都对。',
+      'Some verbs have a small word in front, and the action comes back to the person: Je me lève. Asseyez-vous. When the subject changes, the small word changes: me, te, se, nous, vous. Both il s’assoit and il s’assied are correct.',
+      [['Je me lève.', '我起来。', 'I get up.'], ['Asseyez-vous, s’il vous plaît.', '请坐。', 'Please sit down.']],
+      ['d9_lef_asseyez'], [[9, 'Nous nous'], [9, 'Noé se']]),
+    P('le_jour', 9, 'le + jour (le jeudi)',
+      '说每个星期的某一天，在日子前面加 le：le jeudi = 每个星期四。Venez le jeudi.',
+      'For a day every week, put le in front of the day: le jeudi = on Thursdays. Venez le jeudi.',
+      [['Vous voulez venir manger le jeudi ?', '你们愿意每个星期四来吃饭吗？', 'Would you like to come and eat on Thursdays?'], ['Le jeudi, c’est long.', '星期四，日子很长。', 'Thursdays are long.']],
+      ['d9_lef_jeudi'], [[9, 'invite le']])
   ];
   // A bulb shows only on a point's lines from its own day (later days reuse the point silently): a few bulbs per chapter.
   function dayOfLine(l) { var m = /^d(\d)_/.exec(l); return m ? +m[1] : 1; }
@@ -14605,6 +15060,20 @@ function getLang(ls, id) {
         { kind: 'try', prof: 'À toi' + NB + '!', q: 'Nous habitons ici ___ samedi.', options: ['depuis', 'pendant', 'pour'], answer: 'depuis',
           zh: '我们从星期六起住在这里。', en: 'We have lived here since Saturday.', why: { zh: '从星期六一直到现在，用 depuis，动词保持现在时。', en: 'From Saturday up to now: depuis, and the verb stays in the present.' } }
       ]
+    },
+    pronominaux: {
+      title: 'se + verbe',
+      zh: '有些动词前面有一个小词，动作回到自己身上：je me lève（我起来），asseyez-vous（请您坐下）。主语换了，这个小词也跟着换：me, te, se, nous, vous。对您说的命令式是 Asseyez-vous。il s’assoit 和 il s’assied 两种说法都对。',
+      en: 'Some verbs have a small word in front, and the action comes back to the person: je me lève (I get up), asseyez-vous (please sit down). When the subject changes, that small word changes too: me, te, se, nous, vous. The vous instruction is Asseyez-vous. Both il s’assoit and il s’assied are correct.',
+      ex: ['Je me lève.', 'Asseyez-vous.', 'Noé se lève.'],
+      steps: [
+        { kind: 'example', prof: 'Regarde' + NB + ': il y a un petit mot avant le verbe' + NB + '!', ex: ['Je me lève.', 'Asseyez-vous.'], mark: ['me lève', 'Asseyez-vous'],
+          zh: '动作回到自己身上：我（让自己）起来；您（让自己）坐下。', en: 'The action comes back to the person: I get myself up; you sit yourself down.' },
+        { kind: 'pattern', prof: 'se + verbe', pattern: ['je me lève', 'tu te lèves', 'il / elle se lève', 'nous nous levons', 'vous vous levez'], arrow: 's\u2019asseoir → asseyez-vous',
+          zh: '主语换了，se 也跟着换：me, te, se, nous, vous。命令式 vous 时说 Asseyez-vous。il s’assoit 和 il s’assied 两种说法都对。', en: 'When the subject changes, se changes too: me, te, se, nous, vous. With vous, the instruction is Asseyez-vous. Both il s’assoit and il s’assied are correct.' },
+        { kind: 'try', prof: 'À toi' + NB + '!', q: 'Noé ___ lève pour le pain.', options: ['se', 'me', 'te'], answer: 'se',
+          zh: 'Noé 起来去拿面包。', en: 'Noé gets up for the bread.', why: { zh: 'Noé = il → se lève。', en: 'Noé = il → se lève.' } }
+      ]
     }
   };
 
@@ -14884,10 +15353,40 @@ function getLang(ls, id) {
           h1: { zh: '邻居带来的那种绿色香草。', en: 'The green herb the neighbour brought.' },
           h2: { zh: 'b a s i l i c（7 个字母）。', en: 'b a s i l i c (7 letters).' } }
       }
+    },
+    9: {
+      n: 9, ch: 'd9', kind: 'Carte', to: 'Léa', grammar: 'pronominaux', band: 'A1',
+      intro: { zh: '星期一晚上。你给 Léa 写一张卡片：楼下的晚饭，谁坐在哪儿，星期四的约定。', en: 'Monday evening. You write Léa a card: dinner downstairs, who sits where, and the Thursday plan.' },
+      body: [
+        ['Chère Léa,'],
+        ['Ce soir, nous dînons chez la voisine. Nous nous ', { gap: 'asseyons' }, ' à sa table.'],
+        ['Noé se ', { gap: 'leve' }, ' trois fois pour le pain' + NB + '!'],
+        ['Elle nous invite le ', { gap: 'jeudi' }, '.'],
+        ['Sur la table, il y a une vieille ', { gap: 'cle' }, '.'],
+        ['Bisous' + NB + '!']
+      ],
+      gaps: {
+        asseyons: { type: 'mc', mcOnly: true, answer: 'asseyons', accept: ['asseyons', 'assoyons'], options: ['asseyons', 'assoit', 'asseyez'],
+          fr: 'Nous nous asseyons à sa table.', zh: '我们在她的桌边坐下。', en: 'We sit down at her table.',
+          h1: { zh: 'nous → nous nous asseyons。', en: 'nous → nous nous asseyons.' },
+          h2: { zh: 'a s s e y o n s。', en: 'a s s e y o n s.' } },
+        leve: { type: 'mc', answer: 'lève', options: ['lève', 'lèves', 'levons'],
+          fr: 'Noé se lève trois fois pour le pain.', zh: 'Noé 为了面包起来三次。', en: 'Noé gets up three times for the bread.',
+          h1: { zh: 'il → se lève。', en: 'il → se lève.' },
+          h2: { zh: 'l è v e。', en: 'l è v e.' } },
+        jeudi: { type: 'type', answer: 'jeudi', accept: ['jeudi'],
+          fr: 'Elle nous invite le jeudi.', zh: '她请我们每个星期四去。', en: 'She invites us on Thursdays.',
+          h1: { zh: '一星期的第四天。', en: 'The fourth day of the week.' },
+          h2: { zh: 'j e u d i。', en: 'j e u d i.' } },
+        cle: { type: 'type', answer: 'clé', accept: ['clé', 'cle'],
+          fr: 'Sur la table, il y a une vieille clé.', zh: '桌上有一把旧钥匙。', en: 'On the table, there is an old key.',
+          h1: { zh: '开门用的东西。', en: 'The thing you open a door with.' },
+          h2: { zh: 'c l é，也可以写成 c l e。', en: 'c l é, or c l e.' } }
+      }
     }
   };
-  // Day 7: subjonctif after il faut que (v0.9.0). Day 8: depuis + present. See docs/WEEK2_STORY.md.
-  var ORDER = [1, 2, 3, 4, 5, 6, 7, 8];
+  // Day 7: subjonctif after il faut que (v0.9.0). Day 8: depuis + present. Day 9: pronominal verbs. See docs/WEEK2_STORY.md.
+  var ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   // FSRS items for the gaps: id lt<n>_<gap>. They are only introduced by writing the letter (origin 'letter').
   function itemsFor(n) {
@@ -14900,7 +15399,7 @@ function getLang(ls, id) {
       out.push({ id: 'lt' + n + '_' + gid, origin: 'letter', letter: n, gap: gid, grammar: L.grammar === 'pc-avoir' || L.grammar === 'pc-etre' ? 'passe-compose' : L.grammar,
         band: L.band, speaker: 'neutral', fr: g.fr, zh: g.zh, en: g.en,
         noteZh: g.h1.zh + ' ' + g.h2.zh, noteEn: g.h1.en + ' ' + g.h2.en, lessonTitle: les ? les.title : null,
-        cloze: { prompt: prompt, answer: g.answer, accept: g.accept || [g.answer] }, gapType: g.type, rare: !!g.rare, module: n >= 8 ? 'week2' : undefined });
+        cloze: { prompt: prompt, answer: g.answer, accept: g.accept || [g.answer] }, gapType: g.type, rare: !!g.rare, mcOnly: !!g.mcOnly, module: n >= 8 ? 'week2' : undefined });
     });
     return out;
   }
@@ -16321,6 +16820,1696 @@ function getLang(ls, id) {
 
 </script>
 <script>
+/* Grid pathfinding for the apartment hub. 4-direction A* over a walkable mask.
+ * Walkable cells are JSON true or 1. No DOM. */
+(function (root, factory) {
+  var api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  if (root) root.HubPath = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  var DIRS = [
+    { c: 0, r: -1, face: 'up' },
+    { c: 1, r: 0, face: 'right' },
+    { c: 0, r: 1, face: 'down' },
+    { c: -1, r: 0, face: 'left' }
+  ];
+
+  function isWalkable(grid, c, r) {
+    if (!grid || r < 0 || c < 0 || r >= grid.length || !grid[r] || c >= grid[r].length) return false;
+    var v = grid[r][c];
+    return v === true || v === 1;
+  }
+
+  function coord(p) {
+    return {
+      c: (p.c != null ? p.c : p.col) | 0,
+      r: (p.r != null ? p.r : p.row) | 0
+    };
+  }
+
+  function findPath(grid, start, goal) {
+    start = coord(start);
+    goal = coord(goal);
+    var sc = start.c, sr = start.r, gc = goal.c, gr = goal.r;
+    if (!isWalkable(grid, sc, sr) || !isWalkable(grid, gc, gr)) return null;
+    if (sc === gc && sr === gr) return [{ c: sc, r: sr }];
+    var cols = grid[0].length;
+    var key = function (c, r) { return r * cols + c; };
+    var heur = function (c, r) { return Math.abs(c - gc) + Math.abs(r - gr); };
+    var open = [{ c: sc, r: sr, g: 0, f: heur(sc, sr) }];
+    var came = new Map();
+    var best = new Map([[key(sc, sr), 0]]);
+    var seen = new Set();
+    while (open.length) {
+      var bi = 0;
+      for (var i = 1; i < open.length; i++) {
+        var a = open[i], b = open[bi];
+        if (a.f < b.f || (a.f === b.f && (a.g < b.g || (a.g === b.g && (a.r < b.r || (a.r === b.r && a.c < b.c)))))) bi = i;
+      }
+      var cur = open.splice(bi, 1)[0];
+      var ck = key(cur.c, cur.r);
+      if (seen.has(ck)) continue;
+      seen.add(ck);
+      if (cur.c === gc && cur.r === gr) {
+        var path = [{ c: gc, r: gr }];
+        var k = ck;
+        while (came.has(k)) {
+          k = came.get(k);
+          path.push({ c: k % cols, r: (k / cols) | 0 });
+        }
+        path.reverse();
+        return path;
+      }
+      for (var d = 0; d < DIRS.length; d++) {
+        var nc = cur.c + DIRS[d].c, nr = cur.r + DIRS[d].r;
+        if (!isWalkable(grid, nc, nr)) continue;
+        var nk = key(nc, nr);
+        if (seen.has(nk)) continue;
+        var ng = cur.g + 1;
+        if (ng >= (best.has(nk) ? best.get(nk) : Infinity)) continue;
+        best.set(nk, ng);
+        came.set(nk, ck);
+        open.push({ c: nc, r: nr, g: ng, f: ng + heur(nc, nr) });
+      }
+    }
+    return null;
+  }
+
+  function facingBetween(a, b) {
+    if (b.c > a.c) return 'right';
+    if (b.c < a.c) return 'left';
+    if (b.r > a.r) return 'down';
+    if (b.r < a.r) return 'up';
+    return null;
+  }
+
+  /* First listed approach wins ties, so room.json order is the art direction. */
+  function pickApproach(grid, start, approaches) {
+    var best = null;
+    for (var i = 0; i < approaches.length; i++) {
+      var spot = approaches[i];
+      var goal = coord(spot);
+      var path = findPath(grid, start, goal);
+      if (!path) continue;
+      if (!best || path.length < best.path.length) {
+        best = { c: goal.c, r: goal.r, face: spot.face, path: path };
+      }
+    }
+    return best;
+  }
+
+  return { DIRS: DIRS, isWalkable: isWalkable, findPath: findPath, facingBetween: facingBetween, pickApproach: pickApproach };
+});
+
+</script>
+<script>
+/* Soir: out = base * ([0.26,0.29,0.45] + glow*[0.95,0.70,0.36]), glow capped at 1.2,
+ * then the window pane mixes 30% of that with 70% rgb(60,50,110).
+ * Nuit still uses the v2.5 grade and a normal zone blend.
+ * lit = 1 - Π(1 - m_i)
+ * m is the zone mask, raised to maskPower when a time sets one (1 leaves it alone)
+ * a = floor(max(minAlpha, maxAlpha * (1 - lit))) / 255
+ * darkened = base * (1 - a*(1 - MUL)) + highpass(base) * LIFT * a + ADD * a
+ * highpass = base - box blur (radius 1)
+ * Zones then combine as spec.blend:
+ *   normal  — alpha-over at alpha glow * m^1.4 (the old fog)
+ *   add     — darkened + zone_rgb * m * intensity
+ * If spec.shoulder is set, a peak above the knee scales all three channels
+ * together toward the limit, so a hot core stays the same hue instead of clipping red.
+ *   lighten — max(darkened, zone_rgb * m)
+ *   screen  — screen(darkened, zone_rgb * m * intensity)
+ * No rim light and no brightness floor. Pure buffers, no DOM. */
+(function (root, factory) {
+  var api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  if (root) root.HubLights = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  var lutK = null, lutP = null, lutA = null;
+
+  function glowLut(k, pow) {
+    if (lutA && lutK === k && lutP === pow) return lutA;
+    lutK = k;
+    lutP = pow;
+    lutA = new Float64Array(256);
+    for (var a = 0; a < 256; a++) lutA[a] = k * Math.pow(a / 255, pow);
+    return lutA;
+  }
+
+  function approach(current, target, dt, fadeMs) {
+    if (fadeMs <= 0) return target;
+    if (dt <= 0 || current === target) return current;
+    var step = dt / fadeMs;
+    if (current < target) return Math.min(target, current + step);
+    return Math.max(target, current - step);
+  }
+
+  function prepareLights(w, h, zones, spec) {
+    var count = zones.length;
+    var n = w * h;
+    var alpha = new Uint8Array(n);
+    var glow = new Uint8ClampedArray(n * 4);
+    var add = new Float32Array(n * 3);
+    var lift = new Float32Array(n * 3);
+    var maxA = spec.maxAlpha;
+    var minA = spec.minAlpha || 0;
+    var gk = spec.glow == null ? 0.42 : spec.glow;
+    var pow = spec.glowPower == null ? 1.4 : spec.glowPower;
+    var maskPower = spec.maskPower == null ? 1 : spec.maskPower;
+    var masks = new Array(count);
+    var weights = new Array(count);
+    var cols = new Array(count);
+    var shade = new Array(count);
+    var steady = true;
+    var z, wgt;
+    for (z = 0; z < count; z++) {
+      masks[z] = zones[z].mask;
+      wgt = zones[z].weight == null ? 1 : zones[z].weight;
+      weights[z] = wgt;
+      cols[z] = zones[z].color;
+      shade[z] = zones[z].keepNight ? false : true;
+      if (wgt !== 0 && wgt !== 1) steady = false;
+    }
+    var lut = steady ? glowLut(gk, pow) : null;
+    var ms = new Float64Array(count);
+    var i, o, m, unlit, na, a, gr, gg, gb, ga, outA;
+    for (i = 0; i < n; i++) {
+      unlit = 1;
+      for (z = 0; z < count; z++) {
+        wgt = weights[z];
+        if (wgt <= 0) { ms[z] = 0; continue; }
+        m = (masks[z][i] / 255) * wgt;
+        if (m > 1) m = 1;
+        if (maskPower !== 1 && m > 0 && m < 1) m = Math.pow(m, maskPower);
+        if (zones[z].strength != null) m *= zones[z].strength;
+        if (m < 0) m = 0;
+        else if (m > 1) m = 1;
+        ms[z] = m;
+        if (shade[z]) unlit *= (1 - m);
+      }
+      na = maxA * unlit;
+      if (na < minA) na = minA;
+      alpha[i] = na <= 0 ? 0 : (na >= 255 ? 255 : Math.floor(na + 1e-6));
+      gr = 0; gg = 0; gb = 0; ga = 0;
+      var ar = 0, ag = 0, ab = 0, lr = 0, lg = 0, lb = 0, cr, cg, cb;
+      o = i * 4;
+      for (z = 0; z < count; z++) {
+        m = ms[z];
+        if (m <= 0) continue;
+        if (lut && weights[z] === 1 && maskPower === 1) a = lut[masks[z][i]];
+        else a = gk * Math.pow(m, pow);
+        if (a > 1) a = 1;
+        outA = a + ga * (1 - a);
+        if (outA > 0) {
+          gr = (cols[z][0] * a + gr * ga * (1 - a)) / outA;
+          gg = (cols[z][1] * a + gg * ga * (1 - a)) / outA;
+          gb = (cols[z][2] * a + gb * ga * (1 - a)) / outA;
+        }
+        ga = outA;
+        cr = cols[z][0] * m;
+        cg = cols[z][1] * m;
+        cb = cols[z][2] * m;
+        ar += cr * gk;
+        ag += cg * gk;
+        ab += cb * gk;
+        if (cr > lr) lr = cr;
+        if (cg > lg) lg = cg;
+        if (cb > lb) lb = cb;
+      }
+      glow[o] = Math.round(gr);
+      glow[o + 1] = Math.round(gg);
+      glow[o + 2] = Math.round(gb);
+      glow[o + 3] = ga <= 0 ? 0 : (ga >= 1 ? 255 : Math.round(ga * 255));
+      add[i * 3] = ar;
+      add[i * 3 + 1] = ag;
+      add[i * 3 + 2] = ab;
+      lift[i * 3] = lr;
+      lift[i * 3 + 1] = lg;
+      lift[i * 3 + 2] = lb;
+    }
+    return { alpha: alpha, glow: glow, add: add, lift: lift };
+  }
+
+  function shoulder(v, knee, limit) {
+    if (v <= knee) return v;
+    var span = limit - knee;
+    var x = (v - knee) / span;
+    return knee + span * (1 - Math.exp(-x));
+  }
+
+  function applyGrade(world, w, h, alpha, light, spec) {
+    var pack = light && light.add && light.glow;
+    var glow = pack ? light.glow : light;
+    var addBuf = pack ? light.add : null;
+    var liftBuf = pack ? light.lift : null;
+    var blend = spec.blend || 'normal';
+    var mul = spec.mul;
+    var lift = spec.lift;
+    var add = spec.add;
+    var out = new Uint8ClampedArray(world.length);
+    function at(x, y, c) {
+      if (x < 0) x = 0;
+      else if (x >= w) x = w - 1;
+      if (y < 0) y = 0;
+      else if (y >= h) y = h - 1;
+      return world[(y * w + x) * 4 + c];
+    }
+    var y, x, i, o, c, a, base, blur, dx, dy, m, v, ga, rgb, peak, mapped, scale;
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        i = y * w + x;
+        o = i * 4;
+        a = alpha ? alpha[i] / 255 : 0;
+        ga = blend === 'normal' && glow ? glow[o + 3] / 255 : 0;
+        rgb = [0, 0, 0];
+        for (c = 0; c < 3; c++) {
+          base = world[o + c];
+          blur = 0;
+          for (dy = -1; dy <= 1; dy++) {
+            for (dx = -1; dx <= 1; dx++) blur += at(x + dx, y + dy, c);
+          }
+          blur /= 9;
+          m = 1 - a * (1 - mul[c]);
+          v = base * m + (base - blur) * lift * a + add[c] * a;
+          if (spec.floorWarm && y >= spec.floorWarm.y) {
+            var reach = h - spec.floorWarm.y;
+            var ramp = 0.5 + 0.5 * (reach > 0 ? (y - spec.floorWarm.y) / reach : 1);
+            if (ramp > 1) ramp = 1;
+            v += spec.floorWarm.add[c] * a * ramp;
+          }
+          if (blend === 'add' && addBuf) v += addBuf[i * 3 + c];
+          else if (blend === 'lighten' && liftBuf) {
+            var L = liftBuf[i * 3 + c];
+            if (L > v) v = L;
+          } else if (blend === 'screen' && addBuf) {
+            var S = addBuf[i * 3 + c];
+            if (S < 0) S = 0;
+            else if (S > 255) S = 255;
+            v = 255 - (255 - v) * (255 - S) / 255;
+          } else if (ga) v = v * (1 - ga) + glow[o + c] * ga;
+          if (v < 0) v = 0;
+          rgb[c] = v;
+        }
+        if (spec.shoulder) {
+          peak = rgb[0];
+          if (rgb[1] > peak) peak = rgb[1];
+          if (rgb[2] > peak) peak = rgb[2];
+          if (peak > spec.shoulder.knee) {
+            mapped = shoulder(peak, spec.shoulder.knee, spec.shoulder.limit);
+            scale = peak > 0 ? mapped / peak : 1;
+            rgb[0] *= scale;
+            rgb[1] *= scale;
+            rgb[2] *= scale;
+          }
+        }
+        for (c = 0; c < 3; c++) {
+          v = rgb[c];
+          if (v < 0) v = 0;
+          else if (v > 255) v = 255;
+          out[o + c] = Math.round(v);
+        }
+        out[o + 3] = world[o + 3];
+      }
+    }
+    return out;
+  }
+
+  function buildLightMap(w, h, spec) {
+    var cool = spec.cool;
+    var warm = spec.warm;
+    var cap = spec.cap == null ? 1.2 : spec.cap;
+    var lamps = spec.lamps || [];
+    var map = new Float32Array(w * h * 3);
+    var y, x, i, g, k, lamp, dx, dy;
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        g = 0;
+        for (k = 0; k < lamps.length; k++) {
+          lamp = lamps[k];
+          dx = x - lamp.x;
+          dy = y - lamp.y;
+          g += lamp.s * Math.exp(-(dx * dx + dy * dy) / (2 * lamp.r * lamp.r));
+        }
+        if (g > cap) g = cap;
+        else if (g < 0) g = 0;
+        i = (y * w + x) * 3;
+        map[i] = cool[0] + g * warm[0];
+        map[i + 1] = cool[1] + g * warm[1];
+        map[i + 2] = cool[2] + g * warm[2];
+      }
+    }
+    return map;
+  }
+
+  function applyMultiply(world, w, h, map, windowSpec) {
+    var out = new Uint8ClampedArray(world.length);
+    var mix = windowSpec ? windowSpec.mix : 0;
+    var keep = 1 - mix;
+    var wx0 = windowSpec ? windowSpec.x : 0;
+    var wy0 = windowSpec ? windowSpec.y : 0;
+    var wx1 = windowSpec ? windowSpec.x + windowSpec.w : 0;
+    var wy1 = windowSpec ? windowSpec.y + windowSpec.h : 0;
+    var wc = windowSpec ? windowSpec.color : null;
+    var y, x, i, o, c, v, inside;
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        i = y * w + x;
+        o = i * 4;
+        inside = windowSpec && x >= wx0 && x < wx1 && y >= wy0 && y < wy1;
+        for (c = 0; c < 3; c++) {
+          v = world[o + c] * map[i * 3 + c];
+          if (inside) v = v * keep + wc[c] * mix;
+          if (v < 0) v = 0;
+          else if (v > 255) v = 255;
+          out[o + c] = Math.round(v);
+        }
+        out[o + 3] = world[o + 3];
+      }
+    }
+    return out;
+  }
+
+  return {
+    approach: approach,
+    prepareLights: prepareLights,
+    applyGrade: applyGrade,
+    buildLightMap: buildLightMap,
+    applyMultiply: applyMultiply
+  };
+});
+
+</script>
+<script>
+/* L'Appartement 411 — walkable apartment hub (prototype, not wired into the game).
+ * Day (A), evening (E) and midnight (M). D is an alias of midnight.
+ * Soir multiplies the unlit picture by a precomputed light map, then mixes the window.
+ * Nuit grades with the v2.5 multiply + high-pass, then normal-blends its zones. */
+(function () {
+  var FACINGS = ['down', 'up', 'left', 'right'];
+  var room, scale = 0, reduced = false;
+  var mapW, mapH, tile;
+  var sprites = new Map();
+  var styles = {};
+  var active = null;
+  var ellipse = null;
+  var shadowFrame, shadowCtx, world, worldCtx;
+  var canvas, ctx, motes = [];
+  var state;
+  var zoneWeights = {};
+  var lightStamp = 0;
+  var lightKey = '';
+  var lightPrep = null;
+  var assetRoot = '';
+  var stageEl = null;
+  var onHook = null;
+  var looping = false;
+  var inputBound = false;
+
+  function assetUrl(src) {
+    if (!src || /^(https?:|data:|blob:)/.test(src) || src.charAt(0) === '/') return src;
+    return (assetRoot || '') + src;
+  }
+
+  function loadImage(src) {
+    var full = assetUrl(src);
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { reject(new Error(full)); };
+      img.src = full;
+    });
+  }
+
+  function fetchJson(src) {
+    return fetch(assetUrl(src)).then(function (res) {
+      if (!res.ok) throw new Error(src);
+      return res.json();
+    });
+  }
+
+  function styleKey(id) { return (room && room.id ? room.id : 'room') + ':' + id; }
+
+  function classifyNote(note) {
+    var n = note || '';
+    if (/wall decal/i.test(n)) return { kind: 'wall' };
+    var vm = /variant of\s+([A-Za-z0-9_]+)/i.exec(n);
+    if (vm) return { kind: 'variant', variantOf: vm[1] };
+    var om = /overlay:\s*([A-Za-z0-9_]+)/i.exec(n);
+    if (om) return { kind: 'overlay', overlayOf: om[1] };
+    if (/\boverhead\b/i.test(n)) return { kind: 'overhead' };
+    if (/decal/i.test(n)) return { kind: 'decal' };
+    return { kind: 'prop' };
+  }
+
+  function blit(img, mapX, mapY) {
+    worldCtx.drawImage(img, Math.round(mapX), Math.round(mapY));
+  }
+
+  function fillMap(mx, my, color, alpha) {
+    worldCtx.globalAlpha = alpha == null ? 1 : alpha;
+    worldCtx.fillStyle = color;
+    worldCtx.fillRect(Math.round(mx), Math.round(my), 1, 1);
+    worldCtx.globalAlpha = 1;
+  }
+
+  function expandPattern(pattern, frames) {
+    var names = [];
+    var hasFacing = pattern.indexOf('{facing}') >= 0;
+    for (var f = 0; f < frames; f++) {
+      if (hasFacing) {
+        for (var d = 0; d < FACINGS.length; d++) names.push(pattern.replace('{facing}', FACINGS[d]).replace('{frame}', String(f)));
+      } else names.push(pattern.replace('{frame}', String(f)));
+    }
+    return names;
+  }
+
+  function idleFrame(f) {
+    if (reduced) return 0;
+    if (f % 16 === 14) return 3;
+    return [0, 1, 2, 1][Math.floor(f / 2) % 4];
+  }
+
+  function spriteNamed(pattern, facing, frame) {
+    return sprites.get(pattern.replace('{facing}', facing || 'down').replace('{frame}', String(frame)));
+  }
+
+  function makeEllipse(w, h, rgba) {
+    var c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    var g = c.getContext('2d');
+    var img = g.createImageData(w, h);
+    var cx = (w - 1) / 2, cy = (h - 1) / 2, rx = w / 2, ry = h / 2;
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
+        var nx = (x - cx) / rx, ny = (y - cy) / ry;
+        if (nx * nx + ny * ny <= 1) {
+          var o = (y * w + x) * 4;
+          img.data[o] = rgba[0];
+          img.data[o + 1] = rgba[1];
+          img.data[o + 2] = rgba[2];
+          img.data[o + 3] = rgba[3];
+        }
+      }
+    }
+    g.putImageData(img, 0, 0);
+    return c;
+  }
+
+  function imageDataOf(img) {
+    var c = document.createElement('canvas');
+    c.width = img.width;
+    c.height = img.height;
+    var g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    return g.getImageData(0, 0, c.width, c.height);
+  }
+
+  function maskOf(img) {
+    if (img.width !== mapW || img.height !== mapH) throw new Error('light zone is not the map size');
+    var data = imageDataOf(img);
+    var n = mapW * mapH;
+    var mask = new Uint8Array(n);
+    var color = [0, 0, 0];
+    var best = -1;
+    var d = data.data;
+    for (var i = 0; i < n; i++) {
+      var a = d[i * 4 + 3];
+      mask[i] = a;
+      if (a > best) {
+        best = a;
+        color = [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]];
+      }
+    }
+    return { mask: mask, color: color };
+  }
+
+  function cleanShadow(img, points) {
+    var c = document.createElement('canvas');
+    c.width = img.width;
+    c.height = img.height;
+    var g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    var data = g.getImageData(0, 0, c.width, c.height);
+    for (var p = 0; p < points.length; p++) {
+      var fx = points[p][0], fy = points[p][1];
+      for (var y = fy - 3; y <= fy + 3; y++) {
+        for (var x = fx - 8; x <= fx + 8; x++) {
+          if (x < 0 || y < 0 || x >= c.width || y >= c.height) continue;
+          var o = (y * c.width + x) * 4 + 3;
+          if (data.data[o] >= 100) data.data[o] = 0;
+        }
+      }
+    }
+    g.putImageData(data, 0, 0);
+    return c;
+  }
+
+  function expandHit(rect, min) {
+    var x = rect.x, y = rect.y, w = rect.w, h = rect.h;
+    if (w < min) { x -= (min - w) / 2; w = min; }
+    if (h < min) { y -= (min - h) / 2; h = min; }
+    return { x: x, y: y, w: w, h: h };
+  }
+
+  function mulberry32(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a |= 0;
+      a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  async function loadStyle(id) {
+    var key = styleKey(id);
+    if (styles[key]) return styles[key];
+    var spec = room.styles[id];
+    if (!spec) throw new Error('missing style ' + id);
+    var base = spec.dir;
+    var floor = await loadImage(base + spec.floor);
+    var furn = await fetchJson(base + spec.furniture);
+    var walk = await fetchJson(base + spec.walkable);
+    if (walk.cols !== room.cols || walk.rows !== room.rows || walk.tile !== room.tile) {
+      throw new Error('walkable.json does not match room.json');
+    }
+    var frames = {};
+    var still = {};
+    var names = Object.keys(furn);
+    var jobs = [];
+    for (var i = 0; i < names.length; i++) {
+      (function (name) {
+        var anim = spec.spriteFrames && spec.spriteFrames[name];
+        if (anim) {
+          frames[name] = [];
+          for (var f2 = 0; f2 < anim.frames; f2++) {
+            (function (frame) {
+              jobs.push(loadImage(base + anim.pattern.replace('{frame}', String(frame))).then(function (img) {
+                frames[name][frame] = img;
+              }));
+            })(f2);
+          }
+        } else {
+          jobs.push(loadImage(base + 'furniture/' + name + '.png').then(function (img) { still[name] = img; }));
+        }
+      })(names[i]);
+    }
+    var curtains = [];
+    var curtainList = spec.curtains || [];
+    for (var c = 0; c < curtainList.length; c++) {
+      (function (curtain) {
+        var imgs = [];
+        curtains.push({ x: curtain.x, y: curtain.y, frames: imgs });
+        for (var f = 0; f < curtain.frames; f++) {
+          (function (frame) {
+            jobs.push(loadImage(base + curtain.pattern.replace('{frame}', String(frame))).then(function (img) {
+              imgs[frame] = img;
+            }));
+          })(f);
+        }
+      })(curtainList[c]);
+    }
+    var light = spec.light || {};
+    var under = [], beforeGrade = [], over = [], overhead = [];
+    function queueLayer(list, entry) {
+      var layer = { img: null, cleaned: null, contactShadow: !!entry.contactShadow };
+      list.push(layer);
+      jobs.push(loadImage(base + entry.src).then(function (img) {
+        layer.img = img;
+        if (layer.contactShadow) layer.cleaned = cleanShadow(img, room.dropBakedShadows || []);
+      }));
+    }
+    var u, o, h;
+    for (u = 0; u < (light.under || []).length; u++) queueLayer(under, light.under[u]);
+    for (o = 0; o < (light.beforeGrade || []).length; o++) queueLayer(beforeGrade, light.beforeGrade[o]);
+    for (o = 0; o < (light.over || []).length; o++) queueLayer(over, light.over[o]);
+    for (h = 0; h < (spec.overhead || []).length; h++) {
+      (function (entry) {
+        var item = { x: entry.x, y: entry.y, img: null };
+        overhead.push(item);
+        jobs.push(loadImage(base + entry.src).then(function (img) { item.img = img; }));
+      })(spec.overhead[h]);
+    }
+    var multiply = null;
+    if (light.multiply) {
+      multiply = { window: light.multiply.window || null, map: null };
+      jobs.push(loadImage(base + light.multiply.src).then(function (img) {
+        if (img.width !== mapW || img.height !== mapH) throw new Error('light map is not the map size');
+        var data = imageDataOf(img).data;
+        var map = new Float32Array(mapW * mapH * 3);
+        var n = mapW * mapH;
+        for (var p = 0; p < n; p++) {
+          map[p * 3] = data[p * 4] / 255 * 2;
+          map[p * 3 + 1] = data[p * 4 + 1] / 255 * 2;
+          map[p * 3 + 2] = data[p * 4 + 2] / 255 * 2;
+        }
+        multiply.map = map;
+      }));
+    }
+    var zones = null;
+    if (light.zones) {
+      zones = { items: [] };
+      var zitems = light.zones.items;
+      for (var zi = 0; zi < zitems.length; zi++) {
+        (function (entry) {
+          var item = {
+            id: entry.id, label: entry.label,
+            color: entry.color || [255, 255, 255],
+            lockColor: !!entry.color,
+            keepNight: !!entry.keepNight,
+            strength: entry.strength == null ? 1 : entry.strength,
+            masks: []
+          };
+          zones.items.push(item);
+          var count = entry.frames || 1;
+          for (var fi = 0; fi < count; fi++) {
+            (function (frame) {
+              var src = entry.frames
+                ? entry.framePattern.replace('{frame}', (frame < 10 ? '0' : '') + frame)
+                : entry.src;
+              jobs.push(loadImage(base + src).then(function (img) {
+                var packed = maskOf(img);
+                item.masks[frame] = packed.mask;
+                if (frame === 0 && !item.lockColor) item.color = packed.color;
+              }));
+            })(fi);
+          }
+        })(zitems[zi]);
+      }
+    }
+    var extras = room.extras || [];
+    for (var ex = 0; ex < extras.length; ex++) {
+      (function (extra) {
+        if (extra.pattern && extra.frames) {
+          frames[extra.name] = [];
+          for (var f3 = 0; f3 < extra.frames; f3++) {
+            (function (frame) {
+              jobs.push(loadImage(extra.pattern.replace('{frame}', String(frame))).then(function (img) {
+                frames[extra.name][frame] = img;
+              }));
+            })(f3);
+          }
+        } else if (extra.file) {
+          jobs.push(loadImage(extra.file).then(function (img) { still[extra.name] = img; }));
+          if (extra.alt) jobs.push(loadImage(extra.alt).then(function (img) { still[extra.name + ':alt'] = img; }));
+        }
+      })(extras[ex]);
+    }
+    await Promise.all(jobs);
+    var objects = [];
+    var spots = [];
+    var overheadFurn = [];
+    function pushObject(name, meta, img, alt) {
+      var cls = classifyNote(meta.note);
+      var obj = {
+        name: name,
+        kind: cls.kind,
+        decal: cls.kind === 'decal',
+        variantOf: cls.variantOf || null,
+        overlayOf: cls.overlayOf || null,
+        sortY: meta.sortY != null ? meta.sortY : null,
+        anchor: meta.anchor,
+        placed_at: meta.placed_at,
+        size: meta.size,
+        frames: frames[name] || null,
+        img: img || null,
+        alt: alt || null
+      };
+      if (cls.kind === 'overhead') overheadFurn.push(obj);
+      var hitBase = {
+        x: meta.placed_at[0] - meta.anchor[0],
+        y: meta.placed_at[1] - meta.anchor[1],
+        w: meta.size[0],
+        h: meta.size[1]
+      };
+      var specHot = room.hotspots[name];
+      if (specHot) {
+        var hit = specHot.hit
+          ? { x: specHot.hit[0], y: specHot.hit[1], w: specHot.hit[2], h: specHot.hit[3] }
+          : expandHit(hitBase, 22);
+        obj.hotspot = {
+          id: specHot.id,
+          label: specHot.label == null ? null : specHot.label,
+          object: name,
+          exit: specHot.exit || null,
+          approach: specHot.approach.map(function (a) { return { c: a.col, r: a.row, face: a.face }; }),
+          hit: hit,
+          footY: meta.placed_at[1]
+        };
+        obj.hotspot._obj = obj;
+        spots.push(obj.hotspot);
+      }
+      objects.push(obj);
+    }
+    for (var n = 0; n < names.length; n++) {
+      pushObject(names[n], furn[names[n]], still[names[n]] || null, null);
+    }
+    for (var e2 = 0; e2 < extras.length; e2++) {
+      var extra = extras[e2];
+      pushObject(extra.name, extra, still[extra.name] || null, still[extra.name + ':alt'] || null);
+    }
+    var byName = {};
+    for (var b = 0; b < objects.length; b++) byName[objects[b].name] = objects[b];
+    styles[key] = {
+      id: id,
+      roomId: room.id,
+      byName: byName,
+      overheadFurn: overheadFurn,
+      floor: floor,
+      grid: walk.walkable,
+      exits: walk.exits,
+      objects: objects,
+      spots: spots,
+      curtains: curtains,
+      under: under,
+      beforeGrade: beforeGrade,
+      over: over,
+      overhead: overhead,
+      zones: zones,
+      multiply: multiply,
+      grade: light.grade || null,
+      fadeMs: (light.zones && light.zones.fadeMs != null) ? light.zones.fadeMs : 700
+    };
+    return styles[id];
+  }
+
+  function navFrom() {
+    if (state.step) return { c: state.step.c, r: state.step.r };
+    return { c: state.c, r: state.r };
+  }
+
+  function takeStep() {
+    if (!state.path.length) {
+      state.step = null;
+      state.marker = null;
+      var fn = state.arrive;
+      state.arrive = null;
+      if (fn) fn();
+      return;
+    }
+    var next = state.path.shift();
+    var facing = HubPath.facingBetween({ c: state.c, r: state.r }, next) || state.facing;
+    state.facing = facing;
+    state.step = {
+      x0: state.x, y0: state.y,
+      x1: next.c * tile + 8, y1: next.r * tile + 12,
+      t0: performance.now(),
+      dur: (reduced || state.fast) ? 0 : room.timing.stepMs,
+      c: next.c, r: next.r, facing: facing
+    };
+  }
+
+  function goTo(goal, arrive) {
+    var from = navFrom();
+    var path = HubPath.findPath(active.grid, from, { c: goal.c, r: goal.r });
+    if (!path) return false;
+    state.arrive = arrive || null;
+    state.marker = { c: goal.c, r: goal.r };
+    state.path = path.slice(1);
+    if (!state.step) takeStep();
+    return true;
+  }
+
+  function objectVisible(obj) {
+    if (!obj) return false;
+    if (state.hidden && state.hidden[obj.name]) return false;
+    if (obj.kind === 'variant') return !!(state.variants && state.variants[obj.variantOf] === obj.name);
+    if (state.variants && state.variants[obj.name]) return false;
+    return true;
+  }
+
+  function spotLive(spot) {
+    if (!spot._obj) return true;
+    if (objectVisible(spot._obj)) return true;
+    if (spot._obj.name === 'basil' && state.hidden && state.hidden.basil && !(state.hidden.basil_few)) return true;
+    return false;
+  }
+
+  function emitHook(spot) {
+    var detail = { id: spot.id, label: spot.label == null ? null : spot.label, object: spot.object, exit: spot.exit, room: room && room.id };
+    state.hook = detail;
+    var hookEl = document.getElementById('hook');
+    if (hookEl) hookEl.textContent = spot.label ? '\u00ab ' + spot.label + ' \u00bb' : '';
+    if (onHook) onHook(detail);
+    window.dispatchEvent(new CustomEvent('hub:hook', { detail: detail }));
+  }
+
+  function interact(spot) {
+    var approach = HubPath.pickApproach(active.grid, navFrom(), spot.approach);
+    if (!approach) return;
+    goTo(approach, function () {
+      state.facing = approach.face;
+      emitHook(spot);
+    });
+  }
+
+  var lastTap = 0;
+  function onTap(cx, cy) {
+    var now = performance.now();
+    if (now - lastTap < 40) return;
+    lastTap = now;
+    var rect = canvas.getBoundingClientRect();
+    var mx = (cx - rect.left) * (mapW / rect.width);
+    var my = (cy - rect.top) * (mapH / rect.height);
+    if (mx < 0 || my < 0 || mx >= mapW || my >= mapH) return;
+    var spots = active.spots.slice().sort(function (a, b) { return b.footY - a.footY; });
+    for (var i = 0; i < spots.length; i++) {
+      var h = spots[i].hit;
+      if (mx >= h.x && my >= h.y && mx < h.x + h.w && my < h.y + h.h) {
+        if (!spotLive(spots[i])) continue;
+        interact(spots[i]);
+        return;
+      }
+    }
+    var c = Math.floor(mx / tile), r = Math.floor(my / tile);
+    if (!HubPath.isWalkable(active.grid, c, r)) return;
+    goTo({ c: c, r: r }, null);
+  }
+
+  function update(now) {
+    if (!state || !room) return;
+    var guard = 0;
+    while (state.step && guard++ < 500) {
+      var step = state.step;
+      var t = step.dur <= 0 ? 1 : Math.min(1, (now - step.t0) / step.dur);
+      state.x = step.x0 + (step.x1 - step.x0) * t;
+      state.y = step.y0 + (step.y1 - step.y0) * t;
+      state.facing = step.facing;
+      if (t < 1) break;
+      state.x = step.x1;
+      state.y = step.y1;
+      state.c = step.c;
+      state.r = step.r;
+      state.step = null;
+      takeStep();
+    }
+  }
+
+  function resolveStyle(id) {
+    if (room.aliases && room.aliases[id]) return room.aliases[id];
+    return id;
+  }
+
+  function currentLights() {
+    if (!active || !active.zones) return [];
+    var spec = room.scene && room.scene.lights;
+    var list = null;
+    if (Array.isArray(spec)) list = spec;
+    else if (spec && spec[active.id]) list = spec[active.id];
+    if (!list) {
+      list = [];
+      for (var i = 0; i < active.zones.items.length; i++) list.push(active.zones.items[i].id);
+    }
+    return list.slice();
+  }
+
+  function paintZoneButtons() {
+    var buttons = document.querySelectorAll('#zones button');
+    var on = currentLights();
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute('aria-pressed', on.indexOf(buttons[i].dataset.zone) >= 0 ? 'true' : 'false');
+    }
+  }
+
+  function setLights(ids) {
+    if (!active || !active.zones) return;
+    var want = {};
+    for (var i = 0; i < ids.length; i++) want[ids[i]] = true;
+    var next = [];
+    var items = active.zones.items;
+    for (var j = 0; j < items.length; j++) if (want[items[j].id]) next.push(items[j].id);
+    if (!room.scene) room.scene = {};
+    if (!room.scene.lights || Array.isArray(room.scene.lights)) room.scene.lights = {};
+    room.scene.lights[active.id] = next;
+    lightKey = '';
+    paintZoneButtons();
+  }
+
+  function toggleLight(id) {
+    var cur = currentLights();
+    var at = cur.indexOf(id);
+    if (at >= 0) cur.splice(at, 1);
+    else cur.push(id);
+    setLights(cur);
+  }
+
+  function buildZoneToggles() {
+    var bar = document.getElementById('zones');
+    if (!bar) return;
+    bar.textContent = '';
+    if (!active || !active.zones) { bar.hidden = true; return; }
+    bar.hidden = false;
+    var items = active.zones.items;
+    for (var i = 0; i < items.length; i++) {
+      (function (item) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.dataset.zone = item.id;
+        b.textContent = item.label;
+        b.title = item.id;
+        b.addEventListener('click', function () { toggleLight(item.id); });
+        bar.appendChild(b);
+      })(items[i]);
+    }
+    paintZoneButtons();
+  }
+
+  function syncLights(now) {
+    if (!active || !active.zones) return;
+    var selected = {};
+    var list = currentLights();
+    for (var i = 0; i < list.length; i++) selected[list[i]] = true;
+    var fade = reduced ? 0 : active.fadeMs;
+    var dt = lightStamp ? Math.min(100, now - lightStamp) : 0;
+    lightStamp = now;
+    var items = active.zones.items;
+    for (var z = 0; z < items.length; z++) {
+      var id = items[z].id;
+      var key = active.id + ':' + id;
+      var target = selected[id] ? 1 : 0;
+      var st = zoneWeights[key];
+      if (!st) { zoneWeights[key] = { w: target, target: target }; continue; }
+      var next = HubLights.approach(st.w, target, dt, fade);
+      if (next !== st.w) lightKey = '';
+      st.w = next;
+      st.target = target;
+    }
+  }
+
+  function objectImage(obj, f) {
+    if (state.plantHealthy && obj.alt) return obj.alt;
+    if (obj.frames) return obj.frames[f % obj.frames.length];
+    return obj.img;
+  }
+
+  function liveActors() {
+    if (!state || !room) return [];
+    if (state.actors) return state.actors;
+    return room.actors || [];
+  }
+
+  function paintShadows() {
+    shadowCtx.clearRect(0, 0, mapW, mapH);
+    shadowCtx.drawImage(active.shadow, 0, 0);
+    var w = room.footShadow.w, h = room.footShadow.h;
+    var feet = [];
+    if (state.showPlayer !== false) feet.push({ x: state.x, y: state.y });
+    var cast = liveActors();
+    for (var i = 0; i < cast.length; i++) feet.push({ x: cast[i].foot[0], y: cast[i].foot[1] });
+    for (var f = 0; f < feet.length; f++) {
+      shadowCtx.drawImage(ellipse, Math.round(feet[f].x - w / 2), Math.round(feet[f].y - h / 2));
+    }
+  }
+
+  function drawCueTile(c, r) {
+    var x0 = c * tile, y0 = r * tile;
+    for (var i = 2; i < tile - 2; i += 2) {
+      fillMap(x0 + i, y0 + 1, '#f6a54a', 1);
+      fillMap(x0 + i, y0 + tile - 2, '#f6a54a', 1);
+      fillMap(x0 + 1, y0 + i, '#f6a54a', 1);
+      fillMap(x0 + tile - 2, y0 + i, '#f6a54a', 1);
+    }
+  }
+
+  function drawMarker() {
+    if (!state.marker || (!state.step && !state.path.length)) return;
+    drawCueTile(state.marker.c, state.marker.r);
+  }
+
+  function drawSteam(f) {
+    if (!room.ambient || !room.ambient.steam || !room.ambient.paper) return;
+    var paper = room.ambient.paper;
+    var color = 'rgb(' + paper[0] + ',' + paper[1] + ',' + paper[2] + ')';
+    var sources = room.ambient.steam;
+    for (var s = 0; s < sources.length; s++) {
+      for (var i = 0; i < 3; i++) {
+        var k = (f + i * 5) % 12;
+        var alpha = Math.max(0, 200 - k * 15) / 255;
+        var yy = sources[s].y - k;
+        var xx = sources[s].x + Math.round(Math.sin((f + i * 5) / 2.5));
+        fillMap(xx, yy, color, alpha);
+      }
+    }
+  }
+
+  function drawDust(f) {
+    var dust = room.ambient.dust;
+    if (!dust || dust.styles.indexOf(active.id) < 0) return;
+    var paper = room.ambient.paper;
+    var color = 'rgb(' + paper[0] + ',' + paper[1] + ',' + paper[2] + ')';
+    for (var i = 0; i < motes.length; i++) {
+      if ((f + i) % 5 === 0) continue;
+      var m = motes[i];
+      var yy = m.top + ((m.y0 - m.top + f * 1.5) % m.span);
+      var xx = m.x0 + (yy - m.top) * 0.45 + Math.round(Math.sin(f / 3 + i));
+      fillMap(xx, yy, color, 220 / 255);
+    }
+  }
+
+  function yItems(f, now) {
+    var moving = !!(state.step || state.path.length);
+    var items = [];
+    var objects = active.objects;
+    for (var i = 0; i < objects.length; i++) {
+      var obj = objects[i];
+      if (obj.kind === 'decal' || obj.kind === 'wall' || obj.kind === 'overhead') continue;
+      if (!objectVisible(obj)) continue;
+      var img = objectImage(obj, f);
+      if (!img) continue;
+      var y = obj.sortY != null ? obj.sortY : obj.placed_at[1];
+      if (obj.kind === 'overlay' && obj.sortY == null && obj.overlayOf && active.byName[obj.overlayOf]) {
+        y = active.byName[obj.overlayOf].placed_at[1] + 0.5;
+      }
+      items.push({
+        y: y,
+        tie: obj.kind === 'overlay' ? 1 : 0,
+        img: img,
+        x: obj.placed_at[0] - obj.anchor[0],
+        y0: obj.placed_at[1] - obj.anchor[1]
+      });
+    }
+    var cast = liveActors();
+    for (var a = 0; a < cast.length; a++) {
+      var actor = cast[a];
+      var def = room.sprites[actor.sprite];
+      if (!def) continue;
+      var aim = spriteNamed(def.idle, actor.facing || 'down', idleFrame(f));
+      if (!aim) continue;
+      items.push({
+        y: actor.foot[1], tie: 2, img: aim,
+        x: actor.foot[0] - def.anchor[0],
+        y0: actor.foot[1] - def.anchor[1]
+      });
+    }
+    if (state.showPlayer !== false) {
+      var player = room.sprites.player;
+      var pFrame = moving ? (Math.floor(now / room.timing.walkFrameMs) % player.frames) : idleFrame(f);
+      var pImg = spriteNamed(moving ? player.walk : player.idle, state.facing, pFrame);
+      items.push({
+        y: state.y, tie: 3, img: pImg,
+        x: state.x - player.anchor[0],
+        y0: state.y - player.anchor[1]
+      });
+    }
+    items.sort(function (a, b) { return a.y - b.y || a.tie - b.tie; });
+    return items;
+  }
+
+  function ensureLights(f) {
+    if (!active.grade) return null;
+    var parts = [];
+    var keyParts = [active.id, String(f % 16)];
+    var items = active.zones ? active.zones.items : [];
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var st = zoneWeights[active.id + ':' + item.id];
+      var wgt = st ? st.w : 0;
+      keyParts.push(wgt.toFixed(3));
+      if (wgt <= 0) continue;
+      var frame = item.masks.length > 1 ? (f % item.masks.length) : 0;
+      parts.push({
+        color: item.color,
+        mask: item.masks[frame],
+        weight: wgt,
+        keepNight: !!item.keepNight,
+        strength: item.strength
+      });
+    }
+    var key = keyParts.join('|');
+    if (key !== lightKey) {
+      lightPrep = HubLights.prepareLights(mapW, mapH, parts, active.grade);
+      lightKey = key;
+    }
+    return lightPrep;
+  }
+
+  function draw(now) {
+    if (!active || !worldCtx) return;
+    var f = Math.floor(now / room.timing.ambientMs);
+    if (f < 0) f = 0;
+    syncLights(now);
+    worldCtx.imageSmoothingEnabled = false;
+    worldCtx.clearRect(0, 0, mapW, mapH);
+    blit(active.floor, 0, 0);
+    var pre = active.objects;
+    for (var w = 0; w < pre.length; w++) {
+      if (pre[w].kind !== 'wall' || !objectVisible(pre[w])) continue;
+      var wall = pre[w];
+      var wallImg = objectImage(wall, f);
+      if (wallImg) blit(wallImg, wall.placed_at[0] - wall.anchor[0], wall.placed_at[1] - wall.anchor[1]);
+    }
+    for (var c = 0; c < active.curtains.length; c++) {
+      var curtain = active.curtains[c];
+      blit(curtain.frames[f % curtain.frames.length], curtain.x, curtain.y);
+    }
+    for (var u = 0; u < active.under.length; u++) {
+      var under = active.under[u];
+      if (under.contactShadow) {
+        active.shadow = under.cleaned;
+        paintShadows();
+        blit(shadowFrame, 0, 0);
+      } else blit(under.img, 0, 0);
+    }
+    var objects = active.objects;
+    for (var d = 0; d < objects.length; d++) {
+      if (objects[d].kind !== 'decal' || !objectVisible(objects[d])) continue;
+      var dec = objects[d];
+      var decImg = objectImage(dec, f);
+      if (decImg) blit(decImg, dec.placed_at[0] - dec.anchor[0], dec.placed_at[1] - dec.anchor[1]);
+    }
+    drawMarker();
+    var cues = state.cues || [];
+    for (var q = 0; q < cues.length; q++) drawCueTile(cues[q].c, cues[q].r);
+    var items = yItems(f, now);
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      blit(item.img, Math.round(item.x), Math.round(item.y0));
+    }
+    drawSteam(f);
+    var furnOver = active.overheadFurn || [];
+    for (var fo = 0; fo < furnOver.length; fo++) {
+      if (!objectVisible(furnOver[fo])) continue;
+      var fov = furnOver[fo];
+      var foImg = objectImage(fov, f);
+      if (foImg) blit(foImg, fov.placed_at[0] - fov.anchor[0], fov.placed_at[1] - fov.anchor[1]);
+    }
+    for (var h = 0; h < active.overhead.length; h++) {
+      var oh = active.overhead[h];
+      blit(oh.img, oh.x, oh.y);
+    }
+    drawDust(f);
+    for (var b = 0; b < active.beforeGrade.length; b++) blit(active.beforeGrade[b].img, 0, 0);
+    if (active.multiply) {
+      var mulPixels = worldCtx.getImageData(0, 0, mapW, mapH);
+      var multiplied = HubLights.applyMultiply(mulPixels.data, mapW, mapH, active.multiply.map, active.multiply.window);
+      worldCtx.putImageData(new ImageData(multiplied, mapW, mapH), 0, 0);
+    } else if (active.grade) {
+      var prep = ensureLights(f);
+      var pixels = worldCtx.getImageData(0, 0, mapW, mapH);
+      var graded = HubLights.applyGrade(pixels.data, mapW, mapH, prep.alpha, prep, active.grade);
+      worldCtx.putImageData(new ImageData(graded, mapW, mapH), 0, 0);
+    }
+    for (var o = 0; o < active.over.length; o++) blit(active.over[o].img, 0, 0);
+    if (scale < 1) return;
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(world, 0, 0, mapW * scale, mapH * scale);
+  }
+
+  function fit() {
+    var stage = stageEl || document.getElementById('stage');
+    var availW = (stage && stage.clientWidth) || window.innerWidth;
+    var availH = (stage && stage.clientHeight) || (window.innerHeight - 76);
+    var s = Math.floor(Math.min(availW / mapW, availH / mapH));
+    if (s < 1) s = 1;
+    if (s > 5) s = 5;
+    if (s === scale && canvas.width === mapW * s) return;
+    scale = s;
+    canvas.width = mapW * scale;
+    canvas.height = mapH * scale;
+    canvas.style.width = canvas.width + 'px';
+    canvas.style.height = canvas.height + 'px';
+    canvas.dataset.scale = String(scale);
+  }
+
+  function loop(now) {
+    update(now);
+    draw(now);
+    requestAnimationFrame(loop);
+  }
+
+  function setStyle(id) {
+    id = resolveStyle(id);
+    var cached = styles[styleKey(id)];
+    if (!cached || (active && active.id === id && active.roomId === (room && room.id))) return;
+    active = cached;
+    lightKey = '';
+    var buttons = document.querySelectorAll('#times button');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute('aria-pressed', buttons[i].getAttribute('data-time') === id ? 'true' : 'false');
+    }
+    buildZoneToggles();
+    draw(performance.now());
+  }
+
+  function hotspotClientPoint(id) {
+    if (!active || !canvas) return null;
+    var spot = null;
+    for (var i = 0; i < active.spots.length; i++) if (active.spots[i].id === id) spot = active.spots[i];
+    if (!spot) return null;
+    var rect = canvas.getBoundingClientRect();
+    var mx = spot.hit.x + spot.hit.w / 2, my = spot.hit.y + spot.hit.h / 2;
+    return {
+      x: rect.left + (mx / mapW) * rect.width,
+      y: rect.top + (my / mapH) * rect.height
+    };
+  }
+
+  function adoptSize() {
+    tile = room.tile;
+    var w = room.cols * tile, h = room.rows * tile;
+    var sh = room.footShadow;
+    ellipse = makeEllipse(sh.w, sh.h, [sh.color[0], sh.color[1], sh.color[2], sh.alpha]);
+    if (shadowFrame && mapW === w && mapH === h) return;
+    mapW = w;
+    mapH = h;
+    shadowFrame = document.createElement('canvas');
+    shadowFrame.width = mapW;
+    shadowFrame.height = mapH;
+    shadowCtx = shadowFrame.getContext('2d');
+    world = document.createElement('canvas');
+    world.width = mapW;
+    world.height = mapH;
+    worldCtx = world.getContext('2d');
+    scale = 0;
+  }
+
+  function buildMotes() {
+    motes = [];
+    var dust = room.ambient && room.ambient.dust;
+    if (!dust) return;
+    var rand = mulberry32(dust.seed);
+    for (var i = 0; i < dust.count; i++) {
+      motes.push({
+        x0: dust.x0 + rand() * (dust.x1 - dust.x0),
+        y0: dust.y0 + rand() * (dust.y1 - dust.y0),
+        top: dust.top,
+        span: dust.span
+      });
+    }
+  }
+
+  function ensureSprites() {
+    var spriteJobs = [];
+    var keys = Object.keys(room.sprites || {});
+    for (var s = 0; s < keys.length; s++) {
+      if (keys[s] === 'dir') continue;
+      var def = room.sprites[keys[s]];
+      var patterns = [def.idle, def.walk];
+      for (var p = 0; p < patterns.length; p++) {
+        var names = expandPattern(patterns[p], def.frames);
+        for (var n = 0; n < names.length; n++) {
+          (function (name) {
+            if (sprites.has(name)) return;
+            spriteJobs.push(loadImage(room.sprites.dir + name).then(function (img) { sprites.set(name, img); }));
+          })(names[n]);
+        }
+      }
+    }
+    return Promise.all(spriteJobs);
+  }
+
+  function placeFrom(spawn) {
+    state.c = spawn.col;
+    state.r = spawn.row;
+    state.facing = spawn.facing || 'down';
+    state.x = state.c * tile + 8;
+    state.y = state.r * tile + 12;
+    state.step = null;
+    state.path = [];
+    state.arrive = null;
+    state.marker = null;
+  }
+
+  function freshState(spawn) {
+    state = { step: null, path: [], arrive: null, marker: null, hook: null, hidden: {}, variants: {}, cues: [], actors: null, fast: false, plantHealthy: false, showPlayer: true };
+    placeFrom(spawn);
+  }
+
+  function applyDefaultHidden() {
+    state.hidden = state.hidden || {};
+    (room.extras || []).forEach(function (ex) { if (ex.startHidden) state.hidden[ex.name] = 1; });
+  }
+
+  function bindInput() {
+    if (inputBound || !canvas) return;
+    inputBound = true;
+    canvas.addEventListener('pointerup', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      onTap(e.clientX, e.clientY);
+    });
+    canvas.addEventListener('touchend', function (e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+      onTap(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('resize', function () { fit(); draw(performance.now()); });
+    if (window.ResizeObserver) {
+      var stage = stageEl || document.getElementById('stage');
+      if (stage) new ResizeObserver(function () { fit(); draw(performance.now()); }).observe(stage);
+    }
+  }
+
+  function startLoop() {
+    if (looping) return;
+    looping = true;
+    requestAnimationFrame(loop);
+  }
+
+  function publishHub() {
+    window.Hub = {
+      ready: false,
+      mounted: !!(canvas && ctx),
+      player: function () {
+        if (!state) return { c: 0, r: 0, facing: 'down', moving: false };
+        return { c: state.c, r: state.r, facing: state.facing, moving: !!(state.step || state.path.length) };
+      },
+      lastHook: function () { return state && state.hook; },
+      style: function () { return active && active.id; },
+      setStyle: setStyle,
+      lights: function () { return currentLights(); },
+      setLights: setLights,
+      toggleLight: toggleLight,
+      lightWeight: function (id) {
+        if (!active) return 0;
+        var st = zoneWeights[active.id + ':' + id];
+        return st ? st.w : 0;
+      },
+      hotspotClientPoint: hotspotClientPoint,
+      scale: function () { return scale; },
+      mount: mount,
+      openRoom: openRoom,
+      configure: configure,
+      place: function (col, row, facing) { placeFrom({ col: col, row: row, facing: facing || state.facing }); },
+      setFast: function (v) { if (state) state.fast = !!v; },
+      roomId: function () { return room && room.id; },
+      actors: function () { return liveActors().map(function (a) { return { id: a.id, sprite: a.sprite, foot: a.foot }; }); }
+    };
+  }
+
+  function configure(cfg) {
+    cfg = cfg || {};
+    if (!state) return;
+    state.hidden = {};
+    (cfg.hidden || []).forEach(function (n) { state.hidden[n] = 1; });
+    state.variants = cfg.variants || {};
+    state.actors = cfg.actors || [];
+    state.cues = cfg.cues || [];
+    state.plantHealthy = !!cfg.plantHealthy;
+    state.showPlayer = cfg.player !== false;
+  }
+
+  async function mount(opts) {
+    opts = opts || {};
+    canvas = opts.canvas || document.getElementById('view');
+    if (!canvas) throw new Error('no hub canvas');
+    ctx = canvas.getContext('2d');
+    stageEl = opts.stage || document.getElementById('stage');
+    if (opts.base != null) assetRoot = opts.base;
+    onHook = opts.onHook || null;
+    reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    bindInput();
+    publishHub();
+    window.Hub.mounted = true;
+    startLoop();
+  }
+
+  async function openRoom(url, opts) {
+    opts = opts || {};
+    if (room && room._url === url) {
+      if (opts.spawn) placeFrom(opts.spawn);
+      var sameStyle = resolveStyle(opts.style || room.defaultStyle || 'A');
+      await loadStyle(sameStyle);
+      active = null;
+      setStyle(sameStyle);
+      fit();
+      window.Hub.ready = true;
+      return;
+    }
+    room = await fetchJson(url);
+    room._url = url;
+    adoptSize();
+    buildMotes();
+    await ensureSprites();
+    freshState(opts.spawn || room.spawn);
+    applyDefaultHidden();
+    var styleId = resolveStyle(opts.style || room.defaultStyle || 'A');
+    await loadStyle(styleId);
+    active = null;
+    setStyle(styleId);
+    fit();
+    window.Hub.ready = true;
+  }
+
+  async function boot() {
+    await mount({ canvas: document.getElementById('view'), stage: document.getElementById('stage'), base: '' });
+    room = await fetchJson('room.json');
+    room._url = 'room.json';
+    adoptSize();
+    buildMotes();
+    await ensureSprites();
+    var params = new URLSearchParams(location.search);
+    var asked = params.get('style');
+    var initial = asked ? resolveStyle(asked) : (room.defaultStyle || 'A');
+    var times = room.times || [{ id: 'A' }, { id: 'E' }, { id: 'M' }];
+    var timeBar = document.getElementById('times');
+    if (timeBar) {
+      for (var t = 0; t < times.length; t++) {
+        (function (entry) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.dataset.time = entry.id;
+          b.textContent = entry.label;
+          b.addEventListener('click', function () { setStyle(entry.id); });
+          timeBar.appendChild(b);
+        })(times[t]);
+      }
+    }
+    freshState(room.spawn);
+    applyDefaultHidden();
+    await Promise.all([loadStyle('A'), loadStyle('E'), loadStyle('M')]);
+    active = null;
+    setStyle(initial);
+    requestAnimationFrame(function () {
+      fit();
+      draw(performance.now());
+      window.Hub.ready = true;
+    });
+  }
+
+  publishHub();
+  if (document.getElementById('view')) {
+    boot().catch(function (err) {
+      var hook = document.getElementById('hook');
+      if (hook) hook.textContent = 'Impossible de charger la pièce.';
+      console.error(err);
+    });
+  }
+})();
+
+</script>
+<script>
+/* Days 8–9 on the walkable hub. Pure rules: which beat is next, what a tap does,
+ * and what the room should show. The scene player still speaks every line. */
+(function (root) {
+  'use strict';
+  var ORDER = {
+    d8: ['d8_A', 'd8_B', 'd8_B2', 'd8_C', 'd8_D', 'd8_E', 'd8_F', 'd8_G', 'd8_H'],
+    d9: ['d9_A', 'd9_B', 'd9_C', 'd9_D', 'd9_E', 'd9_F1', 'd9_F2', 'd9_G', 'd9_H', 'd9_I', 'd9_J']
+  };
+  // d9_A2 is optional and never gates the day.
+  var META = {
+    d8_A: { auto: true, scene: true },
+    d8_B: { scene: true, hotspot: 'table' },
+    d8_B2: { auto: true, visual: true },
+    d8_C: { auto: true, scene: true },
+    d8_D: { scene: true, hotspot: 'calendar' },
+    d8_E: { auto: true, visual: true, sfx: 'knock' },
+    d8_F: { scene: true, hotspot: 'door' },
+    d8_G: { scene: true, hotspot: 'basil' },
+    d8_H: { auto: true, scene: true, done: true },
+    d9_A: { auto: true, visual: true },
+    d9_A2: { optional: true, hotspot: 'basil' },
+    d9_B: { scene: true, hotspot: 'door' },
+    d9_C: { auto: true, scene: true },
+    d9_D: { scene: true, hotspot: 'lefevre_door' },
+    d9_E: { auto: true, scene: true },
+    d9_F1: { scene: true, hotspot: 'chair' },
+    d9_F2: { auto: true, scene: true },
+    d9_G: { auto: true, scene: true },
+    d9_H: { auto: true, scene: true },
+    d9_I: { hotspot: 'door', transit: true },
+    d9_J: { auto: true, scene: true, done: true }
+  };
+
+  function has(done, id) {
+    if (!done) return false;
+    if (Array.isArray(done)) return done.indexOf(id) >= 0;
+    return !!done[id];
+  }
+  function nextId(day, done) {
+    var list = ORDER[day === 8 || day === 'd8' ? 'd8' : day === 9 || day === 'd9' ? 'd9' : day] || [];
+    for (var i = 0; i < list.length; i++) if (!has(done, list[i])) return list[i];
+    return null;
+  }
+  function meta(id) { return META[id] || null; }
+  function dayKey(day) { return day === 8 || day === 'd8' ? 8 : 9; }
+  function roomKey(engineId) {
+    if (!engineId || engineId === 'apt' || engineId === 'appartement-411') return 'apt';
+    return engineId;
+  }
+  function isTable(h) { return h.object === 'table' || h.id === 'plante'; }
+  function isCalendar(h) { return h.object === 'calendar_wall' || h.id === 'calendrier'; }
+  function isAptDoor(h) { return h.object === 'door' || h.id === 'stairs'; }
+  function is411(h) { return h.object === 'door411' || h.id === 'apt411'; }
+  function isBasil(h) { return h.object === 'basil' || h.object === 'basil_few' || h.id === 'basilic'; }
+  function isLefeve(h) { return h.object === 'door_lefevre' || h.id === 'porte'; }
+  function isChair(h) { return h.object === 'chair_1_s' || h.id === 'chaise'; }
+  function isRoof(h) { return h.object === 'door_rooftop' || h.id === 'locked'; }
+  function isDesk(h) { return h.object === 'desk' || h.id === 'desk'; }
+  function isBox(h) { return h.object === 'box' || h.id === 'croissant_box'; }
+  function isLefDoor(h) { return h.object === 'door' && h.id === 'stairwell'; }
+
+  function action(day, done, hook, room) {
+    day = dayKey(day);
+    room = roomKey(room);
+    hook = hook || {};
+    if (isRoof(hook)) return room === 'stairwell' ? { rattle: true } : null;
+    var next = nextId(day, done);
+    var storyOver = day === 8 ? has(done, 'd8_H') : has(done, 'd9_J');
+    if (storyOver) {
+      if (room !== 'apt') return null;
+      if (isDesk(hook)) return { close: 'desk' };
+      if (isTable(hook)) return { close: 'plant' };
+      if (isBox(hook)) return { close: 'box' };
+      return null;
+    }
+    if (day === 9 && room === 'apt' && !has(done, 'd9_A2') && !has(done, 'd9_B') && isBasil(hook)) return { optional: 'd9_A2' };
+    if (!next) return null;
+    if (day === 8 && room === 'apt') {
+      if (next === 'd8_B' && isTable(hook)) return { beat: 'd8_B' };
+      if (next === 'd8_D' && isCalendar(hook)) return { beat: 'd8_D' };
+      if (next === 'd8_F' && isAptDoor(hook)) return { beat: 'd8_F' };
+      if (next === 'd8_G' && isBasil(hook)) return { beat: 'd8_G' };
+      return null;
+    }
+    if (day === 9) {
+      if (next === 'd9_B' && room === 'apt' && isAptDoor(hook)) return { beat: 'd9_B' };
+      if (next === 'd9_D' && room === 'stairwell' && isLefeve(hook)) return { beat: 'd9_D' };
+      if (next === 'd9_F1' && room === 'lefevre' && isChair(hook)) return { beat: 'd9_F1' };
+      if (next === 'd9_I' && room === 'lefevre' && (isLefDoor(hook) || (isAptDoor(hook) && hook.exit === 'stairwell'))) return { beat: 'd9_I', transit: true };
+      return null;
+    }
+    return null;
+  }
+
+  function actor(id, sprite, foot, facing) {
+    return { id: id, sprite: sprite, foot: foot, facing: facing || 'down' };
+  }
+  function cue(c, r) { return { c: c, r: r }; }
+
+  function croissantHidden(day, done) {
+    day = dayKey(day);
+    if (day !== 9) return false;
+    if (!has(done, 'd9_B')) return false;
+    var next = nextId(day, done);
+    if (next === 'd9_F2' || has(done, 'd9_F2')) return false;
+    if (has(done, 'd9_I')) return false;
+    return true;
+  }
+
+  function view(day, done, choices, opts) {
+    day = dayKey(day);
+    opts = opts || {};
+    choices = choices || {};
+    var transit = !!opts.transit && day === 9 && !has(done, 'd9_I');
+    var next = nextId(day, done);
+    var room = 'apt';
+    if (day === 9) {
+      if (transit) room = 'stairwell';
+      else if (!has(done, 'd9_B')) room = 'apt';
+      else if (!has(done, 'd9_D')) room = 'stairwell';
+      else if (!has(done, 'd9_I')) room = 'lefevre';
+      else room = 'apt';
+    }
+    var bureau = choices.d8_plante === 'bureau' && has(done, 'd8_B');
+    var hidden = ['plantp_desk', 'basil_few'];
+    if (bureau) hidden = ['plantp_table', 'basil_few'];
+    if (day === 8 && !has(done, 'd8_C')) hidden.push('basil');
+    if (day === 9 && has(done, 'd9_A2')) {
+      hidden = hidden.filter(function (n) { return n !== 'basil_few'; });
+      hidden.push('basil');
+    }
+    if (has(done, 'd9_H')) hidden.push('key');
+    var catChair = day === 9 && room === 'lefevre' && (next === 'd9_F2' || has(done, 'd9_F2'));
+    if (catChair) hidden.push('chair_4_n');
+    var actors = [];
+    if (room === 'apt' && day === 8) {
+      actors.push(actor('noe', 'noe', [120, 100], 'right'));
+      if (choices.d8_plante === 'chat' && has(done, 'd8_B')) actors.push(actor('croissant', 'croissant', [48, 230], 'left'));
+      else actors.push(actor('croissant', 'croissant', [136, 108], 'left'));
+      if (has(done, 'd8_C')) actors.push(actor('camille', 'camille', [88, 64], 'up'));
+    } else if (room === 'apt' && day === 9) {
+      actors.push(actor('camille', 'camille', [80, 300], 'down'));
+      actors.push(actor('noe', 'noe', [116, 300], 'down'));
+      if (!croissantHidden(day, done)) actors.push(actor('croissant', 'croissant', [72, 208], 'down'));
+    } else if (room === 'stairwell' && transit) {
+      actors.push(actor('croissant', 'croissant', [136, 204], 'up'));
+      actors.push(actor('noe', 'noe', [136, 268], 'up'));
+      actors.push(actor('camille', 'camille', [152, 284], 'up'));
+    } else if (room === 'stairwell') {
+      actors.push(actor('noe', 'noe', [136, 268], 'down'));
+      actors.push(actor('camille', 'camille', [152, 252], 'down'));
+      actors.push(actor('lefevre', 'lefevre', [64, 308], 'left'));
+    } else if (room === 'lefevre') {
+      actors.push(actor('noe', 'noe', [40, 140], 'right'));
+      actors.push(actor('camille', 'camille', [152, 156], 'left'));
+      actors.push(actor('lefevre', 'lefevre', [48, 92], 'down'));
+      if (catChair) actors.push(actor('croissant', 'croissant_chair', [96, 114], 'down'));
+    }
+    var cues = [];
+    var storyOver = day === 8 ? has(done, 'd8_H') : has(done, 'd9_J');
+    if (!storyOver && !transit) {
+      if (next === 'd8_B') cues.push(cue(8, 5));
+      else if (next === 'd8_D') cues.push(cue(6, 3));
+      else if (next === 'd8_E' || next === 'd8_F' || next === 'd9_A' || next === 'd9_B') cues.push(cue(5, 18));
+      else if (next === 'd8_G') cues.push(cue(3, 4));
+      else if (next === 'd9_D') cues.push(cue(2, 19));
+      else if (next === 'd9_F1') cues.push(cue(6, 10));
+      else if (next === 'd9_I') cues.push(cue(5, 13));
+    }
+    var spawn, spawnKey;
+    if (day === 8) { spawn = { col: 7, row: 6, facing: 'up' }; spawnKey = 'd8-apt'; }
+    else if (room === 'stairwell' && transit) { spawn = { col: 3, row: 19, facing: 'up' }; spawnKey = 'd9-stairs-up'; }
+    else if (room === 'stairwell') { spawn = { col: 8, row: 15, facing: 'down' }; spawnKey = 'd9-stairs-down'; }
+    else if (room === 'lefevre') { spawn = { col: 4, row: 12, facing: 'up' }; spawnKey = 'd9-lefevre'; }
+    else if (has(done, 'd9_I')) { spawn = { col: 5, row: 16, facing: 'up' }; spawnKey = 'd9-apt-back'; }
+    else { spawn = { col: 5, row: 16, facing: 'down' }; spawnKey = 'd9-apt-out'; }
+    return {
+      day: day,
+      room: room,
+      style: day === 8 ? 'A' : 'E',
+      spawn: spawn,
+      spawnKey: spawnKey,
+      hidden: hidden,
+      variants: {},
+      actors: actors,
+      cues: cues,
+      player: true,
+      plantAt: bureau ? 'desk' : 'table',
+      plantHealthy: !!opts.plantHealthy,
+      basil: hidden.indexOf('basil') >= 0 ? (hidden.indexOf('basil_few') >= 0 ? 'hidden' : 'few') : 'full',
+      next: next,
+      auto: !!(next && META[next] && META[next].auto),
+      scene: !!(next && META[next] && META[next].scene),
+      visual: !!(next && META[next] && META[next].visual),
+      optional: day === 9 && room === 'apt' && !has(done, 'd9_A2') && !has(done, 'd9_B'),
+      transit: transit,
+      croissantHidden: croissantHidden(day, done) && room !== 'lefevre'
+    };
+  }
+
+  var api = {
+    ORDER: ORDER, META: META, nextId: nextId, meta: meta, action: action, view: view,
+    croissantHidden: croissantHidden, roomKey: roomKey
+  };
+  root.A411 = root.A411 || {};
+  root.A411.HubStory = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* L’Appartement 411 — Day 1 player (UI + scene engine). */
 (function () {
   'use strict';
@@ -16984,6 +19173,8 @@ function getLang(ls, id) {
       var bp = document.getElementById('btnPause');
       if (bp) { bp.textContent = ''; bp.appendChild(icon('pause')); bp.setAttribute('aria-label', Z('暂停', 'Pause')); }
       $screen.innerHTML = '';
+      var hubMount = document.getElementById('hubMount');
+      if (hubMount) hubMount.hidden = ui.view !== 'hub';
       if (ui.view === 'gate') { $topbar.hidden = true; A411.StudyUI.renderGate(studyCtx()); return; }
       if (ui.view === 'placement') { $topbar.hidden = true; A411.StudyUI.renderPlacement(studyCtx()); return; }
       if (ui.view === 'study') { $topbar.hidden = false; $where.textContent = (profileId || '') + ' · ' + T('today') + verBit(); A411.StudyUI.renderSession(studyCtx()); return; }
@@ -16992,6 +19183,7 @@ function getLang(ls, id) {
       if (ui.view === 'stats') { $topbar.hidden = true; A411.ReviewUI.renderStats(studyCtx()); return; }
       if (ui.view === 'desk') { $topbar.hidden = false; renderDesk(); return; }
       if (ui.view === 'title' || !S) { $topbar.hidden = true; renderTitle(); return; }
+      if (ui.view === 'hub') { $topbar.hidden = false; renderHub(); return; }
       if (ui.view === 'chapter') { $topbar.hidden = false; renderChapter(); return; }
       if (ui.view === 'letter') { $topbar.hidden = false; renderLetter(); return; }
       if (ui.view === 'ritual') { $topbar.hidden = true; renderRitual(); return; }
@@ -17030,7 +19222,7 @@ function getLang(ls, id) {
     if (act) col.appendChild(frBtn(act.fr, act.gloss, act.fn, 'primary big', { id: act.id, 'data-next': plan.next }));
     if ((plan.next === 'done' || plan.next === 'end') && !ritualDue(plan)) {
       col.appendChild(h('div', { class: 'banner ok', id: 'dayDone' }, h('b', { lang: 'fr', text: '✓ Journée terminée. ' }),
-        plan.next === 'done' ? Z('下一章已经可以玩了——现在继续，或者留到明天，都可以。', 'The next chapter is ready — go on now, or keep it for tomorrow.') : plan.day >= 8 ? Z('Jour 8 完成了。第二周的其余几天还在制作中。', 'Jour 8 is done. The rest of week 2 is still being made.') : weekDone() ? Z('第一周完成！第二周还在制作中。', 'Week 1 complete! Week 2 is still in production.') : Z('Jour ' + (plan.day + 1) + ' 还在制作中。', 'Jour ' + (plan.day + 1) + ' is still in production.')));
+        plan.next === 'done' ? Z('下一章已经可以玩了——现在继续，或者留到明天，都可以。', 'The next chapter is ready — go on now, or keep it for tomorrow.') : plan.day >= 9 ? Z('Jour 9 完成了。第二周的其余几天还在制作中。', 'Jour 9 is done. The rest of week 2 is still being made.') : weekDone() ? Z('第一周完成！第二周还在制作中。', 'Week 1 complete! Week 2 is still in production.') : Z('Jour ' + (plan.day + 1) + ' 还在制作中。', 'Jour ' + (plan.day + 1) + ' is still in production.')));
       if (weekDone()) col.appendChild(frBtn('Récap de la semaine 1', Z('回顾这一周', 'look back on the week'), openRecap, '', { id: 'btnHomeRecap' }));
       if (weekDone()) col.appendChild(frBtn('Bilan', Z('第一周的小检查（不打分）', 'a short week-1 check (not graded)'), openWeekCheck, 'small', { id: 'btnHomeCheck' }));
       if (plan.plantDue || plan.replantDue) { var q0 = queueNow(); col.appendChild(frBtn(plan.replantDue ? 'Replanter' : 'Arroser la plante', plan.replantDue ? Z('植物枯死了——种一盆新的', 'the plant died — plant a new one') : Z('可选 · 复习 = 浇水（' + q0.queue.length + ' 张卡片）', 'optional · review = watering (' + q0.queue.length + ' cards)'), function () { openDesk('plant'); }, '', { id: 'btnHomePlant' })); }
@@ -17056,7 +19248,8 @@ function getLang(ls, id) {
       var nw = h('div', { class: 'card fade-in whats-new', id: 'whatsNew' },
         h('h2', { lang: 'fr', text: 'Nouveau' + NB + '!' }),
         h('ul', { class: 'bravo-recap', lang: 'fr' },
-          h('li', null, icon('letter'), ' Jour 7' + NB + ': « La visite ». Fin de la semaine 1.'),
+          h('li', null, icon('letter'), ' Jour 9' + NB + ': « Six heures ». On dîne chez Madame Lefèvre.'),
+          h('li', null, icon('paw'), ' Croissant a choisi sa chaise.'),
           h('li', null, icon('bulb'), ' Petites ampoules : garde les points de grammaire.'),
           h('li', null, icon('wordbook'), ' Dictionnaire : forme → base, en trois lignes.'),
           h('li', null, icon('letter'), ' Conjugaison : participe passé et présent.'),
@@ -17105,7 +19298,10 @@ function getLang(ls, id) {
       if (plan.day === 1) { openChapter('letter'); return; }
       openChapter('d' + plan.day); return;
     }
-    if (plan.next === 'desk') { openLetter(plan.day); return; }
+    if (plan.next === 'desk') {
+      if (plan.day === 8 || plan.day === 9) { ui.hubDay = plan.day; ui.cid = 'd' + plan.day; enterHub(); return; }
+      openLetter(plan.day); return;
+    }
     if (ritualDue(plan)) { openRitual(plan.day); return; }
     if (plan.next === 'plant' || plan.next === 'replant') { openDesk('plant'); return; }
     goTitle();
@@ -17857,6 +20053,7 @@ function getLang(ls, id) {
     5: { fr: 'Cette nuit, quelque part dans Paris… un petit chat roux marche sur les toits. Il regarde la lune.', zh: '今夜，巴黎的某个地方……一只橘色小猫走在屋顶上。它望着月亮。', en: 'Tonight, somewhere in Paris… a small orange cat walks along the rooftops. He looks at the moon.', sfx: ['meow'] },
     /*<D7>*/ 7: { fr: 'Samedi soir. Croissant dort entre les plantes. La nouvelle plante fleurit. Bienvenue chez toi, Croissant.', zh: '星期六晚上。Croissant 睡在两盆植物中间。新的那盆开花了。欢迎回家，Croissant。', en: 'Saturday night. Croissant sleeps between the plants. The new plant is flowering. Welcome home, Croissant.', sfx: ['purr'] }, /*</D7>*/
     8: { fr: 'Deux pots sur la table. Croissant sent le basilic. Sur un papier' + NB + ': « 18 h ».', zh: '桌上两盆。Croissant 闻着罗勒。纸条上写着：「18 h」。', en: 'Two pots on the table. Croissant sniffs the basil. On a slip of paper: « 18 h ».', sfx: ['meow'] },
+    9: { fr: 'La nuit. En haut, Croissant dort sur le canapé. En bas, quatre assiettes. Sur le frigo' + NB + ': « Jeudi ».', zh: '夜里。楼上，Croissant 睡在沙发上。楼下，四个盘子。冰箱上写着：「星期四」。', en: 'Night. Upstairs, Croissant sleeps on the sofa. Downstairs, four plates. On the fridge: « Thursday ».', sfx: ['purr'] },
     6: { fr: 'Ce soir, Noé ferme la porte à clé. Clic' + NB + '! Croissant dort dans son panier. Demain, dix heures…', zh: '今晚，Noé 把门锁上了。咔哒！Croissant 在自己的窝里睡着了。明天，十点……', en: 'Tonight, Noé locks the door. Click! Croissant is asleep in his basket. Tomorrow, ten o’clock…', sfx: ['click', 'purr'] },
   };
   function openRitual(n) { Au.stop(); ui.view = 'ritual'; ui.ritual = { n: n, phase: 'building', at: Date.now() }; ui.zoom = null; render(); }
@@ -17927,7 +20124,11 @@ function getLang(ls, id) {
     if (learnState && questionsOf().items.length) tiles.appendChild(tile('btnAfterQuestions', 'ask', 'Questions', Z('给 Prof Neng 的问题', 'your questions for Prof Neng'), openQuestions, 't-sky'));
     tiles.appendChild(tile('btnAfterLetters', 'letter', 'Lettres', Z('重读今天的信', 'reread today’s letters'), openCarnet, 't-sand'));
     if (S.week && S.week.letterSeen) tiles.appendChild(tile('btnAfterTraces', 'paw', 'Traces', Z('看看屋里还剩哪些痕迹', 'see which traces are left'), openArc, 't-moss'));
-    tiles.appendChild(tile('btnAfterHome', 'home', 'Accueil', Z('回到首页', 'back to the home screen'), goTitle, 't-grey'));
+    tiles.appendChild(tile('btnAfterHome', 'home', 'Accueil', Z('回到首页', 'back to the home screen'), function () {
+      var n = ui.ritual && ui.ritual.n;
+      if (n === 8 || n === 9) { ui.hubDay = n; ui.cid = 'd' + n; enterHub(); return; }
+      goTitle();
+    }, 't-grey'));
     tiles.appendChild(tile('btnAfterFeedback', 'ask', 'Note', Z('写一条笔记（可选）', 'leave a note (optional)'), openFeedback, 't-grey'));
     if (weekDone()) tiles.appendChild(tile('btnAfterCheck', 'check', 'Bilan', Z('第一周的小检查（不打分）', 'a short week-1 check (not graded)'), openWeekCheck, 't-sky'));
     menu.appendChild(h('p', { class: 'muted small', id: 'bravoFeedbackHint', text: Z('如果有哪里不清楚，可以留一条笔记。', 'If something was unclear, you can leave a note.') }));
@@ -17975,6 +20176,170 @@ function getLang(ls, id) {
     $screen.appendChild(card);
   }
 
+  // ---------- Days 8–9 walkable hub ----------
+  function clearHubTimer() { if (ui.hubTimer) { clearTimeout(ui.hubTimer); ui.hubTimer = 0; } }
+  function ensureHub(cid) {
+    var w = WL.ensureWeek(S);
+    w.hub = w.hub || {};
+    w.hub[cid] = w.hub[cid] || { beats: [] };
+    if (!Array.isArray(w.hub[cid].beats)) w.hub[cid].beats = [];
+    return w.hub[cid];
+  }
+  function hubBeats() {
+    var cid = ui.cid || ('d' + ui.hubDay);
+    return ensureHub(cid).beats;
+  }
+  function noteHubBeat(cid, id) {
+    if (!id) return;
+    var h = ensureHub(cid);
+    if (h.beats.indexOf(id) < 0) h.beats.push(id);
+    persist('hub-beat');
+  }
+  function rattleLocked() {
+    window.__a411Rattle = (window.__a411Rattle || 0) + 1;
+    try { if (Au && Au.sfx) Au.sfx('sfx_locked'); } catch (e) {}
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      var ac = rattleLocked.ac || (rattleLocked.ac = new Ctx());
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'square';
+      o.frequency.value = 90;
+      g.gain.value = 0.03;
+      o.connect(g); g.connect(ac.destination);
+      o.start();
+      o.frequency.setValueAtTime(70, ac.currentTime + 0.04);
+      o.frequency.setValueAtTime(110, ac.currentTime + 0.09);
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.16);
+      o.stop(ac.currentTime + 0.17);
+    } catch (e2) {}
+  }
+  function hubClose(kind) {
+    var day = ui.hubDay;
+    if (kind === 'desk') {
+      if (!WL.deskDone(S, day)) { openLetter(day); return; }
+      if (!WL.ritualSeen(S, day)) { openRitual(day); return; }
+      openJournal(day);
+      return;
+    }
+    if (kind === 'plant') { openDesk('plant'); return; }
+    if (kind === 'box') {
+      var today = todayKey();
+      var hit = (S.week && S.week.cleared || []).filter(function (c) { return c && c.day === today; })[0];
+      if (hit && W.TRACES[hit.n]) openTraceZoom(hit.n);
+    }
+  }
+  function startHubScene(beat) {
+    if (!beat || ui.view !== 'hub') return;
+    clearHubTimer();
+    var steps = W.CHAPTERS[ui.cid].steps;
+    var i = 0;
+    for (; i < steps.length; i++) if (steps[i].beat === beat && stepVisible(steps[i])) break;
+    if (i >= steps.length) { noteHubBeat(ui.cid, beat); enterHub(); return; }
+    var c = chState();
+    c.step = i;
+    ui.view = 'chapter';
+    ui.gesture = true;
+    ui.line = null; ui.trial = null; ui.wk = null; ui.chips = null;
+    render();
+  }
+  function beginTransit() {
+    ui.transit = 'd9_I';
+    ui.hubSpawnKey = '';
+    clearHubTimer();
+    render();
+    if (!window.A411_HUB_HOLD) ui.hubTimer = setTimeout(function () {
+      ui.transit = null;
+      noteHubBeat(ui.cid, 'd9_I');
+      enterHub();
+    }, 700);
+  }
+  function onHubHook(detail) {
+    if (ui.view !== 'hub' || !S || !A411.HubStory) return;
+    var HS = A411.HubStory;
+    var act = HS.action(ui.hubDay, hubBeats(), detail, HS.roomKey(window.Hub && Hub.roomId ? Hub.roomId() : 'apt'));
+    if (!act) return;
+    if (act.rattle) { rattleLocked(); return; }
+    if (act.optional) { noteHubBeat(ui.cid, act.optional); render(); return; }
+    if (act.close) { hubClose(act.close); return; }
+    if (act.transit) { beginTransit(); return; }
+    if (act.beat) startHubScene(act.beat);
+  }
+  function renderHub() {
+    var day = ui.hubDay, cid = 'd' + day;
+    ui.cid = cid;
+    $where.textContent = 'Jour ' + day + ' · ' + chTitle(cid) + verBit();
+    var mount = document.getElementById('hubMount');
+    var bar = document.getElementById('topbar');
+    if (mount && bar && !bar.hidden) mount.style.top = bar.offsetHeight + 'px';
+    if (!window.Hub || !A411.HubStory) return;
+    var HS = A411.HubStory;
+    var gst = gardenStatus();
+    var spec = HS.view(day, hubBeats(), { d8_plante: choiceVal('d8_plante') }, { plantHealthy: !!(gst && gst.wateredToday), transit: ui.transit === 'd9_I' });
+    var urls = { apt: 'room.json', stairwell: 'stairwell.json', lefevre: 'lefevre.json' };
+    ui.hubGen = (ui.hubGen || 0) + 1;
+    var gen = ui.hubGen;
+    var ready = Hub.mounted ? Promise.resolve() : Hub.mount({
+      canvas: document.getElementById('hubCanvas'),
+      stage: document.getElementById('hubStage'),
+      base: 'prototype/hub/',
+      onHook: onHubHook
+    });
+    ready.then(function () {
+      if (gen !== ui.hubGen || ui.view !== 'hub') return;
+      var spawn = null;
+      if (ui.hubSpawnKey !== spec.spawnKey) { ui.hubSpawnKey = spec.spawnKey; spawn = spec.spawn; }
+      return Hub.openRoom(urls[spec.room], { style: spec.style, spawn: spawn });
+    }).then(function () {
+      if (gen !== ui.hubGen || ui.view !== 'hub' || !Hub.configure) return;
+      if (window.A411_HUB_FAST || (S.settings && S.settings.reducedMotion)) Hub.setFast(true);
+      Hub.configure({
+        hidden: spec.hidden, variants: spec.variants, actors: spec.actors,
+        player: true, cues: spec.cues, plantHealthy: spec.plantHealthy
+      });
+    }).catch(function (err) { console.error(err); });
+  }
+  function enterHub() {
+    clearHubTimer();
+    ui.view = 'hub';
+    ui.cid = 'd' + ui.hubDay;
+    ui.line = null;
+    ui.transit = ui.transit === 'd9_I' ? ui.transit : null;
+    if (!window.A411_HUB_HOLD && A411.HubStory) {
+      var guard = 0;
+      while (guard++ < 6) {
+        var id = A411.HubStory.nextId(ui.hubDay, hubBeats());
+        var meta = A411.HubStory.meta(id);
+        if (!meta || !meta.visual) break;
+        if (meta.sfx && Au && Au.sfx) Au.sfx(meta.sfx);
+        noteHubBeat(ui.cid, id);
+      }
+      var id2 = A411.HubStory.nextId(ui.hubDay, hubBeats());
+      var meta2 = A411.HubStory.meta(id2);
+      if (meta2 && meta2.done && S.week.chapters[ui.cid] && S.week.chapters[ui.cid].status === 'complete') {
+        noteHubBeat(ui.cid, id2);
+        id2 = A411.HubStory.nextId(ui.hubDay, hubBeats());
+        meta2 = A411.HubStory.meta(id2);
+      }
+      if (meta2 && meta2.auto && meta2.scene) ui.hubTimer = setTimeout(function () { startHubScene(id2); }, 280);
+    }
+    render();
+  }
+  function hubRelease() {
+    if (ui.view !== 'hub' || !A411.HubStory) return;
+    if (ui.transit === 'd9_I') { ui.transit = null; noteHubBeat(ui.cid, 'd9_I'); enterHub(); return; }
+    var id = A411.HubStory.nextId(ui.hubDay, hubBeats());
+    var meta = A411.HubStory.meta(id);
+    if (!meta) return;
+    if (meta.visual) {
+      if (meta.sfx && Au && Au.sfx) Au.sfx(meta.sfx);
+      noteHubBeat(ui.cid, id);
+      enterHub();
+      return;
+    }
+    if (meta.auto && meta.scene) startHubScene(id);
+  }
+
   // ---------- chapter availability ----------
   function storyNext() {
     // What the main story button should do now.
@@ -17997,6 +20362,7 @@ function getLang(ls, id) {
     if (cid !== 'letter' && !w.letterSeen) { ui.afterLetter = cid; cid = 'letter'; }
     WL.startChapter(S, cid, new Date());
     persist('chapter-start');
+    if (cid === 'd8' || cid === 'd9') { ui.hubDay = chDay(cid); ui.cid = cid; enterHub(); return; }
     ui.view = 'chapter'; ui.cid = cid; ui.gesture = true; ui.line = null; ui.trial = null; ui.wk = null;
     render();
   }
@@ -18326,8 +20692,15 @@ function getLang(ls, id) {
   function chNext() {
     Au.stop();
     var c = chState(), steps = W.CHAPTERS[ui.cid].steps;
+    var cur = steps[c.step];
     var i = c.step + 1;
     while (i < steps.length && !stepVisible(steps[i])) i++;
+    if (cur && cur.beat && (ui.cid === 'd8' || ui.cid === 'd9') && (i >= steps.length || !steps[i] || steps[i].beat !== cur.beat)) {
+      noteHubBeat(ui.cid, cur.beat);
+      ui.hubDay = chDay(ui.cid);
+      enterHub();
+      return;
+    }
     c.step = Math.min(i, steps.length - 1);
     ui.line = null; ui.trial = null; ui.wk = null; ui.chips = null; ui.gesture = true;
     WL.noteActive(S, new Date());
@@ -18766,11 +21139,18 @@ function getLang(ls, id) {
       add('Madame Lefèvre a apporté du basilic.', 'Lefèvre 太太带来了罗勒。', 'Madame Lefèvre brought basil.');
       if (ch.d8_merci) add(({ merci: 'J\u2019ai dit' + NB + ': « Merci, Madame. »', gentil: 'J\u2019ai dit' + NB + ': « C\u2019est gentil, Madame Lefèvre. »', entrer: 'J\u2019ai dit' + NB + ': « Vous voulez entrer' + NB + '? »' })[ch.d8_merci] || '', '你对 Lefèvre 太太说的话。', 'What you said to Madame Lefèvre.');
       add('Elle a dit' + NB + ': « Venez chez moi à six heures. »', '她请你们六点去她家。', 'She said: « Come to my place at six. »');
+    } else if (cid === 'd9') {
+      add('Lundi, six heures. On dîne chez Madame Lefèvre.', '星期一六点，在 Lefèvre 太太家吃饭。', 'Monday, six o’clock. Dinner at Madame Lefèvre’s.');
+      if (ch.d9_soupe) add(({ oui: 'J\u2019ai dit' + NB + ': « Oui, merci, Madame. »', pain: 'J\u2019ai dit' + NB + ': « Je voudrais du pain, s\u2019il vous plaît. »', peu: 'J\u2019ai dit' + NB + ': « Un peu, s\u2019il vous plaît. »' })[ch.d9_soupe] || '', '你对汤说的话。', 'What you said about the soup.');
+      add('Croissant était sur la quatrième chaise.', 'Croissant 坐在第四把椅子上。', 'Croissant was on the fourth chair.');
+      if (ch.d9_jeudi) add(({ oui: 'J\u2019ai dit oui pour le jeudi.', cuisine: 'J\u2019ai dit oui. Noé fait une tarte.', parfois: 'J\u2019ai demandé' + NB + ': un jeudi sur deux.' })[ch.d9_jeudi] || '', '你对星期四的回答。', 'Your answer about Thursday.');
+      add('Sur la table, une vieille clé. Ce n\u2019est pas la clé de Noé.', '桌上有一把旧钥匙。不是 Noé 的钥匙。', 'On the table, an old key. It is not Noé’s key.');
     } else add('Madame Martin vient samedi.', '房东星期六要来。', 'The landlady is coming on Saturday.');
     var box = h('div', null, ul, qHelp(function () { return gl.join(' ') + Z('（游戏自动记录，只写你亲历的事。）', ' (Recorded by the game; only what you saw.)'); }, { id: 'chronQ', btnId: 'chronQBtn' }));
     return box;
   }
   WR.done = function (st, c, ch) {
+    if ((ui.cid === 'd8' || ui.cid === 'd9') && st.beat) noteHubBeat(ui.cid, st.beat);
     var first = c.status !== 'complete';
     if (first) {
       WL.completeChapter(S, ui.cid, new Date());
@@ -19833,6 +22213,31 @@ function getLang(ls, id) {
     });
   }
   window.A411.App = { state: function () { return S; }, render: render, persist: persist, openLetter: function (n, ro) { openLetter(n, ro); }, openRitual: function (n) { openRitual(n); }, learn: function () { return learnState; }, summaryText: function () { return syncSummary(profileId); } }; // debug/test hook
+  window.A411.HubPlay = {
+    status: function () {
+      var HS = A411.HubStory;
+      var cid = ui.cid || (ui.hubDay ? 'd' + ui.hubDay : null);
+      var beats = S && S.week && S.week.hub && cid && S.week.hub[cid] ? S.week.hub[cid].beats : [];
+      var step = null;
+      if (ui.view === 'chapter' && ui.cid && S && chState()) {
+        var st = W.CHAPTERS[ui.cid].steps[chState().step];
+        if (st) step = { t: st.t, id: st.id || null, key: st.key || null, w: st.w || null, beat: st.beat || null };
+      }
+      return {
+        view: ui.view, day: ui.hubDay || null,
+        room: window.Hub && Hub.roomId && HS ? HS.roomKey(Hub.roomId()) : null,
+        done: beats.slice(), pending: ui.hubDay && HS ? HS.nextId(ui.hubDay, beats) : null,
+        moving: window.Hub && Hub.player ? !!Hub.player().moving : false,
+        actors: window.Hub && Hub.actors ? Hub.actors() : [],
+        rattle: window.__a411Rattle || 0,
+        hook: window.Hub && Hub.lastHook ? Hub.lastHook() : null,
+        scale: window.Hub && Hub.scale ? Hub.scale() : 0,
+        transit: ui.transit || null, step: step,
+        ready: !!(window.Hub && Hub.ready)
+      };
+    },
+    release: function () { hubRelease(); }
+  };
   boot();
 })();
 

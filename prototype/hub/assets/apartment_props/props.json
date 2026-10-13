@@ -1,0 +1,75 @@
+{
+ "plantp_table": {
+  "file": "plantp.png",
+  "size": [
+   12,
+   14
+  ],
+  "anchor": [
+   6,
+   13
+  ],
+  "placed_at": [
+   152,
+   86
+  ],
+  "footprint_tiles": [],
+  "note": "overlay: table (draw right after table, sort y 95.5); Day 8 drooping. plantp_ok.png = healthy after watering"
+ },
+ "plantp_desk": {
+  "file": "plantp.png",
+  "size": [
+   12,
+   14
+  ],
+  "anchor": [
+   6,
+   13
+  ],
+  "placed_at": [
+   148,
+   176
+  ],
+  "footprint_tiles": [],
+  "note": "overlay: desk (sort y 191.5); used after choice \"bureau\""
+ },
+ "calendar": {
+  "file": "calendar.png",
+  "size": [
+   12,
+   15
+  ],
+  "anchor": [
+   6,
+   14
+  ],
+  "placed_at": [
+   98,
+   30
+  ],
+  "footprint_tiles": [],
+  "note": "wall decal: kitchen wall between the window curtain and the poster; drawn on floor_walls, under sprites. hotspot calendar hit [90,14,16,18], approach (6,3) face up"
+ },
+ "basil_few": {
+  "file": "basil_few_<0-7>.png",
+  "size": [
+   16,
+   14
+  ],
+  "anchor": [
+   6,
+   13
+  ],
+  "placed_at": [
+   56,
+   38
+  ],
+  "footprint_tiles": [
+   [
+    3,
+    2
+   ]
+  ],
+  "note": "Day 9 after d9_A2: replaces basil_<f>.png, same anchor/placement and 8-frame sway"
+ }
+}

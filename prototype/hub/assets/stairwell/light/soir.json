@@ -1,0 +1,48 @@
+{
+ "under": [
+  {
+   "src": "light/shadow.png",
+   "contactShadow": true
+  }
+ ],
+ "multiply": {
+  "src": "light/light_multiplier_half.png",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "landing4_timer",
+    "x": 96,
+    "y": 136,
+    "r": 44,
+    "s": 0.85,
+    "flicker": true
+   },
+   {
+    "id": "landing3_timer",
+    "x": 96,
+    "y": 296,
+    "r": 44,
+    "s": 0.85,
+    "flicker": true
+   },
+   {
+    "id": "stairs_spill",
+    "x": 144,
+    "y": 240,
+    "r": 28,
+    "s": 0.35
+   }
+  ],
+  "window": null
+ }
+}
