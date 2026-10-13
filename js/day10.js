@@ -1,12 +1,13 @@
 /* Day 10 « La clé » — DAY10_DRAFT_v2 (34 numbered steps + 12b).
- * PLACEHOLDER: d10_cam_a/b/c/null and letter 10. The v1 wording is not in this build.
- * The Story Director will supply the real band lines and the real letter. */
+ * Band lines are the director text below. Letter 10 is js/day10-letter.js. */
 (function (root) {
   'use strict';
   var Fr = root.A411 && root.A411.Fr;
   if (!Fr && typeof require === 'function') Fr = require('./fr.js');
   var fr = Fr.normalizeFr;
   var NB = Fr.NB;
+  var LetterPack = root.A411 && root.A411.Day10Letter;
+  if (!LetterPack && typeof require === 'function') LetterPack = require('./day10-letter.js');
 
   function narr(id, french, zh, en, art, beat) {
     return { t: 'narr', id: id, fr: fr(french), zh: zh, en: en, art: art, beat: beat };
@@ -17,11 +18,10 @@
 
   var LINES = {
     d10_cam_liste: { speaker: 'camille', fr: fr('C’est une liste. La liste de la maison.'), zh: '这是一张清单。家里的清单。', en: 'It’s a list. The list for the house.', label: 'understand', target: 'cest_une_bonne_idee' },
-    /* PLACEHOLDER band lines — Story Director will replace these. */
-    d10_cam_a: { placeholder: true, speaker: 'camille', fr: fr('Samedi, elle a souri. On fait attention.'), zh: '星期六她是笑着走的。我们小心一点。', en: 'On Saturday she left smiling. We are careful.', label: 'atmosphere' },
-    d10_cam_b: { placeholder: true, speaker: 'camille', fr: fr('Elle revient dans un mois. Moins de bruit.'), zh: '她一个月后回来。少一点声音。', en: 'She comes back in a month. Less noise.', label: 'atmosphere' },
-    d10_cam_c: { placeholder: true, speaker: 'camille', fr: fr('On écrit les règles. On fait très attention.'), zh: '我们把规矩写下来。我们会非常小心。', en: 'We write the rules. We are very careful.', label: 'atmosphere' },
-    d10_cam_null: { placeholder: true, speaker: 'camille', fr: fr('C’est mardi. On écrit la liste.'), zh: '今天是星期二。我们写清单。', en: 'It’s Tuesday. We write the list.', label: 'atmosphere' },
+    d10_cam_a: { speaker: 'camille', fr: fr("Personne n'a demandé de liste. Mais c'est bien."), zh: '没人要求写清单。不过写一份挺好的。', en: 'Nobody asked for a list. But it’s good.', label: 'atmosphere' },
+    d10_cam_b: { speaker: 'camille', fr: fr('Une liste, pour les nuits calmes.'), zh: '一张清单，为了安静的夜晚。', en: 'A list, for the quiet nights.', label: 'atmosphere' },
+    d10_cam_c: { speaker: 'camille', fr: fr("Madame Martin veut une liste. Aujourd'hui, on l'écrit."), zh: 'Martin 太太要一份清单。今天我们就写。', en: 'Madame Martin wants a list. Today, we write it.', label: 'atmosphere' },
+    d10_cam_null: { speaker: 'camille', fr: fr("Une liste, c'est plus simple."), zh: '有张清单，事情简单些。', en: 'A list is simpler.', label: 'atmosphere' },
     d10_cam_frigo: { speaker: 'camille', fr: fr('Le lait, ça va dans le frigo. Pas sur la table.'), zh: '牛奶放冰箱。不放桌上。', en: 'The milk goes in the fridge. Not on the table.', label: 'understand', target: 'le_lait_dans_le_frigo' },
     d10_cam_vaisselle: { speaker: 'camille', fr: fr('Noé, tu pourrais faire la vaisselle ?'), zh: 'Noé，你能洗一下碗吗？', en: 'Noé, could you do the dishes?', label: 'understand', target: 'tu_pourrais_vaisselle' },
     d10_noe_vaisselle: { speaker: 'noe', fr: fr('Je pourrais… Mais je ne voudrais pas.'), zh: '我可以……但我不想。', en: 'I could… But I wouldn’t want to.', label: 'understand' },
@@ -152,48 +152,13 @@
     deckCard('pas_de_nourriture_canape', 'Pas de nourriture sur le canapé.', '不许在沙发上吃东西。', 'No food on the sofa.', 'pas_de')
   ];
 
-  /* PLACEHOLDER letter 10 — reconstructed fridge list. Story Director will supply the real letter.
-   * Line 6 is the specified addition (« Le jardin : un peu d’eau. »). */
-  var LETTER = {
-    placeholder: true,
-    n: 10, ch: 'd10', kind: 'Liste', to: 'le frigo', grammar: 'conditionnel', band: 'A1',
-    intro: { zh: '清单贴在冰箱上。你补上最后一行。', en: 'The list is on the fridge. You add the last line.' },
-    body: [
-      ['La liste de la maison'],
-      ['1. Le lait, ça va dans le frigo.'],
-      ['2. Noé, tu ', { gap: 'pourrais' }, ' faire la vaisselle' + NB + '?'],
-      ['3. Pas de bruit la nuit.'],
-      ['4. Croissant, dans ton panier.'],
-      [fr('5. Jeudi : dîner en bas.')],
-      [fr('6. Le jardin : un peu d’eau.')]
-    ],
-    gaps: {
-      pourrais: { type: 'mc', answer: 'pourrais', options: ['pourrais', 'peux', 'fais'],
-        fr: fr('Tu pourrais faire la vaisselle ?'), zh: '你能洗一下碗吗？', en: 'Could you do the dishes?',
-        h1: { zh: '客气地请人做事：tu pourrais + 动词原形。', en: 'A polite request: tu pourrais + infinitive.' },
-        h2: { zh: 'p o u r r a i s。', en: 'p o u r r a i s.' } }
-    }
-  };
-
-  var LESSON = {
-    title: fr('Tu pourrais… ?'),
-    steps: [
-      { kind: 'example', prof: fr('Regarde. On demande poliment.'), ex: [fr('Tu pourrais faire la vaisselle ?')], mark: ['pourrais'],
-        zh: '用 pourrais 请别人帮忙，语气更客气。', en: 'pourrais asks for help, more politely.' },
-      { kind: 'pattern', prof: fr('tu pourrais + verbe'), pattern: ['tu pourrais', '+', 'infinitif', '+', '?'],
-        zh: '后面接动词原形，句末是问号。', en: 'Then the infinitive, and a question mark.' },
-      { kind: 'try', prof: fr('À toi !'), q: fr('Tu ___ faire la vaisselle ?'), options: ['pourrais', 'peux', 'fais'], answer: 'pourrais',
-        zh: '请 Noé 洗碗。', en: 'Ask Noé to do the dishes.', why: { zh: '客气的请求用 pourrais。', en: 'A polite request uses pourrais.' } }
-    ]
-  };
-
   var RITUAL = { fr: fr('La nuit, sur le toit. Le basilic a bu. Croissant dort sur la vieille chaise.'), zh: '夜里，楼顶上。罗勒喝过水了。Croissant 睡在那把旧椅子上。', en: 'Night, on the roof. The basil has had water. Croissant sleeps on the old chair.', sfx: ['purr'] };
 
   var REQUIRED_IDS = ['n_d10_matin', 'd10_cam_liste', 'd10_cam_frigo', 'd10_cam_vaisselle', 'd10_noe_vaisselle', 'd10_regle', 'n_d10_noe_ecrit', 'd10_cam_chat', 'n_d10_toc', 'n_d10_lef_porte', 'd10_cam_cafe', 'd10_lef_bonjour', 'n_d10_cle', 'd10_lef_toi', 'd10_pourmoi', 'd10_lef_jardin', 'd10_noe_jardin', 'd10_lef_allez', 'n_d10_descend', 'n_d10_monte', 'd10_cam_toit', 'd10_noe_sec', 'n_d10_basilic', 'd10_noe_ici', 'n_d10_plante', 'd10_eau', 'n_d10_arrose', 'd10_cam_idee', 'n_d10_regard'];
 
   var api = {
     LINES: LINES, STEPS: STEPS, CHAPTER: CHAPTER, HUB: HUB, WORDS: WORDS, DECK: DECK,
-    LETTER: LETTER, LESSON: LESSON, RITUAL: RITUAL, REQUIRED_IDS: REQUIRED_IDS, NB: NB
+    LETTER: LetterPack.LETTER, LESSON: LetterPack.LESSON, RITUAL: RITUAL, REQUIRED_IDS: REQUIRED_IDS, NB: NB
   };
   root.A411 = root.A411 || {};
   root.A411.Day10 = api;

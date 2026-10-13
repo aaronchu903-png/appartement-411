@@ -29,7 +29,7 @@ test('new French uses a curly apostrophe and a narrow space before ? ! ; :', fun
   assert.equal(Fr.normalizeFr("C'est pour moi ?"), 'C' + AP + 'est pour moi' + NB + '?');
   assert.equal(Fr.normalizeFr('Jeudi : dîner'), 'Jeudi' + NB + ': dîner');
   assert.equal(Fr.normalizeFr('« C’est une bonne idée. »'), '«' + NB + 'C' + AP + 'est une bonne idée.' + NB + '»');
-  var bits = frenchBits(Day10.STEPS, []).concat(frenchBits(Day10.LINES, []), frenchBits(Day10.LETTER, []), frenchBits(Day10.DECK, []), frenchBits(Day12.LINES, []), [Day12.HOOK.fr, Day12.OPTION_JARDIN, Day12.KEPT, Day12.EVE.fr]);
+  var bits = frenchBits(Day10.STEPS, []).concat(frenchBits(Day10.LINES, []), frenchBits(Day10.LETTER, []), frenchBits(Day10.LESSON, []), frenchBits(Day10.DECK, []), frenchBits(Day12.LINES, []), [Day12.HOOK.fr, Day12.OPTION_JARDIN, Day12.KEPT, Day12.EVE.fr]);
   bits.forEach(function (s) {
     assert.equal(s.indexOf("'"), -1, s);
     assert.equal(/[ \u00A0][?!;:]/.test(s), false, s);
@@ -51,12 +51,43 @@ test('Day 10 keeps the required beats and the five new chunks', function () {
   assert.ok(kept.indexOf('pas_de_nourriture_canape') >= 0);
   var blob = frenchBits(Day10.STEPS, []).join('\n') + frenchBits(Day10.LINES, []).join('\n');
   assert.equal(/Hélène|C’était à lui|son jardin/i.test(blob), false);
-  var letter = Day10.LETTER.body.map(function (p) { return p.map(function (x) { return typeof x === 'string' ? x : ''; }).join(''); }).join('\n');
-  assert.ok(letter.indexOf('6. Le jardin' + NB + ': un peu d' + AP + 'eau.') >= 0);
+  function flat(paras) {
+    return paras.map(function (p) { return p.map(function (x) { return typeof x === 'string' ? x : ''; }).join(''); }).join('\n');
+  }
+  var letter = flat(Day10.LETTER.body);
+  assert.equal(letter.indexOf('6. Le jardin'), -1);
+  assert.equal(Day10.LETTER.kind, 'Mot');
+  assert.equal(Day10.LETTER.to, 'Madame Lefèvre');
+  assert.equal(Day10.LETTER.grammar, 'conditionnel_politesse');
+  assert.equal(Day10.LETTER.placeholder, undefined);
+  assert.ok(letter.indexOf('Chère Madame,') >= 0);
+  assert.ok(letter.indexOf('Merci pour la clé. Le basilic est sur le toit, dans un pot.') >= 0);
+  assert.ok(letter.indexOf('Il a de l' + AP + 'eau. Une feuille se redresse' + NB + '!') >= 0);
+  assert.ok(letter.indexOf('À jeudi' + NB + '!') >= 0);
+  assert.ok(letter.indexOf('le 411 (et Croissant)') >= 0);
+  assert.equal(letter.indexOf('P.S.'), -1);
+  assert.deepEqual(Day10.LETTER.gaps.voudriez.options, ['voudriez', 'voudrais', 'voudrait']);
+  assert.deepEqual(Day10.LETTER.gaps.pourrais.options, ['pourrais', 'pourrait', 'pourriez']);
+  assert.deepEqual(Day10.LETTER.gaps.pourriez.options, ['pourriez', 'pourrais', 'pourrons']);
+  assert.equal(Day10.LETTER.ps.choice, 'd10_eau');
+  assert.equal(Day10.LETTER.ps.value, 'cafe');
+  var cafe = flat(Day10.LETTER.paragraphs('cafe'));
+  assert.ok(cafe.indexOf('le 411 (et Croissant)') < cafe.indexOf('P.S. Noé voudrait du café. Toujours.'));
+  assert.equal(flat(Day10.LETTER.paragraphs('eau')).indexOf('P.S.'), -1);
+  assert.equal(flat(Day10.LETTER.paragraphs(null)).indexOf('P.S.'), -1);
+  assert.equal(Day10.LESSON.title, 'Le conditionnel de politesse');
+  assert.equal(Day10.LESSON.steps[2].q, 'Camille, tu ___ fermer la fenêtre' + NB + '?');
+  assert.equal(Day10.LESSON.steps[2].answer, 'pourrais');
+  assert.equal(Day10.LINES.d10_cam_a.fr, 'Personne n' + AP + 'a demandé de liste. Mais c' + AP + 'est bien.');
+  assert.equal(Day10.LINES.d10_cam_b.fr, 'Une liste, pour les nuits calmes.');
+  assert.equal(Day10.LINES.d10_cam_c.fr, 'Madame Martin veut une liste. Aujourd' + AP + 'hui, on l' + AP + 'écrit.');
+  assert.equal(Day10.LINES.d10_cam_null.fr, 'Une liste, c' + AP + 'est plus simple.');
+  assert.equal(Day10.LINES.d10_cam_a.placeholder, undefined);
   ['d10_cam_a', 'd10_cam_b', 'd10_cam_c', 'd10_cam_null'].forEach(function (id) {
-    assert.equal(Day10.LINES[id].placeholder, true, id);
+    assert.equal(Day10.LINES[id].label, 'atmosphere', id);
+    assert.equal(Day10.LINES[id].speaker, 'camille', id);
   });
-  assert.equal(Day10.LETTER.placeholder, true);
+  assert.deepEqual(Day10.STEPS.filter(function (st) { return st.id && st.id.indexOf('d10_cam_') === 0 && st.when; }).map(function (st) { return st.id + ':' + st.when.v[0]; }), ['d10_cam_a:A', 'd10_cam_b:B', 'd10_cam_c:C', 'd10_cam_null:null']);
 });
 
 test('Day 12 apply inserts the pocket beat and rewrites the final lines', function () {

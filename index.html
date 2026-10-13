@@ -15452,9 +15452,13 @@ function getLang(ls, id) {
     return deck;
   }
   // Text of a finished letter, with the player's own answers where they typed them.
-  function fullText(n, answers) {
+  function letterParas(L, choice) {
+    if (L && typeof L.paragraphs === 'function') return L.paragraphs(choice);
+    return L.body;
+  }
+  function fullText(n, answers, choice) {
     var L = LETTERS[n];
-    return L.body.map(function (para) {
+    return letterParas(L, choice).map(function (para) {
       return para.map(function (x) { return typeof x === 'string' ? x : ((answers && answers[x.gap]) || L.gaps[x.gap].answer); }).join('');
     }).join('\n');
   }
@@ -18581,6 +18585,7 @@ function getLang(ls, id) {
 </script>
 <script src="js/fr.js"></script>
 <script src="js/pots.js"></script>
+<script src="js/day10-letter.js"></script>
 <script src="js/day10.js"></script>
 <script src="js/day12.js"></script>
 <script src="js/install-story.js"></script>
@@ -20828,7 +20833,9 @@ function getLang(ls, id) {
   function gapItemId(n, gid) { return 'lt' + n + '_' + gid; }
   function paper(n, r, curGid) {
     var Lt = LT.LETTERS[n], box = h('div', { class: 'letter-paper', lang: 'fr', id: 'letterPaper' });
-    Lt.body.forEach(function (para) {
+    var choice = Lt.ps ? choiceVal(Lt.ps.choice) : null;
+    var paras = typeof Lt.paragraphs === 'function' ? Lt.paragraphs(choice) : Lt.body;
+    paras.forEach(function (para) {
       var p = h('p');
       var ptxt = para.filter(function (x) { return typeof x === 'string'; }).join('');
       var lpts = GR && learnState ? GR.forLetterPara(n, ptxt) : [];
@@ -21001,7 +21008,8 @@ function getLang(ls, id) {
   function letterListenBtn(n, r) {
     var b = btn([icon('sound'), ' ', h('span', { text: Z('听这封信（设备语音）', 'Listen to the letter (device voice)') })], function () {
       if (ui.letterSay) { ui.letterSay.stop(); Au.stop(); ui.letterSay = null; set(false); return; }
-      var run = Au.speakChunks(LT.fullText(n, answersOf(r)).replace(/\u00A0/g, ' ').replace(/[\u2019\u2018]/g, "'"), { speaker: 'neutral' });
+      var Lt = LT.LETTERS[n], choice = Lt && Lt.ps ? choiceVal(Lt.ps.choice) : null;
+      var run = Au.speakChunks(LT.fullText(n, answersOf(r), choice).replace(/[\u00A0\u202F]/g, ' ').replace(/[\u2019\u2018]/g, "'"), { speaker: 'neutral' });
       ui.letterSay = run; set(true);
       run.done.then(function (res) { if (ui.letterSay === run) { ui.letterSay = null; set(false); } if (res === 'failed' || res === 'unavailable') toast(Z('设备语音没有播放。', 'The device voice didn’t play.')); });
     }, 'small', { id: 'btnLetterListen', 'aria-pressed': 'false' });
@@ -21021,7 +21029,7 @@ function getLang(ls, id) {
       any = true;
       box.appendChild(h('div', { class: 'card postcard', 'data-letter': String(n) },
         h('h3', { lang: 'fr', text: 'Jour ' + n + ' · ' + Lt.kind + ' à ' + Lt.to }),
-        r.status === 'done' ? h('div', { class: 'letter-paper small', lang: 'fr', text: LT.fullText(n, answersOf(r)) })
+        r.status === 'done' ? h('div', { class: 'letter-paper small', lang: 'fr', text: LT.fullText(n, answersOf(r), Lt.ps ? choiceVal(Lt.ps.choice) : null) })
           : h('p', { class: 'muted', text: r.status === 'migrated' ? Z('旧版本里做过这一天的晚间任务；这封信还可以补写（不会再清除痕迹）。', 'This day’s evening task was done in an older version; you can still write the letter (no extra trace).') : Z('还没写完。', 'Not finished yet.') }),
         r.status === 'done' ? null : btn(Z('写这封信', 'Write this letter'), function () { closeOverlay(); openLetter(n); }, 'small', { id: 'btnCarnetWrite' + n })));
     });
@@ -22583,7 +22591,7 @@ function getLang(ls, id) {
     var q;
     try { q = new URLSearchParams(location.search); } catch (e) { return null; }
     var kind = q.get('preview');
-    if (kind !== 'rooftop' && kind !== 'pots') return null;
+    if (kind !== 'rooftop' && kind !== 'pots' && kind !== 'letter') return null;
     return q;
   }
   function bootPreview(q) {
@@ -22596,6 +22604,21 @@ function getLang(ls, id) {
       A411.Pots.fillPreview(learnState, q.get('leaves') || 'full');
       ui.potNight = q.get('night') === '1';
       ui.view = 'pots';
+    } else if (q.get('preview') === 'letter') {
+      var choice = q.get('choice') === 'cafe' ? 'cafe' : 'eau';
+      var w = WL.ensureWeek(S);
+      w.chapters.d10 = { status: 'complete', choices: { d10_eau: choice }, step: 0 };
+      var lesson = q.get('lesson') === '1';
+      var gaps = {};
+      if (!lesson) {
+        Object.keys(A411.Day10.LETTER.gaps).forEach(function (gid) {
+          gaps[gid] = { value: A411.Day10.LETTER.gaps[gid].answer, correct: true, hints: 0, tries: 0 };
+        });
+      }
+      w.letters[10] = { status: lesson ? 'in_progress' : 'done', gaps: gaps };
+      ui.letterN = 10;
+      ui.letterRead = !lesson;
+      ui.view = 'letter';
     } else {
       ui.roofScene = q.get('scene') === 'tidy' ? 'tidy' : 'firstvisit';
       ui.roofNight = q.get('night') === '1';

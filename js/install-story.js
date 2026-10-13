@@ -26,7 +26,7 @@
     }
     if (A.Letters) {
       A.Letters.LETTERS[10] = D.LETTER;
-      A.Letters.LESSONS.conditionnel = D.LESSON;
+      A.Letters.LESSONS[D.LETTER.grammar] = D.LESSON;
       if (A.Letters.ORDER.indexOf(10) < 0) A.Letters.ORDER.push(10);
     }
     if (A.HubStory) {

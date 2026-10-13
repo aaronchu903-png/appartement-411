@@ -56,6 +56,8 @@ Before Day 10 is finished, the desk still shows the old windowsill. After `story
 
 Day 10 « La clé » is the first visit: dry pots, weeds, an old chair, a faded sign with no readable text, then the basil in pot ②. Day 12’s final line edits live in `js/day12.js` and are applied when that episode exists. This build does not include the supérette arc.
 
-## PLACEHOLDER copy
+## Day 10 band lines and letter 10
 
-`d10_cam_a`, `d10_cam_b`, `d10_cam_c`, and `d10_cam_null` are marked `placeholder: true` in `js/day10.js`. Letter 10 is marked `placeholder: true` as well. The Story Director will supply the real band lines and the real letter. Line 6 (« 6. Le jardin : un peu d’eau. ») is the specified addition; the rest of that letter body is not the v1 recording.
+The Tuesday-morning lines are the director text in `js/day10.js`. One of them plays, from the Day 7 band: `d10_cam_a` (A), `d10_cam_b` (B), `d10_cam_c` (C), or `d10_cam_null` (no band). They do not name an ending, and nothing after that line changes.
+
+Letter 10 is a « Mot » to Madame Lefèvre, slipped under her door. The French lives in `js/day10-letter.js` so a later wording fix stays in one file. Straight apostrophes and ordinary spaces are normalized on load (’ and U+202F). The note uses the polite conditional: voudriez, pourrais, pourriez. The signature is « le 411 (et Croissant) ». The line « P.S. Noé voudrait du café. Toujours. » is added after that signature only when the step-30 choice `d10_eau` was `cafe`. No reply is written here. The fridge list stays as the night rooftop art, not as the letter. The grammar card is `conditionnel_politesse`.
