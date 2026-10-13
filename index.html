@@ -19145,15 +19145,18 @@ function getLang(ls, id) {
   function loadGardenPack() {
     if (!gardenPack) {
       gardenPack = fetch('art/garden/manifest.json').then(function (r) { return r.json(); }).then(function (manifest) {
-        return fetch('art/garden/rooftop/walkable.json').then(function (r) {
-          if (!r.ok) return null;
-          return r.json();
-        }, function () { return null; }).then(function (shipped) {
+        function finish(shipped) {
           var walk = shipped || A411.GardenArt.baseWalkable(manifest);
           var fixed = A411.GardenArt.correctWalkable(walk, manifest);
           A411.walkableRoof = fixed;
           return { manifest: manifest, walkable: fixed };
-        });
+        }
+        var rel = manifest.files && manifest.files.walkable;
+        if (!rel) return finish(null);
+        return fetch('art/garden/' + rel).then(function (r) {
+          if (!r.ok) return null;
+          return r.json();
+        }, function () { return null; }).then(finish);
       });
     }
     return gardenPack;

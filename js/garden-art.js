@@ -3,7 +3,7 @@
  * visit and the tidy roof are placed here (ROOF_LAYOUT) until a later pack
  * puts scenes on the manifest and composed files in manifest.files
  * (rooftop_day_firstvisit, rooftop_night_tidy, …). Those files win when present.
- * A shipped rooftop/walkable.json wins over the generated y≥96 grid.
+ * A walk grid listed as manifest.files.walkable replaces the generated y≥96 grid.
  */
 (function (root) {
   'use strict';
