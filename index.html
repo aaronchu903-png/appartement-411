@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.12.2 single-file build 2026-10-13T22:43:09.333Z -->
+<!-- L’Appartement 411 v0.13.0 single-file build 2026-10-13T23:12:21.597Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -134,9 +134,12 @@ select { width:100%; font:inherit; font-size:1em; padding:10px; border:2px solid
 .icon { min-width:44px; min-height:44px; padding:.3rem .6rem; font-size:1.3rem; background:transparent; border:1px solid var(--line, #c9b9a0); border-radius:10px; }
 .linkish { background:none; border:none; padding:.2rem .3rem; text-decoration:underline; min-height:auto; font-size:.95rem; cursor:pointer; color:inherit; }
 .day-steps { display:flex; gap:.4rem; list-style:none; padding:0; margin:.6rem 0; }
-.day-steps li { flex:1; text-align:center; padding:.35rem .2rem; border-radius:10px; border:1px solid var(--line, #c9b9a0); font-size:.85rem; opacity:.75; }
-.day-steps li[data-state="current"] { opacity:1; border-width:2px; font-weight:700; background:rgba(255,220,140,.25); }
-.day-steps li[data-state="done"] { opacity:1; background:rgba(120,190,120,.22); }
+.day-steps li { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-align:center; padding:.4rem .2rem; border-radius:10px; border:1px solid var(--line, #c9b9a0); font-size:.85rem; opacity:1; background:#fffdf8; }
+.day-steps li[data-state="current"] { border-width:2px; font-weight:700; background:rgba(255,220,140,.45); }
+.day-steps li[data-state="done"] { background:rgba(120,190,120,.28); }
+.day-steps .dot { display:flex; align-items:center; justify-content:center; min-width:1.25rem; height:1.25rem; padding:0 .2rem; border-radius:999px; background:#efe2c4; font-weight:700; font-size:.75rem; line-height:1; }
+.day-steps .pxicon { width:22px; height:22px; display:block; }
+.day-steps .lbl { display:block; line-height:1.15; }
 .home-status { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; justify-content:center; margin:.4rem 0; }
 .version-footer { text-align:center; font-size:.75rem; opacity:.6; margin-top:1rem; }
 .letter-paper { background:#fffaf0; color:#3a2e22; border:1px solid #d8c7a8; border-radius:8px; padding:.9rem 1rem; line-height:1.9; font-family: "Noto Sans", "Noto Sans SC", system-ui, sans-serif; box-shadow: 0 2px 0 rgba(0,0,0,.05); white-space:normal; }
@@ -269,7 +272,7 @@ canvas.prof { width:64px; height:64px; image-rendering:pixelated; border:2px sol
 .confetti { position:absolute; inset:0; pointer-events:none; }
 .confetti i { position:absolute; top:-12px; width:8px; height:8px; animation:confetti 1.8s ease-in forwards; }
 @keyframes confetti { 0% { transform:translateY(0) rotate(0); opacity:1; } 100% { transform:translateY(220px) rotate(200deg); opacity:0; } }
-#screen { padding-bottom:88px; }
+#screen { padding-bottom:128px; }
 /* v0.7.0 Day 5 timeline (« L'enquête ») */
 .timeline { list-style:none; margin:.4em 0; padding:0; display:flex; flex-direction:column; gap:.25em; }
 .timeline li { display:flex; align-items:center; gap:.35em; padding:.3em .5em; border:2px dashed #b9ad94; border-radius:8px; min-height:2.2em; background:#fffdf7; }
@@ -347,6 +350,32 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
 .hub-tile.t-sand { background:#f6efdc; color:#8a5a2b; } .hub-tile.t-moss { background:#dcebd2; color:#4d7a35; }
 .hub-tile.t-grey { background:#ecebe6; color:#55524a; }
 .hub-tile:active { transform:translateY(2px); box-shadow:0 0 0 #2a2a2a; }
+/* Daily tasks: French text is Noto Sans / system-ui. Pixel art stays on the canvas. */
+.task-offers { display:flex; flex-direction:column; gap:8px; margin:10px 0; }
+.task-offer { width:100%; text-align:left; }
+.task-ui { font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; padding:12px 12px 28px; }
+.task-kicker, .task-line, .parcel-name, .task-slot, .task-door, .task-offer { font-family:"Noto Sans", "Noto Sans SC", system-ui, sans-serif; }
+.task-kicker { margin:0 0 8px; color:var(--muted); }
+.task-line { font-size:1.2rem; line-height:1.45; margin:10px 0; }
+.parcel-name { font-size:1.45rem; font-weight:700; letter-spacing:0; margin:8px 0 0; }
+.task-art { display:block; width:min(100%, 360px); height:auto; margin:0 auto; image-rendering:pixelated; background:#d8c9ad; border:2px solid #2a2e3a; }
+.task-actions { display:flex; flex-direction:column; gap:8px; }
+.task-actions .btn, .task-ui > .btn { min-height:44px; }
+.task-icons { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-end; }
+.task-icon { padding:4px; }
+.task-icon canvas, .task-chip { display:block; width:auto; height:auto; image-rendering:pixelated; image-rendering:crisp-edges; }
+.task-chip { margin:10px auto 0; cursor:grab; border:2px solid #2a2e3a; touch-action:none; }
+.task-stage { position:relative; width:288px; height:336px; max-width:100%; margin:8px auto 4px; box-sizing:content-box; border:2px solid #2a2e3a; line-height:0; }
+.task-stage .task-art { width:288px; height:336px; max-width:100%; border:0; background:transparent; }
+.task-zone { position:absolute; margin:0; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; min-width:0; min-height:0; cursor:pointer; }
+.task-zone:focus-visible, .task-zone:active { background:rgba(242,201,76,.28); outline:2px solid #c9a227; }
+.task-slots { display:flex; flex-direction:column; gap:8px; }
+.task-slot, .task-door { width:100%; text-align:left; }
+.task-ui.task-miss { box-shadow:inset 0 0 0 2px var(--warn); }
+.handover { animation:task-hand .55s ease; }
+@keyframes task-hand { from { transform:translateY(10px); opacity:.35; } to { transform:none; opacity:1; } }
+@media (prefers-reduced-motion: reduce) { .handover { animation:none; } }
+body.reduced-motion .handover { animation:none; }
 /* the wordbook icon stays on every screen; it only fades + lets taps through while it would cover an answer option */
 .wb-fab.over-option { opacity:.35; pointer-events:none; }
 
@@ -961,7 +990,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.12.2';
+  var APP_VERSION = '0.13.0';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -2921,8 +2950,20 @@ var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait
     });
   };
 
+  // Spoken form only. The on-screen French stays as written.
+  // « le / la … » is split before it reaches the engine. « deux euros » is rewritten
+  // « deuz euros » so the liaison /døzøʁo/ is in the string (orthography hides the /z/).
+  function forSpeech(text) {
+    var t = String(text == null ? '' : text);
+    var Lex = root.A411 && root.A411.Lexicon;
+    if (t.indexOf(' / ') >= 0) t = Lex && Lex.speakable ? Lex.speakable(t) : t.split(' / ')[0].trim();
+    t = t.replace(/deux euros/gi, 'deuz euros');
+    return t;
+  }
+  A.forSpeech = forSpeech;
   // opts: { speaker: 'camille'|'noe'|'neutral', rate } -> 'played' | 'failed' | 'unavailable' | 'stopped'. Never rejects.
   A.speak = function (text, opts) {
+    text = forSpeech(text);
     opts = opts || {};
     return new Promise(function (resolve) {
       var who = opts.speaker;
@@ -11397,6 +11438,214 @@ function getLang(ls, id) {
 
 </script>
 <script>
+/* Generated by tools/build-lexicon.mjs from data/act1_lexicon_fields.json and docs/ACT1_POTS.md.
+ * fr_* / icon / tags are Prof Neng’s hand-written fields. Do not derive them.
+ */
+(function (root) {
+  'use strict';
+  root.A411 = root.A411 || {};
+  root.A411.LEXICON_FIELDS = {"schema_version":1,"generated":"2026-10-13","author":"Prof Neng (hand-written; Cursor must not derive these)","source":"docs/ACT1_POTS.md (167 items: 166 + p2_38 le lait)","joins_on":"id (same ids as act1_testout_items.json)","notes":["Curly ’ everywhere. Plain spaces; implementation applies NNBSP before ? ! : ; and inside « ».","Phrases/verb chunks: noun fields null. If a chunk carries a fetchable noun DT01 may need, it is listed in embedded_nouns (exposure/fetch target), but the chunk itself is not tagged item.","fr_partitive uses un/une for countables; fr_count holds an alternative counted/plural form.","Slash entries (le / la colocataire, toit / jardin) are pairs: split before TTS or templating.","icon_status 'missing' = proposed slug, see docs/ICONS_MISSING_ACT1.md.","p2_38 le lait has no test-out entry (not sampled in the germination test)."],"items":[{"id":"p1_01","fr":"Bonjour !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","greeting"],"pot":1,"metDay":1,"deckIds":["bonjour"]},{"id":"p1_02","fr":"Salut !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","greeting"],"pot":1,"metDay":1,"deckIds":["salut"]},{"id":"p1_03","fr":"Bonsoir !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","greeting"],"pot":1,"metDay":6,"deckIds":["bonsoir"]},{"id":"p1_04","fr":"Je m’appelle…","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro","verb_chunk"],"pot":1,"metDay":1,"deckIds":["je_mappelle"]},{"id":"p1_05","fr":"Tu t’appelles comment ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro"],"pot":1,"metDay":7,"deckIds":["tu_tappelles_comment"]},{"id":"p1_06","fr":"Moi, c’est…","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro"],"pot":1,"metDay":7,"deckIds":["moi_cest"]},{"id":"p1_07","fr":"Enchanté(e) !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","greeting","intro"],"pot":1,"metDay":7,"deckIds":["enchante"]},{"id":"p1_08","fr":"le / la colocataire","fr_def":"le / la colocataire","fr_partitive":"un / une colocataire","fr_neg":"pas de colocataire","fr_count":null,"icon":null,"icon_status":null,"tags":["noun","person"],"pot":1,"metDay":1,"deckIds":["je_suis","jai_elision"]},{"id":"p1_09","fr":"Tu habites où ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro"],"pot":1,"metDay":7,"deckIds":["tu_habites"]},{"id":"p1_10","fr":"J’habite à Paris.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro","verb_chunk"],"pot":1,"metDay":7,"deckIds":["jhabite_paris"]},{"id":"p1_11","fr":"C’est mon appartement.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home"],"pot":1,"metDay":7,"deckIds":["mon_appartement"]},{"id":"p1_12","fr":"Bienvenue chez nous !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","greeting","home"],"pot":1,"metDay":1,"deckIds":[]},{"id":"p1_13","fr":"la porte","fr_def":"la porte","fr_partitive":"une porte","fr_neg":"pas de porte","fr_count":null,"icon":"doorway","icon_status":"ok","tags":["noun","home","furniture"],"pot":1,"metDay":1,"deckIds":[]},{"id":"p1_14","fr":"la clé","fr_def":"la clé","fr_partitive":"une clé","fr_neg":"pas de clé","fr_count":null,"icon":"key","icon_status":"ok","tags":["noun","item","home"],"pot":1,"metDay":5,"deckIds":["jai_perdu_la_cle"]},{"id":"p1_15","fr":"la cuisine","fr_def":"la cuisine","fr_partitive":"une cuisine","fr_neg":"pas de cuisine","fr_count":null,"icon":"kitchen","icon_status":"ok","tags":["noun","place","home"],"pot":1,"metDay":3,"deckIds":["dans_la_cuisine"]},{"id":"p1_16","fr":"le canapé","fr_def":"le canapé","fr_partitive":"un canapé","fr_neg":"pas de canapé","fr_count":null,"icon":"sofa","icon_status":"missing","tags":["noun","home","furniture"],"pot":1,"metDay":1,"deckIds":["derriere_le_canape"]},{"id":"p1_17","fr":"sur / sous la table","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"table","icon_status":"ok","tags":["phrase","position"],"pot":1,"metDay":3,"deckIds":["sur_la_table","sous_la_table"]},{"id":"p1_18","fr":"à côté de…","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","position"],"pot":1,"metDay":3,"deckIds":["a_cote_de"]},{"id":"p1_19","fr":"la plante","fr_def":"la plante","fr_partitive":"une plante","fr_neg":"pas de plante","fr_count":null,"icon":"plantp","icon_status":"ok","tags":["noun","item","home"],"pot":1,"metDay":1,"deckIds":[]},{"id":"p1_20","fr":"la lettre","fr_def":"la lettre","fr_partitive":"une lettre","fr_neg":"pas de lettre","fr_count":null,"icon":"letter","icon_status":"ok","tags":["noun","item","home"],"pot":1,"metDay":1,"deckIds":[]},{"id":"p1_21","fr":"la fenêtre","fr_def":"la fenêtre","fr_partitive":"une fenêtre","fr_neg":"pas de fenêtre","fr_count":null,"icon":"window","icon_status":"missing","tags":["noun","home","furniture"],"pot":1,"metDay":9,"deckIds":[]},{"id":"p1_22","fr":"l’escalier (m.)","fr_def":"l’escalier","fr_partitive":"un escalier","fr_neg":"pas d’escalier","fr_count":null,"icon":"stairs","icon_status":"missing","tags":["noun","place","home"],"pot":1,"metDay":5,"deckIds":[]},{"id":"p1_23","fr":"en haut / en bas","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","position"],"pot":1,"metDay":4,"deckIds":[]},{"id":"p1_24","fr":"le lit","fr_def":"le lit","fr_partitive":"un lit","fr_neg":"pas de lit","fr_count":null,"icon":"bed","icon_status":"ok","tags":["noun","home","furniture"],"pot":1,"metDay":9,"deckIds":[]},{"id":"p1_25","fr":"Entrez !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home"],"pot":1,"metDay":7,"deckIds":[]},{"id":"p1_26","fr":"Asseyez-vous. / Assieds-toi.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home","verb_chunk"],"pot":1,"metDay":8,"deckIds":["asseyez_vous","assieds_toi"]},{"id":"p1_27","fr":"Il y a du bruit.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"noise","icon_status":"ok","tags":["phrase","home","rule"],"pot":1,"metDay":4,"deckIds":["il_y_a_du_bruit"]},{"id":"p1_28","fr":"Pas de bruit la nuit.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home","rule"],"pot":1,"metDay":9,"deckIds":[]},{"id":"p1_29","fr":"une règle","fr_def":"la règle","fr_partitive":"une règle","fr_neg":"pas de règle","fr_count":null,"icon":"rule_sign","icon_status":"missing","tags":["noun","home","rule"],"pot":1,"metDay":9,"deckIds":[]},{"id":"p1_30","fr":"la chambre","fr_def":"la chambre","fr_partitive":"une chambre","fr_neg":"pas de chambre","fr_count":null,"icon":"bedroom","icon_status":"missing","tags":["noun","place","home"],"pot":1,"metDay":null,"deckIds":[]},{"id":"p1_31","fr":"la salle de bains","fr_def":"la salle de bains","fr_partitive":"une salle de bains","fr_neg":"pas de salle de bains","fr_count":null,"icon":"bathroom","icon_status":"missing","tags":["noun","place","home"],"pot":1,"metDay":null,"deckIds":[]},{"id":"p1_32","fr":"Pas de nourriture sur le canapé.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home","rule"],"pot":1,"metDay":9,"deckIds":["pas_de_nourriture_canape"]},{"id":"p1_33","fr":"Aujourd’hui, on ne fait rien.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home","time"],"pot":1,"metDay":14,"deckIds":["on_ne_fait_rien"]},{"id":"p2_01","fr":"Tu veux du thé ou du café ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","drink"],"embedded_nouns":[{"fr_def":"le thé","fr_partitive":"du thé","fr_neg":"pas de thé","fr_count":"un thé","icon":"the"},{"fr_def":"le café","fr_partitive":"du café","fr_neg":"pas de café","fr_count":"un café","icon":"coffee_cup"}],"pot":2,"metDay":2,"deckIds":["the_ou_cafe"]},{"id":"p2_02","fr":"Je voudrais du café / du thé.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","drink","verb_chunk"],"embedded_nouns":[{"fr_def":"le café","fr_partitive":"du café","fr_neg":"pas de café","fr_count":"un café","icon":"coffee_cup"},{"fr_def":"le thé","fr_partitive":"du thé","fr_neg":"pas de thé","fr_count":"un thé","icon":"the"}],"pot":2,"metDay":2,"deckIds":["je_voudrais_cafe","je_voudrais_the"]},{"id":"p2_03","fr":"Je voudrais de l’eau.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","drink","verb_chunk"],"embedded_nouns":[{"fr_def":"l’eau","fr_partitive":"de l’eau","fr_neg":"pas d’eau","fr_count":"un verre d’eau","icon":"eau"}],"pot":2,"metDay":2,"deckIds":["de_leau"]},{"id":"p2_04","fr":"le sel (et le poivre)","fr_def":"le sel","fr_partitive":"du sel","fr_neg":"pas de sel","fr_count":null,"icon":"sel","icon_status":"ok","tags":["noun","item","food"],"pot":2,"metDay":null,"deckIds":[]},{"id":"p2_05","fr":"Vous voulez de la soupe ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"embedded_nouns":[{"fr_def":"la soupe","fr_partitive":"de la soupe","fr_neg":"pas de soupe","fr_count":null,"icon":"bowl"}],"pot":2,"metDay":8,"deckIds":["vous_voulez_de_la_soupe"]},{"id":"p2_06","fr":"Je voudrais du pain, s’il vous plaît.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","verb_chunk"],"embedded_nouns":[{"fr_def":"le pain","fr_partitive":"du pain","fr_neg":"pas de pain","fr_count":null,"icon":"bread"}],"pot":2,"metDay":8,"deckIds":["je_voudrais_du_pain"]},{"id":"p2_07","fr":"Encore un peu ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":8,"deckIds":["encore_un_peu"]},{"id":"p2_08","fr":"le fromage","fr_def":"le fromage","fr_partitive":"du fromage","fr_neg":"pas de fromage","fr_count":null,"icon":"fromage","icon_status":"ok","tags":["noun","item","food"],"pot":2,"metDay":8,"deckIds":[]},{"id":"p2_09","fr":"C’est du basilic, pour la cuisine.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"embedded_nouns":[{"fr_def":"le basilic","fr_partitive":"du basilic","fr_neg":"pas de basilic","fr_count":null,"icon":"basilic"}],"pot":2,"metDay":8,"deckIds":["cest_du_basilic"]},{"id":"p2_10","fr":"On mange à table.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","verb_chunk"],"pot":2,"metDay":9,"deckIds":["on_mange_a_table"]},{"id":"p2_11","fr":"un œuf / des œufs","fr_def":"l’œuf","fr_partitive":"un œuf","fr_neg":"pas d’œuf","fr_count":"des œufs","icon":"oeuf","icon_status":"ok","tags":["noun","item","food"],"pot":2,"metDay":null,"deckIds":[]},{"id":"p2_12","fr":"Tu pourrais faire la vaisselle ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","home","verb_chunk"],"pot":2,"metDay":9,"deckIds":["tu_pourrais_vaisselle"]},{"id":"p2_13","fr":"Le lait, ça va dans le frigo.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":9,"deckIds":["le_lait_dans_le_frigo"]},{"id":"p2_14","fr":"le beurre","fr_def":"le beurre","fr_partitive":"du beurre","fr_neg":"pas de beurre","fr_count":null,"icon":"beurre","icon_status":"ok","tags":["noun","item","food"],"pot":2,"metDay":9,"deckIds":[]},{"id":"p2_15","fr":"Il n’y a plus de lait.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":10,"deckIds":["il_ny_a_plus_de_lait"]},{"id":"p2_16","fr":"J’ai faim !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","feeling","verb_chunk"],"pot":2,"metDay":10,"deckIds":["jai_faim"]},{"id":"p2_17","fr":"Tu as faim ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","feeling","verb_chunk"],"pot":2,"metDay":13,"deckIds":["tu_as_faim"]},{"id":"p2_18","fr":"Je n’ai plus faim.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","feeling","verb_chunk"],"pot":2,"metDay":11,"deckIds":["je_nai_plus_faim"]},{"id":"p2_19","fr":"J’ai soif.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","drink","feeling","verb_chunk"],"pot":2,"metDay":12,"deckIds":["jai_soif"]},{"id":"p2_20","fr":"C’est délicieux !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":11,"deckIds":["cest_delicieux"]},{"id":"p2_21","fr":"Vous voulez du thé ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","drink"],"embedded_nouns":[{"fr_def":"le thé","fr_partitive":"du thé","fr_neg":"pas de thé","fr_count":"un thé","icon":"the"}],"pot":2,"metDay":11,"deckIds":["vous_voulez_du_the"]},{"id":"p2_22","fr":"Merci pour le dîner.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","politeness"],"pot":2,"metDay":11,"deckIds":["merci_pour_le_diner"]},{"id":"p2_23","fr":"Une part de tarte ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"embedded_nouns":[{"fr_def":"la tarte","fr_partitive":"de la tarte","fr_neg":"pas de tarte","fr_count":"une part de tarte","icon":"tart"}],"pot":2,"metDay":11,"deckIds":["une_part_de_tarte"]},{"id":"p2_24","fr":"la soupe de légumes","fr_def":"la soupe de légumes","fr_partitive":"de la soupe de légumes","fr_neg":"pas de soupe de légumes","fr_count":null,"icon":"bowl","icon_status":"ok","tags":["noun","item","food"],"pot":2,"metDay":11,"deckIds":[]},{"id":"p2_25","fr":"On déjeune ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food","verb_chunk"],"pot":2,"metDay":12,"deckIds":["on_dejeune"]},{"id":"p2_26","fr":"Des pâtes, ça te va ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"embedded_nouns":[{"fr_def":"les pâtes","fr_partitive":"des pâtes","fr_neg":"pas de pâtes","fr_count":null,"icon":"pasta_pack"}],"pot":2,"metDay":12,"deckIds":["des_pates_ca_te_va"]},{"id":"p2_27","fr":"Un verre d’eau, s’il te plaît.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","drink"],"embedded_nouns":[{"fr_def":"l’eau","fr_partitive":"de l’eau","fr_neg":"pas d’eau","fr_count":"un verre d’eau","icon":"eau"}],"pot":2,"metDay":12,"deckIds":["un_verre_deau"]},{"id":"p2_28","fr":"C’est prêt ! À table !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":12,"deckIds":["cest_pret"]},{"id":"p2_29","fr":"Tu veux boire quelque chose ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","drink","verb_chunk"],"pot":2,"metDay":13,"deckIds":["tu_veux_boire_quelque_chose"]},{"id":"p2_30","fr":"Avec plaisir.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":2,"metDay":13,"deckIds":["avec_plaisir"]},{"id":"p2_31","fr":"Il reste de la tarte.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":13,"deckIds":["il_reste_de_la_tarte"]},{"id":"p2_32","fr":"Bon appétit !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","food"],"pot":2,"metDay":13,"deckIds":["bon_appetit"]},{"id":"p2_33","fr":"J’ai fait du café.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","drink","verb_chunk"],"pot":2,"metDay":7,"deckIds":["jai_fait"]},{"id":"p2_34","fr":"le petit-déjeuner","fr_def":"le petit-déjeuner","fr_partitive":"un petit-déjeuner","fr_neg":"pas de petit-déjeuner","fr_count":null,"icon":"breakfast","icon_status":"missing","tags":["noun","food","meal"],"pot":2,"metDay":14,"deckIds":["on_prend_le_petit_dejeuner"]},{"id":"p2_35","fr":"un croissant, un pain au chocolat","fr_def":"le croissant / le pain au chocolat","fr_partitive":"un croissant / un pain au chocolat","fr_neg":"pas de croissant / pas de pain au chocolat","fr_count":null,"icon":"croiss","icon_status":"ok","tags":["noun","item","food"],"pot":2,"metDay":14,"deckIds":["un_croissant_ou_un_pain_au_chocolat"]},{"id":"p2_36","fr":"Prenez, c’est pour vous.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":2,"metDay":9,"deckIds":[]},{"id":"p2_37","fr":"Il faut de l’eau.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","drink","plant"],"embedded_nouns":[{"fr_def":"l’eau","fr_partitive":"de l’eau","fr_neg":"pas d’eau","fr_count":null,"icon":"eau"}],"pot":2,"metDay":9,"deckIds":["il_faut_de_leau"]},{"id":"p2_38","fr":"le lait","fr_def":"le lait","fr_partitive":"du lait","fr_neg":"pas de lait","fr_count":null,"icon":"milk_carton","icon_status":"missing","tags":["noun","item","food","drink"],"pot":2,"metDay":9,"deckIds":[]},{"id":"p3_01","fr":"C’est combien ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","money"],"pot":3,"metDay":2,"deckIds":["cest_combien"]},{"id":"p3_02","fr":"Je voudrais un sac de croquettes, s’il vous plaît.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","verb_chunk"],"embedded_nouns":[{"fr_def":"les croquettes","fr_partitive":"des croquettes","fr_neg":"pas de croquettes","fr_count":"un sac de croquettes","icon":"croquettes_2kg"}],"pot":3,"metDay":2,"deckIds":["un_sac_de"]},{"id":"p3_03","fr":"Merci, bonne journée !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","politeness"],"pot":3,"metDay":2,"deckIds":["bonne_journee"]},{"id":"p3_04","fr":"Il n’y a pas de croquettes.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop"],"embedded_nouns":[{"fr_def":"les croquettes","fr_partitive":"des croquettes","fr_neg":"pas de croquettes","fr_count":null,"icon":"croquettes_2kg"}],"pot":3,"metDay":2,"deckIds":["pas_de_croquettes"]},{"id":"p3_05","fr":"Il n’y a pas de pain.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop"],"embedded_nouns":[{"fr_def":"le pain","fr_partitive":"du pain","fr_neg":"pas de pain","fr_count":null,"icon":"bread"}],"pot":3,"metDay":7,"deckIds":["pas_de_pain"]},{"id":"p3_06","fr":"Je vais acheter…","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","verb_chunk"],"pot":3,"metDay":2,"deckIds":["je_vais_acheter"]},{"id":"p3_07","fr":"J’ai acheté du pain.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","verb_chunk"],"pot":3,"metDay":7,"deckIds":["jai_achete"]},{"id":"p3_08","fr":"Il y a une supérette au coin.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"shopfront","icon_status":"ok","tags":["phrase","shop","place"],"pot":3,"metDay":2,"deckIds":["superette"]},{"id":"p3_09","fr":"Merci !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":3,"metDay":2,"deckIds":["merci"]},{"id":"p3_10","fr":"S’il vous plaît.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":3,"metDay":2,"deckIds":["s_il_vous_plait"]},{"id":"p3_11","fr":"Vous pouvez répéter, s’il vous plaît ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness","verb_chunk"],"pot":3,"metDay":4,"deckIds":["vous_pouvez_repeter"]},{"id":"p3_12","fr":"Je ne sais pas.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","classroom"],"pot":3,"metDay":3,"deckIds":["je_ne_sais_pas"]},{"id":"p3_13","fr":"Je prends ce… / ça.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","verb_chunk"],"pot":3,"metDay":7,"deckIds":["ce_verre"]},{"id":"p3_14","fr":"moins cher / trop cher","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","money"],"pot":3,"metDay":7,"deckIds":["moins_cher"]},{"id":"p3_15","fr":"une boîte de…","fr_def":"la boîte","fr_partitive":"une boîte","fr_neg":"pas de boîte","fr_count":"une boîte de…","icon":"cat_food_tin","icon_status":"ok","tags":["noun","item","shop","container"],"pot":3,"metDay":3,"deckIds":[]},{"id":"p3_16","fr":"les nombres 1–10","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"num_1_10","icon_status":"missing","tags":["noun","number"],"pot":3,"metDay":3,"deckIds":[]},{"id":"p3_17","fr":"les nombres 11–20","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"num_11_20","icon_status":"missing","tags":["noun","number"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_18","fr":"les dizaines 20–100","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"num_tens","icon_status":"missing","tags":["noun","number"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_19","fr":"un euro, deux euros…","fr_def":"l’euro","fr_partitive":"un euro","fr_neg":"pas d’euro","fr_count":"deux euros","icon":"euro","icon_status":"ok","tags":["noun","money","number"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_20","fr":"Ça fait trois euros cinquante.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","money","number"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_21","fr":"Vous avez de la monnaie ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"coins_pile","icon_status":"ok","tags":["phrase","shop","money"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_22","fr":"Je peux payer par carte ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"card","icon_status":"ok","tags":["phrase","shop","money","verb_chunk"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_23","fr":"Vous voulez un sac ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"plastic_bag","icon_status":"ok","tags":["phrase","shop"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_24","fr":"un kilo de… / un litre de…","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","quantity"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_25","fr":"une bouteille d’eau","fr_def":"la bouteille d’eau","fr_partitive":"une bouteille d’eau","fr_neg":"pas de bouteille d’eau","fr_count":null,"icon":"water_bottle","icon_status":"ok","tags":["noun","item","shop","drink","container"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_26","fr":"un paquet de pâtes","fr_def":"le paquet de pâtes","fr_partitive":"un paquet de pâtes","fr_neg":"pas de paquet de pâtes","fr_count":null,"icon":"pasta_pack","icon_status":"ok","tags":["noun","item","shop","food","container"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_27","fr":"une baguette, une demi-baguette","fr_def":"la baguette","fr_partitive":"une baguette","fr_neg":"pas de baguette","fr_count":"une demi-baguette","icon":"baguette","icon_status":"ok","tags":["noun","item","shop","food"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_28","fr":"Et avec ceci ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_29","fr":"C’est tout, merci.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop","politeness"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_30","fr":"Vous avez encore des… ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_31","fr":"la caisse","fr_def":"la caisse","fr_partitive":"une caisse","fr_neg":"pas de caisse","fr_count":null,"icon":"register","icon_status":"ok","tags":["noun","place","shop"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_32","fr":"le ticket (de caisse)","fr_def":"le ticket","fr_partitive":"un ticket","fr_neg":"pas de ticket","fr_count":null,"icon":"receipt","icon_status":"ok","tags":["noun","item","shop"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_33","fr":"Excusez-moi !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p3_34","fr":"C’est pour offrir.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","shop"],"pot":3,"metDay":null,"deckIds":[]},{"id":"p4_01","fr":"à droite","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"arrowR","icon_status":"ok","tags":["phrase","direction"],"pot":4,"metDay":6,"deckIds":["a_droite"]},{"id":"p4_02","fr":"à gauche","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"arrowL","icon_status":"ok","tags":["phrase","direction"],"pot":4,"metDay":6,"deckIds":["a_gauche"]},{"id":"p4_03","fr":"tout droit","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"arrowU","icon_status":"ok","tags":["phrase","direction"],"pot":4,"metDay":6,"deckIds":["tout_droit"]},{"id":"p4_04","fr":"Où est la station de métro ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","direction","place"],"pot":4,"metDay":7,"deckIds":["ou_est_metro"]},{"id":"p4_05","fr":"Vous pouvez m’indiquer… ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","direction","verb_chunk"],"pot":4,"metDay":7,"deckIds":["pouvez_mindiquer"]},{"id":"p4_06","fr":"Je cherche un bureau de poste.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","direction","place","verb_chunk"],"pot":4,"metDay":7,"deckIds":["je_cherche_poste"]},{"id":"p4_07","fr":"la rue","fr_def":"la rue","fr_partitive":"une rue","fr_neg":"pas de rue","fr_count":null,"icon":"street","icon_status":"ok","tags":["noun","place","city"],"pot":4,"metDay":7,"deckIds":["rue_ou"]},{"id":"p4_08","fr":"le colis","fr_def":"le colis","fr_partitive":"un colis","fr_neg":"pas de colis","fr_count":null,"icon":"box","icon_status":"ok","tags":["noun","item","home"],"pot":4,"metDay":3,"deckIds":["il_y_a_deux_colis","colis_livre"]},{"id":"p4_09","fr":"les jours (lundi… dimanche)","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"calendar","icon_status":"ok","tags":["noun","time"],"pot":4,"metDay":1,"deckIds":[]},{"id":"p4_10","fr":"le jeudi","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","time"],"pot":4,"metDay":8,"deckIds":["vous_voulez_venir_le_jeudi"]},{"id":"p4_11","fr":"à six heures","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","time","number"],"pot":4,"metDay":8,"deckIds":["venez_a_six_heures"]},{"id":"p4_12","fr":"sept heures et demie","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","time","number"],"pot":4,"metDay":8,"deckIds":[]},{"id":"p4_13","fr":"le matin / le soir / la nuit","fr_def":"le matin / le soir / la nuit","fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"night","icon_status":"ok","tags":["noun","time"],"pot":4,"metDay":4,"deckIds":[]},{"id":"p4_14","fr":"aujourd’hui / demain / hier","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"calendar","icon_status":"ok","tags":["adverb","time"],"pot":4,"metDay":1,"deckIds":[]},{"id":"p4_15","fr":"À jeudi ! / À bientôt !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","greeting","time"],"pot":4,"metDay":8,"deckIds":["a_bientot"]},{"id":"p4_16","fr":"Il pleut.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"rain","icon_status":"ok","tags":["phrase","weather"],"pot":4,"metDay":5,"deckIds":["il_pleuvait"]},{"id":"p4_17","fr":"Il fait froid.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"snow","icon_status":"ok","tags":["phrase","weather"],"pot":4,"metDay":7,"deckIds":["froid_manteau"]},{"id":"p4_18","fr":"la fin du mois","fr_def":"la fin du mois","fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"calendar","icon_status":"ok","tags":["noun","time","money"],"pot":4,"metDay":10,"deckIds":[]},{"id":"p4_19","fr":"le café (lieu)","fr_def":"le café","fr_partitive":"un café","fr_neg":"pas de café","fr_count":null,"icon":"cafe_front","icon_status":"missing","tags":["noun","place","city"],"pot":4,"metDay":7,"deckIds":["nous_sommes_alles"]},{"id":"p4_20","fr":"le toit, le jardin","fr_def":"le toit / le jardin","fr_partitive":"un toit / un jardin","fr_neg":"pas de toit / pas de jardin","fr_count":null,"icon":"roof","icon_status":"ok","tags":["noun","place","home"],"pot":4,"metDay":11,"deckIds":[]},{"id":"p4_21","fr":"Quelle heure est-il ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","time"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_22","fr":"Je suis en retard !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","time","verb_chunk"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_23","fr":"la boulangerie","fr_def":"la boulangerie","fr_partitive":"une boulangerie","fr_neg":"pas de boulangerie","fr_count":null,"icon":"bakery_front","icon_status":"missing","tags":["noun","place","city","shop"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_24","fr":"la pharmacie","fr_def":"la pharmacie","fr_partitive":"une pharmacie","fr_neg":"pas de pharmacie","fr_count":null,"icon":"pharmacy_front","icon_status":"missing","tags":["noun","place","city","shop"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_25","fr":"le marché","fr_def":"le marché","fr_partitive":"un marché","fr_neg":"pas de marché","fr_count":null,"icon":"market_stall","icon_status":"missing","tags":["noun","place","city","shop"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_26","fr":"le parc","fr_def":"le parc","fr_partitive":"un parc","fr_neg":"pas de parc","fr_count":null,"icon":"parc","icon_status":"ok","tags":["noun","place","city"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_27","fr":"C’est loin ? / C’est près d’ici ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","direction"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_28","fr":"en face de…","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","direction","position"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_29","fr":"prendre le métro / le bus","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"metro_sign","icon_status":"missing","tags":["phrase","transport","verb_chunk"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_30","fr":"au coin de la rue","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","direction","place"],"pot":4,"metDay":null,"deckIds":[]},{"id":"p4_31","fr":"Il fait beau !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"sun","icon_status":"ok","tags":["phrase","weather"],"pot":4,"metDay":14,"deckIds":["il_fait_beau"]},{"id":"p5_01","fr":"la propriétaire","fr_def":"la propriétaire","fr_partitive":"une propriétaire","fr_neg":"pas de propriétaire","fr_count":null,"icon":"martin_portrait","icon_status":"missing","tags":["noun","person"],"pot":5,"metDay":1,"deckIds":["la_proprietaire"]},{"id":"p5_02","fr":"la voisine / le voisin","fr_def":"la voisine / le voisin","fr_partitive":"une voisine / un voisin","fr_neg":"pas de voisin","fr_count":null,"icon":"neighbour_portrait","icon_status":"missing","tags":["noun","person"],"pot":5,"metDay":4,"deckIds":["dont_voisine"]},{"id":"p5_03","fr":"Madame / Monsieur","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["noun","person","politeness"],"pot":5,"metDay":4,"deckIds":[]},{"id":"p5_04","fr":"Il est gentil.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","person","description"],"pot":5,"metDay":4,"deckIds":["il_est_gentil"]},{"id":"p5_05","fr":"Je suis désolé(e).","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness","feeling"],"pot":5,"metDay":4,"deckIds":["je_suis_desole"]},{"id":"p5_06","fr":"Pardon.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":5,"metDay":4,"deckIds":["pardon"]},{"id":"p5_07","fr":"Vous avez vu… ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","verb_chunk"],"pot":5,"metDay":6,"deckIds":["vous_avez_vu_un_chat"]},{"id":"p5_08","fr":"Je suis étudiant(e).","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro","verb_chunk"],"pot":5,"metDay":7,"deckIds":["je_suis_etudiant"]},{"id":"p5_09","fr":"Tu es nouveau / nouvelle ici ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro"],"pot":5,"metDay":7,"deckIds":["tu_es_nouveau"]},{"id":"p5_10","fr":"Il est content. / Il n’est pas content.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","feeling"],"pot":5,"metDay":8,"deckIds":[]},{"id":"p5_11","fr":"Elle est seule.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","feeling"],"pot":5,"metDay":4,"deckIds":[]},{"id":"p5_12","fr":"triste","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["adjective","feeling"],"pot":5,"metDay":9,"deckIds":[]},{"id":"p5_13","fr":"la famille","fr_def":"la famille","fr_partitive":"une famille","fr_neg":"pas de famille","fr_count":null,"icon":null,"icon_status":null,"tags":["noun","person","family"],"pot":5,"metDay":7,"deckIds":[]},{"id":"p5_14","fr":"le mari","fr_def":"le mari","fr_partitive":"un mari","fr_neg":"pas de mari","fr_count":null,"icon":null,"icon_status":null,"tags":["noun","person","family"],"pot":5,"metDay":11,"deckIds":[]},{"id":"p5_15","fr":"la nièce, la tante","fr_def":"la nièce / la tante","fr_partitive":"une nièce / une tante","fr_neg":"pas de nièce / pas de tante","fr_count":null,"icon":null,"icon_status":null,"tags":["noun","person","family"],"pot":5,"metDay":13,"deckIds":[]},{"id":"p5_16","fr":"roux / rousse","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":"catroux","icon_status":"ok","tags":["adjective","description"],"pot":5,"metDay":6,"deckIds":["je_lai_vu"]},{"id":"p5_17","fr":"C’est une bonne idée.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","opinion"],"pot":5,"metDay":9,"deckIds":["cest_une_bonne_idee"]},{"id":"p5_18","fr":"D’accord.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","agreement"],"pot":5,"metDay":2,"deckIds":[]},{"id":"p5_19","fr":"Très drôle.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","opinion"],"pot":5,"metDay":9,"deckIds":[]},{"id":"p5_20","fr":"Bonne chance !","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","wish"],"pot":5,"metDay":9,"deckIds":[]},{"id":"p5_21","fr":"Merci, c’est gentil.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":5,"metDay":13,"deckIds":[]},{"id":"p5_22","fr":"Moi aussi.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","agreement"],"pot":5,"metDay":8,"deckIds":[]},{"id":"p5_23","fr":"J’ai mal à la tête.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","health","verb_chunk"],"pot":5,"metDay":7,"deckIds":["jai_mal"]},{"id":"p5_24","fr":"J’ai froid.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","feeling","weather","verb_chunk"],"pot":5,"metDay":7,"deckIds":["jai_froid"]},{"id":"p5_25","fr":"fatigué(e)","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["adjective","feeling","health"],"pot":5,"metDay":null,"deckIds":[]},{"id":"p5_26","fr":"Tu as quel âge ? / J’ai 20 ans.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","intro","number"],"pot":5,"metDay":null,"deckIds":[]},{"id":"p5_27","fr":"le frère, la sœur","fr_def":"le frère / la sœur","fr_partitive":"un frère / une sœur","fr_neg":"pas de frère / pas de sœur","fr_count":null,"icon":null,"icon_status":null,"tags":["noun","person","family"],"pot":5,"metDay":null,"deckIds":[]},{"id":"p5_28","fr":"Il est cuisinier.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","person","work"],"pot":5,"metDay":null,"deckIds":[]},{"id":"p5_29","fr":"grand(e) / petit(e)","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["adjective","description"],"pot":5,"metDay":null,"deckIds":[]},{"id":"p5_30","fr":"Elle est sympa.","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","person","description"],"pot":5,"metDay":null,"deckIds":[]},{"id":"p5_31","fr":"C’est pour moi ?","fr_def":null,"fr_partitive":null,"fr_neg":null,"fr_count":null,"icon":null,"icon_status":null,"tags":["phrase","politeness"],"pot":5,"metDay":9,"deckIds":["cest_pour_moi"]}]};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.A411.LEXICON_FIELDS;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Act I pot lexicon. Fields fr_def / fr_partitive / fr_neg / fr_count / icon / tags
+ * are copied from Prof Neng’s hand-written table (data/act1_lexicon_fields.json).
+ * Nothing here derives an article from gender or the first letter.
+ */
+(function (root) {
+  'use strict';
+  var DATA = (root.A411 && root.A411.LEXICON_FIELDS) || null;
+  if (!DATA && typeof require === 'function') {
+    try { DATA = require('./lexicon-data.js'); } catch (e) { DATA = null; }
+  }
+  var ITEMS = (DATA && DATA.items) || [];
+  var BY_ID = {};
+  ITEMS.forEach(function (it) { BY_ID[it.id] = it; });
+
+  // A segment that is only an article (or a negated article), so « le / la colocataire »
+  // becomes « le colocataire » and « la colocataire » before TTS or a template slot.
+  var ARTICLE = /^(le|la|les|l['’]|un|une|du|des|de la|de l['’]|pas de|pas d['’])$/i;
+
+  function splitSlash(s) {
+    if (s == null || s === '') return [];
+    var str = String(s);
+    if (str.indexOf(' / ') < 0) return [str];
+    var parts = str.split(' / ').map(function (p) { return p.trim(); }).filter(Boolean);
+    var bare = parts.filter(function (p) { return ARTICLE.test(p); });
+    if (!bare.length) return parts;
+    var last = parts[parts.length - 1];
+    var noun = last.replace(/^(le|la|les|l['’]|un|une|du|des|de la|de l['’]|pas de|pas d['’])\s+/i, '');
+    return parts.map(function (p) { return ARTICLE.test(p) ? (p + ' ' + noun).replace(/\s+/g, ' ') : p; });
+  }
+
+  // One string safe to send to TTS: no slash. Article-only halves keep their noun.
+  function speakable(s) {
+    var v = splitSlash(s);
+    return v.length ? v[0] : '';
+  }
+
+  function hasTag(it, tag) { return !!(it && it.tags && it.tags.indexOf(tag) >= 0); }
+
+  // One fetchable noun. Slash forms become separate targets. embedded_nouns ride along
+  // with the chunk that carries them; the chunk itself is not an item.
+  function nounForms(entry) {
+    if (!entry) return [];
+    var defs = splitSlash(entry.fr_def);
+    var parts = splitSlash(entry.fr_partitive);
+    var negs = splitSlash(entry.fr_neg);
+    var counts = splitSlash(entry.fr_count);
+    var n = Math.max(defs.length, parts.length, negs.length, counts.length, 1);
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      var part = parts[i] || parts[0] || null;
+      if (!part) continue;
+      out.push({
+        id: entry.id + (n > 1 ? '#' + i : ''),
+        entryId: entry.id,
+        pot: entry.pot,
+        fr_def: defs[i] || defs[0] || null,
+        fr_partitive: part,
+        fr_neg: negs[i] || negs[0] || null,
+        fr_count: counts[i] || counts[0] || null,
+        icon: (n > 1 && i > 0) ? null : (entry.icon || null),
+        tags: (entry.tags || []).slice(),
+        source: 'item',
+        metDay: entry.metDay,
+        deckIds: (entry.deckIds || []).slice(),
+        parents: [entry.id]
+      });
+    }
+    return out;
+  }
+
+  function embeddedForms(entry) {
+    var list = entry.embedded_nouns || [];
+    return list.map(function (n) {
+      var part = n.fr_partitive || null;
+      if (!part) return null;
+      return {
+        id: 'emb:' + part,
+        entryId: entry.id,
+        pot: entry.pot,
+        fr_def: n.fr_def || null,
+        fr_partitive: part,
+        fr_neg: n.fr_neg || null,
+        fr_count: n.fr_count || null,
+        icon: n.icon || null,
+        tags: ['embedded'],
+        source: 'embedded',
+        metDay: entry.metDay,
+        deckIds: (entry.deckIds || []).slice(),
+        parents: [entry.id]
+      };
+    }).filter(Boolean);
+  }
+
+  // DT01 pool: item-tagged nouns in the given pots, plus every embedded noun on entries in those pots.
+  // Same partitive from two chunks collapses; the noun is met if any parent is met.
+  function fetchTargets(opts) {
+    opts = opts || {};
+    var pots = opts.pots || [2];
+    var byPart = {};
+    var order = [];
+    function add(form) {
+      if (!form || pots.indexOf(form.pot) < 0) return;
+      var key = form.fr_partitive;
+      var cur = byPart[key];
+      if (!cur) { byPart[key] = form; order.push(key); return; }
+      form.parents.forEach(function (id) { if (cur.parents.indexOf(id) < 0) cur.parents.push(id); });
+      (form.deckIds || []).forEach(function (id) { if (cur.deckIds.indexOf(id) < 0) cur.deckIds.push(id); });
+      if (form.source === 'item') cur.source = 'item';
+      if (cur.metDay == null || (form.metDay != null && form.metDay < cur.metDay)) cur.metDay = form.metDay;
+    }
+    ITEMS.forEach(function (entry) {
+      if (pots.indexOf(entry.pot) < 0) return;
+      if (hasTag(entry, 'item')) nounForms(entry).forEach(add);
+      embeddedForms(entry).forEach(add);
+    });
+    return order.map(function (k) { return byPart[k]; });
+  }
+
+  function met(entryOrForm, storyDay) {
+    if (!entryOrForm) return false;
+    if (entryOrForm.metDay == null) return false;
+    return entryOrForm.metDay <= storyDay;
+  }
+
+  // Copy hand-written fields onto the ostension word table where the link is explicit.
+  // Words with no pot entry keep null / [] — those forms were not supplied.
+  var WORD_LINK = {
+    porte: { id: 'p1_13' },
+    cle: { id: 'p1_14' },
+    cuisine: { id: 'p1_15' },
+    canape: { id: 'p1_16' },
+    plante: { id: 'p1_19' },
+    lettre: { id: 'p1_20' },
+    fenetre: { id: 'p1_21' },
+    lit: { id: 'p1_24' },
+    chambre: { id: 'p1_30' },
+    sdb: { id: 'p1_31' },
+    beurre: { id: 'p2_14' },
+    lait: { id: 'p2_38' },
+    colis: { id: 'p4_08' },
+    euro: { id: 'p3_19' },
+    boite: { id: 'p3_15' },
+    the: { embedded: 'p2_01', part: 'du thé' },
+    cafe: { embedded: 'p2_01', part: 'du café' },
+    eau: { embedded: 'p2_03', part: 'de l’eau' },
+    pain: { embedded: 'p2_06', part: 'du pain' },
+    basilic: { embedded: 'p2_09', part: 'du basilic' },
+    croissants: { id: 'p2_35', variant: 0 }
+  };
+
+  function fieldsFrom(link) {
+    if (!link) return null;
+    if (link.embedded) {
+      var parent = BY_ID[link.embedded];
+      if (!parent) return null;
+      var forms = embeddedForms(parent).filter(function (f) { return f.fr_partitive === link.part; });
+      return forms[0] || null;
+    }
+    var entry = BY_ID[link.id];
+    if (!entry) return null;
+    var nouns = nounForms(entry);
+    if (!nouns.length) {
+      return { fr_def: entry.fr_def, fr_partitive: entry.fr_partitive, fr_neg: entry.fr_neg, fr_count: entry.fr_count, icon: entry.icon, tags: entry.tags, potId: entry.id };
+    }
+    return nouns[link.variant || 0] || nouns[0];
+  }
+
+  function applyToWords(words) {
+    if (!words) return;
+    Object.keys(words).forEach(function (id) {
+      var w = words[id];
+      var src = fieldsFrom(WORD_LINK[id]);
+      w.potId = src && (src.entryId || src.potId) || null;
+      w.fr_def = src ? src.fr_def : null;
+      w.fr_partitive = src ? src.fr_partitive : null;
+      w.fr_neg = src ? src.fr_neg : null;
+      w.fr_count = src ? (src.fr_count || null) : null;
+      w.icon = src ? (src.icon || null) : null;
+      w.tags = src && src.tags ? src.tags.slice() : [];
+    });
+  }
+
+  var api = {
+    DATA: DATA, ITEMS: ITEMS, BY_ID: BY_ID, WORD_LINK: WORD_LINK,
+    splitSlash: splitSlash, speakable: speakable, hasTag: hasTag,
+    nounForms: nounForms, embeddedForms: embeddedForms, fetchTargets: fetchTargets,
+    met: met, applyToWords: applyToWords
+  };
+  root.A411 = root.A411 || {};
+  root.A411.Lexicon = api;
+  if (root.A411.Words && root.A411.Words.WORDS) applyToWords(root.A411.Words.WORDS);
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* L’Appartement 411 — v0.4.1 key words for Days 1–6 (attention-directed ostension).
  * Each word: fr (with article), forms (surface forms matched in story French, longest first), focus (scene region or prop ids
  * the camera / pulse can point at, see art.js region()), prop (picture for the word card when the scene has none),
@@ -11496,6 +11745,7 @@ function getLang(ls, id) {
     return out;
   }
   function wordsIn(text) { var s = {}; segments(text).forEach(function (g) { if (g.word) s[g.word] = 1; }); return Object.keys(s); }
+  if (root.A411 && root.A411.Lexicon && root.A411.Lexicon.applyToWords) root.A411.Lexicon.applyToWords(WORDS);
   var api = { WORDS: WORDS, segments: segments, wordsIn: wordsIn };
   root.A411 = root.A411 || {};
   root.A411.Words = api;
@@ -15857,6 +16107,14 @@ function getLang(ls, id) {
     var checks = [a.week1Check, b.week1Check].filter(function (x) { return x && x.at; });
     if (checks.length) { checks.sort(function (x, y) { return t(y.at) - t(x.at); }); out.week1Check = clone(checks[0]); }
     out.storyPending = unionBy(newer.storyPending, older.storyPending, 'itemId').filter(function (x) { return !del[x.itemId]; });
+    // Daily-task encounters: union the lines heard, keep the higher contact count. Never dropped on sync.
+    var taskLines = {}, taskContacts = {};
+    [a.taskLog, b.taskLog].forEach(function (tl) {
+      if (!tl) return;
+      Object.keys(tl.lines || {}).forEach(function (k) { taskLines[k] = 1; });
+      Object.keys(tl.contacts || {}).forEach(function (k) { taskContacts[k] = Math.max(taskContacts[k] || 0, tl.contacts[k] || 0); });
+    });
+    if (Object.keys(taskLines).length || Object.keys(taskContacts).length) out.taskLog = { lines: taskLines, contacts: taskContacts };
     var held = [], heldSeen = {};
     (a.siblingHold || []).concat(b.siblingHold || []).forEach(function (e) {
       if (!e || !e.key || heldSeen[e.key] || (out.cards && out.cards[e.key]) || del[e.itemId]) return;
@@ -19000,6 +19258,746 @@ function getLang(ls, id) {
 
 </script>
 <script>
+/* Daily-task template engine (DT01–DT15). P0 playable: DT01–DT05.
+ * French lines are full strings or a single hand-written slot (fr_partitive / fr_def).
+ * Place phrases are never built from a preposition plus an article.
+ * fsrsCredit is stored per template; the MVP always records an encounter, never an FSRS grade.
+ */
+(function (root) {
+  'use strict';
+  var Lex = (root.A411 && root.A411.Lexicon) || (typeof require === 'function' ? require('./lexicon.js') : null);
+  var NN = '\u202F';
+
+  function line(fr) { return fr; }
+
+  // DT02 prompts. Each sentence is written out in full (B3). place is also stored for the drop target.
+  var DT02_LINES = [
+    { objectId: 'p1_14', place: 'sur la table', need: ['p1_14', 'p1_17'], icon: 'key', fr: 'La clé, sur la table, s’il te plaît.' },
+    { objectId: 'p1_14', place: 'sous la table', need: ['p1_14', 'p1_17'], icon: 'key', fr: 'La clé, sous la table, s’il te plaît.' },
+    { objectId: 'p1_14', place: 'dans la cuisine', need: ['p1_14', 'p1_15'], icon: 'key', fr: 'La clé, dans la cuisine, s’il te plaît.' },
+    { objectId: 'p1_14', place: 'à côté du canapé', need: ['p1_14', 'p1_18', 'p1_16'], icon: 'key', fr: 'La clé, à côté du canapé, s’il te plaît.' },
+    { objectId: 'p1_14', place: 'à côté de la porte', need: ['p1_14', 'p1_18', 'p1_13'], icon: 'key', fr: 'La clé, à côté de la porte, s’il te plaît.' },
+    { objectId: 'p1_14', place: 'à côté de la fenêtre', need: ['p1_14', 'p1_18', 'p1_21'], icon: 'key', fr: 'La clé, à côté de la fenêtre, s’il te plaît.' },
+    { objectId: 'p1_20', place: 'sur la table', need: ['p1_20', 'p1_17'], icon: 'letter', fr: 'La lettre, sur la table, s’il te plaît.' },
+    { objectId: 'p1_20', place: 'sous la table', need: ['p1_20', 'p1_17'], icon: 'letter', fr: 'La lettre, sous la table, s’il te plaît.' },
+    { objectId: 'p1_20', place: 'dans la cuisine', need: ['p1_20', 'p1_15'], icon: 'letter', fr: 'La lettre, dans la cuisine, s’il te plaît.' },
+    { objectId: 'p1_20', place: 'à côté du canapé', need: ['p1_20', 'p1_18', 'p1_16'], icon: 'letter', fr: 'La lettre, à côté du canapé, s’il te plaît.' },
+    { objectId: 'p1_20', place: 'à côté de la porte', need: ['p1_20', 'p1_18', 'p1_13'], icon: 'letter', fr: 'La lettre, à côté de la porte, s’il te plaît.' },
+    { objectId: 'p1_20', place: 'à côté de la fenêtre', need: ['p1_20', 'p1_18', 'p1_21'], icon: 'letter', fr: 'La lettre, à côté de la fenêtre, s’il te plaît.' },
+    { objectId: 'p1_19', place: 'sur la table', need: ['p1_19', 'p1_17'], icon: 'plantp', fr: 'La plante, sur la table, s’il te plaît.' },
+    { objectId: 'p1_19', place: 'sous la table', need: ['p1_19', 'p1_17'], icon: 'plantp', fr: 'La plante, sous la table, s’il te plaît.' },
+    { objectId: 'p1_19', place: 'dans la cuisine', need: ['p1_19', 'p1_15'], icon: 'plantp', fr: 'La plante, dans la cuisine, s’il te plaît.' },
+    { objectId: 'p1_19', place: 'à côté du canapé', need: ['p1_19', 'p1_18', 'p1_16'], icon: 'plantp', fr: 'La plante, à côté du canapé, s’il te plaît.' },
+    { objectId: 'p1_19', place: 'à côté de la porte', need: ['p1_19', 'p1_18', 'p1_13'], icon: 'plantp', fr: 'La plante, à côté de la porte, s’il te plaît.' },
+    { objectId: 'p1_19', place: 'à côté de la fenêtre', need: ['p1_19', 'p1_18', 'p1_21'], icon: 'plantp', fr: 'La plante, à côté de la fenêtre, s’il te plaît.' },
+    { objectId: 'p4_08', place: 'sur la table', need: ['p4_08', 'p1_17'], icon: 'box', fr: 'Le colis, sur la table, s’il te plaît.' },
+    { objectId: 'p4_08', place: 'sous la table', need: ['p4_08', 'p1_17'], icon: 'box', fr: 'Le colis, sous la table, s’il te plaît.' },
+    { objectId: 'p4_08', place: 'dans la cuisine', need: ['p4_08', 'p1_15'], icon: 'box', fr: 'Le colis, dans la cuisine, s’il te plaît.' },
+    { objectId: 'p4_08', place: 'à côté du canapé', need: ['p4_08', 'p1_18', 'p1_16'], icon: 'box', fr: 'Le colis, à côté du canapé, s’il te plaît.' },
+    { objectId: 'p4_08', place: 'à côté de la porte', need: ['p4_08', 'p1_18', 'p1_13'], icon: 'box', fr: 'Le colis, à côté de la porte, s’il te plaît.' },
+    { objectId: 'p4_08', place: 'à côté de la fenêtre', need: ['p4_08', 'p1_18', 'p1_21'], icon: 'box', fr: 'Le colis, à côté de la fenêtre, s’il te plaît.' }
+  ];
+
+  var DT02_OK = DT02_LINES;
+
+  var DT03_SCOLDS = [
+    { fr: 'Croissant' + NN + '! Pas sur la table' + NN + '!', need: ['p1_17'], pose: 'cat_chair' },
+    { fr: 'Croissant' + NN + '! Pas sur le canapé' + NN + '!', need: ['p1_16'], pose: 'cat_paw' }
+  ];
+  var DT03_REPLIES = [
+    { id: 'faim', fr: 'Il a faim' + NN + '?', need: ['p2_16'], who: 'player' },
+    { id: 'fatigue', fr: 'Il est fatigué.', need: ['p5_25'], who: 'player', about: 'cat' }
+  ];
+  var DT03_POSES = ['cat_chair', 'cat_paw', 'sit_in_pot', 'smug'];
+
+  var DT04_CAPTIONS = [
+    { id: 'plante', fr: 'Regardez, la plante' + NN + '!', need: ['p1_19'], recognition: false },
+    { id: 'feuille', fr: 'Regardez, une nouvelle feuille' + NN + '!', need: [], recognition: true }
+  ];
+  var DT04_REPLIES = [
+    { fr: 'C’est très bien.', need: [] },
+    { fr: 'C’est une bonne idée.', need: ['p5_17'] }
+  ];
+
+  var RECIPIENTS = [
+    { id: 'camille', name: 'Camille', door: '411', register: 'tu' },
+    { id: 'noe', name: 'Noé', door: '411', register: 'tu' },
+    { id: 'lefevre', name: 'Madame Lefèvre', door: 'lefevre', register: 'vous' },
+    { id: 'martin', name: 'Madame Martin', door: 'martin', register: 'vous' }
+  ];
+  var DOORS = [
+    { id: '411', fr: 'Le 411' },
+    { id: 'lefevre', fr: 'Madame Lefèvre' },
+    { id: 'martin', fr: 'Madame Martin' }
+  ];
+
+  var TEMPLATES = [
+    {
+      id: 'DT01_petite_course', n: 'DT01', title: 'La petite course', priority: 'P0', playable: true,
+      unlockDay: 1, giver: ['noe', 'camille', 'lefevre'],
+      location: ['flat411_kitchen', 'stairwell', 'lefevre_flat'],
+      variant: { afterDay: 15, location: 'superette', npc: 'samir' },
+      potWords: { pot: 2, tags: ['item'], pick: 1, requireMet: true, maxRecognition: 1 },
+      interaction: 'fetch', fsrsCredit: 'exposure', hook: null
+    },
+    {
+      id: 'DT02_ranger', n: 'DT02', title: 'Ranger l’appart', priority: 'P0', playable: true,
+      unlockDay: 1, giver: ['camille'], location: ['flat411'],
+      potWords: { pot: 1, tags: ['noun'], pick: 4, requireMet: true },
+      interaction: 'drag_to_slot', fsrsCredit: 'exposure', hook: null
+    },
+    {
+      id: 'DT03_croissant_betise', n: 'DT03', title: 'Croissant fait une bêtise', priority: 'P0', playable: true,
+      unlockDay: 1, giver: ['noe', 'camille'], location: ['flat411'],
+      potWords: { pot: 1, requireMet: true },
+      interaction: 'pick_reply', fsrsCredit: 'exposure', hook: null
+    },
+    {
+      id: 'DT04_photo_martin', n: 'DT04', title: 'Une photo pour Martin', priority: 'P0', playable: true,
+      unlockDay: 1, giver: ['martin'], location: ['rooftop'],
+      potWords: { pot: 1, requireMet: true, maxRecognition: 1 },
+      interaction: 'photo', fsrsCredit: 'exposure', hook: null
+    },
+    {
+      id: 'DT05_colis', n: 'DT05', title: 'Un colis devant la porte', priority: 'P0', playable: true,
+      unlockDay: 1, giver: ['resident'], location: ['stairwell'],
+      potWords: { pot: 5, requireMet: true },
+      interaction: 'deliver', fsrsCredit: 'exposure', hook: null
+    },
+    { id: 'DT06_arroser_lefevre', n: 'DT06', title: 'Arroser chez Lefèvre', priority: 'P1', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
+    { id: 'DT07_petit_dejeuner', n: 'DT07', title: 'Le petit-déjeuner de Noé', priority: 'P1', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
+    { id: 'DT08_heure', n: 'DT08', title: 'Quelle heure est-il', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' },
+    { id: 'DT09_liste', n: 'DT09', title: 'La liste de courses', priority: 'P1', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
+    { id: 'DT10_monnaie', n: 'DT10', title: 'La monnaie', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure',
+      speakLine: 'Ça fait deux euros cinquante.' },
+    { id: 'DT11_temps', n: 'DT11', title: 'Il fait quel temps', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' },
+    { id: 'DT12_ou_est', n: 'DT12', title: 'Où est Croissant', priority: 'P2', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
+    { id: 'DT13_courrier', n: 'DT13', title: 'Le courrier', priority: 'P2', playable: false, interaction: 'deliver', fsrsCredit: 'exposure' },
+    { id: 'DT14_mot', n: 'DT14', title: 'Un mot sur la porte', priority: 'P2', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' },
+    { id: 'DT15_ca_va', n: 'DT15', title: 'Comment ça va', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' }
+  ];
+  var BY_ID = {};
+  TEMPLATES.forEach(function (t) { BY_ID[t.id] = t; BY_ID[t.n] = t; });
+
+  function hash(s) {
+    var h = 2166136261;
+    s = String(s || '');
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+  function rngOf(seed) {
+    var a = hash(seed) || 1;
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function pick(rng, list) { return list[Math.floor(rng() * list.length)]; }
+  function shuffle(rng, list) {
+    var a = list.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(rng() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function entryMet(id, storyDay) {
+    var it = Lex && Lex.BY_ID[id];
+    return !!(it && it.metDay != null && it.metDay <= storyDay);
+  }
+  function allMet(ids, storyDay) {
+    return ids.every(function (id) { return entryMet(id, storyDay); });
+  }
+
+  function potsFor(tmpl, storyDay) {
+    var pots = [tmpl.potWords && tmpl.potWords.pot || 2];
+    if (tmpl.variant && storyDay >= tmpl.variant.afterDay && pots.indexOf(3) < 0) pots.push(3);
+    return pots;
+  }
+
+  function contactOf(ctx, id) {
+    var c = ctx && ctx.contacts;
+    return c && c[id] || 0;
+  }
+  // Due first. Under 10 contacts get a boost; at 20 or more the boost stops. Never drops the item.
+  function scoreTarget(ctx, target) {
+    var id = target.id;
+    var n = contactOf(ctx, id);
+    var due = (ctx.dueIds || []).some(function (d) {
+      return d === id || d === target.entryId || (target.parents || []).indexOf(d) >= 0 || (target.deckIds || []).indexOf(d) >= 0;
+    });
+    var favour = n >= 20 ? 0 : n < 10 ? (10 - n) : 1;
+    return (due ? 100 : 0) + favour;
+  }
+
+  // A fetch card is a picture. No prop in the art set means the card would be an empty frame, so it stays out.
+  function propReady(icon) {
+    var Art = root.A411 && root.A411.Art;
+    return !!(icon && Art && Art.PROPS && Art.PROPS[icon]);
+  }
+
+  function dt01Pool(ctx) {
+    var pots = potsFor(BY_ID.DT01_petite_course, ctx.storyDay);
+    return Lex.fetchTargets({ pots: pots }).filter(function (t) {
+      if (t.metDay == null || t.metDay > ctx.storyDay) return false;
+      if (!t.fr_partitive || t.fr_partitive.indexOf(' / ') >= 0) return false;
+      if (!propReady(t.icon)) return false;
+      return true;
+    });
+  }
+
+  function askLine(giver, partitive) {
+    var vous = giver === 'lefevre' || giver === 'martin' || giver === 'samir';
+    return 'Je voudrais ' + partitive + ', ' + (vous ? 's’il vous plaît.' : 's’il te plaît.');
+  }
+
+  function giversFor(tmpl, ctx) {
+    var list = (tmpl.giver || []).slice();
+    var away = (ctx.absent && ctx.absent[ctx.storyDay]) || [];
+    list = list.filter(function (id) { return away.indexOf(id) < 0; });
+    if (tmpl.variant && ctx.storyDay >= tmpl.variant.afterDay) list = [tmpl.variant.npc];
+    return list;
+  }
+
+  function prepareDT01(ctx) {
+    var pool = dt01Pool(ctx);
+    if (!pool.length) return null;
+    var rng = rngOf(ctx.seed + ':DT01');
+    var ranked = pool.slice().sort(function (a, b) {
+      var d = scoreTarget(ctx, b) - scoreTarget(ctx, a);
+      return d || (rng() - 0.5);
+    });
+    var target = ranked[0];
+    var rest = shuffle(rng, ranked.slice(1));
+    var icons = [target].concat(rest.slice(0, 2));
+    icons = shuffle(rng, icons);
+    var givers = giversFor(BY_ID.DT01_petite_course, ctx);
+    if (!givers.length) return null;
+    var giver = pick(rng, givers);
+    var locs = BY_ID.DT01_petite_course.location.slice();
+    if (BY_ID.DT01_petite_course.variant && ctx.storyDay >= 15) locs = ['superette'];
+    var ask = askLine(giver, target.fr_partitive);
+    var unsure = entryMet('p3_12', ctx.storyDay);
+    return {
+      steps: [
+        { type: 'line', who: giver, fr: ask, speak: ask, target: target.id, options: [
+          { id: 'ok', fr: 'D’accord' + NN + '!', effect: 'next' },
+          { id: 'pardon', fr: 'Pardon' + NN + '?', effect: 'replay' }
+        ] },
+        { type: 'fetch', fr: ask, target: target, options: icons.map(function (it) {
+          return { id: it.id, fr_def: it.fr_def, fr_partitive: it.fr_partitive, icon: it.icon, correct: it.id === target.id };
+        }), unsure: unsure ? 'Je ne sais pas.' : null },
+        { type: 'line', who: giver, fr: 'Merci' + NN + '!', speak: 'Merci' + NN + '!', handover: true, target: target.id }
+      ],
+      giver: giver, location: pick(rng, locs), word: target
+    };
+  }
+
+  // Visual spots in the tidy room. The words are the spoken prompt; the player aims at the furniture, not a copy of the sentence.
+  var ZONE_NEED = {
+    'sur la table': ['p1_17'],
+    'sous la table': ['p1_17'],
+    'dans la cuisine': ['p1_15'],
+    'à côté du canapé': ['p1_18', 'p1_16'],
+    'à côté de la porte': ['p1_18', 'p1_13'],
+    'à côté de la fenêtre': ['p1_18', 'p1_21']
+  };
+  function zonesFor(storyDay, objectId) {
+    return Object.keys(ZONE_NEED).filter(function (place) {
+      if (objectId === 'p1_19' && place.indexOf('plante') >= 0) return false;
+      return allMet(ZONE_NEED[place], storyDay);
+    });
+  }
+
+  function prepareDT02(ctx) {
+    var rows = DT02_OK.filter(function (row) {
+      if (!allMet(row.need, ctx.storyDay)) return false;
+      var spots = zonesFor(ctx.storyDay, row.objectId);
+      return spots.indexOf(row.place) >= 0 && spots.length >= 2;
+    });
+    if (rows.length < 3) return null;
+    var rng = rngOf(ctx.seed + ':DT02');
+    var byObj = {};
+    rows.forEach(function (row) { (byObj[row.objectId] = byObj[row.objectId] || []).push(row); });
+    var objs = shuffle(rng, Object.keys(byObj));
+    var chosen = [];
+    objs.forEach(function (id) { if (chosen.length < 5) chosen.push(pick(rng, byObj[id])); });
+    var want = Math.min(rows.length, 3 + Math.floor(rng() * 3));
+    if (want < 3) want = 3;
+    var extra = shuffle(rng, rows.filter(function (row) { return chosen.indexOf(row) < 0; }));
+    while (chosen.length < want && extra.length) chosen.push(extra.pop());
+    chosen = shuffle(rng, chosen).slice(0, 5);
+    return {
+      steps: chosen.map(function (row) {
+        return { type: 'drag', fr: row.fr, speak: row.fr, who: 'camille', place: row.place, icon: row.icon, objectId: row.objectId, slots: zonesFor(ctx.storyDay, row.objectId), target: row.objectId };
+      }),
+      giver: 'camille', location: 'flat411'
+    };
+  }
+
+  function prepareDT03(ctx) {
+    var scolds = DT03_SCOLDS.filter(function (s) { return allMet(s.need, ctx.storyDay); });
+    var replies = DT03_REPLIES.filter(function (s) { return allMet(s.need, ctx.storyDay); });
+    if (!scolds.length || !replies.length) return null;
+    var rng = rngOf(ctx.seed + ':DT03');
+    var scold = pick(rng, scolds);
+    var pose = pick(rng, DT03_POSES);
+    var giver = pick(rng, giversFor(BY_ID.DT03_croissant_betise, ctx).concat(['noe']));
+    return {
+      steps: [
+        { type: 'line', who: giver === 'camille' ? 'camille' : 'noe', fr: scold.fr, speak: scold.fr, pose: pose },
+        { type: 'reply', fr: scold.fr, options: replies.map(function (r) { return { id: r.id, fr: r.fr, ok: true }; }), pose: pose }
+      ],
+      giver: giver, location: 'flat411', pose: pose
+    };
+  }
+
+  function prepareDT04(ctx) {
+    if (!entryMet('p1_19', ctx.storyDay)) return null;
+    var captions = DT04_CAPTIONS.filter(function (c) { return !c.need.length || allMet(c.need, ctx.storyDay); });
+    var recog = captions.filter(function (c) { return c.recognition; });
+    if (recog.length > 1) captions = captions.filter(function (c) { return !c.recognition; }).concat(recog.slice(0, 1));
+    var replies = DT04_REPLIES.filter(function (r) { return !r.need.length || allMet(r.need, ctx.storyDay); });
+    var rng = rngOf(ctx.seed + ':DT04');
+    var reply = pick(rng, replies);
+    return {
+      steps: [
+        { type: 'photo', captions: captions },
+        { type: 'line', who: 'martin', fr: reply.fr, speak: reply.fr }
+      ],
+      giver: 'martin', location: 'rooftop'
+    };
+  }
+
+  function prepareDT05(ctx) {
+    if (!entryMet('p5_31', ctx.storyDay)) return null;
+    var rng = rngOf(ctx.seed + ':DT05');
+    var who = pick(rng, RECIPIENTS);
+    var ask = who.register === 'vous' ? ('C’est pour vous, madame' + NN + '?') : ('C’est pour toi' + NN + '?');
+    return {
+      steps: [
+        { type: 'deliver', who: 'player', fr: ask, speak: ask, recipient: who, doors: DOORS,
+          yes: 'Oui, c’est pour moi. Merci' + NN + '!',
+          no: 'Non, ce n’est pas pour moi.' }
+      ],
+      giver: who.id, location: 'stairwell', recipient: who
+    };
+  }
+
+  var PREP = { DT01_petite_course: prepareDT01, DT02_ranger: prepareDT02, DT03_croissant_betise: prepareDT03, DT04_photo_martin: prepareDT04, DT05_colis: prepareDT05 };
+
+  function prepare(id, ctx) {
+    var tmpl = BY_ID[id];
+    if (!tmpl || !tmpl.playable) return null;
+    ctx = ctx || {};
+    if (!ctx.storyDay || ctx.storyDay < (tmpl.unlockDay || 1)) return null;
+    var built = PREP[tmpl.id](ctx);
+    if (!built) return null;
+    built.id = tmpl.id;
+    built.n = tmpl.n;
+    built.title = tmpl.title;
+    built.interaction = tmpl.interaction;
+    built.fsrsCredit = 'exposure';
+    built.fsrsBehaviour = 'exposure';
+    return built;
+  }
+
+  function canFill(id, ctx) { return !!prepare(id, ctx); }
+
+  function offer(ctx) {
+    ctx = ctx || {};
+    var rng = rngOf((ctx.seed || ctx.dayKey || 'day') + ':offer');
+    var playable = TEMPLATES.filter(function (t) { return t.playable && canFill(t.id, ctx); });
+    var yesterday = ctx.yesterday || [];
+    var fresh = playable.filter(function (t) { return yesterday.indexOf(t.id) < 0; });
+    var pool = fresh.length >= Math.min(3, playable.length) ? fresh : playable;
+    var reused = pool !== fresh && fresh.length < playable.length;
+    var shuffled = shuffle(rng, pool);
+    var cap = shuffled.length < 3 ? shuffled.length : Math.min(shuffled.length, 3 + Math.floor(rng() * 3));
+    return { ids: shuffled.slice(0, cap).map(function (t) { return t.id; }), reusedYesterday: reused };
+  }
+
+  function begin() { return { step: 0, reveal: false, photo: false, wrongDoor: false }; }
+
+  function view(inst, state) {
+    if (!inst) return { done: true };
+    if (state.step >= inst.steps.length) return { done: true, title: inst.title };
+    var step = inst.steps[state.step];
+    return { done: false, title: inst.title, step: step, index: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: state.wrongDoor, giver: inst.giver, location: inst.location, pose: inst.pose || (step && step.pose) };
+  }
+
+  // input: { choice, pick, slot, caption, door, next }
+  // Returns a new state plus encounter descriptors. Pardon replays and adds none.
+  // Wrong door / wrong slot stays. Never asks the caller to grade FSRS.
+  function act(inst, state, input) {
+    input = input || {};
+    var step = inst.steps[state.step];
+    var next = { step: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: false };
+    var encounters = [];
+    var speak = null;
+    if (!step) return { state: next, encounters: encounters, done: true };
+    function hear(fr, target) { if (fr) encounters.push({ fr: fr, target: target || null, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false }); }
+    if (step.type === 'line' && step.options && input.choice) {
+      var opt = (step.options || []).filter(function (o) { return o.id === input.choice; })[0];
+      if (!opt) return { state: next, encounters: [], done: false };
+      if (opt.effect === 'replay') return { state: next, encounters: [], speak: step.fr, replay: true, done: false };
+      hear(opt.fr, null);
+      next.step = state.step + 1;
+    } else if (step.type === 'line' || step.type === 'drag') {
+      if (input.next || input.slot) {
+        if (step.type === 'drag' && input.slot && input.slot !== step.place) return { state: next, encounters: [], miss: true, done: false };
+        if (step.type === 'drag') hear(step.fr, step.target);
+        next.step = state.step + 1;
+      }
+    } else if (step.type === 'choice') {
+      var opt = (step.options || []).filter(function (o) { return o.id === input.choice; })[0];
+      if (!opt) return { state: next, encounters: [], done: false };
+      if (opt.effect === 'replay') {
+        speak = inst.steps[0] && inst.steps[0].fr;
+        return { state: next, encounters: [], speak: speak, replay: true, done: false };
+      }
+      hear(opt.fr, null);
+      next.step = state.step + 1;
+    } else if (step.type === 'fetch') {
+      if (input.pick === 'unsure') {
+        next.reveal = true;
+        if (step.unsure) hear(step.unsure, null);
+        hear(step.target.fr_partitive, step.target.id);
+        next.step = state.step + 1;
+        next.reveal = false;
+      } else if (input.pick) {
+        var hit = (step.options || []).filter(function (o) { return o.id === input.pick; })[0];
+        if (!hit) return { state: next, encounters: [], done: false };
+        if (!hit.correct) return { state: next, encounters: [], miss: true, done: false };
+        hear(hit.fr_partitive, hit.id);
+        next.step = state.step + 1;
+      }
+    } else if (step.type === 'reply') {
+      var rep = (step.options || []).filter(function (o) { return o.id === input.choice; })[0];
+      if (!rep) return { state: next, encounters: [], done: false };
+      hear(rep.fr, null);
+      next.step = state.step + 1;
+    } else if (step.type === 'photo') {
+      if (!state.photo && input.next) { next.photo = true; return { state: next, encounters: [], photo: true, done: false }; }
+      var cap = (step.captions || []).filter(function (c) { return c.id === input.caption; })[0];
+      if (!cap) return { state: next, encounters: [], done: false };
+      hear(cap.fr, cap.recognition ? null : 'p1_19');
+      next.photo = false;
+      next.step = state.step + 1;
+    } else if (step.type === 'deliver') {
+      if (!input.door) return { state: next, encounters: [], done: false };
+      if (input.door !== step.recipient.door) {
+        next.wrongDoor = true;
+        hear(step.no, null);
+        return { state: next, encounters: encounters, speak: step.no, miss: true, done: false };
+      }
+      hear(step.fr, null);
+      hear(step.yes, 'p5_31');
+      next.step = state.step + 1;
+    }
+    return { state: next, encounters: encounters, speak: speak, done: next.step >= inst.steps.length };
+  }
+
+  // First time this exact line is heard today: +1 contact. Later repeats the same day add nothing.
+  function commit(store, dayKey, enc) {
+    store.lines = store.lines || {};
+    store.contacts = store.contacts || {};
+    var key = dayKey + '|' + (enc.target || '') + '|' + enc.fr;
+    if (store.lines[key]) return { fresh: false, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false };
+    store.lines[key] = 1;
+    if (enc.target) store.contacts[enc.target] = (store.contacts[enc.target] || 0) + 1;
+    return { fresh: true, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false, target: enc.target || null, fr: enc.fr };
+  }
+
+  function dueEntryIds(learn, now) {
+    var due = {};
+    if (!learn || !learn.cards) return [];
+    var t = (now || new Date()).getTime();
+    Object.keys(learn.cards).forEach(function (k) {
+      var c = learn.cards[k];
+      if (!c || !c.reps || !c.due || c.suspended) return;
+      if (new Date(c.due).getTime() <= t) due[c.itemId] = 1;
+    });
+    var ids = [];
+    (Lex.ITEMS || []).forEach(function (it) {
+      if ((it.deckIds || []).some(function (d) { return due[d]; })) ids.push(it.id);
+    });
+    Object.keys(due).forEach(function (id) { if (ids.indexOf(id) < 0) ids.push(id); });
+    return ids;
+  }
+
+  var PLAYER_LINES = [
+    'D’accord' + NN + '!',
+    'Pardon' + NN + '?',
+    'Il a faim' + NN + '?',
+    'Il est fatigué.',
+    'Regardez, la plante' + NN + '!',
+    'Regardez, une nouvelle feuille' + NN + '!',
+    'C’est pour toi' + NN + '?',
+    'C’est pour vous, madame' + NN + '?'
+  ];
+
+  var api = {
+    NN: NN, TEMPLATES: TEMPLATES, BY_ID: BY_ID, DT02_LINES: DT02_OK, DT03_REPLIES: DT03_REPLIES,
+    RECIPIENTS: RECIPIENTS, PLAYER_LINES: PLAYER_LINES,
+    prepare: prepare, canFill: canFill, offer: offer, begin: begin, view: view, act: act,
+    commit: commit, dueEntryIds: dueEntryIds, askLine: askLine, dt01Pool: dt01Pool,
+    scoreTarget: scoreTarget, entryMet: entryMet
+  };
+  root.A411 = root.A411 || {};
+  root.A411.Tasks = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* In-world daily tasks. French only. Text is Noto Sans / system-ui, never a pixel font.
+ * Pictures are existing pixel props, drawn at an integer scale. A missing icon is not a card. */
+(function (root) {
+  'use strict';
+  var WHO = { noe: 'Noé', camille: 'Camille', lefevre: 'Madame Lefèvre', martin: 'Madame Martin', samir: 'Samir', croissant: 'Croissant' };
+  var LOC = {
+    flat411_kitchen: 'La cuisine', stairwell: 'L’escalier', lefevre_flat: 'Chez Madame Lefèvre',
+    superette: 'La supérette', rooftop: 'Le toit', flat411: 'L’appartement'
+  };
+
+  function el(tag, attrs) {
+    var node = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v == null || v === false) return;
+      if (k === 'class') node.className = v;
+      else if (k === 'text') node.textContent = v;
+      else node.setAttribute(k, v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var c = arguments[i];
+      if (c == null || c === false) continue;
+      if (Array.isArray(c)) c.forEach(function (x) { if (x) node.appendChild(x); });
+      else node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    }
+    return node;
+  }
+  function btn(label, fn, cls, id) {
+    var b = el('button', { type: 'button', class: 'btn ' + (cls || ''), id: id || null });
+    if (typeof label === 'string') b.textContent = label;
+    else if (label) b.appendChild(label);
+    b.addEventListener('click', function (ev) { ev.preventDefault(); fn(); });
+    return b;
+  }
+
+  // Integer nearest-neighbour. The canvas buffer is the CSS size, so the browser does not rescale it.
+  // No prop means no card: the caller leaves the item out of the row.
+  function paintIcon(canvas, icon, Art, scale) {
+    if (!(Art && icon && Art.PROPS && Art.PROPS[icon] && Art.propSize)) return false;
+    var ctx = canvas.getContext('2d');
+    var s = scale || 4;
+    var sz = Art.propSize(icon);
+    var w = sz[0] * s + s * 2;
+    var h = sz[1] * s + s * 2;
+    canvas.width = w;
+    canvas.height = h;
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = '#f3ecdf';
+    ctx.fillRect(0, 0, w, h);
+    Art.drawProp(ctx, icon, Math.floor((w - sz[0] * s) / 2), Math.floor((h - sz[1] * s) / 2), s);
+    return true;
+  }
+
+  // One room, logical 96×112, drawn at 3× so the phone shows crisp pixels. Hit zones use the same grid.
+  var TIDY_W = 96, TIDY_H = 112, TIDY_S = 3;
+  var ZONES = {
+    'à côté de la fenêtre': { x: 0, y: 0, w: 48, h: 36 },
+    'dans la cuisine': { x: 48, y: 0, w: 48, h: 36 },
+    'à côté de la porte': { x: 0, y: 40, w: 34, h: 72 },
+    'sur la table': { x: 36, y: 40, w: 32, h: 28 },
+    'sous la table': { x: 36, y: 70, w: 32, h: 42 },
+    'à côté du canapé': { x: 68, y: 70, w: 28, h: 42 }
+  };
+  function paintTidy(canvas) {
+    var S = TIDY_S;
+    canvas.width = TIDY_W * S;
+    canvas.height = TIDY_H * S;
+    var ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    function px(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x * S, y * S, w * S, h * S); }
+    px(0, 0, TIDY_W, 40, '#efe2c4');
+    px(0, 40, TIDY_W, TIDY_H - 40, '#c4a882');
+    px(6, 6, 28, 18, '#9fd0ea');
+    px(6, 14, 28, 1, '#ffffff');
+    px(19, 6, 1, 18, '#ffffff');
+    px(4, 24, 32, 2, '#6b4f3a');
+    px(54, 14, 36, 3, '#8a5a3a');
+    px(56, 6, 7, 8, '#d9534f');
+    px(66, 5, 7, 9, '#e2873a');
+    px(76, 6, 7, 8, '#5cb85c');
+    px(4, 58, 16, 42, '#6b4430');
+    px(6, 60, 12, 38, '#a06a42');
+    px(15, 76, 2, 2, '#e0c060');
+    px(40, 50, 26, 4, '#8a5a3a');
+    px(42, 54, 3, 28, '#6b4430');
+    px(61, 54, 3, 28, '#6b4430');
+    px(72, 88, 20, 8, '#5b6fa0');
+    px(72, 82, 20, 7, '#4b5d8a');
+    px(70, 84, 3, 16, '#4b5d8a');
+    px(90, 84, 3, 16, '#4b5d8a');
+  }
+
+  function paintScene(canvas, inst, view, Art) {
+    if (!Art) return;
+    if (inst.interaction === 'drag_to_slot') { paintTidy(canvas); return; }
+    var ctx = canvas.getContext('2d');
+    var pose = view.pose || (view.step && view.step.pose);
+    var loc = view.location;
+    canvas.width = Art.W; canvas.height = Art.H;
+    if (inst.interaction === 'photo' || loc === 'rooftop') {
+      ctx.fillStyle = '#9ec6ea';
+      ctx.fillRect(0, 0, Art.W, Art.H);
+      ctx.fillStyle = '#d8c9ad';
+      ctx.fillRect(0, 40, Art.W, 24);
+      if (Art.garden) { ctx.save(); ctx.translate(24, 8); Art.garden(ctx, 4, 'healthy', true); ctx.restore(); }
+      if (Art.PROPS.phone) Art.drawProp(ctx, 'phone', 62, 28, 2);
+      return;
+    }
+    if (pose === 'cat_chair' || pose === 'cat_paw') { Art.scene(ctx, pose, {}); return; }
+    if (pose === 'sit_in_pot') { Art.scene(ctx, 'plant', { watered: true }); return; }
+    if (pose === 'smug') { Art.scene(ctx, 'cat', {}); return; }
+    if (loc === 'stairwell' || inst.interaction === 'deliver') { Art.scene(ctx, 'doorway', { door: 'closed' }); return; }
+    if (loc === 'flat411_kitchen') { Art.scene(ctx, 'kitchen', {}); return; }
+    if (loc === 'lefevre_flat') { Art.scene(ctx, 'doorway', { door: 'open', voisine: 'idle' }); return; }
+    Art.scene(ctx, 'kitchen', {});
+  }
+
+  function render(ctx) {
+    var Tasks = ctx.Tasks, Art = ctx.Art, mount = ctx.mount;
+    var inst = ctx.inst, state = ctx.state;
+    mount.innerHTML = '';
+    var v = Tasks.view(inst, state);
+    var rootEl = el('div', { class: 'task-ui', id: 'taskUi', lang: 'fr' });
+    rootEl.appendChild(el('p', { class: 'task-kicker', id: 'taskWhere', text: (WHO[v.giver] ? WHO[v.giver] + ' · ' : '') + (LOC[v.location] || '') }));
+    var canvas = el('canvas', { class: 'task-art', id: 'taskArt', width: String(Art ? Art.W : 96), height: String(Art ? Art.H : 64) });
+    rootEl.appendChild(canvas);
+    paintScene(canvas, inst, v, Art);
+    if (v.done) {
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: 'Merci' + Tasks.NN + '!' }));
+      rootEl.appendChild(btn('Retour', ctx.onExit, 'primary', 'btnTaskExit'));
+      mount.appendChild(rootEl);
+      if (ctx.onDone) ctx.onDone();
+      return;
+    }
+    var step = v.step;
+    var actions = el('div', { class: 'task-actions', id: 'taskActions' });
+
+    function go(input) {
+      var res = Tasks.act(inst, ctx.state, input);
+      (res.encounters || []).forEach(function (enc) { if (ctx.onEncounter) ctx.onEncounter(enc); });
+      ctx.miss = !!res.miss;
+      ctx.state = res.state;
+      if (ctx.onState) ctx.onState(res.state);
+      if (res.replay && ctx.speak) ctx.speak(res.speak || (inst.steps[0] && inst.steps[0].fr), step.who);
+      else if (res.speak && ctx.speak) ctx.speak(res.speak, step.who);
+      render(ctx);
+    }
+
+    if (step.type === 'line') {
+      var spoken = el('p', { class: 'task-line' + (step.handover ? ' handover' : '') + (ctx.miss ? ' task-miss' : ''), id: 'taskLine', text: step.fr });
+      rootEl.appendChild(spoken);
+      if (ctx.onEncounter && !step._heard) {
+        step._heard = true;
+        ctx.onEncounter({ fr: step.fr, target: step.target || null, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false });
+      }
+      if (step.speak && ctx.speak && !step._spoke) { step._spoke = true; ctx.speak(step.speak, step.who); }
+      if (step.options) {
+        step.options.forEach(function (o) {
+          actions.appendChild(btn(o.fr, function () { go({ choice: o.id }); }, '', 'btnOpt_' + o.id));
+        });
+      } else actions.appendChild(btn('Continuer', function () { go({ next: true }); }, 'primary', 'btnTaskNext'));
+    } else if (step.type === 'choice' || step.type === 'reply') {
+      if (step.type === 'reply') rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr || '' }));
+      (step.options || []).forEach(function (o) {
+        actions.appendChild(btn(o.fr, function () { go({ choice: o.id }); }, '', 'btnOpt_' + o.id));
+      });
+    } else if (step.type === 'fetch') {
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr || '' }));
+      var row = el('div', { class: 'task-icons', id: 'taskIcons' });
+      (step.options || []).forEach(function (o) {
+        if (!(Art && Art.PROPS && o.icon && Art.PROPS[o.icon])) return;
+        var c = el('canvas', { 'data-icon': o.icon || '', 'data-item': o.id });
+        paintIcon(c, o.icon, Art, 4);
+        var b = btn(c, function () { go({ pick: o.id }); }, 'task-icon' + (v.reveal && o.correct ? ' is-right' : ''), 'btnItem_' + o.id);
+        b.setAttribute('aria-label', o.fr_def || o.fr_partitive || '');
+        if (o.fr_partitive) b.setAttribute('data-partitive', o.fr_partitive);
+        row.appendChild(b);
+      });
+      actions.appendChild(row);
+      if (step.unsure) actions.appendChild(btn(step.unsure, function () { go({ pick: 'unsure' }); }, 'small', 'btnUnsure'));
+    } else if (step.type === 'drag') {
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr }));
+      if (ctx.onEncounter && !step._heard) {
+        step._heard = true;
+        ctx.onEncounter({ fr: step.fr, target: step.target || null, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false });
+      }
+      var stage = el('div', { class: 'task-stage', id: 'taskStage' });
+      canvas.parentNode.insertBefore(stage, canvas);
+      stage.appendChild(canvas);
+      (step.slots || []).forEach(function (place) {
+        var z = ZONES[place];
+        if (!z) return;
+        var s = el('button', { type: 'button', class: 'task-zone', 'data-place': place, 'aria-label': place });
+        s.style.left = (z.x * TIDY_S) + 'px';
+        s.style.top = (z.y * TIDY_S) + 'px';
+        s.style.width = (z.w * TIDY_S) + 'px';
+        s.style.height = (z.h * TIDY_S) + 'px';
+        s.addEventListener('click', function () { go({ slot: place }); });
+        s.addEventListener('dragover', function (ev) { ev.preventDefault(); });
+        s.addEventListener('drop', function (ev) { ev.preventDefault(); go({ slot: place }); });
+        stage.appendChild(s);
+      });
+      var chip = el('canvas', { class: 'task-chip', id: 'taskChip', draggable: 'true' });
+      paintIcon(chip, step.icon, Art, 4);
+      chip.setAttribute('aria-label', step.fr);
+      chip.addEventListener('dragstart', function (ev) { try { ev.dataTransfer.setData('text/plain', 'item'); } catch (e) {} });
+      actions.appendChild(chip);
+    } else if (step.type === 'photo') {
+      if (!v.photo) {
+        rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: 'La plante.' }));
+        actions.appendChild(btn('La photo', function () { go({ next: true }); }, 'primary', 'btnPhoto'));
+      } else {
+        rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: '' }));
+        (step.captions || []).forEach(function (c) {
+          actions.appendChild(btn(c.fr, function () { go({ caption: c.id }); }, '', 'btnCap_' + c.id));
+        });
+      }
+    } else if (step.type === 'deliver') {
+      var name = el('p', { class: 'parcel-name', id: 'parcelName', text: step.recipient.name });
+      rootEl.appendChild(name);
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: v.wrongDoor ? step.no : step.fr }));
+      if (!v.wrongDoor && ctx.onEncounter && !step._heard) {
+        step._heard = true;
+        ctx.onEncounter({ fr: step.fr, target: null, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false });
+      }
+      (step.doors || []).forEach(function (d) {
+        actions.appendChild(btn(d.fr, function () { go({ door: d.id }); }, 'task-door', 'btnDoor_' + d.id));
+      });
+    }
+    rootEl.appendChild(actions);
+    rootEl.appendChild(btn('Retour', ctx.onExit, 'small', 'btnTaskExit'));
+    if (ctx.miss) rootEl.classList.add('task-miss');
+    ctx.miss = false;
+    mount.appendChild(rootEl);
+  }
+
+  var api = { render: render, paintIcon: paintIcon, WHO: WHO, LOC: LOC };
+  root.A411 = root.A411 || {};
+  root.A411.TaskUI = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* L’Appartement 411 — Day 1 player (UI + scene engine). */
 (function () {
   'use strict';
@@ -19058,7 +20056,7 @@ function getLang(ls, id) {
     var showGloss = glossText && !inStory();
     return btn([h('span', { lang: 'fr', class: 'frlab', text: frText }), showGloss ? h('span', { class: 'bgloss', text: glossText }) : null], fn, cls, extra);
   }
-  function inStory() { return ui.view === 'play' || ui.view === 'chapter'; }
+  function inStory() { return ui.view === 'play' || ui.view === 'chapter' || ui.view === 'task'; }
   // ---- v0.4.1: pixel UI icons (art.js ICONS) as inline SVG in currentColor; no emoji. ----
   function icon(name, label) {
     var m = Art.ICONS[name]; if (!m) return null;
@@ -19766,6 +20764,7 @@ function getLang(ls, id) {
       if (ui.view === 'cards') { $topbar.hidden = true; A411.ReviewUI.renderCards(studyCtx()); return; }
       if (ui.view === 'stats') { $topbar.hidden = true; A411.ReviewUI.renderStats(studyCtx()); return; }
       if (ui.view === 'desk') { $topbar.hidden = false; renderDesk(); return; }
+      if (ui.view === 'task') { $topbar.hidden = true; renderTask(); return; }
       if (ui.view === 'title' || !S) { $topbar.hidden = true; renderTitle(); return; }
       if (ui.view === 'hub') { $topbar.hidden = false; renderHub(); return; }
       if (ui.view === 'chapter') { $topbar.hidden = false; renderChapter(); return; }
@@ -19813,6 +20812,7 @@ function getLang(ls, id) {
       if (WL.ritualSeen(S, plan.day)) col.appendChild(frBtn('Revoir la soirée', null, function () { openRitual(plan.day); }, 'small', { id: 'btnRitualAgain' }));
       if (plan.early) col.appendChild(frBtn('On continue' + NB + '? Jour ' + chDay(plan.early), Z('打开下一章（或者明天再来）', 'open the next chapter (or come back tomorrow)'), function () { openEarly(plan.early); }, 'small', { id: 'btnEarly' }));
     }
+    var homeTasks = taskOfferEl(); if (homeTasks) col.appendChild(homeTasks);
     col.appendChild(frBtn('Note', Z('写一条笔记（可选）', 'leave a note (optional)'), openFeedback, 'small', { id: 'btnHomeFeedback' }));
     if (act) pulseFirst(col); else pulseNext(col.querySelector('#btnHomePlant') || col.querySelector('#btnEarly') || col.querySelector('#btnHomeRecap')); // the next step pulses on home too
     card.appendChild(col);
@@ -19845,10 +20845,12 @@ function getLang(ls, id) {
   function currentPlan() { return WL.dayPlan(S, gardenStatus(), todayKey(), W.CHAPTER_ORDER.length + 1); }
   function stepsBar(plan) {
     var ol = h('ol', { class: 'day-steps', id: 'daySteps', 'aria-label': Z('今天的三步', 'Today’s three steps') });
-    [['story', '', 'Histoire', Z('新故事', 'new story')], ['desk', '', 'Au bureau', Z('写信', 'letter')], ['plant', '', 'La plante', Z('复习', 'review')]].forEach(function (s, i) {
+    [['story', 'book', 'Histoire', Z('新故事', 'new story')], ['desk', 'letter', 'Au bureau', Z('写信', 'letter')], ['plant', 'plant', 'La plante', Z('复习', 'review')]].forEach(function (s, i) {
       var state = plan.steps[s[0]];
-      ol.appendChild(h('li', { class: 'step ' + state, 'data-step': s[0], 'data-state': state, 'aria-current': state === 'current' ? 'step' : null },
-        h('span', { class: 'dot', text: state === 'done' ? '✓' : String(i + 1) }),
+      var n = state === 'done' ? '✓' : String(i + 1);
+      ol.appendChild(h('li', { class: 'step ' + state, 'data-step': s[0], 'data-state': state, 'aria-current': state === 'current' ? 'step' : null, 'aria-label': n + '. ' + s[2] },
+        h('span', { class: 'dot', 'aria-hidden': 'true', text: n }),
+        icon(s[1]),
         h('span', { class: 'lbl', title: s[3] }, h('span', { lang: 'fr', text: s[2] }))));
     });
     return ol;
@@ -20645,6 +21647,113 @@ function getLang(ls, id) {
     9: { fr: 'La nuit. En haut, Croissant dort sur le canapé. En bas, quatre assiettes. Sur le frigo' + NB + ': « Jeudi ».', zh: '夜里。楼上，Croissant 睡在沙发上。楼下，四个盘子。冰箱上写着：「星期四」。', en: 'Night. Upstairs, Croissant sleeps on the sofa. Downstairs, four plates. On the fridge: « Thursday ».', sfx: ['purr'] },
     6: { fr: 'Ce soir, Noé ferme la porte à clé. Clic' + NB + '! Croissant dort dans son panier. Demain, dix heures…', zh: '今晚，Noé 把门锁上了。咔哒！Croissant 在自己的窝里睡着了。明天，十点……', en: 'Tonight, Noé locks the door. Click! Croissant is asleep in his basket. Tomorrow, ten o’clock…', sfx: ['click', 'purr'] },
   };
+  // Highest story day whose Bravo has been seen. Vocab for tasks follows that day, not the calendar.
+  function finishedStoryDay() {
+    var n = 0;
+    for (var d = 1; d <= 9; d++) if (S && WL.ritualSeen(S, d)) n = d;
+    return n;
+  }
+  function taskCtx(storyDay) {
+    if (learnState) learnState.taskLog = learnState.taskLog || { lines: {}, contacts: {} };
+    var dayKey = todayKey();
+    var store = S && S.week && S.week.dailyTasks || {};
+    var yKey = WL.addDays(dayKey, -1);
+    return {
+      storyDay: storyDay,
+      seed: (profileId || 'player') + ':' + dayKey,
+      dayKey: dayKey,
+      contacts: (learnState && learnState.taskLog && learnState.taskLog.contacts) || {},
+      dueIds: A411.Tasks && learnState ? A411.Tasks.dueEntryIds(learnState, new Date()) : [],
+      yesterday: (store[yKey] && store[yKey].ids) || [],
+      absent: {}
+    };
+  }
+  function todayOffer() {
+    if (!S || !A411.Tasks) return null;
+    var day = finishedStoryDay();
+    if (!day) return null;
+    var w = WL.ensureWeek(S);
+    w.dailyTasks = w.dailyTasks || {};
+    var key = todayKey();
+    var cur = w.dailyTasks[key];
+    if (cur && cur.storyDay === day && cur.ids) return cur;
+    var off = A411.Tasks.offer(taskCtx(day));
+    w.dailyTasks[key] = { ids: off.ids, reusedYesterday: !!off.reusedYesterday, storyDay: day };
+    persist('daily-tasks');
+    return w.dailyTasks[key];
+  }
+  function taskOfferEl() {
+    if (!A411.Tasks || !S) return null;
+    var off = todayOffer();
+    if (!off || !off.ids || !off.ids.length) return null;
+    var box = h('div', { class: 'task-offers', id: 'taskOffers', lang: 'fr' });
+    off.ids.forEach(function (id) {
+      var t = A411.Tasks.BY_ID[id];
+      if (!t) return;
+      box.appendChild(btn(t.title, function () { openTask(id); }, 'task-offer', { id: 'btnTask_' + id, lang: 'fr' }));
+    });
+    return box;
+  }
+  function noteTaskEncounter(enc) {
+    if (!learnState || !A411.Tasks || !enc || !enc.fr) return;
+    learnState.taskLog = learnState.taskLog || { lines: {}, contacts: {} };
+    var rec = A411.Tasks.commit(learnState.taskLog, todayKey(), enc);
+    if (!rec.fresh) return;
+    saveLearn();
+    if (!S || !S.learning) return;
+    pushAttempt({
+      target: enc.target || null,
+      lesson: 'task',
+      modality: 'listening',
+      audioStatus: 'not_used',
+      resultType: 'exposure',
+      evidenceKind: 'encounter',
+      correct: null,
+      context: 'task.' + (ui.task && ui.task.inst ? ui.task.inst.n : ''),
+      stimulus: enc.fr
+    });
+  }
+  function openTask(id, opts) {
+    opts = opts || {};
+    if (!A411.Tasks || !A411.TaskUI) return;
+    var day = opts.previewDay || finishedStoryDay();
+    if (!day) return;
+    var inst = A411.Tasks.prepare(id, taskCtx(day));
+    if (!inst) return;
+    Au.stop();
+    ui.view = 'task';
+    ui.task = { id: inst.id, inst: inst, state: A411.Tasks.begin(), preview: !!opts.previewDay };
+    render();
+  }
+  function renderTask() {
+    if (!ui.task || !A411.TaskUI) { goTitle(); return; }
+    var mount = h('div', { id: 'taskMount' });
+    $screen.appendChild(mount);
+    A411.TaskUI.render({
+      Tasks: A411.Tasks,
+      Art: Art,
+      mount: mount,
+      inst: ui.task.inst,
+      state: ui.task.state,
+      onState: function (st) { if (ui.task) ui.task.state = st; },
+      onExit: function () { ui.task = null; goTitle(); },
+      onEncounter: noteTaskEncounter,
+      onDone: function () {},
+      speak: function (text, who) {
+        try { Au.speak(text, { speaker: who === 'camille' || who === 'noe' || who === 'lefevre' || who === 'martin' ? who : 'neutral' }); } catch (e) {}
+      }
+    });
+  }
+  function maybePreviewTask() {
+    var id = null, day = 14;
+    try {
+      var q = new URLSearchParams(location.search || '');
+      id = q.get('task');
+      if (q.get('previewDay')) day = Number(q.get('previewDay')) || 14;
+    } catch (e) { return; }
+    if (!id || !A411.Tasks || !A411.Tasks.BY_ID[id]) return;
+    openTask(id, { previewDay: day });
+  }
   function openRitual(n) { Au.stop(); ui.view = 'ritual'; ui.ritual = { n: n, phase: 'building', at: Date.now() }; ui.zoom = null; render(); }
   function ritualNext(phase) { if (ui.view !== 'ritual' || !ui.ritual) return; ui.ritual.phase = phase; ui.ritual.at = Date.now(); render(); }
   function renderRitual() {
@@ -20720,6 +21829,7 @@ function getLang(ls, id) {
     }, 't-grey'));
     tiles.appendChild(tile('btnAfterFeedback', 'ask', 'Note', Z('写一条笔记（可选）', 'leave a note (optional)'), openFeedback, 't-grey'));
     if (weekDone()) tiles.appendChild(tile('btnAfterCheck', 'check', 'Bilan', Z('第一周的小检查（不打分）', 'a short week-1 check (not graded)'), openWeekCheck, 't-sky'));
+    var bravoTasks = taskOfferEl(); if (bravoTasks) menu.appendChild(bravoTasks);
     menu.appendChild(h('p', { class: 'muted small', id: 'bravoFeedbackHint', text: Z('如果有哪里不清楚，可以留一条笔记。', 'If something was unclear, you can leave a note.') }));
     menu.appendChild(tiles);
     var hubPlant = menu.querySelector('#btnAfterPlant');
@@ -21987,6 +23097,7 @@ function getLang(ls, id) {
     var muted = MU.mix.muted || MU.mix.music <= 0;
     b.textContent = ''; b.appendChild(icon(muted ? 'mute' : 'sound'));
     b.setAttribute('aria-pressed', muted ? 'true' : 'false');
+    b.hidden = ui.view === 'task';
     b.setAttribute('aria-label', muted ? Z('音乐已静音，点一下打开', 'Music muted, tap to turn on') : Z('音乐，点一下静音', 'Music, tap to mute'));
     b.title = muted ? Z('打开音乐', 'Music on') : Z('音乐静音', 'Mute music');
     b.classList.toggle('muted', muted);
@@ -22026,7 +23137,7 @@ function getLang(ls, id) {
   window.addEventListener('resize', function () { fabGuard(); });
   function wordbookFab() {
     var b = document.getElementById('btnWordbook');
-    var show = !!learnState && ui.view !== 'gate' && ui.view !== 'placement';
+    var show = !!learnState && ui.view !== 'gate' && ui.view !== 'placement' && ui.view !== 'task';
     if (!b) {
       b = h('button', { type: 'button', id: 'btnWordbook', class: 'wb-fab', onclick: function (ev) { ev.stopPropagation(); ui.gesture = true; safe(openWordbook)(); } }, icon('wordbook'));
       document.getElementById('app').appendChild(b);
@@ -22802,6 +23913,7 @@ function getLang(ls, id) {
     try { if (A411.Grammar && learnState.grammar) A411.Grammar.sync(learnState); } catch (e) {}
     if (ui.syncOffer && ui.syncOffer.p !== id) ui.syncOffer = null;
     render();
+    maybePreviewTask();
     if (!chooseProfile._noSync) { syncOnOpen(); flushFeedback(); }
   }
   function remindSection() {
@@ -22928,7 +24040,7 @@ function getLang(ls, id) {
       if (ui.view === 'play') rerenderStep();
     });
   }
-  window.A411.App = { state: function () { return S; }, render: render, persist: persist, openChapter: function (cid) { openChapter(cid); }, openLetter: function (n, ro) { openLetter(n, ro); }, openRitual: function (n) { openRitual(n); }, learn: function () { return learnState; }, summaryText: function () { return syncSummary(profileId); } }; // debug/test hook
+  window.A411.App = { state: function () { return S; }, render: render, persist: persist, openChapter: function (cid) { openChapter(cid); }, openLetter: function (n, ro) { openLetter(n, ro); }, openRitual: function (n) { openRitual(n); }, openTask: function (id, opts) { openTask(id, opts); }, learn: function () { return learnState; }, summaryText: function () { return syncSummary(profileId); } }; // debug/test hook
   window.A411.HubPlay = {
     status: function () {
       var HS = A411.HubStory;
