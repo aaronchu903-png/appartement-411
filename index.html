@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<!-- L’Appartement 411 v0.13.1 single-file build 2026-10-13T23:50:55.007Z -->
+<!-- L’Appartement 411 v0.13.3 single-file build 2026-10-14T06:06:03.792Z -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
@@ -183,7 +183,10 @@ canvas.stage.zooming { transition: transform .75s ease-in-out; }
 .kw { color:inherit; background:linear-gradient(transparent 62%, rgba(255,215,122,.75) 62%); border-bottom:1px dotted #a8862a; cursor:pointer; padding:0 1px; border-radius:2px; }
 .kw:focus-visible { outline:2px solid #4a90c0; }
 .kw.big { font-size:1.6em; font-weight:700; }
-.focus-beat .focus-word { margin:.2em 0; text-align:center; }
+.focus-beat .focus-word, #waterWord { margin:.2em 0; text-align:center; }
+.water-head { display:flex; align-items:center; gap:.6em; }
+.water-head .narr { flex:1; }
+#waterWord.replay { animation: a411pulse .7s ease; }
 .focus-beat .focus-say { text-align:center; opacity:.8; font-style:italic; }
 .narr .narr-fr { font-style:italic; }
 .line-head { display:flex; align-items:center; gap:.4em; }
@@ -361,7 +364,7 @@ body.reduced-motion .next-pulse, body.reduced-motion .hub-prompt.live { animatio
 .parcel-name { font-size:1.45rem; font-weight:700; letter-spacing:0; margin:8px 0 0; }
 .task-art { display:block; width:min(100%, 360px); height:auto; margin:0 auto; image-rendering:pixelated; background:#d8c9ad; border:2px solid #2a2e3a; }
 .task-actions { display:flex; flex-direction:column; gap:8px; }
-.task-actions .btn, .task-ui > .btn { min-height:44px; }
+.task-actions .btn, .task-ui > .btn { min-height:44px; min-width:44px; }
 .task-icons { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-end; }
 .task-icon { padding:4px; }
 .task-icon canvas, .task-chip { display:block; width:auto; height:auto; image-rendering:pixelated; image-rendering:crisp-edges; }
@@ -754,6 +757,34 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
   }
 
   // ---------------- Week « Protège Croissant » ----------------
+  function verLess(a, b) {
+    var pa = String(a == null ? '0' : a).split('.'), pb = String(b).split('.'), i, d;
+    for (i = 0; i < 3; i++) {
+      d = (parseInt(pa[i], 10) || 0) - (parseInt(pb[i], 10) || 0);
+      if (d) return d < 0;
+    }
+    return false;
+  }
+  // v0.13.3: the watering beat is inserted after the Day 7 diary. A save already past that
+  // diary (evening scene or end card) keeps the same beat. A save still in the visit does not move.
+  function migrateD7Arrosoir(S) {
+    if (!S || !S.week || S.week.d7Arrosoir) return false;
+    var Wk = root.A411 && root.A411.Week;
+    var steps = Wk && Wk.CHAPTERS && Wk.CHAPTERS.d7 && Wk.CHAPTERS.d7.steps;
+    if (!steps) return false;
+    var c = S.week.chapters && S.week.chapters.d7;
+    if (c && typeof c.step === 'number' && verLess(S.appVersion, '0.13.3')) {
+      var diary = -1, soir = -1, i;
+      for (i = 0; i < steps.length; i++) {
+        if (diary < 0 && steps[i].t === 'diary') diary = i;
+        if (steps[i].id === 'n_d7_soir') soir = i;
+      }
+      var added = diary >= 0 && soir > diary ? soir - diary - 1 : 0;
+      if (added && c.step > diary) c.step = Math.min(steps.length - 1, c.step + added);
+    }
+    S.week.d7Arrosoir = 1;
+    return true;
+  }
   function ensureWeek(S) {
     if (!S.week || typeof S.week !== 'object') S.week = { v: 2, letterSeen: false, chapters: {}, cleared: [], absences: [], evenings: {}, outputs: {}, letters: {}, lastActiveDay: null, stepsV: ((typeof window !== 'undefined' ? window : globalThis).A411 && (typeof window !== 'undefined' ? window : globalThis).A411.Week || {}).CONTENT_VERSION || null };
     if (!S.week.letters || typeof S.week.letters !== 'object') S.week.letters = {};
@@ -994,7 +1025,7 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
     tracesLeft: tracesLeft, traceHudOn: traceHudOn, clearTrace: clearTrace, traceLedger: traceLedger, syncTraces: syncTraces, letterCareful: letterCareful, letterTallies: letterTallies, CARE_FOR: CARE_FOR, traceGone: traceGone, day7Band: day7Band, LEGACY_TRACE_MAX: LEGACY_TRACE_MAX, ritualSeen: ritualSeen, markRitual: markRitual, completeChapter: completeChapter,
     checkAbsence: checkAbsence, noteActive: noteActive, validateWeek: validateWeek, completedDay: completedDay,
     storyDone: storyDone, deskDone: deskDone, letterTraceState: letterTraceState, startLetter: startLetter, completeLetter: completeLetter,
-    dayPlan: dayPlan, migrateWeekV2: migrateWeekV2
+    dayPlan: dayPlan, migrateWeekV2: migrateWeekV2, migrateD7Arrosoir: migrateD7Arrosoir
   };
   root.A411 = root.A411 || {};
   root.A411.WeekLogic = api;
@@ -1011,7 +1042,7 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
   var WL = (root.A411 && root.A411.WeekLogic) || (typeof require !== 'undefined' ? require('./weeklogic.js') : null);
 
   var SCHEMA_VERSION = 1;
-  var APP_VERSION = '0.13.1';
+  var APP_VERSION = '0.13.3';
   var KEY = 'a411.save';
   var TMP_KEY = 'a411.save.tmp';
   var BACKUP_PREFIX = 'a411.backup.';
@@ -1847,6 +1878,9 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
     table: ['dddddddddd', 'DDDDDDDDDD', '.D......D.', '.D......D.', '.D......D.', '.D......D.'],
     bag: ['..kkk...', '.k...k..', 'gggggggg', 'gGggggGg', 'gggggggg', 'gggggggg', 'GGGGGGGG'],
     can: ['....mmm...', '...m...m..', 'mmmmmmmm..', 'mMMMMMMmmm', 'mMMMMMMm..', 'mMMMMMMm..', 'mmmmmmmm..'],
+    // v0.13.3 Madame Martin's old can (11x7). Distinct from the house can above. Grids from Pixel Studio.
+    arrosoir: ['YY......GG.', 'YYG....G..G', '..GGYYYYG.G', '...GggtgGG.', '....GtggG..', '...GgggtG..', '...GGGGGG..'],
+    bag_arrosoir: ['..kkk.YY', '.k...kGY', 'gggggGgg', 'gGggggGg', 'gggggggg', 'gggggggg', 'GGGGGGGG'],
     plantp: ['..g..g..', '.ggggggg', '..gGgg..', '...G....', 'dddddddd', '.dRRRRd.'.replace(/R/g, 'O'), '.dOOOOd.', '..dddd..'],
     basil: ['g.g.g.g.', '.gggggg.', 'g.gGg.g.', '..gGgg..', '...G....', 'dddddddd', '.d....d.', '..dddd..'],
     // traces
@@ -2050,6 +2084,7 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
     if (name === 'plant') {
       pushActor(list, stand('camille', 'camille', st.camille, 48, F));
       pushActor(list, stand('martin', 'martin', st.martin, 72, F, { order: 1 }));
+      if (st.noe) pushActor(list, stand('noe', 'noe', st.noe, 62, F, { order: 2 }));
       return list;
     }
     if (name === 'cat') {
@@ -2344,7 +2379,20 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
   }
   function scene(ctx, name, st) {
     sceneBase(ctx, name, st || {});
-    if (st && st.props) drawProps(ctx, st.props);
+    var props = st && st.props ? st.props.slice() : null;
+    var tipped = null;
+    if (props && st.canTip) {
+      props = props.filter(function (p) { if (p[0] === 'arrosoir') tipped = p; return p[0] !== 'arrosoir'; });
+    }
+    if (props && props.length) drawProps(ctx, props);
+    if (tipped) {
+      ctx.save();
+      var ax = tipped[1] + 2, ay = tipped[2] + 6;
+      ctx.translate(ax, ay); ctx.rotate(-0.6); ctx.translate(-ax, -ay);
+      drawProp(ctx, 'arrosoir', tipped[1], tipped[2]);
+      ctx.restore();
+    }
+    if (st && st.evening) px(ctx, 0, 0, W, H, 'rgba(36,28,64,0.28)');
     if (st && st.motion && st.motion.ghosts && st.motion.ghosts.length) drawPeople(ctx, st.motion.ghosts, null, 0, st);
   }
   function sceneBase(ctx, name, st) {
@@ -2387,7 +2435,11 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
       room(ctx, '#dfe6d2', '#a88a68');
       px(ctx, 8, 6, 26, 22, '#a6d7f0'); px(ctx, 8, 16, 26, 1, '#fff'); px(ctx, 20, 6, 1, 22, '#fff'); px(ctx, 7, 28, 28, 2, '#6b4f3a');
       px(ctx, 10, 40, 22, 3, '#6b4f3a'); px(ctx, 12, 43, 2, 10, '#6b4f3a'); px(ctx, 28, 43, 2, 10, '#6b4f3a');
-      plant(ctx, 16, 23, !!st.watered);
+      plant(ctx, 16, 23, !!st.watered || !!st.soil);
+      if (st.soil) {
+        var soilInk = ['#7a4630', '#5c3422', '#3e2418'];
+        px(ctx, 18, 35, 6, 2, soilInk[Math.min(soilInk.length - 1, st.soil - 1)]);
+      }
       if (st.drops) { px(ctx, 20, 18, 1, 2, '#4aa3df'); px(ctx, 23, 16, 1, 2, '#4aa3df'); px(ctx, 18, 15, 1, 2, '#4aa3df'); }
       drawPeople(ctx, actors(name, st), spk, 0, st);
       return;
@@ -2600,15 +2652,12 @@ body.reduced-motion .handover, body.reduced-motion .task-art.task-shake { animat
       return id;
     }
     /*<D7>*/
-    if (id === 'd7-plante') { // the desk at night: the old plant, Madame Martin's new plant (it flowers), and Croissant asleep between the pots
+    if (id === 'd7-plante') { // the desk at night: the player's Day 1 plant, Martin's old can, Croissant asleep beside them
       var u7 = t % 8;
       px(ctx, 0, 0, W, H, '#2a2f4a'); px(ctx, 60, 4, 26, 22, '#1a2340'); px(ctx, 72, 4, 1, 22, '#4a4f6a'); px(ctx, 60, 14, 26, 1, '#4a4f6a'); crescent(ctx, 66, 9, 3, '#f5e6a8', '#1a2340');
       px(ctx, 6, 44, 84, 4, '#8a5a3a'); px(ctx, 10, 48, 3, 16, '#6b4430'); px(ctx, 83, 48, 3, 16, '#6b4430'); // desk
       plant(ctx, 14, 30, true);
-      px(ctx, 64, 38, 10, 6, '#b8603b'); px(ctx, 63, 37, 12, 1, '#8c4a2f'); px(ctx, 68, 26, 2, 11, '#2f6e36'); // the new plant
-      px(ctx, 64, 30, 4, 2, '#4f9a4a'); px(ctx, 70, 28, 4, 2, '#4f9a4a'); px(ctx, 64, 34, 4, 2, '#4f9a4a'); px(ctx, 70, 32, 4, 2, '#4f9a4a');
-      var bloom = Math.min(3, Math.floor(u7 / 1.5));
-      [[63, 24], [71, 22], [67, 20]].slice(0, bloom).forEach(function (f) { px(ctx, f[0], f[1], 3, 3, '#e79aa0'); px(ctx, f[0] + 1, f[1] + 1, 1, 1, '#ffd77a'); });
+      drawProp(ctx, 'arrosoir', 62, 36);
       catAt(ctx, 38, 36 + (Math.sin(t * 2) > 0 ? 0 : 1), false);
       px(ctx, 39, 39, 1, 1, PAL.o); px(ctx, 43, 39, 1, 1, PAL.o); px(ctx, 39, 40, 1, 1, PAL.O); px(ctx, 43, 40, 1, 1, PAL.O); // eyes closed
       if (u7 > 4) { px(ctx, 49, 31, 2, 1, '#c9d3ff'); px(ctx, 51, 29, 2, 1, '#c9d3ff'); px(ctx, 53, 27, 3, 1, '#c9d3ff'); }
@@ -2780,7 +2829,7 @@ var api = { W: W, H: H, scene: scene, ritual: ritual, RITUALS: RITUALS, portrait
 (function (root) {
   'use strict';
   root.A411 = root.A411 || {};
-  root.A411.WEEK_CLIPS = { source: 'recording:qwen3-tts', files: {"abs_noe":"audio/w1/abs_noe.mp3","d2_cam_bruit":"audio/w1/d2_cam_bruit.mp3","d2_cam_cafe":"audio/w1/d2_cam_cafe.mp3","d2_cam_faim":"audio/w1/d2_cam_faim.mp3","d2_cam_merci":"audio/w1/d2_cam_merci.mp3","d2_cam_non":"audio/w1/d2_cam_non.mp3","d2_cam_salut":"audio/w1/d2_cam_salut.mp3","d2_cam_travail":"audio/w1/d2_cam_travail.mp3","d2_clerk_bonjour":"audio/w1/d2_clerk_bonjour.mp3","d2_clerk_bye":"audio/w1/d2_clerk_bye.mp3","d2_clerk_chat":"audio/w1/d2_clerk_chat.mp3","d2_clerk_dacc":"audio/w1/d2_clerk_dacc.mp3","d2_clerk_lait":"audio/w1/d2_clerk_lait.mp3","d2_clerk_prix":"audio/w1/d2_clerk_prix.mp3","d2_clerk_voila":"audio/w1/d2_clerk_voila.mp3","d2_hook_1":"audio/w1/d2_hook_1.mp3","d2_hook_2":"audio/w1/d2_hook_2.mp3","d2_hook_3":"audio/w1/d2_hook_3.mp3","d2_noe_acheter":"audio/w1/d2_noe_acheter.mp3","d2_noe_aide":"audio/w1/d2_noe_aide.mp3","d2_noe_aide_moi":"audio/w1/d2_noe_aide_moi.mp3","d2_noe_bol":"audio/w1/d2_noe_bol.mp3","d2_noe_bonjour":"audio/w1/d2_noe_bonjour.mp3","d2_noe_bravo":"audio/w1/d2_noe_bravo.mp3","d2_noe_camille":"audio/w1/d2_noe_camille.mp3","d2_noe_chut":"audio/w1/d2_noe_chut.mp3","d2_noe_cond_b":"audio/w1/d2_noe_cond_b.mp3","d2_noe_croq":"audio/w1/d2_noe_croq.mp3","d2_noe_et_toi":"audio/w1/d2_noe_et_toi.mp3","d2_noe_faim":"audio/w1/d2_noe_faim.mp3","d2_noe_lait":"audio/w1/d2_noe_lait.mp3","d2_noe_liste":"audio/w1/d2_noe_liste.mp3","d2_noe_merci":"audio/w1/d2_noe_merci.mp3","d2_noe_pain":"audio/w1/d2_noe_pain.mp3","d2_noe_regarde":"audio/w1/d2_noe_regarde.mp3","d2_noe_retard":"audio/w1/d2_noe_retard.mp3","d2_noe_sms":"audio/w1/d2_noe_sms.mp3","d2_noe_superette2":"audio/w1/d2_noe_superette2.mp3","d2_noe_the_ou_cafe":"audio/w1/d2_noe_the_ou_cafe.mp3","d2_noe_tresbien":"audio/w1/d2_noe_tresbien.mp3","d2_noe_ventre":"audio/w1/d2_noe_ventre.mp3","d2_noe_voila_cafe":"audio/w1/d2_noe_voila_cafe.mp3","d2_noe_voila_eau":"audio/w1/d2_noe_voila_eau.mp3","d2_noe_voila_the":"audio/w1/d2_noe_voila_the.mp3","d2_req_cafe":"audio/w1/d2_req_cafe.mp3","d2_req_eau":"audio/w1/d2_req_eau.mp3","d2_req_the":"audio/w1/d2_req_the.mp3","d3_call_allo":"audio/w1/d3_call_allo.mp3","d3_call_derriere":"audio/w1/d3_call_derriere.mp3","d3_call_deuxieme":"audio/w1/d3_call_deuxieme.mp3","d3_call_laisse":"audio/w1/d3_call_laisse.mp3","d3_call_marseille":"audio/w1/d3_call_marseille.mp3","d3_call_trouve":"audio/w1/d3_call_trouve.mp3","d3_cam_colis":"audio/w1/d3_cam_colis.mp3","d3_cam_quoi":"audio/w1/d3_cam_quoi.mp3","d3_cam_rentree":"audio/w1/d3_cam_rentree.mp3","d3_found_cat":"audio/w1/d3_found_cat.mp3","d3_loc_dans":"audio/w1/d3_loc_dans.mp3","d3_loc_derriere":"audio/w1/d3_loc_derriere.mp3","d3_loc_devant":"audio/w1/d3_loc_devant.mp3","d3_loc_sous":"audio/w1/d3_loc_sous.mp3","d3_loc_sur":"audio/w1/d3_loc_sur.mp3","d3_noe_arbre":"audio/w1/d3_noe_arbre.mp3","d3_noe_boite":"audio/w1/d3_noe_boite.mp3","d3_noe_cacher":"audio/w1/d3_noe_cacher.mp3","d3_noe_croissant":"audio/w1/d3_noe_croissant.mp3","d3_noe_deux":"audio/w1/d3_noe_deux.mp3","d3_noe_jsp":"audio/w1/d3_noe_jsp.mp3","d3_noe_lesquels":"audio/w1/d3_noe_lesquels.mp3","d3_noe_livre_b":"audio/w1/d3_noe_livre_b.mp3","d3_noe_livreur":"audio/w1/d3_noe_livreur.mp3","d3_noe_ou":"audio/w1/d3_noe_ou.mp3","d3_noe_parfait":"audio/w1/d3_noe_parfait.mp3","d3_noe_question":"audio/w1/d3_noe_question.mp3","d3_noe_retard":"audio/w1/d3_noe_retard.mp3","d3_room_chambre":"audio/w1/d3_room_chambre.mp3","d3_room_cuisine":"audio/w1/d3_room_cuisine.mp3","d3_room_salon":"audio/w1/d3_room_salon.mp3","d3_room_sdb":"audio/w1/d3_room_sdb.mp3","d4_cam_chat":"audio/w1/d4_cam_chat.mp3","d4_cam_chat2":"audio/w1/d4_cam_chat2.mp3","d4_cam_dont":"audio/w1/d4_cam_dont.mp3","d4_cam_equipe":"audio/w1/d4_cam_equipe.mp3","d4_cam_interdit":"audio/w1/d4_cam_interdit.mp3","d4_cam_mot":"audio/w1/d4_cam_mot.mp3","d4_cam_ok":"audio/w1/d4_cam_ok.mp3","d4_cam_pardon":"audio/w1/d4_cam_pardon.mp3","d4_cam_parfait":"audio/w1/d4_cam_parfait.mp3","d4_cam_secret":"audio/w1/d4_cam_secret.mp3","d4_gag_attention":"audio/w1/d4_gag_attention.mp3","d4_gag_boum":"audio/w1/d4_gag_boum.mp3","d4_gag_bruit":"audio/w1/d4_gag_bruit.mp3","d4_gag_courait":"audio/w1/d4_gag_courait.mp3","d4_gag_lent":"audio/w1/d4_gag_lent.mp3","d4_gag_martin":"audio/w1/d4_gag_martin.mp3","d4_gag_seule":"audio/w1/d4_gag_seule.mp3","d4_martin_cle":"audio/w1/d4_martin_cle.mp3","d4_noe_aie":"audio/w1/d4_noe_aie.mp3","d4_noe_chut":"audio/w1/d4_noe_chut.mp3","d4_noe_cles":"audio/w1/d4_noe_cles.mp3","d4_noe_faute":"audio/w1/d4_noe_faute.mp3","d4_noe_gentil":"audio/w1/d4_noe_gentil.mp3","d4_noe_qui":"audio/w1/d4_noe_qui.mp3","d4_noe_stp":"audio/w1/d4_noe_stp.mp3","d5_cam_attends":"audio/w1/d5_cam_attends.mp3","d5_cam_enquete":"audio/w1/d5_cam_enquete.mp3","d5_cam_fermer":"audio/w1/d5_cam_fermer.mp3","d5_cam_ou":"audio/w1/d5_cam_ou.mp3","d5_cam_panier":"audio/w1/d5_cam_panier.mp3","d5_cam_parfait":"audio/w1/d5_cam_parfait.mp3","d5_cam_porte":"audio/w1/d5_cam_porte.mp3","d5_cam_samedi":"audio/w1/d5_cam_samedi.mp3","d5_cam_toi":"audio/w1/d5_cam_toi.mp3","d5_cam_vues":"audio/w1/d5_cam_vues.mp3","d5_gag_bonsoir":"audio/w1/d5_gag_bonsoir.mp3","d5_gag_chat":"audio/w1/d5_gag_chat.mp3","d5_gag_essaye":"audio/w1/d5_gag_essaye.mp3","d5_gag_gentil":"audio/w1/d5_gag_gentil.mp3","d5_gag_quatre":"audio/w1/d5_gag_quatre.mp3","d5_gag_sport":"audio/w1/d5_gag_sport.mp3","d5_noe_attention":"audio/w1/d5_noe_attention.mp3","d5_noe_cherche":"audio/w1/d5_noe_cherche.mp3","d5_noe_couche":"audio/w1/d5_noe_couche.mp3","d5_noe_crochet":"audio/w1/d5_noe_crochet.mp3","d5_noe_croissant":"audio/w1/d5_noe_croissant.mp3","d5_noe_descendu":"audio/w1/d5_noe_descendu.mp3","d5_noe_jouait":"audio/w1/d5_noe_jouait.mp3","d5_noe_manque":"audio/w1/d5_noe_manque.mp3","d5_noe_mescles":"audio/w1/d5_noe_mescles.mp3","d5_noe_ou":"audio/w1/d5_noe_ou.mp3","d5_noe_pleuvait":"audio/w1/d5_noe_pleuvait.mp3","d5_noe_poche":"audio/w1/d5_noe_poche.mp3","d5_noe_pose":"audio/w1/d5_noe_pose.mp3","d5_noe_quatre":"audio/w1/d5_noe_quatre.mp3","d5_noe_rentre":"audio/w1/d5_noe_rentre.mp3","d5_noe_ruban":"audio/w1/d5_noe_ruban.mp3","d5_noe_sais":"audio/w1/d5_noe_sais.mp3","d5_noe_trouvee":"audio/w1/d5_noe_trouvee.mp3","d6_cam_bien":"audio/w1/d6_cam_bien.mp3","d6_cam_chut":"audio/w1/d6_cam_chut.mp3","d6_cam_merci":"audio/w1/d6_cam_merci.mp3","d6_cam_peur":"audio/w1/d6_cam_peur.mp3","d6_cam_retour":"audio/w1/d6_cam_retour.mp3","d6_cam_rue":"audio/w1/d6_cam_rue.mp3","d6_cam_surprise":"audio/w1/d6_cam_surprise.mp3","d6_clerk_croq":"audio/w1/d6_clerk_croq.mp3","d6_clerk_droite":"audio/w1/d6_clerk_droite.mp3","d6_clerk_parc":"audio/w1/d6_clerk_parc.mp3","d6_gag_arrive":"audio/w1/d6_gag_arrive.mp3","d6_gag_avous":"audio/w1/d6_gag_avous.mp3","d6_gag_demain":"audio/w1/d6_gag_demain.mp3","d6_gag_dormi":"audio/w1/d6_gag_dormi.mp3","d6_gag_garder":"audio/w1/d6_gag_garder.mp3","d6_gag_meilleur":"audio/w1/d6_gag_meilleur.mp3","d6_gag_seule":"audio/w1/d6_gag_seule.mp3","d6_gag_sport":"audio/w1/d6_gag_sport.mp3","d6_gag_verite":"audio/w1/d6_gag_verite.mp3","d6_mar_demain":"audio/w1/d6_mar_demain.mp3","d6_mar_surprise":"audio/w1/d6_mar_surprise.mp3","d6_noe_amoi":"audio/w1/d6_noe_amoi.mp3","d6_noe_appelle":"audio/w1/d6_noe_appelle.mp3","d6_noe_clic":"audio/w1/d6_noe_clic.mp3","d6_noe_croissants":"audio/w1/d6_noe_croissants.mp3","d6_noe_equipe":"audio/w1/d6_noe_equipe.mp3","d6_noe_faute":"audio/w1/d6_noe_faute.mp3","d6_noe_gros":"audio/w1/d6_noe_gros.mp3","d6_noe_la":"audio/w1/d6_noe_la.mp3","d6_noe_pardon":"audio/w1/d6_noe_pardon.mp3","d6_noe_raison":"audio/w1/d6_noe_raison.mp3","d6_pas_non":"audio/w1/d6_pas_non.mp3","d6_pas_tu":"audio/w1/d6_pas_tu.mp3","d6_pas_vu":"audio/w1/d6_pas_vu.mp3","d7_cam_entrez":"audio/w1/d7_cam_entrez.mp3","d7_cam_maison":"audio/w1/d7_cam_maison.mp3","d7_cam_non":"audio/w1/d7_cam_non.mp3","d7_cam_parle":"audio/w1/d7_cam_parle.mp3","d7_cam_plan":"audio/w1/d7_cam_plan.mp3","d7_cam_ventre":"audio/w1/d7_cam_ventre.mp3","d7_cam_verite":"audio/w1/d7_cam_verite.mp3","d7_gag_bonjour":"audio/w1/d7_gag_bonjour.mp3","d7_gag_jambon":"audio/w1/d7_gag_jambon.mp3","d7_mar_biscotte":"audio/w1/d7_mar_biscotte.mp3","d7_mar_bonjour_chat":"audio/w1/d7_mar_bonjour_chat.mp3","d7_mar_bruit":"audio/w1/d7_mar_bruit.mp3","d7_mar_cafe":"audio/w1/d7_mar_cafe.mp3","d7_mar_chat":"audio/w1/d7_mar_chat.mp3","d7_mar_enchantee":"audio/w1/d7_mar_enchantee.mp3","d7_mar_essai":"audio/w1/d7_mar_essai.mp3","d7_mar_instant":"audio/w1/d7_mar_instant.mp3","d7_mar_lefevre":"audio/w1/d7_mar_lefevre.mp3","d7_mar_mois":"audio/w1/d7_mar_mois.mp3","d7_mar_petite":"audio/w1/d7_mar_petite.mp3","d7_mar_poils":"audio/w1/d7_mar_poils.mp3","d7_mar_propre":"audio/w1/d7_mar_propre.mp3","d7_mar_rester":"audio/w1/d7_mar_rester.mp3","d7_mar_sac":"audio/w1/d7_mar_sac.mp3","d7_mar_surprise":"audio/w1/d7_mar_surprise.mp3","d7_mar_verite":"audio/w1/d7_mar_verite.mp3","d7_mar_vous":"audio/w1/d7_mar_vous.mp3","d7_noe_boire":"audio/w1/d7_noe_boire.mp3","d7_noe_lefevre":"audio/w1/d7_noe_lefevre.mp3","d7_noe_monchat":"audio/w1/d7_noe_monchat.mp3","d7_noe_promets":"audio/w1/d7_noe_promets.mp3","d7_noe_pull":"audio/w1/d7_noe_pull.mp3","d7_noe_regles":"audio/w1/d7_noe_regles.mp3","d7_noe_rire":"audio/w1/d7_noe_rire.mp3","l_martin_1":"audio/w1/l_martin_1.mp3","l_martin_2":"audio/w1/l_martin_2.mp3","l_martin_3":"audio/w1/l_martin_3.mp3","l_martin_4":"audio/w1/l_martin_4.mp3","l_martin_5":"audio/w1/l_martin_5.mp3","l_martin_b":"audio/w1/l_martin_b.mp3","l_noe_1":"audio/w1/l_noe_1.mp3","l_noe_2":"audio/w1/l_noe_2.mp3","l_noe_3":"audio/w1/l_noe_3.mp3","l_noe_4":"audio/w1/l_noe_4.mp3","l_noe_5":"audio/w1/l_noe_5.mp3","l_noe_animal":"audio/w1/l_noe_animal.mp3","l_noe_cache":"audio/w1/l_noe_cache.mp3","pr2_ask":"audio/w1/pr2_ask.mp3","pr2_cafe":"audio/w1/pr2_cafe.mp3","pr2_croq":"audio/w1/pr2_croq.mp3","pr2_the":"audio/w1/pr2_the.mp3","pr3_chambre":"audio/w1/pr3_chambre.mp3","pr3_cuisine":"audio/w1/pr3_cuisine.mp3","pr3_sous":"audio/w1/pr3_sous.mp3","pr3_sur":"audio/w1/pr3_sur.mp3","pr4_bruit":"audio/w1/pr4_bruit.mp3","pr4_desole":"audio/w1/pr4_desole.mp3","pr4_gentil":"audio/w1/pr4_gentil.mp3","pr4_repeter":"audio/w1/pr4_repeter.mp3","pr5_chaussettes":"audio/w1/pr5_chaussettes.mp3","pr5_cle":"audio/w1/pr5_cle.mp3","pr5_pluie":"audio/w1/pr5_pluie.mp3","pr5_rentre":"audio/w1/pr5_rentre.mp3","pr6_droit":"audio/w1/pr6_droit.mp3","pr6_droite":"audio/w1/pr6_droite.mp3","pr6_gauche":"audio/w1/pr6_gauche.mp3","pr6_roux":"audio/w1/pr6_roux.mp3","pr7_cafe":"audio/w1/pr7_cafe.mp3","pr7_chat":"audio/w1/pr7_chat.mp3","pr7_mois":"audio/w1/pr7_mois.mp3","pr7_plante":"audio/w1/pr7_plante.mp3","w_arbre":"audio/w1/w_arbre.mp3","w_balcon":"audio/w1/w_balcon.mp3","w_bol":"audio/w1/w_bol.mp3","w_bruit":"audio/w1/w_bruit.mp3","w_canape":"audio/w1/w_canape.mp3","w_chat":"audio/w1/w_chat.mp3","w_cle":"audio/w1/w_cle.mp3","w_colis":"audio/w1/w_colis.mp3","w_croissants":"audio/w1/w_croissants.mp3","w_croquettes":"audio/w1/w_croquettes.mp3","w_eau":"audio/w1/w_eau.mp3","w_jambon":"audio/w1/w_jambon.mp3","w_lettre":"audio/w1/w_lettre.mp3","w_nuit":"audio/w1/w_nuit.mp3","w_pain":"audio/w1/w_pain.mp3","w_panier":"audio/w1/w_panier.mp3","w_plante":"audio/w1/w_plante.mp3","w_pluie":"audio/w1/w_pluie.mp3","w_porte":"audio/w1/w_porte.mp3","w_roux":"audio/w1/w_roux.mp3","w_rue":"audio/w1/w_rue.mp3","w_tasse":"audio/w1/w_tasse.mp3","w_veste":"audio/w1/w_veste.mp3","w_voisine":"audio/w1/w_voisine.mp3"} };
+  root.A411.WEEK_CLIPS = { source: 'recording:qwen3-tts', files: {"abs_noe":"audio/w1/abs_noe.mp3","d2_cam_bruit":"audio/w1/d2_cam_bruit.mp3","d2_cam_cafe":"audio/w1/d2_cam_cafe.mp3","d2_cam_faim":"audio/w1/d2_cam_faim.mp3","d2_cam_merci":"audio/w1/d2_cam_merci.mp3","d2_cam_non":"audio/w1/d2_cam_non.mp3","d2_cam_salut":"audio/w1/d2_cam_salut.mp3","d2_cam_travail":"audio/w1/d2_cam_travail.mp3","d2_clerk_bonjour":"audio/w1/d2_clerk_bonjour.mp3","d2_clerk_bye":"audio/w1/d2_clerk_bye.mp3","d2_clerk_chat":"audio/w1/d2_clerk_chat.mp3","d2_clerk_dacc":"audio/w1/d2_clerk_dacc.mp3","d2_clerk_lait":"audio/w1/d2_clerk_lait.mp3","d2_clerk_prix":"audio/w1/d2_clerk_prix.mp3","d2_clerk_voila":"audio/w1/d2_clerk_voila.mp3","d2_hook_1":"audio/w1/d2_hook_1.mp3","d2_hook_2":"audio/w1/d2_hook_2.mp3","d2_hook_3":"audio/w1/d2_hook_3.mp3","d2_noe_acheter":"audio/w1/d2_noe_acheter.mp3","d2_noe_aide":"audio/w1/d2_noe_aide.mp3","d2_noe_aide_moi":"audio/w1/d2_noe_aide_moi.mp3","d2_noe_bol":"audio/w1/d2_noe_bol.mp3","d2_noe_bonjour":"audio/w1/d2_noe_bonjour.mp3","d2_noe_bravo":"audio/w1/d2_noe_bravo.mp3","d2_noe_camille":"audio/w1/d2_noe_camille.mp3","d2_noe_chut":"audio/w1/d2_noe_chut.mp3","d2_noe_cond_b":"audio/w1/d2_noe_cond_b.mp3","d2_noe_croq":"audio/w1/d2_noe_croq.mp3","d2_noe_et_toi":"audio/w1/d2_noe_et_toi.mp3","d2_noe_faim":"audio/w1/d2_noe_faim.mp3","d2_noe_lait":"audio/w1/d2_noe_lait.mp3","d2_noe_liste":"audio/w1/d2_noe_liste.mp3","d2_noe_merci":"audio/w1/d2_noe_merci.mp3","d2_noe_pain":"audio/w1/d2_noe_pain.mp3","d2_noe_regarde":"audio/w1/d2_noe_regarde.mp3","d2_noe_retard":"audio/w1/d2_noe_retard.mp3","d2_noe_sms":"audio/w1/d2_noe_sms.mp3","d2_noe_superette2":"audio/w1/d2_noe_superette2.mp3","d2_noe_the_ou_cafe":"audio/w1/d2_noe_the_ou_cafe.mp3","d2_noe_tresbien":"audio/w1/d2_noe_tresbien.mp3","d2_noe_ventre":"audio/w1/d2_noe_ventre.mp3","d2_noe_voila_cafe":"audio/w1/d2_noe_voila_cafe.mp3","d2_noe_voila_eau":"audio/w1/d2_noe_voila_eau.mp3","d2_noe_voila_the":"audio/w1/d2_noe_voila_the.mp3","d2_req_cafe":"audio/w1/d2_req_cafe.mp3","d2_req_eau":"audio/w1/d2_req_eau.mp3","d2_req_the":"audio/w1/d2_req_the.mp3","d3_call_allo":"audio/w1/d3_call_allo.mp3","d3_call_derriere":"audio/w1/d3_call_derriere.mp3","d3_call_deuxieme":"audio/w1/d3_call_deuxieme.mp3","d3_call_laisse":"audio/w1/d3_call_laisse.mp3","d3_call_marseille":"audio/w1/d3_call_marseille.mp3","d3_call_trouve":"audio/w1/d3_call_trouve.mp3","d3_cam_colis":"audio/w1/d3_cam_colis.mp3","d3_cam_quoi":"audio/w1/d3_cam_quoi.mp3","d3_cam_rentree":"audio/w1/d3_cam_rentree.mp3","d3_found_cat":"audio/w1/d3_found_cat.mp3","d3_loc_dans":"audio/w1/d3_loc_dans.mp3","d3_loc_derriere":"audio/w1/d3_loc_derriere.mp3","d3_loc_devant":"audio/w1/d3_loc_devant.mp3","d3_loc_sous":"audio/w1/d3_loc_sous.mp3","d3_loc_sur":"audio/w1/d3_loc_sur.mp3","d3_noe_arbre":"audio/w1/d3_noe_arbre.mp3","d3_noe_boite":"audio/w1/d3_noe_boite.mp3","d3_noe_cacher":"audio/w1/d3_noe_cacher.mp3","d3_noe_croissant":"audio/w1/d3_noe_croissant.mp3","d3_noe_deux":"audio/w1/d3_noe_deux.mp3","d3_noe_jsp":"audio/w1/d3_noe_jsp.mp3","d3_noe_lesquels":"audio/w1/d3_noe_lesquels.mp3","d3_noe_livre_b":"audio/w1/d3_noe_livre_b.mp3","d3_noe_livreur":"audio/w1/d3_noe_livreur.mp3","d3_noe_ou":"audio/w1/d3_noe_ou.mp3","d3_noe_parfait":"audio/w1/d3_noe_parfait.mp3","d3_noe_question":"audio/w1/d3_noe_question.mp3","d3_noe_retard":"audio/w1/d3_noe_retard.mp3","d3_room_chambre":"audio/w1/d3_room_chambre.mp3","d3_room_cuisine":"audio/w1/d3_room_cuisine.mp3","d3_room_salon":"audio/w1/d3_room_salon.mp3","d3_room_sdb":"audio/w1/d3_room_sdb.mp3","d4_cam_chat":"audio/w1/d4_cam_chat.mp3","d4_cam_chat2":"audio/w1/d4_cam_chat2.mp3","d4_cam_dont":"audio/w1/d4_cam_dont.mp3","d4_cam_equipe":"audio/w1/d4_cam_equipe.mp3","d4_cam_interdit":"audio/w1/d4_cam_interdit.mp3","d4_cam_mot":"audio/w1/d4_cam_mot.mp3","d4_cam_ok":"audio/w1/d4_cam_ok.mp3","d4_cam_pardon":"audio/w1/d4_cam_pardon.mp3","d4_cam_parfait":"audio/w1/d4_cam_parfait.mp3","d4_cam_secret":"audio/w1/d4_cam_secret.mp3","d4_gag_attention":"audio/w1/d4_gag_attention.mp3","d4_gag_boum":"audio/w1/d4_gag_boum.mp3","d4_gag_bruit":"audio/w1/d4_gag_bruit.mp3","d4_gag_courait":"audio/w1/d4_gag_courait.mp3","d4_gag_lent":"audio/w1/d4_gag_lent.mp3","d4_gag_martin":"audio/w1/d4_gag_martin.mp3","d4_gag_seule":"audio/w1/d4_gag_seule.mp3","d4_martin_cle":"audio/w1/d4_martin_cle.mp3","d4_noe_aie":"audio/w1/d4_noe_aie.mp3","d4_noe_chut":"audio/w1/d4_noe_chut.mp3","d4_noe_cles":"audio/w1/d4_noe_cles.mp3","d4_noe_faute":"audio/w1/d4_noe_faute.mp3","d4_noe_gentil":"audio/w1/d4_noe_gentil.mp3","d4_noe_qui":"audio/w1/d4_noe_qui.mp3","d4_noe_stp":"audio/w1/d4_noe_stp.mp3","d5_cam_attends":"audio/w1/d5_cam_attends.mp3","d5_cam_enquete":"audio/w1/d5_cam_enquete.mp3","d5_cam_fermer":"audio/w1/d5_cam_fermer.mp3","d5_cam_ou":"audio/w1/d5_cam_ou.mp3","d5_cam_panier":"audio/w1/d5_cam_panier.mp3","d5_cam_parfait":"audio/w1/d5_cam_parfait.mp3","d5_cam_porte":"audio/w1/d5_cam_porte.mp3","d5_cam_samedi":"audio/w1/d5_cam_samedi.mp3","d5_cam_toi":"audio/w1/d5_cam_toi.mp3","d5_cam_vues":"audio/w1/d5_cam_vues.mp3","d5_gag_bonsoir":"audio/w1/d5_gag_bonsoir.mp3","d5_gag_chat":"audio/w1/d5_gag_chat.mp3","d5_gag_essaye":"audio/w1/d5_gag_essaye.mp3","d5_gag_gentil":"audio/w1/d5_gag_gentil.mp3","d5_gag_quatre":"audio/w1/d5_gag_quatre.mp3","d5_gag_sport":"audio/w1/d5_gag_sport.mp3","d5_noe_attention":"audio/w1/d5_noe_attention.mp3","d5_noe_cherche":"audio/w1/d5_noe_cherche.mp3","d5_noe_couche":"audio/w1/d5_noe_couche.mp3","d5_noe_crochet":"audio/w1/d5_noe_crochet.mp3","d5_noe_croissant":"audio/w1/d5_noe_croissant.mp3","d5_noe_descendu":"audio/w1/d5_noe_descendu.mp3","d5_noe_jouait":"audio/w1/d5_noe_jouait.mp3","d5_noe_manque":"audio/w1/d5_noe_manque.mp3","d5_noe_mescles":"audio/w1/d5_noe_mescles.mp3","d5_noe_ou":"audio/w1/d5_noe_ou.mp3","d5_noe_pleuvait":"audio/w1/d5_noe_pleuvait.mp3","d5_noe_poche":"audio/w1/d5_noe_poche.mp3","d5_noe_pose":"audio/w1/d5_noe_pose.mp3","d5_noe_quatre":"audio/w1/d5_noe_quatre.mp3","d5_noe_rentre":"audio/w1/d5_noe_rentre.mp3","d5_noe_ruban":"audio/w1/d5_noe_ruban.mp3","d5_noe_sais":"audio/w1/d5_noe_sais.mp3","d5_noe_trouvee":"audio/w1/d5_noe_trouvee.mp3","d6_cam_bien":"audio/w1/d6_cam_bien.mp3","d6_cam_chut":"audio/w1/d6_cam_chut.mp3","d6_cam_merci":"audio/w1/d6_cam_merci.mp3","d6_cam_peur":"audio/w1/d6_cam_peur.mp3","d6_cam_retour":"audio/w1/d6_cam_retour.mp3","d6_cam_rue":"audio/w1/d6_cam_rue.mp3","d6_cam_surprise":"audio/w1/d6_cam_surprise.mp3","d6_clerk_croq":"audio/w1/d6_clerk_croq.mp3","d6_clerk_droite":"audio/w1/d6_clerk_droite.mp3","d6_clerk_parc":"audio/w1/d6_clerk_parc.mp3","d6_gag_arrive":"audio/w1/d6_gag_arrive.mp3","d6_gag_avous":"audio/w1/d6_gag_avous.mp3","d6_gag_demain":"audio/w1/d6_gag_demain.mp3","d6_gag_dormi":"audio/w1/d6_gag_dormi.mp3","d6_gag_garder":"audio/w1/d6_gag_garder.mp3","d6_gag_meilleur":"audio/w1/d6_gag_meilleur.mp3","d6_gag_seule":"audio/w1/d6_gag_seule.mp3","d6_gag_sport":"audio/w1/d6_gag_sport.mp3","d6_gag_verite":"audio/w1/d6_gag_verite.mp3","d6_mar_demain":"audio/w1/d6_mar_demain.mp3","d6_mar_surprise":"audio/w1/d6_mar_surprise.mp3","d6_noe_amoi":"audio/w1/d6_noe_amoi.mp3","d6_noe_appelle":"audio/w1/d6_noe_appelle.mp3","d6_noe_clic":"audio/w1/d6_noe_clic.mp3","d6_noe_croissants":"audio/w1/d6_noe_croissants.mp3","d6_noe_equipe":"audio/w1/d6_noe_equipe.mp3","d6_noe_faute":"audio/w1/d6_noe_faute.mp3","d6_noe_gros":"audio/w1/d6_noe_gros.mp3","d6_noe_la":"audio/w1/d6_noe_la.mp3","d6_noe_pardon":"audio/w1/d6_noe_pardon.mp3","d6_noe_raison":"audio/w1/d6_noe_raison.mp3","d6_pas_non":"audio/w1/d6_pas_non.mp3","d6_pas_tu":"audio/w1/d6_pas_tu.mp3","d6_pas_vu":"audio/w1/d6_pas_vu.mp3","d7_cam_entrez":"audio/w1/d7_cam_entrez.mp3","d7_cam_maison":"audio/w1/d7_cam_maison.mp3","d7_cam_non":"audio/w1/d7_cam_non.mp3","d7_cam_parle":"audio/w1/d7_cam_parle.mp3","d7_cam_plan":"audio/w1/d7_cam_plan.mp3","d7_cam_ventre":"audio/w1/d7_cam_ventre.mp3","d7_cam_verite":"audio/w1/d7_cam_verite.mp3","d7_gag_bonjour":"audio/w1/d7_gag_bonjour.mp3","d7_gag_jambon":"audio/w1/d7_gag_jambon.mp3","d7_mar_biscotte":"audio/w1/d7_mar_biscotte.mp3","d7_mar_bonjour_chat":"audio/w1/d7_mar_bonjour_chat.mp3","d7_mar_bruit":"audio/w1/d7_mar_bruit.mp3","d7_mar_cafe":"audio/w1/d7_mar_cafe.mp3","d7_mar_chat":"audio/w1/d7_mar_chat.mp3","d7_mar_enchantee":"audio/w1/d7_mar_enchantee.mp3","d7_mar_essai":"audio/w1/d7_mar_essai.mp3","d7_mar_instant":"audio/w1/d7_mar_instant.mp3","d7_mar_lefevre":"audio/w1/d7_mar_lefevre.mp3","d7_mar_mois":"audio/w1/d7_mar_mois.mp3","d7_mar_petite":"audio/w1/d7_mar_petite.mp3","d7_mar_poils":"audio/w1/d7_mar_poils.mp3","d7_mar_propre":"audio/w1/d7_mar_propre.mp3","d7_mar_rester":"audio/w1/d7_mar_rester.mp3","d7_mar_sac":"audio/w1/d7_mar_sac.mp3","d7_mar_verite":"audio/w1/d7_mar_verite.mp3","d7_mar_vous":"audio/w1/d7_mar_vous.mp3","d7_noe_boire":"audio/w1/d7_noe_boire.mp3","d7_noe_lefevre":"audio/w1/d7_noe_lefevre.mp3","d7_noe_monchat":"audio/w1/d7_noe_monchat.mp3","d7_noe_promets":"audio/w1/d7_noe_promets.mp3","d7_noe_pull":"audio/w1/d7_noe_pull.mp3","d7_noe_regles":"audio/w1/d7_noe_regles.mp3","d7_noe_rire":"audio/w1/d7_noe_rire.mp3","l_martin_1":"audio/w1/l_martin_1.mp3","l_martin_2":"audio/w1/l_martin_2.mp3","l_martin_3":"audio/w1/l_martin_3.mp3","l_martin_4":"audio/w1/l_martin_4.mp3","l_martin_5":"audio/w1/l_martin_5.mp3","l_martin_b":"audio/w1/l_martin_b.mp3","l_noe_1":"audio/w1/l_noe_1.mp3","l_noe_2":"audio/w1/l_noe_2.mp3","l_noe_3":"audio/w1/l_noe_3.mp3","l_noe_4":"audio/w1/l_noe_4.mp3","l_noe_5":"audio/w1/l_noe_5.mp3","l_noe_animal":"audio/w1/l_noe_animal.mp3","l_noe_cache":"audio/w1/l_noe_cache.mp3","pr2_ask":"audio/w1/pr2_ask.mp3","pr2_cafe":"audio/w1/pr2_cafe.mp3","pr2_croq":"audio/w1/pr2_croq.mp3","pr2_the":"audio/w1/pr2_the.mp3","pr3_chambre":"audio/w1/pr3_chambre.mp3","pr3_cuisine":"audio/w1/pr3_cuisine.mp3","pr3_sous":"audio/w1/pr3_sous.mp3","pr3_sur":"audio/w1/pr3_sur.mp3","pr4_bruit":"audio/w1/pr4_bruit.mp3","pr4_desole":"audio/w1/pr4_desole.mp3","pr4_gentil":"audio/w1/pr4_gentil.mp3","pr4_repeter":"audio/w1/pr4_repeter.mp3","pr5_chaussettes":"audio/w1/pr5_chaussettes.mp3","pr5_cle":"audio/w1/pr5_cle.mp3","pr5_pluie":"audio/w1/pr5_pluie.mp3","pr5_rentre":"audio/w1/pr5_rentre.mp3","pr6_droit":"audio/w1/pr6_droit.mp3","pr6_droite":"audio/w1/pr6_droite.mp3","pr6_gauche":"audio/w1/pr6_gauche.mp3","pr6_roux":"audio/w1/pr6_roux.mp3","pr7_cafe":"audio/w1/pr7_cafe.mp3","pr7_chat":"audio/w1/pr7_chat.mp3","pr7_mois":"audio/w1/pr7_mois.mp3","w_arbre":"audio/w1/w_arbre.mp3","w_balcon":"audio/w1/w_balcon.mp3","w_bol":"audio/w1/w_bol.mp3","w_bruit":"audio/w1/w_bruit.mp3","w_canape":"audio/w1/w_canape.mp3","w_chat":"audio/w1/w_chat.mp3","w_cle":"audio/w1/w_cle.mp3","w_colis":"audio/w1/w_colis.mp3","w_croissants":"audio/w1/w_croissants.mp3","w_croquettes":"audio/w1/w_croquettes.mp3","w_eau":"audio/w1/w_eau.mp3","w_jambon":"audio/w1/w_jambon.mp3","w_lettre":"audio/w1/w_lettre.mp3","w_nuit":"audio/w1/w_nuit.mp3","w_pain":"audio/w1/w_pain.mp3","w_panier":"audio/w1/w_panier.mp3","w_plante":"audio/w1/w_plante.mp3","w_pluie":"audio/w1/w_pluie.mp3","w_porte":"audio/w1/w_porte.mp3","w_roux":"audio/w1/w_roux.mp3","w_rue":"audio/w1/w_rue.mp3","w_tasse":"audio/w1/w_tasse.mp3","w_veste":"audio/w1/w_veste.mp3","w_voisine":"audio/w1/w_voisine.mp3"} };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.A411.WEEK_CLIPS;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -10753,13 +10802,16 @@ function getLang(ls, id) {
     d7_gag_bonjour: { speaker: 'lefevre', fr: 'Bonjour, Madame Martin. Ce chat… c\u2019est un bon voisin, vous savez.', tts: "Bonjour, Madame Martin. Ce chat… c'est un bon voisin, vous savez.", zh: '您好，Martin 太太。这只猫……是个好邻居，您知道吗。', en: 'Hello, Madame Martin. This cat… he’s a good neighbour, you know.', label: 'understand' },
     d7_mar_lefevre: { speaker: 'martin', fr: 'Madame Lefèvre' + NB + '! Vous le connaissez aussi' + NB + '?', tts: 'Madame Lefèvre ! Vous le connaissez aussi ?', zh: 'Lefèvre 太太！您也认识它？', en: 'Madame Lefèvre! You know him too?', label: 'understand' },
     d7_gag_jambon: { speaker: 'lefevre', fr: 'Oh oui. Il a mangé mon jambon' + NB + '!', tts: 'Oh oui. Il a mangé mon jambon !', zh: '当然。它吃了我的火腿！', en: 'Oh yes. He ate my ham!', label: 'understand' },
-    d7_mar_surprise: { speaker: 'martin', fr: 'Et voilà ma surprise' + NB + ': une plante, pour votre bureau. Prenez-en soin' + NB + '!', tts: 'Et voilà ma surprise : une plante, pour votre bureau. Prenez-en soin !', zh: '这就是我的惊喜：一盆植物，放在你的书桌上。好好照顾它！', en: 'And here’s my surprise: a plant, for your desk. Take good care of it!', label: 'understand' },
+    d7_mar_surprise: { speaker: 'martin', textOnly: true, fr: 'Et voilà ma surprise' + NB + ': mon vieil arrosoir. Pour votre plante' + NB + '!', tts: 'Et voilà ma surprise : mon vieil arrosoir. Pour votre plante !', zh: '这就是我的惊喜：我的旧喷壶。给你们的植物用！', en: 'And here’s my surprise: my old watering can. For your plant!', label: 'understand' },
     d7_cam_maison: { speaker: 'camille', fr: 'Merci, Madame Martin. Ici, c\u2019est vraiment ma maison.', tts: "Merci, Madame Martin. Ici, c'est vraiment ma maison.", zh: '谢谢您，Martin 太太。这里真的是我的家。', en: 'Thank you, Madame Martin. This really is my home.', label: 'understand' },
     d7_noe_promets: { speaker: 'noe', fr: 'Je vous promets' + NB + ': on va faire attention.', tts: 'Je vous promets : on va faire attention.', zh: '我向您保证：我们会注意的。', en: 'I promise you: we’re going to be careful.', target: 'on_va_faire_attention', label: 'understand' },
     d7_mar_mois: { speaker: 'martin', fr: 'Je reviendrai dans un mois. On verra comment va… Croissant.', tts: 'Je reviendrai dans un mois. On verra comment va… Croissant.', zh: '一个月后我再来。到时候看看……Croissant 过得怎么样。', en: 'I’ll come back in a month. We’ll see how… Croissant is doing.', label: 'understand' },
     pr7_chat: { speaker: 'neutral', fr: 'Il y a un chat ici' + NB + '?', tts: 'Il y a un chat ici ?', zh: '这里有猫吗？', en: 'Is there a cat here?', label: 'probe' },
     pr7_cafe: { speaker: 'neutral', fr: 'Un café, s\u2019il vous plaît.', tts: "Un café, s'il vous plaît.", zh: '请来一杯咖啡。', en: 'A coffee, please.', label: 'probe' },
-    pr7_plante: { speaker: 'neutral', fr: 'Voilà une plante pour vous.', zh: '这盆植物是给您的。', en: 'Here is a plant for you.', label: 'probe' },
+    pr7_plante: { speaker: 'neutral', textOnly: true, fr: 'Voilà un arrosoir pour vous.', zh: '这个喷壶是给您的。', en: 'Here is a watering can for you.', label: 'probe' },
+    d7_cam_unmot: { speaker: 'camille', textOnly: true, fr: 'Regarde. Un mot, un peu d\u2019eau.', tts: "Regarde. Un mot, un peu d'eau.", zh: '你看。一个词，一点水。', en: 'Look. One word, a little water.', label: 'understand' },
+    d7_cam_hop: { speaker: 'camille', textOnly: true, fr: 'Tu comprends un mot' + NB + '? Hop' + NB + '! L\u2019eau coule.', tts: "Tu comprends un mot ? Hop ! L'eau coule.", zh: '你听懂一个词？哗——水就流下去。', en: 'You understand a word? Whoosh! The water runs.', label: 'understand' },
+    d7_noe_doucement: { speaker: 'noe', textOnly: true, fr: 'Un mot, une fois. Pas tout l\u2019arrosoir' + NB + '!', tts: "Un mot, une fois. Pas tout l'arrosoir !", zh: '一个词，浇一次。别一下子倒光！', en: 'One word, one pour. Not the whole can!', label: 'understand' },
     pr7_mois: { speaker: 'neutral', fr: 'Je reviens dans un mois.', zh: '我一个月后回来。', en: 'I’ll be back in a month.', label: 'probe' },
     /*</D7>*/
 
@@ -11253,7 +11305,7 @@ function getLang(ls, id) {
                  { id: 'placard', fr: 'Dans le placard, avec son panier.', zh: '带着它的窝，躲进壁橱。', en: 'In the cupboard, with his basket.', after: { fr: 'Croissant entre dans le placard. Noé ferme la porte… doucement.', zh: 'Croissant 钻进壁橱。Noé 轻轻地……关上门。', en: 'Croissant goes into the cupboard. Noé closes the door… gently.' } },
                  { id: 'verite', fr: 'Ici. On dit la vérité à Madame Martin.', zh: '就在这儿。我们跟 Martin 太太说实话。', en: 'Right here. We tell Madame Martin the truth.', after: { fr: 'Croissant reste sur le canapé. Camille respire très fort.', zh: 'Croissant 留在沙发上。Camille 深深地吸了一口气。', en: 'Croissant stays on the sofa. Camille breathes very hard.' } }] },
         n('n_d7_dix', 'Dix heures pile. Toc, toc, toc.', '十点整。咚、咚、咚。', 'Ten o’clock sharp. Knock, knock, knock.', { sfx: 'knock', scene: 'doorway' }),
-        n('n_d7_porte', 'Camille ouvre la porte. Madame Martin est là, avec un grand sac.', 'Camille 打开门。Martin 太太站在门口，拎着一个大袋子。', 'Camille opens the door. Madame Martin is there, with a big bag.', { sfx: 'door', scene: 'doorway', door: 'open', martin: 'idle', camille: 'idle', noe: 'idle' }),
+        n('n_d7_porte', 'Camille ouvre la porte. Madame Martin est là, avec un grand sac.', 'Camille 打开门。Martin 太太站在门口，拎着一个大袋子。', 'Camille opens the door. Madame Martin is there, with a big bag.', { sfx: 'door', scene: 'doorway', door: 'open', martin: 'idle', camille: 'idle', noe: 'idle', props: [['bag_arrosoir', 49, 35]] }),
         L('l_martin_1', { scene: 'doorway', door: 'open', martin: 'wave', camille: 'idle', noe: 'idle' }),
         { t: 'say', key: 'd7_salut', fr: 'Madame Martin te regarde. Tu dis…', zh: 'Martin 太太看着你。你会怎么说？', en: 'Madame Martin looks at you. What do you say?', art: { scene: 'doorway', door: 'open', martin: 'idle', camille: 'idle', noe: 'idle' },
           opts: [{ id: 'vous', fr: 'Bonjour, Madame. Enchanté' + NB + '!', target: 'enchante' }, { id: 'salut', fr: 'Salut' + NB + '! Ça va' + NB + '?' }, { id: 'bienvenue', fr: 'Bienvenue chez nous' + NB + '!' }] },
@@ -11300,9 +11352,9 @@ function getLang(ls, id) {
         L('d7_gag_bonjour', { scene: 'doorway', door: 'open', voisine: 'point', martin: 'idle', camille: 'idle', noe: 'idle', cat: 1 }),
         L('d7_mar_lefevre', { scene: 'doorway', door: 'open', voisine: 'idle', martin: 'ask', camille: 'idle', noe: 'idle', cat: 1 }),
         L('d7_gag_jambon', { scene: 'doorway', door: 'open', voisine: 'happy', martin: 'happy', camille: 'happy', noe: 'happy', cat: 1, props: [['jambon', 78, 46]] }),
-        L('d7_mar_surprise', { scene: 'plant', martin: 'happy', camille: 'happy', props: [['plantp', 44, 40, 'hl']] }),
-        F('plante', { scene: 'plant', martin: 'idle', camille: 'happy', props: [['plantp', 44, 40]], focus: 'plantp' }),
-        n('n_d7_plante', 'Une petite plante verte. Camille pose la plante sur ton bureau, à côté de l\u2019autre.', '一盆绿色的小植物。Camille 把它放在你的书桌上，挨着原来那盆。', 'A small green plant. Camille puts it on your desk, next to the other one.', { scene: 'plant', camille: 'point', props: [['plantp', 44, 40, 'hl']] }),
+        L('d7_mar_surprise', { scene: 'plant', martin: 'happy', camille: 'happy', props: [['arrosoir', 44, 40, 'hl']] }),
+        F('arrosoir', { scene: 'plant', martin: 'idle', camille: 'happy', props: [['arrosoir', 44, 40]], focus: 'arrosoir' }),
+        n('n_d7_plante', 'Un vieil arrosoir vert. Camille le pose sur ton bureau, à côté de ta plante.', '一个绿色的旧喷壶。Camille 把它放在你的书桌上，你的植物旁边。', 'An old green watering can. Camille puts it on your desk, next to your plant.', { scene: 'plant', camille: 'point', props: [['arrosoir', 44, 40, 'hl']] }),
         L('d7_cam_maison', { scene: 'cat', martin: 'idle', camille: 'happy', noe: 'idle', cat: 'sit' }),
         { t: 'chips', key: 'd7_promesse', target: 'on_va_faire_attention', fr: 'Une promesse à Madame Martin. Mets les mots dans l\u2019ordre' + NB + ':', zh: '给 Martin 太太一个承诺。把词块排成一句话：', en: 'A promise to Madame Martin. Put the blocks in order:', art: { scene: 'cat', martin: 'idle', camille: 'idle', noe: 'idle', cat: 'sit' },
           answer: ['Madame Martin,', 'je vous promets', 'qu\u2019on va', 'faire attention.'], extra: ['partir.'], accept: ['Madame Martin je vous promets qu on va faire attention', 'Madame Martin je vous promets quon va faire attention'] },
@@ -11311,10 +11363,21 @@ function getLang(ls, id) {
         n('n_d7_rire', 'La porte se ferme. Une seconde de silence… puis tout le monde rit.', '门关上了。安静了一秒……然后大家都笑了。', 'The door closes. One second of silence… then everyone laughs.', { sfx: 'door', scene: 'cat', camille: 'happy', noe: 'happy', cat: 'sit' }),
         { t: 'mission' },
         { t: 'probe', key: 'd7_probe', items: ['pr7_chat', 'pr7_cafe', 'pr7_plante', 'pr7_mois'],
-          answers: { pr7_chat: 'chat', pr7_cafe: 'cafe', pr7_plante: 'plante', pr7_mois: 'mois' },
-          opts: [{ id: 'chat', fr: 'un chat, ici' + NB + '?', img: { prop: 'catface' }, zh: '这里有猫？', en: 'a cat, here?' }, { id: 'cafe', fr: 'un café', img: { prop: 'cafe' }, zh: '一杯咖啡', en: 'a coffee' }, { id: 'plante', fr: 'une plante', img: { prop: 'plantp' }, zh: '一盆植物', en: 'a plant' }, { id: 'mois', fr: 'dans un mois', img: { prop: 'calendar' }, zh: '一个月以后', en: 'in a month' }] },
+          answers: { pr7_chat: 'chat', pr7_cafe: 'cafe', pr7_plante: 'arrosoir', pr7_mois: 'mois' },
+          opts: [{ id: 'chat', fr: 'un chat, ici' + NB + '?', img: { prop: 'catface' }, zh: '这里有猫？', en: 'a cat, here?' }, { id: 'cafe', fr: 'un café', img: { prop: 'cafe' }, zh: '一杯咖啡', en: 'a coffee' }, { id: 'arrosoir', fr: 'un arrosoir', img: { prop: 'arrosoir' }, zh: '一个喷壶', en: 'a watering can' }, { id: 'mois', fr: 'dans un mois', img: { prop: 'calendar' }, zh: '一个月以后', en: 'in a month' }] },
         { t: 'diary' },
-        n('n_d7_soir', 'Samedi soir. Sur le bureau, la plante de Madame Martin. Et à côté… Croissant dort.', '星期六晚上。书桌上放着 Martin 太太送的植物。旁边……Croissant 睡着了。', 'Saturday evening. On the desk, Madame Martin’s plant. And next to it… Croissant is asleep.', { scene: 'end', cat: 1, watered: true }),
+        n('n_d7_eau_intro', 'Ta plante a soif.', '你的植物渴了。', 'Your plant is thirsty.', { scene: 'plant', evening: true, camille: 'idle', props: [['arrosoir', 44, 36]] }),
+        L('d7_cam_unmot', { scene: 'plant', evening: true, camille: 'point', props: [['arrosoir', 44, 36]] }),
+        L('d7_cam_hop', { scene: 'plant', evening: true, camille: 'point', canTip: true, props: [['arrosoir', 44, 36]] }),
+        L('d7_noe_doucement', { scene: 'plant', evening: true, camille: 'idle', noe: 'point', props: [['arrosoir', 44, 36]] }),
+        { t: 'water', key: 'd7_eau', fr: 'Un mot. Une fois.', zh: '一个词。浇一次。', en: 'One word. One pour.',
+          art: { scene: 'plant', evening: true, camille: 'idle', props: [['arrosoir', 44, 36]] },
+          items: [
+            { word: 'plante', answer: 'plante', opts: [{ id: 'plante', fr: 'la plante', img: { prop: 'plantp' } }, { id: 'chat', fr: 'le chat', img: { prop: 'catface' } }, { id: 'pain', fr: 'le pain', img: { prop: 'bread' } }] },
+            { word: 'eau', answer: 'eau', opts: [{ id: 'eau', fr: 'l\u2019eau', img: { prop: 'eau' } }, { id: 'cafe', fr: 'le café', img: { prop: 'cafe' } }, { id: 'lait', fr: 'le lait', img: { prop: 'milk' } }] },
+            { word: 'chat', answer: 'chat', opts: [{ id: 'chat', fr: 'le chat', img: { prop: 'catface' } }, { id: 'cle', fr: 'la clé', img: { prop: 'key' } }, { id: 'sac', fr: 'le sac', img: { prop: 'bag' } }] }
+          ] },
+        n('n_d7_soir', 'Samedi soir. Sur le bureau, ta plante et le vieil arrosoir. Et à côté… Croissant dort.', '星期六晚上。书桌上是你的植物和那个旧喷壶。旁边……Croissant 睡着了。', 'Saturday evening. On the desk, your plant and the old watering can. And next to them… Croissant is asleep.', { scene: 'end', cat: 1, watered: true, props: [['arrosoir', 22, 46]] }),
         { t: 'done', art: { scene: 'end', cat: 1, watered: true }, endKey: 'd7_band',
           endings: { A: { fr: 'Visite parfaite', zh: '完美来访', en: 'A perfect visit' }, B: { fr: 'De justesse', zh: '有惊无险', en: 'A close call' }, C: { fr: 'Découvert', zh: '被发现了', en: 'Found out' } },
           hook: { fr: 'Croissant est chez lui. Dans un mois, Madame Martin revient… Fin de la semaine 1.', zh: 'Croissant 有家了。一个月后，Martin 太太还会再来……第一周完。', en: 'Croissant is home. In a month, Madame Martin comes back… End of week 1.' },
@@ -11691,7 +11754,7 @@ function getLang(ls, id) {
     jeudi: w('jeudi', ['jeudi'], ['calendar'], 'calendar', 'Un jour' + NB + ': lundi, mardi, mercredi, jeudi…', '星期四', 'Thursday', { by: 'lefevre', tts: 'Le jeudi… le jeudi.' }),
     soif: w('avoir soif', ['soif'], ['plante'], 'eau', 'On veut boire.', '渴', 'to be thirsty'),
     eau: w('l\u2019eau', ['eau'], ['eau'], 'eau', 'On boit de l\u2019eau.', '水', 'water', { by: 'camille', tts: "L'eau… de l'eau." }),
-    arrosoir: w('l\u2019arrosoir', ['arrosoir', 'arroses', 'arroser'], ['eau'], 'can', 'Pour donner de l\u2019eau à la plante.', '浇水壶 / 浇水', 'watering can / to water'),
+    arrosoir: w('l\u2019arrosoir', ['arrosoir', 'arroses', 'arroser'], ['eau'], 'arrosoir', 'Pour donner de l\u2019eau à la plante.', '浇水壶 / 浇水', 'watering can / to water', { by: 'neutral', tts: "L'arrosoir." }),
     chat: w('le chat', ['chat'], ['chat'], null, 'Un animal' + NB + ': « Miaou' + NB + '! »', '猫', 'cat', { by: 'noe', tts: 'Le chat… mon chat.' }),
     canape: w('le canapé', ['canapé'], ['canape'], null, 'Un grand siège pour deux ou trois personnes.', '沙发', 'sofa', { by: 'neutral', tts: 'Le canapé… le canapé.' }),
     chambre: w('la chambre', ['chambre'], ['chambre', 'bed'], 'bed', 'La pièce pour dormir.', '卧室', 'bedroom'),
@@ -19285,7 +19348,9 @@ function getLang(ls, id) {
 
 </script>
 <script>
-/* Daily-task template engine (DT01–DT15). P0 playable: DT01–DT05.
+/* Daily-task template engine (DT01–DT15). Playable: DT01–DT15.
+ * DT06–DT15 unlock from Day 7, so Days 1–6 keep their old offer.
+ * Day 8’s offer is the long one. Rooftop and garden steps arrive through A411.Loop plugs.
  * French lines are full strings or a single hand-written slot (fr_partitive / fr_def).
  * Place phrases are never built from a preposition plus an article.
  * fsrsCredit is stored per template; the MVP always records an encounter, never an FSRS grade.
@@ -19369,43 +19434,83 @@ function getLang(ls, id) {
       location: ['flat411_kitchen', 'stairwell', 'lefevre_flat'],
       variant: { afterDay: 15, location: 'superette', npc: 'samir' },
       potWords: { pot: 2, tags: ['item'], pick: 1, requireMet: true, maxRecognition: 1 },
-      interaction: 'fetch', fsrsCredit: 'exposure', hook: null
+      interaction: 'fetch', fsrsCredit: 'exposure', hook: null, minutes: 4
     },
     {
       id: 'DT02_ranger', n: 'DT02', title: 'Ranger l’appart', priority: 'P0', playable: true,
       unlockDay: 1, giver: ['camille'], location: ['flat411'],
       potWords: { pot: 1, tags: ['noun'], pick: 4, requireMet: true },
-      interaction: 'drag_to_slot', fsrsCredit: 'exposure', hook: null
+      interaction: 'drag_to_slot', fsrsCredit: 'exposure', hook: null, minutes: 6
     },
     {
       id: 'DT03_croissant_betise', n: 'DT03', title: 'Croissant fait une bêtise', priority: 'P0', playable: true,
       unlockDay: 1, giver: ['noe', 'camille'], location: ['flat411'],
       potWords: { pot: 1, requireMet: true },
-      interaction: 'pick_reply', fsrsCredit: 'exposure', hook: null
+      interaction: 'pick_reply', fsrsCredit: 'exposure', hook: null, minutes: 4
     },
     {
       id: 'DT04_photo_martin', n: 'DT04', title: 'Une photo pour Martin', priority: 'P0', playable: true,
-      unlockDay: 1, giver: ['martin'], location: ['rooftop'],
+      unlockDay: 1, giver: ['martin'], location: ['rooftop'], slot: 'rooftop',
       potWords: { pot: 1, requireMet: true, maxRecognition: 1 },
-      interaction: 'photo', fsrsCredit: 'exposure', hook: null
+      interaction: 'photo', fsrsCredit: 'exposure', hook: null, minutes: 4
     },
     {
       id: 'DT05_colis', n: 'DT05', title: 'Un colis devant la porte', priority: 'P0', playable: true,
       unlockDay: 1, giver: ['resident'], location: ['stairwell'],
       potWords: { pot: 5, requireMet: true },
-      interaction: 'deliver', fsrsCredit: 'exposure', hook: null
+      interaction: 'deliver', fsrsCredit: 'exposure', hook: null, minutes: 4
     },
-    { id: 'DT06_arroser_lefevre', n: 'DT06', title: 'Arroser chez Lefèvre', priority: 'P1', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
-    { id: 'DT07_petit_dejeuner', n: 'DT07', title: 'Le petit-déjeuner de Noé', priority: 'P1', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
-    { id: 'DT08_heure', n: 'DT08', title: 'Quelle heure est-il', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' },
-    { id: 'DT09_liste', n: 'DT09', title: 'La liste de courses', priority: 'P1', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
-    { id: 'DT10_monnaie', n: 'DT10', title: 'La monnaie', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure',
-      speakLine: 'Ça fait deux euros cinquante.' },
-    { id: 'DT11_temps', n: 'DT11', title: 'Il fait quel temps', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' },
-    { id: 'DT12_ou_est', n: 'DT12', title: 'Où est Croissant', priority: 'P2', playable: false, interaction: 'fetch', fsrsCredit: 'exposure' },
-    { id: 'DT13_courrier', n: 'DT13', title: 'Le courrier', priority: 'P2', playable: false, interaction: 'deliver', fsrsCredit: 'exposure' },
-    { id: 'DT14_mot', n: 'DT14', title: 'Un mot sur la porte', priority: 'P2', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' },
-    { id: 'DT15_ca_va', n: 'DT15', title: 'Comment ça va', priority: 'P1', playable: false, interaction: 'pick_reply', fsrsCredit: 'exposure' }
+    {
+      id: 'DT06_arroser_lefevre', n: 'DT06', title: 'Arroser chez Lefèvre', priority: 'P1', playable: true,
+      unlockDay: 7, giver: ['lefevre'], location: ['lefevre_flat'], slot: 'garden',
+      interaction: 'fetch', fsrsCredit: 'exposure', minutes: 6
+    },
+    {
+      id: 'DT07_petit_dejeuner', n: 'DT07', title: 'Le petit-déjeuner de Noé', priority: 'P1', playable: true,
+      unlockDay: 7, giver: ['noe'], location: ['flat411_kitchen'],
+      interaction: 'fetch', fsrsCredit: 'exposure', minutes: 6
+    },
+    {
+      id: 'DT08_heure', n: 'DT08', title: 'Quelle heure est-il', priority: 'P1', playable: true,
+      unlockDay: 8, giver: ['camille'], location: ['flat411'],
+      interaction: 'pick_reply', fsrsCredit: 'exposure', minutes: 5
+    },
+    {
+      id: 'DT09_liste', n: 'DT09', title: 'La liste de courses', priority: 'P1', playable: true,
+      unlockDay: 7, giver: ['samir'], location: ['superette'],
+      interaction: 'fetch', fsrsCredit: 'exposure', minutes: 8
+    },
+    {
+      id: 'DT10_monnaie', n: 'DT10', title: 'La monnaie', priority: 'P1', playable: true,
+      unlockDay: 7, giver: ['samir'], location: ['superette'], slot: 'money',
+      interaction: 'fetch', fsrsCredit: 'exposure', minutes: 6,
+      speakLine: 'Ça fait deux euros cinquante.'
+    },
+    {
+      id: 'DT11_temps', n: 'DT11', title: 'Il fait quel temps', priority: 'P1', playable: true,
+      unlockDay: 7, giver: ['camille'], location: ['stairwell'],
+      interaction: 'fetch', fsrsCredit: 'exposure', minutes: 4
+    },
+    {
+      id: 'DT12_ou_est', n: 'DT12', title: 'Où est Croissant', priority: 'P2', playable: true,
+      unlockDay: 7, giver: ['noe'], location: ['flat411'],
+      interaction: 'fetch', fsrsCredit: 'exposure', minutes: 5
+    },
+    {
+      id: 'DT13_courrier', n: 'DT13', title: 'Le courrier', priority: 'P2', playable: true,
+      unlockDay: 7, giver: ['resident'], location: ['stairwell'],
+      interaction: 'deliver', fsrsCredit: 'exposure', minutes: 4
+    },
+    {
+      id: 'DT14_mot', n: 'DT14', title: 'Un mot sur la porte', priority: 'P2', playable: true,
+      unlockDay: 7, giver: ['lefevre'], location: ['stairwell'],
+      interaction: 'pick_reply', fsrsCredit: 'exposure', minutes: 4
+    },
+    {
+      id: 'DT15_ca_va', n: 'DT15', title: 'Comment ça va', priority: 'P1', playable: true,
+      unlockDay: 7, giver: ['camille'], location: ['flat411'],
+      interaction: 'pick_reply', fsrsCredit: 'exposure', minutes: 4
+    }
   ];
   var BY_ID = {};
   TEMPLATES.forEach(function (t) { BY_ID[t.id] = t; BY_ID[t.n] = t; });
@@ -19610,7 +19715,7 @@ function getLang(ls, id) {
     var replies = DT04_REPLIES.filter(function (r) { return !r.need.length || allMet(r.need, ctx.storyDay); });
     var rng = rngOf(ctx.seed + ':DT04');
     var reply = pick(rng, replies);
-    return {
+    return withExtra('rooftop', ctx, {
       steps: [
         { type: 'photo', fr: DT04_PHOTO, captions: captions.map(function (c) {
           return { id: c.id, fr: c.fr, recognition: !!c.recognition, ok: c.ok !== false };
@@ -19618,7 +19723,7 @@ function getLang(ls, id) {
         { type: 'line', who: 'martin', fr: reply.fr, speak: reply.fr }
       ],
       giver: 'martin', location: 'rooftop'
-    };
+    });
   }
 
   function prepareDT05(ctx) {
@@ -19636,7 +19741,286 @@ function getLang(ls, id) {
     };
   }
 
-  var PREP = { DT01_petite_course: prepareDT01, DT02_ranger: prepareDT02, DT03_croissant_betise: prepareDT03, DT04_photo_martin: prepareDT04, DT05_colis: prepareDT05 };
+  // A registered slot (rooftop, garden, money) may append steps. Empty until something plugs in.
+  function withExtra(slot, ctx, built) {
+    var Loop = root.A411 && root.A411.Loop;
+    var extra = Loop && Loop.taskExtra && Loop.taskExtra(slot, ctx);
+    if (!built || !extra) return built;
+    if (extra.steps && extra.steps.length) built.steps = built.steps.concat(extra.steps);
+    if (extra.location) built.location = extra.location;
+    return built;
+  }
+
+  function card(icon, part, correct, id) {
+    return { id: id || icon, icon: icon, fr_partitive: part, fr_def: part, correct: !!correct };
+  }
+  function fetchStep(fr, targetId, options) {
+    return { type: 'fetch', fr: fr, speak: fr, target: { id: targetId, fr_partitive: fr }, options: options };
+  }
+
+  function prepareDT06(ctx) {
+    if (!entryMet('p2_03', ctx.storyDay) || !entryMet('p1_19', ctx.storyDay)) return null;
+    var eau = 'Je voudrais de l’eau.';
+    var steps = [
+      { type: 'line', who: 'lefevre', fr: eau, speak: eau, target: 'p2_03' },
+      fetchStep(eau, 'p2_03', [
+        card('eau', 'de l’eau', true, 'p2_03'),
+        card('cafe', 'du café', false, 'cafe'),
+        card('bread', 'du pain', false, 'pain')
+      ])
+    ];
+    if (entryMet('p2_09', ctx.storyDay)) {
+      var basil = 'C’est du basilic, pour la cuisine.';
+      steps.push({ type: 'line', who: 'lefevre', fr: basil, speak: basil, target: 'p2_09' });
+      steps.push(fetchStep(basil, 'p2_09', [
+        card('basil', 'du basilic', true, 'p2_09'),
+        card('plantp', 'une plante', false, 'p1_19'),
+        card('bowl', '', false, 'bol')
+      ]));
+    }
+    steps.push({ type: 'line', who: 'lefevre', fr: 'Merci' + NN + '!', speak: 'Merci' + NN + '!', target: 'p3_09' });
+    return withExtra('garden', ctx, { steps: steps, giver: 'lefevre', location: 'lefevre_flat' });
+  }
+
+  function prepareDT07(ctx) {
+    if (!entryMet('p2_01', ctx.storyDay) || !entryMet('p2_03', ctx.storyDay) || !entryMet('p4_17', ctx.storyDay)) return null;
+    var ask = 'Tu veux du thé ou du café' + NN + '?';
+    var eau = 'Je voudrais de l’eau.';
+    var cafe = 'J’ai fait du café.';
+    var cold = 'Il fait froid.';
+    var rng = rngOf(ctx.seed + ':DT07');
+    return {
+      steps: [
+        { type: 'line', who: 'noe', fr: ask, speak: ask, target: 'p2_01' },
+        { type: 'reply', fr: ask, options: shuffle(rng, [
+          { id: 'eau', fr: eau, ok: true },
+          { id: 'cafe', fr: cafe, ok: true },
+          { id: 'froid', fr: cold, ok: false, react: 'Non. Tu veux du thé ou du café' + NN + '?' }
+        ]) },
+        fetchStep(cafe, 'p2_33', [
+          card('cafe', 'du café', true, 'p2_33'),
+          card('the', 'du thé', false, 'the'),
+          card('eau', 'de l’eau', false, 'eau')
+        ]),
+        fetchStep(eau, 'p2_03', [
+          card('eau', 'de l’eau', true, 'p2_03'),
+          card('cafe', 'du café', false, 'cafe'),
+          card('bread', 'du pain', false, 'pain')
+        ]),
+        { type: 'line', who: 'noe', fr: 'Merci' + NN + '!', speak: 'Merci' + NN + '!' }
+      ],
+      giver: 'noe', location: 'flat411_kitchen'
+    };
+  }
+
+  function prepareDT08(ctx) {
+    if (!entryMet('p4_11', ctx.storyDay) || !entryMet('p4_12', ctx.storyDay)) return null;
+    var six = 'À six heures.';
+    var sept = 'Sept heures et demie.';
+    var cold = 'Il fait froid.';
+    var rng = rngOf(ctx.seed + ':DT08');
+    var steps = [];
+    if (entryMet('p4_21', ctx.storyDay)) {
+      steps.push({ type: 'line', who: 'camille', fr: 'Quelle heure est-il' + NN + '?', speak: 'Quelle heure est-il' + NN + '?', target: 'p4_21' });
+    }
+    steps.push({ type: 'line', who: 'camille', fr: six, speak: six, target: 'p4_11' });
+    steps.push({ type: 'reply', fr: six, options: shuffle(rng, [
+      { id: 'six', fr: six, ok: true },
+      { id: 'sept', fr: sept, ok: false, react: 'Non. À six heures.' },
+      { id: 'froid', fr: cold, ok: false, react: 'Non. À six heures.' }
+    ]) });
+    steps.push({ type: 'line', who: 'camille', fr: sept, speak: sept, target: 'p4_12' });
+    steps.push({ type: 'reply', fr: sept, options: shuffle(rng, [
+      { id: 'sept', fr: sept, ok: true },
+      { id: 'six', fr: six, ok: false, react: 'Non. Sept heures et demie.' },
+      { id: 'froid', fr: cold, ok: false, react: 'Non. Sept heures et demie.' }
+    ]) });
+    return { steps: steps, giver: 'camille', location: 'flat411' };
+  }
+
+  // Shopping rows. part is a lexicon fr_partitive or a hand-written slot, never a joined article.
+  var LIST_ROWS = [
+    { id: 'p1_19', icon: 'plantp', part: 'une plante', need: ['p1_19'] },
+    { id: 'p1_20', icon: 'letter', part: 'une lettre', need: ['p1_20'] },
+    { id: 'p4_08', icon: 'box', part: 'un colis', need: ['p4_08'] },
+    { id: 'p1_14', icon: 'key', part: 'une clé', need: ['p1_14'] },
+    { id: 'p2_08', icon: 'fromage', part: 'du fromage', need: ['p2_08'] },
+    { id: 'p2_14', icon: 'butter', part: 'du beurre', need: ['p2_14'] },
+    { id: 'p2_38', icon: 'milk', part: 'du lait', need: ['p2_38'] }
+  ];
+
+  function prepareDT09(ctx) {
+    var rows = LIST_ROWS.filter(function (row) { return allMet(row.need, ctx.storyDay) && propReady(row.icon); });
+    if (rows.length < 3) return null;
+    var rng = rngOf(ctx.seed + ':DT09');
+    var chosen = shuffle(rng, rows).slice(0, 3);
+    var steps = [];
+    chosen.forEach(function (row) {
+      var fr = askLine('samir', row.part);
+      var options = shuffle(rng, chosen.map(function (other) {
+        return card(other.icon, other.part, other.id === row.id, other.id);
+      }));
+      steps.push({ type: 'line', who: 'samir', fr: fr, speak: fr, target: row.id });
+      steps.push(fetchStep(fr, row.id, options));
+    });
+    steps.push({ type: 'line', who: 'samir', fr: 'Merci' + NN + '!', speak: 'Merci' + NN + '!' });
+    return { steps: steps, giver: 'samir', location: 'superette' };
+  }
+
+  function prepareDT10(ctx) {
+    if (!entryMet('p3_07', ctx.storyDay) || !entryMet('p3_09', ctx.storyDay)) return null;
+    var rng = rngOf(ctx.seed + ':DT10');
+    var ask = entryMet('p2_06', ctx.storyDay) ? 'Je voudrais du pain, s’il vous plaît.' : 'J’ai acheté du pain.';
+    var target = entryMet('p2_06', ctx.storyDay) ? 'p2_06' : 'p3_07';
+    var steps = [
+      { type: 'line', who: 'samir', fr: ask, speak: ask, target: target },
+      fetchStep(ask, target, [
+        card('bread', 'du pain', true, target),
+        card('cafe', 'du café', false, 'cafe'),
+        card('eau', 'de l’eau', false, 'eau')
+      ])
+    ];
+    if (entryMet('p3_20', ctx.storyDay)) {
+      steps.push({ type: 'line', who: 'samir', fr: 'Ça fait trois euros cinquante.', speak: 'Ça fait trois euros cinquante.', target: 'p3_20' });
+    }
+    if (entryMet('p3_21', ctx.storyDay)) {
+      steps.push({ type: 'line', who: 'samir', fr: 'Vous avez de la monnaie' + NN + '?', speak: 'Vous avez de la monnaie' + NN + '?', target: 'p3_21' });
+    }
+    if (entryMet('p3_19', ctx.storyDay) && propReady('euro')) {
+      steps.push(fetchStep('un euro', 'p3_19', [
+        card('euro', 'un euro', true, 'p3_19'),
+        card('bread', 'du pain', false, 'pain'),
+        card('letter', 'une lettre', false, 'lettre')
+      ]));
+    }
+    steps.push({ type: 'reply', fr: 'Merci' + NN + '!', options: shuffle(rng, [
+      { id: 'merci', fr: 'Merci' + NN + '!', ok: true },
+      { id: 'accord', fr: 'D’accord.', ok: true },
+      { id: 'froid', fr: 'Il fait froid.', ok: false, react: 'Non. Merci' + NN + '!' }
+    ]) });
+    return withExtra('money', ctx, { steps: steps, giver: 'samir', location: 'superette' });
+  }
+
+  function prepareDT11(ctx) {
+    if (!entryMet('p4_17', ctx.storyDay)) return null;
+    var cold = 'Il fait froid.';
+    var steps = [
+      { type: 'line', who: 'camille', fr: cold, speak: cold, target: 'p4_17' },
+      fetchStep(cold, 'p4_17', [
+        card('snow', cold, true, 'p4_17'),
+        card('rain', '', false, 'rain'),
+        card('sun', '', false, 'sun')
+      ])
+    ];
+    if (entryMet('p4_31', ctx.storyDay)) {
+      var beau = 'Il fait beau' + NN + '!';
+      steps.push({ type: 'line', who: 'camille', fr: beau, speak: beau, target: 'p4_31' });
+      steps.push(fetchStep(beau, 'p4_31', [
+        card('sun', beau, true, 'p4_31'),
+        card('snow', cold, false, 'snow'),
+        card('rain', '', false, 'rain')
+      ]));
+    }
+    return { steps: steps, giver: 'camille', location: 'stairwell' };
+  }
+
+  function prepareDT12(ctx) {
+    if (!entryMet('p1_17', ctx.storyDay) || !entryMet('p1_19', ctx.storyDay)) return null;
+    var under = 'Croissant est sous la table.';
+    var plant = 'Croissant regarde la plante.';
+    return {
+      steps: [
+        { type: 'line', who: 'noe', fr: under, speak: under, target: 'p1_17' },
+        fetchStep(under, 'p1_17', [
+          card('table', 'sous la table', true, 'p1_17'),
+          card('plantp', 'la plante', false, 'p1_19'),
+          card('bowl', '', false, 'bol')
+        ]),
+        { type: 'line', who: 'noe', fr: plant, speak: plant, target: 'p1_19' },
+        fetchStep(plant, 'p1_19', [
+          card('plantp', 'la plante', true, 'p1_19'),
+          card('table', 'sous la table', false, 'p1_17'),
+          card('catface', 'Croissant', false, 'cat')
+        ])
+      ],
+      giver: 'noe', location: 'flat411', pose: 'cat_chair'
+    };
+  }
+
+  function prepareDT13(ctx) {
+    if (!entryMet('p1_20', ctx.storyDay)) return null;
+    var rng = rngOf(ctx.seed + ':DT13');
+    var who = pick(rng, RECIPIENTS);
+    var ask = who.register === 'vous' ? ('La lettre, s’il vous plaît.') : ('La lettre, s’il te plaît.');
+    return {
+      steps: [
+        { type: 'deliver', who: 'player', fr: ask, speak: ask, recipient: who, doors: DOORS,
+          yes: 'Merci' + NN + '!',
+          no: 'Non.' }
+      ],
+      giver: who.id, location: 'stairwell', recipient: who
+    };
+  }
+
+  function prepareDT14(ctx) {
+    if (!entryMet('p1_25', ctx.storyDay) || !entryMet('p1_03', ctx.storyDay) || !entryMet('p4_17', ctx.storyDay)) return null;
+    var note = 'Entrez' + NN + '!';
+    var rng = rngOf(ctx.seed + ':DT14');
+    return {
+      steps: [
+        { type: 'line', who: 'lefevre', fr: note, speak: note, target: 'p1_25' },
+        { type: 'reply', fr: note, options: shuffle(rng, [
+          { id: 'accord', fr: 'D’accord.', ok: true },
+          { id: 'soir', fr: 'Bonsoir' + NN + '!', ok: true },
+          { id: 'froid', fr: 'Il fait froid.', ok: false, react: 'Non. Entrez' + NN + '!' }
+        ]) }
+      ],
+      giver: 'lefevre', location: 'stairwell'
+    };
+  }
+
+  function prepareDT15(ctx) {
+    if (!entryMet('p1_01', ctx.storyDay) || !entryMet('p1_02', ctx.storyDay) || !entryMet('p1_03', ctx.storyDay)) return null;
+    var rng = rngOf(ctx.seed + ':DT15');
+    var hello = 'Bonjour' + NN + '!';
+    var hi = 'Salut' + NN + '!';
+    var evening = 'Bonsoir' + NN + '!';
+    var cold = 'Il fait froid.';
+    return {
+      steps: [
+        { type: 'line', who: 'camille', fr: hello, speak: hello, target: 'p1_01' },
+        { type: 'reply', fr: hello, options: shuffle(rng, [
+          { id: 'bonjour', fr: hello, ok: true },
+          { id: 'salut', fr: hi, ok: true },
+          { id: 'froid', fr: cold, ok: false, react: 'Non. Bonjour' + NN + '!' }
+        ]) },
+        { type: 'line', who: 'camille', fr: evening, speak: evening, target: 'p1_03' },
+        { type: 'reply', fr: evening, options: shuffle(rng, [
+          { id: 'soir', fr: evening, ok: true },
+          { id: 'bonjour', fr: hello, ok: true },
+          { id: 'pain', fr: 'J’ai acheté du pain.', ok: false, react: 'Non. Bonsoir' + NN + '!' }
+        ]) }
+      ],
+      giver: 'camille', location: 'flat411'
+    };
+  }
+
+  var PREP = {
+    DT01_petite_course: prepareDT01, DT02_ranger: prepareDT02, DT03_croissant_betise: prepareDT03,
+    DT04_photo_martin: prepareDT04, DT05_colis: prepareDT05, DT06_arroser_lefevre: prepareDT06,
+    DT07_petit_dejeuner: prepareDT07, DT08_heure: prepareDT08, DT09_liste: prepareDT09,
+    DT10_monnaie: prepareDT10, DT11_temps: prepareDT11, DT12_ou_est: prepareDT12,
+    DT13_courrier: prepareDT13, DT14_mot: prepareDT14, DT15_ca_va: prepareDT15
+  };
+
+  // Days 7–9 name the tasks in order. Later days add a row here; Days 1–6 stay on the short offer.
+  var OFFER_MAX = { 7: 5, 8: 8, 9: 6 };
+  var OFFER_SPINE = {
+    7: ['DT06_arroser_lefevre', 'DT07_petit_dejeuner', 'DT09_liste', 'DT11_temps', 'DT14_mot'],
+    8: ['DT06_arroser_lefevre', 'DT07_petit_dejeuner', 'DT08_heure', 'DT09_liste', 'DT10_monnaie', 'DT12_ou_est', 'DT02_ranger', 'DT04_photo_martin'],
+    9: ['DT05_colis', 'DT09_liste', 'DT11_temps', 'DT13_courrier', 'DT15_ca_va', 'DT06_arroser_lefevre']
+  };
+  function offerMax(day) { return OFFER_MAX[day] || 5; }
 
   function prepare(id, ctx) {
     var tmpl = BY_ID[id];
@@ -19664,6 +20048,22 @@ function getLang(ls, id) {
     var offered = ctx.offered || [];
     var unseen = playable.filter(function (t) { return offered.indexOf(t.id) < 0; });
     var fresh = playable.filter(function (t) { return yesterday.indexOf(t.id) < 0; });
+    var max = offerMax(ctx.storyDay);
+    var spine = OFFER_SPINE[ctx.storyDay];
+    if (spine) {
+      var ids = [];
+      spine.forEach(function (id) {
+        if (ids.length >= max) return;
+        if (canFill(id, ctx) && ids.indexOf(id) < 0) ids.push(id);
+      });
+      var rest = shuffle(rng, unseen).concat(shuffle(rng, fresh.filter(function (t) { return unseen.indexOf(t) < 0; })));
+      rest.forEach(function (t) {
+        if (ids.length >= max) return;
+        if (ids.indexOf(t.id) < 0) ids.push(t.id);
+      });
+      var reusedSpine = ids.some(function (id) { return yesterday.indexOf(id) >= 0; }) && fresh.length < playable.length;
+      return { ids: ids, reusedYesterday: reusedSpine };
+    }
     var unseenShuffled = shuffle(rng, unseen);
     var freshRest = shuffle(rng, fresh.filter(function (t) { return unseen.indexOf(t) < 0; }));
     var stale = shuffle(rng, playable.filter(function (t) { return unseen.indexOf(t) < 0 && fresh.indexOf(t) < 0; }));
@@ -19671,21 +20071,21 @@ function getLang(ls, id) {
     var need = Math.min(3, playable.length);
     if (ordered.length < need) ordered = ordered.concat(stale);
     var cap = ordered.length < 3 ? ordered.length : Math.min(ordered.length, 3 + Math.floor(rng() * 3));
-    if (unseenShuffled.length && cap < unseenShuffled.length) cap = Math.min(5, unseenShuffled.length);
-    var ids = ordered.slice(0, cap).map(function (t) { return t.id; });
-    var reused = ids.some(function (id) { return yesterday.indexOf(id) >= 0; }) && fresh.length < playable.length;
-    return { ids: ids, reusedYesterday: reused };
+    if (unseenShuffled.length && cap < unseenShuffled.length) cap = Math.min(max, unseenShuffled.length);
+    var picked = ordered.slice(0, cap).map(function (t) { return t.id; });
+    var reused = picked.some(function (id) { return yesterday.indexOf(id) >= 0; }) && fresh.length < playable.length;
+    return { ids: picked, reusedYesterday: reused };
   }
 
-  function begin() { return { step: 0, reveal: false, photo: false, wrongDoor: false, placed: [] }; }
+  function begin() { return { step: 0, reveal: false, photo: false, wrongDoor: false, placed: [], built: [], picked: [], showText: false }; }
 
   function view(inst, state) {
     state = state || {};
     var placed = state.placed || [];
     if (!inst) return { done: true, placed: placed };
-    if (state.step >= inst.steps.length) return { done: true, title: inst.title, placed: placed, giver: inst.giver, location: inst.location };
+    if (state.step >= inst.steps.length) return { done: true, title: inst.title, placed: placed, giver: inst.giver, location: inst.location, showText: !!state.showText };
     var step = inst.steps[state.step];
-    return { done: false, title: inst.title, step: step, index: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: state.wrongDoor, placed: placed, giver: inst.giver, location: inst.location, pose: inst.pose || (step && step.pose) };
+    return { done: false, title: inst.title, step: step, index: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: state.wrongDoor, placed: placed, built: state.built || [], picked: state.picked || [], showText: !!state.showText, giver: inst.giver, location: inst.location, pose: inst.pose || (step && step.pose) };
   }
 
   // input: { choice, pick, slot, caption, door, next }
@@ -19694,10 +20094,14 @@ function getLang(ls, id) {
   function act(inst, state, input) {
     input = input || {};
     var step = inst.steps[state.step];
-    var next = { step: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: false, placed: (state.placed || []).slice() };
+    var next = { step: state.step, reveal: state.reveal, photo: state.photo, wrongDoor: false, placed: (state.placed || []).slice(), built: (state.built || []).slice(), picked: (state.picked || []).slice(), showText: !!state.showText };
     var encounters = [];
     var speak = null;
     if (!step) return { state: next, encounters: encounters, done: true };
+    if (input.toggle && (step.type === 'listen' || step.type === 'order')) {
+      next.showText = !state.showText;
+      return { state: next, encounters: [], done: false };
+    }
     function hear(fr, target) { if (fr) encounters.push({ fr: fr, target: target || null, evidenceKind: 'encounter', resultType: 'exposure', fsrs: false }); }
     function miss(react) { return { state: next, encounters: [], miss: true, react: react, speak: react, done: false }; }
     if (step.type === 'line' && step.options && input.choice) {
@@ -19739,12 +20143,37 @@ function getLang(ls, id) {
         hear(hit.fr_partitive, hit.id);
         next.step = state.step + 1;
       }
-    } else if (step.type === 'reply') {
+    } else if (step.type === 'reply' || step.type === 'gap') {
       var rep = (step.options || []).filter(function (o) { return o.id === input.choice; })[0];
       if (!rep) return { state: next, encounters: [], done: false };
       if (rep.ok === false) return miss(rep.react || 'Non.');
-      hear(rep.fr, null);
+      hear(rep.fr, step.target || null);
       next.step = state.step + 1;
+    } else if (step.type === 'listen') {
+      if (input.next) {
+        hear(step.fr, step.target || null);
+        next.step = state.step + 1;
+      }
+    } else if (step.type === 'chips') {
+      if (!input.chip) return { state: next, encounters: [], done: false };
+      var wantChip = (step.pieces || [])[next.built.length];
+      if (input.chip !== wantChip) return miss(step.react || 'Non.');
+      next.built.push(input.chip);
+      if (next.built.length >= (step.pieces || []).length) {
+        hear(step.fr, step.target || null);
+        next.built = [];
+        next.step = state.step + 1;
+      }
+    } else if (step.type === 'order') {
+      if (!input.pick) return { state: next, encounters: [], done: false };
+      var wantPick = (step.order || [])[next.picked.length];
+      if (input.pick !== wantPick) return miss(step.react || 'Non.');
+      next.picked.push(input.pick);
+      if (next.picked.length >= (step.order || []).length) {
+        hear(step.fr, step.target || null);
+        next.picked = [];
+        next.step = state.step + 1;
+      }
     } else if (step.type === 'photo') {
       if (!state.photo && input.next) { next.photo = true; return { state: next, encounters: [], photo: true, done: false }; }
       var cap = (step.captions || []).filter(function (c) { return c.id === input.caption; })[0];
@@ -19805,7 +20234,16 @@ function getLang(ls, id) {
     'Regardez, une nouvelle feuille' + NN + '!',
     'Regardez, le canapé' + NN + '!',
     'C’est pour toi' + NN + '?',
-    'C’est pour vous, madame' + NN + '?'
+    'C’est pour vous, madame' + NN + '?',
+    'Je voudrais de l’eau.',
+    'J’ai fait du café.',
+    'À six heures.',
+    'Sept heures et demie.',
+    'D’accord.',
+    'Bonjour' + NN + '!',
+    'Salut' + NN + '!',
+    'Bonsoir' + NN + '!',
+    'Merci' + NN + '!'
   ];
 
   var api = {
@@ -19813,7 +20251,7 @@ function getLang(ls, id) {
     RECIPIENTS: RECIPIENTS, PLAYER_LINES: PLAYER_LINES,
     prepare: prepare, canFill: canFill, offer: offer, begin: begin, view: view, act: act,
     commit: commit, dueEntryIds: dueEntryIds, askLine: askLine, dt01Pool: dt01Pool,
-    scoreTarget: scoreTarget, entryMet: entryMet
+    scoreTarget: scoreTarget, entryMet: entryMet, offerMax: offerMax, OFFER_SPINE: OFFER_SPINE, OFFER_MAX: OFFER_MAX
   };
   root.A411 = root.A411 || {};
   root.A411.Tasks = api;
@@ -19829,7 +20267,7 @@ function getLang(ls, id) {
   var WHO = { noe: 'Noé', camille: 'Camille', lefevre: 'Madame Lefèvre', martin: 'Madame Martin', samir: 'Samir', croissant: 'Croissant' };
   var LOC = {
     flat411_kitchen: 'La cuisine', stairwell: 'L’escalier', lefevre_flat: 'Chez Madame Lefèvre',
-    superette: 'La supérette', rooftop: 'Le toit', flat411: 'L’appartement'
+    superette: 'La supérette', rooftop: 'Le toit', flat411: 'L’appartement', soir: 'Le soir'
   };
 
   function el(tag, attrs) {
@@ -19969,6 +20407,7 @@ function getLang(ls, id) {
     if (pose === 'sit_in_pot') { Art.scene(ctx, 'plant', { watered: true }); return; }
     if (pose === 'smug') { Art.scene(ctx, 'cat', {}); return; }
     if (loc === 'stairwell' || inst.interaction === 'deliver') { Art.scene(ctx, 'doorway', { door: 'closed' }); return; }
+    if (loc === 'superette') { Art.scene(ctx, 'shop', {}); return; }
     if (loc === 'flat411_kitchen') { Art.scene(ctx, 'kitchen', {}); return; }
     if (loc === 'lefevre_flat') { Art.scene(ctx, 'doorway', { door: 'open', voisine: 'idle' }); return; }
     Art.scene(ctx, 'kitchen', {});
@@ -19983,6 +20422,10 @@ function getLang(ls, id) {
     if (step.type === 'reply') return '选一句合适的话。有一句是不对的。';
     if (step.type === 'photo') return photoTaken ? '选一句和照片相符的话。' : '给屋顶上的植物拍一张照片。';
     if (step.type === 'deliver') return '把包裹送到名字上的那个人门口。';
+    if (step.type === 'listen') return '先听。想看字就点「文字」。听完再继续。';
+    if (step.type === 'gap') return '选句子里缺的那个词。有一个是错的。';
+    if (step.type === 'chips') return '听一遍，再按顺序点词块。';
+    if (step.type === 'order') return '按听到的顺序点。有一个是错的。';
     return '';
   }
 
@@ -20036,6 +20479,36 @@ function getLang(ls, id) {
           actions.appendChild(btn(o.fr, function () { go({ choice: o.id }); }, '', 'btnOpt_' + o.id));
         });
       } else actions.appendChild(btn('Continuer', function () { go({ next: true }); }, 'primary', 'btnTaskNext'));
+    } else if (step.type === 'listen') {
+      if (v.showText) rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr || '' }));
+      else rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: '……' }));
+      if (ctx.speak && step.speak && !step._spoke) { step._spoke = true; ctx.speak(step.speak, step.who); }
+      actions.appendChild(btn(v.showText ? 'Sans texte' : 'Texte', function () { go({ toggle: true }); }, '', 'btnTaskText'));
+      actions.appendChild(btn('Continuer', function () { go({ next: true }); }, 'primary', 'btnTaskNext'));
+    } else if (step.type === 'gap') {
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr || '' }));
+      (step.options || []).forEach(function (o) {
+        actions.appendChild(btn(o.fr, function () { go({ choice: o.id }); }, '', 'btnOpt_' + o.id));
+      });
+    } else if (step.type === 'chips') {
+      var built = (v.built || []).join(' ');
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: built || '……' }));
+      var pool = step.pool || (step.pieces || []).concat(step.extra || []);
+      pool.forEach(function (piece, i) {
+        actions.appendChild(btn(piece, function () { go({ chip: piece }); }, '', 'btnChip_' + i));
+      });
+    } else if (step.type === 'order') {
+      rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: v.showText ? (step.fr || '') : '……' }));
+      actions.appendChild(btn(v.showText ? 'Sans texte' : 'Texte', function () { go({ toggle: true }); }, '', 'btnTaskText'));
+      (step.icons || []).forEach(function (o) {
+        if (o.icon && Art && Art.PROPS && Art.PROPS[o.icon]) {
+          var c = el('canvas', { 'data-icon': o.icon });
+          paintIcon(c, o.icon, Art, 4);
+          var b = btn(c, function () { go({ pick: o.id }); }, 'task-icon', 'btnOrd_' + o.id);
+          b.setAttribute('aria-label', o.fr || '');
+          actions.appendChild(b);
+        } else actions.appendChild(btn(o.fr, function () { go({ pick: o.id }); }, '', 'btnOrd_' + o.id));
+      });
     } else if (step.type === 'choice' || step.type === 'reply') {
       if (step.type === 'reply') rootEl.appendChild(el('p', { class: 'task-line', id: 'taskLine', text: step.fr || '' }));
       (step.options || []).forEach(function (o) {
@@ -20108,7 +20581,7 @@ function getLang(ls, id) {
         actions.appendChild(btn(d.fr, function () { go({ door: d.id }); }, 'task-door', 'btnDoor_' + d.id));
       });
     }
-    var spokenFr = step.type === 'deliver' ? (v.wrongDoor ? step.no : step.fr) : (step.fr || '');
+    var spokenFr = step.type === 'deliver' ? (v.wrongDoor ? step.no : step.fr) : (step.speak || step.fr || '');
     var react = ctx.react || '';
     ctx.react = null;
     if (react && react !== spokenFr) rootEl.appendChild(el('p', { class: 'task-react', id: 'taskReact', text: react }));
@@ -20127,6 +20600,454 @@ function getLang(ls, id) {
   var api = { render: render, paintIcon: paintIcon, WHO: WHO, LOC: LOC };
   root.A411 = root.A411 || {};
   root.A411.TaskUI = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Day-7-and-after loop: « Écoute du soir », a rotating mini-game mix, and the minute log.
+ * Story chapters are read, never rewritten. Days 10–14 appear when their chapter or a LOOP_DAYS row exists.
+ * Rooftop and garden stay empty slots until a later branch calls Loop.plug. */
+(function (root) {
+  'use strict';
+  var LISTEN_SEC = 18;
+  var GAP_SEC = 80;
+  var ROUND_SEC = 80;
+  var MAX_DAY = 14;
+
+  // passes: how many times that day’s lines play. Hints are tried first, then any word still in the lines.
+  // A story rewrite (another branch owns Day 8’s text) keeps the replay: the blank is taken from the lines that are there.
+  var LOOP_DAYS = {
+    7: { passes: 1, games: ['MG_chips', 'MG_listen'] },
+    8: { passes: 2, games: ['MG_chips', 'MG_ordre', 'MG_listen'] },
+    9: { passes: 1, games: ['MG_ordre', 'MG_listen'] }
+  };
+  var GAP_HINTS = {
+    7: ['plante'],
+    8: ['basilic', 'six heures'],
+    9: ['jeudi']
+  };
+  var GAP_SKIP = { le: 1, la: 1, les: 1, un: 1, une: 1, de: 1, du: 1, des: 1, et: 1, à: 1, a: 1, je: 1, tu: 1, il: 1, elle: 1, on: 1, nous: 1, vous: 1, est: 1, sont: 1, pas: 1, ne: 1, que: 1, qui: 1, pour: 1, dans: 1, sur: 1, avec: 1, ce: 1, cette: 1, mon: 1, ma: 1, mes: 1, son: 1, sa: 1, au: 1, aux: 1, en: 1, ou: 1, si: 1, plus: 1, tout: 1, une: 1, c: 1, d: 1, l: 1, n: 1, se: 1, me: 1, te: 1, lui: 1, leur: 1, ça: 1, est: 1 };
+  var SLOTS = {
+    rooftop: { fromDay: 8, title: 'Sur le toit', minutes: 12 },
+    garden: { fromDay: 8, title: 'Le jardin', minutes: 12 }
+  };
+  var plugs = {};
+
+  function tasksApi() { return root.A411 && root.A411.Tasks; }
+  function weekApi() { return root.A411 && root.A411.Week; }
+
+  function hash(s) {
+    var h = 2166136261;
+    s = String(s || '');
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+  function rngOf(seed) {
+    var a = hash(seed) || 1;
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function shuffle(rng, list) {
+    var a = list.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(rng() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function plug(slot, provider) {
+    if (!SLOTS[slot] || !provider) return null;
+    plugs[slot] = provider;
+    return provider;
+  }
+  function unplug(slot) { delete plugs[slot]; }
+  function taskExtra(slot, ctx) {
+    var p = plugs[slot];
+    var meta = SLOTS[slot];
+    if (!p || !meta || !ctx || (ctx.storyDay || 0) < meta.fromDay) return null;
+    if (typeof p.taskExtra === 'function') return p.taskExtra(ctx);
+    return null;
+  }
+
+  // Unconditional spoken lines of that chapter. A later day only needs CHAPTERS['d' + day].
+  function chapterLines(day) {
+    var Week = weekApi();
+    if (!Week || !Week.CHAPTERS) return [];
+    var ch = Week.CHAPTERS['d' + day];
+    if (!ch || !ch.steps) return [];
+    var out = [];
+    ch.steps.forEach(function (st) {
+      if (!st || st.when || st.bonus) return;
+      if (st.t === 'line' && Week.LINES && Week.LINES[st.id] && !Week.LINES[st.id].bonus) {
+        var ln = Week.LINES[st.id];
+        out.push({ fr: ln.fr, speak: ln.tts || ln.fr, who: ln.speaker || 'neutral', id: st.id });
+      } else if (st.t === 'narr' && st.fr) {
+        out.push({ fr: st.fr, speak: st.fr, who: 'neutral', id: st.id || 'narr' });
+      }
+    });
+    return out;
+  }
+
+  function dayPlan(day) { return LOOP_DAYS[day] || null; }
+  function passesFor(day) {
+    var row = dayPlan(day);
+    if (row) return row.passes || 1;
+    return chapterLines(day).length ? 1 : 0;
+  }
+  function plainWord(w) {
+    return String(w || '').replace(/^[«»"'“”‘’]+|[«»"'“”‘’.,!?;:…]+$/g, '').toLowerCase();
+  }
+  function contentWords(lines) {
+    var out = [];
+    var seen = {};
+    (lines || []).forEach(function (ln) {
+      String(ln && ln.fr || '').replace(/[«»"“”.,!?;:…]/g, ' ').split(/\s+/).forEach(function (raw) {
+        var key = plainWord(raw);
+        if (key.length < 4 || GAP_SKIP[key] || seen[key]) return;
+        seen[key] = 1;
+        out.push(raw.replace(/^[«»"'“”‘’]+|[«»"'“”‘’.,!?;:…]+$/g, ''));
+      });
+    });
+    return out;
+  }
+  // hint is used only when that exact span is still in a line. Otherwise the blank is some other word from the lines.
+  function gapFromLines(lines, hint) {
+    lines = lines || [];
+    var words = contentWords(lines);
+    var want = hint ? String(hint) : '';
+    var hit = null;
+    var at = -1;
+    var found = '';
+    if (want) {
+      var needle = want.toLowerCase();
+      for (var i = 0; i < lines.length; i++) {
+        var fr = lines[i].fr || '';
+        var idx = fr.toLowerCase().indexOf(needle);
+        if (idx >= 0) { hit = lines[i]; at = idx; found = fr.slice(idx, idx + want.length); break; }
+      }
+    }
+    if (!hit) {
+      for (var w = 0; w < words.length && !hit; w++) {
+        var bit = words[w];
+        for (var j = 0; j < lines.length; j++) {
+          var text = lines[j].fr || '';
+          var pos = text.toLowerCase().indexOf(bit.toLowerCase());
+          if (pos >= 0) { hit = lines[j]; at = pos; found = text.slice(pos, pos + bit.length); break; }
+        }
+      }
+    }
+    if (!hit || !found) return null;
+    var wrongs = [];
+    words.forEach(function (word) {
+      if (wrongs.length >= 2) return;
+      if (word.toLowerCase() === found.toLowerCase()) return;
+      if (found.toLowerCase().indexOf(word.toLowerCase()) >= 0) return;
+      wrongs.push(word);
+    });
+    if (!wrongs.length) return null;
+    var options = [{ id: 'ok', fr: found, ok: true }].concat(wrongs.map(function (word, n) {
+      return { id: 'no' + n, fr: word, ok: false, react: 'Non.' };
+    }));
+    return {
+      type: 'gap',
+      fr: hit.fr.slice(0, at) + '……' + hit.fr.slice(at + found.length),
+      speak: hit.speak || hit.fr,
+      who: hit.who,
+      target: null,
+      options: options,
+      answer: found
+    };
+  }
+
+  function prepareEcoute(ctx) {
+    var day = ctx && ctx.storyDay;
+    var lines = chapterLines(day);
+    if (!lines.length) return null;
+    var passes = passesFor(day);
+    var hints = GAP_HINTS[day] || [];
+    var steps = [];
+    var rng = rngOf((ctx.seed || 'ecoute') + ':ecoute:' + day);
+    var used = {};
+    for (var p = 0; p < passes; p++) {
+      lines.forEach(function (ln) {
+        steps.push({ type: 'listen', fr: ln.fr, speak: ln.speak, who: ln.who, target: null });
+      });
+      var gap = gapFromLines(lines, hints[p] || null);
+      if (gap && used[gap.answer]) gap = gapFromLines(lines.filter(function (ln) { return (ln.fr || '').indexOf(gap.answer) < 0; }), null);
+      if (gap) {
+        used[gap.answer] = 1;
+        gap.options = shuffle(rng, gap.options);
+        steps.push(gap);
+      }
+    }
+    if (!steps.length) return null;
+    return {
+      id: 'ECOUTE_soir', n: 'ECOUTE', title: 'Écoute du soir', interaction: 'listen',
+      fsrsCredit: 'exposure', fsrsBehaviour: 'exposure', location: 'soir', giver: null, steps: steps
+    };
+  }
+
+  function chip(fr, pieces, extra, target) {
+    return { type: 'chips', fr: fr, speak: fr, pieces: pieces, extra: extra, target: target || null, react: 'Non.', options: pieces.concat(extra) };
+  }
+  function orderStep(fr, order, extra, icons) {
+    return { type: 'order', fr: fr, speak: fr, order: order, extra: extra, icons: icons, react: 'Non.' };
+  }
+  function listenFetch(fr, icon, target, wrongs) {
+    var options = [{ id: target, icon: icon, fr_partitive: fr, fr_def: fr, correct: true }].concat(wrongs);
+    return { type: 'fetch', fr: fr, speak: fr, target: { id: target, fr_partitive: fr }, options: options };
+  }
+
+  var CHIPS = {
+    7: [
+      chip('J’ai acheté du pain.', ['J’ai acheté', 'du pain.'], ['de l’eau.'], 'p3_07'),
+      chip('Je voudrais de l’eau.', ['Je voudrais', 'de l’eau.'], ['du pain.'], 'p2_03'),
+      chip('J’ai fait du café.', ['J’ai fait', 'du café.'], ['du pain.'], 'p2_33'),
+      chip('Tu veux du thé ou du café ?', ['Tu veux', 'du thé', 'ou du café ?'], ['de l’eau'], 'p2_01'),
+      chip('Il n’y a pas de pain.', ['Il n’y a pas', 'de pain.'], ['de café.'], 'p3_05'),
+      chip('C’est mon appartement.', ['C’est', 'mon appartement.'], ['du pain.'], 'p1_11')
+    ],
+    8: [
+      chip('C’est du basilic, pour la cuisine.', ['C’est du basilic,', 'pour la cuisine.'], ['pour la porte.'], 'p2_09'),
+      chip('Je voudrais du pain, s’il vous plaît.', ['Je voudrais', 'du pain,', 's’il vous plaît.'], ['de l’eau,'], 'p2_06'),
+      chip('Venez chez moi à six heures.', ['Venez chez moi', 'à six heures.'], ['sept heures et demie.'], 'p4_11'),
+      chip('J’habite à Paris.', ['J’habite', 'à Paris.'], ['à six heures.'], 'p1_10'),
+      chip('C’est mon appartement.', ['C’est', 'mon appartement.'], ['du basilic.'], 'p1_11'),
+      chip('Tu habites où ?', ['Tu habites', 'où ?'], ['comment ?'], 'p1_09')
+    ]
+  };
+  var ORDRE = {
+    8: [
+      orderStep('À six heures. Sept heures et demie.', ['six', 'sept'], ['froid'], [
+        { id: 'six', fr: 'À six heures.' }, { id: 'sept', fr: 'Sept heures et demie.' }, { id: 'froid', fr: 'Il fait froid.' }
+      ]),
+      orderStep('C’est du basilic, pour la cuisine. Je voudrais du pain, s’il vous plaît.', ['basilic', 'pain'], ['froid'], [
+        { id: 'basilic', fr: 'C’est du basilic, pour la cuisine.' }, { id: 'pain', fr: 'Je voudrais du pain, s’il vous plaît.' }, { id: 'froid', fr: 'Il fait froid.' }
+      ]),
+      orderStep('Du fromage. Du pain.', ['fromage', 'pain'], ['eau'], [
+        { id: 'fromage', fr: 'Du fromage.' }, { id: 'pain', fr: 'Du pain.' }, { id: 'eau', fr: 'De l’eau.' }
+      ]),
+      orderStep('Bonjour ! Entrez !', ['bonjour', 'entrez'], ['froid'], [
+        { id: 'bonjour', fr: 'Bonjour !' }, { id: 'entrez', fr: 'Entrez !' }, { id: 'froid', fr: 'Il fait froid.' }
+      ]),
+      orderStep('J’ai fait du café. Merci !', ['cafe', 'merci'], ['salut'], [
+        { id: 'cafe', fr: 'J’ai fait du café.' }, { id: 'merci', fr: 'Merci !' }, { id: 'salut', fr: 'Salut !' }
+      ]),
+      orderStep('La plante. C’est du basilic, pour la cuisine.', ['plante', 'basilic'], ['eau'], [
+        { id: 'plante', fr: 'La plante.' }, { id: 'basilic', fr: 'C’est du basilic, pour la cuisine.' }, { id: 'eau', fr: 'De l’eau.' }
+      ])
+    ],
+    9: [
+      orderStep('Bonsoir ! Entrez !', ['soir', 'entrez'], ['froid'], [
+        { id: 'soir', fr: 'Bonsoir !' }, { id: 'entrez', fr: 'Entrez !' }, { id: 'froid', fr: 'Il fait froid.' }
+      ]),
+      orderStep('Je voudrais du pain, s’il vous plaît. Merci !', ['pain', 'merci'], ['salut'], [
+        { id: 'pain', fr: 'Je voudrais du pain, s’il vous plaît.' }, { id: 'merci', fr: 'Merci !' }, { id: 'salut', fr: 'Salut !' }
+      ]),
+      orderStep('À six heures. le jeudi.', ['six', 'jeudi'], ['froid'], [
+        { id: 'six', fr: 'À six heures.' }, { id: 'jeudi', fr: 'le jeudi' }, { id: 'froid', fr: 'Il fait froid.' }
+      ]),
+      orderStep('Je voudrais de l’eau. Merci !', ['eau', 'merci'], ['salut'], [
+        { id: 'eau', fr: 'Je voudrais de l’eau.' }, { id: 'merci', fr: 'Merci !' }, { id: 'salut', fr: 'Salut !' }
+      ]),
+      orderStep('Vous voulez de la soupe ? Encore un peu ?', ['soupe', 'encore'], ['froid'], [
+        { id: 'soupe', fr: 'Vous voulez de la soupe ?' }, { id: 'encore', fr: 'Encore un peu ?' }, { id: 'froid', fr: 'Il fait froid.' }
+      ]),
+      orderStep('Du beurre. Du lait.', ['beurre', 'lait'], ['fromage'], [
+        { id: 'beurre', fr: 'Du beurre.' }, { id: 'lait', fr: 'Du lait.' }, { id: 'fromage', fr: 'Du fromage.' }
+      ])
+    ]
+  };
+  function wrongCard(icon, id) { return { id: id, icon: icon, fr_partitive: '', fr_def: '', correct: false }; }
+  var LISTEN = {
+    7: [
+      listenFetch('Je voudrais de l’eau.', 'eau', 'p2_03', [wrongCard('cafe', 'cafe'), wrongCard('bread', 'pain')]),
+      listenFetch('J’ai acheté du pain.', 'bread', 'p3_07', [wrongCard('eau', 'eau'), wrongCard('plantp', 'plante')]),
+      listenFetch('J’ai fait du café.', 'cafe', 'p2_33', [wrongCard('the', 'the'), wrongCard('eau', 'eau')]),
+      listenFetch('Il fait froid.', 'snow', 'p4_17', [wrongCard('rain', 'rain'), wrongCard('sun', 'sun')]),
+      listenFetch('Je voudrais une plante, s’il vous plaît.', 'plantp', 'p1_19', [wrongCard('letter', 'lettre'), wrongCard('key', 'cle')]),
+      listenFetch('La lettre.', 'letter', 'p1_20', [wrongCard('box', 'colis'), wrongCard('key', 'cle')])
+    ],
+    8: [
+      listenFetch('C’est du basilic, pour la cuisine.', 'basil', 'p2_09', [wrongCard('plantp', 'plante'), wrongCard('bowl', 'bol')]),
+      listenFetch('Je voudrais du pain, s’il vous plaît.', 'bread', 'p2_06', [wrongCard('fromage', 'fromage'), wrongCard('eau', 'eau')]),
+      listenFetch('Du fromage.', 'fromage', 'p2_08', [wrongCard('bread', 'pain'), wrongCard('basil', 'basil')]),
+      listenFetch('À six heures.', 'calendar', 'p4_11', [wrongCard('bread', 'pain'), wrongCard('plantp', 'plante')]),
+      listenFetch('La plante.', 'plantp', 'p1_19', [wrongCard('basil', 'basil'), wrongCard('bowl', 'bol')]),
+      listenFetch('Je voudrais de l’eau.', 'eau', 'p2_03', [wrongCard('cafe', 'cafe'), wrongCard('fromage', 'fromage')])
+    ],
+    9: [
+      listenFetch('Du lait.', 'milk', 'p2_38', [wrongCard('butter', 'beurre'), wrongCard('bread', 'pain')]),
+      listenFetch('Du beurre.', 'butter', 'p2_14', [wrongCard('milk', 'lait'), wrongCard('fromage', 'fromage')]),
+      listenFetch('Le lit.', 'bed', 'p1_24', [wrongCard('table', 'table'), wrongCard('plantp', 'plante')]),
+      listenFetch('J’ai acheté du pain.', 'bread', 'p3_07', [wrongCard('milk', 'lait'), wrongCard('letter', 'lettre')]),
+      listenFetch('La plante.', 'plantp', 'p1_19', [wrongCard('bed', 'lit'), wrongCard('bowl', 'bol')]),
+      listenFetch('La lettre.', 'letter', 'p1_20', [wrongCard('key', 'cle'), wrongCard('box', 'colis')])
+    ]
+  };
+
+  var GAMES = {
+    MG_chips: { id: 'MG_chips', n: 'MG1', title: 'Les mots dans l’ordre', interaction: 'chips', bank: CHIPS, location: 'flat411' },
+    MG_ordre: { id: 'MG_ordre', n: 'MG2', title: 'Dans l’ordre', interaction: 'order', bank: ORDRE, location: 'flat411' },
+    MG_listen: { id: 'MG_listen', n: 'MG3', title: 'Écoute et touche', interaction: 'fetch', bank: LISTEN, location: 'flat411_kitchen' }
+  };
+
+  function roundsFor(game, day) {
+    var bank = game.bank || {};
+    if (bank[day]) return bank[day];
+    var keys = Object.keys(bank).map(Number).filter(function (n) { return n <= day; }).sort(function (a, b) { return b - a; });
+    return keys.length ? bank[keys[0]] : [];
+  }
+  function gameMinutes(steps) { return Math.round((steps.length * ROUND_SEC) / 60); }
+
+  function prepareGame(id, ctx) {
+    var game = GAMES[id];
+    if (!game || !ctx) return null;
+    var steps = roundsFor(game, ctx.storyDay);
+    if (!steps.length) return null;
+    var rng = rngOf((ctx.seed || 'game') + ':' + id + ':' + ctx.storyDay);
+    steps = steps.map(function (step) {
+      var copy = {};
+      Object.keys(step).forEach(function (k) { copy[k] = step[k]; });
+      if (copy.options) copy.options = shuffle(rng, copy.options.slice());
+      if (copy.icons) copy.icons = shuffle(rng, copy.icons.slice());
+      if (copy.pieces && copy.extra) copy.pool = shuffle(rng, copy.pieces.concat(copy.extra));
+      return copy;
+    });
+    return {
+      id: game.id, n: game.n, title: game.title, interaction: game.interaction,
+      fsrsCredit: 'exposure', fsrsBehaviour: 'exposure', location: game.location, giver: 'noe',
+      minutes: gameMinutes(steps), steps: steps
+    };
+  }
+
+  function gamesFor(day) {
+    var row = dayPlan(day);
+    var ids = row && row.games || [];
+    return ids.map(function (id) { return GAMES[id]; }).filter(Boolean);
+  }
+
+  function ecouteSeconds(day) {
+    var lines = chapterLines(day);
+    var passes = passesFor(day);
+    if (!lines.length || !passes) return 0;
+    var hints = GAP_HINTS[day] || [];
+    var gaps = 0;
+    var used = {};
+    for (var p = 0; p < passes; p++) {
+      var gap = gapFromLines(lines, hints[p] || null);
+      if (gap && used[gap.answer]) gap = gapFromLines(lines.filter(function (ln) { return (ln.fr || '').indexOf(gap.answer) < 0; }), null);
+      if (gap) { used[gap.answer] = 1; gaps += 1; }
+    }
+    return lines.length * passes * LISTEN_SEC + gaps * GAP_SEC;
+  }
+  function ecouteMinutes(day) { return Math.round(ecouteSeconds(day) / 60); }
+
+  function pluggedActivities(day) {
+    var out = [];
+    Object.keys(SLOTS).forEach(function (slot) {
+      var meta = SLOTS[slot];
+      var p = plugs[slot];
+      if (!p || day < meta.fromDay) return;
+      out.push({
+        id: p.id || ('SLOT_' + slot),
+        title: p.title || meta.title,
+        minutes: p.minutes != null ? p.minutes : meta.minutes,
+        slot: slot
+      });
+    });
+    return out;
+  }
+
+  function isActivity(id) {
+    return id === 'ECOUTE_soir' || id === 'ECOUTE' || !!GAMES[id] || !!plugs[id];
+  }
+
+  function prepare(id, ctx) {
+    if (id === 'ECOUTE' || id === 'ECOUTE_soir') return prepareEcoute(ctx);
+    if (GAMES[id]) return prepareGame(id, ctx);
+    var slot = null;
+    Object.keys(plugs).forEach(function (name) {
+      var p = plugs[name];
+      if (p && (p.id === id || name === id)) slot = name;
+    });
+    if (slot && plugs[slot].prepare) return plugs[slot].prepare(ctx);
+    return null;
+  }
+
+  function estimate(ctx, offerIds) {
+    ctx = ctx || {};
+    var day = ctx.storyDay || 0;
+    var Tasks = tasksApi();
+    var ids = offerIds || (Tasks ? Tasks.offer(ctx).ids : []);
+    var taskMin = 0;
+    ids.forEach(function (id) {
+      var t = Tasks && Tasks.BY_ID[id];
+      if (t && t.minutes) taskMin += t.minutes;
+    });
+    var games = [];
+    if (day >= 7) {
+      gamesFor(day).forEach(function (game) {
+        var inst = prepareGame(game.id, ctx);
+        if (inst) games.push({ id: game.id, title: game.title, minutes: inst.minutes });
+      });
+    }
+    var eco = day >= 7 ? ecouteMinutes(day) : 0;
+    var plugRows = day >= 7 ? pluggedActivities(day) : [];
+    var gameMin = games.reduce(function (s, g) { return s + g.minutes; }, 0);
+    var plugMin = plugRows.reduce(function (s, g) { return s + g.minutes; }, 0);
+    return {
+      day: day,
+      tasks: taskMin,
+      ecoute: eco,
+      games: gameMin,
+      plugs: plugMin,
+      total: taskMin + eco + gameMin + plugMin,
+      taskIds: ids,
+      gameIds: games.map(function (g) { return g.id; }),
+      plugIds: plugRows.map(function (g) { return g.id; }),
+      gameRows: games,
+      plugRows: plugRows
+    };
+  }
+
+  function activities(ctx) {
+    var day = ctx && ctx.storyDay || 0;
+    if (day < 7) return [];
+    var list = [];
+    if (chapterLines(day).length) list.push({ id: 'ECOUTE_soir', title: 'Écoute du soir', kind: 'ecoute' });
+    gamesFor(day).forEach(function (game) {
+      if (roundsFor(game, day).length) list.push({ id: game.id, title: game.title, kind: 'game' });
+    });
+    pluggedActivities(day).forEach(function (row) {
+      list.push({ id: row.id, title: row.title, kind: 'plug', slot: row.slot });
+    });
+    return list;
+  }
+
+  function report(days) {
+    days = days || [7, 8, 9];
+    return days.map(function (day) {
+      return estimate({ storyDay: day, seed: 'loop-day-' + day, dayKey: '2026-10-' + String(day).padStart(2, '0'), contacts: {}, dueIds: [], yesterday: [], offered: [] });
+    });
+  }
+
+  var api = {
+    MAX_DAY: MAX_DAY, LOOP_DAYS: LOOP_DAYS, GAP_HINTS: GAP_HINTS, SLOTS: SLOTS, GAMES: GAMES,
+    gapFromLines: gapFromLines, contentWords: contentWords,
+    plug: plug, unplug: unplug, taskExtra: taskExtra, chapterLines: chapterLines,
+    prepare: prepare, prepareEcoute: prepareEcoute, prepareGame: prepareGame,
+    isActivity: isActivity, activities: activities, estimate: estimate, report: report,
+    ecouteMinutes: ecouteMinutes, gamesFor: gamesFor, passesFor: passesFor
+  };
+  root.A411 = root.A411 || {};
+  root.A411.Loop = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -20318,7 +21239,7 @@ function getLang(ls, id) {
     var box = h('div', { class: 'pad wordcard', id: 'wordCard', 'data-word': id }, pic,
       h('p', { class: 'fr word-fr', lang: 'fr', text: w.fr }),
       h('p', { class: 'fr word-para', lang: 'fr', text: '= ' + w.para }),
-      w.say ? h('div', { class: 'row' }, btn([icon('sound'), ' ', h('span', { lang: 'fr', text: w.fr })], function () { Au.playLine('w_' + id, w.say.tts, { speaker: w.say.by }); }, 'small', { id: 'btnWordPlay' })) : null,
+      w.say && Au.hasClip('w_' + id) ? h('div', { class: 'row' }, btn([icon('sound'), ' ', h('span', { lang: 'fr', text: w.fr })], function () { Au.playLine('w_' + id, w.say.tts, { speaker: w.say.by }); }, 'small', { id: 'btnWordPlay' })) : null,
       qHelp(function () { return Z(w.zh, w.en); }, { id: 'wordQ', target: null }),
       h('div', { class: 'row' }, learnState ? wordAddButton(w) : null, btn('OK', closeOverlay, 'primary grow', { id: 'btnWordOk' })));
     openOverlay(sheet(w.fr, box));
@@ -20686,6 +21607,9 @@ function getLang(ls, id) {
   function stage(sceneName, st) {
     st = st || {};
     var wrap = h('div', { class: 'stage-wrap' });
+    if (st.waterTask) wrap.id = 'waterStage';
+    if (st.soil) wrap.setAttribute('data-soil', String(st.soil));
+    if (st.canTip) wrap.setAttribute('data-tip', '1');
     var c = h('canvas', { class: 'stage', width: Art.W, height: Art.H, role: 'img', 'aria-label': st.alt || Z('像素场景', 'Pixel scene') });
     Art.scene(c.getContext('2d'), sceneName, st);
     wrap.appendChild(c);
@@ -20947,6 +21871,7 @@ function getLang(ls, id) {
       if (plan.early) col.appendChild(frBtn('On continue' + NB + '? Jour ' + chDay(plan.early), Z('打开下一章（或者明天再来）', 'open the next chapter (or come back tomorrow)'), function () { openEarly(plan.early); }, 'small', { id: 'btnEarly' }));
     }
     var homeTasks = taskOfferEl(); if (homeTasks) col.appendChild(homeTasks);
+    var homeLoop = loopOfferEl(); if (homeLoop) col.appendChild(homeLoop);
     col.appendChild(frBtn('Note', Z('写一条笔记（可选）', 'leave a note (optional)'), openFeedback, 'small', { id: 'btnHomeFeedback' }));
     if (act) pulseFirst(col); else pulseNext(col.querySelector('#btnHomePlant') || col.querySelector('#btnEarly') || col.querySelector('#btnHomeRecap')); // the next step pulses on home too
     card.appendChild(col);
@@ -20969,7 +21894,8 @@ function getLang(ls, id) {
         h('ul', { class: 'bravo-recap', lang: 'fr' },
           h('li', null, icon('paw'), ' Les personnages respirent, clignent des yeux, et marchent jusqu’à leur place.'),
           h('li', null, icon('check'), ' Tout le monde a les pieds par terre.'),
-          h('li', null, icon('plant'), ' Dans l’appartement, l’objectif brille. Le bouton pour continuer aussi.')),
+          h('li', null, icon('plant'), ' Dans l’appartement, l’objectif brille. Le bouton pour continuer aussi.'),
+          h('li', null, icon('plant'), ' Madame Martin offre son vieil arrosoir. Ta plante, c’est celle du premier jour.')),
         qHelp(function () { return Z('人物会轻轻呼吸、眨眼，走进画面时会迈一小步，不再突然出现。每个人都站在地板上。公寓里，当前目标会发光，提示从一开始就看得见。继续按钮会轻轻闪一下。中文和英文说明仍然可以点问号打开。', 'Characters breathe, blink, and take a small step into place. Everyone stands on the floor. In the apartment the current goal glows, and its prompt is visible from the start. The continue button pulses gently. Chinese and English hints still open from the question mark.'); }, { id: 'newsQ' }),
         h('div', { class: 'row' }, btn('OK', function () { try { localStorage.setItem('a411.news', L.APP_VERSION); } catch (e) { } nw.remove(); }, 'small', { id: 'btnNewsOk' })));
       $screen.appendChild(nw);
@@ -21294,7 +22220,7 @@ function getLang(ls, id) {
     var s = ui.line;
     $screen.appendChild(stage(sceneName, art));
     var say = function (rep) {
-      if (!w.say || !Au.canPlay(clip)) return;
+      if (!w.say || !Au.hasClip(clip)) return;
       if (rep) s.replays++;
       Au.playLine(clip, w.say.tts, { speaker: w.say.by }).then(function (r) { if (r === 'played' || (!s.voiceInfo && r === 'failed')) s.voiceInfo = Au.last; s.audio = bestAudio(s.audio === 'pending' ? 'not_used' : s.audio, r); });
     };
@@ -21303,7 +22229,7 @@ function getLang(ls, id) {
       h('p', { class: 'fr focus-say', lang: 'fr', text: w.say ? w.say.tts : w.fr }),
       qHelp(function () { return Z(w.zh, w.en); }, { id: 'focusQ', btnId: 'btnZh', textId: 'gloss' }),
       h('div', { class: 'row' },
-        btn(icon('replay', Z('再听一次', 'Hear it again')), function () { say(true); }, 'small icon', { id: 'btnReplay', 'aria-label': Z('再听一次', 'Hear it again'), disabled: !(w.say && Au.canPlay(clip)) }),
+        btn(icon('replay', Z('再听一次', 'Hear it again')), function () { say(true); }, 'small icon', { id: 'btnReplay', 'aria-label': Z('再听一次', 'Hear it again'), disabled: !(w.say && Au.hasClip(clip)) }),
         nextBtn(function () {
           var fa = { target: null, lesson: meta.lesson || ctxKey.split('.')[0], modality: s.audio === 'played' ? 'listening+reading' : 'reading', audioStatus: s.audio === 'pending' ? 'not_used' : s.audio,
             visibleSupport: { level: level(), focusWord: wid, picture: true }, replays: s.replays, resultType: 'exposure', evidenceKind: 'encounter', context: ctxKey + '.focus.' + wid,
@@ -21779,7 +22705,7 @@ function getLang(ls, id) {
     3: { fr: 'Un colis bouge… C\u2019est Croissant' + NB + '! Il dort dans la boîte. Chut…', zh: '一个箱子在动……是 Croissant！它在箱子里睡着了。嘘……', en: 'A box is moving… it’s Croissant! He’s asleep in the box. Shh…', sfx: ['parcel', 'purr'] },
     4: { fr: 'Trois heures du matin. Croissant joue avec sa souris… Boum' + NB + '! Chut, Croissant' + NB + '! Il retourne sur le canapé, sur la pointe des pattes.', zh: '凌晨三点。Croissant 追着玩具老鼠跑……咚！嘘，Croissant！它踮着爪子溜回了沙发。', en: 'Three in the morning. Croissant chases his toy mouse… Boom! Shh, Croissant! He tiptoes back to the sofa.', sfx: ['steps', 'meow'] },
     5: { fr: 'Cette nuit, quelque part dans Paris… un petit chat roux marche sur les toits. Il regarde la lune.', zh: '今夜，巴黎的某个地方……一只橘色小猫走在屋顶上。它望着月亮。', en: 'Tonight, somewhere in Paris… a small orange cat walks along the rooftops. He looks at the moon.', sfx: ['meow'] },
-    /*<D7>*/ 7: { fr: 'Samedi soir. Croissant dort entre les plantes. La nouvelle plante fleurit. Bienvenue chez toi, Croissant.', zh: '星期六晚上。Croissant 睡在两盆植物中间。新的那盆开花了。欢迎回家，Croissant。', en: 'Saturday night. Croissant sleeps between the plants. The new plant is flowering. Welcome home, Croissant.', sfx: ['purr'] }, /*</D7>*/
+    /*<D7>*/ 7: { fr: 'Samedi soir. Sur le bureau, ta plante et le vieil arrosoir. Croissant dort à côté. Bienvenue chez toi, Croissant.', zh: '星期六晚上。书桌上是你的植物和那个旧喷壶。Croissant 睡在旁边。欢迎回家，Croissant。', en: 'Saturday evening. On the desk, your plant and the old watering can. Croissant is asleep beside them. Welcome home, Croissant.', sfx: ['purr'] }, /*</D7>*/
     8: { fr: 'Deux pots sur la table. Croissant sent le basilic. Sur un papier' + NB + ': « 18 h ».', zh: '桌上两盆。Croissant 闻着罗勒。纸条上写着：「18 h」。', en: 'Two pots on the table. Croissant sniffs the basil. On a slip of paper: « 18 h ».', sfx: ['meow'] },
     9: { fr: 'La nuit. En haut, Croissant dort sur le canapé. En bas, quatre assiettes. Sur le frigo' + NB + ': « Jeudi ».', zh: '夜里。楼上，Croissant 睡在沙发上。楼下，四个盘子。冰箱上写着：「星期四」。', en: 'Night. Upstairs, Croissant sleeps on the sofa. Downstairs, four plates. On the fridge: « Thursday ».', sfx: ['purr'] },
     6: { fr: 'Ce soir, Noé ferme la porte à clé. Clic' + NB + '! Croissant dort dans son panier. Demain, dix heures…', zh: '今晚，Noé 把门锁上了。咔哒！Croissant 在自己的窝里睡着了。明天，十点……', en: 'Tonight, Noé locks the door. Click! Croissant is asleep in his basket. Tomorrow, ten o’clock…', sfx: ['click', 'purr'] },
@@ -21787,7 +22713,8 @@ function getLang(ls, id) {
   // Highest story day whose Bravo has been seen. Vocab for tasks follows that day, not the calendar.
   function finishedStoryDay() {
     var n = 0;
-    for (var d = 1; d <= 9; d++) if (S && WL.ritualSeen(S, d)) n = d;
+    var maxDay = (A411.Loop && A411.Loop.MAX_DAY) || 9;
+    for (var d = 1; d <= maxDay; d++) if (S && WL.ritualSeen(S, d)) n = d;
     return n;
   }
   function taskCtx(storyDay) {
@@ -21898,6 +22825,36 @@ function getLang(ls, id) {
       }
     });
   }
+  function loopOfferEl() {
+    if (!A411.Loop || !S) return null;
+    var day = finishedStoryDay();
+    if (day < 7) return null;
+    var ctx = taskCtx(day);
+    var acts = A411.Loop.activities(ctx);
+    if (!acts.length) return null;
+    var off = todayOffer();
+    var doneIds = (off && off.done) || [];
+    var est = A411.Loop.estimate(ctx, off && off.ids);
+    var box = h('div', { class: 'task-offers', id: 'loopOffers' });
+    box.appendChild(h('p', { class: 'task-help', lang: 'zh-Hans', id: 'loopEstimate', 'data-minutes': String(est.total), text: '今天的额外内容大约 ' + est.total + ' 分钟。' }));
+    acts.forEach(function (act) {
+      var done = doneIds.indexOf(act.id) >= 0;
+      box.appendChild(btn((done ? '✓ ' : '') + act.title, function () { openActivity(act.id); }, 'task-offer' + (done ? ' is-done' : ''), { id: 'btnLoop_' + act.id, lang: 'fr' }));
+    });
+    return box;
+  }
+  function openActivity(id, opts) {
+    opts = opts || {};
+    if (!A411.Loop || !A411.TaskUI || !A411.Tasks) return;
+    var day = opts.previewDay || finishedStoryDay();
+    if (!day) return;
+    var inst = A411.Loop.prepare(id, taskCtx(day));
+    if (!inst) return;
+    Au.stop();
+    ui.view = 'task';
+    ui.task = { id: inst.id, inst: inst, state: A411.Tasks.begin(), preview: !!opts.previewDay };
+    render();
+  }
   function maybePreviewTask() {
     var id = null, day = 14;
     try {
@@ -21905,7 +22862,9 @@ function getLang(ls, id) {
       id = q.get('task');
       if (q.get('previewDay')) day = Number(q.get('previewDay')) || 14;
     } catch (e) { return; }
-    if (!id || !A411.Tasks || !A411.Tasks.BY_ID[id]) return;
+    if (!id) return;
+    if (A411.Loop && A411.Loop.isActivity(id)) { openActivity(id, { previewDay: day }); return; }
+    if (!A411.Tasks || !A411.Tasks.BY_ID[id]) return;
     openTask(id, { previewDay: day });
   }
   function openRitual(n) { Au.stop(); ui.view = 'ritual'; ui.ritual = { n: n, phase: 'building', at: Date.now() }; ui.zoom = null; render(); }
@@ -21984,6 +22943,7 @@ function getLang(ls, id) {
     tiles.appendChild(tile('btnAfterFeedback', 'ask', 'Note', Z('写一条笔记（可选）', 'leave a note (optional)'), openFeedback, 't-grey'));
     if (weekDone()) tiles.appendChild(tile('btnAfterCheck', 'check', 'Bilan', Z('第一周的小检查（不打分）', 'a short week-1 check (not graded)'), openWeekCheck, 't-sky'));
     var bravoTasks = taskOfferEl(); if (bravoTasks) menu.appendChild(bravoTasks);
+    var bravoLoop = loopOfferEl(); if (bravoLoop) menu.appendChild(bravoLoop);
     menu.appendChild(h('p', { class: 'muted small', id: 'bravoFeedbackHint', text: Z('如果有哪里不清楚，可以留一条笔记。', 'If something was unclear, you can leave a note.') }));
     menu.appendChild(tiles);
     var hubPlant = menu.querySelector('#btnAfterPlant');
@@ -22665,8 +23625,10 @@ function getLang(ls, id) {
     var s = ui.line, ln = wLine(lineId);
     lineBodyInto(host, ln, s, { urgent: !!ln.critical || !!s.urgent, refresh: function () { if (ui.line === s) wkLineBody(lineId); }, onOpen: function () { if (ui.line === s) wkLineBody(lineId); } });
   }
+  function lineSilent(ln) { return !!(ln && ln.textOnly); }
   function wkPlay(lineId, isReplay) {
     var s = ui.line, ln = wLine(lineId);
+    if (lineSilent(ln)) { s.sub = true; if (s.audio === 'pending') s.audio = 'not_used'; return Promise.resolve('not_used'); }
     if (isReplay) { s.replays++; S.learning.helpLog.push({ kind: 'replay', context: ui.cid + '.' + chState().step, target: ln.target || null, at: L.nowISO() }); }
     var stEl = document.getElementById('audioState'); if (stEl) stEl.textContent = '…';
     return Au.playLine(lineId, lineSay(ln), { speaker: ln.speaker }).then(function (res) {
@@ -22683,14 +23645,15 @@ function getLang(ls, id) {
     var key = ui.cid + '.' + c.step + '.' + lineId;
     if (!ui.line || ui.line.id !== key) ui.line = { id: key, sub: level() >= 2, zh: false, replays: 0, audio: 'pending' };
     var s = ui.line;
-    if (!Au.canPlay(lineId) && Au.status !== 'unknown') { s.sub = true; if (s.audio === 'pending') s.audio = 'unavailable'; }
+    if (lineSilent(ln)) { s.sub = true; if (s.audio === 'pending') s.audio = 'not_used'; }
+    else if (!Au.canPlay(lineId) && Au.status !== 'unknown') { s.sub = true; if (s.audio === 'pending') s.audio = 'unavailable'; }
     var art = { speaker: ln.speaker };
     if (!(st.art && st.art.focus)) art.pulse = pulseFor(ln.fr, (st.art && st.art.scene) || 'cat', st.art || {});
     $screen.appendChild(wkStage(st.art, art));
-    var ab = audioBanner(lineId); if (ab) $screen.appendChild(ab);
+    var ab = lineSilent(ln) ? null : audioBanner(lineId); if (ab) $screen.appendChild(ab);
     $screen.appendChild(h('div', { class: 'dialogue fade-in' }, progressNote(c, ch), h('div', { id: 'lineBody' }),
       h('div', { class: 'row' },
-        lineButtons(Au.canPlay(lineId) || Au.status === 'unknown', function () { wkPlay(lineId, s.audio !== 'pending'); },
+        lineButtons(!lineSilent(ln) && (Au.canPlay(lineId) || Au.status === 'unknown'), function () { wkPlay(lineId, s.audio !== 'pending'); },
           function () { if (!s.sub) { s.sub = true; S.learning.helpLog.push({ kind: 'subtitle', context: key, target: ln.target || null, at: L.nowISO() }); persist('help'); } wkLineBody(lineId); }),
         nextBtn(function () {
           var audio = s.audio === 'pending' ? 'not_used' : s.audio;
@@ -22701,7 +23664,7 @@ function getLang(ls, id) {
           chNext();
         }))));
     wkLineBody(lineId);
-    if (ui.gesture && s.audio === 'pending' && Au.canPlay(lineId)) wkPlay(lineId, false);
+    if (ui.gesture && s.audio === 'pending' && !lineSilent(ln) && Au.canPlay(lineId)) wkPlay(lineId, false);
   };
   function lastScene(c) { return W.CHAPTERS[ui.cid].steps.slice(0, c.step).reverse().map(function (x) { return x.art && x.art.scene; }).filter(Boolean)[0] || 'cat'; }
   WR.choice = function (st, c, ch) {
@@ -22914,10 +23877,11 @@ function getLang(ls, id) {
     var key = opts.key, line = opts.line;
     if (!ui.trial || ui.trial.key !== key) ui.trial = { key: key, replays: 0, audio: 'pending', sub: false, zh: false, plays: 0 };
     var t = ui.trial;
-    if (!Au.canPlay(opts.lineId) && Au.status !== 'unknown' && t.audio === 'pending') t.audio = 'unavailable';
-    var reading = t.audio === 'unavailable' || t.audio === 'failed';
+    if (line.textOnly) { t.sub = true; if (t.audio === 'pending') t.audio = 'not_used'; }
+    else if (!Au.canPlay(opts.lineId) && Au.status !== 'unknown' && t.audio === 'pending') t.audio = 'unavailable';
+    var reading = !!line.textOnly || t.audio === 'unavailable' || t.audio === 'failed';
     $screen.appendChild(stage('probe', { alt: Z('中性画面：只有一个扬声器图标，没有人物和手势', 'Neutral screen: only a speaker icon, no characters or gestures') }));
-    var ab = audioBanner(opts.lineId); if (ab) $screen.appendChild(ab);
+    var ab = line.textOnly ? null : audioBanner(opts.lineId); if (ab) $screen.appendChild(ab);
     var card = h('div', { class: 'dialogue' }, h('div', { class: 'muted', id: 'trialTitle', text: opts.title }));
     var stim = h('div', { id: 'stimulus' });
     if (reading) stim.appendChild(h('div', null, h('div', { class: 'muted', text: 'Aa' }), fr(line.fr)));
@@ -22947,8 +23911,53 @@ function getLang(ls, id) {
     card.appendChild(optsBox);
     if (!answerable) card.appendChild(h('p', { class: 'muted', lang: 'fr', text: 'Écoute d\u2019abord.' }));
     $screen.appendChild(card);
-    if (ui.gesture && t.audio === 'pending' && Au.canPlay(opts.lineId) && !t.autoTried) { t.autoTried = true; play(true); }
+    if (!line.textOnly && ui.gesture && t.audio === 'pending' && Au.canPlay(opts.lineId) && !t.autoTried) { t.autoTried = true; play(true); }
   }
+  // Day 7, after the diary: one word, one pour on pot ① (the Day 1 desk plant). No score, no summary.
+  function replayWaterWord(wid) {
+    var el = document.getElementById('waterWord');
+    if (el) { el.classList.remove('replay'); void el.offsetWidth; el.classList.add('replay'); }
+    var w = Wd.WORDS[wid], id = 'w_' + wid;
+    if (w && w.say && Au.hasClip(id)) Au.playLine(id, w.say.tts, { speaker: w.say.by });
+  }
+  WR.water = function (st, c, ch) {
+    c.water = c.water || {};
+    var p = c.water[st.key] = c.water[st.key] || { i: 0, tip: false, tipToken: 0 };
+    if (p.i >= st.items.length) { chNext(); return; }
+    var it = st.items[p.i], w = Wd.WORDS[it.word];
+    var art = {};
+    Object.keys(st.art || {}).forEach(function (k) { art[k] = st.art[k]; });
+    art.soil = p.i; art.watered = p.i > 0; art.drops = p.i > 0; art.canTip = !!p.tip; art.waterTask = true; art.evening = true;
+    $screen.appendChild(wkStage(art));
+    var card = h('div', { class: 'dialogue fade-in', id: 'waterCard' }, progressNote(c, ch));
+    card.appendChild(h('div', { class: 'water-head', id: 'waterHead' }, propIcon('arrosoir'),
+      h('div', { class: 'narr', id: 'waterPrompt' }, richFr(st.fr, 'fr narr-fr'),
+        qHelp(function () { return Z(st.zh, st.en); }, { id: 'waterQ', btnId: 'waterQBtn' }))));
+    card.appendChild(h('p', { class: 'focus-word', lang: 'fr', id: 'waterWord', text: w ? w.fr : it.word }));
+    var grid = h('div', { class: 'pick-grid', role: 'group' });
+    it.opts.forEach(function (o) {
+      grid.appendChild(btn(optLabel(o), function () {
+        if (o.id !== it.answer) {
+          p.tip = true; p.tipToken++;
+          var token = p.tipToken;
+          rerenderStep();
+          replayWaterWord(it.word);
+          setTimeout(function () {
+            if (p.tipToken !== token) return;
+            p.tip = false;
+            if (ui.view === 'chapter') rerenderStep();
+          }, 700);
+          return;
+        }
+        p.i++; p.tip = false; p.tipToken++;
+        persist('water');
+        if (p.i >= st.items.length) chNext();
+        else render();
+      }, 'choice pick picopt', { 'data-opt': o.id, 'aria-label': o.fr }));
+    });
+    card.appendChild(grid);
+    $screen.appendChild(card);
+  };
   function shuffleStable(arr, seed) {
     var hsh = 0; for (var i = 0; i < seed.length; i++) hsh = (hsh * 31 + seed.charCodeAt(i)) | 0;
     return arr.map(function (x, i) { return { x: x, k: Math.sin(hsh + i * 7.13) }; }).sort(function (a, b) { return a.k - b.k; }).map(function (o) { return o.x; });
@@ -23053,7 +24062,7 @@ function getLang(ls, id) {
       if (ch.d7_plan) add(({ lefevre: 'Croissant était chez Madame Lefèvre.', placard: 'Croissant était dans le placard.', verite: 'Croissant était sur le canapé' + NB + ': on voulait dire la vérité.' })[ch.d7_plan] || '', '房东来访时 Croissant 待的地方。', 'Where Croissant was during the visit.');
       if (ch.d7_reponse) add(({ moi: 'J’ai dit la vérité' + NB + ': « Il s’appelle Croissant. »', noe: 'Noé a dit' + NB + ': « C’est mon chat. »', camille: 'Camille a parlé à Madame Martin.' })[ch.d7_reponse] || '', '谁说出了实话。', 'Who told the truth.');
       add(({ A: 'Croissant peut rester.', B: 'Croissant reste' + NB + ': un mois d’essai.', C: 'Croissant reste… pour l’instant.' })[ch.d7_band] || 'Croissant reste.', '结局。', 'The ending.');
-      add('Madame Martin m’a donné une plante.', 'Martin 太太送了你一盆植物。', 'Madame Martin gave you a plant.');
+      add('Madame Martin m’a donné son vieil arrosoir.', 'Martin 太太送了你她的旧喷壶。', 'Madame Martin gave you her old watering can.');
     /*</D7>*/ } else if (cid === 'd8') {
       add('Lundi matin, la plante était sur la table. Croissant la regardait.', '星期一早上，植物在桌上，Croissant 盯着它。', 'Monday morning, the plant was on the table. Croissant was looking at it.');
       if (ch.d8_plante) add(({ bureau: 'J\u2019ai mis la plante sur le bureau.', chat: 'J\u2019ai appelé Croissant.', camille: 'J\u2019ai appelé Camille.' })[ch.d8_plante] || '', '你怎么处理这盆植物。', 'What you did with the plant.');
@@ -24015,8 +25024,9 @@ function getLang(ls, id) {
   // ---------- boot ----------
   // v0.4.1: the Day 1–3 scripts got longer (focus beats, narration, rephrasing lines). Move saved positions onto the same step.
   function remapSteps() {
-    var G = A411.Legacy; if (!G) return;
     var changed = false;
+    if (S && WL.migrateD7Arrosoir(S)) changed = true;
+    var G = A411.Legacy; if (!G) { if (changed) persist('remap-steps'); return; }
     var w = S.week;
     if (w && w.stepsV !== W.CONTENT_VERSION) {
       Object.keys(w.chapters || {}).forEach(function (cid) {
