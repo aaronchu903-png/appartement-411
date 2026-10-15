@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#293e37"><title>Jinyi · Read-only save export</title><link rel="stylesheet" href="style.css"><script defer src="save.js"></script><script defer src="export.js"></script></head>
+<body style="overflow:auto;background:#f6f1e5"><main style="max-width:540px;margin:0 auto;padding:40px 26px;color:#293e37">
+  <div class="eyebrow">L’APPARTEMENT 411 · READ-ONLY EXPORT</div><h1 style="font-size:34px;font-weight:450;margin:28px 0 15px">把熟悉的词带走。<br><span style="font-size:23px">Bring your words with you.</span></h1>
+  <p class="hint">只读取 Jinyi 的存档，不改动原进度。<br>Reads only Jinyi’s permitted keys. Never reads or writes Yuechao’s keys.</p>
+  <div class="import-info" id="export-status" role="status"></div>
+  <button class="primary" id="download-export">一键导出 Jinyi 的进度 · Download</button>
+  <button class="secondary" id="copy-export">复制导出内容 · Copy</button>
+  <textarea id="export-json" class="textarea" readonly aria-label="Exported save JSON" style="min-height:180px"></textarea>
+  <p class="protected-note">在原游戏所在的域名打开此页。iOS 主屏幕应用可能与 Safari 分开存储；只有在原应用的同一存储环境里才能看到进度。<br>Open on the old game’s origin, in its original storage context. An iOS home-screen app may not share Safari’s storage. Do not uninstall the old app before checking the exported file.</p>
+  <details style="margin-top:30px"><summary style="font-size:13px">手动选择未命名旧档 · Choose an unnamed legacy save</summary>
+    <p class="hint">Only use this for your own unnamed save. No profile discovery or key enumeration is performed.</p>
+    <label class="check-line"><input id="legacy-consent" type="checkbox">这个未命名的存档属于我 · This save is mine</label>
+    <select id="legacy-key" aria-label="Legacy save key" style="padding:12px;width:100%;border:1px solid #c8cfb8;background:#fffcf5;border-radius:8px"><option>a411.save</option><option>a411.save.tmp</option><option>a404.save</option><option>a404.save.tmp</option></select>
+    <button id="legacy-export" class="secondary">读取并导出所选旧档 · Export selected legacy save</button>
+  </details>
+  <p style="margin-top:30px"><a href="index.html" style="font-size:13px">前往第八天 · Open Day 8</a></p>
+</main></body></html>

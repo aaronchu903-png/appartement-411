@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#293e37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="L’Appartement 411. Le basilic. A small story, a little French, a place to grow.">
+  <title>Le basilic · L’Appartement 411</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="data/inherited.js"></script>
+  <script defer src="../js/conjugate.js"></script>
+  <script defer src="language.js"></script>
+  <script defer src="content.js"></script>
+  <script defer src="engine.js"></script>
+  <script defer src="save.js"></script>
+  <script defer src="art.js"></script>
+  <script defer src="audio.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main id="app" class="game entry" aria-label="L’Appartement 411">
+    <section id="stage" class="stage" aria-label="Pixel scene">
+      <canvas id="scene" width="480" height="320" role="img" aria-label="A quiet Parisian rooftop at dusk"></canvas>
+      <div class="scene-shade"></div>
+      <div id="location" class="location"></div>
+      <div id="scene-actions" class="scene-actions"></div>
+      <div id="scene-title" class="scene-title"></div>
+      <div id="hotspots" class="hotspots"></div>
+      <div id="scene-caption" class="scene-caption"></div>
+    </section>
+    <section id="panel" class="panel" aria-label="Story and activities" tabindex="-1"></section>
+    <nav id="nav" class="navigation" aria-label="Main navigation"></nav>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <div id="storage-warning" class="storage-warning" role="alert" hidden></div>
+  </main>
+  <noscript>This little garden needs JavaScript. No account or connection is required.</noscript>
+</body>
+</html>

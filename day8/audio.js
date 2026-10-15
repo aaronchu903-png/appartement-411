@@ -1,0 +1,85 @@
+/* Original recordings stay at their existing repository paths. No generated sound. */
+(function (root) {
+  'use strict';
+  let settings = { music: .24, voice: .85, sfx: .5, muted: false };
+  let music, voice, speech, sequence = 0, unlocked = false;
+  const missing = new Set();
+  const status = text => { document.querySelectorAll('.audio-status').forEach(el => { el.textContent = text; }); };
+  const unavailable = () => document.dispatchEvent(new Event('day8-audio-unavailable'));
+  function localRecording(path) {
+    if(typeof path!=='string'||/[\\?#]/.test(path)||/%(?:2e|2f|5c)/i.test(path))return false;
+    const prefix=['../audio/','recordings/','docs/day08_assets/audio_night/'].find(value=>path.startsWith(value));
+    return !!prefix && path.slice(prefix.length).split('/').every(part=>part && part!=='.' && part!=='..') && path.endsWith('.mp3');
+  }
+  function volume(kind) { return settings.muted ? 0 : Number(settings[kind] ?? .5); }
+  function configure(next) {
+    settings = Object.assign(settings, next);
+    if (music) music.volume = volume('music') * (voice || speech ? .25 : 1);
+    if (voice) voice.volume = volume('voice');
+    if (settings.muted) stopVoice();
+  }
+  function unlock() {
+    if (unlocked) return;
+    unlocked = true;
+    music = new Audio('../audio/music/matin-cafe.mp3'); music.loop = true;
+    music.volume = volume('music'); music.play().catch(() => {});
+  }
+  function ambience(night) {
+    if (!unlocked) return;
+    const src = night ? 'docs/day08_assets/audio_night/night_01.mp3' : '../audio/music/matin-cafe.mp3';
+    if (!music.src.endsWith(src.slice(3))) { music.pause(); music.src = src; music.play().catch(() => {}); }
+    configure(settings);
+  }
+  function stopVoice() {
+    sequence++;
+    if (voice) { voice.pause(); voice = null; }
+    if (speech && root.speechSynthesis) root.speechSynthesis.cancel();
+    speech = null; if (music) music.volume = volume('music');
+  }
+  function localVoice() {
+    return root.speechSynthesis?.getVoices().find(v => /^fr(?:-|_)/i.test(v.lang) && v.localService);
+  }
+  function speak(text, id, directPath) {
+    stopVoice();
+    const token = sequence;
+    if (!volume('voice')) { status(settings.uiLang === 'en' ? 'Sound is off. Written support is available.' : '声音已关闭，可查看文字。'); unavailable(); return Promise.resolve(false); }
+    if (music) music.volume = volume('music') * .25;
+    const map = root.Day8Content?.audio || {};
+    const candidates = [...new Set([directPath, map[id], id ? `recordings/${encodeURIComponent(id)}.mp3` : null].filter(x => localRecording(x) && !missing.has(x)))];
+    return new Promise(resolve => {
+      function finish(ok) { if (token !== sequence) { resolve(false); return; } voice = null; speech = null; if (music) music.volume = volume('music'); resolve(ok); }
+      function fallback() {
+        if (token !== sequence) return resolve(false);
+        const v = localVoice();
+        if (!v) { status(settings.uiLang === 'en' ? 'No local French voice. Written support is available.' : '未安装离线法语语音，可查看文字。'); unavailable(); finish(false); return; }
+        speech = new SpeechSynthesisUtterance(text); speech.lang = 'fr-FR'; speech.voice = v; speech.rate = .88; speech.volume = volume('voice');
+        speech.onend = () => finish(true); speech.onerror = () => finish(false);
+        root.speechSynthesis.speak(speech);
+        status(settings.uiLang === 'en' ? 'Device French voice' : '设备法语语音');
+      }
+      function attempt() {
+        if (token !== sequence) return resolve(false);
+        const path = candidates.shift();
+        if (!path) return fallback();
+        voice = new Audio(path); voice.volume = volume('voice');
+        let failed=false;
+        const fail=()=>{if(failed)return;failed=true;missing.add(path);attempt();};
+        voice.onended = () => finish(true);
+        voice.onerror = fail;
+        voice.play().then(() => status(settings.uiLang === 'en' ? 'Original recording' : '原声录音')).catch(e => {
+          if (token !== sequence) return resolve(false);
+          if (e.name === 'NotAllowedError') { status(settings.uiLang === 'en' ? 'Tap the speaker to listen.' : '点击扬声器播放。'); finish(false); }
+          else fail();
+        });
+      }
+      attempt();
+    });
+  }
+  function sfx(id) {
+    if (!volume('sfx')) return;
+    const allowed = ['bravo','click','door','knock','meow','notif','paper','parcel','phone','purr','steps','water'];
+    if (!allowed.includes(id)) return;
+    const a = new Audio(`../audio/sfx/${id}.mp3`); a.volume = volume('sfx'); a.play().catch(() => {});
+  }
+  root.Day8Audio = {configure,unlock,ambience,speak,sfx,stop:stopVoice,canSpeak:() => !!volume('voice') && !!localVoice(),isMuted:() => !volume('voice')};
+})(window);
