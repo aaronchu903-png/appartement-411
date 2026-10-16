@@ -16,12 +16,14 @@
   function sanitizeState(value) {
     const object=x=>x && typeof x==='object' && !Array.isArray(x);
     value.story=object(value.story)?value.story:{};value.settings=object(value.settings)?value.settings:{};
+    const legacyStory=value.story.day8Version!==2;
     let index=Number(value.story.day8Index);
     const stable=C.scenes.findIndex(s=>s.id===value.story.day8SceneId);
     if(stable>=0)index=stable;
     else if(value.story.day8Version!==2&&Number.isInteger(index)&&index>0&&index<49)index--;
     value.story.day8Index=Number.isInteger(index)?Math.max(0,Math.min(C.scenes.length-1,index)):0;
     value.story.day8Version=2;
+    for(const key of ['rooftop','day8Complete'])value.story[key]=value.story[key]===true;
     value.settings.uiLang=value.settings.uiLang==='en'?'en':'zh';value.settings.muted=value.settings.muted===true;
     for(const [key,fallback] of [['music',.24],['voice',.85],['sfx',.5]])value.settings[key]=typeof value.settings[key]==='number'&&Number.isFinite(value.settings[key])?Math.max(0,Math.min(1,value.settings[key])):fallback;
     for(const key of ['words','cards','days','customWords'])if(!object(value[key]))value[key]={};
@@ -31,7 +33,10 @@
     value.grammar=Array.isArray(value.grammar)?value.grammar.filter(x=>typeof x==='string'):[];
     value.notes=Array.isArray(value.notes)?value.notes.filter(object):[];
     const review=value.appSession,s=review?.session;
-    if(!object(review)||!object(s)||s.mode!=='garden'||(!value.story.rooftop&&!value.story.day8Complete)||!Array.isArray(s.queue)||!s.queue.every(x=>object(x)&&typeof x.wordId==='string')||!Number.isInteger(s.index)||s.index<0||!Array.isArray(s.types))value.appSession=null;
+    const validExercise=x=>object(x)&&['R1','R2','R3','P1','P2'].includes(x.type)&&object(x.word)&&typeof x.wordId==='string'&&typeof x.sentence==='string'&&(!['R1','R2'].includes(x.type)||Array.isArray(x.options)&&x.options.every(object))&&(x.type!=='R3'||Array.isArray(x.chunks));
+    // v1 queues refer to removed/reordered activities. Keep learning data, not their UI continuation.
+    if(legacyStory||!object(review)||!object(s)||s.mode!=='garden'||(!value.story.rooftop&&!value.story.day8Complete)||!Array.isArray(s.queue)||!s.queue.every(x=>object(x)&&typeof x.wordId==='string')||!Number.isInteger(s.index)||s.index<0||s.index>s.queue.length||!Array.isArray(s.types)||!Array.isArray(s.pool)||!Number.isInteger(s.answered)||s.answered<0||!Number.isFinite(Date.parse(s.now))||!['story','garden'].includes(review.returnTo)||review.feedback&&!validExercise(review.lastExercise)||s.current&&!validExercise(s.current)||review.returnTo==='story'&&(C.scenes[value.story.day8Index].kind!=='water'||review.originSceneId&&review.originSceneId!==C.scenes[value.story.day8Index].id))value.appSession=null;
+    if(value.appSession&&(review.first||review.returnTo==='story'))s.firstWateringCap=Math.min(8,Number.isFinite(s.firstWateringCap)?Math.max(0,s.firstWateringCap):8);
     return value;
   }
   state=sanitizeState(state);
@@ -70,6 +75,10 @@
   function allWords() { return [...C.words, ...Object.values(state.customWords || {})]; }
   function wordById(id) { return allWords().find(w => w.id === id); }
   function currentScene() { return C.scenes[Math.min(Number(state.story.day8Index || 0), C.scenes.length-1)]; }
+  function canReview(first=false) {
+    // Follow the current story cursor, not unlocks carried over from an earlier playthrough.
+    return state.story.has_key===true && (first?currentScene().id==='d8_first_watering':state.story.day8Index>C.scenes.findIndex(s=>s.id==='d8_first_watering'));
+  }
   function notice(text) { $('#notice').textContent = text; $('#notice').classList.add('show'); clearTimeout(noticeTimer); noticeTimer = setTimeout(() => $('#notice').classList.remove('show'),2600); }
   function tokenize(text) {
     return C.french(text || '').split(/([A-Za-zÀ-ÖØ-öø-ÿŒœÆæ]+(?:[’'-][A-Za-zÀ-ÖØ-öø-ÿŒœÆæ]+)*)/g).map((token,i) => i%2 ? `<button class="word" data-word="${esc(token)}">${esc(token)}</button>` : esc(token)).join('');
@@ -88,10 +97,17 @@
     ].map(([id,cls,action,ico,label])=>button(icon(ico),action,cls,`id="${id}" aria-label="${label}" title="${label}"`)).join('');
     $('#btnWordbook').dataset.count=count;
     $('#btnWordbook').setAttribute('aria-label',`Carnet, ${count} mots`);
-    $('#btnMusic').setAttribute('aria-pressed',String(state.settings.music>0));
-    $('#btnMusic').innerHTML=icon(state.settings.music>0?'music':'mute');
+    const musicOn=state.settings.music>0&&!state.settings.muted;
+    $('#btnMusic').setAttribute('aria-pressed',String(musicOn));
+    $('#btnMusic').setAttribute('aria-label',musicOn?'Couper la musique':'Activer la musique');
+    $('#btnMusic').title=musicOn?'Couper la musique':'Activer la musique';
+    $('#btnMusic').classList.toggle('muted',!musicOn);
+    $('#btnMusic').innerHTML=icon(musicOn?'music':'mute');
     $('#btnPause').classList.toggle('audio-unavailable',audioUnavailable);
-    $('#scene-actions').innerHTML = '';
+    // Outside the scrolling exercise panel: reachable even when a queue is empty or broken.
+    const inGarden=['garden','review','reviewdone','reveal'].includes(screen)||screen==='story'&&currentScene().kind==='water';
+    if(inGarden){const label=currentScene().kind==='water'?'Continuer l’histoire':'Continuer · Rentrer';if($('#scene-actions [data-action="leave-garden"]')?.textContent!==label)$('#scene-actions').innerHTML=button(label,'leave-garden','secondary');}
+    else $('#scene-actions').replaceChildren();
   }
   function render() {
     const modal=overlayScreens.has(screen);
@@ -104,7 +120,12 @@
       panel.className=`panel ${screen==='story'?'dialogue':screen}-panel`;
     }
     const screens = {entry:renderEntry,story:renderStory,garden:renderGarden,review:renderReview,reviewdone:renderReviewDone,catdone:renderCatDone,wordbook:renderWordbook,lookup:renderLookup,settings:renderSettings,import:renderImport,more:renderMore,grammar:renderGrammar,conjugation:renderConjugation,notes:renderNotes,writing:renderWriting,atelier:renderAtelier,end:renderEnd,reveal:renderReveal,evening:renderEvening};
-    (screens[screen] || renderStory)();
+    try { (screens[screen] || renderStory)(); }
+    catch(error) {
+      if(screen!=='review')throw error;
+      review=null;feedback=null;exercise=null;gardenController=null;screen='garden';save();renderGarden();
+      notice('La révision est indisponible. Vous pouvez rentrer.');
+    }
     if(!modal){baseScreen=screen;game.dataset.screen=screen;}
     typesetFrench();
     if(modal&&!panel.querySelector('[data-action="back"],[data-action="close-lookup"],[data-action="close-conjugation"]'))panel.insertAdjacentHTML('afterbegin',back());
@@ -145,9 +166,9 @@
   }
   function setLocation(place, time='Lundi') { $('#location').innerHTML = `<span>411</span><span>${esc(place)}</span><span>${esc(time)}</span>`; }
   function renderEntry() {
-    setScene({scene:'roof',night:false,reaction:'idle',water:0,focus:null}); setLocation('PARIS','18:42');
+    setScene({scene:'kitchen',night:false,reaction:'idle',water:0,focus:null,garden:null}); setLocation('La cuisine','07:30');
     $('#scene-title').innerHTML='<div class="entry-title">L’Appartement 411<br><strong>Le basilic.</strong></div>';
-    panel.innerHTML = `${primary(state.story.day8Complete?'Retour au jardin':'Continuer · Jour 8','continue')}${button('Importer ma progression','import','text-button')}`;
+    panel.innerHTML = `${primary('Continuer · Jour 8','continue')}${button('Importer ma progression','import','text-button')}`;
     try { detected ||= S.detect(storage); } catch (_) {}
     if (detected?.available && !state.imports?.length && !state.story.importDismissed) {
       panel.querySelector('[data-action="import"]').textContent='Importer la progression de Jinyi';
@@ -249,10 +270,10 @@
     if (['stairs','roof','lefevre','facade'].includes(s.scene)) A.ambience(true);
   }
   function renderGarden(inStory=false) {
-    if(!state.story.rooftop&&!state.story.day8Complete){screen='story';return renderStory();}
+    if(!canReview()){screen='story';return renderStory();}
     setScene({scene:'roof',night:true,water:0,focus:null,focusZoom:0,reaction:'idle',action:'',catGame:null,garden:gardenModel()});setLocation('Le jardin','21:30');
     const slots=sceneModel.garden.slots,bays=Math.max(1,Math.ceil(slots.length/24));
-    panel.innerHTML=`<div class="garden-controls">${gardenBay>0?button(icon('back'),'garden-prev','icon-button','aria-label="Étagère précédente"'):''}${button(icon('water'),'start-garden','primary','aria-label="Arroser"')}${gardenBay<bays-1?button(icon('arrow'),'garden-next','icon-button','aria-label="Étagère suivante"'):''}${button(icon('book'),'selected-pot','icon-button','aria-label="Mots de cette plante"')}${!state.story.day8Complete?button('Continuer','story','secondary'):''}</div>`;
+    panel.innerHTML=`<div class="garden-controls">${gardenBay>0?button(icon('back'),'garden-prev','icon-button','aria-label="Étagère précédente"'):''}${button(icon('water'),'start-garden','primary','aria-label="Arroser"')}${gardenBay<bays-1?button(icon('arrow'),'garden-next','icon-button','aria-label="Étagère suivante"'):''}${button(icon('book'),'selected-pot','icon-button','aria-label="Mots de cette plante"')}</div>`;
     const positions=window.Day8Art.projectHotspots($('#scene'),{...sceneModel,v2:true}) || {};
     slots.filter(p=>p.bay===gardenBay).forEach(p=>{
       const projected=positions['pot:'+p.id],fallback=[12+p.col*10.5,35+p.row*14];
@@ -272,13 +293,13 @@
   }
   function startReview(mode='garden',first=false) {
     if(mode==='cat'){startCat();return;}
-    if(!state.story.rooftop&&!state.story.day8Complete)return;
+    if(!canReview(first))return;
     reviewReturn = screen==='story'?'story':'garden';
     if (!review || review.session?.mode!=='garden' || first) {
       gardenController=gardenModule();
-      const opts=first?{firstWordId:currentScene().firstWordId || 'basilic',duePotId:1,budget:9,now:now()}:{now:now(),budget:8,onlyIds:allWords().filter(w=>Number(w.potId||w.pot)===Number(currentPot)).map(w=>w.id)};
+      const opts=first?{firstWordId:currentScene().firstWordId || 'basilic',duePotId:1,budget:8,now:now()}:{now:now(),budget:8,onlyIds:allWords().filter(w=>Number(w.potId||w.pot)===Number(currentPot)).map(w=>w.id)};
       const session=gardenController.create(opts);
-      review={session,returnTo:reviewReturn,first,feedback:null,danger:0,correct:0};
+      review={session,returnTo:reviewReturn,originSceneId:currentScene().id,first,feedback:null,danger:0,correct:0};
     }else gardenController=gardenModule(review.session);
     reviewReturn=review.returnTo; feedback=review.feedback || null; chunks=[];reviewStarted=performance.now();screen='review';save();render();
     playReviewPrompt();
@@ -370,8 +391,16 @@
     screen='catdone';sceneEpoch=performance.now();render();A.sfx('purr');
   }
   function finishReview() {
-    const next=review?.returnTo==='story';gardenController?.finish();gardenController=null;review=null;feedback=null;save();
+    const next=review?.returnTo==='story'&&currentScene().kind==='water'&&(!review.originSceneId||review.originSceneId===currentScene().id);gardenController?.finish();gardenController=null;review=null;feedback=null;save();
     if(next)nextScene();else{screen='garden';render();}
+  }
+  function startAtHome() {
+    closeAllOverlays();cancelHold();A.stop();
+    review=null;feedback=null;exercise=null;gardenController=null;growthReveal=null;
+    moduleController=null;moduleKey='';activeSceneId='';catGame=null;walkMotion=null;
+    chunks=[];lineRevealed=false;hintOpen=false;replyFeedback=null;replyAttempts=0;transcript=false;
+    // Restart only the narrative cursor, never cards, collections, notes or garden unlocks.
+    state.story.day8Index=0;screen='story';save();render();
   }
   function renderFirstWater(s) {
     currentPot=2;game.classList.add('hold','first-water');setScene({scene:'roof',night:true,reaction:'idle',water:0,garden:gardenModel(),targetPotId:2});
@@ -479,6 +508,7 @@
   }
   function renderSettings() {
     panel.innerHTML=header('Pause',back())+`<div class="settings-group"><div class="setting-line"><span>Langue des indices</span><div class="segmented">${button('Chinois','lang:zh',state.settings.uiLang==='zh'?'selected':'secondary')}${button('Anglais','lang:en',state.settings.uiLang==='en'?'selected':'secondary')}</div></div><div class="setting-line"><span>Son</span>${button(state.settings.muted?'Activer':'Couper','mute','secondary')}</div>${[['music','Musique'],['voice','Voix'],['sfx','Effets']].map(([key,label])=>`<label>${label}<input type="range" min="0" max="1" step=".05" value="${state.settings[key]}" data-volume="${key}" aria-label="${label}"></label>`).join('')}${audioUnavailable?`<p>${icon('mute')} La voix n’est pas disponible. Le texte reste accessible.</p>`:''}${button('Aa','text-size','secondary',`aria-label="Taille du texte" aria-pressed="${!!state.settings.largeText}"`)}</div><div class="settings-group">${button(`${icon('download')}Exporter ma progression`,'export','secondary')}${button('Importer une progression','import','secondary')}${state.story.rooftop||state.story.day8Complete?button(`${icon('pot')}Jardin`,'garden','secondary'):''}</div>${button('Écouter','evening','secondary')}${button('Écrire','writing','secondary')}${button('Grammaire','grammar','secondary')}${button('Note','notes','secondary')}${dev?button('Atelier','atelier','secondary'):''}`;
+    if(!canReview())panel.querySelector('[data-action="garden"]')?.remove();
   }
   function renderImport() {
     try{detected=S.detect(storage);}catch(_){detected=null;}
@@ -519,15 +549,25 @@
   function renderAtelier() {
     panel.innerHTML=header('Atelier',back())+`<p>Aperçu isolé, sans écriture dans les sauvegardes.</p>${button('+1 jour','debug-day','secondary')}<div class="atlas-links">${[2,24,60].map(n=>button(`${n} plantes`,`debug-garden:${n}`,'secondary')).join('')}${['R1','R2','R3','P1','P2'].map(type=>button(type,`debug-type:${type}`,'soft-button')).join('')}</div><div class="atlas-links">${C.scenes.map((s,i)=>button(`${i+1} ${s.id}`,`jump:${i}`,'soft-button')).join('')}</div>`;
   }
-  function go(target) {if(overlayScreens.has(target)){openOverlay(target);return;}closeAllOverlays();screen=target;render();}
+  function go(target) {if(overlayScreens.has(target)){openOverlay(target);return;}if(target==='garden'&&!canReview())return;closeAllOverlays();if(target==='garden'){settle();if(growthReveal)target='reveal';}screen=target;render();}
   function handle(action,el) {
+    if(action==='music'){
+      if(state.settings.music>0&&!state.settings.muted){state.settings.musicVolume=state.settings.music;state.settings.music=0;}
+      else {const previous=state.settings.music || state.settings.musicVolume;state.settings.music=Number.isFinite(previous)&&previous>0?Math.min(1,previous):.24;state.settings.muted=false;}
+      // Apply the preference before unlock so a first-tap mute never starts playback.
+      A.configure(state.settings);A.unlock();save();if(overlayScreens.has(screen))render();else nav();return;
+    }
     A.unlock();if(!['hold-water','mute','cat-bop'].includes(action))A.sfx('click');
     if(action==='next'){nextScene();return;}
-    if(action==='continue') {settle();if(review){gardenController=gardenModule(review.session);screen='review';}else screen=growthReveal&&state.story.rooftop?'reveal':state.story.day8Complete?'garden':'story';render();return;}
-    if(action==='after-reveal'){growthReveal=null;screen=state.story.day8Complete?'garden':'story';render();return;}
+    if(action==='continue') {startAtHome();return;}
+    if(action==='leave-garden') {
+      if(currentScene().kind==='water'){review=null;feedback=null;exercise=null;gardenController=null;nextScene();}
+      else startAtHome();
+      return;
+    }
+    if(action==='after-reveal'){growthReveal=null;screen='garden';render();return;}
     if(['back','close-lookup','close-conjugation'].includes(action)){closeOverlay();return;}
     if(action==='mute'){state.settings.muted=!state.settings.muted;A.configure(state.settings);save();if(overlayScreens.has(screen))render();else nav();return;}
-    if(action==='music'){if(state.settings.music>0){state.settings.musicVolume=state.settings.music;state.settings.music=0;}else state.settings.music=state.settings.musicVolume || .24;A.configure(state.settings);save();nav();return;}
     if(action==='text-size'){state.settings.largeText=!state.settings.largeText;save();render();return;}
     if(action==='language'||action.startsWith('lang:')){state.settings.uiLang=action==='language'?(state.settings.uiLang==='zh'?'en':'zh'):action.split(':')[1];save();render();return;}
     if(action==='replay'){A.speak(currentScene().text,currentScene().id);return;}
@@ -585,7 +625,7 @@
     if(action==='debug-day'&&dev){closeAllOverlays();simulatedNow=new Date(now().setDate(now().getDate()+1));settle();screen=growthReveal&&state.story.rooftop?'reveal':state.story.rooftop?'garden':'story';render();return;}
     if(['story','garden','wordbook','more','settings','import','grammar','conjugation','writing','notes','evening','atelier'].includes(action)){if(action==='atelier'&&!dev)return;if(action==='grammar'){grammarPoint=grammarFor(currentScene());hintOpen=false;}go(action);}
   }
-  let press=null,pressTimer=0,suppressClickUntil=0;
+  let press=null,pressTimer=0,suppressClickUntil=0,musicPointer=null,lastMusicPointer=-Infinity;
   function selectedText(){
     const selection=window.getSelection();if(!selection||selection.isCollapsed)return '';
     const node=selection.anchorNode?.parentElement;
@@ -602,6 +642,7 @@
     return '';
   }
   document.addEventListener('click',event=>{
+    if(event.target.closest('[data-action="music"]')&&event.detail>0&&performance.now()-lastMusicPointer<700){event.preventDefault();return;}
     if(performance.now()<suppressClickUntil){event.preventDefault();return;}
     const selected=selectedText();if(selected){event.preventDefault();window.getSelection().removeAllRanges();lookup(selected);return;}
     const word=event.target.closest('[data-word]');if(word){lookup(word.dataset.word);return;}
@@ -634,6 +675,7 @@
     }
   });
   document.addEventListener('pointerdown',event=>{
+    if(event.target.closest('[data-action="music"]')&&event.button===0){musicPointer=event.pointerId;return;}
     const el=event.target.closest('[data-action=hold-water]');if(el){event.preventDefault();A.unlock();el.setPointerCapture(event.pointerId);beginHold(el);return;}
     const cat=event.target.closest('[data-action="cat-bop"]');
     if(cat&&catGame?.active){event.preventDefault();A.unlock();cat.setPointerCapture(event.pointerId);press={cat:true,x:event.clientX,y:event.clientY,last:performance.now()};bopCat();suppressClickUntil=performance.now()+600;return;}
@@ -648,6 +690,9 @@
   });
   function releasePointer(event){
     cancelHold();clearTimeout(pressTimer);
+    const musicTap=event.type==='pointerup'&&musicPointer===event.pointerId&&event.target.closest('[data-action="music"]');
+    musicPointer=null;
+    if(musicTap){event.preventDefault();lastMusicPointer=performance.now();handle('music');press=null;return;}
     if(press?.cat)suppressClickUntil=performance.now()+600;
     press=null;
     if(event.type==='pointercancel')return;
@@ -707,7 +752,7 @@
   const debug={
     getState:()=>state,getScreen:()=>screen,getExercise:()=>exercise,getSession:()=>review,
     getSceneModel:()=>artModel(performance.now()),getCat:()=>catGame?{...catGame}:null,
-    jump(id){closeAllOverlays();review=null;gardenController=null;feedback=null;replyFeedback=null;chunks=[];lineRevealed=false;hintOpen=false;catGame=null;walkMotion=null;snapshotTime=null;activeSceneId='';state.story.day8Index=typeof id==='number'?Math.max(0,Math.min(C.scenes.length-1,id)):Math.max(0,C.scenes.findIndex(s=>s.id===id));screen='story';render();},
+    jump(id){closeAllOverlays();review=null;gardenController=null;feedback=null;replyFeedback=null;chunks=[];lineRevealed=false;hintOpen=false;catGame=null;walkMotion=null;snapshotTime=null;activeSceneId='';state.story.day8Index=typeof id==='number'?Math.max(0,Math.min(C.scenes.length-1,id)):Math.max(0,C.scenes.findIndex(s=>s.id===id));if(state.story.day8Index>=C.scenes.findIndex(s=>s.id==='d10_lef_jardin'))state.story.has_key=true;screen='story';render();},
     show(name){go(name);},
     review(type='R1',mode='garden'){
       closeAllOverlays();if(mode==='cat'){debug.jump(C.scenes.findIndex(s=>s.kind==='cat'));startCat();return;}
@@ -722,12 +767,12 @@
     reset(){closeAllOverlays();state=sanitizeState(S.fresh(C.words,{now:now()}));state.settings={uiLang:'en',music:0,voice:0,sfx:0,muted:true};review=null;gardenController=null;feedback=null;catGame=null;walkMotion=null;gardenFixture=null;gardenBay=0;activeSceneId='';moduleKey='';snapshotTime=null;screen='entry';render();},
     lookup:raw=>lookup(raw),setLanguage(lang){state.settings.uiLang=lang;render();},
     setState(next){state=sanitizeState(next);review=state.appSession || null;gardenController=null;feedback=review?.feedback || null;render();},
-    garden(count=2,bay=0){closeAllOverlays();gardenFixture=Math.max(2,Math.min(60,Math.floor(count)));gardenBay=Math.max(0,Math.floor(bay));state.story.rooftop=true;state.story.basilPlanted=true;catGame=null;screen='garden';render();},
+    garden(count=2,bay=0){debug.jump('n_d10_arrose');gardenFixture=Math.max(2,Math.min(60,Math.floor(count)));gardenBay=Math.max(0,Math.floor(bay));state.story.rooftop=true;state.story.basilPlanted=true;catGame=null;screen='garden';render();},
     catFinish:finishCat,frame(elapsed){snapshotTime=Number.isFinite(elapsed)?elapsed:null;window.Day8Art.draw($('#scene'),artModel(performance.now()));},
     import:importData,allWords,render
   };
   window.Day8App={ready:true,...(dev?{debug}:{})};
   render();requestAnimationFrame(animate);
   if(loaded?.ok===false){$('#storage-warning').hidden=false;$('#storage-warning').textContent='Lecture de la progression locale impossible. Utilisez l’importation ou l’exportation dans Pause.';}
-  if('serviceWorker' in navigator && location.protocol!=='file:' && !dev)navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+  if('serviceWorker' in navigator && location.protocol!=='file:' && !dev)navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{});
 })();

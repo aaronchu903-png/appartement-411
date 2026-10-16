@@ -12,7 +12,7 @@ const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
-const output = path.join(__dirname, 'screenshots');
+const output = process.env.SCREENSHOTS_OUTPUT || path.join(__dirname, 'screenshots');
 const phase = process.env.SCREENSHOTS_PHASE;
 const reportFile = phase || process.env.SCREENSHOTS_ONLY ? `report-${phase || 'all'}-${process.env.SCREENSHOTS_ONLY || 'both'}.json` : 'report.json';
 const sceneCount = 53; // Remove morning watering, add the approved Noe carry-up line.
@@ -676,11 +676,13 @@ async function regressions(viewport, name) {
         const pot = (shownStage, condition = 'healthy') => ({ G: 0, stage: 1, shownStage, condition, lastReveal: null });
         state.growth = { pots: { 1: pot(kind === 'growth' ? 0 : 1), 2: pot(kind === 'wake' ? 1 : 0, kind === 'wake' ? 'wilted' : 'healthy') }, lastSettlement: window.Day8Engine.dayKey(yesterday), lastRevealDay: null };
         state.story.rooftop = true;
+        state.story.has_key = true;
+        state.story.day8SceneId = 'n_d10_arrose';
         if (kind === 'growth') state.growth.pots[2].stage = 0;
         for (const card of Object.values(state.cards)) card.due = new Date(Date.now() + 86400000).toISOString();
         d.setState(state);
       }, kind);
-      await click(page, 'continue');
+      await click(page, 'settings'); await click(page, 'garden');
       assert.equal(await screen(page), 'reveal', 'Seeded pending growth reaches real reveal flow');
       const initial = (await debug(page, 'getState')).growth;
       const shown = [1, 2].map(id => initial.pots[id].shownStage);
@@ -777,7 +779,7 @@ async function legacyImport(viewport, name) {
       const reloaded = await stored();
       assert.equal(reloaded.story.day8Index, 29, 'Reload does not remigrate or lose imported progress');
       await click(page, 'continue');
-      assert((await page.locator('#panel').innerText()).includes('Bon… il a choisi sa place.'), 'Real Continue resumes the imported scene');
+      assert.equal((await stored()).story.day8SceneId, 'n_d8_matin', 'Entry Continue starts at home, not an imported activity');
       check(name + ': ' + (progressed ? 'progressed local' : 'fresh legacy') + ' own-export UI import and reload preserve story progress', true);
     } finally { await context.close(); }
   }

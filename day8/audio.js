@@ -12,9 +12,20 @@
     return !!prefix && path.slice(prefix.length).split('/').every(part=>part && part!=='.' && part!=='..') && path.endsWith('.mp3');
   }
   function volume(kind) { return settings.muted ? 0 : Number(settings[kind] ?? .5); }
+  function syncMusic() {
+    if (!music) return;
+    const level = volume('music');
+    music.muted = !level;
+    music.volume = level * (voice || speech ? .25 : 1);
+    // iPhone Safari may ignore volume writes. Pause the shared day/night player as well.
+    if (!level) music.pause();
+    else if (unlocked && music.paused) music.play().then(() => {
+      if (!volume('music')) { music.muted = true; music.pause(); }
+    }).catch(() => {});
+  }
   function configure(next) {
     settings = Object.assign(settings, next);
-    if (music) music.volume = volume('music') * (voice || speech ? .25 : 1);
+    syncMusic();
     if (voice) voice.volume = volume('voice');
     if (settings.muted) stopVoice();
   }
@@ -22,13 +33,13 @@
     if (unlocked) return;
     unlocked = true;
     music = new Audio('../audio/music/matin-cafe.mp3'); music.loop = true;
-    music.volume = volume('music'); music.play().catch(() => {});
+    syncMusic();
   }
   function ambience(night) {
     if (!unlocked) return;
     const src = night ? 'docs/day08_assets/audio_night/night_01.mp3' : '../audio/music/matin-cafe.mp3';
-    if (!music.src.endsWith(src.slice(3))) { music.pause(); music.src = src; music.play().catch(() => {}); }
-    configure(settings);
+    if (!music.src.endsWith(src.slice(3))) { music.pause(); music.src = src; }
+    syncMusic();
   }
   function stopVoice() {
     sequence++;

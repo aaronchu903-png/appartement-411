@@ -1,12 +1,26 @@
 /* Scope is app/ only. Never replaces or removes the old game's service worker. */
 'use strict';
-const CACHE='a411-day8-static-v3-pixel';
+const CACHE='a411-day8-static-v6-music-mute';
 const CORE=['./','index.html','tokens.css','style.css','icons.js','modules/index.js','modules/M1.js','modules/M2.js','modules/M3.js','modules/M4.js','app.js','art.js','audio.js','engine.js','save.js','content.js','language.js','data/inherited.js','../js/conjugate.js','manifest.webmanifest','export.html','export.js'];
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE.map(path=>new Request(new URL(path,self.location.href),{cache:'reload'})))).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('a411-day8-static-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
+  event.waitUntil((async()=>{
+    const obsolete=(await caches.keys()).filter(key=>key.startsWith('a411-day8-static-')&&key!==CACHE);
+    await Promise.all(obsolete.map(key=>caches.delete(key)));
+    await self.clients.claim();
+    if(!obsolete.length)return;
+    // Legacy pages have no controllerchange listener; load the newly installed shell once.
+    const scope=new URL('./',self.location.href);
+    const windows=await self.clients.matchAll({type:'window'});
+    windows.forEach(client=>{
+      const url=new URL(client.url);
+      if(url.origin!==scope.origin||!url.pathname.startsWith(scope.pathname))return;
+      // Navigation fetches wait for activation, so awaiting them here would deadlock.
+      try{client.navigate(client.url).catch(()=>{});}catch(_){/* A closed tab must not fail activation. */}
+    });
+  })());
 });
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;
