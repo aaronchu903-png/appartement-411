@@ -82,6 +82,16 @@ These are not new wording. They are noted to make the staging distinction clear 
 | d8_mg_non | Non, Croissant ! | 不行，Croissant！ | No, Croissant! |
 | d8_mg_attention | Attention ! | 小心！ | Careful! |
 
+## Approved V2 Carry
+
+The FINAL V2 instruction approves this listening-only line. Noé carries Martin's plant onto the roof before basil planting and the first watering session. It creates no reviewed vocabulary or FSRS card.
+
+| ID | French | 中文 | English |
+|---|---|---|---|
+| d8_noe_carry / Noé | Et ta plante ? Je la monte aussi ! | 那你的植物呢？我也把它搬上去！ | And your plant? I will bring it up too! |
+
+V2 removes the morning review and moves all review to the night rooftop. The cat is a touch interaction with no language questions. There is no narrator-line or narrator-word cap; silent action beats retain their authored text in content data for provenance and stable save IDs.
+
 ## Interface Register
 
 `app/language.js` centralizes the compiled French UI registry and typography. Existing labels are preserved; the growth reveal is the brief's proposed line. The coordinator may append additional interface strings. The content module adds no French instructions to the morning review, pointing gestures, walking or watering hold; those remain visual actions.

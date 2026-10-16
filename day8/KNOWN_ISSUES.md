@@ -1,10 +1,10 @@
 # Known Issues And Validation Limits
 
-Snapshot: 2026-10-15, after the final post-language-approval verification. This is a list of current limitations and unverified boundaries, not a list of already completed features.
+Snapshot: 2026-10-16, V2 pixel-HUD and rooftop-only review port. This is a list of current limitations and unverified boundaries, not a list of already completed features.
 
 ## Validation Boundaries
 
-- Final automated checks pass: 94 unit tests, 285 screenshots, 4,046 browser assertions, two full 53-scene UI walkthroughs, and separate exporter/import/offline-reload checks. The screenshot report records matching source hashes with no changes during capture. These checks do not remove the physical-device and real-save boundaries below.
+- Unit checks pass: 126 app tests, 292 unchanged legacy tests, and 33 existing hub tests. The independent renderer check preserves ten pre-edit default pixel hashes and verifies full-viewport rendering at both requested sizes, reduced motion, 60-pot bays, and visible cat-ending foliage. Current browser capture counts and source hashes are recorded in screenshots/report.json; v2-prefixed images distinguish the current port from retained v1 reference captures. These checks do not remove the physical-device and real-save boundaries below.
 - No physical iOS device audio-quality or installed-home-screen migration guarantee is made. Browser automation does not establish voice availability, pronunciation quality, silent-mode behavior, autoplay policy, download UX or actual storage-context accessibility on the founder's phone.
 - Save tests use synthetic documented-schema fixtures. No founder save or sanitized real export has been tested, and no claim of successful real-data migration is made. Unknown legacy IDs are retained and reported rather than guaranteed to become active review items.
 
@@ -21,4 +21,6 @@ Snapshot: 2026-10-15, after the final post-language-approval verification. This 
 - The offline writing check offers a learned-pattern reference, not LanguageTool, a grammar checker or an assessment of arbitrary French prose.
 - A very sparse imported review pool can shorten the retry gap when no other practiced item is available, and may lack a suitable semantic distractor. The engine does not invent vocabulary to conceal that shortage.
 - Some long mobile transcript, hint and utility panels require scrolling to reach their controls. The screenshot runner includes companion control-area captures; being reachable by scrolling is not the same as every control fitting above the initial fold.
+- The 50+ pot layout uses 24-slot shelf bays, not 60 simultaneously interactive pots squeezed onto a phone. Atelier fixtures are synthetic and never change saved growth. First watering is basil plus up to eight due Martin words; other due words remain due for later rooftop visits.
+- The J'ai faim study covers all 600 source frames. Day 8 retains its original characters and scene painters; its lift is an adaptation of the reference timing, not an action present in the video. Automated continuity checks and recordings do not replace subjective animation review.
 - The content compiler currently enforces the specific Day 8 sequence. Day 9 can reuse the modules but still needs authored data, chapter selection/manifest wiring and chapter-specific validation. It is not already a playable second chapter.

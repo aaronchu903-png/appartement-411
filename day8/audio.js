@@ -42,7 +42,7 @@
   function speak(text, id, directPath) {
     stopVoice();
     const token = sequence;
-    if (!volume('voice')) { status(settings.uiLang === 'en' ? 'Sound is off. Written support is available.' : '声音已关闭，可查看文字。'); unavailable(); return Promise.resolve(false); }
+    if (!volume('voice')) { status('Voix coupée. Texte disponible.'); unavailable(); return Promise.resolve(false); }
     if (music) music.volume = volume('music') * .25;
     const map = root.Day8Content?.audio || {};
     const candidates = [...new Set([directPath, map[id], id ? `recordings/${encodeURIComponent(id)}.mp3` : null].filter(x => localRecording(x) && !missing.has(x)))];
@@ -51,11 +51,11 @@
       function fallback() {
         if (token !== sequence) return resolve(false);
         const v = localVoice();
-        if (!v) { status(settings.uiLang === 'en' ? 'No local French voice. Written support is available.' : '未安装离线法语语音，可查看文字。'); unavailable(); finish(false); return; }
+        if (!v) { status('Voix française indisponible. Texte disponible.'); unavailable(); finish(false); return; }
         speech = new SpeechSynthesisUtterance(text); speech.lang = 'fr-FR'; speech.voice = v; speech.rate = .88; speech.volume = volume('voice');
         speech.onend = () => finish(true); speech.onerror = () => finish(false);
         root.speechSynthesis.speak(speech);
-        status(settings.uiLang === 'en' ? 'Device French voice' : '设备法语语音');
+        status('Voix française de cet appareil');
       }
       function attempt() {
         if (token !== sequence) return resolve(false);
@@ -66,9 +66,9 @@
         const fail=()=>{if(failed)return;failed=true;missing.add(path);attempt();};
         voice.onended = () => finish(true);
         voice.onerror = fail;
-        voice.play().then(() => status(settings.uiLang === 'en' ? 'Original recording' : '原声录音')).catch(e => {
+        voice.play().then(() => status('Enregistrement original')).catch(e => {
           if (token !== sequence) return resolve(false);
-          if (e.name === 'NotAllowedError') { status(settings.uiLang === 'en' ? 'Tap the speaker to listen.' : '点击扬声器播放。'); finish(false); }
+          if (e.name === 'NotAllowedError') { status('Touchez le haut-parleur.'); finish(false); }
           else fail();
         });
       }

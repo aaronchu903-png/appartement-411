@@ -48,7 +48,8 @@ const server=http.createServer((request,response)=>{
     console.log('PASS: one-tap read-only Jinyi export, zero old-key writes and zero protected reads');
 
     await page.goto(base+'/app/index.html');await page.waitForFunction(()=>window.Day8App?.ready);
-    await page.locator('[data-action="import"]').first().click();await page.locator('[data-action="import-local"]').click();
+    await page.locator('#btnPause').click();
+    await page.locator('#overlay-body [data-action="import"]').click();await page.locator('#overlay-body [data-action="import-local"]').click();
     const stored=await page.evaluate(()=>JSON.parse(window.__peek('a411app.v1.state')));
     assert.equal(stored.cards['plante|listening'].stability,19);assert.equal(stored.words.plante.collected,true);assert.equal(stored.story.d7_band,'B');
     assert.equal(await page.evaluate(()=>window.__peek('a411.p.yuechao.learn')),'PROTECTED SYNTHETIC FIXTURE');

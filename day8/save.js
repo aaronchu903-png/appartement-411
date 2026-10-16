@@ -245,7 +245,16 @@
           // replace that archive with the normalized active-card representation.
           if (object(value.rawCards)) out.rawCards = { ...out.rawCards, ...clone(value.rawCards) };
           if (object(value.unknownCards)) out.unknownCards = { ...clone(value.unknownCards), ...out.unknownCards };
-          if (object(value.story)) out.story = { ...clone(value.story), ...out.story };
+          if (object(value.story)) {
+            const incoming = clone(value.story), local = out.story;
+            const progressed = local.day8Complete || Number(local.day8Index) > 0;
+            out.story = progressed ? { ...incoming, ...local } : { ...local, ...incoming };
+            // UI defaults are not progress. Keep an imported index and its migration stamps together.
+            const cursor = progressed ? local : incoming;
+            if (own(cursor, 'day8Index')) {
+              for (const key of ['day8Version', 'day8SceneId']) if (!own(cursor, key)) delete out.story[key];
+            }
+          }
           if (value.growth && !validGrowth(value.growth)) report.warnings.push('Invalid plant history');
           else if (value.growth && (!out.growth || !out.growth.lastSettlement || (iso(value.growth.lastSettlement) && value.growth.lastSettlement > out.growth.lastSettlement))) out.growth = clone(value.growth);
           if (value.settings && ['zh', 'en'].includes(value.settings.uiLang)) out.settings = { ...out.settings, ...clone(value.settings) };

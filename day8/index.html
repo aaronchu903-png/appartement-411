@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,6 +9,7 @@
   <meta name="description" content="L’Appartement 411. Le basilic. A small story, a little French, a place to grow.">
   <title>Le basilic · L’Appartement 411</title>
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="style.css">
   <script defer src="data/inherited.js"></script>
   <script defer src="../js/conjugate.js"></script>
@@ -18,6 +19,12 @@
   <script defer src="save.js"></script>
   <script defer src="art.js"></script>
   <script defer src="audio.js"></script>
+  <script defer src="icons.js"></script>
+  <script defer src="modules/index.js"></script>
+  <script defer src="modules/M1.js"></script>
+  <script defer src="modules/M2.js"></script>
+  <script defer src="modules/M3.js"></script>
+  <script defer src="modules/M4.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -32,7 +39,8 @@
       <div id="scene-caption" class="scene-caption"></div>
     </section>
     <section id="panel" class="panel" aria-label="Story and activities" tabindex="-1"></section>
-    <nav id="nav" class="navigation" aria-label="Main navigation"></nav>
+    <div id="overlay" class="overlay" hidden><section id="overlay-body" class="sheet" role="dialog" aria-modal="true" tabindex="-1"></section></div>
+    <nav id="nav" class="hud" aria-label="Commandes"></nav>
     <div id="notice" class="notice" role="status" aria-live="polite"></div>
     <div id="storage-warning" class="storage-warning" role="alert" hidden></div>
   </main>

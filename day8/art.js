@@ -8,6 +8,11 @@
  * action + elapsed (ms since entering the beat) select one-shot story gestures.
  * rooftopUnlocked/basilPlanted are explicit story flags; omit them for the entry tableau.
  * direction ('up'/'down') + optional walkProgress (0..1) select the stairwell walk.
+ * v2:true opts into adaptive cover composition; default calls remain pixel-identical.
+ * garden:{slots:[{id,bay,row,col,growth,due}],bay,zoom,selectedPot} uses 24 slots/bay.
+ * catGame:{active,elapsed,approachElapsed,reach,blocked,phase,phaseElapsed,liftFrom}
+ * uses motion(previousState).cat for a continuous interrupted lift. Times are ms.
+ * focusZoom (0..1), targetPotId and reducedMotion share geometry with projected hits.
  */
 (function (root) {
   'use strict';
@@ -38,7 +43,10 @@
       direction: s.direction === 'up' ? 'up' : 'down',
       action: s.action === 'lift' ? 'catdone' : s.action || (s.reaction === 'lift' ? 'catdone' : ''), elapsed: clamp(s.elapsed, 0, 1e12),
       rooftopUnlocked: s.rooftopUnlocked !== false, basilPlanted: s.basilPlanted !== false,
-      walkProgress: s.walkProgress == null ? null : clamp(s.walkProgress, 0, 1)
+      walkProgress: s.walkProgress == null ? null : clamp(s.walkProgress, 0, 1),
+      v2: s.v2 === true, reducedMotion: !!s.reducedMotion,
+      garden: s.garden || null, catGame: s.catGame || null,
+      targetPotId: s.targetPotId, focusZoom: clamp(s.focusZoom, 0, 1), speaker: s.speaker || ''
     };
   }
 
@@ -206,11 +214,13 @@
     if (water > 0) p.r(x - 8, y - 5 - water * 16, 2, water * 16, '#c1d4ba');
   }
 
-  function person(p, x, feet, who, time, pose = 'idle', scale = 1) {
+  function person(p, x, feet, who, time, pose = 'idle', scale = 1, expression = {}) {
+    if (p.people && p.people[who]) expression = p.people[who];
     const breath = Math.sin(time / 650 + x) > .65 ? 1 : 0;
     const stride = pose === 'walk' ? Math.round(Math.sin(time / 130) * 4) : 0;
-    const y = feet - 59 * scale + breath + (pose === 'laugh' ? Math.round(Math.sin(time / 130)) : 0);
-    const r = (a, b, w, h, c) => p.r(x + a * scale, y + b * scale, w * scale, h * scale, c);
+    const y = feet - 59 * scale + breath + (pose === 'laugh' ? Math.round(Math.sin(time / 130)) : 0) + (expression.bob || 0);
+    let head = 0;
+    const r = (a, b, w, h, c) => p.r(x + (a + head) * scale, y + b * scale, w * scale, h * scale, c);
     const shirt = who === 'camille' ? '#377c60' : who === 'noe' ? '#c2714c' : '#815574';
     const shade = who === 'camille' ? '#285c50' : who === 'noe' ? '#9b4f3c' : '#603e5b';
     const hair = who === 'camille' ? '#3b2a20' : who === 'noe' ? '#7a4a22' : '#c4c4cc';
@@ -229,6 +239,7 @@
     if (pose === 'catch') { r(-13, 32, 18, 6, shirt); r(-18, 31, 7, 5, P.skin); r(-9, 39, 14, 5, shirt); r(-16, 38, 8, 5, P.skin); }
     if (pose === 'hold') { r(-4, 36, 10, 6, shirt); r(-7, 35, 6, 4, P.skin); }
     if (pose === 'lift') { r(1, 30, 7, 10, shirt); r(22, 30, 7, 10, shade); r(5, 37, 22, 5, shirt); }
+    head = expression.tilt || 0;
     r(10, 22, 8, 6, P.skinShade); r(4, 6, 21, 15, hair); r(6, 9, 18, 14, P.skin);
     r(8, 22, 14, 3, P.skin); r(22, 13, 3, 8, P.skinShade);
     r(3, 6, 23, 5, hair); r(6, 2, 17, 6, hair); r(9, 0, 10, 4, hair);
@@ -236,7 +247,7 @@
     if (who === 'camille') { r(19, 7, 9, 4, hair); r(7, 4, 9, 2, '#50382b'); }
     if (who === 'noe') { r(5, 0, 3, 6, hair); r(14, -2, 3, 6, hair); r(23, 0, 3, 7, hair); r(7, 5, 9, 2, '#956139'); }
     if (who === 'lefevre') { r(10, -5, 9, 7, '#8e8e98'); r(9, -6, 8, 6, hair); r(3, 10, 3, 11, '#8e8e98'); }
-    const blink = pose === 'laugh' || (time + x * 37) % 4700 > 4500;
+    const blink = expression.blink || pose === 'laugh' || (time + x * 37) % 4700 > 4500;
     r(10, 14, 2, blink ? 1 : 3, '#30303a'); r(18, 14, 2, blink ? 1 : 3, '#30303a');
     r(14, 18, 2, 2, '#dcaa87'); r(14, 21, 3, 1, '#b56f65'); r(8, 19, 3, 1, '#e5ad92');
     if (pose === 'laugh') { r(12, 20, 7, 3, '#9a615d'); r(13, 20, 5, 1, '#f4dec5'); }
@@ -246,10 +257,13 @@
       r(8, 14, 1, 3, '#5a5a66'); r(21, 14, 1, 3, '#5a5a66'); r(13, 15, 4, 1, '#5a5a66');
       r(15, 33, 1, 2, '#d8b78a'); r(15, 39, 1, 2, '#d8b78a');
     }
+    if (expression.mouth) r(13, 21, expression.mouth === 2 ? 5 : 3, expression.mouth, '#9a615d');
+    head = 0;
     r(7, 35, 2, 2, shade); r(19, 38, 2, 2, shade);
   }
 
   function cat(p, x, y, s) {
+    const cp = s.catPose || {};
     const happy = s.reaction === 'happy', lick = s.reaction === 'lick', offended = s.reaction === 'offended';
     const hop = happy ? Math.max(0, Math.round(Math.sin(s.time / 170) * 3)) : 0;
     y -= hop;
@@ -264,7 +278,8 @@
       return;
     }
     p.oval(x + 3, y + hop + 1, 20, 3, '#49384630');
-    p.oval(x + 1, y - 9, 13, 10, orange); p.r(x - 8, y - 6, 6, 7, orange); p.r(x + 7, y - 6, 5, 7, orange);
+    p.oval(x + 1, y - 9, 13 + (cp.squash || 0), 10 - (cp.squash || 0), orange);
+    p.r(x - 8 + (cp.stride || 0), y - 6, 6, 7, orange); p.r(x + 7 - (cp.stride || 0), y - 6, 5, 7, orange);
     const turn = s.action === 'catTurnsHead' ? 2 - Math.round(beat(s, 750, 180) * 7) : offended ? -3 : 2;
     p.r(x - 8 + turn, y - 25, 19, 15, orange);
     p.poly([[x - 8 + turn, y - 24], [x - 9 + turn, y - 33], [x - 1 + turn, y - 26]], orange);
@@ -276,7 +291,7 @@
     p.r(x + 6 + turn, y - 19, 2, shut || offended ? 1 : 3, '#22303a');
     p.r(x + 1 + turn, y - 16, 2, 1, '#e79aa0'); p.r(x + turn, y - 13, 5, 2, light);
     p.r(x - 8, y - 10, 4, 2, stripe); p.r(x - 9, y - 6, 4, 2, stripe);
-    const flick = happy || offended ? Math.round(Math.sin(s.time / 240) * 3) : 0;
+    const flick = happy || offended || s.v2 ? Math.round(Math.sin((s.time - 100) / 240) * (happy || offended ? 3 : 2)) : 0;
     p.line(x - 9, y - 2, x - 18, y - 8, orange, 4); p.line(x - 18, y - 8, x - 19 + flick, y - 18, orange, 3);
     p.r(x - 19 + flick, y - 18, 3, 4, light);
     if (lick) {
@@ -287,6 +302,7 @@
       p.line(x + 8, y - 8, x + 15 + reach, y - 13, orange, 4); p.r(x + 14 + reach, y - 14, 4, 3, light);
     }
     if (happy) { p.r(x + 20, y - 33, 1, 5, '#f8d793'); p.r(x + 18, y - 31, 5, 1, '#f8d793'); }
+    if (s.v2 && Math.floor(s.time / 140) % 23 === 9) p.r(x + 11 + turn, y - 31, 2, 3, orange);
   }
 
   function windowFrame(p, x, y, width, height, night) {
@@ -694,6 +710,7 @@
 
   function getHotspots(scene, options) {
     const s = state(typeof scene === 'object' ? scene : Object.assign({}, options, { scene }));
+    if (s.v2) return v2Hotspots(s, { width: W, height: H, ox: 0, oy: 0 });
     const result = {};
     Object.entries(rawHotspots(s)).forEach(([id, rect]) => {
       if (id === 'cat' && (!s.cat || (s.scene === 'roof' && !s.rooftopUnlocked))) return;
@@ -707,6 +724,7 @@
   }
 
   function projectHotspots(canvas, options) {
+    if (options && options.v2) return v2Hotspots(state(options), layout(canvas, options));
     const rect = canvas.getBoundingClientRect();
     const width = canvas.clientWidth || rect.width || W, height = canvas.clientHeight || rect.height || H;
     const scale = Math.max(width / W, height / H), ox = (width - W * scale) / 2, oy = (height - H * scale) / 2;
@@ -723,6 +741,7 @@
 
   function draw(canvas, options) {
     if (!canvas || typeof canvas.getContext !== 'function') throw new TypeError('Day8Art.draw requires a canvas');
+    if (options && options.v2) return drawV2(canvas, state(options));
     const s = state(options), ctx = canvas.getContext('2d');
     if (!ctx) return {};
     if (canvas.width !== W) canvas.width = W;
@@ -749,6 +768,266 @@
     return projectHotspots(canvas, s);
   }
 
+  // V2 is deliberately separate: the established 480x320 renderer remains a golden fixture.
+  function motion(options) {
+    const s = state(options), g = s.catGame || {}, reduced = s.reducedMotion;
+    const t = reduced ? 0 : Math.floor(s.time / (1000 / 24)) * (1000 / 24);
+    const smooth = n => { n = clamp(n, 0, 1); return n * n * (3 - 2 * n); };
+    const elapsed = reduced ? 2000 : clamp(g.elapsed == null ? s.elapsed : g.elapsed, 0, 1e12);
+    const approach = g.active ? smooth((reduced ? 2000 : g.approachElapsed == null ? elapsed : g.approachElapsed) / 1500) : 1;
+    const reach = clamp(g.reach == null ? s.danger : g.reach, 0, 1);
+    const blocked = clamp(g.blocked, 0, 1);
+    const potX = 282 + reach * 34;
+    let x = 510 + (potX - 42 - 510) * approach;
+    let y = 212 - (approach < 1 ? Math.abs(Math.sin(t / 130)) * 2 : 0);
+    const lifting = ['lift', 'done'].includes(g.phase) || ['catdone', 'cupFalls'].includes(s.action);
+    const liftElapsed = reduced || g.phase === 'done' || s.action === 'cupFalls' ? 1600 : (g.phaseElapsed == null ? s.elapsed : g.phaseElapsed);
+    const lift = lifting ? smooth((liftElapsed - 250) / 1100) : 0;
+    const hold = lifting ? smooth(liftElapsed / 250) : 0;
+    const from = g.liftFrom || { x, y, potX };
+    if (lifting) { x = from.x + (226 - from.x) * lift; y = from.y + (181 - from.y) * lift; }
+    const phase = Math.floor(t / 83.333);
+    const people = {};
+    ['camille', 'noe', 'lefevre', 'gaspard'].forEach((who, i) => {
+      const local = t + i * 619;
+      people[who] = {
+        bob: reduced ? 0 : Math.round(Math.sin(local / 710)),
+        tilt: reduced ? 0 : Math.round(Math.sin(local / 1100)),
+        blink: !reduced && local % 3200 > 3033,
+        mouth: !reduced && s.speaker.toLowerCase().includes(who) ? [0, 1, 2, 1][phase % 4] : 0
+      };
+    });
+    return { time: t, people, cat: { x, y, potX: lifting ? from.potX : potX, lift, hold, approach,
+      stride: approach < 1 && !reduced ? Math.round(Math.sin(t / 130) * 3) : 0,
+      squash: reduced ? 0 : blocked > 0 ? Math.round(blocked * 2) : Math.floor(t / 83.333) % 18 === 0 ? 1 : 0,
+      paw: lifting ? 0 : (1 - blocked) * (4 + reach * 12 + Math.sin(t / 340) * 3) } };
+  }
+
+  function layout(canvas, options) {
+    const rect = canvas.getBoundingClientRect();
+    const cw = canvas.clientWidth || rect.width || W, ch = canvas.clientHeight || rect.height || H;
+    const portrait = ch > cw * 1.15, width = portrait ? 320 : W;
+    const height = Math.max(240, Math.round(width * ch / cw));
+    return { width, height, portrait, ox: (width - W) / 2, oy: portrait ? Math.round(height * .18) : 0,
+      storyPlantStage: Math.max(2, clamp(options && options.growth && options.growth[0], 0, 5)) };
+  }
+
+  function placed(p, x, y, scale = 1) {
+    return {
+      r: (a, b, w, h, c) => p.r(x + a * scale, y + b * scale, w * scale, h * scale, c),
+      line: (a, b, c, d, color, width = 1) => p.line(x + a * scale, y + b * scale, x + c * scale, y + d * scale, color, Math.max(1, width * scale)),
+      poly: (points, color) => p.poly(points.map(([a, b]) => [x + a * scale, y + b * scale]), color),
+      oval: (a, b, rx, ry, color) => p.oval(x + a * scale, y + b * scale, rx * scale, ry * scale, color), ctx: p.ctx
+    };
+  }
+
+  function shelfSlots(s, l) {
+    const garden = s.garden || {}, source = garden.slots || garden.pots || [
+      { id: 1, growth: Math.max(2, s.growth[0]), bay: 0, row: 0, col: 3 },
+      { id: 2, growth: s.basilPlanted ? Math.max(2, s.growth[1]) : 0, bay: 0, row: 0, col: 4, basil: true }
+    ];
+    const slots = source.map((item, i) => ({ ...item, id: item.id == null ? i + 1 : item.id,
+      bay: Math.floor(clamp(item.bay == null ? Math.floor(i / 24) : item.bay, 0, 10000)),
+      row: Math.floor(clamp(item.row == null ? Math.floor(i % 24 / 8) : item.row, 0, 2)),
+      col: Math.floor(clamp(item.col == null ? i % 8 : item.col, 0, 7)) }));
+    const bays = Math.max(1, ...slots.map(item => item.bay + 1));
+    const selected = slots.find(item => String(item.id) === String(s.water > 0 && s.targetPotId != null ? s.targetPotId : garden.selectedPot));
+    const bay = selected && (garden.zoom === 'pot' || s.water > 0) ? selected.bay : Math.round(clamp(garden.bay, 0, bays - 1));
+    const overview = garden.zoom === 'overview';
+    const padding = l.portrait ? 15 : 48, area = l.width - padding * 2;
+    const pitch = area / 8, scale = overview ? .38 : Math.min(.72, pitch / 52);
+    const top = l.portrait ? l.oy + 182 : Math.min(170, l.height * .43);
+    const step = l.portrait ? 61 : Math.min(55, l.height * .16);
+    const feet = l.portrait ? l.oy + 326 : l.height * .86;
+    return { slots, bays, bay, selected, scale, padding, pitch, overview, top, step, feet,
+      point(item) {
+        if (overview) return { x: padding + (item.bay + (item.col + .5) / 8) * area / bays,
+          y: top + item.row * step, scale: Math.min(.38, area / bays / 8 / 44) };
+        return { x: padding + (item.col + .5) * pitch, y: top + item.row * step, scale };
+      } };
+  }
+
+  function v2Rects(s, l) {
+    if (s.scene === 'roof') {
+      const grid = shelfSlots(s, l), rects = {};
+      grid.slots.filter(item => grid.overview || item.bay === grid.bay).forEach(item => {
+        const p = grid.point(item);
+        rects['pot:' + item.id] = [p.x, p.y - 40 * p.scale, Math.max(26, 44 * p.scale), Math.max(36, 96 * p.scale)];
+      });
+      const basil = grid.slots.find(item => item.basil || String(item.id) === '2');
+      const target = grid.selected || basil || grid.slots[0];
+      if (target && rects['pot:' + target.id]) rects.pot = rects['pot:' + target.id];
+      if (basil && rects['pot:' + basil.id]) rects.basil = rects.emptyPot = rects['pot:' + basil.id];
+      rects.can = [l.width / 2 - 36, grid.feet - 20, 48, 42];
+      if (s.water > 0 && target) {
+        const q = grid.point(target);
+        rects.can = [q.x - 36, q.y - 29 * q.scale - 32, 48, 42];
+      }
+      rects.cat = [l.width / 2 + 28, grid.feet - 23, 46, 38];
+      rects.door = rects.up = [l.width - 29, grid.top - 49, 34, 69];
+      rects.chair = [l.width - grid.padding - 23, grid.feet - 23, 36, 46];
+      rects.garden = [l.width / 2, grid.top + grid.step - 20, l.width - grid.padding * 2, grid.step * 2 + 80];
+      return rects;
+    }
+    const rects = Object.fromEntries(Object.entries(rawHotspots(s)).map(([id, r]) => [id, [r[0] + l.ox, r[1] + l.oy + facadePan(s), r[2], r[3]]]));
+    if (s.scene === 'kitchen' && s.action !== 'sleepBetweenPots') {
+      const m = motion(s).cat;
+      rects.cat = [m.x + l.ox, m.y - 17 + l.oy, 48, 38];
+      rects.pot = [m.potX + l.ox, 174 + l.oy, 48, 96];
+    }
+    return rects;
+  }
+
+  function camera(s, l, rects) {
+    const id = s.garden && s.garden.zoom === 'pot' ? 'pot:' + s.garden.selectedPot : s.focus;
+    const target = rects[id] || (s.water > 0 && s.targetPotId != null ? rects['pot:' + s.targetPotId] : null);
+    const amount = s.garden && s.garden.zoom === 'pot' ? 1 : s.focusZoom;
+    const maximum = target ? Math.min(2.25, Math.max(1.08, l.width * .9 / target[2]), Math.max(1.08, l.height * .55 / target[3])) : 1;
+    const scale = target ? 1 + amount * (maximum - 1) : 1;
+    const x = target ? l.width / 2 - target[0] * scale : 0;
+    const y = target ? l.height * .43 - target[1] * scale : 0;
+    return { scale, x: Math.max(l.width * (1 - scale), Math.min(0, x)), y: Math.max(l.height * (1 - scale), Math.min(0, y)) };
+  }
+
+  function v2Hotspots(s, l) {
+    const rects = v2Rects(s, l), cam = camera(s, l, rects), result = {};
+    Object.entries(rects).forEach(([id, r]) => {
+      if (id === 'cat' && !s.cat) return;
+      if (id === 'basil' && s.scene === 'kitchen' && s.action !== 'sleepBetweenPots' && (!s.night || s.basilPlanted)) return;
+      const x = r[0] * cam.scale + cam.x, y = r[1] * cam.scale + cam.y;
+      const w = r[2] * cam.scale, h = r[3] * cam.scale;
+      result[id] = { id, x: x / l.width * 100, y: y / l.height * 100, width: w / l.width * 100, height: h / l.height * 100,
+        visible: x + w / 2 > 0 && x - w / 2 < l.width && y + h / 2 > 0 && y - h / 2 < l.height };
+    });
+    return result;
+  }
+
+  function v2Kitchen(p, s) {
+    const m = motion(s), c = m.cat, lift = c.lift;
+    const actor = (x, feet, who, pose) => person(p, x, feet, who, m.time, pose, 1, m.people[who]);
+    actor(128 + (c.x - 40 - 128) * c.hold, 221, 'camille', lift ? 'lift' : c.hold ? 'catch' : 'idle');
+    actor(332, 224, 'noe', s.reaction === 'catch' ? 'catch' : 'idle');
+    table(p, s);
+    if (s.action === 'sleepBetweenPots') {
+      pot(p, 202, 216, Math.max(2, s.growth[1]), m.time, true);
+      if (s.cat) cat(p, 255, 212, s);
+      pot(p, 310, 216, Math.max(2, s.growth[0]), m.time);
+    } else {
+      if (s.cat) {
+        const reaction = lift ? 'lift' : (s.catGame && s.catGame.blocked > .1 ? 'offended' : s.reaction);
+        cat(p, c.x, c.y, { ...s, time: m.time, reaction, danger: 0, catPose: c });
+        if (!lift && c.approach === 1 && c.paw > 0) {
+          p.line(c.x + 8, c.y - 8, c.x + 18 + c.paw, c.y - 13, '#e2873a', 4);
+          p.r(c.x + 17 + c.paw, c.y - 14, 4, 3, '#f3b365');
+        }
+        if (c.hold) {
+          const handX = 154 + (c.x - 9 - 154) * c.hold;
+          p.line(handX - 15, 204 + (c.y - 202) * c.hold, handX, 204 + (c.y - 202) * c.hold, '#377c60', 5);
+          p.r(handX, 201 + (c.y - 202) * c.hold, 7, 4, P.skin);
+          if (c.hold === 1) p.r(c.x + 8, c.y - 2, 7, 4, P.skin);
+        }
+      }
+      // The story prop is alive even when its review record is still at seed stage.
+      pot(p, c.potX, 216, Math.max(2, s.growth[0]), m.time, !!lift, Math.sin(m.time / 95) * s.danger * 2);
+    }
+    can(p, 98, 176, 0, m.time);
+    if (s.action !== 'cupFalls') steam(p, 175, 199, m.time);
+  }
+
+  function v2Roof(p, s, l) {
+    const grid = shelfSlots(s, l), world = placed(p, l.ox, l.oy), m = motion(s);
+    const horizon = grid.top - l.oy - 37;
+    sky(world, s.night); skyline(world, s.night, l.portrait ? -35 : -20);
+    world.r(0, horizon, W, 22, '#a58a88'); world.r(0, horizon, W, 4, '#c0a49a');
+    floor(world, horizon + 21, s.night, true);
+    door(p, l.width - 43, grid.top - 82, 27, 65, false, s.night);
+    for (let x = 0; x < l.width; x += 28) {
+      const y = l.oy + 85 + Math.sin(x / l.width * Math.PI) * 21;
+      p.line(x, y, x + 28, l.oy + 85 + Math.sin((x + 28) / l.width * Math.PI) * 21, '#4c4b58');
+      p.oval(x + 4, y + 8, 10, 11, '#ffd28a12'); p.r(x + 3, y + 5, 3, 4, '#ffe8ae');
+    }
+    for (let row = 0; row < 3; row++) {
+      const y = grid.top + 2 + row * grid.step;
+      p.r(grid.padding - 7, y, l.width - grid.padding * 2 + 14, 5, '#725b54');
+      p.r(grid.padding - 7, y, l.width - grid.padding * 2 + 14, 1, '#c5986e');
+      p.r(grid.padding - 5, y + 5, 3, 19, '#594c4c'); p.r(l.width - grid.padding + 2, y + 5, 3, 19, '#594c4c');
+      if (!grid.overview) for (let col = 0; col < 8; col++) {
+        const x = grid.padding + (col + .5) * grid.pitch;
+        p.oval(x, y - 2, 8, 2, '#403b4930');
+      }
+    }
+    grid.slots.filter(item => grid.overview || item.bay === grid.bay).forEach(item => {
+      const q = grid.point(item), basil = item.basil || String(item.id) === '2';
+      if (s.action === 'carryMartinPlant' && String(item.id) === '1') {
+        const f = beat(s, 1600, 400);
+        q.x = (l.width - grid.padding - 20) * (1 - f) + q.x * f;
+        q.y = (grid.feet - 28) * (1 - f) + q.y * f;
+      }
+      const martinPresent = s.garden || s.basilPlanted || ['carryMartinPlant', 'plantBasil', 'leafLifts'].includes(s.action);
+      const planted = String(item.id) === '1' ? !!martinPresent : !basil || s.basilPlanted || s.action === 'plantBasil';
+      const growth = planted ? Math.max(String(item.id) === '1' || basil ? 2 : 0, clamp(item.growth, 0, 5)) : 0;
+      const lowering = s.action === 'plantBasil' && basil ? -18 * (1 - beat(s, 1500)) : 0;
+      pot(placed(p, q.x, q.y, q.scale), 0, 0, growth, m.time, basil, 0, { plantOffset: lowering });
+      if (item.due) {
+        const blink = s.reducedMotion ? 0 : Math.floor(m.time / 180 + item.col * 3) % 7;
+        p.r(q.x + 9, q.y - 35 - blink, 1, 2, '#ffe2a5');
+        if (blink < 3) p.r(q.x + 8, q.y - 34 - blink, 3, 1, '#ffe2a5');
+      }
+    });
+    const selected = grid.selected || grid.slots.find(item => String(item.id) === '2') || grid.slots[0];
+    if (s.water > 0 && selected) {
+      const q = grid.point(selected), target = q.y - 29 * q.scale;
+      can(placed(p, q.x - 40, target - 22, .65), 0, 0, s.water, m.time);
+      for (let i = 0; i < 20; i++) {
+        const f = (m.time / 800 + i / 20) % 1;
+        p.r(q.x - 18 * (1 - f), target - 41 * (1 - f * f), 1, 2, '#c7e2df');
+      }
+    } else can(p, l.width / 2 - 42, grid.feet - 6, 0, m.time);
+    chair(p, l.width - grid.padding - 35, grid.feet - 44, .75, true);
+    if (s.rooftopUnlocked) {
+      person(p, grid.padding - 13, grid.feet, 'camille', m.time, 'idle', .85, m.people.camille);
+      person(p, l.width - grid.padding - 12, grid.feet, 'noe', m.time, s.water || s.action === 'carryMartinPlant' ? 'hold' : 'idle', .85, m.people.noe);
+      if (s.cat) cat(p, l.width / 2 + 28, grid.feet - 6, { ...s, time: m.time });
+    }
+  }
+
+  function drawV2(canvas, s) {
+    const l = layout(canvas, s), ctx = canvas.getContext('2d');
+    if (!ctx) return {};
+    if (s.reducedMotion) s = { ...s, time: 0, elapsed: 10000 };
+    if (canvas.width !== l.width) canvas.width = l.width;
+    if (canvas.height !== l.height) canvas.height = l.height;
+    canvas.style.imageRendering = 'pixelated'; canvas.style.objectFit = 'cover';
+    canvas.style.objectPosition = '50% 50%'; ctx.imageSmoothingEnabled = false;
+    const rects = v2Rects(s, l), cam = camera(s, l, rects);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    try {
+      const base = painter(ctx), p = placed(base, cam.x, cam.y, cam.scale);
+      p.r(0, 0, l.width, l.height, s.scene === 'facade' ? '#33394f' : s.scene === 'roof' ? s.night ? '#33394f' : '#9b849d' : s.night ? '#847d80' : '#ddc6a6');
+      if (l.portrait) {
+        speckle(p, 0, 0, l.width, l.oy + 20, 160, s.scene === 'roof' ? s.night ? '#b9a9b6' : '#b594a8' : s.night ? '#9b8b88' : '#e8d3b2', 14);
+        for (let y = l.oy + 220; y < l.height; y += 100) floor(placed(p, l.ox, y - 220), 220, s.night, s.scene === 'roof');
+      }
+      if (s.scene === 'roof') v2Roof(p, s, l);
+      else {
+        const world = placed(p, l.ox, l.oy + facadePan(s));
+        world.people = motion(s).people;
+        const backdrop = s.scene === 'lefevre' && handover(s) ? 'doorway' : s.scene;
+        backgrounds[backdrop](world, s);
+        if (s.scene === 'kitchen') v2Kitchen(world, s);
+        else foreground(world, s);
+      }
+      if (s.focus && rects[s.focus]) {
+        const r = rects[s.focus], pulse = s.reducedMotion ? 0 : Math.round(Math.sin(s.time / 380) * 2);
+        const x = r[0] - r[2] / 2 - pulse, y = r[1] - r[3] / 2 - pulse;
+        p.line(x, y, x + 6, y, '#ffe2a5'); p.line(x, y, x, y + 6, '#ffe2a5');
+        p.line(x + r[2] + pulse * 2, y + r[3] + pulse * 2, x + r[2] + pulse * 2 - 6, y + r[3] + pulse * 2, '#ffe2a5');
+      }
+    } finally { ctx.restore(); }
+    return v2Hotspots(s, l);
+  }
+
   function start(canvas, initial) {
     if (runners.has(canvas)) runners.get(canvas).stop();
     const view = canvas.ownerDocument.defaultView || root;
@@ -759,6 +1038,7 @@
       const value = typeof source === 'function' ? source() : source;
       return draw(canvas, Object.assign({}, value, {
         time: motion.matches ? 0 : view.performance.now() - began,
+        reducedMotion: motion.matches,
         // Reduced motion shows the settled pose, not an endlessly suspended cup or hand.
         elapsed: motion.matches ? 10000 : value && value.elapsed
       }));
@@ -778,5 +1058,5 @@
     return controller;
   }
 
-  root.Day8Art = Object.freeze({ width: W, height: H, scenes: Object.freeze(scenes), draw, start, getHotspots, projectHotspots });
+  root.Day8Art = Object.freeze({ width: W, height: H, scenes: Object.freeze(scenes), draw, start, getHotspots, projectHotspots, motion, layout });
 })(typeof window !== 'undefined' ? window : globalThis);
