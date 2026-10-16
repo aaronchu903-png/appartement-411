@@ -8,37 +8,31 @@
     const state = hooks.state;
     let session = hooks.session || null, finished = false;
     if (session && session.mode !== 'garden') throw new Error('M2 cannot resume cat review');
-    function remainingAnswers() {
-      if (!Number.isFinite(session?.firstWateringCap)) return Infinity;
-      const remaining = Math.max(0, Math.min(8, session.firstWateringCap) - session.answered);
-      if (!remaining) { session.done = true; session.current = null; }
-      return remaining;
+    if (session && Number.isFinite(session.firstWateringCap)) {
+      // Shipped first-watering saves may contain only eight of today's due words.
+      const queued = new Set(session.queue.map(entry => entry.wordId));
+      const rest = E.createSession(state, items, { now: session.now, storyDay: session.storyDay });
+      session.queue.push(...rest.queue.filter(entry => !queued.has(entry.wordId)));
+      session.initialIds = [...new Set(session.queue.filter(entry => !entry.retryType && !entry.recognition).map(entry => entry.wordId))];
+      session.completedIds ||= [...new Set(session.queue.slice(0, session.index).map(entry => entry.wordId).filter(id => session.initialIds.includes(id)))];
+      session.initial = session.initialIds.length;
+      session.budget = session.initial;
+      session.pool = [...new Set([...session.pool, ...rest.pool])];
+      session.done = session.index >= session.queue.length;
+      delete session.firstWateringCap;
     }
-    remainingAnswers();
     const controller = {
       skin,
       get session() { return session; },
       create(options = {}) {
-        if (options.mode && options.mode !== 'garden') throw new Error('M2 supports garden review only');
-        const opts = { ...options, mode: 'garden' };
-        if (options.firstWordId) {
-          // Both queues see the whole catalog so first watering cannot hide the daily due load.
-          const first = E.createSession(state, items, { ...opts, onlyIds: [options.firstWordId], practice: true, budget: 1 });
-          const dueIds = items.filter(w => String(w.potId ?? w.pot) === String(options.duePotId ?? 1)).map(w => w.id);
-          const due = E.createSession(state, items, { ...opts, onlyIds: dueIds, practice: false, budget: undefined });
-          first.queue = first.queue.concat(due.queue.filter(entry => entry.due && entry.wordId !== options.firstWordId));
-          first.firstWateringCap = Number.isFinite(options.budget) ? Math.min(8, Math.max(0, Math.floor(options.budget))) : 8;
-          first.queue = first.queue.slice(0, first.firstWateringCap);
-          first.pool = [...new Set(first.queue.map(entry => entry.wordId))];
-          first.initial = first.queue.length;
-          first.budget = first.initial;
-          first.done = !first.initial;
-          session = first;
-        } else session = E.createSession(state, items, opts);
+        if (options.mode && !['garden', 'test'].includes(options.mode)) throw new Error('M2 supports garden review only');
+        session = E.createSession(state, items, { ...options, mode: options.mode === 'test' ? 'test' : 'garden', practice: false });
+        // Explicit developer fixtures may filter a queue; presentation remains rooftop review.
+        session.mode = 'garden';
         finished = false;
         return session;
       },
-      current() { return session && remainingAnswers() ? E.current(session, state, items) : null; },
+      current() { return session ? E.current(session, state, items) : null; },
       answer(input, options = {}) {
         const value = Array.isArray(input) ? input.join(' ') : input && typeof input === 'object' ? input.id : input;
         if (!String(value ?? '').trim()) return { skipped: 'empty', done: !!session?.done, correct: false, scheduled: false,
@@ -46,12 +40,11 @@
         if (!controller.current()) return { done: true, correct: false, scheduled: false, remaining: 0 };
         // Each accepted call advances the engine; presentation guards duplicate submits during feedback.
         const result = E.answer(session, state, items, input, options);
-        // The story allowance counts retries and fillers, not just the initial due queue.
-        result.remaining = Math.min(result.remaining, remainingAnswers());
-        result.done = session.done;
         // Correct sentence audio and target-pot feedback are emitted even after a wrong answer.
-        hooks.audio?.(result);
-        hooks.answer?.(result);
+        for (const item of result.pairResults || [result]) {
+          hooks.audio?.(item);
+          hooks.answer?.(item);
+        }
         return result;
       },
       finish() {

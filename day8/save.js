@@ -24,8 +24,8 @@
       if (own(word, field) && typeof word[field] !== 'string') delete word[field];
     }
     for (const field of ['id', 'scene', 'audioId', 'clip', 'wordClip']) if (own(word, field) && !safeId(word[field])) delete word[field];
-    for (const field of ['scenes', 'legacyIds', 'homophones', 'chunks', 'accepted', 'forms', 'tags']) if (own(word, field)) {
-      word[field] = Array.isArray(word[field]) ? word[field].filter(value => typeof value === 'string' && value.trim() && (!['scenes', 'legacyIds', 'homophones'].includes(field) || safeId(value))) : [];
+    for (const field of ['scenes', 'activeScenes', 'legacyIds', 'homophones', 'chunks', 'accepted', 'forms', 'tags']) if (own(word, field)) {
+      word[field] = Array.isArray(word[field]) ? word[field].filter(value => typeof value === 'string' && value.trim() && (!['scenes', 'activeScenes', 'legacyIds', 'homophones'].includes(field) || safeId(value))) : [];
     }
     for (const field of ['met', 'collected', 'introduced', 'seen', 'recorded', 'recognitionOnly', 'rare', 'growthEligible']) if (own(word, field) && typeof word[field] !== 'boolean') delete word[field];
     for (const field of ['pot', 'potId', 'week']) if (own(word, field) && (!Number.isInteger(word[field]) || word[field] < 1)) delete word[field];

@@ -13,7 +13,7 @@
   const normalize = L.normalize;
   const slug = text => normalize(text).replace(/ /g, '_');
   const audio = { ...I.audio };
-  const sceneKinds = ['line', 'focus', 'point', 'reply', 'choice', 'walk', 'voicemail', 'chat', 'cat', 'water', 'end'];
+  const sceneKinds = ['line', 'focus', 'pick', 'probe', 'chips', 'point', 'reply', 'choice', 'walk', 'voicemail', 'chat', 'cat', 'water', 'establishing', 'diary', 'ritual', 'end'];
   const moduleForKind = kind => kind === 'cat' ? null : kind === 'water' ? 'M2' : kind === 'voicemail' ? 'M3' : ['reply', 'choice', 'chat'].includes(kind) ? 'M4' : 'M1';
   const sceneNames = ['kitchen', 'doorway', 'stairs', 'lefevre', 'roof', 'facade'];
   const newFrench = [];
@@ -39,9 +39,28 @@
   function beat(id, scene, kind, extra) {
     return { id, scene, kind, speaker: 'neutral', text: '', zh: '', en: '', ...extra };
   }
-  function focus(id, scene, wordIds, hotspot) {
-    const records = wordIds.map(w => I.words[w]);
-    return beat(id, scene, 'focus', { text: records.map(w => w.fr).join(' · '), zh: records.map(w => w.zh).join(' · '), en: records.map(w => w.en).join(' · '), wordIds, hotspot, clips: wordIds.map(w => 'w_' + w) });
+  // Focus text is its source sentence, not a word list. Only reveal shows the headword/gloss.
+  function focus(id, scene, wordIds, hotspot, sourceId) {
+    const source = line(sourceId, scene);
+    return beat(id, scene, 'focus', { text: source.text, sentence: source.text, sourceSentence: source.text, sourceId, source: source.source,
+      zh: source.zh, en: source.en, speaker: source.speaker, audioId: sourceId, clip: sourceId,
+      wordIds, hotspot, clips: wordIds.map(w => 'w_' + w), comprehensionOnly: true, graded: false,
+      encounter: 'comprehension', visualCue: true });
+  }
+  const lessonInstructions = {
+    pick: fr('Écoute, puis choisis.'), chips: fr('Mets les mots dans l’ordre.'), diary: fr('Aujourd’hui…')
+  };
+  // cue is an audio ID, never visible text. Options are text-only; wordIds names targets, not distractors.
+  function pick(id, scene, answer, alternatives, kind = 'pick') {
+    return beat(id, scene, kind, { prompt: lessonInstructions.pick, cue: 'w_' + answer, answer,
+      options: alternatives.map(id => ({ id, text: fr(I.words[id].fr) })), wordIds: [answer],
+      encounter: 'recall', visualCue: false, revealAfterAnswer: true, evidenceOnly: true });
+  }
+  function chips(id, scene, answer, chunks, wordIds, sourceId) {
+    return beat(id, scene, 'chips', { prompt: lessonInstructions.chips, answer: fr(answer),
+      // sourceId is provenance only: a reply option/excerpt needs its own exact-answer recording.
+      chunks: chunks.map(fr), wordIds, sourceId, audioId: id, encounter: 'recall', visualCue: false,
+      revealAfterAnswer: true, evidenceOnly: true });
   }
   const replyGlosses = {
     d8_merci: [['谢谢您，夫人。', 'Thank you, Madame.'], ['您真好，Lefèvre 太太。', 'That is kind of you, Madame Lefèvre.'], ['您要进来吗？', 'Would you like to come in?']],
@@ -114,57 +133,87 @@
     line('n_d8_matin', 'kitchen', { lighting: 'morning', sfx: 'meow', props: ['martinPlant', 'martinCan'], cat: 'watch' }),
     line('d8_cam_depuis', 'kitchen', { grammarIds: ['depuis_present'] }),
     line('d8_noe_matin', 'kitchen', { hotspot: 'plant' }),
-    focus('d8_focus_plante', 'kitchen', ['plante'], 'plant'),
+    focus('d8_focus_plante', 'kitchen', ['plante'], 'plant', 'd8_noe_matin'),
     line('d8_mg_non', 'kitchen', { id: 'd8_cat', kind: 'cat', durationMs: 16000, interaction: 'touch',
       reactions: ['freeze', 'offended', 'sit', 'lick', 'lookAway', 'sleep'], catchLine: line('d8_mg_attention', 'kitchen'), finishAction: 'camilleLiftsCat', neverBreaks: true }),
     line('n_d8_boum', 'kitchen', { sfx: 'click', action: 'cupFalls', cat: 'blink' }),
     line('d8_noe_plante', 'kitchen', { silenceAfterMs: 1000 }),
     line('n_d8_toc', 'doorway', { sfx: 'knock', door: 'closed' }),
     line('n_d8_porte', 'doorway', { sfx: 'door', door: 'open', silent: true }),
+    pick('d8_pick_plante', 'doorway', 'plante', ['plante', 'table', 'chaise']),
     line('d8_gag_bonjour', 'doorway'),
-    line('d8_gag_basilic', 'doorway', { wordIds: ['basilic', 'cest_du_basilic'], action: 'catTurnsHead', grammarIds: ['partitif'] }),
-    focus('d8_focus_basilic', 'doorway', ['basilic'], 'basil'),
-    beat('d8_pot', 'doorway', 'point', { hotspot: 'basil', wordIds: ['basilic'], promptClip: 'd8_gag_basilic', noMenu: true }),
+    line('d8_gag_basilic', 'doorway', { wordIds: ['cest_du_basilic'], action: 'catTurnsHead', grammarIds: ['partitif'] }),
+    focus('d8_focus_basilic', 'doorway', ['basilic'], 'basil', 'd8_gag_basilic'),
+    pick('d8_pot', 'doorway', 'basilic', ['pain', 'basilic', 'beurre']),
     reply('d8_merci', 'doorway'),
     line('d8_gag_venez', 'doorway', { wordIds: ['venez_a_six_heures'], action: 'pointDownAndClock', grammarIds: ['imperatif_vous'] }),
     voicemail,
     ...chats.slice(0, 3),
+    beat('d8_dusk', 'facade', 'establishing', { durationMs: 4000, characters: [], lighting: 'dusk',
+      transition: 'dayToNight', action: 'windowsLightUp', silent: true }),
     line('n_d8_cinq', 'kitchen', { time: '17:55', timeLabel: '17 h 55', lighting: 'evening', props: ['martinPlant', 'basil'], cat: 'sleepBetweenPots' }),
     line('n_d9_soir', 'stairs', { lighting: 'night', sfx: 'steps' }),
     line('d8_cam_descend', 'stairs', { kind: 'walk', direction: 'down', tiles: 8, hotspot: 'lefevreDoor', steam: true, roofDoorLocked: true, lockedFeedback: 'rattle', lockedText: '' }),
     line('d9_noe_chat', 'stairs'),
-    line('d9_cam_basilic', 'stairs', { carries: 'basil' }),
+    line('d9_cam_basilic', 'stairs', { carries: 'basil', wordIds: ['basilic'] }),
     line('d9_cam_null', 'stairs', { bandFlag: 'd7_band', variants: bandVariants }),
+    pick('d8_pick_plante_stairs', 'stairs', 'plante', ['chaise', 'table', 'plante']),
     line('d9_lef_bonsoir', 'lefevre', { location: 'doorway', door: 'open' }),
     line('d9_lef_asseyez', 'lefevre', { location: 'table', chairs: 4, plates: 4, wordIds: ['asseyez_vous'], grammarIds: ['pronominaux'] }),
-    line('d9_lef_soupe', 'lefevre', { wordIds: ['soupe', 'vous_voulez_de_la_soupe'], recognitionOnly: true }),
+    line('d9_lef_soupe', 'lefevre', { wordIds: ['vous_voulez_de_la_soupe'], recognitionOnly: true }),
+    focus('d8_focus_soupe', 'lefevre', ['soupe'], 'soup', 'd9_lef_soupe'),
     line('n_d9_croissant', 'lefevre', { kind: 'point', hotspot: 'catChair', silenceAfterMs: 1000, sfx: 'meow' }),
     line('d9_lef_place', 'lefevre', { action: 'firstLaugh' }),
+    pick('d8_pick_soupe', 'lefevre', 'soupe', ['soupe', 'eau', 'plante']),
     reply('d9_soupe', 'lefevre'),
     line('d9_noe_pain', 'lefevre'),
+    focus('d8_focus_pain', 'lefevre', ['pain'], 'bread', 'd9_noe_pain'),
     line('d9_lef_question', 'lefevre', { silenceBeforeMs: 1000 }),
-    line('d9_lef_jeudi', 'lefevre', { wordIds: ['vous_voulez_venir_le_jeudi', 'jeudi'], hotspot: 'calendar', grammarIds: ['le_jour'] }),
+    chips('d8_chips_pain', 'lefevre', 'Je voudrais du pain, s’il vous plaît.', ['vous', 'pain,', 'Je', 'plaît.', 'du', 's’il', 'voudrais'], ['pain'], 'd9_soupe'),
+    line('d9_lef_jeudi', 'lefevre', { wordIds: ['vous_voulez_venir_le_jeudi'], hotspot: 'calendar', grammarIds: ['le_jour'] }),
+    focus('d8_focus_jeudi', 'lefevre', ['jeudi'], 'calendar', 'd9_lef_jeudi'),
     line('d9_lef_seule', 'lefevre'),
     reply('d9_jeudi', 'lefevre', { flag: 'd9_jeudi', storyChoice: true, graded: false }),
+    pick('d8_pick_jeudi', 'lefevre', 'jeudi', ['samedi', 'jeudi', 'nuit']),
     line('n_d9_cle', 'lefevre', { sfx: 'click', hotspot: 'key', silent: true }),
-    line('d9_lef_cle', 'lefevre', { wordIds: ['cle'], action: 'coverKey', wordClip: 'w_cle' }),
-    line('d8_noe_danger', 'lefevre', { action: 'moveBasilAndLaugh', silenceAfterMs: 1500, silentLook: ['key', 'basil', 'emptyChair'] }),
+    line('d9_lef_cle', 'lefevre', { action: 'coverKey', wordClip: 'w_cle' }),
+    focus('d8_focus_cle', 'lefevre', ['cle'], 'key', 'd9_lef_cle'),
+    line('d8_noe_danger', 'lefevre', { wordIds: ['plante'], action: 'moveBasilAndLaugh', silenceAfterMs: 1500, silentLook: ['key', 'basil', 'emptyChair'] }),
+    pick('d8_pick_pain', 'lefevre', 'pain', ['beurre', 'pain', 'basilic']),
+    pick('d8_pick_cle', 'lefevre', 'cle', ['porte', 'chaise', 'cle']),
     line('n_d10_cle', 'lefevre', { location: 'doorway', action: 'openHand', hotspots, optionalHotspots: true, continueHotspot: 'lefevre', nengLightCheck: true, silent: true }),
-    line('d10_lef_jardin', 'lefevre', { location: 'doorway', flags: { has_key: true }, action: 'giveKey', closesHotspots: true, wordIds: ['toit', 'jardin'] }),
+    line('d10_lef_jardin', 'lefevre', { location: 'doorway', flags: { has_key: true }, action: 'giveKey', closesHotspots: true, wordIds: ['cle'] }),
+    focus('d8_focus_toit', 'lefevre', ['toit'], 'key', 'd10_lef_jardin'),
+    focus('d8_focus_jardin', 'lefevre', ['jardin'], 'key', 'd10_lef_jardin'),
     reply('d10_pourmoi', 'lefevre', { location: 'doorway', wordIds: ['cest_pour_moi'], anyAttemptCounts: true }),
+    chips('d8_chips_pourmoi', 'lefevre', 'C’est pour moi ?', ['moi ?', 'C’est', 'pour'], ['cest_pour_moi'], 'd10_pourmoi'),
+    pick('d8_pick_toit', 'lefevre', 'toit', ['jardin', 'toit', 'salon']),
+    pick('d8_pick_jardin', 'lefevre', 'jardin', ['jardin', 'salon', 'toit']),
     line('d10_lef_allez', 'lefevre', { location: 'doorway', action: 'closeDoor', sfx: 'door', lightUnderDoor: true }),
     chats[3],
     line('d10_noe_porte', 'stairs', { kind: 'walk', direction: 'up', tiles: 8, flights: 2, hotspot: 'roofDoor', requiresFlag: 'has_key', cat: 'runAhead' }),
+    pick('d8_pick_soupe_stairs', 'stairs', 'soupe', ['eau', 'soupe', 'plante']),
+    pick('d8_pick_pain_stairs', 'stairs', 'pain', ['pain', 'beurre', 'basilic']),
+    chips('d8_chips_jeudi', 'stairs', 'Vous voulez venir manger le jeudi ?', ['jeudi ?', 'venir', 'Vous', 'le', 'manger', 'voulez'], ['jeudi'], 'd9_lef_jeudi'),
     line('n_d10_monte', 'stairs', { flags: { rooftop: true }, action: 'keyTurns', sfx: 'door', silent: true }),
-    focus('d8_focus_roof', 'roof', ['toit', 'jardin'], 'garden'),
+    pick('d8_focus_roof', 'roof', 'toit', ['salon', 'jardin', 'toit']),
+    pick('d8_pick_jardin_roof', 'roof', 'jardin', ['toit', 'jardin', 'salon']),
+    chips('d8_chips_jardin', 'roof', 'Il y a un jardin, là-haut.', ['jardin,', 'un', 'Il', 'là-haut.', 'a', 'y'], ['jardin'], 'd10_lef_jardin'),
     line('d10_noe_ici', 'roof', { kind: 'point', hotspot: 'emptyPot', lighting: 'night' }),
+    pick('d8_probe_basilic', 'roof', 'basilic', ['beurre', 'basilic', 'pain'], 'probe'),
+    pick('d8_probe_soupe', 'roof', 'soupe', ['plante', 'eau', 'soupe'], 'probe'),
+    pick('d8_probe_cle', 'roof', 'cle', ['cle', 'chaise', 'porte'], 'probe'),
+    pick('d8_probe_toit', 'roof', 'toit', ['jardin', 'toit', 'salon'], 'probe'),
     beat('d8_noe_carry', 'roof', 'line', carry),
     line('n_d10_plante', 'roof', { action: 'plantBasil', flags: { basil_planted: true }, pot: 2, cat: 'dig', silent: true }),
     beat('d8_first_watering', 'roof', 'water', { mode: 'first', lighting: 'night', holdMs: 3000, pot: 2, potId: 2, firstWordId: 'basilic', duePotId: 1,
       firstSentence: fr('C’est du basilic, pour la cuisine.'), can: 'martin', underlay: line('d8_noe_eau', 'roof'), noTextDuringHold: true, flags: { garden_open: true } }),
     line('n_d10_arrose', 'roof', { action: 'leafLifts', silent: true }),
+    beat('d8_diary', 'roof', 'diary', { prompt: lessonInstructions.diary, optional: true, graded: false, saveKey: 'day8', wordIds: [] }),
+    beat('d8_ritual', 'facade', 'ritual', { durationMs: 4000, action: 'lightsOut', lamp: true, preserveLamp: 'lefevre', silent: true }),
     beat('d8_end', 'facade', 'end', { ...hook, id: 'd8_end', clip: 'd8_hook', action: 'tiltToWindow', lamp: true, hand: 'empty', flags: { day8_done: true }, pots: [1, 2] })
   ];
+  chats[3].wordIds = ['jeudi'];
 
   const words = [];
   const wordById = {};
@@ -193,7 +242,8 @@
     const lex = lexicon.find(l => l.fr_def && normalize(l.fr_def) === normalize(w.fr));
     const met = I.firstMeet[id];
     const entry = (met && (I.lines[met.id] || I.narr[met.id])) || null;
-    const sceneLine = scenes.find(s => s.wordIds?.includes(id) && s.kind === 'line');
+    const focusScene = scenes.find(s => s.kind === 'focus' && s.wordIds.includes(id));
+    const sceneLine = focusScene ? scenes.find(s => s.id === focusScene.sourceId) || focusScene : scenes.find(s => s.wordIds?.includes(id) && s.kind === 'line');
     // Week 1 review must not reveal tonight's dialogue before it happens.
     const sentence = met ? (/^w_/.test(met.id) ? w.say?.tts || met.fr : met.fr) : sceneLine?.text || w.para;
     const clip = met?.id || sceneLine?.audioId || 'w_' + id;
@@ -247,7 +297,9 @@
       source: 'app/docs/refs/WORDLIST_W1-2_DRAFT.md', tagmap: tag || null, encounters: first ? [{ id: reference, day: item.day, fr: first.fr }] : [] });
   }
   // Metadata only: semantic pools, not rewritten French or invented distractors.
+  const drawableWords = new Set(['plante', 'basilic', 'bol', 'soupe', 'pain', 'cle', 'toit', 'heure', 'sept_heures', 'porte', 'fenetre', 'table', 'tasse', 'chaise', 'fromage']);
   for (const word of words) {
+    if (drawableWords.has(word.id)) word.picture = word.id === 'sept_heures' ? 'heure' : word.id;
     if (['drink', 'food', 'shop'].includes(word.field) || ['tasse', 'bol', 'soif', 'faim'].includes(word.id)) word.field = 'kitchen';
     if (word.id === 'arrosoir') word.field = 'item';
     if (['nuit', 'pluie'].includes(word.id)) word.field = 'atmosphere';
@@ -308,13 +360,54 @@
     }
     return null;
   }
-  // Independent approved module order, not inferred from the data being checked.
+  // Preserve every approved story/save anchor in order; lesson inserts need not freeze a scene count.
   const orderedIds = ('n_d8_matin d8_cam_depuis d8_noe_matin d8_focus_plante d8_cat n_d8_boum d8_noe_plante ' +
     'n_d8_toc n_d8_porte d8_gag_bonjour d8_gag_basilic d8_focus_basilic d8_pot d8_merci d8_gag_venez d8_voicemail ' +
     'd8_chat_place d8_chat_time d8_chat_basil n_d8_cinq n_d9_soir d8_cam_descend d9_noe_chat d9_cam_basilic d9_cam_null ' +
     'd9_lef_bonsoir d9_lef_asseyez d9_lef_soupe n_d9_croissant d9_lef_place d9_soupe d9_noe_pain d9_lef_question ' +
     'd9_lef_jeudi d9_lef_seule d9_jeudi n_d9_cle d9_lef_cle d8_noe_danger n_d10_cle d10_lef_jardin d10_pourmoi ' +
     'd10_lef_allez d8_chat_thursday d10_noe_porte n_d10_monte d8_focus_roof d10_noe_ici d8_noe_carry n_d10_plante d8_first_watering n_d10_arrose d8_end').split(' ');
+  const recallKinds = ['pick', 'probe', 'chips'];
+  const passiveKinds = ['line', 'establishing', 'ritual', 'end'];
+  function auditLesson(list = scenes) {
+    const counts = Object.fromEntries(sceneKinds.map(kind => [kind, list.filter(s => s.kind === kind).length]));
+    let run = [], longest = [];
+    for (const scene of list) {
+      run = passiveKinds.includes(scene.kind) ? [...run, scene.id] : [];
+      if (run.length > longest.length) longest = run;
+    }
+    const waterIndex = list.findIndex(s => s.kind === 'water');
+    const beforeReview = list.slice(0, waterIndex < 0 ? list.length : waterIndex);
+    // Count guaranteed target encounters only, not distractor options or optional hotspot visits.
+    const targets = [...new Set(list.filter(s => s.kind === 'focus').flatMap(s => s.wordIds || []))].map(id => {
+      const encounters = beforeReview.filter(s => s.wordIds?.includes(id));
+      return { id, encounters: encounters.map(s => s.id), locations: [...new Set(encounters.map(s => s.scene))],
+        first: encounters[0]?.kind, next: encounters[1]?.kind,
+        nextWithoutCue: encounters[1]?.visualCue === false,
+        active: encounters.filter(s => recallKinds.includes(s.kind)).map(s => s.id) };
+    });
+    // These are recording requests, NOT claims that the files exist. The Node QA tool checks disk.
+    const requests = new Map();
+    function request(id, scene) {
+      if (!id) return;
+      if (!requests.has(id)) requests.set(id, { id, scenes: [] });
+      if (!requests.get(id).scenes.includes(scene)) requests.get(id).scenes.push(scene);
+    }
+    for (const s of list) {
+      if (!s.silent) request(s.audioId || s.clip || (s.text ? s.id : null), s.id);
+      if (recallKinds.includes(s.kind)) request(s.cue, s.id);
+      if (s.kind === 'chips') request(s.id, s.id);
+      (s.clips || []).forEach(id => request(id, s.id));
+      for (const child of [...(s.lines || []), ...(s.hotspots || []), ...Object.values(s.variants || {}),
+        ...(['reply', 'choice', 'chat'].includes(s.kind) ? s.options || [] : []), s.underlay, s.catchLine].filter(Boolean)) {
+        const optionId = s.options?.includes(child) && !child.id.startsWith(s.id) ? s.id + '_' + child.id : child.id;
+        request(child.audioId || child.clip || optionId, s.id);
+        if (child.after) request(child.after.id, s.id);
+      }
+    }
+    return { scenes: list.length, counts, focusItems: targets.length, maxPassiveBeats: longest.length,
+      longestPassiveRun: longest, targets, audioRequests: [...requests.values()] };
+  }
   function compile(input) {
     const list = input || scenes;
     const seen = new Set();
@@ -325,7 +418,7 @@
       if (s.module !== moduleForKind(s.kind)) throw new Error('Invalid scene module: ' + s.id);
       for (const key of ['text', 'zh', 'en', 'speaker']) if (typeof s[key] !== 'string') throw new Error('Missing ' + key + ': ' + s.id);
       if (s.text !== fr(s.text)) throw new Error('French typography: ' + s.id);
-      for (const child of [...(s.options || []), ...(s.hotspots || []), ...(s.lines || [])]) {
+      for (const child of [...(['pick', 'probe'].includes(s.kind) ? [] : s.options || []), ...(s.hotspots || []), ...(s.lines || [])]) {
         if (child.text !== fr(child.text) || typeof child.zh !== 'string' || typeof child.en !== 'string') throw new Error('Invalid translated child: ' + child.id);
         if (child.after && child.after.text !== fr(child.after.text)) throw new Error('French follow-up typography: ' + child.id);
       }
@@ -333,8 +426,31 @@
       for (const id of s.grammarIds || []) if (!A.GRAMMAR_DATA.some(g => g.id === id)) throw new Error('Unknown grammar ' + id + ': ' + s.id);
       if (I.canonical[s.id] && s.text !== fr(I.canonical[s.id].fr)) throw new Error('Canonical text changed: ' + s.id);
       if (['reply', 'choice', 'chat'].includes(s.kind) && !s.options?.length) throw new Error('Missing answers: ' + s.id);
+      if (s.kind === 'focus') {
+        const source = I.canonical[s.sourceId] || I.lines[s.sourceId] || I.narr[s.sourceId];
+        if (!source || !s.wordIds?.length || !s.hotspot || s.text !== fr(source.fr) || s.sentence !== s.text || s.sourceSentence !== s.text || s.audioId !== s.sourceId) throw new Error('Invalid focus source: ' + s.id);
+        if (s.comprehensionOnly !== true || s.graded !== false || s.encounter !== 'comprehension' || s.options || s.answer) throw new Error('First focus is comprehension only: ' + s.id);
+      }
+      if (recallKinds.includes(s.kind)) {
+        if (!s.prompt || s.prompt !== fr(s.prompt) || !s.wordIds?.length || s.text || s.hotspot || s.visualCue !== false || s.encounter !== 'recall' || s.revealAfterAnswer !== true || s.evidenceOnly !== true) throw new Error('Recall contract or visual cue: ' + s.id);
+        if (['pick', 'probe'].includes(s.kind)) {
+          if (!wordById[s.answer] || !s.wordIds.includes(s.answer) || s.cue !== wordById[s.answer].wordClip || s.options?.length < 3 || !s.options) throw new Error('Invalid pick/probe answer or cue: ' + s.id);
+          const ids = s.options.map(o => o.id);
+          if (new Set(ids).size !== ids.length || !ids.includes(s.answer)) throw new Error('Invalid pick/probe options: ' + s.id);
+          for (const option of s.options) {
+            if (Object.keys(option).sort().join('|') !== 'id|text' || !wordById[option.id] || option.text !== fr(wordById[option.id].fr)) throw new Error('Text-only pick/probe options required: ' + s.id);
+          }
+        } else {
+          if (s.audioId !== s.id || s.cue) throw new Error('Chips require an exact-answer audio ID: ' + s.id);
+          const tokens = typeof s.answer === 'string' ? s.answer.split(/ +/) : [];
+          if (!tokens.length || !Array.isArray(s.chunks) || s.chunks.some(c => typeof c !== 'string' || !c || c !== fr(c)) ||
+              s.chunks.join(' ') === s.answer || [...s.chunks].sort().join('|') !== tokens.sort().join('|')) throw new Error('Chips must be a scrambled answer: ' + s.id);
+          const source = I.canonical[s.sourceId] || I.lines[s.sourceId];
+          if (!(source && fr(source.fr).includes(s.answer)) && !I.choices[s.sourceId]?.opts.some(o => fr(o.fr) === s.answer)) throw new Error('Chips answer must preserve source French: ' + s.id);
+        }
+      }
     });
-    if (list.map(s => s.id).join('|') !== orderedIds.join('|')) throw new Error('Day 8 canonical sequence changed');
+    if (list.filter(s => orderedIds.includes(s.id)).map(s => s.id).join('|') !== orderedIds.join('|') || list[0].id !== 'n_d8_matin') throw new Error('Day 8 canonical sequence changed');
     if (list.filter(s => s.kind === 'walk').length !== 2) throw new Error('Only two stairwell walking beats are permitted');
     if (list.filter(s => s.id === 'd10_noe_ici').length !== 1) throw new Error('Empty pot beat must appear once');
     const water = list.find(s => s.id === 'd8_first_watering');
@@ -342,18 +458,37 @@
     if (list.filter(s => s.kind === 'water').length !== 1 || water.scene !== 'roof' || water.lighting !== 'night' || water.pot !== 2 || water.potId !== 2 || water.firstWordId !== 'basilic' || water.duePotId !== 1) throw new Error('Review must be one night roof session, basil then Martin');
     const carried = list.find(s => s.id === 'd8_noe_carry');
     if (carried.text !== carry.text || !carried.listenOnly || carried.reviewed !== false) throw new Error('Approved listen-only carry changed');
+    if (list[list.indexOf(carried) + 1]?.id !== 'n_d10_plante' || list[list.indexOf(carried) + 2] !== water) throw new Error('Carry, planting, watering continuity changed');
     const cat = list.find(s => s.kind === 'cat');
     if (cat.module || cat.durationMs !== 16000 || ['budget', 'mode', 'seenOnly', 'potId'].some(key => key in cat)) throw new Error('Cat is a touch interaction, not review');
     if (list.some(s => s.id === 'd8_noe_eau')) throw new Error('Water recognition line is an underlay, not a separate step');
     if (list.filter(s => s.kind === 'chat').length !== 4) throw new Error('Four approved Coloc 411 exchanges are required');
     if (list[list.length - 1].text !== hook.text) throw new Error('Approved ending changed');
+    const keyIndex = list.findIndex(s => s.id === 'd10_lef_jardin');
+    if (list[keyIndex].flags?.has_key !== true || list.find(s => s.id === 'd10_noe_porte').requiresFlag !== 'has_key' ||
+        list.find(s => s.id === 'd8_cam_descend').roofDoorLocked !== true || list.some((s, i) => i < keyIndex && (s.scene === 'roof' || s.flags?.has_key || s.flags?.rooftop || s.flags?.garden_open))) throw new Error('Key gating changed');
+    const dusk = list.filter(s => s.kind === 'establishing');
+    if (dusk.length !== 1 || dusk[0].scene !== 'facade' || dusk[0].durationMs !== 4000 || dusk[0].text || dusk[0].characters?.length !== 0 ||
+        list.indexOf(dusk[0]) + 1 !== list.findIndex(s => s.id === 'n_d8_cinq')) throw new Error('Empty dusk establishing contract changed');
+    const diary = list.find(s => s.kind === 'diary'), ritual = list.find(s => s.kind === 'ritual');
+    if (!diary || !ritual || diary.optional !== true || diary.graded !== false || !diary.prompt || ritual.scene !== 'facade' || ritual.preserveLamp !== 'lefevre' || ritual.lamp !== true ||
+        list.indexOf(diary) <= list.indexOf(water) || list.indexOf(ritual) <= list.indexOf(diary) || list.indexOf(ritual) >= list.length - 1) throw new Error('Diary/ritual ending changed');
+    const audit = auditLesson(list);
+    if (audit.focusItems < 8 || audit.counts.pick < 3 || audit.counts.chips < 2 || audit.counts.probe < 3 || audit.counts.probe > 4) throw new Error('Lesson interaction quota changed');
+    if (audit.maxPassiveBeats > 4) throw new Error('Passive run exceeds four beats');
+    for (const target of audit.targets) {
+      if (target.first !== 'focus' || !recallKinds.includes(target.next) || !target.nextWithoutCue) throw new Error('Focus then uncued recall required: ' + target.id);
+      if (target.encounters.length < 4 || target.locations.length < 2 || !target.active.length) throw new Error('Insufficient spaced story encounters: ' + target.id);
+    }
+    const probes = list.filter(s => s.kind === 'probe');
+    if (probes.some((s, i) => list.indexOf(s) !== list.indexOf(probes[0]) + i) || list.indexOf(probes[0]) <= keyIndex || list.indexOf(probes.at(-1)) >= list.indexOf(water)) throw new Error('End probe must be a single pre-review block');
     return list;
   }
-  const api = { version: 2, day: 8, title: 'Le basilic', scenes: compile(), words, wordById,
+  const api = { version: 3, day: 8, title: 'Le basilic', legacySceneIds: orderedIds.slice(), scenes: compile(), words, wordById,
     sceneById: Object.fromEntries(scenes.map(s => [s.id, s])), oldIdToWordId, lineWordIds, audio, voicemail, chats, hotspots, newFrench,
     pots: [{ id: 1, name: 'Chez nous', location: 'roof', plant: 'martin' }, { id: 2, name: 'À table', location: 'roof', plant: 'basilic', unlock: 'basil_planted' }],
     requiredChunks: ['cest_du_basilic', 'venez_a_six_heures', 'asseyez_vous', 'vous_voulez_venir_le_jeudi', 'cest_pour_moi'],
-    glossary: A.GLOSSARY_DATA, grammar: A.GRAMMAR_DATA, compile, lookup, normalize, french: fr,
+    glossary: A.GLOSSARY_DATA, grammar: A.GRAMMAR_DATA, compile, auditLesson, lessonInstructions, lookup, normalize, french: fr,
     resolveBand: (scene, flags) => scene.variants?.[flags?.d7_band || 'null'] || scene,
     accepts: (scene, answer) => L.gradeAnswer(answer, scene.accepted || [], scene.canonical || scene.answer).correct,
     clipPath: id => audio[id] || '../audio/w1/' + id + '.mp3' };

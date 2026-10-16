@@ -6,6 +6,8 @@
   "scripts": {
     "test": "node --test tests/*.test.cjs",
     "test:webkit": "node --test tests/hotfix-webkit.cjs",
+    "test:round3": "node --test tests/round3-browser.cjs",
+    "screenshots:round3": "node tools/round3-screenshots.cjs",
     "screenshots": "node screenshots.cjs",
     "portability": "node portability.cjs",
     "verify:content": "node tools/validate-content.mjs"

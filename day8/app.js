@@ -16,27 +16,30 @@
   function sanitizeState(value) {
     const object=x=>x && typeof x==='object' && !Array.isArray(x);
     value.story=object(value.story)?value.story:{};value.settings=object(value.settings)?value.settings:{};
-    const legacyStory=value.story.day8Version!==2;
+    const legacyStory=Number(value.story.day8Version||0)<2;
     let index=Number(value.story.day8Index);
     const stable=C.scenes.findIndex(s=>s.id===value.story.day8SceneId);
     if(stable>=0)index=stable;
-    else if(value.story.day8Version!==2&&Number.isInteger(index)&&index>0&&index<49)index--;
+    else if(Number(value.story.day8Version||0)<3&&Number.isInteger(index)){
+      if(legacyStory&&index>0&&index<49)index--;
+      const id=C.legacySceneIds?.[index];
+      if(id)index=C.scenes.findIndex(scene=>scene.id===id);
+    }
     value.story.day8Index=Number.isInteger(index)?Math.max(0,Math.min(C.scenes.length-1,index)):0;
-    value.story.day8Version=2;
+    value.story.day8Version=3;
     for(const key of ['rooftop','day8Complete'])value.story[key]=value.story[key]===true;
     value.settings.uiLang=value.settings.uiLang==='en'?'en':'zh';value.settings.muted=value.settings.muted===true;
     for(const [key,fallback] of [['music',.24],['voice',.85],['sfx',.5]])value.settings[key]=typeof value.settings[key]==='number'&&Number.isFinite(value.settings[key])?Math.max(0,Math.min(1,value.settings[key])):fallback;
     for(const key of ['words','cards','days','customWords'])if(!object(value[key]))value[key]={};
-    for(const [id,word] of Object.entries(value.words)){if(!object(word)){delete value.words[id];continue;}word.scenes=Array.isArray(word.scenes)?word.scenes.filter(x=>typeof x==='string'):[];}
+    for(const [id,word] of Object.entries(value.words)){if(!object(word)){delete value.words[id];continue;}for(const field of ['scenes','activeScenes'])word[field]=Array.isArray(word[field])?word[field].filter(x=>typeof x==='string'):[];}
     for(const [id,word] of Object.entries(value.customWords))if(!object(word)||word.id!==id||typeof word.fr!=='string')delete value.customWords[id];
     for(const [day,record] of Object.entries(value.days)){if(!object(record)){delete value.days[day];continue;}for(const key of ['introduced','attempted','due','reviewed'])record[key]=Array.isArray(record[key])?record[key].filter(x=>typeof x==='string'):[];}
     value.grammar=Array.isArray(value.grammar)?value.grammar.filter(x=>typeof x==='string'):[];
     value.notes=Array.isArray(value.notes)?value.notes.filter(object):[];
     const review=value.appSession,s=review?.session;
-    const validExercise=x=>object(x)&&['R1','R2','R3','P1','P2'].includes(x.type)&&object(x.word)&&typeof x.wordId==='string'&&typeof x.sentence==='string'&&(!['R1','R2'].includes(x.type)||Array.isArray(x.options)&&x.options.every(object))&&(x.type!=='R3'||Array.isArray(x.chunks));
+    const validExercise=x=>object(x)&&['E1','E3','R1','R2','R3','P1','P2'].includes(x.type)&&object(x.word)&&typeof x.wordId==='string'&&typeof x.sentence==='string'&&(!['E1','R1','R2'].includes(x.type)||Array.isArray(x.options)&&x.options.every(object))&&(x.type!=='R3'||Array.isArray(x.chunks))&&(x.type!=='E3'||Array.isArray(x.pairs));
     // v1 queues refer to removed/reordered activities. Keep learning data, not their UI continuation.
     if(legacyStory||!object(review)||!object(s)||s.mode!=='garden'||(!value.story.rooftop&&!value.story.day8Complete)||!Array.isArray(s.queue)||!s.queue.every(x=>object(x)&&typeof x.wordId==='string')||!Number.isInteger(s.index)||s.index<0||s.index>s.queue.length||!Array.isArray(s.types)||!Array.isArray(s.pool)||!Number.isInteger(s.answered)||s.answered<0||!Number.isFinite(Date.parse(s.now))||!['story','garden'].includes(review.returnTo)||review.feedback&&!validExercise(review.lastExercise)||s.current&&!validExercise(s.current)||review.returnTo==='story'&&(C.scenes[value.story.day8Index].kind!=='water'||review.originSceneId&&review.originSceneId!==C.scenes[value.story.day8Index].id))value.appSession=null;
-    if(value.appSession&&(review.first||review.returnTo==='story'))s.firstWateringCap=Math.min(8,Number.isFinite(s.firstWateringCap)?Math.max(0,s.firstWateringCap):8);
     return value;
   }
   state=sanitizeState(state);
@@ -46,7 +49,9 @@
   let review = state.appSession || null, feedback = review?.feedback || null, exercise = null;
   let reviewStarted = performance.now(), reviewReturn = 'story', chunks = [], lineRevealed = false;
   let glossVisible = false, replyAttempts = 0, replyFeedback = null, transcript = false;
-  let currentPot = 1, expandedWord = null, search = '', simulatedNow = null, noteImages = [];
+  let currentPot = 1, expandedWord = null, search = '', simulatedNow = null, noteImages = [], wordPage = 0, wordPageSize = 8, searchOpen = false;
+  let reviewDelay = 0, reviewReplays = 0, pairSelection = null, focusAge = 0, establishingAge = 0, focusSpeechDone = false, focusSpeechToken = 0, reviewSpeechDone = true;
+  const thumbnails = new Map();
   let sceneModel = {scene:'roof',night:false,cat:true,danger:0,reaction:'idle',water:0,growth:[1,0]};
   let holdFrame = 0, holdStart = 0, holdActive = false, noticeTimer = 0, sceneTimer = 0, sceneEpoch=performance.now(),activeSceneId='';
   let importMessage = '', importReport = null, detected = null, growthReveal = null;
@@ -62,7 +67,7 @@
   const status = () => '<div class="audio-status" hidden></div>';
   function save() {
     state.appSession = review;
-    state.story.day8SceneId=currentScene().id;state.story.day8Version=2;
+    state.story.day8SceneId=currentScene().id;state.story.day8Version=3;
     if (dev) return;
     try {
       const result = S.save(storage,state);
@@ -77,7 +82,7 @@
   function currentScene() { return C.scenes[Math.min(Number(state.story.day8Index || 0), C.scenes.length-1)]; }
   function canReview(first=false) {
     // Follow the current story cursor, not unlocks carried over from an earlier playthrough.
-    return state.story.has_key===true && (first?currentScene().id==='d8_first_watering':state.story.day8Index>C.scenes.findIndex(s=>s.id==='d8_first_watering'));
+    return state.story.has_key===true && (first?currentScene().id==='d8_first_watering':state.story.day8Index>=C.scenes.findIndex(s=>s.id==='d8_first_watering'));
   }
   function notice(text) { $('#notice').textContent = text; $('#notice').classList.add('show'); clearTimeout(noticeTimer); noticeTimer = setTimeout(() => $('#notice').classList.remove('show'),2600); }
   function tokenize(text) {
@@ -96,6 +101,7 @@
       ['btnMusic','mu-fab','music','music','Musique'],['btnPause','pause-fab','settings','pause','Pause']
     ].map(([id,cls,action,ico,label])=>button(icon(ico),action,cls,`id="${id}" aria-label="${label}" title="${label}"`)).join('');
     $('#btnWordbook').dataset.count=count;
+    $('#btnWordbook').disabled=baseScreen==='review'&&!feedback&&!review?.checkpoint;
     $('#btnWordbook').setAttribute('aria-label',`Carnet, ${count} mots`);
     const musicOn=state.settings.music>0&&!state.settings.muted;
     $('#btnMusic').setAttribute('aria-pressed',String(musicOn));
@@ -106,7 +112,7 @@
     $('#btnPause').classList.toggle('audio-unavailable',audioUnavailable);
     // Outside the scrolling exercise panel: reachable even when a queue is empty or broken.
     const inGarden=['garden','review','reviewdone','reveal'].includes(screen)||screen==='story'&&currentScene().kind==='water';
-    if(inGarden){const label=currentScene().kind==='water'?'Continuer l’histoire':'Continuer · Rentrer';if($('#scene-actions [data-action="leave-garden"]')?.textContent!==label)$('#scene-actions').innerHTML=button(label,'leave-garden','secondary');}
+    if(inGarden){const label=currentScene().kind==='water'?'Continuer l’histoire':'Continuer · Rentrer';$('#scene-actions').innerHTML=(screen==='review'?button('Plus tard','review-exit','secondary'):'')+button(label,'leave-garden','secondary');}
     else $('#scene-actions').replaceChildren();
   }
   function render() {
@@ -135,8 +141,8 @@
     $('#overlay').setAttribute('aria-label',({wordbook:'Carnet',lookup:'Dictionnaire',settings:'Pause',notes:'Note',grammar:'Grammaire'})[screen] || 'Outils');
     $('#overlay-body').setAttribute('aria-label',$('#overlay').getAttribute('aria-label'));
     game.style.setProperty('--text-scale',state.settings.largeText?'1.15':'1');
-    $('#location .dev-badge')?.remove();
-    if (dev) $('#location').insertAdjacentHTML('beforeend','<span class="dev-badge">ATELIER</span>');
+    $('#overlay-body').dataset.sheet=modal?screen:'';
+    if(!modal&&screen!=='review')$('#review-progress').replaceChildren();
   }
   // Like the legacy overlay, keep the actual scene and utility nodes, not a rerendered snapshot.
   function openOverlay(target) {
@@ -166,12 +172,11 @@
   }
   function setLocation(place, time='Lundi') { $('#location').innerHTML = `<span>411</span><span>${esc(place)}</span><span>${esc(time)}</span>`; }
   function renderEntry() {
-    setScene({scene:'kitchen',night:false,reaction:'idle',water:0,focus:null,garden:null}); setLocation('La cuisine','07:30');
-    $('#scene-title').innerHTML='<div class="entry-title">L’Appartement 411<br><strong>Le basilic.</strong></div>';
-    panel.innerHTML = `${primary('Continuer · Jour 8','continue')}${button('Importer ma progression','import','text-button')}`;
+    setScene({scene:'facade',night:false,cat:false,reaction:'idle',water:0,focus:null,garden:null,establishingProgress:0}); setLocation('','');
+    panel.innerHTML = primary('Continuer','continue');
     try { detected ||= S.detect(storage); } catch (_) {}
     if (detected?.available && !state.imports?.length && !state.story.importDismissed) {
-      panel.querySelector('[data-action="import"]').textContent='Importer la progression de Jinyi';
+      // Import remains available from Pause, never an entry gate.
     }
   }
   function storyTop(scene) {
@@ -187,11 +192,16 @@
   }
   function renderStory() {
     const s = currentScene();
-    if(activeSceneId!==s.id){activeSceneId=s.id;sceneEpoch=performance.now();moduleController=null;moduleKey='';catGame=null;}
-    setScene({scene:s.scene || 'kitchen',night:!!s.night || s.lighting==='evening' || ['lefevre','stairs','roof','facade'].includes(s.scene),direction:s.direction || 'down',action:s.action || (s.cat==='sleepBetweenPots'?'sleepBetweenPots':''),focus:null,focusZoom:0,water:0,reaction:'idle',walkProgress:0,garden:null,catGame:null,speaker:s.speaker});
+    sceneModel.cat=s.cat!==false;
+    if(activeSceneId!==s.id){activeSceneId=s.id;sceneEpoch=performance.now();focusAge=0;focusSpeechDone=false;establishingAge=0;moduleController=null;moduleKey='';catGame=null;}
+    setScene({scene:s.scene || 'kitchen',night:!!s.night || s.lighting==='evening' || ['lefevre','stairs','roof','facade'].includes(s.scene),direction:s.direction || 'down',action:s.action || (s.cat==='sleepBetweenPots'?'sleepBetweenPots':''),focus:null,focusZoom:0,water:0,reaction:'idle',walkProgress:0,garden:null,catGame:null,speaker:s.speaker,establishingProgress:undefined,recall:false});
     setLocation(s.scene==='roof'?'Le toit':s.scene==='stairs'?'L’escalier':s.scene==='lefevre'?'Chez Madame Lefèvre':s.scene==='doorway'?'La porte':'La cuisine',s.time || (sceneModel.night?'21:08':'07:30'));
     if (s.flags) { Object.assign(state.story,s.flags); save(); }
     if (s.wordIds) markMet(s.wordIds,s);
+    if(s.kind==='establishing'){panel.innerHTML='';setScene({scene:'facade',cat:false,night:false,establishingProgress:establishingAge/(s.durationMs||4000)});return;}
+    if(s.kind==='ritual'){panel.innerHTML='';setScene({scene:'facade',cat:false,night:true,action:'lightsOut'});return;}
+    if(['pick','probe','chips'].includes(s.kind))return renderStoryRecall(s);
+    if(s.kind==='diary'){panel.innerHTML=header('Mon carnet du jour')+`<textarea id="writing-text" class="textarea" lang="fr" aria-label="Mon texte" placeholder="Aujourd’hui…">${esc(state.writing||'')}</textarea>`+primary('Bonne nuit');return;}
     if (s.kind === 'water') {
       if (s.mode==='first') return renderFirstWater(s);
       return nextScene();
@@ -231,11 +241,45 @@
   }
   function renderFocus(s,controller){
     const target=s.hotspot==='plant'?'pot':s.hotspot || (s.wordIds?.includes('basilic')?'basil':'pot');
-    setScene({focus:target,focusZoom:lineRevealed?1:0});controller.pulse();
-    if(!lineRevealed){panel.innerHTML=`<div class="focus-guess">${button('?', 'focus-reveal','primary','aria-label="Révéler le mot"')}</div>`;hotspot(target,'focus-reveal');return;}
+    setScene({focus:target,focusZoom:1});controller.pulse();
     panel.classList.add('focus-card');
     const words=(s.wordIds || []).map(wordById).filter(Boolean);
-    panel.innerHTML=words.map(w=>`<div class="focus-word gender ${esc(w.gender)}" lang="fr">${tokenize(w.fr)}</div><div class="line-tools">${button(icon('sound'),`focus-audio:${w.id}`,'icon-button','aria-label="Écouter le mot"')}${button(state.words[w.id]?.collected?`${icon('check')} Dans le carnet`:'Ajouter au carnet',`collect-id:${w.id}`,'secondary')}</div>`).join('')+primary('OK','focus-next');
+    panel.innerHTML=`<div class="dialogue" lang="fr">${esc(s.sourceSentence||s.text)}</div>`+(!lineRevealed?'<div class="focus-listening" aria-label="Écoute">· · ·</div>':words.map(w=>`<span class="new-word">NOUVEAU</span><div class="focus-word gender ${esc(w.gender)}" lang="fr">${tokenize(w.fr)}</div>`).join(''))+`<div class="line-tools">${button(icon('sound'),'focus-listen','icon-button','aria-label="Écouter"')}${button('?','exercise-hint','icon-button','aria-label="Traduction"')}${primary('Continuer','focus-next')}</div>`+(hintOpen?`<p class="exercise-hint">${esc(words.map(w=>hint(w.zh,w.en)).join(' · '))}</p>`:'');
+    if(focusAge===0){focusAge=1;playFocusSentence(s);}
+  }
+  function playFocusSentence(s){
+    const token=++focusSpeechToken;focusSpeechDone=false;
+    Promise.resolve(A.speak(s.sourceSentence||s.text,s.sourceId||s.audioId||s.id)).then(()=>{if(token===focusSpeechToken&&currentScene().id===s.id)focusSpeechDone=true;});
+  }
+  function revealFocus(){
+    if(lineRevealed)return;
+    lineRevealed=true;sceneModule('M1',currentScene()).reveal();
+    for(const id of currentScene().wordIds||[]){state.words[id].collected=true;sceneThumbnail(wordById(id));}
+    save();render();const w=wordById(currentScene().wordIds?.[0]);if(w)A.speak(w.fr,w.wordClip);
+    $('#btnWordbook').classList.remove('book-arrival');void $('#btnWordbook').offsetWidth;$('#btnWordbook').classList.add('book-arrival');
+    if(w&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const flight=document.createElement('span');flight.className=`word-flight gender ${w.gender||''}`;flight.textContent=w.fr;game.append(flight);
+      flight.animate([{left:'50%',top:'70%',opacity:1},{left:'34px',top:'calc(100% - 45px)',opacity:0}],{duration:450,easing:'ease-in'}).finished.then(()=>flight.remove());
+    }
+  }
+  function renderStoryRecall(s){
+    // Retrieval never reuses the focus spotlight, gender colour or object glint.
+    setScene({focus:null,focusZoom:0,recall:true,reaction:'idle'});
+    panel.classList.add('recall-panel');
+    if(replyFeedback){panel.innerHTML=`<div class="feedback" role="status" lang="fr">${replyFeedback.correct?'Oui.':'C’est…'} <span class="correct-answer gender ${esc(wordById(s.answer)?.gender)}">${esc(replyFeedback.answer)}</span></div>`+primary('Continuer');return;}
+    panel.innerHTML=`<div class="question" lang="fr">${esc(s.prompt||'Écoute. Quel mot ?')}</div>${listenButton('story-listen')}`;
+    if(s.kind==='chips')panel.innerHTML+=`<div class="ordered" lang="fr">${chunks.map((i,n)=>button(esc(s.chunks[i]),`story-unchunk:${n}`,'chunk')).join('')}</div><div class="chunks" lang="fr">${s.chunks.map((text,i)=>button(esc(text),`story-chunk:${i}`,'chunk',chunks.includes(i)?'disabled':'')).join('')}</div>`;
+    else panel.innerHTML+=`<div class="answer-grid" lang="fr">${s.options.map(o=>button(esc(o.text),`story-answer:${o.id}`,'answer')).join('')}</div>`;
+    if(focusAge===0){focusAge=1;A.speak(wordById(s.answer)?.fr||s.answer,s.cue||s.audioId||s.id);}
+  }
+  function answerStory(input){
+    const s=currentScene();if(replyFeedback)return;
+    const correct=E.normalize(input)===E.normalize(s.answer);
+    const answer=s.kind==='chips'?s.answer:s.options.find(o=>o.id===s.answer)?.text||wordById(s.answer)?.fr;
+    replyFeedback={correct,answer};
+    for(const id of s.wordIds||[]){const word=state.words[id];word.activeScenes ||= [];if(!word.activeScenes.includes(s.id))word.activeScenes.push(s.id);}
+    state.story.evidence ||= [];state.story.evidence.push({scene:s.id,kind:s.kind,correct,at:now().toISOString()});
+    save();render();A.speak(answer);A.sfx(correct?'paper':'click');
   }
   function hotspot(target, action, quiet=false) {
     const aliases = {plant:'pot',basilic:'basil',pot_empty:'basil',emptyPot:'basil',catChair:'chair',lefevreDoor:'down',roofDoor:'up',rooftop:'door',lfd_chaises:'chair',lfd_fenetre:'window'};
@@ -297,11 +341,11 @@
     reviewReturn = screen==='story'?'story':'garden';
     if (!review || review.session?.mode!=='garden' || first) {
       gardenController=gardenModule();
-      const opts=first?{firstWordId:currentScene().firstWordId || 'basilic',duePotId:1,budget:8,now:now()}:{now:now(),budget:8,onlyIds:allWords().filter(w=>Number(w.potId||w.pot)===Number(currentPot)).map(w=>w.id)};
+      const opts={now:now(),storyDay:8};
       const session=gardenController.create(opts);
       review={session,returnTo:reviewReturn,originSceneId:currentScene().id,first,feedback:null,danger:0,correct:0};
     }else gardenController=gardenModule(review.session);
-    reviewReturn=review.returnTo; feedback=review.feedback || null; chunks=[];reviewStarted=performance.now();screen='review';save();render();
+    reviewReturn=review.returnTo; feedback=review.feedback || null; reviewDelay=feedback?.correct?900:0;chunks=[];reviewReplays=0;pairSelection=null;reviewStarted=performance.now();screen='review';save();render();
     playReviewPrompt();
   }
   function renderReview() {
@@ -309,8 +353,11 @@
     if(review.session.mode!=='garden'){review=null;feedback=null;screen='story';return renderStory();}
     gardenController ||= gardenModule(review.session);
     exercise = feedback ? review.lastExercise : gardenController.current();
-    setScene({scene:'roof',night:true,cat:true,reaction:feedback?'happy':'idle',action:'',focus:null,focusZoom:0,catGame:null,garden:gardenModel()});
+    setScene({scene:'roof',night:true,cat:true,reaction:feedback?(feedback.correct?(review.combo>=3?'roll':'happy'):'tilt'):review.checkpoint?'happy':'idle',action:'',focus:null,focusZoom:0,catGame:null,garden:gardenModel(),moisture:review.moisture||{},recall:false});
     setLocation('Le jardin','21:30');
+    const completed=review.session.completedIds?.length||0,total=review.session.initial;
+    $('#review-progress').innerHTML=`<div class="water-count">${icon('water')}<span>${Math.max(0,total-completed)}</span></div><progress value="${completed}" max="${Math.max(1,total)}" aria-label="Mots arrosés"></progress><span>${completed}/${total}</span>`;
+    if(review.checkpoint){panel.innerHTML=`<div class="review-checkpoint"><h2>Une petite pause</h2><p>${completed} mots arrosés.</p><div class="line-tools">${primary('Continuer','checkpoint-continue')}${button('Plus tard','review-exit','secondary')}</div></div>`;return;}
     if (!exercise && !feedback) {screen='reviewdone';save();return renderReviewDone();}
     const ex=exercise;
     currentPot=Number(ex.potId || ex.word?.potId || ex.word?.pot || 1);
@@ -318,12 +365,16 @@
     sceneModel.garden={...sceneModel.garden,bay:gardenBay,selectedPot:currentPot};sceneModel.targetPotId=currentPot;
     panel.innerHTML='';
     if (feedback) {
-      panel.innerHTML = `<div class="feedback ${feedback.correct?'':'soft'}" role="status"><p lang="fr">${tokenize(feedback.sentence)}</p></div><div class="line-tools">${button(icon('sound'),'review-audio','icon-button','aria-label="Réécouter"')}${primary('Continuer','review-next')}</div>${status()}`;
+      const answer=ex.type==='R3'?ex.sentence:ex.word.fr;
+      panel.innerHTML = `<div class="feedback ${feedback.correct?'':'soft'}" role="status">${feedback.correct?`<p>${review.combo>=3?`${review.combo} de suite !`:'Oui !'}</p>`:`<p>C’est… <strong class="correct-answer gender ${esc(ex.word.gender)}">${esc(answer)}</strong></p>${ex.options?`<div class="answer-grid">${ex.options.map(o=>button(esc(o.fr||o.text),'noop',`answer ${o.id===ex.wordId?'correct gender '+esc(ex.word.gender):'wrong'}`,'disabled')).join('')}</div>`:''}${ex.type==='E3'?`<div class="pair-corrections">${ex.pairs.map(p=>`<span class="correct-answer">${esc(p.fr)}</span>`).join(' · ')}</div>`:''}`}<p lang="fr">${tokenize(feedback.sentence)}</p></div><div class="line-tools">${button(icon('sound'),'review-audio','icon-button','aria-label="Réécouter"')}${feedback.correct?'':primary('Continuer','review-next')}</div>${status()}`;
       return;
     }
     const meaning=hint(ex.word?.zh || '',ex.word?.en || '');
-    if (ex.type==='R1') {
-      panel.innerHTML += listenButton('review-audio')+`${(!A.canSpeak() && !ex.word?.recorded || A.isMuted())?`<p class="audio-fallback" lang="fr">${tokenize(ex.sentence)}</p>`:''}${status()}`;
+    if (ex.type==='R1'||ex.type==='E1') {
+      panel.innerHTML += `<div class="question" lang="fr">${ex.type==='E1'?'Écoute. Quelle image ?':'Écoute. Quel mot ?'}</div>`+listenButton('review-audio')+`${(!A.canSpeak() && !ex.word?.recorded || A.isMuted())?`<p class="audio-fallback" lang="fr">${esc(ex.word.fr)}</p>`:''}${status()}`;
+    } else if(ex.type==='E3'){
+      const matches=review.pairMatches||[];
+      panel.innerHTML+=`<div class="question" lang="fr">Relie chaque mot à son image.</div><div class="pair-grid"><div>${ex.pairs.map(p=>button(esc(p.fr),`pair-word:${p.id}`,`answer ${pairSelection===p.id?'selected':''}`,matches.some(m=>m.id===p.id)?'disabled':'')).join('')}</div><div>${[...ex.pairs].reverse().map(p=>button(`<img src="${wordPicture(wordById(p.id))}" alt="Image à associer">`,`pair-picture:${p.id}`,'answer picture-answer',matches.some(m=>m.matchId===p.id)?'disabled':'')).join('')}</div></div>`;
     } else if (ex.type==='R2' || ex.type==='P1') {
       panel.innerHTML += `<div class="question" lang="fr">${tokenize(ex.prompt || ex.word?.cloze || '')}</div>`;
     } else if (ex.type==='R3') {
@@ -332,38 +383,50 @@
       const usable=(ex.word?.recorded || A.canSpeak()) && !A.isMuted();
       panel.innerHTML += listenButton('review-audio')+`${usable?'':`<div class="question audio-fallback" lang="fr">${tokenize(ex.word?.cloze || ex.prompt || '')}</div>`}${status()}`;
     }
-    if (ex.type==='R1' || ex.type==='R2') {
-      panel.innerHTML += `<div class="answer-grid" lang="fr">${(ex.options || []).map(option=>button(`<span>${esc(ex.type==='R1'?(option.fr || wordById(option.id)?.fr || ''):option.text)}</span>`,`answer:${option.id}`,'answer')).join('')}</div>`;
-    } else if (ex.type!=='R3') {
+    if (['E1','R1','R2'].includes(ex.type)) {
+      panel.innerHTML += `<div class="answer-grid" lang="fr">${(ex.options || []).map(option=>button(ex.type==='E1'?`<img src="${wordPicture(wordById(option.id))}" alt="${esc(option.fr||option.text)}">`:`<span>${esc(ex.type==='R1'?(option.fr || wordById(option.id)?.fr || ''):option.text)}</span>`,`answer:${option.id}`,`answer ${ex.type==='E1'?'picture-answer':''}`)).join('')}</div>`;
+    } else if (!['R3','E3'].includes(ex.type)) {
       panel.innerHTML += `<form id="review-form" class="input-row"><input id="review-input" aria-label="Réponse en français" lang="fr" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${esc(ex.firstLetter || '')}…"><button type="submit" class="primary" aria-label="Vérifier">${icon('arrow')}</button></form>`;
     }
     panel.innerHTML+=button('?','exercise-hint','icon-button','aria-label="Indice"')+(hintOpen?`<p class="exercise-hint" data-hint>${esc(meaning)}</p>`:'');
   }
   function listenButton(action) { return button(icon('sound'),action,'listen-button','aria-label="Écouter" title="Écouter"'); }
-  function playReviewPrompt() { if (!feedback && exercise && ['R1','R3','P2'].includes(exercise.type)) A.speak(exercise.sentence,exercise.audioId,exercise.word?.clipPath); }
+  function playReviewPrompt() { if (!feedback && exercise && ['E1','R1','R3','P2'].includes(exercise.type)) A.speak(['E1','R1'].includes(exercise.type)?exercise.word.fr:exercise.sentence,['E1','R1'].includes(exercise.type)?exercise.word.wordClip:exercise.audioId); }
   document.addEventListener('day8-audio-unavailable',()=>{
     audioUnavailable=true;nav();
     if(screen!=='review'||feedback||!exercise||!['R1','P2'].includes(exercise.type)||panel.querySelector('.audio-fallback'))return;
-    const text=exercise.type==='R1'?exercise.sentence:exercise.word.cloze || exercise.sentence.replace(exercise.answer,'___');
+    const text=exercise.type==='R1'?exercise.word.fr:exercise.word.cloze || exercise.sentence.replace(exercise.answer,'___');
     const anchor=panel.querySelector('.audio-status');if(anchor)anchor.insertAdjacentHTML('afterend',`<p class="hint audio-fallback" lang="fr">${esc(C.french(text))}</p>`);
   });
   function answerReview(input) {
     if (feedback || !exercise || !String(Array.isArray(input)?input.join(''):input).trim()) return;
     review.lastExercise=exercise;
-    feedback=gardenController.answer(input,{now:now(),elapsed:(performance.now()-reviewStarted)/1000});
+    feedback=gardenController.answer(input,{now:now(),elapsed:(performance.now()-reviewStarted)/1000,replays:reviewReplays});
     if (feedback.error) {notice(feedback.error);return;}
     review.feedback=feedback;
     if (feedback.correct) review.correct++;
+    review.combo=feedback.correct?(review.combo||0)+1:0;
+    review.moisture ||= {};const pot=exercise.potId||exercise.word?.pot||1;review.moisture[pot]=Math.min(3,(review.moisture[pot]||0)+1);
+    reviewDelay=feedback.correct?900:0;
     sceneModel.water=1;sceneModel.targetPotId=exercise.potId || exercise.word?.pot || 1;A.sfx('water');
     save();render();
-    A.speak(feedback.sentence,feedback.audioId);
+    const spokenFeedback=feedback;reviewSpeechDone=false;
+    Promise.resolve(A.speak(feedback.sentence,feedback.audioId)).then(()=>{if(feedback===spokenFeedback)reviewSpeechDone=true;});
   }
   function reviewNext() {
-    feedback=null;review.feedback=null;chunks=[];hintOpen=false;sceneModel.water=0;reviewStarted=performance.now();save();render();playReviewPrompt();
+    if(!review)return;
+    const completed=review.session.completedIds?.length||0;
+    if(completed>=((review.lastCheckpoint||0)+8)&&!review.session.done){review.checkpoint=true;review.lastCheckpoint=completed;}
+    feedback=null;review.feedback=null;review.pairMatches=[];pairSelection=null;chunks=[];hintOpen=false;reviewReplays=0;reviewDelay=0;sceneModel.water=0;reviewStarted=performance.now();save();render();if(!review.checkpoint)playReviewPrompt();
   }
   function renderReviewDone() {
-    panel.innerHTML = button(icon('arrow'),'finish-review','primary','aria-label="Continuer"');
+    panel.innerHTML = `<div class="review-summary"><h2>Bravo !</h2><p>${review?.session.completedIds?.length||0} mots arrosés.</p>${button('Bonne nuit','finish-review','primary')}</div>`;
     setScene({water:0,reaction:'happy'});
+  }
+  function exitReview(){
+    closeAllOverlays();reviewDelay=0;A.stop();
+    // Answers are already saved. Keep the queue so Arroser resumes the same item.
+    screen='garden';save();render();
   }
   function renderCatDone() {
     setScene({scene:'kitchen',night:false,reaction:'lift',action:'lift',danger:0,water:0,focus:null,garden:null,catGame:catGame});
@@ -479,12 +542,39 @@
   }
   function renderWordbook() {
     const pots=[...new Set([1,2,...allWords().filter(w=>state.words[w.id]?.met||state.words[w.id]?.collected).map(w=>Number(w.potId||w.pot||1))])];
-    panel.innerHTML=header('Carnet',back())+`<div class="line-tools">${button(icon('bulb'),'grammar','icon-button','aria-label="Grammaire"')}<label>Plante <select id="word-pot" aria-label="Plante">${pots.map(n=>`<option value="${n}" ${n===currentPot?'selected':''}>${n===1?'Chez nous':n===2?'Le basilic':'Plante '+n}</option>`).join('')}</select></label></div><input class="search-input" id="word-search" placeholder="Chercher un mot…" aria-label="Chercher dans le carnet" value="${esc(search)}"><div class="word-list wb-list" id="word-list">${wordRows()}</div>`;
+    panel.innerHTML=header('Carnet',back())+`<div class="pot-tabs" role="group" aria-label="Plantes">${pots.map(n=>button(n===1?'Chez nous':n===2?'Le basilic':'Plante '+n,`word-pot:${n}`,n===currentPot?'primary':'secondary')).join('')}${button('?','word-search-toggle','icon-button','aria-label="Chercher dans le carnet"')}</div>${searchOpen?`<input class="search-input" id="word-search" placeholder="Chercher un mot…" aria-label="Chercher dans le carnet" value="${esc(search)}">`:''}<div class="word-list wb-list" id="word-list">${wordRows()}</div>`;
   }
   function wordRows() {
-    const words=allWords().filter(w=>(w.pot || w.potId)===currentPot && (w.seen || state.words[w.id]?.met || state.words[w.id]?.collected) && normalize(`${w.fr} ${w.zh} ${w.en}`).includes(normalize(search))).map(w=>({...w,fr:C.french(w.fr)}));
+    const words=allWords().filter(w=>Number(w.pot || w.potId)===currentPot && (state.words[w.id]?.met || state.words[w.id]?.collected) && normalize(`${w.fr} ${w.zh} ${w.en}`).includes(normalize(search))).map(w=>({...w,fr:C.french(w.fr)})).sort((a,b)=>String(state.words[b.id]?.at||'').localeCompare(String(state.words[a.id]?.at||'')));
     if(!words.length)return '<p>Aucun mot ici.</p>';
-    return words.map(w=>{const cards=Object.values(state.cards).filter(c=>c.wordId===w.id || c.itemId===w.id);const stability=cards[0]?.stability || 0;return `<div class="word-row"><div class="word-row-head"><button data-action="expand:${esc(w.id)}" aria-expanded="${expandedWord===w.id}"><span class="gender ${esc(w.gender)}">${w.gender==='m'?'m.':w.gender==='f'?'f.':''}</span> ${esc(w.fr)}</button><span class="mastery">${stability>=14?'Familier':stability>=3?'En cours':'Rencontré'}</span></div>${expandedWord===w.id?`<div class="word-detail"><p class="word-gloss">${esc(hint(w.zh,w.en))}</p><div class="sentence" lang="fr">${tokenize(w.sentence)}</div><div class="line-tools">${button(icon('sound'),`word-sentence:${esc(w.id)}`,'icon-button','aria-label="Écouter la phrase"')}${button(state.words[w.id]?.collected?`${icon('check')} Dans le carnet`:'Ajouter au carnet',`collect-id:${esc(w.id)}`,'text-button')}</div>${(state.words[w.id]?.scenes || []).map(id=>{const scene=C.scenes.find(s=>s.id===id);return scene?button(`${esc(scene.text)} ${icon('sound')}`,`source:${esc(id)}`,'text-button'):'';}).join('')}</div>`:''}</div>`;}).join('');
+    const size=wordPageSize,pages=Math.ceil(words.length/size);wordPage=Math.min(wordPage,pages-1);
+    return words.slice(wordPage*size,(wordPage+1)*size).map(w=>{
+      const encounters=state.words[w.id]?.scenes?.length||0;
+      return `<div class="word-row" data-word-id="${esc(w.id)}"><div class="word-row-head"><button data-action="expand:${esc(w.id)}" aria-expanded="${expandedWord===w.id}"><span class="gender ${esc(w.gender)}">${esc(w.fr)} <small>${w.gender==='m'?'m.':w.gender==='f'?'f.':''}</small></span> <span class="pos-tag">${esc(({noun:'nom',verb:'verbe',adj:'adj.',chunk:'expr.'})[w.pos]||w.pos||'mot')}</span><span class="word-gloss">${esc(hint(w.zh,w.en))}</span></button>${button(icon('sound'),`focus-audio:${w.id}`,'icon-button','aria-label="Écouter le mot"')}<span class="encounter-pips" aria-label="${encounters} rencontres">${[0,1,2].map(i=>`<i class="${i<encounters?'filled':''}"></i>`).join('')}</span></div>${expandedWord===w.id?`<div class="word-detail"><img class="scene-thumbnail" src="${sceneThumbnail(w)}" width="120" height="80" alt="Scène de la première rencontre"><div><div class="sentence" lang="fr">${tokenize(sourceSentence(w))}</div>${button(icon('sound'),`word-sentence:${esc(w.id)}`,'icon-button','aria-label="Écouter la phrase"')}${w.pos==='verb'?button('Conjugaison',`word-conjugation:${w.id}`,'text-button'):''}</div></div>`:''}</div>`;
+    }).join('')+(pages>1?`<div class="word-pages">${button(icon('back'),`word-page:${wordPage-1}`,'icon-button',wordPage===0?'disabled aria-label="Page précédente"':'aria-label="Page précédente"')}<span>${wordPage+1} / ${pages}</span>${button(icon('arrow'),`word-page:${wordPage+1}`,'icon-button',wordPage===pages-1?'disabled aria-label="Page suivante"':'aria-label="Page suivante"')}</div>`:'');
+  }
+  function sourceScene(w){
+    const first=state.words[w.id]?.scenes?.[0];
+    return C.scenes.find(s=>s.id===first)||C.scenes.find(s=>s.wordIds?.includes(w.id))||{scene:w.scene||'kitchen',text:w.sentence};
+  }
+  function sourceSentence(w){const s=sourceScene(w);return s.sourceSentence||s.text||w.sentence;}
+  function sceneThumbnail(w){
+    if(!w)return '';
+    const s=sourceScene(w),key=w.id+':'+(s.id||s.scene);
+    if(!thumbnails.has(key)){
+      const source=document.createElement('canvas');source.width=480;source.height=320;
+      window.Day8Art.draw(source,{...s,scene:s.scene||w.scene,night:['roof','lefevre','stairs'].includes(s.scene),time:0,elapsed:5000,cat:false,basilPlanted:true,rooftopUnlocked:true});
+      const thumb=document.createElement('canvas');thumb.width=120;thumb.height=80;const ctx=thumb.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(source,0,0,120,80);thumbnails.set(key,thumb.toDataURL());
+    }
+    return thumbnails.get(key);
+  }
+  function wordPicture(w){
+    if(!w)return '';
+    const key='picture:'+w.id;if(!thumbnails.has(key)){
+      const canvas=document.createElement('canvas');canvas.width=120;canvas.height=80;
+      if(window.Day8Art.drawWord?.(canvas,w.picture||w.id)===true)thumbnails.set(key,canvas.toDataURL());
+      else return sceneThumbnail(w);
+    }return thumbnails.get(key);
   }
   let grammarPoint=null, conjugationTense='present';
   function renderGrammar() {
@@ -509,6 +599,7 @@
   function renderSettings() {
     panel.innerHTML=header('Pause',back())+`<div class="settings-group"><div class="setting-line"><span>Langue des indices</span><div class="segmented">${button('Chinois','lang:zh',state.settings.uiLang==='zh'?'selected':'secondary')}${button('Anglais','lang:en',state.settings.uiLang==='en'?'selected':'secondary')}</div></div><div class="setting-line"><span>Son</span>${button(state.settings.muted?'Activer':'Couper','mute','secondary')}</div>${[['music','Musique'],['voice','Voix'],['sfx','Effets']].map(([key,label])=>`<label>${label}<input type="range" min="0" max="1" step=".05" value="${state.settings[key]}" data-volume="${key}" aria-label="${label}"></label>`).join('')}${audioUnavailable?`<p>${icon('mute')} La voix n’est pas disponible. Le texte reste accessible.</p>`:''}${button('Aa','text-size','secondary',`aria-label="Taille du texte" aria-pressed="${!!state.settings.largeText}"`)}</div><div class="settings-group">${button(`${icon('download')}Exporter ma progression`,'export','secondary')}${button('Importer une progression','import','secondary')}${state.story.rooftop||state.story.day8Complete?button(`${icon('pot')}Jardin`,'garden','secondary'):''}</div>${button('Écouter','evening','secondary')}${button('Écrire','writing','secondary')}${button('Grammaire','grammar','secondary')}${button('Note','notes','secondary')}${dev?button('Atelier','atelier','secondary'):''}`;
     if(!canReview())panel.querySelector('[data-action="garden"]')?.remove();
+    if(baseScreen==='review')panel.insertAdjacentHTML('afterbegin',`<div class="line-tools">${button('Continuer','back','primary')}${button('Plus tard','review-exit','secondary')}</div>`);
   }
   function renderImport() {
     try{detected=S.detect(storage);}catch(_){detected=null;}
@@ -575,8 +666,13 @@
     if(action==='reveal-line'){lineRevealed=true;render();A.speak(currentScene().text,currentScene().id);return;}
     if(action==='point-next'){if(walkMotion)return;A.sfx(currentScene().kind==='walk'?'steps':'paper');if(currentScene().kind==='walk'){game.classList.add('walking');walkMotion={elapsed:0};}else nextScene();return;}
     if(action==='rattle'){A.sfx('door');return;}
-    if(action==='focus-reveal'||action==='focus-word'){lineRevealed=true;sceneModule('M1',currentScene()).reveal();render();const w=wordById(currentScene().wordIds?.[0]);if(w)A.speak(w.fr,w.wordClip);return;}
-    if(action==='focus-next'){nextScene();return;}
+    if(action==='focus-reveal'||action==='focus-word'){revealFocus();return;}
+    if(action==='focus-next'){revealFocus();nextScene();return;}
+    if(action==='focus-listen'){playFocusSentence(currentScene());return;}
+    if(action==='story-listen'){const s=currentScene();A.speak(wordById(s.answer)?.fr||s.answer,s.cue||s.audioId||s.id);return;}
+    if(action.startsWith('story-answer:')){answerStory(action.slice(13));return;}
+    if(action.startsWith('story-chunk:')){const s=currentScene(),i=Number(action.slice(12));if(chunks.includes(i))return;chunks.push(i);if(chunks.length===s.chunks.length)answerStory(chunks.map(n=>s.chunks[n]).join(' '));else render();return;}
+    if(action.startsWith('story-unchunk:')){chunks.splice(Number(action.slice(14)),1);render();return;}
     if(action.startsWith('focus-audio:')){const w=wordById(action.slice(12));if(w)A.speak(w.fr,w.wordClip);return;}
     if(action.startsWith('optional-')){const text=action==='optional-window'?'À la fenêtre, une plante. Elle a soif.':'À côté de la table, une chaise vide.';notice(text);A.speak(text,action==='optional-window'?'lfd_fenetre':'lfd_chaises');return;}
     if(action==='start-garden'){startReview();return;}
@@ -587,8 +683,12 @@
     if(action.startsWith('select-pot:')){currentPot=Number(action.slice(11));A.sfx('paper');render();return;}
     if(action==='selected-pot'){search='';openOverlay('wordbook');return;}
     if(action==='review-next'){reviewNext();return;}
+    if(action==='review-exit'){exitReview();return;}
+    if(action==='checkpoint-continue'){review.checkpoint=false;reviewStarted=performance.now();save();render();playReviewPrompt();return;}
     if(action==='finish-review'){finishReview();return;}
-    if(action==='review-audio'){A.speak(feedback?.sentence || exercise.sentence,feedback?.audioId || exercise.audioId);return;}
+    if(action==='review-audio'){if(!feedback){reviewReplays++;playReviewPrompt();if(!['E1','R1','R3','P2'].includes(exercise.type))A.speak(exercise.sentence,exercise.audioId);}else A.speak(feedback.sentence,feedback.audioId);return;}
+    if(action.startsWith('pair-word:')){pairSelection=action.slice(10);render();return;}
+    if(action.startsWith('pair-picture:')){if(!pairSelection)return;review.pairMatches ||= [];review.pairMatches.push({id:pairSelection,matchId:action.slice(13),elapsed:(performance.now()-reviewStarted)/1000,replays:reviewReplays});pairSelection=null;reviewStarted=performance.now();save();if(review.pairMatches.length===exercise.pairs.length)answerReview(review.pairMatches);else render();return;}
     if(action.startsWith('answer:')){answerReview(action.slice(7));return;}
     if(action.startsWith('chunk:')){chunks.push(Number(action.split(':')[1]));if(chunks.length===exercise.chunks.length)answerReview(chunks.map(i=>exercise.chunks[i]));else render();return;}
     if(action.startsWith('unchunk:')){chunks.splice(Number(action.split(':')[1]),1);render();return;}
@@ -601,9 +701,13 @@
     if(action==='collect'){collect();return;}
     if(action==='word-audio'){A.speak(selectedWord.fr,selectedWord.wordClip || `w_${selectedWord.id}`);return;}
     if(action==='pot-one'||action==='pot-two'){currentPot=action==='pot-one'?1:2;search='';if(screen==='wordbook')render();else openOverlay('wordbook');return;}
-    if(action.startsWith('expand:')){expandedWord=expandedWord===action.slice(7)?null:action.slice(7);render();return;}
+    if(action.startsWith('word-pot:')){currentPot=Number(action.slice(9));search='';wordPage=0;wordPageSize=8;expandedWord=null;render();return;}
+    if(action==='word-search-toggle'){searchOpen=!searchOpen;search='';wordPage=0;render();$('#word-search')?.focus();return;}
+    if(action.startsWith('word-page:')){wordPage=Math.max(0,Number(action.slice(10)));expandedWord=null;render();return;}
+    if(action.startsWith('expand:')){const id=action.slice(7);if(expandedWord===id)expandedWord=null;else{const rows=[...panel.querySelectorAll('.word-row')];const index=rows.findIndex(el=>el.dataset.wordId===id);wordPage=Math.floor((wordPage*wordPageSize+index)/4);wordPageSize=4;expandedWord=id;}render();return;}
+    if(action.startsWith('word-conjugation:')){selectedWord=wordById(action.slice(17));openOverlay('conjugation');return;}
     if(action.startsWith('collect-id:')){selectedWord=wordById(action.slice(11));collect();return;}
-    if(action.startsWith('word-sentence:')){const w=wordById(action.slice(14));A.speak(w.sentence,w.audioId || w.clip);return;}
+    if(action.startsWith('word-sentence:')){const w=wordById(action.slice(14));A.speak(sourceSentence(w),sourceScene(w).audioId||w.audioId);return;}
     if(action.startsWith('source:')){const s=C.scenes.find(s=>s.id===action.slice(7));A.speak(s.text,s.id);return;}
     if(action.startsWith('grammar:')){grammarPoint=(window.A411.GRAMMAR_DATA || []).find(g=>g.id===action.slice(8));hintOpen=false;if(screen==='grammar')render();else openOverlay('grammar');return;}
     if(action==='keep-grammar'){keepGrammar();return;}
@@ -659,7 +763,7 @@
   });
   document.addEventListener('input',event=>{
     if(event.target.dataset.volume){state.settings[event.target.dataset.volume]=Number(event.target.value);A.configure(state.settings);save();nav();}
-    if(event.target.id==='word-search'){search=event.target.value;$('#word-list').innerHTML=wordRows();}
+    if(event.target.id==='word-search'){search=event.target.value;wordPage=0;expandedWord=null;$('#word-list').innerHTML=wordRows();}
     if(event.target.id==='writing-text'){state.writing=event.target.value;save();}
   });
   document.addEventListener('change',async event=>{
@@ -722,8 +826,17 @@
     return {...sceneModel,v2:true,reducedMotion:reduced.matches,catGame:visualCat,time:snapshotTime===null?(reduced.matches?0:t):snapshotTime,elapsed:reduced.matches&&!catGame?5000:age,basilPlanted:baseScreen==='entry'?undefined:!!(state.story.basilPlanted || state.story.basil_planted),rooftopUnlocked:baseScreen==='entry'?undefined:!!state.story.rooftop};
   }
   function animate(t){
-    const dt=lastTick?Math.min(100,t-lastTick):0;lastTick=t;
+    const elapsed=lastTick?t-lastTick:0,dt=Math.min(100,elapsed);lastTick=t;
     const paused=overlayScreens.has(screen)||document.hidden||snapshotTime!==null;
+    if(paused&&baseScreen==='review')reviewStarted+=elapsed;
+    if(!paused&&screen==='story'&&currentScene().kind==='focus'&&!lineRevealed){focusAge+=dt;if(focusAge>=1600&&(focusSpeechDone||focusAge>=10000))revealFocus();}
+    if(!paused&&screen==='story'&&['establishing','ritual'].includes(currentScene().kind)){
+      if(establishingAge===0)A.ambience(true);
+      establishingAge+=dt;const progress=Math.min(1,establishingAge/(currentScene().durationMs||4000));
+      if(currentScene().kind==='establishing')sceneModel.establishingProgress=progress;
+      if(progress>=1)nextScene();
+    }
+    if(!paused&&screen==='review'&&feedback?.correct&&!review?.checkpoint){reviewDelay-=dt;if(reviewDelay<=0&&(reviewSpeechDone||reviewDelay<=-600))reviewNext();}
     if(!paused&&catGame){
       catGame.phaseElapsed+=dt;
       if(catGame.active){
@@ -760,7 +873,7 @@
       const words=allWords();const word=words.find(w=>w.seen && !w.recognitionOnly && w.sentence?.split(' ').length>3) || words.find(w=>w.seen);
       for(const card of Object.values(state.cards))if(card.itemId===word.id)card.due='2000-01-01T00:00:00.000Z';
       gardenController=gardenModule();
-      review={session:gardenController.create({now:now(),onlyIds:[word.id],forceType:type,budget:3}),returnTo:'garden',first:false,feedback:null,danger:0,correct:0};
+      review={session:gardenController.create({now:now(),mode:'test',storyDay:/^P/.test(type)?12:8,onlyIds:[word.id],forceType:type,budget:3}),returnTo:'garden',first:false,feedback:null,danger:0,correct:0};
       feedback=null;chunks=[];reviewStarted=performance.now();screen='review';render();
     },
     answer(input){answerReview(input);},next:()=>feedback?reviewNext():nextScene(),
