@@ -179,7 +179,7 @@
     if(frame?.nodes){panel.replaceChildren(frame.nodes);panel.scrollTop=frame.scroll;}
     else $('#overlay-body').replaceChildren();
     const modal=overlayScreens.has(screen);$('#overlay').hidden=!modal;game.classList.toggle('overlay-open',modal);storyPanel.inert=modal;$('#hotspots').inert=modal;
-    nav();frame?.focus?.isConnected&&frame.focus.focus({preventScroll:true});lastTick=performance.now();
+    nav();if(!modal)updateStoryTranslation();frame?.focus?.isConnected&&frame.focus.focus({preventScroll:true});lastTick=performance.now();
   }
   function closeAllOverlays(){while(overlayScreens.has(screen))closeOverlay();}
   function typesetFrench() {
@@ -212,7 +212,7 @@
   function renderStory() {
     const s = currentScene();
     sceneModel.cat=s.cat!==false;
-    if(activeSceneId!==s.id){activeSceneId=s.id;sceneEpoch=performance.now();focusAge=0;focusSpeechDone=false;establishingAge=0;moduleController=null;moduleKey='';catGame=null;}
+    if(activeSceneId!==s.id){activeSceneId=s.id;glossVisible=false;sceneEpoch=performance.now();focusAge=0;focusSpeechDone=false;establishingAge=0;moduleController=null;moduleKey='';catGame=null;}
     setScene({scene:s.scene || 'kitchen',night:!!s.night || s.lighting==='evening' || ['lefevre','stairs','roof','facade'].includes(s.scene),direction:s.direction || 'down',action:s.action || (s.cat==='sleepBetweenPots'?'sleepBetweenPots':''),focus:null,focusZoom:0,water:0,reaction:'idle',walkProgress:0,garden:null,catGame:null,speaker:s.speaker,establishingProgress:undefined,recall:false});
     setLocation(s.scene==='roof'?'Le toit':s.scene==='stairs'?'L’escalier':s.scene==='lefevre'?'Chez Madame Lefèvre':s.scene==='doorway'?'La porte':'La cuisine',s.time || (sceneModel.night?'21:08':'07:30'));
     if (s.flags) { Object.assign(state.story,s.flags); save(); }
@@ -227,7 +227,7 @@
     }
     if (s.kind === 'cat') {
       if(catGame?.active)return renderCat();
-      panel.innerHTML = storyTop({...s,speaker:'noe'}) + `<div class="dialogue" lang="fr">${tokenize(s.text || 'Non, Croissant !')}</div><div class="line-tools">${button(icon('sound'),'replay','icon-button','aria-label="Réécouter"')}${button(icon('play'),'start-cat','primary','aria-label="Jouer avec Croissant"')}</div>`;
+      panel.innerHTML = storyTop({...s,speaker:'noe'}) + `<div class="dialogue" lang="fr">${tokenize(s.text || 'Non, Croissant !')}</div><div class="line-tools">${button(icon('sound'),'replay','icon-button','aria-label="Réécouter"')}${translationButton(s)}${button(icon('play'),'start-cat','primary','aria-label="Jouer avec Croissant"')}</div>${translationText(s)}`;
       setScene({cat:true,reaction:'anticipate',danger:0});return;
     }
     if (s.kind === 'voicemail') return renderVoicemail(s);
@@ -235,12 +235,11 @@
     if (s.kind === 'end') { screen='end'; return renderEnd(); }
     if (s.kind === 'choice' || s.kind === 'reply') return renderReply(s);
     const controller=sceneModule('M1',s);controller.current();
-    let text = s.text;
-    if (s.variants) { const variant = s.variants[state.story.d7_band] || s.variants.default || s.variants.null; text = typeof variant==='string'?variant:variant?.text || text; }
+    const text = storyLine(s).text;
     if(s.kind==='focus')return renderFocus(s,controller);
     const interactive=s.kind==='point'||s.kind==='walk';
     panel.innerHTML = storyTop(s) + (!s.silent?`<div class="dialogue" lang="fr">${tokenize(text)}</div>`:'') +
-      `<div class="line-tools">${!s.silent?button(icon('sound'),'replay','icon-button','aria-label="Réécouter"'):''}${grammarFor(s)?button(icon('bulb'),'grammar','icon-button','aria-label="Grammaire"'):''}${interactive?button(icon('arrow'),'point-next','primary','aria-label="Continuer"'):primary('Continuer')}</div>${status()}`;
+      `<div class="line-tools">${!s.silent?button(icon('sound'),'replay','icon-button','aria-label="Réécouter"')+translationButton(s):''}${grammarFor(s)?button(icon('bulb'),'grammar','icon-button','aria-label="Grammaire"'):''}${interactive?button(icon('arrow'),'point-next','primary','aria-label="Continuer"'):primary('Continuer')}</div>${!s.silent?translationText(s):''}${status()}`;
     if (s.kind==='point' || s.kind==='walk') {
       const target = s.hotspot || (s.kind==='walk'?'door':'pot');
       hotspot(typeof target==='string'?target:target.id || 'pot','point-next');
@@ -253,6 +252,18 @@
       if (next) { next.disabled = true; sceneTimer = setTimeout(() => { next.disabled=false; },delay); }
     }
   }
+  function storyLine(s){
+    const variant=s.variants?.[state.story.d7_band] || s.variants?.default || s.variants?.null;
+    return typeof variant==='string'?{...s,text:variant}:variant?{...s,...variant}:s;
+  }
+  function sentenceMeaning(s){const line=storyLine(s);return hint(line.zh||line.en||'',line.en||line.zh||'');}
+  function translationButton(s){return sentenceMeaning(s)?button(icon('help'),'story-translation','icon-button sentence-help',`aria-label="Traduction de la phrase" aria-controls="story-translation" aria-expanded="${glossVisible}"`):'';}
+  function translationText(s){return sentenceMeaning(s)?`<p id="story-translation" class="sentence-translation" lang="${state.settings.uiLang==='en'?'en':'zh-Hans'}" ${glossVisible?'':'hidden'}>${esc(sentenceMeaning(s))}</p>`:'';}
+  function updateStoryTranslation(){
+    const text=storyPanel.querySelector('#story-translation'),control=storyPanel.querySelector('[data-action="story-translation"]');
+    if(!text||!control)return;
+    text.textContent=sentenceMeaning(currentScene());text.lang=state.settings.uiLang==='en'?'en':'zh-Hans';text.hidden=!glossVisible;control.setAttribute('aria-expanded',String(glossVisible));
+  }
   function sceneModule(id,item){
     const key=id+':'+item.id;
     if(moduleKey!==key){moduleKey=key;moduleController=window.Day8Modules.run(id,{items:[item],skin:{scene:item.scene},sceneHooks:{state}});}
@@ -263,7 +274,7 @@
     setScene({focus:target,focusZoom:1});controller.pulse();
     panel.classList.add('focus-card');
     const words=(s.wordIds || []).map(wordById).filter(Boolean);
-    panel.innerHTML=`<div class="dialogue" lang="fr">${esc(s.sourceSentence||s.text)}</div>`+(!lineRevealed?'<div class="focus-listening" aria-label="Écoute">· · ·</div>':words.map(w=>`<span class="new-word">NOUVEAU</span><div class="focus-word gender ${esc(w.gender)}" lang="fr">${tokenize(w.fr)}</div>`).join(''))+`<div class="line-tools">${button(icon('sound'),'focus-listen','icon-button','aria-label="Écouter"')}${button('?','exercise-hint','icon-button','aria-label="Traduction"')}${primary('Continuer','focus-next')}</div>`+(hintOpen?`<p class="exercise-hint">${esc(words.map(w=>hint(w.zh,w.en)).join(' · '))}</p>`:'');
+    panel.innerHTML=`<div class="dialogue" lang="fr">${esc(s.sourceSentence||s.text)}</div>`+(!lineRevealed?'<div class="focus-listening" aria-label="Écoute">· · ·</div>':words.map(w=>`<span class="new-word">NOUVEAU</span><div class="focus-word gender ${esc(w.gender)}" lang="fr">${tokenize(w.fr)}</div>`).join(''))+`<div class="line-tools">${button(icon('sound'),'focus-listen','icon-button','aria-label="Écouter"')}${translationButton(s)}${primary('Continuer','focus-next')}</div>${translationText(s)}`;
     if(focusAge===0){focusAge=1;playFocusSentence(s);}
   }
   function playFocusSentence(s){
@@ -394,8 +405,7 @@
     $('#review-progress').innerHTML=`<div class="review-strip"><canvas id="review-art" width="360" height="156" role="img" aria-label="${esc(potName(currentPot))}, à gauche ; Croissant, à droite, ${feedback?feedback.correct?'content':'la tête penchée':'attentif'}"></canvas><div class="review-pot-label">${esc(potName(currentPot))}<div class="strip-drops" aria-label="${dueCount} mots à arroser">${Array.from({length:dueCount},()=>icon('drop')).join('')}</div></div>${feedback?.correct?`<span class="flying-drop" aria-hidden="true">${icon('drop')}</span>`:''}<span class="review-total">${completed} / ${total}</span></div>`;
     panel.innerHTML='';
     if (feedback) {
-      const answer=ex.type==='R3'?ex.sentence:ex.word.fr;
-      panel.innerHTML = `<div class="feedback ${feedback.correct?'':'soft'}" role="status">${feedback.correct?`<p>${review.combo>=3?`${review.combo} de suite !`:'Oui !'}</p>`:`<p>C’est… <strong class="correct-answer gender ${esc(ex.word.gender)}">${esc(answer)}</strong></p>${['E1','R1','R2'].includes(ex.type)&&ex.options?`<div class="answer-grid">${ex.options.map(o=>button(esc(o.fr||o.text),'noop',`answer ${o.id===ex.wordId?'correct gender '+esc(ex.word.gender):'wrong'}`,'disabled')).join('')}</div>`:''}${ex.type==='E3'?`<div class="pair-corrections">${ex.pairs.map(p=>`<span class="correct-answer">${esc(p.fr)}</span>`).join(' · ')}</div>`:''}`}<p lang="fr">${tokenize(feedback.sentence)}</p></div><div class="line-tools">${button(icon('sound'),'review-audio','icon-button','aria-label="Réécouter"')}${feedback.correct?'':primary('Continuer','review-next')}</div>${status()}`;
+      panel.innerHTML = `<div class="feedback ${feedback.correct?'':'soft'}" role="status"><p class="feedback-result">${feedback.correct?review.combo>=3?`${review.combo} de suite !`:'Oui !':'La bonne réponse'}</p><p class="feedback-sentence correct-answer gender ${esc(ex.word.gender)}" lang="fr">${tokenize(feedback.sentence)}</p>${['E1','R1','R2'].includes(ex.type)&&ex.options?`<div class="answer-grid" lang="fr">${ex.options.map(o=>button(ex.type==='E1'?`<img src="${wordPicture(wordById(o.id))}" alt="${esc(o.fr||o.text)}">`:esc(o.fr||o.text),'noop',`answer ${ex.type==='E1'?'picture-answer':''} ${o.id===ex.wordId?'correct gender '+esc(ex.word.gender):'wrong'}`,'disabled')).join('')}</div>`:''}${ex.type==='E3'?`<div class="pair-corrections">${ex.pairs.map(p=>`<div class="grammar-example"><img src="${wordPicture(wordById(p.id))}" alt=""><span class="correct-answer">${esc(p.fr)}</span></div>`).join('')}</div>`:''}</div><div class="line-tools">${button(icon('sound'),'review-audio','icon-button','aria-label="Réécouter"')}${feedback.correct?'':primary('Continuer','review-next')}</div>${status()}`;
       return;
     }
     const meaning=hint(ex.word?.zh || '',ex.word?.en || '');
@@ -607,12 +617,14 @@
     const points=window.A411?.GRAMMAR_DATA || [];grammarPoint ||= grammarFor(currentScene()) || points.find(p=>p.id==='partitif') || points[0];
     const g=grammarPoint;
     if(!g){panel.innerHTML=back()+'<p>Aucun point enregistré.</p>';return;}
-    panel.innerHTML=header('Grammaire',back())+`<h3 lang="fr">${tokenize(g.pattern)}</h3>${button('?','exercise-hint','icon-button','aria-label="Explication"')}${hintOpen?`<p class="exercise-hint" data-hint>${esc(hint(g.zh,g.en))}</p>`:''}${(g.ex || []).map(ex=>`<div class="word-row"><p lang="fr">${tokenize(ex[0])}</p>${hintOpen?`<p class="exercise-hint" data-hint>${esc(ex[state.settings.uiLang==='en'?2:1])}</p>`:''}</div>`).join('')}${button(state.grammar?.includes(g.id)?`${icon('check')} Gardé`:'Garder','keep-grammar','primary')}<h3>Mes points de grammaire</h3><div class="atlas-links">${(state.grammar || []).map(id=>{const p=points.find(x=>x.id===id);return p?button(esc(p.pattern),`grammar:${id}`,'soft-button'):'';}).join('')}</div>`;
+    const saved=state.grammar?.includes(g.id),lang=state.settings.uiLang==='en'?'en':'zh-Hans';
+    const entries=[g,...(state.grammar||[]).filter(id=>id!==g.id).map(id=>points.find(p=>p.id===id)).filter(Boolean)];
+    panel.innerHTML=header('Grammaire · Mon carnet',back())+entries.map((entry,i)=>`${i===1?'<h2 class="grammar-collection">Mes autres points</h2>':''}<article class="grammar-entry" data-grammar="${esc(entry.id)}"><h2 lang="fr">${tokenize(entry.pattern)}</h2>${i>0||saved?`<p class="grammar-saved" role="status">${icon('check')} Gardé dans le carnet</p>`:button(`${icon('plus')} Garder dans le carnet`,'keep-grammar','secondary')}<p class="grammar-explanation" lang="${lang}">${esc(hint(entry.zh,entry.en))}</p><h3>En situation</h3>${(entry.ex||[]).map(ex=>`<div class="grammar-example"><p lang="fr">${tokenize(ex[0])}</p><p class="grammar-meaning" lang="${lang}">${esc(ex[state.settings.uiLang==='en'?2:1])}</p></div>`).join('')}</article>`).join('');
   }
   function keepGrammar() {
-    const g=grammarPoint;state.grammar ||= [];if(!state.grammar.includes(g.id))state.grammar.push(g.id);
+    const g=grammarPoint;state.grammar ||= [];if(state.grammar.includes(g.id))return;state.grammar.push(g.id);
     const id=`grammar:${g.id}`;state.customWords ||= {};state.customWords[id]={id,fr:g.pattern,zh:g.zh,en:g.en,pos:'grammar',pot:currentPot,potId:currentPot,sentence:g.ex[0][0],answer:g.ex[0][0],chunks:g.ex[0][0].split(' '),recognitionOnly:true,seen:true,field:'grammar'};
-    state.words[id]={met:true,collected:true,at:now().toISOString()};save();render();
+    state.words[id]={met:true,collected:true,at:now().toISOString()};save();render();panel.querySelector('.grammar-saved')?.setAttribute('tabindex','-1');panel.querySelector('.grammar-saved')?.focus({preventScroll:true});
   }
   function renderConjugation() {
     const inf=selectedWord?.infinitive || window.A411.Conj.lemmaOf(selectedWord?.fr)?.infinitive || selectedWord?.fr;
@@ -659,10 +671,10 @@
     setScene({scene:'facade',night:true,reaction:'idle',water:0});setLocation('CHEZ NOUS','22:03');
     const hook=C.scenes.find(s=>s.kind==='end');
     sceneModule('M1',hook).current();
-    panel.innerHTML=`<div class="dialogue" lang="fr">${tokenize(hook?.text || '')}</div><div class="line-tools">${button(icon('sound'),'replay','icon-button','aria-label="Réécouter"')}${button(icon('pot'),'garden','primary','aria-label="Jardin"')}</div>`;
+    panel.innerHTML=`<div class="eyebrow">${esc(L.uiFrench.end)}</div><div class="dialogue" lang="fr">${tokenize(hook?.text || '')}</div><div class="line-tools">${button(icon('sound'),'replay','icon-button','aria-label="Réécouter"')}${button(esc(hook.reply),'garden','primary')}</div>`;
   }
   function settle() {try{const result=E.settleGrowth(state,allWords(),{now:now()});if(result?.state)state=result.state;growthReveal=result?.reveal;sceneModel.growth=[1,2].map(id=>state.growth?.pots?.[id]?.shownStage || 0);save();}catch(error){console.warn('Growth settlement unavailable:',error.message);}}
-  function renderReveal() {game.classList.add('reveal');setScene({scene:'roof',night:true,garden:gardenModel(),growth:[1,2].map(id=>state.growth?.pots?.[id]?.shownStage || 0),action:'leafLifts'});panel.innerHTML=button(icon('arrow'),'after-reveal','primary','aria-label="Continuer"');}
+  function renderReveal() {game.classList.add('reveal');setScene({scene:'roof',night:true,garden:gardenModel(),growth:[1,2].map(id=>state.growth?.pots?.[id]?.shownStage || 0),action:'leafLifts'});panel.innerHTML=`<div class="dialogue" lang="fr">${esc(L.uiFrench.reveal)}</div>`+button(icon('arrow'),'after-reveal','primary','aria-label="Continuer"');}
   function renderAtelier() {
     panel.innerHTML=header('Atelier',back())+`<p>Aperçu isolé, sans écriture dans les sauvegardes.</p>${button('+1 jour','debug-day','secondary')}<div class="atlas-links">${[2,24,60].map(n=>button(`${n} plantes`,`debug-garden:${n}`,'secondary')).join('')}${['R1','R2','R3','P1','P2'].map(type=>button(type,`debug-type:${type}`,'soft-button')).join('')}</div><div class="atlas-links">${C.scenes.map((s,i)=>button(`${i+1} ${s.id}`,`jump:${i}`,'soft-button')).join('')}</div>`;
   }
@@ -695,6 +707,7 @@
     if(action==='text-size'){state.settings.largeText=!state.settings.largeText;save();render();return;}
     if(action==='language'||action.startsWith('lang:')){state.settings.uiLang=action==='language'?(state.settings.uiLang==='zh'?'en':'zh'):action.split(':')[1];save();render();return;}
     if(action==='replay'){A.speak(currentScene().text,currentScene().id);return;}
+    if(action==='story-translation'){glossVisible=!glossVisible;updateStoryTranslation();return;}
     if(action==='exercise-hint'){hintOpen=!hintOpen;render();return;}
     if(action==='reveal-line'){lineRevealed=true;render();A.speak(currentScene().text,currentScene().id);return;}
     if(action==='point-next'){if(walkMotion)return;A.sfx(currentScene().kind==='walk'?'steps':'paper');if(currentScene().kind==='walk'){game.classList.add('walking');walkMotion={elapsed:0};}else nextScene();return;}

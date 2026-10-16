@@ -123,8 +123,8 @@
     proposed('lfd_fenetre', 'À la fenêtre, une plante. Elle a soif.', '窗边有一盆植物。它渴了。', 'At the window, a plant. It is thirsty.', { hotspot: 'windowPlant', wordIds: ['fenetre', 'plante', 'soif'] }),
     proposed('lfd_chaises', 'À côté de la table, une chaise vide.', '桌子旁边，一把空椅子。', 'Next to the table, an empty chair.', { hotspot: 'emptyChair', wordIds: ['table', 'chaise', 'vide'] })
   ];
-  const hook = approved('d8_hook', 'Sur le toit, un jardin qui se réveille. En bas, une lampe qui reste allumée.',
-    '楼顶上，一个花园醒了。楼下，一盏灯一直亮着。', 'On the roof, a garden waking up. Downstairs, a lamp that stays on.');
+  const hook = approved('d8_hook', 'Demain matin, on monte sur le toit ?',
+    '楼顶上，一个花园醒了。楼下，一盏灯一直亮着。', 'On the roof, a garden waking up. Downstairs, a lamp that stays on.', { reply: fr('Oui !') });
   const carry = approved('d8_noe_carry', 'Et ta plante ? Je la monte aussi !',
     '那你的植物呢？我也把它搬上去！', 'And your plant? I will bring it up too!',
     { speaker: 'noe', listenOnly: true, reviewed: false, audioId: 'd8_noe_carry', clip: 'd8_noe_carry', action: 'carryMartinPlant', carries: 'martinPlant' });
@@ -463,7 +463,7 @@
     if (cat.module || cat.durationMs !== 6500 || ['budget', 'mode', 'seenOnly', 'potId'].some(key => key in cat)) throw new Error('Cat is a touch interaction, not review');
     if (list.some(s => s.id === 'd8_noe_eau')) throw new Error('Water recognition line is an underlay, not a separate step');
     if (list.filter(s => s.kind === 'chat').length !== 4) throw new Error('Four approved Coloc 411 exchanges are required');
-    if (list[list.length - 1].text !== hook.text) throw new Error('Approved ending changed');
+    if (list[list.length - 1].text !== hook.text || list[list.length - 1].reply !== hook.reply) throw new Error('Approved ending changed');
     const keyIndex = list.findIndex(s => s.id === 'd10_lef_jardin');
     if (list[keyIndex].flags?.has_key !== true || list.find(s => s.id === 'd10_noe_porte').requiresFlag !== 'has_key' ||
         list.find(s => s.id === 'd8_cam_descend').roofDoorLocked !== true || list.some((s, i) => i < keyIndex && (s.scene === 'roof' || s.flags?.has_key || s.flags?.rooftop || s.flags?.garden_open))) throw new Error('Key gating changed');

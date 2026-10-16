@@ -49,6 +49,9 @@ a { color: var(--blue); }
 .speaker-mark { display: none; }
 .line-head, .line-tools, .story-bottom, .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .line-tools { margin: 6px 0 0; }
+.sentence-help[aria-expanded="false"] { color: var(--muted); }
+.sentence-help[aria-expanded="true"] { background: var(--paper-dark); }
+.sentence-translation { margin-top: 10px; padding: 8px 10px; border-left: 3px solid var(--line); background: var(--paper-dark); font-size: 15px; line-height: 1.6; }
 .story-bottom { margin-top: 8px; justify-content: flex-end; }
 .story-bottom .primary { margin-left: auto; }
 .hint, .muted { color: var(--muted); font-size: 13px; }
@@ -208,6 +211,16 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .conjugation-block div { display: flex; justify-content: space-between; gap: 8px; }
 .grammar-pattern { border-left: 3px solid var(--lefevre); padding: 6px 8px; margin: 8px 0; }
 .grammar-example { padding: 6px 0; }
+.sheet[data-sheet="grammar"] { padding: 10px 16px 24px; }
+.sheet[data-sheet="grammar"] .panel-top { margin-inline: -16px; padding-inline: 16px; }
+.grammar-entry { padding: 14px 0 24px; border-bottom: 1px solid var(--line); }
+.grammar-entry h2 { font-size: 22px; line-height: 1.5; font-weight: 600; }
+.grammar-saved { display: flex; align-items: center; gap: 8px; color: var(--green); font-size: 14px; margin: 12px 0; }
+.grammar-saved .pxicon { width: 18px; height: 18px; }
+.grammar-explanation { margin: 20px 0 24px; line-height: 1.7; }
+.grammar-entry .grammar-example { padding: 18px 0; font-size: 18px; }
+.grammar-meaning { color: var(--muted); font-size: 15px; margin-top: 8px; line-height: 1.6; }
+.grammar-collection { padding-top: 24px; }
 .notice, .storage-warning { position: absolute; left: 50%; transform: translateX(-50%); z-index: 50; bottom: calc(64px + var(--safe)); max-width: calc(100% - 32px); padding: 6px 10px; background: var(--ink); color: var(--paper); border: 2px solid var(--paper-dark); font-size: 13px; pointer-events: none; }
 .notice { opacity: 0; }
 .notice.show { opacity: 1; }
@@ -218,7 +231,7 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .game[data-screen="review"] .stage { background: #253e3b; }
 .game[data-screen="review"] .stage > #scene { visibility: hidden; }
 .game[data-screen="review"] > .review-panel { top: calc(194px + var(--safe-top)); bottom: calc(126px + var(--safe)); max-height: none; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; }
-.game[data-screen="review"] .question { margin-bottom: auto; padding-bottom: 18px; }
+.game[data-screen="review"] .question { margin-bottom: 12px; padding-bottom: 18px; }
 .game[data-screen="review"] .review-panel > .icon-button { align-self: flex-start; }
 .game[data-screen="review"] .review-progress { display: block; text-shadow: none; }
 .review-strip { height: 174px; position: relative; }
@@ -229,9 +242,16 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .review-total { position: absolute; right: 12px; bottom: 8px; font-size: 13px; color: var(--paper-dark); }
 .flying-drop { position: absolute; left: 23%; top: 44%; color: #9ed9eb; animation: water-flight .85s steps(10,end) both; }
 @keyframes water-flight { from { transform: translate(80px,-65px); opacity: 1; } 80% { opacity: 1; } to { transform: translate(0,20px); opacity: 0; } }
-.game[data-screen="review"] > .review-panel:has(.feedback) { top: auto; display: block; max-height: calc(var(--phone-height) - 320px - var(--safe-top) - var(--safe)); }
-.game[data-screen="review"] .feedback { margin-bottom: 8px; }
-.game[data-screen="review"] .answer-grid { margin-top: 12px; }
+.game[data-screen="review"] .feedback { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 18px; margin-bottom: 12px; }
+.game[data-screen="review"] .line-tools { flex-shrink: 0; }
+.feedback-result { font-size: 16px; color: var(--green); }
+.feedback-sentence { font-size: 23px; line-height: 1.6; }
+.game[data-screen="review"] .answer-grid { flex: 1; margin-top: 12px; align-content: stretch; }
+.game[data-screen="review"] .answer-grid .answer { justify-content: center; font-size: 18px; }
+.game[data-screen="review"] .feedback .answer-grid { flex: 1; min-height: 0; max-height: 220px; }
+.pair-corrections { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pair-corrections .grammar-example { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+.pair-corrections img { width: 48px; height: 32px; image-rendering: pixelated; }
 .review-progress { position: absolute; z-index: 6; left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right)); top: calc(10px + var(--safe-top)); display: flex; align-items: center; gap: 8px; color: var(--paper); text-shadow: 1px 1px var(--ink); }
 .review-progress:empty { display: none; }
 .water-count { display: flex; align-items: center; gap: 5px; }
@@ -249,7 +269,10 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .pair-grid .selected { outline: 3px solid var(--gold); }
 @container (max-height: 760px) {
   .game[data-screen="review"] > .review-panel { top: calc(166px + var(--safe-top)); padding: 10px; }
-  .game[data-screen="review"] .question { padding-bottom: 4px; }
+  .game[data-screen="review"] .question { padding-bottom: 4px; margin-bottom: 4px; }
+  .game[data-screen="review"] .feedback { gap: 10px; }
+  .feedback-sentence { font-size: 18px; line-height: 1.4; }
+  .game[data-screen="review"] .answer-grid .answer { font-size: 15px; }
   .review-strip { height: 146px; }
   #review-art { height: 112px; }
   .picture-answer img { width: 72px; height: 48px; }
@@ -258,6 +281,7 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
   .pair-grid > div { gap: 4px; }
 }
 .correct-answer { background: #d5e4c4; color: var(--green); padding: 2px 5px; }
+.feedback .correct-answer, .feedback .correct-answer .word, .feedback .answer.correct { color: #24503b; }
 .answer.correct:disabled { opacity: 1; border-color: var(--green); }
 .review-summary { padding: 14px 24px; border: var(--pixel-border); background: var(--paper); text-align: center; }
 .new-word { font-size: 10px; letter-spacing: 2px; background: var(--green); color: var(--paper); padding: 2px 5px; }

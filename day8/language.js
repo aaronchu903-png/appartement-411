@@ -26,8 +26,8 @@
     catTitle: 'Non, Croissant !', group: 'Coloc 411', potOne: 'Chez nous', potTwo: 'À table',
     puzzled: 'Hein ?', agreement: 'D’accord !', keep: 'Garder', kept: '✓ Gardé',
     addWord: 'Ajouter au carnet', savedWord: '✓ Dans le carnet', conjugation: 'Voir la conjugaison',
-    verify: 'Vérifier', writingPrompt: 'Aujourd’hui…', evening: 'ÉCOUTE DU SOIR', end: 'DAY 08 · TERMINÉ',
-    reveal: 'Regarde ! Elle a une nouvelle feuille !', basil: 'Le basilic', timeAnswer: 'À six heures.'
+    verify: 'Vérifier', writingPrompt: 'Aujourd’hui…', evening: 'ÉCOUTE DU SOIR', end: 'JOUR 8 · TERMINÉ',
+    reveal: 'Regarde ! Une nouvelle feuille !', basil: 'Le basilic', timeAnswer: 'À six heures.'
   }).map(([key, value]) => [key, typography(value)])));
   const api = { normalize, gradeAnswer, typography, uiFrench };
   root.Day8Language = api;

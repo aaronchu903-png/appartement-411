@@ -4,7 +4,7 @@ const SCOPE=new URL('./',self.location.href);
 // The unchanged old worker deletes a411-* caches. Keep this namespace distinct,
 // and separate project-path installs that happen to share the same origin.
 const PREFIX='day8-static-'+encodeURIComponent(SCOPE.pathname)+'-';
-const CACHE=PREFIX+'v10-round4b';
+const CACHE=PREFIX+'v13-round5-contrast';
 const CORE=['./','index.html','tokens.css','style.css','icons.js','modules/index.js','modules/M1.js','modules/M2.js','modules/M3.js','modules/M4.js','app.js','art.js','audio.js','engine.js','save.js','content.js','language.js','data/inherited.js','manifest.webmanifest','export.html','export.js'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE.map(path=>new Request(new URL(path,self.location.href),{cache:'reload'})))).then(()=>self.skipWaiting()));
