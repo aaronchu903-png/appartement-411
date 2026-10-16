@@ -22,6 +22,7 @@ a { color: var(--blue); }
 .dev-badge { margin-left: 8px; font-size: 10px; background: var(--ink); padding: 2px 4px; color: var(--paper); }
 .scene-actions, .scene-caption { display: none; }
 .scene-actions:not(:empty) { display: flex; gap: 8px; position: absolute; z-index: 6; left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right)); bottom: calc(70px + var(--safe)); justify-content: center; }
+.scene-actions .text-button { background: var(--paper-dark); }
 .game:has(.scene-actions:not(:empty)) { --dialogue-bottom: calc(126px + var(--safe)); }
 .overlay-open .scene-actions { display: none; }
 .scene-title { position: absolute; left: 50%; top: 18%; transform: translateX(-50%); color: var(--paper); text-align: center; text-shadow: 2px 2px 0 var(--ink); width: max-content; max-width: 85%; pointer-events: none; }
@@ -69,9 +70,7 @@ a { color: var(--blue); }
 .wb-fab[data-count]:not([data-count="0"])::after { content: attr(data-count); position: absolute; right: -5px; top: -7px; min-width: 16px; font-size: 10px; line-height: 16px; background: var(--lefevre); color: white; border: 1px solid var(--ink); }
 .overlay { position: absolute; inset: 0; z-index: 30; background: #20233266; display: flex; align-items: center; justify-content: center; padding: calc(16px + var(--safe-top)) max(12px, var(--safe-right)) calc(76px + var(--safe)) max(12px, var(--safe-left)); }
 .overlay-open > #panel { visibility: hidden; }
-.sheet { width: 100%; max-height: calc(var(--phone-height) - 92px - var(--safe-top) - var(--safe)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; border: var(--pixel-border); border-radius: 0; background: var(--paper); box-shadow: 4px 4px 0 #30314280; padding: 10px; }
-.sheet[data-sheet="wordbook"], .sheet[data-sheet="notes"] { min-height: calc(var(--phone-height) - 92px - var(--safe-top) - var(--safe)); }
-.sheet[data-sheet="wordbook"] { overflow: visible; }
+.sheet { width: 100%; height: calc(var(--phone-height) - 92px - var(--safe-top) - var(--safe)); overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; border: var(--pixel-border); border-radius: 0; background: var(--paper); box-shadow: 4px 4px 0 #30314280; padding: 10px; }
 .sheet .panel-top { position: sticky; z-index: 3; top: -10px; margin: -10px -10px 8px; padding: 6px 10px; border-bottom: 2px solid var(--line); background: var(--paper); }
 .sheet h2 { margin-bottom: 10px; }
 .sheet .spacer { height: 10px; }
@@ -81,11 +80,6 @@ a { color: var(--blue); }
 .lookup-gloss { margin: 6px 0; }
 .lookup-gloss p { margin: 4px 0; }
 .lookup-gloss p:last-child { font-style: italic; }
-.sheet:has(.lookup-title) { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 4px 8px; }
-.sheet:has(.lookup-title) > .panel-top { grid-column: 2; grid-row: 1; margin: 0; padding: 0; border: 0; }
-.sheet:has(.lookup-title) > .panel-top .eyebrow { display: none; }
-.sheet:has(.lookup-title) > .lookup-title { grid-column: 1; grid-row: 1; margin: 0; }
-.sheet:has(.lookup-title) > :not(.panel-top):not(.lookup-title) { grid-column: 1 / -1; }
 .sheet:has(.lookup-title) h2 { margin: 0; }
 .sheet:has(.lookup-title) .lookup-form, .sheet:has(.lookup-title) .lookup-gloss { margin: 2px 0; }
 .sheet:has(.lookup-title) .lookup-gloss p { margin: 2px 0; }
@@ -105,6 +99,11 @@ a { color: var(--blue); }
 .hotspot:hover, .hotspot:focus-visible { border-color: #ffe2a5; background: #ffe2a514; }
 .pot-hotspot { border-color: transparent; }
 .pot-hotspot.selected { border-color: #ffe2a5; }
+.hotspot > .pot-drops { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; width: 54px; white-space: normal; top: auto; bottom: 100%; background: #303142cc; padding: 4px; color: #9ed9eb; pointer-events: none; }
+.pot-drops:empty { display: none; }
+.pot-drops .pxicon { width: 9px; height: 12px; }
+.can-glow { animation: can-glow 3s steps(4,end) infinite; }
+@keyframes can-glow { 50% { box-shadow: 0 0 0 3px #e5b97966, 0 3px 0 var(--ink); } }
 .cat-target { border-color: transparent; touch-action: none; }
 .garden-panel, .cat-panel { width: max-content; max-width: calc(100% - 24px); border: 0; box-shadow: none; background: transparent; padding: 4px; }
 .game[data-screen="catdone"] > .panel, .game[data-screen="reviewdone"] > .panel, .reveal-panel { width: max-content; max-width: calc(100% - 24px); border: 0; box-shadow: none; background: transparent; padding: 4px; }
@@ -212,6 +211,22 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 .large-text .dialogue, .large-text .question { font-size: 22px; }
 .review-panel, .recall-panel { max-height: min(calc(var(--phone-height) * .55), calc(var(--phone-height) - var(--dialogue-bottom) - var(--safe-top) - 48px)); }
+.game[data-screen="review"] .stage { background: #253e3b; }
+.game[data-screen="review"] .stage > #scene { visibility: hidden; }
+.game[data-screen="review"] > .review-panel { top: calc(194px + var(--safe-top)); bottom: calc(126px + var(--safe)); max-height: none; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; }
+.game[data-screen="review"] .question { margin-bottom: auto; padding-bottom: 18px; }
+.game[data-screen="review"] .review-panel > .icon-button { align-self: flex-start; }
+.game[data-screen="review"] .review-progress { display: block; text-shadow: none; }
+.review-strip { height: 174px; position: relative; }
+#review-art { width: 100%; height: 140px; display: block; image-rendering: pixelated; }
+.review-pot-label { position: absolute; bottom: 4px; left: 6px; width: 52%; text-align: center; font-size: 13px; color: var(--paper); }
+.strip-drops { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; max-height: 30px; overflow-y: auto; color: #9ed9eb; }
+.strip-drops .pxicon { width: 9px; height: 12px; }
+.review-total { position: absolute; right: 12px; bottom: 8px; font-size: 13px; color: var(--paper-dark); }
+.flying-drop { position: absolute; left: 23%; top: 44%; color: #9ed9eb; animation: water-flight .85s steps(10,end) both; }
+@keyframes water-flight { from { transform: translate(80px,-65px); opacity: 1; } 80% { opacity: 1; } to { transform: translate(0,20px); opacity: 0; } }
+.game[data-screen="review"] .feedback { margin-bottom: auto; padding-top: 18px; }
+.game[data-screen="review"] .answer-grid { margin-top: 12px; }
 .review-progress { position: absolute; z-index: 6; left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right)); top: calc(10px + var(--safe-top)); display: flex; align-items: center; gap: 8px; color: var(--paper); text-shadow: 1px 1px var(--ink); }
 .review-progress:empty { display: none; }
 .water-count { display: flex; align-items: center; gap: 5px; }
@@ -228,6 +243,10 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .pair-grid img { width: 66px; height: 44px; }
 .pair-grid .selected { outline: 3px solid var(--gold); }
 @container (max-height: 760px) {
+  .game[data-screen="review"] > .review-panel { top: calc(166px + var(--safe-top)); padding: 10px; }
+  .game[data-screen="review"] .question { padding-bottom: 4px; }
+  .review-strip { height: 146px; }
+  #review-art { height: 112px; }
   .picture-answer img { width: 72px; height: 48px; }
   .pair-grid .answer { min-height: 44px; }
   .pair-grid img { width: 48px; height: 32px; }

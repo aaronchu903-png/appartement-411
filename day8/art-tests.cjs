@@ -24,7 +24,7 @@ const goldens = [
   '485b0bef4a643d7b8e8cbaab7721c273c7b43a29d9b658641d5377be787c89d9',
   '3634f43a70843f9ef1ef8dec10cbcebb0e194e8afbec4511919af135c403e89d',
   '374c6c6aded94ce10bfebc2f87858844de721aa42b29afa2fb8270ee3eaf54f3',
-  '9348938c130125c089fa8758f90286889628db8fa59a628f730eb6ee317015a3',
+  '918ca4754408938fb03cf68fe6c408b3add3bcf200e7c21b27a67815bb065062',
   '2e543d55b79021490d8bff98a78cc7ff8ef3251ee9d281ac683ad29eb4e9939d'
 ];
 
@@ -48,7 +48,7 @@ const goldens = [
     }, state))).digest('hex');
     const actual = [];
     for (const state of fixtures) actual.push(await hash(state));
-    assert.deepEqual(actual, goldens, 'default rendering preserves pre-V2 raw pixel goldens');
+    assert.deepEqual(actual, goldens, 'nine unchanged legacy goldens plus repaired handover');
     const kitchen = { v2: true, scene: 'kitchen', growth: [0, 0], time: 1234, speaker: 'noe' };
     assert.equal(await hash(kitchen), await hash(kitchen), 'fixed-time V2 frames deterministic');
     assert.notEqual(await hash(kitchen), await hash({ ...kitchen, time: 1710 }), 'V2 idle has micro-motion');
@@ -73,6 +73,73 @@ const goldens = [
       return images;
     });
     assert.equal(new Set(props).size, 14, 'picture choices have distinct object art rather than shared scene thumbnails');
+    const review = await page.evaluate(() => {
+      const c = document.querySelector('canvas'), ctx = c.getContext('2d');
+      const options = { pot: { id: 1, growth: 3, dueCount: 10, thirsty: true }, time: 1234 };
+      const frame = extra => { const hits = Day8Art.drawReview(c, { ...options, ...extra }); return { hits, image: c.toDataURL(), data: ctx.getImageData(0, 0, c.width, c.height).data }; };
+      const dry = frame({ moisture: 0 }), partial = frame({ moisture: 1 }), recovered = frame({ moisture: 3 });
+      if (c.width !== 320 || c.height !== 112 || ctx.imageSmoothingEnabled) throw new Error('Review must retain its pixel-art aspect ratio');
+      if (dry.data.some((v, i) => i % 4 === 3 && v !== 255)) throw new Error('Review has transparent gaps');
+      if (dry.hits.pot.x >= 50 || dry.hits.cat.x <= 50) throw new Error('Review must place pot LEFT and kitten RIGHT');
+      const green = data => {
+        let top = 112, pixels = 0;
+        for (let y = 0; y < 86; y++) for (let x = 50; x < 110; x++) {
+          const i = (y * 320 + x) * 4;
+          if (['120,149,104', '66,105,87', '164,180,120', '147,154,135', '111,124,116', '174,177,154'].includes(Array.from(data.slice(i, i + 3)).join(','))) { top = Math.min(top, y); pixels++; }
+        }
+        return { top, pixels };
+      };
+      const dg = green(dry.data), rg = green(recovered.data);
+      if (!(dg.pixels > 100 && rg.pixels > 100 && dg.top > rg.top)) throw new Error('Thirsty foliage must droop then recover');
+      const reactions = ['idle', 'happy', 'roll', 'tilt'].map(reaction => {
+        const blank = frame({ reaction, cat: false }).data, shown = frame({ reaction });
+        const hit = shown.hits.cat;
+        let hearts = 0, changed = 0;
+        for (let i = 0; i < blank.length; i += 4) {
+          if (shown.data[i] === 223 && shown.data[i + 1] === 160 && shown.data[i + 2] === 160) hearts++;
+          if (blank[i] === shown.data[i] && blank[i + 1] === shown.data[i + 1] && blank[i + 2] === shown.data[i + 2]) continue;
+          changed++;
+          const x = i / 4 % 320 / 320 * 100, y = Math.floor(i / 4 / 320) / 112 * 100;
+          if (x < hit.x - hit.width / 2 || x > hit.x + hit.width / 2 || y < hit.y - hit.height / 2 || y > hit.y + hit.height / 2) throw new Error(`${reaction} leaves strip cat bounds`);
+        }
+        if (changed < 300 || (['happy', 'roll'].includes(reaction) ? hearts < 20 : hearts !== 0)) throw new Error(`${reaction} incorrect hearts/kitten feedback`);
+        return shown.image;
+      });
+      if (frame({ reducedMotion: true, reaction: 'roll', time: 0 }).image !== frame({ reducedMotion: true, reaction: 'roll', time: 9999 }).image) throw new Error('Reduced-motion strip must be stable');
+      if (frame({ pot: { ...options.pot, hint: true }, reducedMotion: true, time: 0 }).image !== frame({ pot: { ...options.pot, hint: true }, reducedMotion: true, time: 9999 }).image) throw new Error('Reduced-motion hint must be stable');
+      const flights = [0, .5, 1].map(dropProgress => frame({ dropProgress }).image);
+      return { plants: [dry.image, partial.image, recovered.image], reactions, flights };
+    });
+    assert.equal(new Set(review.plants).size, 3, 'dry, partly watered and recovered plants are distinct without changing growth');
+    assert.equal(new Set(review.reactions).size, 4, 'strip has idle, hearts, roll and genuinely tilted head poses');
+    assert.equal(new Set(review.flights).size, 3, 'optional single-drop API has distinct flight and landing frames');
+    await page.evaluate(() => {
+      const c = document.querySelector('canvas'), ctx = c.getContext('2d');
+      for (const v2 of [false, true]) for (const action of ['openHand', 'giveKey']) for (const elapsed of [0, 400, 800, 1450, 9000]) {
+        Day8Art.draw(c, { v2, scene: 'lefevre', action, elapsed, time: elapsed });
+        const data = ctx.getImageData(0, 0, c.width, c.height).data;
+        const at = i => Array.from(data.slice(i * 4, i * 4 + 3)).join(',');
+        for (const colors of [['55,124,96', '40,92,80'], ['129,85,116', '96,62,91']]) {
+          const pixels = new Set();
+          for (let i = 0; i < data.length / 4; i++) {
+            const color = at(i);
+            if (color === '113,140,123') throw new Error('Detached grey-green sleeve returned');
+            if (colors.includes(color)) pixels.add(i);
+          }
+          const total = pixels.size;
+          let largest = 0;
+          while (pixels.size) {
+            const queue = [pixels.values().next().value]; pixels.delete(queue[0]);
+            for (let j = 0; j < queue.length; j++) for (const dy of [-1, 0, 1]) for (const dx of [-1, 0, 1]) {
+              const next = queue[j] + dy * c.width + dx;
+              if (pixels.delete(next)) queue.push(next);
+            }
+            largest = Math.max(largest, queue.length);
+          }
+          if (largest / total < .98) throw new Error(`${v2}/${action}/${elapsed}: disconnected sleeve, ${largest}/${total} connected pixels`);
+        }
+      }
+    });
     const garden = { v2: true, scene: 'roof', time: 1234, garden: { slots: [{ id: 1, growth: 2 }] } };
     const soils = [];
     for (let moisture = 0; moisture <= 3; moisture++) soils.push(await hash({ ...garden, moisture: { 1: moisture } }));
@@ -209,6 +276,6 @@ const goldens = [
       }
       assert.equal(new Set(gait.slice(0, 4)).size, 4, 'four distinct rendered foot poses, not just translated sprite');
     }
-    console.log('Art browser checks passed at 390x844 and 375x667: 10 unchanged legacy pixel goldens, four rendered walk poses, three visible dinner faces, sequential empty facade, portrait composition, deterministic/reduced motion, distinct picture props, four soil moisture levels, 12 full-viewport scenes, 2/24/60-pot bays, living cat-ending plant.');
+    console.log('Art browser checks passed at 390x844 and 375x667: nine unchanged legacy pixel goldens plus repaired handover, four rendered walk poses, three visible dinner faces, sequential empty facade, portrait composition, deterministic/reduced motion, distinct picture props, four soil moisture levels, 12 full-viewport scenes, 2/24/60-pot bays, living cat-ending plant.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -7,6 +7,8 @@
     "test": "node --test tests/*.test.cjs",
     "test:webkit": "node --test tests/hotfix-webkit.cjs",
     "test:round3": "node --test tests/round3-browser.cjs",
+    "test:browser": "node --test tests/v4-browser.cjs",
+    "screenshots:v4": "node tools/v4-screenshots.cjs",
     "screenshots:round3": "node tools/round3-screenshots.cjs",
     "screenshots": "node screenshots.cjs",
     "portability": "node portability.cjs",

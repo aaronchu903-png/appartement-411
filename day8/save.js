@@ -1,10 +1,13 @@
-/* Read-only migration from Jinyi's old game; writes only a411app.v1.state.
- * importData is transactional and does not access storage. Unnamed legacy
- * files require allowLegacy:true. No storage enumeration or active-profile read.
+/* Local migration reads legacy storage, never writes/removes legacy keys.
+ * Manual import is a separate, Jinyi-only boundary. Local provenance permits
+ * the active old profile to keep saving without making file import trusted.
  */
 (function (root) {
   'use strict';
   const KEY = 'a411app.v1.state';
+  const BACKUP_PREFIX = 'a411app.v1.backup.';
+  const ACTIVE_KEY = 'a411.device.profile';
+  const LOCAL = Symbol('same-origin migration');
   const OLD_KEYS = Object.freeze(['a411.p.jinyi.learn', 'a411.p.jinyi.story', 'a411.p.jinyi.uiLang']);
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
   const object = o => !!o && typeof o === 'object' && !Array.isArray(o);
@@ -61,14 +64,14 @@
       }
     }
   }
-  function inspect(input) {
+  function inspect(input, trust) {
     let nodes = 0; const seen = new Set();
     function walk(value, depth) {
       if (++nodes > 100000 || depth > 64) throw new Error('Import is too large or deeply nested');
       if (typeof value === 'string') {
-        if (/yuechao/i.test(value)) throw new Error('Yuechao data is protected and cannot be imported');
+        if (trust !== LOCAL && /yuechao/i.test(value)) throw new Error('Yuechao data is protected and cannot be imported');
         // Bundles can contain the original JSON strings as storage-key values.
-        if (/^\s*[\[{]/.test(value)) { let decoded; try { decoded = JSON.parse(value); } catch (_) { return; } walk(decoded, depth + 1); }
+        if (trust !== LOCAL && /^\s*[\[{]/.test(value)) { let decoded; try { decoded = JSON.parse(value); } catch (_) { return; } walk(decoded, depth + 1); }
         return;
       }
       if (!value || typeof value !== 'object') return;
@@ -76,8 +79,8 @@
       if (!Array.isArray(value) && Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) throw new Error('Invalid object prototype');
       for (const key of Object.keys(value)) {
         if (!safeId(key)) throw new Error('Unsafe object key: ' + key);
-        if (/yuechao/i.test(key)) throw new Error('Yuechao data is protected and cannot be imported');
-        if (['profileId', 'activeProfile', 'profile'].includes(key) && typeof value[key] === 'string' && value[key].toLowerCase() !== 'jinyi') throw new Error('Only the Jinyi profile may be imported');
+        if (trust !== LOCAL && /yuechao/i.test(key)) throw new Error('Yuechao data is protected and cannot be imported');
+        if (trust !== LOCAL && ['profileId', 'activeProfile', 'profile'].includes(key) && typeof value[key] === 'string' && value[key].toLowerCase() !== 'jinyi') throw new Error('Only the Jinyi profile may be imported');
         walk(value[key], depth + 1);
       }
       seen.delete(value);
@@ -109,13 +112,13 @@
       && ['stage', 'shownStage'].every(k => p[k] == null || Number.isInteger(p[k]) && p[k] >= 0 && p[k] <= 5)
       && (p.lastReveal == null || !!iso(p.lastReveal)) && (p.condition == null || ['healthy', 'wilted', 'dormant'].includes(p.condition)));
   }
-  function importData(raw, currentState, words, options) {
+  function importInternal(raw, currentState, words, options, trust) {
     const report = { cards: 0, words: 0, stories: 0, unknownCards: [], invalidCards: [], warnings: [], sources: [] };
     try {
       options = options || {};
       if (typeof raw === 'string' && raw.length > 10000000) throw new Error('Import is too large');
       const input = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      inspect(input);
+      inspect(input, trust);
       if (!object(input) && !Array.isArray(input)) throw new Error('Expected a JSON object or bundle');
       const out = currentState ? clone(currentState) : fresh(words, options);
       cleanWordMaps(out);
@@ -193,9 +196,25 @@
         if (!object(data)) throw new Error('Invalid learn record');
         recognized = true; report.sources.push('learn');
         if (data.carnet) carnet(data.carnet);
-        for (const item of Array.isArray(data.extraItems) ? data.extraItems : []) if (object(item) && safeId(item.id)) hydrate(map.get(item.id) || item.id, item);
+        for (const item of Array.isArray(data.extraItems) ? data.extraItems : []) if (object(item) && safeId(item.id)) {
+          const id = map.get(item.id) || item.id;
+          hydrate(id, item);
+          out.words[id] = { ...(out.words[id] || {}), met: true };
+        }
+        for (const pending of Array.isArray(data.storyPending) ? data.storyPending : []) if (object(pending) && safeId(pending.itemId)) {
+          const id = map.get(pending.itemId) || pending.itemId;
+          hydrate(id);
+          out.words[id] = { ...(out.words[id] || {}), met: true };
+        }
         if (object(data.cards)) for (const key of Object.keys(data.cards)) mergeCard(key, data.cards[key]);
         else if (data.cards != null) report.warnings.push('Invalid cards map');
+        // Tombstones win over stale cards/entries. Keep all source data in legacy/rawCards.
+        for (const field of ['deleted', 'hidden']) if (object(data[field])) for (const [oldId, value] of Object.entries(data[field])) {
+          if (!value || !safeId(oldId)) continue;
+          const id = map.get(oldId) || oldId;
+          out.words[id] = { ...(out.words[id] || {}), [field]: clone(value), met: false, collected: false, introduced: false };
+          for (const card of Object.values(out.cards)) if (card.itemId === id) card.suspended = true;
+        }
         // Keep original evidence/days/unknown extensions without treating them as new app history.
         const previous = out.legacy.learn;
         if (!previous || +new Date(data.updatedAt || 0) >= +new Date(previous.updatedAt || 0)) out.legacy.learn = clone(data);
@@ -297,12 +316,92 @@
         const id = object(card) && (card.itemId || key.slice(0, key.lastIndexOf('|')));
         if (map.has(id) && mergeCard(key, card)) delete out.unknownCards[key];
       }
-      out.profileId = 'jinyi'; out.schema = 'day8-1';
+      out.profileId = trust === LOCAL ? options.profileId : (currentState && currentState.profileId || 'jinyi'); out.schema = 'day8-1';
       cleanWordMaps(out);
       report.sources = [...new Set(report.sources)];
       report.unknownCards = [...new Set(report.unknownCards)].filter(key => own(out.unknownCards, key));
       return { ok: true, state: out, report };
     } catch (error) { return { ok: false, state: currentState || null, report, error: String(error.message || error) }; }
+  }
+  function importData(raw, currentState, words, options) {
+    return importInternal(raw, currentState, words, options);
+  }
+  function localSource(state) {
+    const source = state && state.legacy && state.legacy.localSource;
+    return object(source) && source.version === 1 && ['jinyi', 'yuechao'].includes(source.profileId)
+      && source.profileId === state.profileId && !!iso(source.migratedAt) && object(source.raw)
+      && ['learn', 'story', 'uiLang'].every(name => source.raw['a411.p.' + source.profileId + '.' + name] === null
+        || typeof source.raw['a411.p.' + source.profileId + '.' + name] === 'string') ? source : null;
+  }
+  function inspectState(state) {
+    inspect(state, localSource(state) ? LOCAL : undefined);
+    if (state.schema !== 'day8-1' || (state.profileId !== 'jinyi' && !localSource(state))) throw new Error('Invalid Day8 state');
+  }
+  function migrateLocal(storage, words, options) {
+    options = options || {};
+    let loaded = { ok: false, found: false, state: fresh(words, options) }, backupKey;
+    try {
+      const previousRaw = storage.getItem(KEY);
+      loaded = load({ getItem: () => previousRaw }, words, options);
+      if (!loaded.ok || localSource(loaded.state)) return { ...loaded, migrated: false };
+      const selector = storage.getItem(ACTIVE_KEY);
+      let profileId;
+      if (selector) {
+        const device = JSON.parse(selector);
+        if (!object(device) || !['jinyi', 'yuechao'].includes(device.activeProfile)) throw new Error('Invalid active legacy profile');
+        profileId = device.activeProfile;
+      }
+      function readProfile(id) {
+        const raw = {};
+        for (const name of ['learn', 'story', 'uiLang']) raw['a411.p.' + id + '.' + name] = storage.getItem('a411.p.' + id + '.' + name);
+        return raw;
+      }
+      let raw = readProfile(profileId || 'jinyi');
+      const present = (data, id) => !!(data['a411.p.' + id + '.learn'] || data['a411.p.' + id + '.story']);
+      if (!profileId) {
+        profileId = 'jinyi';
+        if (!present(raw, profileId)) { profileId = 'yuechao'; raw = readProfile(profileId); }
+      }
+      if (!present(raw, profileId)) return { ...loaded, migrated: false };
+      const prefix = 'a411.p.' + profileId + '.', input = {};
+      for (const name of ['learn', 'story']) if (raw[prefix + name]) {
+        const value = JSON.parse(raw[prefix + name]);
+        if (!object(value) || (name === 'learn' && (value.schema !== 1 || value.profileId !== profileId))
+          || (name === 'story' && value.schemaVersion !== 1)
+          || (value.profileId != null && value.profileId !== profileId)) throw new Error('Invalid legacy ' + name + ' record');
+        input[name] = value;
+      }
+      const lang = raw[prefix + 'uiLang'];
+      if (lang) { input.uiLang = lang.startsWith('"') ? JSON.parse(lang) : lang; }
+      let base = loaded.found && loaded.state.profileId === profileId ? loaded.state : fresh(words, options);
+      if (base !== loaded.state || !loaded.found) {
+        base.cards = {};
+        for (const word of Object.values(base.words)) { word.met = false; word.introduced = false; }
+      }
+      const result = importInternal(input, base, words, { ...options, allowLegacy: true, profileId }, LOCAL);
+      if (!result.ok) throw new Error(result.error);
+      const stamp = nowISO(options);
+      result.state.legacy.localSource = { version: 1, profileId, migratedAt: stamp, selector, raw };
+      inspectState(result.state);
+      const nextRaw = JSON.stringify(result.state);
+      // Both the prior new-app bytes and the migration snapshot survive a partial write.
+      const backup = JSON.stringify({ schema: 'day8-migration-backup-1', createdAt: stamp, previousState: previousRaw, migratedState: nextRaw });
+      backupKey = BACKUP_PREFIX + stamp + '.migration';
+      let suffix = 0;
+      while (storage.getItem(backupKey) != null) {
+        if (++suffix > 100) throw new Error('Too many migration backups for this timestamp');
+        backupKey = BACKUP_PREFIX + stamp + '.migration.' + suffix;
+      }
+      if (storage.getItem(KEY) !== previousRaw) throw new Error('New state changed during migration; retry');
+      storage.setItem(backupKey, backup);
+      if (storage.getItem(backupKey) !== backup) throw new Error('Migration backup verification failed');
+      if (storage.getItem(KEY) !== previousRaw) throw new Error('New state changed during migration; retry');
+      storage.setItem(KEY, nextRaw);
+      if (storage.getItem(KEY) !== nextRaw) throw new Error('Migration state verification failed');
+      return { ...result, found: true, migrated: true, backupKey };
+    } catch (error) {
+      return { ...loaded, ok: false, migrated: false, backupKey, error: String(error.message || error) };
+    }
   }
   function detect(storage) {
     try {
@@ -318,13 +417,18 @@
     } catch (error) { return { available: false, bundle: null, counts: { cards: 0, words: 0 }, error: String(error.message || error) }; }
   }
   function exportLegacy(storage) { const result = detect(storage); return { ...result, ok: result.available, text: result.available ? JSON.stringify(result.bundle, null, 2) : null }; }
-  function exportData(state) { inspect(state); return JSON.stringify({ kind: 'day8-save', schema: 1, profileId: 'jinyi', data: state }, null, 2); }
+  function exportData(state) { inspectState(state); return JSON.stringify({ kind: 'day8-save', schema: 1, profileId: state.profileId, data: state }, null, 2); }
   function save(storage, state) {
     try {
-      inspect(state);
-      if (state.profileId !== 'jinyi' || state.schema !== 'day8-1') throw new Error('Invalid Day8 state');
+      inspectState(state);
       // Even an incorrectly placed protected save must not be overwritten by a fresh fallback.
-      if (typeof storage.getItem === 'function') inspect(storage.getItem(KEY));
+      if (typeof storage.getItem === 'function') {
+        const raw = storage.getItem(KEY);
+        if (raw) {
+          const previous = JSON.parse(raw); inspectState(previous);
+          if (localSource(previous) && (!localSource(state) || previous.profileId !== state.profileId)) throw new Error('Cannot replace migrated profile with a fallback state');
+        }
+      }
       storage.setItem(KEY, JSON.stringify(state)); return { ok: true };
     }
     catch (error) { return { ok: false, error: String(error.message || error) }; }
@@ -333,8 +437,8 @@
     try {
       const raw = storage.getItem(KEY);
       if (!raw) return { ok: true, state: fresh(words, options), found: false };
-      const value = JSON.parse(raw); inspect(value);
-      if (value.schema !== 'day8-1' || value.profileId !== 'jinyi' || !object(value.cards) || !object(value.words) || !object(value.days) || !object(value.story) || !object(value.settings)) throw new Error('Invalid Day8 state');
+      const value = JSON.parse(raw); inspectState(value);
+      if (!object(value.cards) || !object(value.words) || !object(value.days) || !object(value.story) || !object(value.settings)) throw new Error('Invalid Day8 state');
       for (const c of Object.values(value.cards)) {
         if (!object(c) || !safeId(c.itemId) || !['listening', 'reading', 'production'].includes(c.modality)
           || !Number.isFinite(c.stability) || c.stability < 0 || c.stability > 36500 || !Number.isFinite(c.difficulty) || c.difficulty < 0 || c.difficulty > 10
@@ -345,7 +449,7 @@
       return { ok: true, state: value, found: true };
     } catch (error) { return { ok: false, state: fresh(words, options), found: false, error: String(error.message || error) }; }
   }
-  const api = { KEY, OLD_KEYS, fresh, importData, detect, load, save, exportData, exportLegacy };
+  const api = { KEY, OLD_KEYS, BACKUP_PREFIX, ACTIVE_KEY, fresh, importData, migrateLocal, detect, load, save, exportData, exportLegacy };
   root.Day8Save = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -9,7 +9,7 @@
  * rooftopUnlocked/basilPlanted are explicit story flags; omit them for the entry tableau.
  * direction ('up'/'down') + optional walkProgress (0..1) select the stairwell walk.
  * v2:true uses mobile portrait composition (390x844 baseline, also tested at 375x667).
- * The parent owns letterboxing and the <=390px portrait CSS canvas; legacy calls stay pixel-identical.
+ * The parent owns letterboxing and the <=390px portrait CSS canvas.
  * garden:{slots:[{id,bay,row,col,growth,due}],bay,zoom,selectedPot} uses 24 slots/bay.
  * catGame:{active,elapsed,approachElapsed,reach,blocked,phase,phaseElapsed,liftFrom}
  * uses motion(previousState).cat for a continuous interrupted lift. Times are ms.
@@ -17,6 +17,11 @@
  * establishingProgress:0..1 on facade is an empty, silent day/dusk/night shot.
  * The caller owns its 3-5s clock and UI/audio; null/omitted restores the story facade.
  * drawWord(canvas, wordId) draws a distinct 120x80 pixel prop; false means unsupported.
+ * drawReview(canvas,{pot:{id,growth,basil,due,thirst?},moisture,reaction,time,
+ * reducedMotion,dropProgress?}) paints a 320x112 strip: pot left, kitten right.
+ * pot also accepts dueCount, thirsty and hint from the parent's garden model.
+ * dueCount (or numeric due) is a remaining-word count; thirst is optional 0..1.
+ * moisture is 0..3; dropProgress is a single answer's flight, 0..1, omitted at rest.
  */
 (function (root) {
   'use strict';
@@ -187,16 +192,20 @@
     if (growth === 0) { p.r(x - 3 + shift, y - 30, 6, 2, '#a49367'); return; }
     y += pose.plantOffset || 0;
     const sway = Math.round(Math.sin(time / 1300 + x) * (growth > 2 ? 1 : 0));
-    const height = 11 + growth * 7, top = y - 29 - height;
-    p.line(x + shift, y - 29, x + shift + sway, top, P.leafDark, 2);
+    const thirst = clamp(pose.thirst, 0, 1), droop = Math.round(thirst * 8);
+    const leaf = thirst ? mix(P.leaf, '#989b8d', thirst * .85) : P.leaf;
+    const dark = thirst ? mix(P.leafDark, '#777f79', thirst * .85) : P.leafDark;
+    const light = thirst ? mix(P.leafLight, '#b0b1a0', thirst * .85) : P.leafLight;
+    const height = 11 + growth * 7, top = y - 29 - height + droop;
+    p.line(x + shift, y - 29, x + shift + sway, top, dark, 2);
     for (let i = 0; i < growth + 1; i++) {
       const yy = y - 34 - i * 6, side = i % 2 ? -1 : 1, extent = (basil ? 10 : 8) + Math.min(i, 2);
-      const lift = pose.leafLift || 0;
-      p.line(x + shift, yy + 2, x + shift + side * extent, yy - 4 - lift, P.leafDark);
-      p.oval(x + shift + side * (extent - 2) + sway, yy - 5 - lift, basil ? 8 : 6, 4, i % 2 ? P.leaf : P.leafDark);
-      p.line(x + shift + side * 3 + sway, yy - 4 - lift, x + shift + side * extent + sway, yy - 6 - lift, P.leafLight);
+      const lift = (pose.leafLift || 0) - droop;
+      p.line(x + shift, yy + 2, x + shift + side * extent, yy - 4 - lift, dark);
+      p.oval(x + shift + side * (extent - 2) + sway, yy - 5 - lift, basil ? 8 : 6, 4, i % 2 ? leaf : dark);
+      p.line(x + shift + side * 3 + sway, yy - 4 - lift, x + shift + side * extent + sway, yy - 6 - lift, light);
     }
-    p.oval(x + shift + sway, top, 4, 5, P.leaf);
+    p.oval(x + shift + sway, top, 4, 5, leaf);
     if (growth >= 4) {
       for (let i = 0; i < (growth === 5 ? 4 : 1); i++) {
         const xx = x + shift + (i - 1) * 7, yy = top - 3 + i % 2 * 5;
@@ -222,7 +231,7 @@
   }
 
   function person(p, x, feet, who, time, pose = 'idle', scale = 1, expression = {}) {
-    if (p.people && p.people[who]) expression = p.people[who];
+    if (p.people && p.people[who]) expression = { ...expression, ...p.people[who] };
     const breath = Math.sin(time / 650 + x) > .65 ? 1 : 0;
     const stride = pose === 'walk' ? Math.round(Math.sin(time / 130) * 4) : 0;
     const y = feet - 59 * scale + breath + (pose === 'laugh' ? Math.round(Math.sin(time / 130)) : 0) + (expression.bob || 0);
@@ -240,8 +249,20 @@
     if (who === 'lefevre') { r(3, 44, 22, 9, '#464354'); r(7, 53, 5, 5, P.skinShade); r(17, 53, 5, 5, P.skinShade); }
     r(4 + stride, 57 - Math.abs(stride), 9, 3, '#302d37'); r(16 - stride, 57, 9, 3, '#302d37');
     if (pose !== 'lift') {
-      r(1 - stride, 31, 5, 14, shirt); r(23 + stride, 31, 5, 14, shade);
-      r(1 - stride, 44, 5, 5, P.skin); r(23 + stride, 44, 5, 5, P.skinShade);
+      if (pose !== 'offer') { r(1 - stride, 31, 5, 14, shirt); r(1 - stride, 44, 5, 5, P.skin); }
+      if (pose !== 'receive') { r(23 + stride, 31, 5, 14, shade); r(23 + stride, 44, 5, 5, P.skinShade); }
+    }
+    if (pose === 'offer' || pose === 'receive') {
+      const arm = (a, b, c, d, color, width) => p.line(x + a * scale, y + b * scale, x + c * scale, y + d * scale, color, width * scale);
+      const reach = expression.reach || 0;
+      if (pose === 'offer') {
+        arm(3, 31, -4, 39, shade, 6); arm(-4, 39, -10 - reach * 7, 40, shirt, 5);
+        r(-18 - reach * 7, 38, 11, 4, P.skin); r(-15 - reach * 7, 36, 4, 2, P.skin);
+        r(-14 - reach * 7, 38, 3, 2, '#ddbc7d'); r(-11 - reach * 7, 39, 6, 1, '#ddbc7d');
+      } else {
+        arm(22, 31, 42, 36, shade, 6); arm(42, 36, 49 + reach * 10, 30 - reach * 12, shirt, 5);
+        r(48 + reach * 10, 27 - reach * 12, 8, 5, P.skin);
+      }
     }
     if (pose === 'catch') { r(-13, 32, 18, 6, shirt); r(-18, 31, 7, 5, P.skin); r(-9, 39, 14, 5, shirt); r(-16, 38, 8, 5, P.skin); }
     if (pose === 'hold') { r(-4, 36, 10, 6, shirt); r(-7, 35, 6, 4, P.skin); }
@@ -275,6 +296,13 @@
     const hop = happy ? Math.max(0, Math.round(Math.sin(s.time / 170) * 3)) : 0;
     y -= hop;
     const orange = '#e2873a', light = '#f3b365', stripe = '#b8642a';
+    if (s.v2 && (happy || s.reaction === 'roll')) {
+      const rise = s.reducedMotion ? 0 : Math.round((Math.sin(s.time / 240) + 1));
+      [[x + 17, y + hop - 34 - rise], [x - 18, y + hop - 30 - rise]].forEach(([hx, hy]) => {
+        p.r(hx, hy, 2, 2, '#dfa0a0'); p.r(hx + 3, hy, 2, 2, '#dfa0a0');
+        p.r(hx, hy + 2, 5, 2, '#dfa0a0'); p.r(hx + 1, hy + 4, 3, 1, '#dfa0a0'); p.r(hx + 2, hy + 5, 1, 1, '#dfa0a0');
+      });
+    }
     if (s.reaction === 'roll') {
       const wiggle = s.reducedMotion ? 0 : Math.round(Math.sin(s.time / 180) * 2);
       p.oval(x, y + 1, 23, 3, '#49384630'); p.oval(x - 3, y - 9, 16, 9, orange);
@@ -308,15 +336,17 @@
     }
     const feetY = y;
     y += (cp.headBob || 0) + (cp.anticipation || 0) + (s.reaction === 'tilt' ? 2 : 0);
+    const tilt = s.reaction === 'tilt' ? 2 : 0;
     const turn = s.action === 'catTurnsHead' ? 2 - Math.round(beat(s, 750, 180) * 7) : offended ? -3 : s.reaction === 'tilt' ? -1 : 2;
-    p.r(x - 8 + turn, y - 25, 19, 15, orange);
-    p.poly([[x - 8 + turn, y - 24], [x - 9 + turn, y - 33], [x - 1 + turn, y - 26]], orange);
-    p.poly([[x + 4 + turn, y - 26], [x + 12 + turn, y - 32], [x + 11 + turn, y - 22]], orange);
-    p.r(x - 6 + turn, y - 28, 2, 3, '#e9a27c'); p.r(x + 8 + turn, y - 28, 2, 3, '#e9a27c');
+    if (tilt) p.poly([[x - 8 + turn, y - 27], [x + 11 + turn, y - 23], [x + 9 + turn, y - 8], [x - 10 + turn, y - 12]], orange);
+    else p.r(x - 8 + turn, y - 25, 19, 15, orange);
+    p.poly([[x - 8 + turn, y - 24 - tilt], [x - 9 + turn, y - 33 - tilt], [x - 1 + turn, y - 26 - tilt]], orange);
+    p.poly([[x + 4 + turn, y - 26 + tilt], [x + 12 + turn, y - 32 + tilt], [x + 11 + turn, y - 22 + tilt]], orange);
+    p.r(x - 6 + turn, y - 28 - tilt, 2, 3, '#e9a27c'); p.r(x + 8 + turn, y - 28 + tilt, 2, 3, '#e9a27c');
     p.r(x - 1 + turn, y - 24, 2, 4, stripe); p.r(x + 4 + turn, y - 24, 2, 3, stripe);
     const shut = happy || lick || (s.action === 'cupFalls' && s.elapsed > 600 && s.elapsed < 1000) || s.time % 4300 > 4110;
-    p.r(x - 4 + turn, y - 19, 2, shut || offended ? 1 : 3, '#22303a');
-    p.r(x + 6 + turn, y - 19, 2, shut || offended ? 1 : 3, '#22303a');
+    p.r(x - 4 + turn, y - 19 - tilt, 2, shut || offended ? 1 : 3, '#22303a');
+    p.r(x + 6 + turn, y - 19 + tilt, 2, shut || offended ? 1 : 3, '#22303a');
     p.r(x + 1 + turn, y - 16, 2, 1, '#e79aa0'); p.r(x + turn, y - 13, 5, 2, light);
     y = feetY;
     p.r(x - 8, y - 10, 4, 2, stripe); p.r(x - 9, y - 6, 4, 2, stripe);
@@ -544,13 +574,32 @@
       const dusk = ['#9b849d', '#b594a8', '#cc9fae', '#e4b0b5', '#efc2ba', '#f3d3bd'];
       const night = ['#33394f', '#43435e', '#56516b', '#6f6079', '#977486', '#b98a91'];
       day.forEach((c, i) => original.r(0, i * 30, W, 31, progress < .5 ? mix(c, dusk[i], progress * 2) : mix(dusk[i], night[i], progress * 2 - 1)));
+      if (progress < .5) {
+        original.oval(346, 34, 12, 12, mix('#fff0cc', '#e9b9bd', progress * 2));
+        [[43, 30, 61], [283, 20, 45], [375, 73, 68]].forEach(([x, y, w]) => {
+          p.r(x, y, w, 3, '#e7ded0'); p.r(x + 12, y - 3, w - 25, 3, '#e7ded0');
+        });
+      }
       skyline(p, progress > .6, -40);
       if (progress > .65) original.oval(346, 42, 9, 9, mix('#797084', '#f7e6c3', (progress - .65) / .35));
     } else { sky(p, true); skyline(p, true, -40); }
     const height = s.facadeHeight || H, rows = Math.max(3, Math.ceil((height - 140) / 71));
     p.r(86, 116, 314, height - 116, '#a2918d');
+    if (progress != null) {
+      p.r(86, 126, 209, height - 126, '#b5a293');
+      p.poly([[295, 126], [400, 126], [400, height], [354, height], [354, 203]], '#94898a');
+      for (let y = 132; y < height; y += 18) {
+        p.r(98, y, 288, 1, '#9d9087');
+        for (let x = 100 + (y % 36 ? 0 : 26); x < 390; x += 52) p.r(x, y + 1, 1, 17, '#a39589');
+      }
+    }
     p.poly([[71, 120], [115, 61], [365, 61], [414, 120]], '#535f72');
     for (let i = 0; i < 9; i++) p.line(116 + i * 30, 65, 91 + i * 37, 116, '#7d8795');
+    if (progress != null) {
+      p.poly([[296, 63], [365, 63], [410, 117], [339, 117]], '#48566a');
+      for (let y = 76; y < 118; y += 13) p.line(117 - (y - 61) * .7, y, 366 + (y - 61) * .8, y, '#69788a');
+      p.r(86, 129, 314, 5, '#817b7b');
+    }
     p.r(74, 119, 337, 6, '#c2ada0'); p.r(82, 125, 321, 4, '#726e77');
     p.r(110, 44, 14, 32, '#b58372'); p.r(107, 42, 20, 5, '#d5a080');
     p.r(347, 40, 13, 34, '#a3786b'); p.r(344, 38, 19, 5, '#d5a080');
@@ -563,6 +612,16 @@
         const lit = progress == null ? (row === 1 && col === 2) || (row === 0 && col === 0) : progress >= .38 + order * .6 / (rows * 4 - 1);
         p.r(x - 4, y - 4, 44, 52, '#bca997'); p.r(x, y, 36, 44, lit ? '#f2cf8e' : '#596172');
         p.r(x + 3, y + 2, 30, 40, lit ? '#dcb17b' : '#686b7d');
+        if (progress != null) {
+          p.r(x - 5, y - 5, 46, 2, '#e0c9aa'); p.r(x - 4, y - 3, 2, 47, '#d6c0a4');
+          p.r(x + 36, y, 4, 44, '#817876');
+          if (!lit) {
+            p.r(x + 4, y + 3, 11, 16, '#92a6ac');
+            p.poly([[x + 20, y + 3], [x + 32, y + 3], [x + 32, y + 10], [x + 20, y + 18]], '#8497a2');
+            p.r(x + 4, y + 24, 10, 9, '#7b8b96');
+          }
+          p.r(x - 3, y + 48, 47, 4, '#887e7a');
+        }
         if (lit) { p.poly([[x + 3, y + 2], [x + 13, y + 2], [x + 9, y + 31], [x + 3, y + 39]], '#aa7e74'); p.r(x + 26, y + 2, 7, 35, '#aa7e74'); }
         p.r(x + 17, y, 2, 44, '#c6b19b'); p.r(x, y + 20, 36, 2, '#c6b19b');
         p.r(x - 6, y + 44, 48, 4, '#d9c0a4');
@@ -648,19 +707,10 @@
       p.r(388, 217, 24, 17, '#ded2b2'); p.r(392, 217, 3, 17, '#839888'); p.r(403, 217, 2, 17, '#839888');
     } else if (s.scene === 'doorway' || (s.scene === 'lefevre' && handover(s))) {
       const closing = s.action === 'closeDoor', f = closing ? beat(s, 1400, 200) : 0;
-      person(p, 254 + f * 6, 239 - f * 14, 'lefevre', s.time, handover(s) || s.night ? 'idle' : 'hold', 1.18);
+      const offering = ['openHand', 'giveKey'].includes(s.action);
+      person(p, 254 + f * 6, 239 - f * 14, 'lefevre', s.time, offering ? 'offer' : handover(s) || s.night ? 'idle' : 'hold', 1.18,
+        { reach: beat(s, 1100) * (s.action === 'giveKey' ? 1 : .35) });
       if (!handover(s) && !s.night) pot(p, 246, 219, Math.max(2, s.growth[1]), s.time, true);
-      if (['openHand', 'giveKey'].includes(s.action)) {
-        const reach = beat(s, 1100) * (s.action === 'giveKey' ? 14 : 5), x = 248 - reach;
-        p.line(258, 215, x, 219, '#815574', 6); p.r(x - 9, 216, 12, 5, P.skin); p.r(x - 6, 214, 7, 2, P.skin);
-        // A tiny in-scene glint, never a key insert or close-up.
-        p.r(x - 6, 216, 3, 2, '#ddbc7d'); p.r(x - 3, 217, 6, 1, '#ddbc7d');
-        if (s.action === 'giveKey') {
-          const take = beat(s, 850, 600);
-          p.line(218, 243, 231 - take * 3, 232 - take * 10, '#718c7b', 7);
-          p.r(227 - take * 3, 226 - take * 10, 10, 5, P.skin);
-        }
-      }
       if (closing) {
         const dw = Math.round(38 + f * 70);
         p.r(194, 36, dw, 194, '#63796f'); p.r(199, 41, dw - 10, 184, '#788d7b');
@@ -668,7 +718,8 @@
         p.r(194 + dw - 10, 137, 3, 7, '#d3b27c');
         p.r(195, 231, 105, 1, '#f5d59a');
       }
-      person(p, 159, 270, 'camille', s.time + 300, 'idle', 1.15);
+      person(p, 159, 270, 'camille', s.time + 300, s.action === 'giveKey' ? 'receive' : 'idle', 1.15,
+        { reach: beat(s, 850, 600) });
       if (s.cat) cat(p, 318, 275, s);
     } else if (s.scene === 'stairs') {
       const progress = s.walkProgress == null ? 0 : s.walkProgress;
@@ -838,7 +889,7 @@
     return projectHotspots(canvas, s);
   }
 
-  // V2 is deliberately separate: the established 480x320 renderer remains a golden fixture.
+  // V2 keeps its portrait layout separate from the tested 480x320 composition.
   function motion(options) {
     const s = state(options), g = s.catGame || {}, reduced = s.reducedMotion;
     const t = reduced ? 0 : Math.floor(s.time / (1000 / 24)) * (1000 / 24);
@@ -915,13 +966,17 @@
     const selected = slots.find(item => String(item.id) === String(s.water > 0 && s.targetPotId != null ? s.targetPotId : garden.selectedPot));
     const bay = selected && (garden.zoom === 'pot' || s.water > 0) ? selected.bay : Math.round(clamp(garden.bay, 0, bays - 1));
     const overview = garden.zoom === 'overview';
+    const compact = !!s.garden && slots.length > 0 && slots.length <= 2 && !overview;
     const padding = 15, area = l.width - padding * 2;
-    const pitch = area / 8, scale = overview ? .38 : Math.min(.72, pitch / 52);
-    const top = l.oy + 182, step = 61, feet = l.oy + 326;
+    const pitch = area / 8, scale = compact ? 1.05 : overview ? .38 : Math.min(.72, pitch / 52);
+    const top = compact ? Math.round(l.height * .64) : l.oy + 182, step = 61, feet = compact ? Math.round(l.height * .81) : l.oy + 326;
     const catX = s.action === 'review' ? l.width - 43 : l.width / 2 + 28;
     const catFeet = s.action === 'review' ? top - 89 : feet - 6;
-    return { slots, bays, bay, selected, scale, padding, pitch, overview, top, step, feet, catX, catFeet,
+    const canX = compact ? l.width * .24 - 6 : l.width / 2 - 42;
+    const canY = compact ? l.height * .72 + 14 : feet - 6;
+    return { slots, bays, bay, selected, scale, padding, pitch, overview, compact, top, step, feet, catX, catFeet, canX, canY,
       point(item) {
+        if (compact) return { x: l.width * (slots.indexOf(item) + 1) / (slots.length + 1), y: top, scale };
         if (overview) return { x: padding + (item.bay + (item.col + .5) / 8) * area / bays,
           y: top + item.row * step, scale: Math.min(.38, area / bays / 8 / 44) };
         return { x: padding + (item.col + .5) * pitch, y: top + item.row * step, scale };
@@ -939,7 +994,7 @@
       const target = grid.selected || basil || grid.slots[0];
       if (target && rects['pot:' + target.id]) rects.pot = rects['pot:' + target.id];
       if (basil && rects['pot:' + basil.id]) rects.basil = rects.emptyPot = rects['pot:' + basil.id];
-      rects.can = [l.width / 2 - 36, grid.feet - 20, 48, 42];
+      rects.can = [grid.canX + 6, grid.canY - 14, 48, 42];
       if (s.water > 0 && target) {
         const q = grid.point(target);
         rects.can = [q.x - 36, q.y - 29 * q.scale - 32, 48, 42];
@@ -947,7 +1002,7 @@
       rects.cat = s.action === 'review' ? [grid.catX, grid.catFeet - 16, 56, 44] : [grid.catX, grid.catFeet - 17, 46, 38];
       rects.door = rects.up = [l.width - 29, grid.top - 49, 34, 69];
       rects.chair = [l.width - grid.padding - 23, grid.feet - 23, 36, 46];
-      rects.garden = [l.width / 2, grid.top + grid.step - 20, l.width - grid.padding * 2, grid.step * 2 + 80];
+      rects.garden = grid.compact ? [l.width / 2, grid.top - 40, l.width - grid.padding * 2, 100] : [l.width / 2, grid.top + grid.step - 20, l.width - grid.padding * 2, grid.step * 2 + 80];
       return rects;
     }
     const scale = l.scale || 1;
@@ -1034,12 +1089,12 @@
       p.line(x, y, x + 28, l.oy + 85 + Math.sin((x + 28) / l.width * Math.PI) * 21, '#4c4b58');
       p.oval(x + 4, y + 8, 10, 11, '#ffd28a12'); p.r(x + 3, y + 5, 3, 4, '#ffe8ae');
     }
-    for (let row = 0; row < 3; row++) {
+    for (let row = 0; row < (grid.compact ? 1 : 3); row++) {
       const y = grid.top + 2 + row * grid.step;
       p.r(grid.padding - 7, y, l.width - grid.padding * 2 + 14, 5, '#725b54');
       p.r(grid.padding - 7, y, l.width - grid.padding * 2 + 14, 1, '#c5986e');
       p.r(grid.padding - 5, y + 5, 3, 19, '#594c4c'); p.r(l.width - grid.padding + 2, y + 5, 3, 19, '#594c4c');
-      if (!grid.overview) for (let col = 0; col < 8; col++) {
+      if (!grid.overview && !grid.compact) for (let col = 0; col < 8; col++) {
         const x = grid.padding + (col + .5) * grid.pitch;
         p.oval(x, y - 2, 8, 2, '#403b4930');
       }
@@ -1055,12 +1110,10 @@
       const planted = String(item.id) === '1' ? !!martinPresent : !basil || s.basilPlanted || s.action === 'plantBasil';
       const growth = planted ? Math.max(String(item.id) === '1' || basil ? 2 : 0, clamp(item.growth, 0, 5)) : 0;
       const lowering = s.action === 'plantBasil' && basil ? -18 * (1 - beat(s, 1500)) : 0;
-      pot(placed(p, q.x, q.y, q.scale), 0, 0, growth, m.time, basil, 0, { plantOffset: lowering, moisture: s.moisture[item.id] });
-      if (item.due) {
-        const blink = s.reducedMotion ? 0 : Math.floor(m.time / 180 + item.col * 3) % 7;
-        p.r(q.x + 9, q.y - 35 - blink, 1, 2, '#ffe2a5');
-        if (blink < 3) p.r(q.x + 8, q.y - 34 - blink, 3, 1, '#ffe2a5');
-      }
+      const thirst = plantThirst(item, s.moisture[item.id]);
+      const wiggle = item.hint && !s.reducedMotion ? Math.sin(m.time / 420) * 1.8 : 0;
+      pot(placed(p, q.x, q.y, q.scale), 0, 0, growth, m.time, basil, wiggle,
+        { plantOffset: lowering, moisture: s.moisture[item.id], thirst });
     });
     const selected = grid.selected || grid.slots.find(item => String(item.id) === '2') || grid.slots[0];
     if (s.water > 0 && selected) {
@@ -1070,7 +1123,7 @@
         const f = (m.time / 800 + i / 20) % 1;
         p.r(q.x - 18 * (1 - f), target - 41 * (1 - f * f), 1, 2, '#c7e2df');
       }
-    } else can(p, l.width / 2 - 42, grid.feet - 6, 0, m.time);
+    } else can(p, grid.canX, grid.canY, 0, m.time);
     chair(p, l.width - grid.padding - 35, grid.feet - 44, .75, true);
     if (s.rooftopUnlocked) {
       person(p, grid.padding - 13, grid.feet, 'camille', m.time, 'idle', .85, m.people.camille);
@@ -1195,5 +1248,48 @@
     return true;
   }
 
-  root.Day8Art = Object.freeze({ width: W, height: H, scenes: Object.freeze(scenes), draw, drawWord, start, getHotspots, projectHotspots, motion, layout });
+  function plantThirst(item, moisture) {
+    if (item.thirst != null) return clamp(item.thirst, 0, 1);
+    const thirsty = item.thirsty == null ? (item.dueCount == null ? item.due : item.dueCount) > 0 : item.thirsty;
+    return thirsty ? 1 - clamp(moisture, 0, 3) / 3 : 0;
+  }
+
+  function drawReview(canvas, options = {}) {
+    if (!canvas || typeof canvas.getContext !== 'function') throw new TypeError('Day8Art.drawReview requires a canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return {};
+    const item = options.pot || {}, s = state({ ...options, v2: true });
+    const time = s.reducedMotion ? 0 : Math.floor(s.time / (1000 / 24)) * (1000 / 24);
+    const moisture = clamp(options.moisture, 0, 3), thirst = plantThirst(item, moisture);
+    if (canvas.width !== 320) canvas.width = 320;
+    if (canvas.height !== 112) canvas.height = 112;
+    canvas.style.imageRendering = 'pixelated'; canvas.style.objectFit = 'contain';
+    canvas.style.objectPosition = '50% 50%'; ctx.imageSmoothingEnabled = false;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    try {
+      const p = painter(ctx);
+      p.r(0, 0, 320, 112, '#dfd5bd'); p.r(0, 0, 320, 42, '#c9d6cf');
+      p.r(0, 42, 320, 21, '#d8d9c6');
+      p.r(0, 63, 320, 49, '#a58a88'); p.r(0, 63, 320, 4, '#c0a49a');
+      for (let x = 0; x < 320; x += 37) p.r(x, 68, 1, 18, '#86747c');
+      p.r(15, 88, 290, 6, '#725b54'); p.r(15, 88, 290, 2, '#c5986e');
+      p.r(24, 94, 5, 18, '#594c4c'); p.r(291, 94, 5, 18, '#594c4c');
+      const wiggle = item.hint && !s.reducedMotion ? Math.sin(time / 420) * 1.8 : 0;
+      pot(p, 80, 86, Math.round(clamp(item.growth == null ? 2 : item.growth, 0, 5)), time, !!item.basil, wiggle, { moisture, thirst });
+      if (s.cat) cat(placed(p, 250, 86, 1.5), 0, 0, { ...s, time });
+      if (options.dropProgress != null) {
+        const f = s.reducedMotion ? 1 : clamp(options.dropProgress, 0, 1);
+        if (f < 1) {
+          const x = 162 - 82 * f, y = 22 + 35 * f * f;
+          p.r(x, y, 2, 2, '#c7e2df'); p.r(x - 1, y + 2, 4, 4, '#8bbabe'); p.r(x, y + 2, 1, 2, '#e3f1e7');
+        } else {
+          [[-8, -3], [0, -5], [8, -3]].forEach(([x, y]) => p.r(80 + x, 57 + y, 2, 2, '#c7e2df'));
+        }
+      }
+    } finally { ctx.restore(); }
+    const rect = (id, x, y, width, height) => ({ id, x: x / 320 * 100, y: y / 112 * 100, width: width / 320 * 100, height: height / 112 * 100, visible: true });
+    return { pot: rect('pot', 80, 48, 52, 86), ...(s.cat ? { cat: rect('cat', 250, 60, 90, 70) } : {}) };
+  }
+
+  root.Day8Art = Object.freeze({ width: W, height: H, scenes: Object.freeze(scenes), draw, drawWord, drawReview, start, getHotspots, projectHotspots, motion, layout });
 })(typeof window !== 'undefined' ? window : globalThis);

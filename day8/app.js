@@ -11,7 +11,7 @@
   const dev = new URLSearchParams(location.search).get('dev') === '1';
   let storage;
   try { storage = localStorage; } catch (_) { storage = null; }
-  let loaded = S.load(storage, C.words);
+  let loaded = dev?S.load(storage,C.words):S.migrateLocal(storage,C.words,{catalog:window.A411.INHERITED.deck});
   let state = loaded?.state || loaded || S.fresh(C.words);
   function sanitizeState(value) {
     const object=x=>x && typeof x==='object' && !Array.isArray(x);
@@ -79,6 +79,7 @@
     state.appSession = review;
     state.story.day8SceneId=currentScene().id;state.story.day8Version=3;
     if (dev) return;
+    if(loaded?.ok===false){$('#storage-warning').hidden=false;$('#storage-warning').textContent='Migration non enregistrée. Votre ancienne sauvegarde est intacte. Exportez votre progression avant de réessayer.';return;}
     try {
       const result = S.save(storage,state);
       if (result === false || result?.ok === false) throw new Error(result?.error || 'Storage unavailable');
@@ -123,8 +124,9 @@
     $('#btnMusic').innerHTML=icon(musicOn?'music':'mute');
     $('#btnPause').classList.toggle('audio-unavailable',audioUnavailable);
     // Outside the scrolling exercise panel: reachable even when a queue is empty or broken.
-    const inGarden=['garden','review','reviewdone','reveal'].includes(screen)||screen==='story'&&currentScene().kind==='water';
-    if(inGarden){const label=currentScene().kind==='water'?'Continuer l’histoire':'Continuer · Rentrer';$('#scene-actions').innerHTML=(screen==='review'?button('Plus tard','review-exit','secondary'):'')+button(label,'leave-garden','secondary');}
+    const inGarden=screen==='garden'||screen==='story'&&currentScene().kind==='water';
+    if(screen==='review')$('#scene-actions').innerHTML=button('Quitter la révision','review-exit','secondary');
+    else if(inGarden&&E.dueWords(state,allWords(),{now:now()}).length)$('#scene-actions').innerHTML=button(currentScene().kind==='water'?'Arroser plus tard':'Rentrer à la maison','leave-garden','text-button');
     else $('#scene-actions').replaceChildren();
   }
   function render() {
@@ -329,36 +331,42 @@
     if(!canReview()){screen='story';return renderStory();}
     setScene({scene:'roof',night:true,water:0,focus:null,focusZoom:0,reaction:'idle',action:'',catGame:null,garden:gardenModel()});setLocation('Le jardin','21:30');
     const slots=sceneModel.garden.slots,bays=Math.max(1,Math.ceil(slots.length/24));
-    panel.innerHTML=`<div class="garden-controls">${gardenBay>0?button(icon('back'),'garden-prev','icon-button','aria-label="Étagère précédente"'):''}${button(icon('water'),'start-garden','primary','aria-label="Arroser"')}${gardenBay<bays-1?button(icon('arrow'),'garden-next','icon-button','aria-label="Étagère suivante"'):''}${button(icon('book'),'selected-pot','icon-button','aria-label="Mots de cette plante"')}</div>`;
+    panel.className='panel garden-panel';
+    const due=slots.reduce((sum,p)=>sum+p.dueCount,0);
+    panel.innerHTML=`<div class="garden-controls">${gardenBay>0?button(icon('back'),'garden-prev','icon-button','aria-label="Étagère précédente"'):''}${due?button(`${icon('water')} Arroser`,'start-garden','primary can-glow','aria-label="Arroser tous les mots à revoir"'):primary(currentScene().kind==='water'?'Continuer':'Rentrer à la maison','leave-garden')}${gardenBay<bays-1?button(icon('arrow'),'garden-next','icon-button','aria-label="Étagère suivante"'):''}</div>`;
     const positions=window.Day8Art.projectHotspots($('#scene'),{...sceneModel,v2:true}) || {};
+    if(due&&positions.can){hotspot('can','start-garden',true);$('#hotspots [data-target="can"]').setAttribute('aria-label','Arroser tous les mots à revoir');}
     slots.filter(p=>p.bay===gardenBay).forEach(p=>{
       const projected=positions['pot:'+p.id],fallback=[12+p.col*10.5,35+p.row*14];
       let x=projected?.x??projected?.[0]??fallback[0],y=projected?.y??projected?.[1]??fallback[1];
       if(x<=1&&y<=1){x*=100;y*=100;}
-      $('#hotspots').insertAdjacentHTML('beforeend',button('',`select-pot:${p.id}`,`hotspot pot-hotspot ${String(currentPot)===String(p.id)?'selected':''}`,`style="left:${x}%;top:${y}%" data-pot="${p.id}" aria-label="${esc(p.name || 'Plante '+p.id)}" aria-pressed="${String(currentPot)===String(p.id)}"`));
+      $('#hotspots').insertAdjacentHTML('beforeend',button(`<span class="pot-drops" aria-hidden="true">${Array.from({length:p.dueCount},()=>icon('drop')).join('')}</span>`,`select-pot:${p.id}`,`hotspot pot-hotspot ${p.hint?'pot-hint':''} ${p.dueCount?'thirsty':'watered'}`,`style="left:${x}%;top:${y}%" data-pot="${p.id}" data-drops="${p.dueCount}" aria-label="${esc(p.name)} : ${p.dueCount} mots à arroser"`));
     });
   }
   function gardenModel(){
     const ids=gardenFixture?Array.from({length:gardenFixture},(_,i)=>i+1):[...new Set([1,2,...allWords().filter(w=>state.words[w.id]?.met||state.words[w.id]?.collected).map(w=>Number(w.potId||w.pot||1))])].filter(Number.isFinite).sort((a,b)=>a-b);
     gardenBay=Math.max(0,Math.min(gardenBay,Math.ceil(ids.length/24)-1));
-    return {bay:gardenBay,selectedPot:currentPot,zoom:'bay',slots:ids.map((id,i)=>({id,bay:Math.floor(i/24),row:Math.floor(i%24/8),col:[3,4,2,5,1,6,0,7][i%8],name:id===1?'Chez nous':id===2?'Le basilic':'Plante '+id,growth:gardenFixture?2+i%4:Math.max(id<=2?2:0,state.growth?.pots?.[id]?.shownStage||0),due:gardenFixture?i%3===0:allWords().some(w=>Number(w.potId||w.pot)===id&&Object.values(state.cards).some(c=>c.itemId===w.id&&!c.suspended&&(!c.due||new Date(c.due)<=now())))}))};
+    const counts=new Map(ids.map(id=>[id,E.dueWords(state,allWords(),{now:now(),potId:id}).length]));
+    const thirstiest=ids.reduce((best,id)=>counts.get(id)> (counts.get(best)||0)?id:best,null);
+    return {bay:gardenBay,selectedPot:currentPot,zoom:'bay',slots:ids.map((id,i)=>({id,bay:Math.floor(i/24),row:Math.floor(i%24/8),col:[3,4,2,5,1,6,0,7][i%8],name:potName(id),growth:gardenFixture?2+i%4:Math.max(id<=2?2:0,state.growth?.pots?.[id]?.shownStage||0),due:counts.get(id)>0,dueCount:counts.get(id),thirsty:counts.get(id)>0,hint:id===thirstiest}))};
   }
+  function potName(id){return id===1?'Chez nous':id===2?'Le basilic':state.potNames?.[id] || 'Plante '+id;}
   let gardenController=null;
   function gardenModule(session){
     return window.Day8Modules.run('M2',{items:allWords(),skin:{scene:'roof',lighting:'night'},sceneHooks:{state,session}});
   }
-  function startReview(mode='garden',first=false) {
+  function startReview(mode='garden',first=false,potId=null) {
     if(mode==='cat'){startCat();return;}
     if(!canReview(first))return;
-    reviewReturn = screen==='story'?'story':'garden';
-    if (!review || review.session?.mode!=='garden' || first) {
+    reviewReturn = currentScene().kind==='water'?'story':'garden';
+    if (!review || review.version!==4 || review.session?.mode!=='garden' || first || (review.potId??null)!==potId) {
       gardenController=gardenModule();
-      const opts={now:now(),storyDay:8};
+      const opts={now:now(),storyDay:8,potId,dueOnly:true};
       const session=gardenController.create(opts);
-      review={session,returnTo:reviewReturn,originSceneId:currentScene().id,first,feedback:null,danger:0,correct:0};
+      review={version:4,session,returnTo:reviewReturn,originSceneId:currentScene().id,first,potId,feedback:null,danger:0,correct:0};
     }else gardenController=gardenModule(review.session);
     reviewReturn=review.returnTo; feedback=review.feedback || null; reviewDelay=feedback?.correct?900:0;chunks=[];reviewReplays=0;pairSelection=null;reviewStarted=performance.now();screen='review';save();render();
-    playReviewPrompt();
+    if(screen==='review')playReviewPrompt();
   }
   function renderReview() {
     if (!review) {screen='garden';return renderGarden();}
@@ -369,16 +377,19 @@
     setLocation('Le jardin','21:30');
     const completed=review.session.completedIds?.length||0,total=review.session.initial;
     $('#review-progress').innerHTML=`<div class="water-count">${icon('water')}<span>${Math.max(0,total-completed)}</span></div><progress value="${completed}" max="${Math.max(1,total)}" aria-label="Mots arrosés"></progress><span>${completed}/${total}</span>`;
-    if(review.checkpoint){panel.innerHTML=`<div class="review-checkpoint"><h2>Une petite pause</h2><p>${completed} mots arrosés.</p><div class="line-tools">${primary('Continuer','checkpoint-continue')}${button('Plus tard','review-exit','secondary')}</div></div>`;return;}
-    if (!exercise && !feedback) {screen='reviewdone';save();return renderReviewDone();}
+    review.checkpoint=false;
+    if (!exercise && !feedback) {finishReview();return;}
     const ex=exercise;
     currentPot=Number(ex.potId || ex.word?.potId || ex.word?.pot || 1);
     const slot=sceneModel.garden.slots.find(p=>p.id===currentPot);if(slot)gardenBay=slot.bay;
     sceneModel.garden={...sceneModel.garden,bay:gardenBay,selectedPot:currentPot};sceneModel.targetPotId=currentPot;
+    sceneModel.reviewStrip=true;
+    const dueCount=slot?.dueCount||0;
+    $('#review-progress').innerHTML=`<div class="review-strip"><canvas id="review-art" width="360" height="156" role="img" aria-label="${esc(potName(currentPot))}, à gauche ; Croissant, à droite, ${feedback?feedback.correct?'content':'la tête penchée':'attentif'}"></canvas><div class="review-pot-label">${esc(potName(currentPot))}<div class="strip-drops" aria-label="${dueCount} mots à arroser">${Array.from({length:dueCount},()=>icon('drop')).join('')}</div></div>${feedback?.correct?`<span class="flying-drop" aria-hidden="true">${icon('drop')}</span>`:''}<span class="review-total">${completed} / ${total}</span></div>`;
     panel.innerHTML='';
     if (feedback) {
       const answer=ex.type==='R3'?ex.sentence:ex.word.fr;
-      panel.innerHTML = `<div class="feedback ${feedback.correct?'':'soft'}" role="status">${feedback.correct?`<p>${review.combo>=3?`${review.combo} de suite !`:'Oui !'}</p>`:`<p>C’est… <strong class="correct-answer gender ${esc(ex.word.gender)}">${esc(answer)}</strong></p>${ex.options?`<div class="answer-grid">${ex.options.map(o=>button(esc(o.fr||o.text),'noop',`answer ${o.id===ex.wordId?'correct gender '+esc(ex.word.gender):'wrong'}`,'disabled')).join('')}</div>`:''}${ex.type==='E3'?`<div class="pair-corrections">${ex.pairs.map(p=>`<span class="correct-answer">${esc(p.fr)}</span>`).join(' · ')}</div>`:''}`}<p lang="fr">${tokenize(feedback.sentence)}</p></div><div class="line-tools">${button(icon('sound'),'review-audio','icon-button','aria-label="Réécouter"')}${feedback.correct?'':primary('Continuer','review-next')}</div>${status()}`;
+      panel.innerHTML = `<div class="feedback ${feedback.correct?'':'soft'}" role="status">${feedback.correct?`<p>${review.combo>=3?`${review.combo} de suite !`:'Oui !'}</p>`:`<p>C’est… <strong class="correct-answer gender ${esc(ex.word.gender)}">${esc(answer)}</strong></p>${['E1','R1','R2'].includes(ex.type)&&ex.options?`<div class="answer-grid">${ex.options.map(o=>button(esc(o.fr||o.text),'noop',`answer ${o.id===ex.wordId?'correct gender '+esc(ex.word.gender):'wrong'}`,'disabled')).join('')}</div>`:''}${ex.type==='E3'?`<div class="pair-corrections">${ex.pairs.map(p=>`<span class="correct-answer">${esc(p.fr)}</span>`).join(' · ')}</div>`:''}`}<p lang="fr">${tokenize(feedback.sentence)}</p></div><div class="line-tools">${button(icon('sound'),'review-audio','icon-button','aria-label="Réécouter"')}${feedback.correct?'':primary('Continuer','review-next')}</div>${status()}`;
       return;
     }
     const meaning=hint(ex.word?.zh || '',ex.word?.en || '');
@@ -390,7 +401,7 @@
     } else if (ex.type==='R2' || ex.type==='P1') {
       panel.innerHTML += `<div class="question" lang="fr">${tokenize(ex.prompt || ex.word?.cloze || '')}</div>`;
     } else if (ex.type==='R3') {
-      panel.innerHTML += `${listenButton('review-audio')}<div class="ordered" lang="fr" aria-label="Votre phrase">${chunks.map((index,i)=>button(esc(ex.chunks[index]),`unchunk:${i}`,'chunk')).join('')}</div><div class="chunks" lang="fr">${ex.chunks.map((chunk,i)=>button(esc(chunk),`chunk:${i}`,`chunk ${chunks.includes(i)?'selected':''}`,chunks.includes(i)?'disabled':'')).join('')}</div>`;
+      panel.innerHTML += `<div class="question" lang="fr">${ex.letterOrdering?'Remets les lettres dans l’ordre.':'Remets la phrase dans l’ordre.'}</div>${listenButton('review-audio')}<div class="ordered" lang="fr" aria-label="Votre phrase">${chunks.map((index,i)=>button(esc(ex.chunks[index]),`unchunk:${i}`,'chunk')).join('')}</div><div class="chunks" lang="fr">${ex.chunks.map((chunk,i)=>button(esc(chunk),`chunk:${i}`,`chunk ${chunks.includes(i)?'selected':''}`,chunks.includes(i)?'disabled':'')).join('')}</div>`;
     } else {
       const usable=(ex.word?.recorded || A.canSpeak()) && !A.isMuted();
       panel.innerHTML += listenButton('review-audio')+`${usable?'':`<div class="question audio-fallback" lang="fr">${tokenize(ex.word?.cloze || ex.prompt || '')}</div>`}${status()}`;
@@ -400,7 +411,7 @@
     } else if (!['R3','E3'].includes(ex.type)) {
       panel.innerHTML += `<form id="review-form" class="input-row"><input id="review-input" aria-label="Réponse en français" lang="fr" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${esc(ex.firstLetter || '')}…"><button type="submit" class="primary" aria-label="Vérifier">${icon('arrow')}</button></form>`;
     }
-    panel.innerHTML+=button('?','exercise-hint','icon-button','aria-label="Indice"')+(hintOpen?`<p class="exercise-hint" data-hint>${esc(meaning)}</p>`:'');
+    panel.innerHTML+=button(icon('help'),'exercise-hint','icon-button','aria-label="Indice"')+(hintOpen?`<p class="exercise-hint" data-hint>${esc(meaning)}</p>`:'');
   }
   function listenButton(action) { return button(icon('sound'),action,'listen-button','aria-label="Écouter" title="Écouter"'); }
   function playReviewPrompt() { if (!feedback && exercise && ['E1','R1','R3','P2'].includes(exercise.type)) A.speak(['E1','R1'].includes(exercise.type)?exercise.word.fr:exercise.sentence,['E1','R1'].includes(exercise.type)?exercise.word.wordClip:exercise.audioId); }
@@ -418,26 +429,24 @@
     review.feedback=feedback;
     if (feedback.correct) review.correct++;
     review.combo=feedback.correct?(review.combo||0)+1:0;
-    review.moisture ||= {};const pot=exercise.potId||exercise.word?.pot||1;review.moisture[pot]=Math.min(3,(review.moisture[pot]||0)+1);
+    review.moisture ||= {};const pot=exercise.potId||exercise.word?.pot||1;if(feedback.correct)review.moisture[pot]=Math.min(3,(review.moisture[pot]||0)+1);
     reviewDelay=feedback.correct?900:0;
-    sceneModel.water=1;sceneModel.targetPotId=exercise.potId || exercise.word?.pot || 1;A.sfx('water');
+    sceneModel.water=feedback.correct?1:0;sceneModel.targetPotId=exercise.potId || exercise.word?.pot || 1;if(feedback.correct)A.sfx('water');
     save();render();
     const spokenFeedback=feedback;reviewSpeechDone=false;
     Promise.resolve(A.speak(feedback.sentence,feedback.audioId)).then(()=>{if(feedback===spokenFeedback)reviewSpeechDone=true;});
   }
   function reviewNext() {
     if(!review)return;
-    const completed=review.session.completedIds?.length||0;
-    if(completed>=((review.lastCheckpoint||0)+8)&&!review.session.done){review.checkpoint=true;review.lastCheckpoint=completed;}
-    feedback=null;review.feedback=null;review.pairMatches=[];pairSelection=null;chunks=[];hintOpen=false;reviewReplays=0;reviewDelay=0;sceneModel.water=0;reviewStarted=performance.now();save();render();if(!review.checkpoint)playReviewPrompt();
+    feedback=null;review.feedback=null;review.pairMatches=[];pairSelection=null;chunks=[];hintOpen=false;reviewReplays=0;reviewDelay=0;sceneModel.water=0;reviewStarted=performance.now();save();render();if(screen==='review')playReviewPrompt();
   }
   function renderReviewDone() {
-    panel.innerHTML = `<div class="review-summary"><h2>Bravo !</h2><p>${review?.session.completedIds?.length||0} mots arrosés.</p>${button('Bonne nuit','finish-review','primary')}</div>`;
-    setScene({water:0,reaction:'happy'});
+    finishReview();
   }
   function exitReview(){
     closeAllOverlays();reviewDelay=0;A.stop();
-    // Answers are already saved. Keep the queue so Arroser resumes the same item.
+    // Scheduling and unfinished drops are persisted per answer, independently of this queue.
+    review=null;feedback=null;exercise=null;gardenController=null;
     screen='garden';save();render();
   }
   function renderCatDone() {
@@ -446,7 +455,7 @@
   }
   function startCat(){
     review=null;feedback=null;exercise=null;gardenController=null;
-    catGame={active:true,elapsed:0,approachElapsed:performance.now()-sceneEpoch,duration:16000,reach:0,blocked:0,phase:'approach',phaseElapsed:0,bops:0,targetReach:.85};
+    catGame={active:true,elapsed:0,approachElapsed:performance.now()-sceneEpoch,duration:currentScene().durationMs,reach:0,blocked:0,phase:'approach',phaseElapsed:0,bops:0,targetReach:.85};
     sceneEpoch=performance.now();lastTick=sceneEpoch;screen='story';render();A.sfx('meow');
   }
   function renderCat(){
@@ -458,15 +467,16 @@
     if(!catGame?.active)return;
     catGame.targetReach=Math.max(0,catGame.reach-.48);catGame.phase='retreat';catGame.phaseElapsed=0;catGame.blocked=1;catGame.bops++;
     A.sfx(catGame.bops%3===0?'purr':'click');sceneModel.reaction=['offended','lick','lookAway'][catGame.bops%3];
+    catGame.duration=Math.min(catGame.duration,catGame.elapsed+1100);
   }
   function finishCat(){
     if(!catGame?.active)return;
     const pose=window.Day8Art.motion?.(artModel(performance.now()))?.cat;
-    catGame={...catGame,active:false,elapsed:16000,phase:'lift',phaseElapsed:0,liftFrom:pose};
+    catGame={...catGame,active:false,phase:'lift',phaseElapsed:0,liftFrom:pose};
     screen='catdone';sceneEpoch=performance.now();render();A.sfx('purr');
   }
   function finishReview() {
-    const next=review?.returnTo==='story'&&currentScene().kind==='water'&&(!review.originSceneId||review.originSceneId===currentScene().id);gardenController?.finish();gardenController=null;review=null;feedback=null;save();
+     const next=review?.returnTo==='story'&&currentScene().kind==='water'&&(!review.originSceneId||review.originSceneId===currentScene().id);gardenController?.finish();gardenController=null;review=null;feedback=null;exercise=null;save();
     if(next)nextScene();else{screen='garden';render();}
   }
   function startAtHome() {
@@ -478,8 +488,7 @@
     state.story.day8Index=0;screen='story';save();render();
   }
   function renderFirstWater(s) {
-    currentPot=2;game.classList.add('hold','first-water');setScene({scene:'roof',night:true,reaction:'idle',water:0,garden:gardenModel(),targetPotId:2});
-    panel.innerHTML=button(icon('water'),'hold-water','primary hold-button','aria-label="Maintenir pour arroser" title="Maintenir pour arroser"');
+    currentPot=2;renderGarden(true);
   }
   function beginHold(el) {
     if(holdActive)return;holdActive=true;holdStart=performance.now();game.classList.add('holding');A.sfx('water');A.speak('Il faut de l’eau.','d8_noe_eau');
@@ -559,16 +568,10 @@
   function wordRows() {
     const words=allWords().filter(w=>Number(w.pot || w.potId)===currentPot && (state.words[w.id]?.met || state.words[w.id]?.collected) && normalize(`${w.fr} ${w.zh} ${w.en}`).includes(normalize(search))).map(w=>({...w,fr:C.french(w.fr)})).sort((a,b)=>String(state.words[b.id]?.at||'').localeCompare(String(state.words[a.id]?.at||'')));
     if(!words.length)return '<p>Aucun mot ici.</p>';
-    const capacity=Math.min(wordPageSize,carnetPageSize(!!expandedWord));
-    if(capacity!==wordPageSize){
-      const offset=expandedWord?words.findIndex(w=>w.id===expandedWord):wordPage*wordPageSize;
-      wordPage=Math.floor(Math.max(0,offset)/capacity);wordPageSize=capacity;
-    }
-    const size=wordPageSize,pages=Math.ceil(words.length/size);wordPage=Math.min(wordPage,pages-1);
-    return words.slice(wordPage*size,(wordPage+1)*size).map(w=>{
+    return words.map(w=>{
       const encounters=state.words[w.id]?.scenes?.length||0;
       return `<div class="word-row" data-word-id="${esc(w.id)}"><div class="word-row-head"><button data-action="expand:${esc(w.id)}" aria-expanded="${expandedWord===w.id}"><span class="gender ${esc(w.gender)}">${esc(w.fr)} <small>${w.gender==='m'?'m.':w.gender==='f'?'f.':''}</small></span> <span class="pos-tag">${esc(({noun:'nom',verb:'verbe',adj:'adj.',chunk:'expr.'})[w.pos]||w.pos||'mot')}</span><span class="word-gloss">${esc(hint(w.zh,w.en))}</span></button>${button(icon('sound'),`focus-audio:${w.id}`,'icon-button','aria-label="Écouter le mot"')}<span class="encounter-pips" aria-label="${encounters} rencontres">${[0,1,2].map(i=>`<i class="${i<encounters?'filled':''}"></i>`).join('')}</span></div>${expandedWord===w.id?`<div class="word-detail"><img class="scene-thumbnail" src="${sceneThumbnail(w)}" width="120" height="80" alt="Scène de la première rencontre"><div><div class="sentence" lang="fr">${tokenize(sourceSentence(w))}</div>${button(icon('sound'),`word-sentence:${esc(w.id)}`,'icon-button','aria-label="Écouter la phrase"')}${w.pos==='verb'?button('Conjugaison',`word-conjugation:${w.id}`,'text-button'):''}</div></div>`:''}</div>`;
-    }).join('')+(pages>1?`<div class="word-pages">${button(icon('back'),`word-page:${wordPage-1}`,'icon-button',wordPage===0?'disabled aria-label="Page précédente"':'aria-label="Page précédente"')}<span>${wordPage+1} / ${pages}</span>${button(icon('arrow'),`word-page:${wordPage+1}`,'icon-button',wordPage===pages-1?'disabled aria-label="Page suivante"':'aria-label="Page suivante"')}</div>`:'');
+    }).join('');
   }
   function sourceScene(w){
     const first=state.words[w.id]?.scenes?.[0];
@@ -697,7 +700,7 @@
     if(action==='cat-bop'){bopCat();return;}
     if(action==='finish-cat'){catGame=null;nextScene();return;}
     if(action==='garden-next'||action==='garden-prev'){gardenBay+=action==='garden-next'?1:-1;render();return;}
-    if(action.startsWith('select-pot:')){currentPot=Number(action.slice(11));A.sfx('paper');render();return;}
+    if(action.startsWith('select-pot:')){currentPot=Number(action.slice(11));if(E.dueWords(state,allWords(),{now:now(),potId:currentPot}).length)startReview('garden',false,currentPot);else{search='';openOverlay('wordbook');}return;}
     if(action==='selected-pot'){search='';openOverlay('wordbook');return;}
     if(action==='review-next'){reviewNext();return;}
     if(action==='review-exit'){exitReview();return;}
@@ -721,7 +724,7 @@
     if(action.startsWith('word-pot:')){currentPot=Number(action.slice(9));search='';wordPage=0;wordPageSize=carnetPageSize();expandedWord=null;render();return;}
     if(action==='word-search-toggle'){searchOpen=!searchOpen;search='';wordPage=0;render();$('#word-search')?.focus();return;}
     if(action.startsWith('word-page:')){wordPage=Math.max(0,Number(action.slice(10)));expandedWord=null;render();return;}
-    if(action.startsWith('expand:')){const id=action.slice(7);if(expandedWord===id)expandedWord=null;else{const rows=[...panel.querySelectorAll('.word-row')];const index=rows.findIndex(el=>el.dataset.wordId===id),size=carnetPageSize(true);wordPage=Math.floor((wordPage*wordPageSize+index)/size);wordPageSize=size;expandedWord=id;}render();return;}
+    if(action.startsWith('expand:')){const scroll=panel.scrollTop,id=action.slice(7);expandedWord=expandedWord===id?null:id;render();panel.scrollTop=scroll;return;}
     if(action.startsWith('word-conjugation:')){selectedWord=wordById(action.slice(17));openOverlay('conjugation');return;}
     if(action.startsWith('collect-id:')){selectedWord=wordById(action.slice(11));collect();return;}
     if(action.startsWith('word-sentence:')){const w=wordById(action.slice(14));A.speak(sourceSentence(w),sourceScene(w).audioId||w.audioId);return;}
@@ -839,7 +842,7 @@
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');let lastFrame=0;
   function artModel(t){
     const age=snapshotTime===null?t-sceneEpoch:snapshotTime;
-    const visualCat=catGame || (baseScreen==='story'&&currentScene().kind==='cat'?{active:true,elapsed:age,approachElapsed:age,duration:16000,reach:0,blocked:0,phase:'approach'}:null);
+    const visualCat=catGame || (baseScreen==='story'&&currentScene().kind==='cat'?{active:true,elapsed:age,approachElapsed:age,duration:currentScene().durationMs,reach:0,blocked:0,phase:'approach'}:null);
     return {...sceneModel,v2:true,reducedMotion:reduced.matches,catGame:visualCat,time:snapshotTime===null?(reduced.matches?0:t):snapshotTime,elapsed:reduced.matches&&!catGame?5000:age,basilPlanted:baseScreen==='entry'?undefined:!!(state.story.basilPlanted || state.story.basil_planted),rooftopUnlocked:baseScreen==='entry'?undefined:!!state.story.rooftop};
   }
   function animate(t){
@@ -871,6 +874,7 @@
     if(!paused&&walkMotion){walkMotion.elapsed+=dt;sceneModel.walkProgress=Math.min(1,walkMotion.elapsed/700);if(sceneModel.walkProgress>=1){walkMotion=null;nextScene();}}
     if(t-lastFrame>(reduced.matches?200:40)){
       lastFrame=t;window.Day8Art.draw($('#scene'),artModel(t));
+      if(baseScreen==='review'&&$('#review-art'))window.Day8Art.drawReview?.($('#review-art'),{pot:sceneModel.garden?.slots.find(p=>p.id===currentPot),moisture:review?.moisture?.[currentPot]||0,reaction:sceneModel.reaction,time:reduced.matches?0:t,reducedMotion:reduced.matches});
       if(catGame?.active&&!overlayScreens.has(screen)){
         const target=$('#hotspots .cat-target'),p=window.Day8Art.projectHotspots($('#scene'),artModel(t)).cat;
         if(target&&p){let x=p.x??p[0],y=p.y??p[1];if(x<=1&&y<=1){x*=100;y*=100;}target.style.left=`${Math.max(8,Math.min(92,x))}%`;target.style.top=`${Math.max(10,Math.min(78,y))}%`;}

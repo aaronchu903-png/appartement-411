@@ -134,7 +134,7 @@
     line('d8_cam_depuis', 'kitchen', { grammarIds: ['depuis_present'] }),
     line('d8_noe_matin', 'kitchen', { hotspot: 'plant' }),
     focus('d8_focus_plante', 'kitchen', ['plante'], 'plant', 'd8_noe_matin'),
-    line('d8_mg_non', 'kitchen', { id: 'd8_cat', kind: 'cat', durationMs: 16000, interaction: 'touch',
+    line('d8_mg_non', 'kitchen', { id: 'd8_cat', kind: 'cat', durationMs: 6500, interaction: 'touch',
       reactions: ['freeze', 'offended', 'sit', 'lick', 'lookAway', 'sleep'], catchLine: line('d8_mg_attention', 'kitchen'), finishAction: 'camilleLiftsCat', neverBreaks: true }),
     line('n_d8_boum', 'kitchen', { sfx: 'click', action: 'cupFalls', cat: 'blink' }),
     line('d8_noe_plante', 'kitchen', { silenceAfterMs: 1000 }),
@@ -206,8 +206,8 @@
     pick('d8_probe_toit', 'roof', 'toit', ['jardin', 'toit', 'salon'], 'probe'),
     beat('d8_noe_carry', 'roof', 'line', carry),
     line('n_d10_plante', 'roof', { action: 'plantBasil', flags: { basil_planted: true }, pot: 2, cat: 'dig', silent: true }),
-    beat('d8_first_watering', 'roof', 'water', { mode: 'first', lighting: 'night', holdMs: 3000, pot: 2, potId: 2, firstWordId: 'basilic', duePotId: 1,
-      firstSentence: fr('C’est du basilic, pour la cuisine.'), can: 'martin', underlay: line('d8_noe_eau', 'roof'), noTextDuringHold: true, flags: { garden_open: true } }),
+    beat('d8_first_watering', 'roof', 'water', { mode: 'first', lighting: 'night', interaction: 'tap', pot: 2, potId: 2, firstWordId: 'basilic', duePotId: 1,
+      firstSentence: fr('C’est du basilic, pour la cuisine.'), can: 'martin', underlay: line('d8_noe_eau', 'roof'), flags: { garden_open: true } }),
     line('n_d10_arrose', 'roof', { action: 'leafLifts', silent: true }),
     beat('d8_diary', 'roof', 'diary', { prompt: lessonInstructions.diary, optional: true, graded: false, saveKey: 'day8', wordIds: [] }),
     beat('d8_ritual', 'facade', 'ritual', { durationMs: 4000, action: 'lightsOut', lamp: true, preserveLamp: 'lefevre', silent: true }),
@@ -454,13 +454,13 @@
     if (list.filter(s => s.kind === 'walk').length !== 2) throw new Error('Only two stairwell walking beats are permitted');
     if (list.filter(s => s.id === 'd10_noe_ici').length !== 1) throw new Error('Empty pot beat must appear once');
     const water = list.find(s => s.id === 'd8_first_watering');
-    if (water.holdMs !== 3000 || water.underlay.id !== 'd8_noe_eau' || water.can !== 'martin') throw new Error('First watering continuity changed');
+    if (water.interaction !== 'tap' || water.underlay.id !== 'd8_noe_eau' || water.can !== 'martin') throw new Error('First watering continuity changed');
     if (list.filter(s => s.kind === 'water').length !== 1 || water.scene !== 'roof' || water.lighting !== 'night' || water.pot !== 2 || water.potId !== 2 || water.firstWordId !== 'basilic' || water.duePotId !== 1) throw new Error('Review must be one night roof session, basil then Martin');
     const carried = list.find(s => s.id === 'd8_noe_carry');
     if (carried.text !== carry.text || !carried.listenOnly || carried.reviewed !== false) throw new Error('Approved listen-only carry changed');
     if (list[list.indexOf(carried) + 1]?.id !== 'n_d10_plante' || list[list.indexOf(carried) + 2] !== water) throw new Error('Carry, planting, watering continuity changed');
     const cat = list.find(s => s.kind === 'cat');
-    if (cat.module || cat.durationMs !== 16000 || ['budget', 'mode', 'seenOnly', 'potId'].some(key => key in cat)) throw new Error('Cat is a touch interaction, not review');
+    if (cat.module || cat.durationMs !== 6500 || ['budget', 'mode', 'seenOnly', 'potId'].some(key => key in cat)) throw new Error('Cat is a touch interaction, not review');
     if (list.some(s => s.id === 'd8_noe_eau')) throw new Error('Water recognition line is an underlay, not a separate step');
     if (list.filter(s => s.kind === 'chat').length !== 4) throw new Error('Four approved Coloc 411 exchanges are required');
     if (list[list.length - 1].text !== hook.text) throw new Error('Approved ending changed');

@@ -66,18 +66,48 @@
     const d = state.days[key];
     for (const k of ['introduced', 'attempted', 'due', 'reviewed']) if (!Array.isArray(d[k])) d[k] = [];
     // Retain the day's complete due load even after review or a filtered story session.
-    for (const w of words || []) if (safeId(w.id) && seen(state, w) && introduced(state, w)
-      && cardsFor(state, w.id).some(c => active(c) && (!c.due || +new Date(c.due) <= +now)) && !d.due.includes(w.id)) d.due.push(w.id);
+    for (const w of dueWords(state, words || [], { now, includeNew: false })) if (!d.introduced.includes(w.id) && !d.due.includes(w.id)) d.due.push(w.id);
     return d;
   }
   function dailyNewCap(d) { return Math.max(0, CONFIG.newCap - Math.floor(new Set(d.due).size / 5)); }
   function cardsFor(state, id) { return Object.values(state.cards || {}).filter(c => c && c.itemId === id); }
   function active(c) { return !c.suspended && !c.suspend && c.state !== 'suspended'; }
-  function seen(state, w) { return introduced(state, w) || !!(state.words[w.id] && (state.words[w.id].met || state.words[w.id].collected)); }
-  function introduced(state, w) { return !!(state.words[w.id] && state.words[w.id].introduced) || cardsFor(state, w.id).some(c => c.reps > 0 || c.stability > 0); }
+  function seen(state, w) { return introduced(state, w) || !!(state.words?.[w.id] && (state.words[w.id].met || state.words[w.id].collected)); }
+  function introduced(state, w) { return !!state.words?.[w.id]?.introduced || cardsFor(state, w.id).some(c => c.reps > 0 || c.stability > 0); }
+  function dueWords(state, words, options = {}) {
+    const now = date(options.now), key = dayKey(now), d = state.days?.[key] || {}, ids = new Set();
+    const due = words.filter(w => {
+      if (!safeId(w.id) || ids.has(w.id) || !seen(state, w) || !reviewEligible(state, w)) return false;
+      const allCards = cardsFor(state, w.id), cards = allCards.filter(active);
+      if (allCards.length && !cards.length) return false;
+      if (!introduced(state, w)) {
+        if (options.includeNew === false || cards.length && !cards.some(c => !c.due || +new Date(c.due) <= +now)) return false;
+        ids.add(w.id); return true;
+      }
+      const pending = state.words?.[w.id]?.reviewPending === true;
+      const reviewed = (d.reviewed || []).includes(w.id);
+      // Old saved queues recorded an attempt before a successful correction.
+      const unfinished = !reviewed && (d.attempted || []).includes(w.id);
+      if (!pending && (reviewed || (!unfinished && cards.length && !cards.some(c => !c.due || +new Date(c.due) <= +now)))) return false;
+      ids.add(w.id); return true;
+    }).sort((a, b) => {
+      const earliest = w => Math.min(...cardsFor(state, w.id).filter(active).map(c => +new Date(c.due || 0)));
+      return earliest(a) - earliest(b) || hash(key + a.id) - hash(key + b.id);
+    });
+    const dueLoad = new Set([...(d.due || []), ...due.filter(w => introduced(state, w) && !(d.introduced || []).includes(w.id)).map(w => w.id)]).size;
+    let newLeft = Math.max(0, CONFIG.newCap - Math.floor(dueLoad / 5) - (d.introduced || []).length);
+    return due.filter(w => introduced(state, w) || newLeft-- > 0)
+      .filter(w => options.potId == null || String(w.potId ?? w.pot) === String(options.potId));
+  }
+  function category(w) {
+    // These legacy records were incorrectly grouped with concrete household objects.
+    const headword = normalize(w.fr).replace(/^(?:le|la|les|un|une|des) /, '');
+    return w.semanticGroup || w.category || ({ secret: 'confidentiality', bail: 'housing-contract' }[headword]) || w.field;
+  }
+  function compatible(a, b) { return !!category(a) && category(a) === category(b); }
   function reviewEligible(state, w) {
     if (introduced(state, w)) return true;
-    const record = state.words[w.id] || {}, scenes = new Set((Array.isArray(record.scenes) ? record.scenes : []).filter(safeId));
+    const record = state.words?.[w.id] || {}, scenes = new Set((Array.isArray(record.scenes) ? record.scenes : []).filter(safeId));
     return scenes.size >= 3 && Array.isArray(record.activeScenes) && record.activeScenes.some(id => scenes.has(id));
   }
   function stability(state, w) { const cs = cardsFor(state, w.id).filter(active); return cs.length ? Math.min(...cs.map(c => Number(c.stability) || 0)) : 0; }
@@ -91,24 +121,21 @@
     options = options || {}; ensure(state);
     const now = date(options.now), key = dayKey(now), d = daily(state, key, words, now);
     const mode = ['cat', 'test'].includes(options.mode) ? options.mode : 'garden';
+    const dueOnly = options.dueOnly || options.potId != null;
     const onlyIds = mode !== 'garden' && (options.onlyIds || options.wordIds);
-    const eligible = words.filter(w => safeId(w.id) && (!onlyIds || onlyIds.includes(w.id)) && seen(state, w) && reviewEligible(state, w) && (!cardsFor(state, w.id).length || cardsFor(state, w.id).some(active)) && (mode !== 'cat' || Number(w.week || 1) === 1));
-    const due = eligible.filter(w => introduced(state, w) && !d.attempted.includes(w.id) && cardsFor(state, w.id).some(c => active(c) && (!c.due || +new Date(c.due) <= +now)));
-    due.sort((a, b) => {
-      const earliest = w => Math.min(...cardsFor(state, w.id).filter(active).map(c => +new Date(c.due || 0)));
-      return earliest(a) - earliest(b) || hash(key + a.id) - hash(key + b.id);
-    });
-    for (const w of due) if (!d.due.includes(w.id)) d.due.push(w.id);
+    const eligible = words.filter(w => safeId(w.id) && (options.potId == null || String(w.potId ?? w.pot) === String(options.potId)) && (!onlyIds || onlyIds.includes(w.id)) && seen(state, w) && reviewEligible(state, w) && (!cardsFor(state, w.id).length || cardsFor(state, w.id).some(active)) && (mode !== 'cat' || Number(w.week || 1) === 1));
+    const due = dueWords(state, words, { now, potId: options.potId, includeNew: !!dueOnly }).filter(w => eligible.includes(w));
+    for (const w of due) if (introduced(state, w) && !d.introduced.includes(w.id) && !d.due.includes(w.id)) d.due.push(w.id);
     const newLimit = Math.max(0, dailyNewCap(d) - d.introduced.length);
-    const newWords = mode === 'cat' ? [] : eligible.filter(w => !introduced(state, w)).slice(0, newLimit);
-    let selected = due.map(w => ({ wordId: w.id, due: true })).concat(newWords.map(w => ({ wordId: w.id, isNew: true })));
-    if (options.practice && mode !== 'cat') selected = selected.concat(eligible.filter(w => !due.includes(w) && !newWords.includes(w)).map(w => ({ wordId: w.id, practice: true, practiceOnly: true })));
+    const newWords = mode === 'cat' || dueOnly ? [] : eligible.filter(w => !introduced(state, w)).slice(0, newLimit);
+    let selected = due.map(w => ({ wordId: w.id, due: true, ...(!introduced(state, w) ? { isNew: true } : {}) })).concat(newWords.map(w => ({ wordId: w.id, isNew: true })));
+    if (options.practice && mode !== 'cat' && !dueOnly) selected = selected.concat(eligible.filter(w => !due.includes(w) && !newWords.includes(w)).map(w => ({ wordId: w.id, practice: true, practiceOnly: true })));
     if (options.firstWordId) {
       const first = selected.findIndex(entry => entry.wordId === options.firstWordId);
       if (first >= 0) selected.unshift(selected.splice(first, 1)[0]);
     }
     const budget = mode !== 'garden' && Number.isFinite(options.budget) ? Math.max(0, Math.floor(options.budget)) : mode === 'cat' ? 6 : selected.length;
-    if (mode === 'cat' && selected.length < budget) {
+    if (mode === 'cat' && !dueOnly && selected.length < budget) {
       selected = selected.concat(eligible.filter(w => !due.includes(w)).map(w => ({ wordId: w.id, recognition: true })));
       const pool = selected.slice();
       while (pool.length && selected.length < budget) selected.push({ ...pool[selected.length % pool.length], recognition: true });
@@ -136,7 +163,7 @@
     const storyDay = Number(session.storyDay) || 8;
     // Only authored drawable IDs can be choices; scene thumbnails are context, not answers.
     const picture = word => word && safeId(word.picture) ? word.picture : null;
-    const picturePeers = words.filter(other => other.id !== w.id && safeId(other.id) && seen(state, other) && picture(other) && picture(other) !== picture(w) && normalize(other.answer || other.fr) !== normalize(w.answer || w.fr) && other.pos === w.pos && (!w.gender || other.gender === w.gender) && (!w.phonetic || other.phonetic !== w.phonetic) && !(w.homophones || []).includes(other.id))
+    const picturePeers = words.filter(other => other.id !== w.id && safeId(other.id) && seen(state, other) && compatible(w, other) && picture(other) && picture(other) !== picture(w) && normalize(other.answer || other.fr) !== normalize(w.answer || w.fr) && other.pos === w.pos && (!w.gender || other.gender === w.gender) && (!w.phonetic || other.phonetic !== w.phonetic) && !(w.homophones || []).includes(other.id))
       .filter((peer, index, peers) => peers.findIndex(other => picture(other) === picture(peer) || normalize(other.answer || other.fr) === normalize(peer.answer || peer.fr)) === index);
     const pairEntries = session.queue.slice(session.index, session.index + 4);
     const pairWords = pairEntries.map(e => words.find(word => word.id === e.wordId));
@@ -159,24 +186,29 @@
     const allowedType = t => (!/^P/.test(t) || storyDay >= 12) && (t !== 'E1' || picture(w) && picturePeers.length >= 2) && (t !== 'E3' || canPair) && (!(w.recognitionOnly || w.rare) || !/^P/.test(t));
     types = types.filter(allowedType);
     if (!types.length) types = ['R1', 'R2', 'R3'].filter(t => t !== repeated && modalityActive(t));
-    const type = session.forceType && !entry.retryType && !entry.practiceOnly && session.forceType !== repeated && modalityActive(session.forceType) && allowedType(session.forceType) ? session.forceType : types[hash(session.day + w.id + session.answered) % types.length];
+    let type = session.forceType && !entry.retryType && !entry.practiceOnly && session.forceType !== repeated && modalityActive(session.forceType) && allowedType(session.forceType) ? session.forceType : types[hash(session.day + w.id + session.answered) % types.length];
     const target = w.answer || w.fr, sentence = w.sentence || w.fr;
     let cloze = w.cloze;
     if (!cloze) { const index = normalize(sentence).indexOf(normalize(target)); cloze = index >= 0 ? sentence.slice(0, index) + '___' + sentence.slice(index + target.length) : '___'; }
-    const peers = (type === 'E1' ? picturePeers : words).filter(other => safeId(other.id) && other.id !== w.id && seen(state, other) && other.pos === w.pos && (!w.gender || other.gender === w.gender) && normalize(other.answer || other.fr) !== normalize(target) && (type !== 'R1' || ((!w.phonetic || other.phonetic !== w.phonetic) && !(w.homophones || []).includes(other.id))));
+    const peers = (type === 'E1' ? picturePeers : words).filter(other => safeId(other.id) && other.id !== w.id && seen(state, other) && compatible(w, other) && other.pos === w.pos && (!w.gender || other.gender === w.gender) && normalize(other.answer || other.fr) !== normalize(target) && (type !== 'R1' || ((!w.phonetic || other.phonetic !== w.phonetic) && !(w.homophones || []).includes(other.id))));
     peers.sort((a, b) => Number(b.field === w.field) - Number(a.field === w.field) || hash(session.day + a.id) - hash(session.day + b.id));
     const distinctPeers = peers.filter((peer, index) => peers.findIndex(other => normalize(other.answer || other.fr) === normalize(peer.answer || peer.fr) || type === 'E1' && picture(other) === picture(peer)) === index);
+    const orderingFallback = /^R[12]$/.test(type) && !distinctPeers.length;
+    if (orderingFallback) type = 'R3';
     const choices = [w, ...distinctPeers.slice(0, 3)].sort((a, b) => hash(a.id + session.answered) - hash(b.id + session.answered));
     let chunks = (w.chunks && w.chunks.length ? w.chunks : sentence.split(/\s+/)).slice();
-    if (chunks.length > 6) { const groups = [], size = Math.ceil(chunks.length / 6); for (let i = 0; i < chunks.length; i += size) groups.push(chunks.slice(i, i + size).join(' ')); chunks = groups; }
+    if (type === 'R3' && chunks.length < 2) chunks = sentence.trim().split(/\s+/);
+    const letterOrdering = type === 'R3' && chunks.length < 2;
+    if (letterOrdering) chunks = Array.from(sentence);
+    if (chunks.length > 6) { const groups = [], size = Math.ceil(chunks.length / 6); for (let i = 0; i < chunks.length; i += size) groups.push(chunks.slice(i, i + size).join(letterOrdering ? '' : ' ')); chunks = groups; }
     const orderedChunks = chunks.join(' ');
     chunks = chunks.map((text, index) => ({ text, order: hash(w.id + session.answered + index) })).sort((a, b) => a.order - b.order).map(c => c.text);
     if (chunks.join(' ') === orderedChunks && chunks.length > 1) chunks.push(chunks.shift());
     session.current = { type, wordId: w.id, word: w, potId: w.potId == null ? w.pot : w.potId, sentence, audioId: w.audioId || w.clip || null,
       prompt: ['E1', 'E3', 'R3'].includes(type) || type === 'P2' && w.recorded ? '' : cloze,
       options: choices.map(c => ({ id: c.id, text: c.answer || c.fr, zh: c.zh, en: c.en, fr: c.answer || c.fr, picture: picture(c), scene: c.scene || null })),
-      chunks, answer: type === 'R3' ? sentence : target, firstLetter: Array.from(target)[0] || '', degraded: type === 'P2' && !w.recorded,
-      modality: MODALITY[type], cardKey: `${w.id}|${MODALITY[type]}`, retry: !!entry.retryType, practiceOnly: !!entry.practiceOnly,
+      chunks, letterOrdering, answer: type === 'R3' ? sentence : target, firstLetter: Array.from(target)[0] || '', degraded: type === 'P2' && !w.recorded,
+      modality: orderingFallback && !modalityActive('R3') ? 'listening' : MODALITY[type], cardKey: `${w.id}|${orderingFallback && !modalityActive('R3') ? 'listening' : MODALITY[type]}`, retry: !!entry.retryType, practiceOnly: !!entry.practiceOnly,
       distractorWarning: (type === 'R1' || type === 'R2') && !peers.some(p => p.field && p.field === w.field) };
     if (type === 'E3') {
       session.pairsUsed = true;
@@ -206,7 +238,7 @@
     if (['E1', 'E3', 'R1', 'R2'].includes(ex.type)) {
       const id = typeof input === 'object' && input ? input.id : input;
       result = grade(id === ex.wordId ? ex.answer : '', ex.answer, ex.type, options.elapsed, options.replays);
-    } else result = grade(input, ex.type === 'R3' ? [ex.sentence] : [ex.answer, ...(ex.word.accepted || [])], ex.type, options.elapsed, options.replays);
+    } else result = grade(ex.letterOrdering ? (Array.isArray(input) ? input.join('') : String(input ?? '').replace(/\s+/g, '')) : input, ex.type === 'R3' ? [ex.sentence] : [ex.answer, ...(ex.word.accepted || [])], ex.type, options.elapsed, options.replays);
     const wasIntroduced = introduced(state, ex.word);
     const overCap = !wasIntroduced && d.introduced.length >= dailyNewCap(d);
     const practiceOnly = ex.practiceOnly || (session.practice && overCap);
@@ -218,6 +250,7 @@
     // Cat recognition of a seen word is practice, never a new introduction.
     const canSchedule = !practiceOnly && (wasIntroduced || session.mode !== 'cat');
     if (canSchedule) state.words[ex.wordId].introduced = true;
+    if (canSchedule) state.words[ex.wordId].reviewPending = !result.correct;
     if (!wasIntroduced && canSchedule) { state.words[ex.wordId].introducedAt = now.toISOString(); d.introduced.push(ex.wordId); }
     const previouslyReviewed = cardsFor(state, ex.wordId).some(c => c.lastReview && dayKey(c.lastReview) === key);
     const scheduled = canSchedule && !ex.retry && !d.attempted.includes(ex.wordId) && !previouslyReviewed;
@@ -233,7 +266,7 @@
     session.answered++; if (result.correct) session.correct++;
     if (!Array.isArray(session.initialIds)) session.initialIds = [...new Set(session.queue.slice(0, session.initial).filter(entry => !entry.retryType && !entry.practice).map(entry => entry.wordId))];
     if (!Array.isArray(session.completedIds)) session.completedIds = [];
-    const completed = session.initialIds.includes(ex.wordId) && !session.completedIds.includes(ex.wordId);
+    const completed = result.correct && session.initialIds.includes(ex.wordId) && !session.completedIds.includes(ex.wordId);
     if (completed) session.completedIds.push(ex.wordId);
     if (!options.pairBatch) session.types.push(ex.type);
     session.index++; session.current = null;
@@ -309,7 +342,7 @@
     }
     return { state, reveal, settledDays: count };
   }
-  const api = { CONFIG, MODALITY, dayKey, normalize, grade, nextState, preview, createSession, current, answer, settleGrowth, stability, reviewEligible };
+  const api = { CONFIG, MODALITY, dayKey, normalize, grade, nextState, preview, dueWords, createSession, current, answer, settleGrowth, stability, reviewEligible };
   root.Day8Engine = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
