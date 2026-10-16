@@ -5,6 +5,8 @@ const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const { chromium } = require('playwright');
 const path = require('node:path');
+const fs = require('node:fs');
+const mobileSizes = [[390, 844], [375, 667]];
 const fixtures = [
   { scene: 'roof' }, { scene: 'roof', night: true, water: .6 },
   { scene: 'kitchen' }, { scene: 'kitchen', danger: .8, reaction: 'catch' },
@@ -29,6 +31,13 @@ const goldens = [
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
+    if (process.env.ART_PREVIEW) {
+      const directory = path.join(__dirname, 'screenshots');
+      for (const name of fs.readdirSync(directory)) {
+        const capture = /^round3-art-(\d+)-.*\.png$/.exec(name);
+        if (capture && !mobileSizes.some(([width]) => width === Number(capture[1]))) fs.unlinkSync(path.join(directory, name));
+      }
+    }
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await page.setContent('<canvas style="width:390px;height:844px"></canvas>');
     await page.addScriptTag({ path: path.join(__dirname, 'art.js') });
@@ -71,12 +80,33 @@ const goldens = [
     const reactions = [];
     for (const reaction of ['idle', 'happy', 'roll', 'tilt']) reactions.push(await hash({ ...garden, reaction }));
     assert.equal(new Set(reactions).size, 4, 'review cat reactions are visibly distinct');
-    for (const size of [[390, 844], [1280, 800]]) {
+    for (const size of mobileSizes) {
       await page.setViewportSize({ width: size[0], height: size[1] });
       await page.evaluate(([w, h]) => {
         const c = document.querySelector('canvas'); c.style.width = w + 'px'; c.style.height = h + 'px';
         document.body.style.margin = '0';
       }, size);
+      const perched = await page.evaluate(() => {
+        const c = document.querySelector('canvas'), s = { v2: true, scene: 'roof', action: 'review', time: 1234 };
+        const ctx = c.getContext('2d');
+        Day8Art.draw(c, { ...s, cat: false });
+        const empty = ctx.getImageData(0, 0, c.width, c.height).data;
+        return ['idle', 'happy', 'roll', 'tilt'].map(reaction => {
+          const hit = Day8Art.draw(c, { ...s, reaction }).cat;
+          const data = ctx.getImageData(0, 0, c.width, c.height).data;
+          let changed = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            if (data[i] === empty[i] && data[i + 1] === empty[i + 1] && data[i + 2] === empty[i + 2]) continue;
+            changed++;
+            const x = i / 4 % c.width / c.width * 100, y = Math.floor(i / 4 / c.width) / c.height * 100;
+            if (y >= 45) throw new Error(`${reaction}: duplicate floor cat or covered reaction`);
+            if (x < hit.x - hit.width / 2 || x > hit.x + hit.width / 2 || y < hit.y - hit.height / 2 || y > hit.y + hit.height / 2) throw new Error(`${reaction}: cat pixels outside projected hitbox`);
+          }
+          if (changed < 100) throw new Error(`${reaction}: missing perched cat`);
+          return c.toDataURL();
+        });
+      });
+      assert.equal(new Set(perched).size, 4, `four distinct perched review reactions at ${size[0]}px, with no floor duplicate`);
       for (const scene of ['kitchen', 'doorway', 'stairs', 'lefevre', 'facade', 'roof']) {
         const model = { ...kitchen, scene, night: scene !== 'kitchen' };
         await hash(model);
@@ -89,6 +119,9 @@ const goldens = [
           return { transparent, spots, width: c.width, height: c.height, layout: a.layout(c, s) };
         }, model);
         assert.equal(result.transparent, 0, `${scene} fills entire viewport`);
+        assert.equal(result.width, 320, 'all scenes use the mobile pixel width');
+        assert.equal(result.layout.portrait, true);
+        assert.equal(result.height, Math.round(320 * size[1] / size[0]));
         assert.ok(Math.abs(result.width / result.height - size[0] / size[1]) < .01);
       }
       const faces = await page.evaluate(() => {
@@ -176,6 +209,6 @@ const goldens = [
       }
       assert.equal(new Set(gait.slice(0, 4)).size, 4, 'four distinct rendered foot poses, not just translated sprite');
     }
-    console.log('Art browser checks passed: 10 unchanged pixel goldens, four rendered walk poses, three visible dinner faces, sequential empty facade, portrait composition, deterministic/reduced motion, 12 full-viewport scenes, 2/24/60-pot bays, living cat-ending plant.');
+    console.log('Art browser checks passed at 390x844 and 375x667: 10 unchanged legacy pixel goldens, four rendered walk poses, three visible dinner faces, sequential empty facade, portrait composition, deterministic/reduced motion, distinct picture props, four soil moisture levels, 12 full-viewport scenes, 2/24/60-pot bays, living cat-ending plant.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

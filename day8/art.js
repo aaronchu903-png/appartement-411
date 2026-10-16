@@ -8,7 +8,8 @@
  * action + elapsed (ms since entering the beat) select one-shot story gestures.
  * rooftopUnlocked/basilPlanted are explicit story flags; omit them for the entry tableau.
  * direction ('up'/'down') + optional walkProgress (0..1) select the stairwell walk.
- * v2:true opts into adaptive cover composition; default calls remain pixel-identical.
+ * v2:true uses mobile portrait composition (390x844 baseline, also tested at 375x667).
+ * The parent owns letterboxing and the <=390px portrait CSS canvas; legacy calls stay pixel-identical.
  * garden:{slots:[{id,bay,row,col,growth,due}],bay,zoom,selectedPot} uses 24 slots/bay.
  * catGame:{active,elapsed,approachElapsed,reach,blocked,phase,phaseElapsed,liftFrom}
  * uses motion(previousState).cat for a continuous interrupted lift. Times are ms.
@@ -506,7 +507,7 @@
     chair(p, 220, 157, .95);
     if (!s.v2) { chair(p, 139, 199, 1.05); chair(p, 308, 199, 1.05); }
     if (s.v2) {
-      const x = top < 0 ? 144 : 420;
+      const x = 144;
       p.r(x, 104, 27, 38, '#ede0b6'); p.r(x, 104, 27, 7, '#947b70');
       for (let row = 0; row < 3; row++) for (let col = 0; col < 5; col++) p.r(x + 3 + col * 5, 116 + row * 7, 2, 2, '#9d8b75');
       p.r(x + 17, 122, 4, 4, '#7f566f');
@@ -779,7 +780,7 @@
 
   function getHotspots(scene, options) {
     const s = state(typeof scene === 'object' ? scene : Object.assign({}, options, { scene }));
-    if (s.v2) return v2Hotspots(s, { width: W, height: H, ox: 0, oy: 0 });
+    if (s.v2) return v2Hotspots(s, layout(null, s));
     const result = {};
     Object.entries(rawHotspots(s)).forEach(([id, rect]) => {
       if (id === 'cat' && (!s.cat || (s.scene === 'roof' && !s.rooftopUnlocked))) return;
@@ -882,14 +883,13 @@
   }
 
   function layout(canvas, options) {
-    const rect = canvas.getBoundingClientRect();
-    const cw = canvas.clientWidth || rect.width || W, ch = canvas.clientHeight || rect.height || H;
-    const portrait = ch > cw * 1.15, width = portrait ? 320 : W;
-    const height = Math.max(240, Math.round(width * ch / cw));
-    const scene = options && options.scene;
-    const scale = portrait && scene !== 'roof' && scene !== 'facade' ? 1.12 : 1;
-    const oy = !portrait ? 0 : scene === 'facade' ? Math.round(height * .05) : scene === 'roof' || !scene ? Math.round(height * .18) : Math.round(height * .76 - 300 * scale);
-    return { width, height, portrait, scale, ox: (width - W * scale) / 2, oy,
+    const rect = canvas ? canvas.getBoundingClientRect() : {};
+    const cw = canvas && canvas.clientWidth || rect.width || 390, ch = canvas && canvas.clientHeight || rect.height || 844;
+    const width = 320, height = Math.round(width * Math.max(667 / 390, ch / cw));
+    const scene = options && options.scene || 'roof';
+    const scale = scene !== 'roof' && scene !== 'facade' ? 1.12 : 1;
+    const oy = scene === 'facade' ? Math.round(height * .05) : scene === 'roof' ? Math.round(height * .18) : Math.round(height * .76 - 300 * scale);
+    return { width, height, portrait: true, scale, ox: (width - W * scale) / 2, oy,
       storyPlantStage: Math.max(2, clamp(options && options.growth && options.growth[0], 0, 5)) };
   }
 
@@ -915,12 +915,12 @@
     const selected = slots.find(item => String(item.id) === String(s.water > 0 && s.targetPotId != null ? s.targetPotId : garden.selectedPot));
     const bay = selected && (garden.zoom === 'pot' || s.water > 0) ? selected.bay : Math.round(clamp(garden.bay, 0, bays - 1));
     const overview = garden.zoom === 'overview';
-    const padding = l.portrait ? 15 : 48, area = l.width - padding * 2;
+    const padding = 15, area = l.width - padding * 2;
     const pitch = area / 8, scale = overview ? .38 : Math.min(.72, pitch / 52);
-    const top = l.portrait ? l.oy + 182 : Math.min(170, l.height * .43);
-    const step = l.portrait ? 61 : Math.min(55, l.height * .16);
-    const feet = l.portrait ? l.oy + 326 : l.height * .86;
-    return { slots, bays, bay, selected, scale, padding, pitch, overview, top, step, feet,
+    const top = l.oy + 182, step = 61, feet = l.oy + 326;
+    const catX = s.action === 'review' ? l.width - 43 : l.width / 2 + 28;
+    const catFeet = s.action === 'review' ? top - 89 : feet - 6;
+    return { slots, bays, bay, selected, scale, padding, pitch, overview, top, step, feet, catX, catFeet,
       point(item) {
         if (overview) return { x: padding + (item.bay + (item.col + .5) / 8) * area / bays,
           y: top + item.row * step, scale: Math.min(.38, area / bays / 8 / 44) };
@@ -944,7 +944,7 @@
         const q = grid.point(target);
         rects.can = [q.x - 36, q.y - 29 * q.scale - 32, 48, 42];
       }
-      rects.cat = [l.width / 2 + 28, grid.feet - 23, 46, 38];
+      rects.cat = s.action === 'review' ? [grid.catX, grid.catFeet - 16, 56, 44] : [grid.catX, grid.catFeet - 17, 46, 38];
       rects.door = rects.up = [l.width - 29, grid.top - 49, 34, 69];
       rects.chair = [l.width - grid.padding - 23, grid.feet - 23, 36, 46];
       rects.garden = [l.width / 2, grid.top + grid.step - 20, l.width - grid.padding * 2, grid.step * 2 + 80];
@@ -952,7 +952,7 @@
     }
     const scale = l.scale || 1;
     const rects = Object.fromEntries(Object.entries(rawHotspots(s)).map(([id, r]) => [id, [r[0] * scale + l.ox, (r[1] + facadePan(s)) * scale + l.oy, r[2] * scale, r[3] * scale]]));
-    if (s.scene === 'lefevre' && !handover(s) && l.portrait) rects.calendar[0] = 157 * scale + l.ox;
+    if (s.scene === 'lefevre' && !handover(s)) rects.calendar[0] = 157 * scale + l.ox;
     if (s.scene === 'kitchen' && s.action !== 'sleepBetweenPots') {
       const m = motion(s).cat;
       rects.cat = [m.x * scale + l.ox, (m.y - 17) * scale + l.oy, 48 * scale, 38 * scale];
@@ -1020,10 +1020,15 @@
   function v2Roof(p, s, l) {
     const grid = shelfSlots(s, l), world = placed(p, l.ox, l.oy), m = motion(s);
     const horizon = grid.top - l.oy - 37;
-    sky(world, s.night); skyline(world, s.night, l.portrait ? -35 : -20);
+    sky(world, s.night); skyline(world, s.night, -35);
     world.r(0, horizon, W, 22, '#a58a88'); world.r(0, horizon, W, 4, '#c0a49a');
     floor(world, horizon + 21, s.night, true);
     door(p, l.width - 43, grid.top - 82, 27, 65, false, s.night);
+    if (s.action === 'review') {
+      // The doorway ledge keeps review reactions above the answer panel.
+      p.r(grid.catX - 29, grid.catFeet + 3, 60, 4, '#c0a49a');
+      p.r(grid.catX - 29, grid.catFeet + 7, 60, 3, '#79656b');
+    }
     for (let x = 0; x < l.width; x += 28) {
       const y = l.oy + 85 + Math.sin(x / l.width * Math.PI) * 21;
       p.line(x, y, x + 28, l.oy + 85 + Math.sin((x + 28) / l.width * Math.PI) * 21, '#4c4b58');
@@ -1070,7 +1075,7 @@
     if (s.rooftopUnlocked) {
       person(p, grid.padding - 13, grid.feet, 'camille', m.time, 'idle', .85, m.people.camille);
       person(p, l.width - grid.padding - 12, grid.feet, 'noe', m.time, s.water || s.action === 'carryMartinPlant' ? 'hold' : 'idle', .85, m.people.noe);
-      if (s.cat) cat(p, l.width / 2 + 28, grid.feet - 6, { ...s, time: m.time });
+      if (s.cat) cat(p, grid.catX, grid.catFeet, { ...s, time: m.time });
     }
   }
 
@@ -1092,16 +1097,16 @@
         const f = s.establishingProgress;
         p.r(0, 0, l.width, l.height, f < .5 ? mix('#a4c5cc', '#9b849d', f * 2) : mix('#9b849d', '#33394f', f * 2 - 1));
       }
-      if (l.portrait) {
-        if (s.scene !== 'facade') speckle(p, 0, 0, l.width, l.oy + 20, 160, s.scene === 'roof' ? s.night ? '#b9a9b6' : '#b594a8' : s.night ? '#9b8b88' : '#e8d3b2', 14);
-        if (s.scene !== 'facade') for (let y = l.oy + 220 * l.scale; y < l.height; y += 100 * l.scale) floor(placed(p, l.ox, y - 220 * l.scale, l.scale), 220, s.night, s.scene === 'roof');
+      if (s.scene !== 'facade') {
+        speckle(p, 0, 0, l.width, l.oy + 20, 160, s.scene === 'roof' ? s.night ? '#b9a9b6' : '#b594a8' : s.night ? '#9b8b88' : '#e8d3b2', 14);
+        for (let y = l.oy + 220 * l.scale; y < l.height; y += 100 * l.scale) floor(placed(p, l.ox, y - 220 * l.scale, l.scale), 220, s.night, s.scene === 'roof');
       }
       if (s.scene === 'roof') v2Roof(p, s, l);
       else {
         const world = placed(p, l.ox, l.oy + facadePan(s) * l.scale, l.scale);
         world.people = motion(s).people;
         const backdrop = s.scene === 'lefevre' && handover(s) ? 'doorway' : s.scene;
-        backgrounds[backdrop](world, l.portrait ? { ...s, top: -l.oy / l.scale, facadeHeight: l.height - l.oy } : s);
+        backgrounds[backdrop](world, { ...s, top: -l.oy / l.scale, facadeHeight: l.height - l.oy });
         if (s.scene === 'kitchen') v2Kitchen(world, s);
         else foreground(world, s);
       }

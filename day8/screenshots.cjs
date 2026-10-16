@@ -2,7 +2,7 @@
 'use strict';
 
 // Run: NODE_PATH=/tmp/kilo/node_modules node app/screenshots.cjs
-// Optional: SCREENSHOTS_ONLY=mobile|desktop; SCREENSHOTS_PHASE=atlas|walk|video|offline|regressions|contact.
+// Optional: SCREENSHOTS_ONLY=mobile|mobile-small; SCREENSHOTS_PHASE=atlas|walk|video|offline|regressions|contact.
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
@@ -89,7 +89,7 @@ function observe(page, label) {
   page.on('requestfailed', request => report.resourceFailures.push({ label, url: request.url(), error: request.failure()?.errorText }));
 }
 async function open(viewport, label, extra = {}) {
-  const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce', serviceWorkers: 'block', ...extra });
+  const context = await browser.newContext({ viewport, hasTouch: true, deviceScaleFactor: 1, reducedMotion: 'reduce', serviceWorkers: 'block', ...extra });
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
   observe(page, label);
@@ -702,7 +702,7 @@ async function regressions(viewport, name) {
 }
 async function persistence(viewport, name) {
   // A new synthetic browser profile, no dev query and no access to real user storage.
-  const context = await browser.newContext({ viewport, reducedMotion: 'reduce', serviceWorkers: 'block', acceptDownloads: true });
+  const context = await browser.newContext({ viewport, hasTouch: true, reducedMotion: 'reduce', serviceWorkers: 'block', acceptDownloads: true });
   const page = await context.newPage(); observe(page, name + '-persistence');
   try {
     await page.goto(base + '/app/');
@@ -740,7 +740,7 @@ async function persistence(viewport, name) {
   } finally { await context.close(); }
 }
 async function offline(viewport, name) {
-  const context = await browser.newContext({ viewport, offline: true, serviceWorkers: 'block' });
+  const context = await browser.newContext({ viewport, hasTouch: true, offline: true, serviceWorkers: 'block' });
   const page = await context.newPage(); observe(page, name + '-file-offline');
   try {
     await page.goto(pathToFileURL(path.join(__dirname, 'index.html')).href + '?dev=1');
@@ -755,7 +755,7 @@ async function offline(viewport, name) {
 }
 async function legacyImport(viewport, name) {
   for (const progressed of [false, true]) {
-    const context = await browser.newContext({ viewport, reducedMotion: 'reduce', serviceWorkers: 'block' });
+    const context = await browser.newContext({ viewport, hasTouch: true, reducedMotion: 'reduce', serviceWorkers: 'block' });
     if (progressed) await context.addInitScript(() => {
       // Synthetic pre-v2 own-save: migrate in memory, then import before anything saves its stable ID.
       if (location.protocol === 'http:' && !localStorage.getItem('a411app.v1.state')) localStorage.setItem('a411app.v1.state', JSON.stringify({ schema: 'day8-1', profileId: 'jinyi', cards: {}, words: {}, days: {}, settings: { uiLang: 'en' }, story: { day8Index: 30 } }));
@@ -789,7 +789,7 @@ async function videos() {
     if (process.env.SCREENSHOTS_ONLY && process.env.SCREENSHOTS_ONLY !== name) return;
     const { page, context } = await open(viewport, name + '-video-' + kind, { reducedMotion: 'no-preference', recordVideo: { dir: output, size: viewport } });
     const video = page.video();
-    const file = 'v2-' + (name === 'mobile' ? '' : 'desktop-') + 'anim-' + kind + '.webm';
+    const file = 'v2-' + (name === 'mobile' ? '' : name + '-') + 'anim-' + kind + '.webm';
     const samples = [];
     try {
       await debug(page, 'reset');
@@ -864,7 +864,7 @@ function contactSheet() {
   execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...inputs.flatMap(file => ['-i', file]), '-filter_complex_threads', '1', '-filter_complex', filters.join(';'), '-map', '[out]', '-frames:v', '1', '-threads', '1', path.join(output, file)], { stdio: 'pipe' });
   report.contacts.push({ file, pairs, tool: 'ffmpeg', comparison: 'Legacy interaction references versus actual v2 captures; final row is v1 versus v2 cat' });
 }
-const viewports = [['mobile', { width: 390, height: 844 }], ['desktop', { width: 1280, height: 800 }]];
+const viewports = [['mobile', { width: 390, height: 844 }], ['mobile-small', { width: 375, height: 667 }]];
 (async () => {
   if (phase === 'contact') { contactSheet(); return; }
   if (!phase && !process.env.SCREENSHOTS_ONLY && fs.existsSync(path.join(output, 'report.json'))) {
@@ -887,7 +887,7 @@ const viewports = [['mobile', { width: 390, height: 844 }], ['desktop', { width:
     if (!phase || phase === 'regressions') await scenario(name + ' legacy own-export import', () => legacyImport(viewport, name));
     if (!phase || phase === 'offline') await scenario(name + ' file offline', () => offline(viewport, name));
   }
-  if ((!phase || phase === 'atlas') && process.env.SCREENSHOTS_ONLY !== 'desktop') {
+  if ((!phase || phase === 'atlas') && process.env.SCREENSHOTS_ONLY !== 'mobile-small') {
     acceptanceAliases(); await scenario('Old/new contact sheet', async () => contactSheet());
   }
   if (!phase || phase === 'video') await videos();
@@ -901,7 +901,7 @@ const viewports = [['mobile', { width: 390, height: 844 }], ['desktop', { width:
   report.finalSourceHashes = sourceHashes();
   report.sourceChangedDuringRun = [...new Set([...Object.keys(report.sourceHashes), ...Object.keys(report.finalSourceHashes)])].filter(file => report.sourceHashes[file] !== report.finalSourceHashes[file]);
   check('Source snapshot stable during run', report.sourceChangedDuringRun.length === 0, report.sourceChangedDuringRun);
-  if (!phase || phase === 'atlas') for (const name of ['mobile', 'desktop']) {
+  if (!phase || phase === 'atlas') for (const name of ['mobile', 'mobile-small']) {
     if (process.env.SCREENSHOTS_ONLY && process.env.SCREENSHOTS_ONLY !== name) continue;
     const scenes = report.screenshots.filter(s => new RegExp('^v2-' + name + '-story-\\d+-[^.]+\\.png$').test(s.file) && !s.file.endsWith('-controls.png') && !s.file.endsWith('-revealed.png'));
     check(name + ': all 53 story screenshots captured', scenes.length === sceneCount, scenes.length);

@@ -16,7 +16,11 @@
   --pixel-border: 3px solid var(--ink);
   --pixel-shadow: 0 3px 0 var(--ink);
   --space: 8px;
-  --safe: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe: var(--safe-bottom);
   --hud-bottom: calc(10px + var(--safe));
   --dialogue-bottom: calc(70px + var(--safe));
   --quick: 120ms;

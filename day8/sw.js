@@ -1,6 +1,6 @@
 /* Scope is app/ only. Never replaces or removes the old game's service worker. */
 'use strict';
-const CACHE='a411-day8-static-v7-round3';
+const CACHE='a411-day8-static-v8-mobile-only';
 const CORE=['./','index.html','tokens.css','style.css','icons.js','modules/index.js','modules/M1.js','modules/M2.js','modules/M3.js','modules/M4.js','app.js','art.js','audio.js','engine.js','save.js','content.js','language.js','data/inherited.js','../js/conjugate.js','manifest.webmanifest','export.html','export.js'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE.map(path=>new Request(new URL(path,self.location.href),{cache:'reload'})))).then(()=>self.skipWaiting()));

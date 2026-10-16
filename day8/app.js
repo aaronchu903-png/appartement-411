@@ -65,6 +65,16 @@
   const back = (action='back') => button(icon('close'), action, 'back-button', 'aria-label="Fermer" title="Fermer"');
   const eyebrow = text => `<div class="eyebrow">${text}</div>`;
   const status = () => '<div class="audio-status" hidden></div>';
+  function fitPhone(){
+    const width=Math.min(390,window.innerWidth),height=Math.min(844,Math.max(667,window.innerHeight));
+    game.style.setProperty('--phone-width',`${width}px`);
+    game.style.setProperty('--phone-height',`${height}px`);
+    game.style.setProperty('--phone-scale',String(Math.min(1,window.innerHeight/height)));
+  }
+  function carnetPageSize(expanded=false){
+    const css=getComputedStyle(game),usable=game.clientHeight-(parseFloat(css.getPropertyValue('--safe-top'))||0)-(parseFloat(css.getPropertyValue('--safe-bottom'))||0);
+    return usable<760?(expanded?3:searchOpen?5:6):(expanded?4:8);
+  }
   function save() {
     state.appSession = review;
     state.story.day8SceneId=currentScene().id;state.story.day8Version=3;
@@ -98,9 +108,11 @@
     const count = Object.values(state.words).filter(w=>w.collected).length;
     if (!$('#btnWordbook')) $('#nav').innerHTML = [
       ['btnWordbook','wb-fab','wordbook','wordbook','Carnet'],['btnFeedbackBar','fb-fab','notes','note','Note'],
-      ['btnMusic','mu-fab','music','music','Musique'],['btnPause','pause-fab','settings','pause','Pause']
+      ['btnMusic','mu-fab','music','music','Musique'],['btnPause','pause-fab','settings','pause','Pause'],
+      ['btnClose','close-fab','back','close','Fermer']
     ].map(([id,cls,action,ico,label])=>button(icon(ico),action,cls,`id="${id}" aria-label="${label}" title="${label}"`)).join('');
     $('#btnWordbook').dataset.count=count;
+    $('#btnClose').hidden=!overlayScreens.has(screen);
     $('#btnWordbook').disabled=baseScreen==='review'&&!feedback&&!review?.checkpoint;
     $('#btnWordbook').setAttribute('aria-label',`Carnet, ${count} mots`);
     const musicOn=state.settings.music>0&&!state.settings.muted;
@@ -353,7 +365,7 @@
     if(review.session.mode!=='garden'){review=null;feedback=null;screen='story';return renderStory();}
     gardenController ||= gardenModule(review.session);
     exercise = feedback ? review.lastExercise : gardenController.current();
-    setScene({scene:'roof',night:true,cat:true,reaction:feedback?(feedback.correct?(review.combo>=3?'roll':'happy'):'tilt'):review.checkpoint?'happy':'idle',action:'',focus:null,focusZoom:0,catGame:null,garden:gardenModel(),moisture:review.moisture||{},recall:false});
+    setScene({scene:'roof',night:true,cat:true,reaction:feedback?(feedback.correct?(review.combo>=3?'roll':'happy'):'tilt'):review.checkpoint?'happy':'idle',action:'review',focus:null,focusZoom:0,catGame:null,garden:gardenModel(),moisture:review.moisture||{},recall:false});
     setLocation('Le jardin','21:30');
     const completed=review.session.completedIds?.length||0,total=review.session.initial;
     $('#review-progress').innerHTML=`<div class="water-count">${icon('water')}<span>${Math.max(0,total-completed)}</span></div><progress value="${completed}" max="${Math.max(1,total)}" aria-label="Mots arrosés"></progress><span>${completed}/${total}</span>`;
@@ -547,6 +559,11 @@
   function wordRows() {
     const words=allWords().filter(w=>Number(w.pot || w.potId)===currentPot && (state.words[w.id]?.met || state.words[w.id]?.collected) && normalize(`${w.fr} ${w.zh} ${w.en}`).includes(normalize(search))).map(w=>({...w,fr:C.french(w.fr)})).sort((a,b)=>String(state.words[b.id]?.at||'').localeCompare(String(state.words[a.id]?.at||'')));
     if(!words.length)return '<p>Aucun mot ici.</p>';
+    const capacity=Math.min(wordPageSize,carnetPageSize(!!expandedWord));
+    if(capacity!==wordPageSize){
+      const offset=expandedWord?words.findIndex(w=>w.id===expandedWord):wordPage*wordPageSize;
+      wordPage=Math.floor(Math.max(0,offset)/capacity);wordPageSize=capacity;
+    }
     const size=wordPageSize,pages=Math.ceil(words.length/size);wordPage=Math.min(wordPage,pages-1);
     return words.slice(wordPage*size,(wordPage+1)*size).map(w=>{
       const encounters=state.words[w.id]?.scenes?.length||0;
@@ -701,10 +718,10 @@
     if(action==='collect'){collect();return;}
     if(action==='word-audio'){A.speak(selectedWord.fr,selectedWord.wordClip || `w_${selectedWord.id}`);return;}
     if(action==='pot-one'||action==='pot-two'){currentPot=action==='pot-one'?1:2;search='';if(screen==='wordbook')render();else openOverlay('wordbook');return;}
-    if(action.startsWith('word-pot:')){currentPot=Number(action.slice(9));search='';wordPage=0;wordPageSize=8;expandedWord=null;render();return;}
+    if(action.startsWith('word-pot:')){currentPot=Number(action.slice(9));search='';wordPage=0;wordPageSize=carnetPageSize();expandedWord=null;render();return;}
     if(action==='word-search-toggle'){searchOpen=!searchOpen;search='';wordPage=0;render();$('#word-search')?.focus();return;}
     if(action.startsWith('word-page:')){wordPage=Math.max(0,Number(action.slice(10)));expandedWord=null;render();return;}
-    if(action.startsWith('expand:')){const id=action.slice(7);if(expandedWord===id)expandedWord=null;else{const rows=[...panel.querySelectorAll('.word-row')];const index=rows.findIndex(el=>el.dataset.wordId===id);wordPage=Math.floor((wordPage*wordPageSize+index)/4);wordPageSize=4;expandedWord=id;}render();return;}
+    if(action.startsWith('expand:')){const id=action.slice(7);if(expandedWord===id)expandedWord=null;else{const rows=[...panel.querySelectorAll('.word-row')];const index=rows.findIndex(el=>el.dataset.wordId===id),size=carnetPageSize(true);wordPage=Math.floor((wordPage*wordPageSize+index)/size);wordPageSize=size;expandedWord=id;}render();return;}
     if(action.startsWith('word-conjugation:')){selectedWord=wordById(action.slice(17));openOverlay('conjugation');return;}
     if(action.startsWith('collect-id:')){selectedWord=wordById(action.slice(11));collect();return;}
     if(action.startsWith('word-sentence:')){const w=wordById(action.slice(14));A.speak(sourceSentence(w),sourceScene(w).audioId||w.audioId);return;}
@@ -884,6 +901,13 @@
     catFinish:finishCat,frame(elapsed){snapshotTime=Number.isFinite(elapsed)?elapsed:null;window.Day8Art.draw($('#scene'),artModel(performance.now()));},
     import:importData,allWords,render
   };
+  fitPhone();
+  window.addEventListener('resize',()=>{
+    fitPhone();
+    // Reproject touch targets after a frame resize without replacing unsaved form fields.
+    if(screen==='wordbook')$('#word-list').innerHTML=wordRows();
+    else if(screen==='garden'||screen==='story'&&currentScene().kind==='point')render();
+  });
   window.Day8App={ready:true,...(dev?{debug}:{})};
   render();requestAnimationFrame(animate);
   if(loaded?.ok===false){$('#storage-warning').hidden=false;$('#storage-warning').textContent='Lecture de la progression locale impossible. Utilisez l’importation ou l’exportation dans Pause.';}

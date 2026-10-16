@@ -21,7 +21,7 @@ const server=http.createServer((request,response)=>{
   const base=`http://127.0.0.1:${server.address().port}`;
   const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME || '/usr/bin/google-chrome'});
   try{
-    const context=await browser.newContext({acceptDownloads:true,viewport:{width:390,height:844}});
+    const context=await browser.newContext({acceptDownloads:true,hasTouch:true,viewport:{width:375,height:667}});
     await context.addInitScript(()=>{
       const get=Storage.prototype.getItem,set=Storage.prototype.setItem;
       const fixture={schema:'a411-learn-1',profileId:'jinyi',cards:{'plante|listening':{itemId:'plante',modality:'listening',stability:19,difficulty:4,due:'2026-01-01T00:00:00.000Z',lastReview:'2025-12-01T00:00:00.000Z',reps:8,lapses:1}},carnet:{v:1,words:[{id:'plante',at:'2025-11-01T00:00:00.000Z'}]}};
