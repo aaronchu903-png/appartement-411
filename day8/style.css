@@ -23,6 +23,10 @@ a { color: var(--blue); }
 .scene-actions, .scene-caption { display: none; }
 .scene-actions:not(:empty) { display: flex; gap: 8px; position: absolute; z-index: 6; left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right)); bottom: calc(70px + var(--safe)); justify-content: center; }
 .scene-actions .text-button { background: var(--paper-dark); }
+.scene-actions:has(.garden-exit) { justify-content: flex-end; }
+.garden-exit { min-width: 44px; min-height: 44px; padding: 4px 8px; border: 0; background: transparent; color: var(--paper); text-shadow: 1px 1px var(--ink); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.sheet[data-sheet="profile-choice"] { display: flex; flex-direction: column; }
+.profile-choices { display: grid; gap: 12px; margin-top: auto; padding-top: 24px; }
 .game:has(.scene-actions:not(:empty)) { --dialogue-bottom: calc(126px + var(--safe)); }
 .overlay-open .scene-actions { display: none; }
 .scene-title { position: absolute; left: 50%; top: 18%; transform: translateX(-50%); color: var(--paper); text-align: center; text-shadow: 2px 2px 0 var(--ink); width: max-content; max-width: 85%; pointer-events: none; }
@@ -225,7 +229,8 @@ input[type="range"] { min-height: 44px; accent-color: var(--green); }
 .review-total { position: absolute; right: 12px; bottom: 8px; font-size: 13px; color: var(--paper-dark); }
 .flying-drop { position: absolute; left: 23%; top: 44%; color: #9ed9eb; animation: water-flight .85s steps(10,end) both; }
 @keyframes water-flight { from { transform: translate(80px,-65px); opacity: 1; } 80% { opacity: 1; } to { transform: translate(0,20px); opacity: 0; } }
-.game[data-screen="review"] .feedback { margin-bottom: auto; padding-top: 18px; }
+.game[data-screen="review"] > .review-panel:has(.feedback) { top: auto; display: block; max-height: calc(var(--phone-height) - 320px - var(--safe-top) - var(--safe)); }
+.game[data-screen="review"] .feedback { margin-bottom: 8px; }
 .game[data-screen="review"] .answer-grid { margin-top: 12px; }
 .review-progress { position: absolute; z-index: 6; left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right)); top: calc(10px + var(--safe-top)); display: flex; align-items: center; gap: 8px; color: var(--paper); text-shadow: 1px 1px var(--ink); }
 .review-progress:empty { display: none; }

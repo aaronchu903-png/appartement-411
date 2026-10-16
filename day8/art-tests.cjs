@@ -24,7 +24,7 @@ const goldens = [
   '485b0bef4a643d7b8e8cbaab7721c273c7b43a29d9b658641d5377be787c89d9',
   '3634f43a70843f9ef1ef8dec10cbcebb0e194e8afbec4511919af135c403e89d',
   '374c6c6aded94ce10bfebc2f87858844de721aa42b29afa2fb8270ee3eaf54f3',
-  '918ca4754408938fb03cf68fe6c408b3add3bcf200e7c21b27a67815bb065062',
+  '4030cc794ec363373c5075c2cf2faade4e947a140a2c04df29dd9797b5016e61',
   '2e543d55b79021490d8bff98a78cc7ff8ef3251ee9d281ac683ad29eb4e9939d'
 ];
 
@@ -113,19 +113,23 @@ const goldens = [
     assert.equal(new Set(review.plants).size, 3, 'dry, partly watered and recovered plants are distinct without changing growth');
     assert.equal(new Set(review.reactions).size, 4, 'strip has idle, hearts, roll and genuinely tilted head poses');
     assert.equal(new Set(review.flights).size, 3, 'optional single-drop API has distinct flight and landing frames');
-    await page.evaluate(() => {
+    const checkHandover = () => page.evaluate(() => {
       const c = document.querySelector('canvas'), ctx = c.getContext('2d');
-      for (const v2 of [false, true]) for (const action of ['openHand', 'giveKey']) for (const elapsed of [0, 400, 800, 1450, 9000]) {
-        Day8Art.draw(c, { v2, scene: 'lefevre', action, elapsed, time: elapsed });
+      for (const v2 of [false, true]) for (const reducedMotion of [false, true]) for (const action of ['openHand', 'giveKey']) for (const elapsed of [0, 400, 800, 1450, 9000]) {
+        const state = { v2, reducedMotion, scene: 'lefevre', action, elapsed, time: elapsed };
+        Day8Art.draw(c, state);
         const data = ctx.getImageData(0, 0, c.width, c.height).data;
-        const at = i => Array.from(data.slice(i * 4, i * 4 + 3)).join(',');
-        for (const colors of [['55,124,96', '40,92,80'], ['129,85,116', '96,62,91']]) {
+        const at = i => (data[i * 4] << 16) | (data[i * 4 + 1] << 8) | data[i * 4 + 2];
+        for (const colors of [[0x377c60, 0x285c50], [0x815574, 0x603e5b]]) {
           const pixels = new Set();
+          let left = c.width, right = 0;
           for (let i = 0; i < data.length / 4; i++) {
             const color = at(i);
-            if (color === '113,140,123') throw new Error('Detached grey-green sleeve returned');
-            if (colors.includes(color)) pixels.add(i);
+            if (color === 0x718c7b) throw new Error('Detached grey-green sleeve returned');
+            if (colors.includes(color)) { pixels.add(i); left = Math.min(left, i % c.width); right = Math.max(right, i % c.width); }
           }
+          const scale = v2 ? Day8Art.layout(c, state).scale : 1;
+          if (colors[0] === 0x377c60 && (pixels.size < 100 || right - left > 45 * 1.15 * scale + 2)) throw new Error('Receiver missing or reaching beyond normal sprite proportions');
           const total = pixels.size;
           let largest = 0;
           while (pixels.size) {
@@ -137,6 +141,13 @@ const goldens = [
             largest = Math.max(largest, queue.length);
           }
           if (largest / total < .98) throw new Error(`${v2}/${action}/${elapsed}: disconnected sleeve, ${largest}/${total} connected pixels`);
+        }
+        if (action === 'giveKey' && (elapsed >= 1450 || v2 && reducedMotion)) {
+          let contact = false;
+          for (let i = 0; i < data.length / 4 - c.width; i++) {
+            if (at(i) === 0xddbc7d && at(i + c.width) === 0xf1c7a5) contact = true;
+          }
+          if (!contact) throw new Error('Settled handover must leave a visible key touching the palm');
         }
       }
     });
@@ -153,6 +164,7 @@ const goldens = [
         const c = document.querySelector('canvas'); c.style.width = w + 'px'; c.style.height = h + 'px';
         document.body.style.margin = '0';
       }, size);
+      await checkHandover();
       const perched = await page.evaluate(() => {
         const c = document.querySelector('canvas'), s = { v2: true, scene: 'roof', action: 'review', time: 1234 };
         const ctx = c.getContext('2d');

@@ -347,24 +347,36 @@
       const selector = storage.getItem(ACTIVE_KEY);
       let profileId;
       if (selector) {
-        const device = JSON.parse(selector);
-        if (!object(device) || !['jinyi', 'yuechao'].includes(device.activeProfile)) throw new Error('Invalid active legacy profile');
-        profileId = device.activeProfile;
+        let device;
+        try { device = JSON.parse(selector); } catch (_) { /* An unreadable selector cannot choose a player. */ }
+        if (object(device) && ['jinyi', 'yuechao'].includes(device.activeProfile)) profileId = device.activeProfile;
       }
       function readProfile(id) {
         const raw = {};
         for (const name of ['learn', 'story', 'uiLang']) raw['a411.p.' + id + '.' + name] = storage.getItem('a411.p.' + id + '.' + name);
         return raw;
       }
-      let raw = readProfile(profileId || 'jinyi');
-      const present = (data, id) => !!(data['a411.p.' + id + '.learn'] || data['a411.p.' + id + '.story']);
-      if (!profileId) {
-        profileId = 'jinyi';
-        if (!present(raw, profileId)) { profileId = 'yuechao'; raw = readProfile(profileId); }
+      // Presence, not parseability, determines candidates: corrupt saves must not select another player.
+      const present = (data, id) => ['learn', 'story'].some(name => data['a411.p.' + id + '.' + name] != null);
+      let raw;
+      if (profileId) raw = readProfile(profileId);
+      else {
+        const candidates = { jinyi: readProfile('jinyi'), yuechao: readProfile('yuechao') };
+        const profiles = Object.keys(candidates).filter(id => present(candidates[id], id));
+        if (options.profileId != null) {
+          if (!['jinyi', 'yuechao'].includes(options.profileId)) throw new Error('Invalid legacy profile choice');
+          if (!profiles.includes(options.profileId)) throw new Error('Selected legacy profile has no saved data');
+          profileId = options.profileId;
+        } else if (profiles.length > 1) {
+          return { ...loaded, ok: false, migrated: false, needsProfileChoice: true, profiles,
+            error: 'Choose a legacy profile before continuing' };
+        } else profileId = profiles[0];
+        if (!profileId) return { ...loaded, migrated: false };
+        raw = candidates[profileId];
       }
       if (!present(raw, profileId)) return { ...loaded, migrated: false };
       const prefix = 'a411.p.' + profileId + '.', input = {};
-      for (const name of ['learn', 'story']) if (raw[prefix + name]) {
+      for (const name of ['learn', 'story']) if (raw[prefix + name] != null) {
         const value = JSON.parse(raw[prefix + name]);
         if (!object(value) || (name === 'learn' && (value.schema !== 1 || value.profileId !== profileId))
           || (name === 'story' && value.schemaVersion !== 1)

@@ -260,8 +260,15 @@
         r(-18 - reach * 7, 38, 11, 4, P.skin); r(-15 - reach * 7, 36, 4, 2, P.skin);
         r(-14 - reach * 7, 38, 3, 2, '#ddbc7d'); r(-11 - reach * 7, 39, 6, 1, '#ddbc7d');
       } else {
-        arm(22, 31, 42, 36, shade, 6); arm(42, 36, 49 + reach * 10, 30 - reach * 12, shirt, 5);
-        r(48 + reach * 10, 27 - reach * 12, 8, 5, P.skin);
+        const wx = 29 + ((expression.key.x - x) / scale - 29) * reach;
+        const wy = 44 + ((expression.key.y - y) / scale + 2 - 44) * reach;
+        const dx = wx - 22, dy = wy - 31, distance = Math.hypot(dx, dy);
+        // Two normal-length segments bend below the wrist; the body closes the gap.
+        const bend = Math.sqrt(Math.max(0, 11 * 11 - distance * distance / 4));
+        const ex = (22 + wx) / 2 - dy / distance * bend;
+        const ey = (31 + wy) / 2 + dx / distance * bend;
+        arm(22, 31, ex, ey, shade, 6); arm(ex, ey, wx, wy, shirt, 5);
+        r(wx - 1, wy - 2, 8, 5, P.skin);
       }
     }
     if (pose === 'catch') { r(-13, 32, 18, 6, shirt); r(-18, 31, 7, 5, P.skin); r(-9, 39, 14, 5, shirt); r(-16, 38, 8, 5, P.skin); }
@@ -288,6 +295,7 @@
     if (expression.mouth) r(13, 21, expression.mouth === 2 ? 5 : 3, expression.mouth, '#9a615d');
     head = 0;
     r(7, 35, 2, 2, shade); r(19, 38, 2, 2, shade);
+    if (pose === 'offer') return { x: x + (-14 - (expression.reach || 0) * 7) * scale, y: y + 40 * scale };
   }
 
   function cat(p, x, y, s) {
@@ -708,7 +716,7 @@
     } else if (s.scene === 'doorway' || (s.scene === 'lefevre' && handover(s))) {
       const closing = s.action === 'closeDoor', f = closing ? beat(s, 1400, 200) : 0;
       const offering = ['openHand', 'giveKey'].includes(s.action);
-      person(p, 254 + f * 6, 239 - f * 14, 'lefevre', s.time, offering ? 'offer' : handover(s) || s.night ? 'idle' : 'hold', 1.18,
+      const key = person(p, 254 + f * 6, 239 - f * 14, 'lefevre', s.time, offering ? 'offer' : handover(s) || s.night ? 'idle' : 'hold', 1.18,
         { reach: beat(s, 1100) * (s.action === 'giveKey' ? 1 : .35) });
       if (!handover(s) && !s.night) pot(p, 246, 219, Math.max(2, s.growth[1]), s.time, true);
       if (closing) {
@@ -718,8 +726,8 @@
         p.r(194 + dw - 10, 137, 3, 7, '#d3b27c');
         p.r(195, 231, 105, 1, '#f5d59a');
       }
-      person(p, 159, 270, 'camille', s.time + 300, s.action === 'giveKey' ? 'receive' : 'idle', 1.15,
-        { reach: beat(s, 850, 600) });
+      person(p, handover(s) ? 190 : 159, handover(s) ? 251 : 270, 'camille', s.time + 300, s.action === 'giveKey' ? 'receive' : 'idle', 1.15,
+        { reach: beat(s, 850, 600), key });
       if (s.cat) cat(p, 318, 275, s);
     } else if (s.scene === 'stairs') {
       const progress = s.walkProgress == null ? 0 : s.walkProgress;
