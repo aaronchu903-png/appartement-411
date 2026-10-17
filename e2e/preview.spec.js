@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 async function installSave(page, throughDay) {
-  await page.goto('/');
+  await page.goto('/appartement-411/legacy/');
   const wrote = await page.evaluate((throughDay) => {
     const L = window.A411.Logic;
     const WL = window.A411.WeekLogic;
@@ -45,7 +45,7 @@ async function installSave(page, throughDay) {
 async function openPlayer(page) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.addInitScript(() => { try { localStorage.clear(); } catch (e) {} });
-  await page.goto('/');
+  await page.goto('/appartement-411/legacy/');
   await page.locator('#pickYuechao').click();
   await page.locator('#btnPlaceSkip').click();
   await page.locator('#btnStart').click();

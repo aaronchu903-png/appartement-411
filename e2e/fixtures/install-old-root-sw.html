@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Install old root SW (test fixture)</title></head>
+<body>
+<p id="status">Registering…</p>
+<script>
+(async () => {
+  const reg = await navigator.serviceWorker.register('./old-root-sw.js', { scope: '/appartement-411/', updateViaCache: 'none' });
+  await reg.update();
+  if (reg.installing) await new Promise(r => reg.installing.addEventListener('statechange', () => reg.installing.state === 'activated' && r()));
+  else if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+  await navigator.serviceWorker.ready;
+  document.getElementById('status').textContent = 'Old root service worker active';
+})();
+</script>
+</body>
+</html>

@@ -12,11 +12,11 @@ module.exports = defineConfig({
     viewport: { width: 390, height: 844 },
     hasTouch: true,
     isMobile: true,
-    baseURL: 'http://127.0.0.1:4173',
-    serviceWorkers: 'block'
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:4173',
+    serviceWorkers: process.env.PLAYWRIGHT_ALLOW_SW ? 'allow' : 'block'
   },
-  webServer: {
-    command: 'python3 -m http.server 4173 --bind 127.0.0.1',
+  webServer: process.env.PLAYWRIGHT_SKIP_SERVER ? undefined : {
+    command: 'node scripts/serve-github-pages.js',
     port: 4173,
     reuseExistingServer: !process.env.CI,
     cwd: __dirname
