@@ -254,9 +254,9 @@
     const y = feet - 59 * scale + breath + (pose === 'laugh' ? Math.round(Math.sin(time / 130)) : 0) + (expression.bob || 0);
     let head = 0;
     const r = (a, b, w, h, c) => p.r(x + (a + head) * scale, y + b * scale, w * scale, h * scale, c);
-    const shirt = who === 'camille' ? '#377c60' : who === 'noe' ? '#c2714c' : '#815574';
-    const shade = who === 'camille' ? '#285c50' : who === 'noe' ? '#9b4f3c' : '#603e5b';
-    const hair = who === 'camille' ? '#3b2a20' : who === 'noe' ? '#7a4a22' : '#c4c4cc';
+    const shirt = who === 'camille' ? '#377c60' : who === 'noe' ? '#c2714c' : who === 'player' ? '#547e99' : '#815574';
+    const shade = who === 'camille' ? '#285c50' : who === 'noe' ? '#9b4f3c' : who === 'player' ? '#38566f' : '#603e5b';
+    const hair = who === 'camille' ? '#3b2a20' : who === 'noe' ? '#7a4a22' : who === 'player' ? '#34313b' : '#c4c4cc';
     p.oval(x + 12 * scale, feet + 2, 18 * scale, 3, '#34324330');
     r(2, 28, 22, 19, shade); r(5, 27, 17, 18, shirt);
     r(7, 28, 11, 2, who === 'lefevre' ? '#f4efe6' : '#d1ba96');
@@ -975,7 +975,9 @@
   function layout(canvas, options) {
     const rect = canvas ? canvas.getBoundingClientRect() : {};
     const cw = canvas && canvas.clientWidth || rect.width || 390, ch = canvas && canvas.clientHeight || rect.height || 844;
-    const width = 320, height = Math.round(width * Math.max(667 / 390, ch / cw));
+    // Day 9 paints directly at CSS resolution, avoiding a fractional 320 -> 390 upscale.
+    const day9 = options && (options.day === 9 || options.staging?.day === 9);
+    const width = day9 ? Math.round(cw) : 320, height = day9 ? Math.round(ch) : Math.round(width * Math.max(667 / 390, ch / cw));
     const scene = options && options.scene || 'roof';
     const scale = scene !== 'roof' && scene !== 'facade' ? 1.12 : 1;
     const oy = scene === 'facade' ? Math.round(height * .05) : scene === 'roof' ? Math.round(height * .18) : Math.round(height * .76 - 300 * scale);
@@ -1075,25 +1077,36 @@
       const shot = typeof s.shot === 'string' ? { type: s.shot } : s.shot;
       const speaker = s.speaker === 'voisine' ? 'lefevre' : s.speaker;
       const vanish = s.day === 9 && s.acting.find(c => c.state === 'vanish');
+      const reaction = vanish && s.staging.reaction && (s.reducedMotion || s.elapsed >= s.staging.reaction.atMs) ? s.staging.reaction : null;
       const timeCut = s.day === 9 && s.acting.some(c => c.type === 'time' && c.progress < .65);
       const targetId = s.day === 9 && s.scene === 'roof' && shot.type === 'medium' && shot.target === 'pot' ? 'garden' : shot.target;
       let id = timeCut ? 'clock' : s.focus && s.focusZoom ? s.focus : targetId || (shot.type === 'wide' ? 'group' : speaker);
       // Object inserts never cut to a face mid-vanish. Keep the sheet with its pen.
-      if (vanish) id = vanish.object === 'pen' ? 'list' : vanish.object;
+      if (vanish) id = reaction ? reaction.actor : vanish.object === 'pen' ? 'list' : vanish.object;
       const people = ['camille', 'noe', 'player', 'group'];
-      if (s.day === 9 && people.includes(id)) id = 'group';
+      if (s.day === 9 && people.includes(id) && !reaction) id = 'group';
       const insert = s.day === 9 && shot.type !== 'wide' && !people.includes(id);
-      const target = rects[id] || rects.group || rects.cat || rects.pot;
+      const target = reaction ? [rects[id][0], 174 + l.height * .18, 96, 104] : rects[id] || rects.group || rects.cat || rects.pot;
       if (target) {
-        const top = l.height * clamp(s.visibleRegion?.top ?? .1, 0, .9) + 12;
-        const bottom = Math.max(top + 40, l.height * clamp(s.visibleRegion?.bottom ?? .7, 0, 1) - 14);
+        // Reserve the dialogue area for the whole sequence, including its silent frames.
+        const reserved = s.day === 9 && (s.staging.pushIn || s.staging.reaction);
+        const top = l.height * clamp(reserved ? .08 : s.visibleRegion?.top ?? .1, 0, .9) + 12;
+        const bottom = Math.max(top + 40, l.height * clamp(reserved ? .7 : s.visibleRegion?.bottom ?? .7, 0, 1) - 14);
         const available = bottom - top, width = l.width - 28;
-        const desired = s.day === 9 ? (shot.type === 'wide' ? 1 : shot.type === 'medium' || !insert || id === 'thirdPot' ? 2 : 3)
+        const desired = s.day === 9 ? (shot.type === 'wide' ? 1 : reaction ? 3 : shot.type === 'medium' || !insert ? 2 : 3)
           : s.focus && s.focusZoom ? 1 + s.focusZoom * 1.25 : ({ wide: .92, medium: 1.5, close: 2.6 })[shot.type] || 1;
         const limit = Math.min(width / target[2], available / target[3]);
         let scale = Math.min(desired, limit);
         if (s.day === 9) scale = Math.max(1, Math.floor(scale));
+        if (s.day === 9 && s.staging.pushIn && !s.reducedMotion) {
+          const progress = beat(s, s.staging.pushIn.duration);
+          scale = Math.max(1, Math.round(1 + (scale - 1) * progress));
+        }
         let x = l.width / 2 - target[0] * scale, y = (top + bottom) / 2 - target[1] * scale;
+        if (s.day === 9 && s.staging.pushIn && !s.reducedMotion) {
+          const remaining = 1 - beat(s, s.staging.pushIn.duration);
+          x += Math.round(42 * remaining); y -= Math.round(30 * remaining);
+        }
         if (s.cameraFrom && !s.reducedMotion && s.day !== 9) {
           const f = s.cameraProgress * s.cameraProgress * (3 - 2 * s.cameraProgress);
           scale = Math.min(limit, s.cameraFrom.scale + (scale - s.cameraFrom.scale) * f);
@@ -1257,11 +1270,12 @@
     };
     rects.up = rects.roofDoor; rects.down = rects.lefevreDoor;
     const third = s.staging.thirdPot;
+    if (s.staging.sharedLaugh) rects.group = [160, 174, 166, 104];
     if (roof && ['sleep', 'stash', 'tease'].includes(third) && s.staging.phase !== 'afternoon') {
-      rects.thirdPot = [213, 200, 142, 200]; rects.stash = rects.thirdPot;
+      rects.thirdPot = third === 'stash' ? [225, 252, 104, 112] : [213, 200, 142, 200]; rects.stash = rects.thirdPot;
     }
     const catAt = s.staging.cat || (third === 'sleep' || third === 'stash' ? 'pot' : roof ? 'spout' : 'sofa');
-    if (s.cat && catAt !== 'none') rects.cat = catAt === 'pot' && rects.thirdPot ? [225, 240, 60, 32]
+    if (s.cat && catAt !== 'none') rects.cat = catAt === 'pot' && rects.thirdPot ? third === 'stash' ? [225, 224, 76, 44] : [225, 240, 60, 32]
       : catAt === 'list' ? [154, 208, 60, 34] : catAt === 'spout' ? [98, 209, 46, 44] : [65, 232, 60, 32];
     rects.canape = rects.sofa; rects.rack = rects.spoon;
     rects['pot:1'] = rects.pot; rects['pot:2'] = rects.basil;
@@ -1319,20 +1333,22 @@
     const doorProgress = doorCue?.progress ?? 1;
     const open = doorState === 'ajar' ? .14 + .66 * (1 - doorProgress) + Math.sin(doorProgress * Math.PI) * .12
       : ['closed', 'locked'].includes(doorState) ? 1 - doorProgress : doorProgress;
+    const roofLeaf = Math.round(40 * (1 - open * .65)), roofHandle = 259 + roofLeaf - 8;
     if (st.splitEnd) {
       // Deliberately composed as two inserts, not a room with a UI overlay.
-      q.r(0, -150, 320, 350, '#50474c'); q.r(0, 185, 320, l.height, '#33394f');
-      q.r(0, 176, 320, 7, '#e5c7a1');
-      day9Prop(placed(q, 160, 100, 2), 'laptop', 0, 0);
-      skyline(placed(q, -80, 178), true, -60);
-      pot(placed(q, 160, 345, 2), 0, 0, 0, 0);
-      cat(placed(q, 160, 280, 1.7), 0, 0, { ...s, acting: [], action: 'sleepBetweenPots', time: t });
-      q.line(182, 280, 207, 304, '#e2873a', 7); q.line(207, 304, 203, 326, '#e2873a', 6);
+      const center = l.width / 2;
+      q.r(0, -l.height, l.width, l.height + 185, '#50474c'); q.r(0, 185, l.width, l.height, '#33394f');
+      q.r(0, 176, l.width, 7, '#e5c7a1');
+      day9Prop(placed(q, center, 100, 2), 'laptop', 0, 0);
+      skyline(placed(q, center - 240, 178), true, -60);
+      pot(placed(q, center, 345, 2), 0, 0, 0, 0);
+      cat(placed(q, center, 280, 1.7), 0, 0, { ...s, acting: [], action: 'sleepBetweenPots', time: t });
+      q.line(center + 22, 280, center + 47, 304, '#e2873a', 7); q.line(center + 47, 304, center + 43, 326, '#e2873a', 6);
       return;
     }
     if (roof) {
       sky(placed(q, -80, -20), s.night || st.phase === 'night');
-      if (st.phase === 'sunset') { ['#a46c8d', '#ca7c87', '#e99a85', '#f7c38b'].forEach((c, i) => q.r(0, -20 + i * 36, 320, 37, c)); q.oval(226, 94, 22, 22, '#ffe0a4'); }
+      if (st.phase === 'sunset') { ['#a46c8d', '#ca7c87', '#e99a85', '#f7c38b'].forEach((c, i) => q.r(-240, i ? -20 + i * 36 : -l.height, l.width + 480, i ? 37 : l.height + 17, c)); q.oval(226, 94, 22, 22, '#ffe0a4'); }
       else if (st.phase === 'dawn') { q.r(0, -30, 320, 65, '#758ca7'); q.oval(224, 108, 16, 16, '#ffe0a4'); }
       skyline(placed(q, -80, -20), s.night, -35);
       q.r(0, 169, 320, 29, '#a58a88'); q.r(0, 167, 320, 5, '#d6b39b'); floor(q, 198, s.night, true);
@@ -1340,12 +1356,22 @@
       door(q, 259, 92, 40, 105, open, s.night);
       if (open) q.poly([[279, 199], [302, 199], [320, 260], [233, 260]], '#ffdf9e38');
     } else if (stairs || s.scene === 'doorway') {
-      stairsBackground(placed(q, -16, -4, .75), { ...s, top: 0 }); floor(q, 260, true, false);
+      if (cam.subject === 'roofDoor') {
+        q.r(0, -200, l.width, 460, '#c8baa0');
+        q.r(242, 78, 73, 127, '#a3947f'); q.r(246, 82, 65, 120, '#ead4ad');
+        q.r(248, 199, 62, 6, '#b39878'); q.r(239, 205, 81, 5, '#dfc7a0');
+      } else stairsBackground(placed(q, -16, -4, .75), { ...s, top: 0 });
+      floor(q, 260, true, false);
       for (let i = 0; i < 7; i++) { q.r(120 + i * 20, 275 - i * 14, 113, 14, '#756e6b'); q.r(120 + i * 20, 275 - i * 14, 113, 3, '#bda38b'); }
-      door(q, 259, 92, 40, 105, open, s.night);
+      // Front-on jambs and level panels; hardware follows the receding leaf.
+      q.r(253, 86, 52, 117, '#705e51'); q.r(257, 90, 44, 109, '#f8dc9c');
+      q.r(259, 92, roofLeaf, 105, '#758878');
+      q.r(262, 96, Math.max(2, roofLeaf - 6), 46, '#516b60');
+      q.r(262, 148, Math.max(2, roofLeaf - 6), 44, '#516b60');
+      q.r(roofHandle, 151, 5, 3, '#e9cd8c'); q.r(roofHandle + 1, 158, 2, 4, '#584c43');
       const lef = cues.find(c => c.type === 'door' && c.at === 'lefevreDoor');
       door(q, 43, 109, 62, 117, lef ? 1 - lef.progress : 0, true); q.r(44, 227, 61, 2, '#f8d996');
-      q.line(126, 241, 260, 148, '#bba084', 3);
+      if (cam.subject !== 'roofDoor') q.line(126, 241, 240, 163, '#bba084', 3);
     } else {
       kitchenBackground(placed(q, -20, -4, .75), { ...s, top: -200 }); floor(q, 231, s.night, false);
       q.r(18, 224, 91, 35, '#8d9b8a'); q.r(13, 216, 11, 44, '#607d70'); q.r(101, 216, 11, 44, '#607d70');
@@ -1362,18 +1388,37 @@
     const pose = st.pose || (st.oneSock ? 'oneSock' : st.sharedLaugh ? 'laugh' : ''), people = motion(s).people;
     // Inserts have one prop draw path, not enlarged room sprites behind the prop.
     const noPeople = cam.insert || cueFor('curtain') || st.splitEnd;
+    const reaction = st.reaction && (s.reducedMotion || s.elapsed >= st.reaction.atMs) ? st.reaction : null;
     if (!noPeople) {
-      person(q, 83, 250, 'camille', t, pose === 'laugh' ? 'laugh' : 'idle', 2, people.camille);
-      person(q, 173, 250, 'noe', t + 500, pose === 'laugh' ? 'laugh' : pose === 'oneSock' ? 'walk' : 'idle', 2, people.noe);
+      const portrait = reaction ? { ...q,
+        r(x, y, w, h, color) { if (y < 222) q.r(x, y, w, Math.min(h, 222 - y), color); },
+        oval() {} } : q;
+      if (st.sharedLaugh) {
+        for (const [i, actor] of ['camille', 'player', 'noe'].entries()) person(portrait, 83 + i * 54, 250, actor, t + i * 300, 'laugh', 2);
+      } else {
+        if (!reaction || reaction.actor === 'camille') person(portrait, 83, 250, 'camille', t, 'idle', 2, reaction ? { mouth: 2, tilt: 1 } : people.camille);
+        if (!reaction || reaction.actor === 'noe') person(portrait, 173, 250, 'noe', t + 500, pose === 'oneSock' && !reaction ? 'walk' : 'idle', 2, reaction ? { mouth: 2, tilt: -1 } : people.noe);
+      }
       if (['morning', 'dawn'].includes(st.phase)) { for (let x = 189; x < 219; x += 5) q.r(x, 226, 2, 17, '#d2b699'); q.r(189, 232, 7, 4, P.soil); q.r(215, 234, 5, 3, P.soil); }
       if (pose === 'arms') { q.line(183, 200, 160, 182, '#c2714c', 9); q.line(223, 200, 246, 182, '#c2714c', 9); q.r(154, 176, 9, 9, P.skin); q.r(244, 176, 9, 9, P.skin); }
       if (pose === 'heart' || pose === 'facepalm' || pose === 'pockets') {
         const y = pose === 'facepalm' ? 175 : pose === 'heart' ? 206 : 232;
         q.line(223, 201, 209, y, '#c2714c', 8); q.r(201, y - 5, 12, 9, P.skin);
       }
-      if (pose === 'oneSock' || st.oneSock) {
+      if (!reaction && (pose === 'oneSock' || st.oneSock)) {
         q.r(186, 243, 17, 9, '#9fa9b6'); q.r(215, 243, 19, 9, P.skin); q.r(230, 248, 4, 3, P.skinShade);
         if (!cueFor('sock')) { q.r(226, 208, 10, 6, P.skin); day9Prop(q, 'sock', 237, 231); }
+      }
+      if (reaction) {
+        const x = reaction.actor === 'camille' ? 115 : 205, shirt = reaction.actor === 'camille' ? '#377c60' : '#c2714c';
+        if (reaction.gesture === 'shrug') {
+          for (const side of [-1, 1]) { q.line(x + side * 20, 196, x + side * 31, 205, shirt, 8); q.line(x + side * 31, 205, x + side * 38, 188, shirt, 7); q.r(x + side * 38 - 4, 182, 10, 7, P.skin); }
+        } else if (reaction.gesture === 'point') {
+          q.line(x + 18, 197, x + 29, 184, shirt, 8); q.line(x + 29, 184, x + 40, 194, P.skin, 6); q.r(x + 40, 197, 3, 10, P.skin);
+        } else {
+          q.line(x + 19, 198, x + 27, 208, shirt, 8); q.line(x + 27, 208, x + 10, 200, shirt, 7); q.r(x + 3, 197, 13, 7, P.skin);
+          q.r(x + 3, 205, 13, 3, '#eadac1');
+        }
       }
     }
     if (roof) {
@@ -1395,7 +1440,7 @@
         pot(placed(third, 251, 290, 1.45), 0, 0, 0, t);
         if (st.thirdPot === 'tease') third.r(256, 238, 7, 12, '#9fa9b6');
         if (st.thirdPot === 'stash') {
-          day9Prop(third, 'pen', 228, 256); day9Prop(third, 'sock', 244, 284); day9Prop(third, 'spoon', 268, 250); day9Prop(third, 'crust', 273, 268);
+          day9Prop(third, 'pen', 220, 270); day9Prop(third, 'sock', 249, 284); day9Prop(third, 'spoon', 284, 272); day9Prop(third, 'crust', 272, 292);
           const lift = cueFor('sock'); if (lift?.state === 'move') { third.r(235, 253 - lift.progress * 37, 14, 5, P.skin); day9Prop(third, 'sock', 242, 275 - lift.progress * 37); }
         }
       }
@@ -1437,7 +1482,8 @@
     } else if (s.cat && rects.cat && catAt !== 'none') {
       const [x, y] = at('cat'), sprinkle = gag?.gag === 'sprinkle';
       const sleeping = ['pot', 'sofa', 'list'].includes(catAt) || ['sleep', 'stash'].includes(st.thirdPot);
-      cat(q, x + (sprinkle && gag.progress > .5 ? Math.sin(t / 55) * 3 : 0), y + 13,
+      const stashCat = roof && st.thirdPot === 'stash';
+      cat(stashCat ? placed(q, x, 240, 2) : q, stashCat ? 0 : x + (sprinkle && gag.progress > .5 ? Math.sin(t / 55) * 3 : 0), stashCat ? 0 : y + 13,
         { ...s, acting: [], time: t, action: sleeping ? 'sleepBetweenPots' : '', reaction: sprinkle ? gag.progress < .5 ? 'lick' : 'offended' : s.reaction });
     }
     const vanished = cues.find(c => c.state === 'vanish' && c.progress >= .6 && c.progress < 1);
@@ -1469,8 +1515,10 @@
       // Two handle checks after the key turn, with a settled closed door.
       if (!s.reducedMotion && f > .7) q.r(x + Math.sin((f - .7) / .3 * Math.PI * 4) * 2, y, 9, 5, P.skin);
     } else if (doorCue?.state === 'open' && doorCue.at === 'roofDoor') {
-      q.line(246, 185, 268, 166, '#738a7a', 9); q.r(263, 157, 20, 10, P.skin);
-      day9Prop(q, 'key', 277, 158, doorProgress);
+      const x = stairs ? roofHandle : 277;
+      q.line(x - 35, 191, x - 29, 174, '#738a7a', 9); q.line(x - 29, 174, x - 17, 164, '#738a7a', 8);
+      q.r(x - 22, 159, 14, 9, P.skin); q.r(x - 12, 162, 6, 4, P.skinShade);
+      day9Prop(q, 'key', x - 11, 162, 1);
     }
   }
 

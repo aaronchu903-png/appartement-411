@@ -175,17 +175,17 @@
     d10_noe_vaisselle: { staging: { pose: 'heart' } },
     n_d10_noe_ecrit: { action: { type: 'object', object: 'list', state: 'write' }, staging: { listText: fr('Jeudi : dîner en bas.') } },
     d10_cam_chat: { action: { type: 'kitten', gag: 'sleep', at: 'list' }, staging: { cat: 'list' } },
-    d10_noe_stylo: { action: { type: 'object', object: 'pen', state: 'vanish' }, staging: { tailTip: true, pose: 'pockets' } },
+    d10_noe_stylo: { action: { type: 'object', object: 'pen', state: 'vanish' }, staging: { tailTip: true, pose: 'pockets', delayMs: 3200, reaction: { actor: 'noe', atMs: 2500, gesture: 'pockets' } } },
     d10_cam_frigo2: { action: { type: 'door', at: 'fridge', state: 'open' } },
     n_d10_chaussette: { action: [{ type: 'time', gesture: 'clock', hour: 12 }, { type: 'kitten', gag: 'slip' }], staging: { oneSock: true, pose: 'oneSock' } },
-    d10_noe_manque: { action: { type: 'object', object: 'sock', state: 'vanish' }, staging: { oneSock: true, pose: 'oneSock', tailTip: true } },
+    d10_noe_manque: { action: { type: 'object', object: 'sock', state: 'vanish' }, staging: { oneSock: true, pose: 'oneSock', tailTip: true, delayMs: 3200, reaction: { actor: 'noe', atMs: 2500, gesture: 'shrug' } } },
     n_d10_gouter: { action: { type: 'time', gesture: 'clock', hour: 17 }, staging: { props: ['croissant', 'list'] } },
-    n_d10_miettes: { action: { type: 'object', object: 'croissant', state: 'vanish' }, staging: { props: ['crumbs', 'list'], tailTip: true } },
+    n_d10_miettes: { action: { type: 'object', object: 'croissant', state: 'vanish' }, staging: { props: ['crumbs', 'list'], tailTip: true, delayMs: 3200, reaction: { actor: 'camille', atMs: 2500, gesture: 'point' } } },
     d10_cam_suit: { action: { type: 'object', object: 'crumbs', state: 'reveal' } },
     lef_porte: { action: { type: 'door', at: 'lefevreDoor', state: 'closed' }, staging: { lightUnderDoor: true } },
     n_d10_porte_ouverte: { action: { type: 'door', at: 'roofDoor', state: 'ajar' }, staging: { door: 'ajar', pose: 'facepalm' } },
-    n_d10_tresor: { action: { type: 'object', object: 'stash', state: 'reveal', duration: 3000 }, staging: { delayMs: 3000, holdMs: 3000 } },
-    d10_noe_tout: { action: { type: 'object', object: 'sock', state: 'move', from: 'pot', to: 'hand' } },
+    n_d10_tresor: { action: { type: 'object', object: 'stash', state: 'reveal', duration: 2400 }, staging: { delayMs: 3000, holdMs: 3000, pushIn: { duration: 2400 } } },
+    d10_noe_tout: { shot: { type: 'medium', target: 'group' }, staging: { sharedLaugh: true, pose: 'laugh' } },
     d10_cam_pot: { action: { type: 'kitten', gag: 'sleep', at: 'pot' }, staging: { sharedLaugh: true, pose: 'laugh' } },
     noe_cle: { action: { type: 'door', at: 'roofDoor', state: 'locked', actor: 'noe', checks: 2 }, staging: { door: 'locked' } },
     n_d10_ding: { action: { type: 'object', object: 'laptop', state: 'reveal' } },
@@ -209,6 +209,7 @@
     } else scene.staging.phase = phase;
     const directed = direction[scene.id] || {};
     Object.assign(scene.staging, directed.staging || {});
+    if (directed.shot) scene.shot = directed.shot;
     if (directed.action) scene.action = directed.action;
     scene.module = moduleForKind(scene.kind);
     if (scene.audioId) audio[scene.audioId] = '../audio/w1/' + scene.audioId + '.mp3';
