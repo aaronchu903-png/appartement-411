@@ -36,6 +36,8 @@ a { color: var(--blue); }
 .scene-title .eyebrow, .scene-title .chapter-number { margin: 6px 0; font-size: 14px; letter-spacing: 0; text-transform: none; }
 .panel { position: absolute; z-index: 5; left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right)); bottom: var(--dialogue-bottom); margin-inline: auto; max-height: min(calc(var(--phone-height) * .55), calc(var(--phone-height) - var(--dialogue-bottom) - var(--safe-top) - 16px)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--line) var(--paper); padding: 8px 10px; border: var(--pixel-border); border-radius: 4px; background: var(--paper); box-shadow: 4px 4px 0 #30314280; }
 .panel:empty, .panel.empty { display: none; }
+.panel.bonne-nuit { top: 50%; bottom: auto; transform: translateY(-50%); padding: 16px; border: 0; background: transparent; box-shadow: none; color: var(--paper); font-family: inherit; font-size: 28px; text-align: center; text-shadow: 0 2px 8px var(--ink); pointer-events: none; animation: bonne-nuit-in 1s ease-out both; }
+@keyframes bonne-nuit-in { from { opacity: 0; } to { opacity: 1; } }
 .panel.panel-top-docked { top: calc(16px + var(--safe-top)); bottom: auto; }
 .panel-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
 .eyebrow { font-size: 13px; text-transform: none; letter-spacing: 0; }

@@ -880,7 +880,14 @@
       if(establishingAge===0)A.ambience(true);
       establishingAge+=dt;const progress=Math.min(1,establishingAge/(currentScene().durationMs||4000));
       if(currentScene().kind==='establishing')sceneModel.establishingProgress=progress;
-      if(progress>=1)nextScene();
+      if(progress>=1){
+        if(currentScene().id==='d8_ritual'&&establishingAge<(currentScene().durationMs||4000)+3000){
+          if(!storyPanel.firstChild){
+            storyPanel.classList.add('bonne-nuit');
+            storyPanel.innerHTML='<p lang="fr" role="status">« Bonne nuit ! »</p>';
+          }
+        }else nextScene();
+      }
     }
     if(!paused&&screen==='review'&&feedback?.correct&&!review?.checkpoint){reviewDelay-=dt;if(reviewDelay<=0&&(reviewSpeechDone||reviewDelay<=-600))reviewNext();}
     if(!paused&&catGame){
