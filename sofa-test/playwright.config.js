@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = defineConfig({
   testDir: path.join(__dirname),
-  testMatch: 'verify.spec.js',
+  testMatch: /verify(-live)?\.spec\.js/,
   timeout: 120000,
   use: {
     ...devices['iPhone 14'],
