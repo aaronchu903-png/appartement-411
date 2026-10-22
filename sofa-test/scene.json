@@ -48,8 +48,42 @@
     "touchMargin": 4
   },
   "lines": {
-    "devant": "« Le chat est devant le canapé. »",
-    "ou": "« Où est le chat\u202F? »",
-    "derriere": "« Il est derrière le canapé\u202F! »"
-  }
+    "devant": "Le chat est devant le canapé.",
+    "ou": "Où est le chat\u202F?",
+    "derriere": "Il est derrière le canapé\u202F!"
+  },
+  "vocabulary": [
+    {
+      "id": "chat",
+      "fr": "le chat",
+      "en": "cat",
+      "zh": "猫",
+      "note": "masc. un chat → le chat",
+      "thumb": "cat_front"
+    },
+    {
+      "id": "canape",
+      "fr": "le canapé",
+      "en": "sofa",
+      "zh": "沙发",
+      "note": "masc. [kanape]",
+      "thumb": "sofa"
+    },
+    {
+      "id": "derriere",
+      "fr": "derrière",
+      "en": "behind",
+      "zh": "在……后面",
+      "note": "opposite → devant",
+      "thumb": "behind_tail"
+    },
+    {
+      "id": "devant",
+      "fr": "devant",
+      "en": "in front of",
+      "zh": "在……前面",
+      "contrast": true,
+      "thumb": "devant"
+    }
+  ]
 }

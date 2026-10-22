@@ -2,9 +2,9 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: #1a1a22;
+  background: #2a2830;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: #f5f0e8;
+  color: #1a1a22;
   overflow: hidden;
 }
 #wrap {
@@ -12,37 +12,52 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 0;
 }
 #phone {
   position: relative;
-  width: min(100vw - 24px, 390px);
-  max-height: calc(100vh - 24px);
-  aspect-ratio: 9 / 16;
-  background: #0e0e12;
-  border-radius: 28px;
-  box-shadow: 0 0 0 3px #2a2a34, 0 24px 48px rgba(0, 0, 0, 0.45);
+  width: min(100vw, 390px);
+  height: 100vh;
+  max-height: 844px;
+  background: linear-gradient(180deg, #d8cbb8 0%, #c4a88a 55%, #9d8064 100%);
+  box-shadow: 0 0 0 2px #6a5d52, 0 16px 40px rgba(0, 0, 0, 0.35);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px;
+  flex-direction: column;
 }
 #stage {
   position: relative;
+  flex: 1;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #121218;
-  border-radius: 12px;
   overflow: hidden;
 }
-canvas#scene {
+canvas#scene,
+canvas#bubbles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: block;
+  touch-action: manipulation;
+}
+canvas#scene {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  touch-action: manipulation;
+}
+canvas#bubbles {
+  pointer-events: none;
+  z-index: 1;
+}
+#fadeveil {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: none;
+}
+#fadeveil.on {
+  opacity: 1;
 }
 #overlay {
   position: absolute;
@@ -50,52 +65,88 @@ canvas#scene {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(26, 26, 34, 0.5);
   cursor: pointer;
-  z-index: 2;
+  z-index: 4;
 }
 #overlay[hidden] { display: none; }
 #overlay p {
   margin: 0;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
+  font-size: 1.1rem;
+  color: #fff;
   text-align: center;
-  padding: 0 16px;
+  padding: 0 20px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 #wordcard {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  background: #e8e0d4;
-  color: #1a1a22;
-  z-index: 3;
-  padding: 24px;
+  align-items: stretch;
+  gap: 12px;
+  background: #ebe4d8;
+  z-index: 5;
+  padding: 16px 14px 20px;
+  overflow-y: auto;
 }
 #wordcard[hidden] { display: none; }
-#wordcard .words {
-  font-size: 1.35rem;
+.wc-title {
+  margin: 0;
+  font-size: 1rem;
   font-weight: 600;
   text-align: center;
-  line-height: 1.5;
+  color: #4b5d8a;
 }
-#wordcard .contrast {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: #5a5248;
-  margin-top: 8px;
+.vocab-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vocab-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  background: #f7f2ea;
+  border-radius: 10px;
+  border: 1px solid #d5cdc0;
+}
+.vocab-row.contrast {
+  opacity: 0.85;
+  border-style: dashed;
+}
+.vocab-row canvas {
+  width: 72px;
+  height: 48px;
+  image-rendering: pixelated;
+  border-radius: 4px;
+  background: #e3d3c6;
+}
+.vocab-fr {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.vocab-mean {
+  font-size: 0.82rem;
+  color: #3d3830;
+  line-height: 1.35;
+}
+.vocab-note {
+  font-size: 0.72rem;
+  color: #6a6258;
 }
 #replay {
   font: inherit;
   font-size: 1rem;
-  padding: 12px 28px;
+  padding: 14px;
   border: none;
-  border-radius: 999px;
+  border-radius: 12px;
   background: #4b5d8a;
   color: #fff;
   cursor: pointer;
+  width: 100%;
 }
-#replay:active { transform: scale(0.98); }
+#replay:active { transform: scale(0.99); }
