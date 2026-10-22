@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "_readme": "Swap Camille art by replacing camille_bend_*.png and editing beats.stand / beats.bend (file, width, height, anchor, layer). layer: front = after sofa; behind = before sofa (backrest occludes torso).",
+  "assetsBase": "assets/",
+  "scene": { "width": 96, "height": 64 },
+  "room": {
+    "wall": "#e3d3c6",
+    "floor": "#9d8064",
+    "floorTop": 44
+  },
+  "sofa": {
+    "file": "sofa_early.png",
+    "x": 50,
+    "y": 30
+  },
+  "camille": {
+    "beats": {
+      "stand": {
+        "file": "camille_bend_0.png",
+        "width": 12,
+        "height": 18,
+        "anchor": { "x": 22, "y": 26 },
+        "layer": "front",
+        "brush": {
+          "file": "brush.png",
+          "width": 6,
+          "height": 3,
+          "anchor": { "x": 33, "y": 37 },
+          "layer": "front"
+        }
+      },
+      "bend": {
+        "file": "camille_bend_1.png",
+        "width": 16,
+        "height": 18,
+        "anchor": { "x": 22, "y": 26 },
+        "layer": "behind",
+        "brush": null
+      }
+    }
+  },
+  "anchors": {
+    "catFront": { "x": 52, "y": 44 },
+    "catBehindY": 36,
+    "peek": { "x": 60, "y": 26 },
+    "tail": { "x": 47, "y": 38 },
+    "tailHitbox": { "x": 44, "y": 34, "w": 8, "h": 12 },
+    "touchMargin": 4
+  },
+  "lines": {
+    "devant": "« Le chat est devant le canapé. »",
+    "ou": "« Où est le chat\u202F? »",
+    "derriere": "« Il est derrière le canapé\u202F! »"
+  }
+}
