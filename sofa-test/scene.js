@@ -321,11 +321,23 @@ function updateBubble(t) {
   }
 }
 
-function bubbleAnchorScene(kind, t) {
-  if (kind === 'off') return { x: 2, y: 28 };
+function camilleHeadScene(t) {
   const cx = camilleX(t);
   const cy = CFG.camille.beats.stand.anchor.y;
   return { x: cx + 6, y: cy + 2 };
+}
+
+function camilleOnScreen(t) {
+  if (!getCamilleBeat(t)) return false;
+  const head = camilleHeadScene(t);
+  const tip = sceneToScreen(head.x, head.y);
+  return tip.x >= 24 && tip.x <= stageW - 24 && tip.y >= 16 && tip.y <= stageH - 16;
+}
+
+function bubbleUsesOffscreenVoice(kind, t) {
+  if (kind === 'off') return true;
+  if (kind === 'camille') return !camilleOnScreen(t);
+  return true;
 }
 
 function wrapLines(text, maxWidth, measure) {
@@ -361,11 +373,21 @@ function drawBubbles(now) {
   const bw = textW + padX * 2;
   const bh = lines.length * lineH + padY * 2;
 
-  const anchor = bubbleAnchorScene(bubbleKind, sceneT);
-  const tip = sceneToScreen(anchor.x, anchor.y);
-  let bx = tip.x - bw / 2;
-  bx = Math.max(8, Math.min(stageW - bw - 8, bx));
-  const by = Math.max(12, tip.y - bh - 14);
+  const offVoice = bubbleUsesOffscreenVoice(bubbleKind, sceneT);
+  const { oy } = viewRect();
+  let bx;
+  let by;
+  let tip = null;
+  if (offVoice) {
+    bx = 12;
+    by = Math.max(14, oy + 16);
+  } else {
+    const anchor = camilleHeadScene(sceneT);
+    tip = sceneToScreen(anchor.x, anchor.y);
+    bx = tip.x - bw / 2;
+    bx = Math.max(8, Math.min(stageW - bw - 8, bx));
+    by = Math.max(12, tip.y - bh - 14);
+  }
 
   bctx.fillStyle = '#fff';
   bctx.strokeStyle = '#22303a';
@@ -374,15 +396,17 @@ function drawBubbles(now) {
   bctx.fill();
   bctx.stroke();
 
-  const tailX = Math.max(bx + 12, Math.min(bx + bw - 12, tip.x));
-  bctx.beginPath();
-  bctx.moveTo(tailX - 6, by + bh);
-  bctx.lineTo(tip.x, tip.y);
-  bctx.lineTo(tailX + 6, by + bh);
-  bctx.closePath();
-  bctx.fillStyle = '#fff';
-  bctx.fill();
-  bctx.stroke();
+  if (!offVoice && tip) {
+    const tailX = Math.max(bx + 12, Math.min(bx + bw - 12, tip.x));
+    bctx.beginPath();
+    bctx.moveTo(tailX - 6, by + bh);
+    bctx.lineTo(tip.x, tip.y);
+    bctx.lineTo(tailX + 6, by + bh);
+    bctx.closePath();
+    bctx.fillStyle = '#fff';
+    bctx.fill();
+    bctx.stroke();
+  }
 
   bctx.fillStyle = '#1a1a22';
   bctx.textBaseline = 'top';
@@ -457,8 +481,15 @@ function drawSceneContent(t) {
 
 function render(now) {
   if (!CFG) return;
-  updateCamera(now);
-  syncCameraToTimeline(sceneT, now);
+
+  if (phase === 'overlay') {
+    cam = { x: 48, y: 33, zoom: ZOOM_WIDE };
+    camFrom = { ...cam };
+    camTo = { ...cam };
+  } else {
+    updateCamera(now);
+    syncCameraToTimeline(sceneT, now);
+  }
 
   drawAmbientBands();
 
@@ -469,12 +500,17 @@ function render(now) {
   ctx.scale(scaleEff, scaleEff);
   ctx.translate(-left, -top);
   drawRoom();
-  drawSceneContent(sceneT);
+  if (phase === 'overlay') drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
+  else drawSceneContent(sceneT);
   ctx.restore();
 
-  updateBubble(sceneT);
-  drawBubbles(now);
-  drawTapGlowRing(now);
+  if (phase === 'overlay') {
+    bctx.clearRect(0, 0, stageW, stageH);
+  } else {
+    updateBubble(sceneT);
+    drawBubbles(now);
+    drawTapGlowRing(now);
+  }
 
   if (fadeAlpha > 0) {
     fadeVeil.hidden = false;
