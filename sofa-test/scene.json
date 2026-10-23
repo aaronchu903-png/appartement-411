@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "_readme": "Swap Camille art by replacing camille_bend_*.png and editing beats.stand / beats.bend (file, width, height, anchor, layer). layer: front = after sofa; behind = before sofa (backrest occludes torso).",
+  "version": 2,
+  "_readme": "Camille: stand / hug (camille_bend_2 before sofa). Cat camera: look_cam_0/1 at anchors.catFront. Shots = CROPS.md hard cuts.",
   "assetsBase": "assets/",
   "scene": { "width": 96, "height": 64 },
   "room": {
@@ -12,6 +12,20 @@
     "file": "sofa_early.png",
     "x": 50,
     "y": 30
+  },
+  "sprites": {
+    "walk_side_0": "walk_side_0.png",
+    "walk_side_1": "walk_side_1.png",
+    "walk_side_2": "walk_side_2.png",
+    "peek_0": "peek_0.png",
+    "peek_1": "peek_1.png",
+    "found_0": "found_0.png",
+    "found_1": "found_1.png",
+    "glance": "glance.png",
+    "look_cam_0": "look_cam_0.png",
+    "look_cam_1": "look_cam_1.png",
+    "tail_0": "tail_0.png",
+    "tail_1": "tail_1.png"
   },
   "camille": {
     "beats": {
@@ -29,11 +43,19 @@
           "layer": "front"
         }
       },
-      "bend": {
-        "file": "camille_bend_1.png",
+      "standSeen": {
+        "file": "camille_bend_0.png",
+        "width": 12,
+        "height": 18,
+        "anchor": { "x": 38, "y": 26 },
+        "layer": "front",
+        "brush": null
+      },
+      "hug": {
+        "file": "camille_bend_2.png",
         "width": 16,
         "height": 18,
-        "anchor": { "x": 22, "y": 26 },
+        "anchor": { "x": 40, "y": 26 },
         "layer": "behind",
         "brush": null
       }
@@ -47,6 +69,17 @@
     "tailHitbox": { "x": 44, "y": 34, "w": 8, "h": 12 },
     "touchMargin": 4
   },
+  "shots": [
+    { "id": 1, "t0": 0, "t1": 1.5, "crop": { "x": 43, "y": 31, "w": 9, "h": 16 } },
+    { "id": 2, "t0": 1.5, "t1": 3.5, "crop": { "x": 24, "y": -48, "w": 72, "h": 128 }, "warmTint": true },
+    { "id": 3, "t0": 3.5, "t1": 5.5, "crop": { "x": 18, "y": -8, "w": 45, "h": 80 } },
+    { "id": 4, "t0": 5.5, "t1": 8, "crop": { "x": 43, "y": 31, "w": 9, "h": 16 } },
+    { "id": 5, "t0": 8, "t1": 10, "crop": { "x": 52, "y": 14, "w": 18, "h": 32 } },
+    { "id": 6, "t0": 10, "t1": 12, "crop": { "x": 24, "y": -48, "w": 72, "h": 128 } },
+    { "id": 7, "t0": 12, "t1": 13.5, "crop": { "x": 28, "y": -8, "w": 45, "h": 80 } },
+    { "id": 8, "t0": 13.5, "t1": 15, "crop": { "x": 46, "y": 30, "w": 18, "h": 32 } }
+  ],
+  "startCrop": { "x": 24, "y": -48, "w": 72, "h": 128 },
   "lines": {
     "devant": "Le chat est devant le canapé.",
     "ou": "Où est le chat\u202F?",

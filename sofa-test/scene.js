@@ -1,6 +1,6 @@
 /**
- * « Où est le chat ? » — 96×64 scene, full-width integer scale + camera shots.
- * Camille poses: scene.json
+ * « Où est le chat ? » v2 — 96×64 scene, CROPS.md hard-cut shots.
+ * Camille / sprites: scene.json
  */
 const canvas = document.getElementById('scene');
 const ctx = canvas.getContext('2d');
@@ -31,31 +31,13 @@ let lastIdleBellFrame = -1;
 let stageW = 390;
 let stageH = 700;
 let dpr = 1;
-let pixelScale = 4;
-let cam = { x: 48, y: 32, zoom: 1 };
-let camFrom = { x: 48, y: 32, zoom: 1 };
-let camTo = { x: 48, y: 32, zoom: 1 };
-let camBlendStart = 0;
-let camBlendDur = 0.35;
+let activeCrop = { x: 0, y: 0, w: 96, h: 64 };
+let activeScale = 4;
+let activeOx = 0;
+let activeOy = 0;
 
 const SW = 96;
 const SH = 64;
-const ZOOM_WIDE = 1;
-const ZOOM_MED = 1.85;
-const ZOOM_CLOSE = 3;
-
-const SPRITE_MANIFEST = {
-  walk_side_0: 'walk_side_0.png',
-  walk_side_1: 'walk_side_1.png',
-  walk_side_2: 'walk_side_2.png',
-  peek_0: 'peek_0.png',
-  peek_1: 'peek_1.png',
-  found_0: 'found_0.png',
-  found_1: 'found_1.png',
-  glance: 'glance.png',
-  tail_0: 'tail_0.png',
-  tail_1: 'tail_1.png'
-};
 
 async function loadConfig() {
   const res = await fetch('scene.json');
@@ -66,8 +48,12 @@ function assetUrl(name) {
   return CFG.assetsBase + name;
 }
 
+function spriteFile(key) {
+  return CFG.sprites[key] || key;
+}
+
 async function loadImages() {
-  const names = new Set(Object.values(SPRITE_MANIFEST));
+  const names = new Set(Object.values(CFG.sprites));
   names.add(CFG.sofa.file);
   for (const beat of Object.values(CFG.camille.beats)) {
     names.add(beat.file);
@@ -135,7 +121,6 @@ function resize() {
   stageW = rect.width;
   stageH = rect.height;
   dpr = Math.min(window.devicePixelRatio || 1, 3);
-  pixelScale = Math.max(1, Math.floor(stageW / SW));
   for (const c of [canvas, bubbleCanvas]) {
     c.width = Math.round(stageW * dpr);
     c.height = Math.round(stageH * dpr);
@@ -147,95 +132,53 @@ function resize() {
   ctx.imageSmoothingEnabled = false;
 }
 
-function easeOut(t) {
-  return 1 - (1 - t) ** 3;
-}
-
-function setCameraTarget(cx, cy, zoom, dur = 0.35) {
-  camFrom = { ...cam };
-  camTo = { x: cx, y: cy, zoom };
-  camBlendStart = performance.now();
-  camBlendDur = dur;
-}
-
-function updateCamera(now) {
-  const elapsed = (now - camBlendStart) / 1000;
-  const t = camBlendDur <= 0 ? 1 : Math.min(1, elapsed / camBlendDur);
-  const e = easeOut(t);
-  cam.x = camFrom.x + (camTo.x - camFrom.x) * e;
-  cam.y = camFrom.y + (camTo.y - camFrom.y) * e;
-  cam.zoom = camFrom.zoom + (camTo.zoom - camFrom.zoom) * e;
-}
-
-function cameraShotForTime(t) {
-  if (t < 4) return { cx: 48, cy: 33, zoom: ZOOM_WIDE };
-  if (t < 6) return { cx: 28, cy: 34, zoom: ZOOM_MED };
-  if (t < 10) return { cx: 52, cy: 36, zoom: ZOOM_CLOSE };
-  if (t < 12) return { cx: 48, cy: 33, zoom: ZOOM_WIDE };
-  return { cx: 44, cy: 38, zoom: ZOOM_MED };
-}
-
-let lastShotKey = '';
-function syncCameraToTimeline(t, now) {
-  const shot = cameraShotForTime(t);
-  const key = `${shot.zoom}-${shot.cx}-${shot.cy}`;
-  if (key !== lastShotKey) {
-    lastShotKey = key;
-    setCameraTarget(shot.cx, shot.cy, shot.zoom, 0.4);
-    camBlendStart = now;
+function shotAtTime(t) {
+  if (phase === 'waitTail') {
+    return CFG.shots.find((s) => s.id === 4) || CFG.shots[3];
   }
+  for (const sh of CFG.shots) {
+    if (t >= sh.t0 && t < sh.t1) return sh;
+  }
+  return CFG.shots[CFG.shots.length - 1];
 }
 
-function viewRect() {
-  const scaleEff = pixelScale * cam.zoom;
-  const vw = SW / cam.zoom;
-  const vh = SH / cam.zoom;
-  const left = cam.x - vw / 2;
-  const top = cam.y - vh / 2;
-  const drawH = vh * scaleEff;
-  const oy = (stageH - drawH) / 2;
-  return { scaleEff, vw, vh, left, top, oy };
+function layoutCrop(crop) {
+  activeScale = Math.max(1, Math.floor(stageW / crop.w));
+  const drawW = crop.w * activeScale;
+  const drawH = crop.h * activeScale;
+  activeOx = (stageW - drawW) / 2;
+  activeOy = (stageH - drawH) / 2;
+  activeCrop = crop;
+}
+
+function fillFrameAmbient() {
+  const floorScreen = activeOy + (CFG.room.floorTop - activeCrop.y) * activeScale;
+  ctx.fillStyle = CFG.room.wall;
+  ctx.fillRect(0, 0, stageW, stageH);
+  ctx.fillStyle = CFG.room.floor;
+  ctx.fillRect(0, floorScreen, stageW, stageH - floorScreen);
 }
 
 function sceneToScreen(sx, sy) {
-  const { scaleEff, left, top, oy } = viewRect();
-  return { x: (sx - left) * scaleEff, y: oy + (sy - top) * scaleEff };
+  return {
+    x: activeOx + (sx - activeCrop.x) * activeScale,
+    y: activeOy + (sy - activeCrop.y) * activeScale
+  };
 }
 
 function screenToScene(px, py) {
-  const { scaleEff, left, top, oy } = viewRect();
-  return { x: left + px / scaleEff, y: top + (py - oy) / scaleEff };
+  return {
+    x: activeCrop.x + (px - activeOx) / activeScale,
+    y: activeCrop.y + (py - activeOy) / activeScale
+  };
 }
 
-function drawAmbientBands() {
-  const wall = CFG.room.wall;
-  const floor = CFG.room.floor;
-  const { scaleEff, left, top, oy, vh } = viewRect();
-  const floorSceneY = CFG.room.floorTop;
-  const floorScreenY = oy + (floorSceneY - top) * scaleEff;
-
-  ctx.fillStyle = wall;
-  ctx.fillRect(0, 0, stageW, stageH);
-  ctx.fillStyle = floor;
-  ctx.fillRect(0, Math.max(0, floorScreenY), stageW, stageH - Math.max(0, floorScreenY));
-
-  const bandTop = oy;
-  const bandBot = oy + vh * scaleEff;
-  if (bandTop > 0) {
-    ctx.fillStyle = wall;
-    ctx.fillRect(0, 0, stageW, bandTop);
-  }
-  if (bandBot < stageH) {
-    ctx.fillStyle = floor;
-    ctx.fillRect(0, bandBot, stageW, stageH - bandBot);
-  }
-}
-
-function drawRoom() {
+function drawExtendedRoom() {
+  const ft = CFG.room.floorTop;
   ctx.fillStyle = CFG.room.wall;
-  ctx.fillRect(0, 0, SW, SH);
+  ctx.fillRect(-160, -160, 320, 160 + ft);
   ctx.fillStyle = CFG.room.floor;
-  ctx.fillRect(0, CFG.room.floorTop, SW, SH - CFG.room.floorTop);
+  ctx.fillRect(-160, ft, 320, 200);
 }
 
 function drawImg(file, x, y, flip = false) {
@@ -252,69 +195,91 @@ function drawImg(file, x, y, flip = false) {
   ctx.restore();
 }
 
+function drawSprite(key, x, y, flip = false) {
+  drawImg(spriteFile(key), x, y, flip);
+}
+
 function catBehindLane(cx, cy, spriteKey) {
   if (spriteKey === 'peek_0' || spriteKey === 'peek_1') return false;
-  const im = images[SPRITE_MANIFEST[spriteKey]];
+  const im = images[spriteFile(spriteKey)];
   if (!im) return false;
   const feetY = cy + im.height - 1;
   return feetY <= 43 && cx + im.width > 50 && cx < 94;
 }
 
 function getCamilleBeat(t) {
-  if (t < 4) return null;
-  if (t >= 10 && t < 12.4) return 'bend';
-  return 'stand';
+  const sh = shotAtTime(t).id;
+  if (sh === 3) return 'stand';
+  if (sh === 6) return 'hug';
+  if (sh === 7) return 'standSeen';
+  return null;
 }
 
 function camilleX(t) {
-  if (t < 4) return -20;
-  if (t < 6) return -20 + ((t - 4) / 2) * (CFG.camille.beats.stand.anchor.x + 20);
+  const sh = shotAtTime(t).id;
+  if (sh === 3) {
+    const prog = Math.min(1, (t - 3.5) / 2);
+    return -20 + prog * (CFG.camille.beats.stand.anchor.x + 20);
+  }
+  if (sh === 7) return CFG.camille.beats.standSeen.anchor.x;
+  if (sh === 6) return CFG.camille.beats.hug.anchor.x;
   return CFG.camille.beats.stand.anchor.x;
 }
 
 function getCatState(t) {
   const a = CFG.anchors;
-  if (t < 2) return { key: 'found_0', x: a.catFront.x, y: a.catFront.y, flip: false };
-  if (t < 4) {
-    const prog = (t - 2) / 2;
-    const xs = [52, 56, 60, 64];
+  const sh = shotAtTime(t).id;
+
+  if (sh === 1) return null;
+  if (sh === 2) {
+    if (t < 2.2) return { key: 'found_0', x: a.catFront.x, y: a.catFront.y, flip: false };
+    const prog = (t - 2.2) / 1.1;
+    const xs = [52, 48, 44, 40];
     const idx = Math.min(3, Math.floor(prog * xs.length));
     return { key: `walk_side_${idx % 3}`, x: xs[idx], y: a.catBehindY, flip: false };
   }
-  if (t < 8) return null;
-  if (t < 8.35) return { key: 'peek_0', x: a.peek.x, y: a.peek.y, flip: false };
-  if (t < 8.7) return { key: 'peek_1', x: a.peek.x, y: a.peek.y, flip: false };
-  if (t < 10) return null;
-  if (t < 12) {
+  if (sh === 3 || sh === 4) return null;
+  if (sh === 5) {
+    if (t < 8.35) return { key: 'peek_0', x: a.peek.x, y: a.peek.y, flip: false };
+    if (t < 8.7) return { key: 'peek_1', x: a.peek.x, y: a.peek.y, flip: false };
+    return null;
+  }
+  if (sh === 6) {
     const prog = (t - 10) / 2;
     const x = Math.round(94 - prog * (94 - a.catFront.x));
     return { key: `walk_side_${Math.floor(t * 5) % 3}`, x, y: a.catFront.y, flip: true };
   }
-  if (t < 13.2) return { key: 'found_0', x: a.catFront.x, y: a.catFront.y, flip: false };
-  if (t < 14) return { key: 'glance', x: a.catFront.x, y: a.catFront.y, flip: false };
-  if (t < 14.35) return { key: 'found_0', x: a.catFront.x, y: a.catFront.y, flip: false };
-  if (t < 14.7) return { key: 'found_0', x: 53, y: 43, flip: false };
-  if (t < 15) return { key: 'found_0', x: 55, y: 36, flip: false };
+  if (sh === 7) return { key: 'found_0', x: a.catFront.x, y: a.catFront.y, flip: false };
+  if (sh === 8) {
+    if (t < 14.2) return { key: 'glance', x: a.catFront.x, y: a.catFront.y, flip: false };
+    if (t < 14.55) return { key: 'look_cam_0', x: a.catFront.x, y: a.catFront.y, flip: false };
+    if (t < 14.85) return { key: 'look_cam_1', x: a.catFront.x, y: a.catFront.y, flip: false };
+    if (t < 15) return { key: 'found_0', x: 54, y: 40, flip: false };
+  }
   return null;
 }
 
 function tailVisible(t) {
-  if (t < 4) return false;
   if (t >= 8.7) return false;
-  if (t >= 8 && phase !== 'waitTail') return false;
+  if (t < 1.5) return true;
+  if (t >= 1.5 && t < 2.3) return false;
   return true;
 }
 
 function updateBubble(t) {
-  if (t >= 0.2 && t < 2) {
+  const sh = shotAtTime(t).id;
+  if (sh === 1) {
+    bubbleText = CFG.lines.ou;
+    bubbleKind = 'off';
+  } else if (sh === 2) {
     bubbleText = CFG.lines.devant;
     bubbleKind = 'off';
-  } else if ((t >= 4.3 && t < 6) || phase === 'waitTail') {
-    bubbleText = CFG.lines.ou;
-    bubbleKind = 'camille';
-  } else if (t >= 8.2 && t < 10) {
+  } else if (sh === 5) {
     bubbleText = CFG.lines.derriere;
     bubbleKind = 'camille';
+  } else if (phase === 'waitTail') {
+    bubbleText = null;
+    bubbleKind = null;
   } else {
     bubbleText = null;
     bubbleKind = null;
@@ -322,14 +287,16 @@ function updateBubble(t) {
 }
 
 function camilleHeadScene(t) {
+  const beatName = getCamilleBeat(t);
+  if (!beatName) return null;
+  const beat = CFG.camille.beats[beatName];
   const cx = camilleX(t);
-  const cy = CFG.camille.beats.stand.anchor.y;
-  return { x: cx + 6, y: cy + 2 };
+  return { x: cx + 6, y: beat.anchor.y + 2 };
 }
 
 function camilleOnScreen(t) {
-  if (!getCamilleBeat(t)) return false;
   const head = camilleHeadScene(t);
+  if (!head) return false;
   const tip = sceneToScreen(head.x, head.y);
   return tip.x >= 24 && tip.x <= stageW - 24 && tip.y >= 16 && tip.y <= stageH - 16;
 }
@@ -356,7 +323,7 @@ function wrapLines(text, maxWidth, measure) {
   return lines.slice(0, 2);
 }
 
-function drawBubbles(now) {
+function drawBubbles() {
   bctx.clearRect(0, 0, stageW, stageH);
   if (!bubbleText || phase === 'overlay' || phase === 'done') return;
 
@@ -374,13 +341,12 @@ function drawBubbles(now) {
   const bh = lines.length * lineH + padY * 2;
 
   const offVoice = bubbleUsesOffscreenVoice(bubbleKind, sceneT);
-  const { oy } = viewRect();
   let bx;
   let by;
   let tip = null;
   if (offVoice) {
     bx = 12;
-    by = Math.max(14, oy + 16);
+    by = Math.max(14, activeOy + 16);
   } else {
     const anchor = camilleHeadScene(sceneT);
     tip = sceneToScreen(anchor.x, anchor.y);
@@ -432,13 +398,10 @@ function roundRectB(x, y, w, h, r) {
 function drawTapGlowRing(now) {
   if (phase !== 'waitTail' || !idleGlow) return;
   const h = CFG.anchors.tailHitbox;
-  const cx = h.x + h.w / 2;
-  const cy = h.y + h.h / 2;
-  const p = sceneToScreen(cx, cy);
-  const { scaleEff } = viewRect();
+  const p = sceneToScreen(h.x + h.w / 2, h.y + h.h / 2);
   const pulse = 0.55 + 0.45 * Math.sin(now * 0.008);
-  const rOuter = (14 + pulse * 8) * (scaleEff / pixelScale);
-  const rInner = (8 + pulse * 4) * (scaleEff / pixelScale);
+  const rOuter = (14 + pulse * 8) * (activeScale / 4);
+  const rInner = (8 + pulse * 4) * (activeScale / 4);
   bctx.save();
   bctx.strokeStyle = `rgba(255, 200, 80, ${0.45 + pulse * 0.4})`;
   bctx.lineWidth = 4 + pulse * 3;
@@ -468,47 +431,54 @@ function drawSceneContent(t) {
   const cx = camilleX(t);
   const catBehind = cat && catBehindLane(cat.x, cat.y, cat.key);
 
-  if (cat && catBehind) drawImg(SPRITE_MANIFEST[cat.key], cat.x, cat.y, cat.flip);
+  if (cat && catBehind) drawSprite(cat.key, cat.x, cat.y, cat.flip);
   if (beat && CFG.camille.beats[beat].layer === 'behind') drawCamille(beat, cx);
   drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
   if (tailVisible(t)) {
     const tailKey = tailPhase % 2 === 0 ? 'tail_0' : 'tail_1';
-    drawImg(SPRITE_MANIFEST[tailKey], CFG.anchors.tail.x, CFG.anchors.tail.y);
+    drawSprite(tailKey, CFG.anchors.tail.x, CFG.anchors.tail.y);
   }
   if (beat && CFG.camille.beats[beat].layer === 'front') drawCamille(beat, cx);
-  if (cat && !catBehind) drawImg(SPRITE_MANIFEST[cat.key], cat.x, cat.y, cat.flip);
+  if (cat && !catBehind) drawSprite(cat.key, cat.x, cat.y, cat.flip);
+}
+
+function renderSceneLayer(crop, t, warmTint) {
+  layoutCrop(crop);
+  fillFrameAmbient();
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  ctx.translate(activeOx, activeOy);
+  ctx.scale(activeScale, activeScale);
+  ctx.translate(-crop.x, -crop.y);
+  drawExtendedRoom();
+  drawSceneContent(t);
+  ctx.restore();
+  if (warmTint) {
+    ctx.fillStyle = 'rgba(235, 195, 140, 0.32)';
+    ctx.fillRect(0, 0, stageW, stageH);
+  }
 }
 
 function render(now) {
   if (!CFG) return;
 
   if (phase === 'overlay') {
-    cam = { x: 48, y: 33, zoom: ZOOM_WIDE };
-    camFrom = { ...cam };
-    camTo = { ...cam };
-  } else {
-    updateCamera(now);
-    syncCameraToTimeline(sceneT, now);
-  }
-
-  drawAmbientBands();
-
-  const { scaleEff, left, top, oy } = viewRect();
-  ctx.save();
-  ctx.imageSmoothingEnabled = false;
-  ctx.translate(0, oy);
-  ctx.scale(scaleEff, scaleEff);
-  ctx.translate(-left, -top);
-  drawRoom();
-  if (phase === 'overlay') drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
-  else drawSceneContent(sceneT);
-  ctx.restore();
-
-  if (phase === 'overlay') {
+    layoutCrop(CFG.startCrop);
+    fillFrameAmbient();
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.translate(activeOx, activeOy);
+    ctx.scale(activeScale, activeScale);
+    ctx.translate(-CFG.startCrop.x, -CFG.startCrop.y);
+    drawExtendedRoom();
+    drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
+    ctx.restore();
     bctx.clearRect(0, 0, stageW, stageH);
   } else {
+    const shot = shotAtTime(sceneT);
+    renderSceneLayer(shot.crop, sceneT, !!shot.warmTint);
     updateBubble(sceneT);
-    drawBubbles(now);
+    drawBubbles();
     drawTapGlowRing(now);
   }
 
@@ -523,9 +493,7 @@ function render(now) {
 
 function hitTail(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
-  const px = clientX - rect.left;
-  const py = clientY - rect.top;
-  const s = screenToScene(px, py);
+  const s = screenToScene(clientX - rect.left, clientY - rect.top);
   const h = CFG.anchors.tailHitbox;
   const m = CFG.anchors.touchMargin;
   return s.x >= h.x - m && s.x <= h.x + h.w + m && s.y >= h.y - m && s.y <= h.y + h.h + m;
@@ -538,7 +506,6 @@ function onTailTap() {
   sceneT = 8;
   waitSince = 0;
   idleGlow = false;
-  lastShotKey = '';
 }
 
 function pointerDown(e) {
@@ -558,8 +525,8 @@ function buildThumb(kind) {
   t.fillRect(0, 0, 96, 64);
   t.fillStyle = CFG.room.floor;
   t.fillRect(0, 44, 96, 20);
-  const draw = (file, x, y, flip) => {
-    const im = images[SPRITE_MANIFEST[file]] || images[file];
+  const draw = (key, x, y, flip) => {
+    const im = images[spriteFile(key)];
     if (!im) return;
     if (!flip) t.drawImage(im, x, y);
     else {
@@ -610,8 +577,6 @@ function startScene() {
   idleGlow = false;
   fadeAlpha = 0;
   lastIdleBellFrame = -1;
-  lastShotKey = '';
-  cam = { x: 48, y: 33, zoom: ZOOM_WIDE };
   overlay.hidden = true;
   wordcard.hidden = true;
   fadeVeil.hidden = true;
@@ -633,18 +598,18 @@ function tick(now) {
 
   if (phase === 'play') {
     sceneT += dt;
-    if (sceneT >= 2 && sceneT < 4) {
+    if (sceneT >= 2.2 && sceneT < 3.5) {
       padTimer += dt;
       if (padTimer > 0.22) {
         padStep();
         padTimer = 0;
       }
     }
-    if (sceneT >= 4) tailPhase = Math.floor(now / 350) % 2;
-    if (sceneT >= 6) {
+    if (sceneT >= 1.5) tailPhase = Math.floor(now / 350) % 2;
+    if (sceneT >= 5.5) {
       phase = 'waitTail';
       waitSince = now;
-      sceneT = 6;
+      sceneT = 5.5;
     }
   } else if (phase === 'waitTail') {
     tailPhase = Math.floor(now / 350) % 2;
@@ -680,30 +645,39 @@ overlay.addEventListener('keydown', (e) => {
 replayBtn.addEventListener('click', resetScene);
 canvas.addEventListener('pointerdown', pointerDown);
 
+function setPhaseForT(t) {
+  if (t >= 15) phase = 'done';
+  else if (t >= 8) phase = 'play2';
+  else if (t >= 5.5) phase = 'waitTail';
+  else phase = 'play';
+}
+
 window.__sofaScene = {
   getPhase: () => phase,
   getT: () => sceneT,
-  getZoom: () => cam.zoom,
+  getShot: () => shotAtTime(sceneT).id,
   start: startScene,
   tapTail: onTailTap,
   setT(t) {
     sceneT = t;
-    if (t >= 15) phase = 'done';
-    else if (t >= 8) phase = 'play2';
-    else if (t >= 6) phase = 'waitTail';
-    else phase = 'play';
-    lastShotKey = '';
-    const shot = cameraShotForTime(t);
-    cam = { x: shot.cx, y: shot.cy, zoom: shot.zoom };
-    camFrom = { ...cam };
-    camTo = { ...cam };
+    setPhaseForT(t);
+    render(performance.now());
+  },
+  setShot(id) {
+    const sh = CFG.shots.find((s) => s.id === id);
+    if (!sh) return;
+    sceneT = (sh.t0 + sh.t1) / 2;
+    setPhaseForT(sceneT);
+    if (id === 4) {
+      phase = 'waitTail';
+      sceneT = 5.75;
+    }
     render(performance.now());
   },
   setIdleGlow(on) {
     idleGlow = on;
     phase = 'waitTail';
-    sceneT = 6;
-    lastShotKey = '';
+    sceneT = 5.75;
     render(performance.now());
   },
   showBlack() {

@@ -21,18 +21,18 @@ test('sofa scene screenshots and no console errors', async ({ page }) => {
 
   await page.click('#overlay');
   await page.waitForFunction(() => window.__sofaScene?.getPhase() === 'play');
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(800);
   await page.screenshot({ path: path.join(OUT, '02-t1-bubble.png'), fullPage: true });
 
-  await page.waitForFunction(() => window.__sofaScene?.getPhase() === 'waitTail', { timeout: 15000 });
+  await page.waitForFunction(() => window.__sofaScene?.getPhase() === 'waitTail', { timeout: 20000 });
   await page.evaluate(() => {
-    window.__sofaScene.setT(6);
+    window.__sofaScene.setShot(4);
   });
   await page.waitForTimeout(300);
   await page.screenshot({ path: path.join(OUT, '03-tail-question.png'), fullPage: true });
 
   await page.evaluate(() => {
-    window.__sofaScene.setT(6);
+    window.__sofaScene.setShot(4);
     window.__sofaScene.setIdleGlow(true);
   });
   await page.waitForTimeout(300);
