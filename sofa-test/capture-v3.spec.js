@@ -28,6 +28,9 @@ async function captureAt(page, cfg) {
   await page.evaluate((c) => {
     if (c.shot) window.__sofaScene.setShot(c.shot);
     else window.__sofaScene.setT(c.t);
+    if (c.idleGlow) {
+      window.__sofaScene.enableTapRing(true);
+    }
   }, cfg);
   if (cfg.t != null) {
     await page.waitForFunction((t) => Math.abs(window.__sofaScene.getT() - t) < 0.02, cfg.t);
@@ -62,7 +65,7 @@ test('v3 portrait screenshots', async ({ page }) => {
     { file: 'shot-01.png', t: 0.8, shotId: 1 },
     { file: 'shot-02.png', t: 2.05, shotId: 2 },
     { file: 'shot-03.png', t: 5.42, shotId: 3 },
-    { file: 'shot-04.png', t: 5.85, shotId: 4 },
+    { file: 'shot-04.png', t: 6.2, shotId: 4, idleGlow: true },
     { file: 'shot-05.png', t: 9.0, shotId: 5 },
     { file: 'shot-06.png', t: 11.2, shotId: 6 },
     { file: 'shot-07.png', t: 12.5, shotId: 7 },

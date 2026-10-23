@@ -787,6 +787,10 @@ window.__sofaScene = {
     phase = 'waitTail';
   },
   getTailRevealTime: () => tailRevealTime(),
+  enableTapRing(on) {
+    idleGlow = !!on;
+    render(performance.now());
+  },
   showBlack() {
     fadeAlpha = 1;
     fadeVeil.hidden = false;
