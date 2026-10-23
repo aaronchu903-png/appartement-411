@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "_readme": "v4: hub living-room backdrop, tail medium crops (cropLibrary), shot 6 tighter wide.",
+  "_readme": "v4 plan B: side-view wall/floor (v3), cropLibrary tail medium for shots 1/4, tighter wide gag shot 6.",
   "assetsBase": "assets/",
   "scene": { "width": 96, "height": 64 },
   "room": {
@@ -11,29 +11,17 @@
     "floorTop": 44
   },
   "cropLibrary": {
-    "tailMedium": { "x": 22, "y": -4, "w": 42, "h": 72, "_note": "Sofa left end + tail; ~3× scale on phone (not 80× close-up)" },
-    "medium": { "x": 18, "y": -8, "w": 45, "h": 80 },
-    "wide": { "x": 24, "y": -36, "w": 72, "h": 128 },
-    "wideGag": { "x": 28, "y": -30, "w": 64, "h": 116, "_note": "Shot 6: whole sofa, slightly tighter for larger cat on phone" }
-  },
-  "backdrop": {
-    "_assetsFrom": "legacy/prototype/hub/assets/A/ (frozen Days 1–6 apartment, style Jour)",
-    "hub": { "origin": { "x": 0, "y": 162 }, "scale": 0.5 },
-    "floorWalls": {
-      "file": "hub_floor_walls.png",
-      "src": { "x": 0, "y": 162, "w": 192, "h": 128 }
+    "tailMedium": {
+      "x": 24,
+      "y": -8,
+      "w": 40,
+      "h": 72,
+      "_note": "Sofa left end + tail (47,38); 9:16 medium, fills phone like v3"
     },
-    "windowPatch": { "file": "hub_window_patch.png", "hub": { "x": 0, "y": 0 } },
-    "curtains": [
-      { "file": "hub_curtain_l.png", "hub": { "x": 43, "y": 162 } },
-      { "file": "hub_curtain_r.png", "hub": { "x": 76, "y": 162 } }
-    ],
-    "props": [
-      { "file": "hub_rug.png", "hubPlace": [48, 248], "hubAnchor": [32, 39], "layer": "underSofa" },
-      { "file": "hub_lamp.png", "hubPlace": [76, 191], "hubAnchor": [6, 35], "layer": "underSofa" },
-      { "file": "hub_splant.png", "hubPlace": [24, 303], "hubAnchor": [10, 33], "layer": "underSofa" }
-    ],
-    "warmOverlayAlpha": 0.32
+    "medium": { "x": 18, "y": -8, "w": 45, "h": 80 },
+    "mediumCamille": { "x": 28, "y": -8, "w": 45, "h": 80 },
+    "wide": { "x": 24, "y": -36, "w": 72, "h": 128 },
+    "wideGag": { "x": 28, "y": -30, "w": 64, "h": 116, "_note": "Shot 6: whole sofa, tighter than wide for readable cat" }
   },
   "wideCrop": { "x": 24, "y": -36, "w": 72, "h": 128 },
   "sofa": {
@@ -93,6 +81,7 @@
     "ouLineAt": 4.7,
     "tailRevealAfterOu": 0.5,
     "shot6Start": 10.3,
+    "shot6CatScale": 1.35,
     "sighAt": 12.3,
     "sceneEnd": 15.2
   },
@@ -106,13 +95,13 @@
     "touchMargin": 4
   },
   "shots": [
-    { "id": 1, "t0": 0, "t1": 1.5, "crop": "tailMedium", "layout": { "maxScale": 3 } },
+    { "id": 1, "t0": 0, "t1": 1.5, "crop": "tailMedium" },
     { "id": 2, "t0": 1.5, "t1": 3.5, "crop": "wide", "warmTint": true },
     { "id": 3, "t0": 3.5, "t1": 5.5, "crop": "medium" },
-    { "id": 4, "t0": 5.5, "t1": 8, "crop": "tailMedium", "layout": { "maxScale": 3 } },
+    { "id": 4, "t0": 5.5, "t1": 8, "crop": "tailMedium" },
     { "id": 5, "t0": 8, "t1": 10.3, "crop": { "x": 52, "y": 14, "w": 18, "h": 32 } },
     { "id": 6, "t0": 10.3, "t1": 12.2, "crop": "wideGag" },
-    { "id": 7, "t0": 12.2, "t1": 13.7, "crop": "medium" },
+    { "id": 7, "t0": 12.2, "t1": 13.7, "crop": "mediumCamille" },
     { "id": 8, "t0": 13.7, "t1": 15.2, "crop": { "x": 56, "y": 30, "w": 18, "h": 32 } }
   ],
   "startCrop": "wide",

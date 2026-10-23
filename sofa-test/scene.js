@@ -78,13 +78,6 @@ async function loadImages() {
     names.add(beat.file);
     if (beat.brush) names.add(beat.brush.file);
   }
-  const bd = CFG.backdrop;
-  if (bd) {
-    names.add(bd.floorWalls.file);
-    if (bd.windowPatch) names.add(bd.windowPatch.file);
-    for (const c of bd.curtains || []) names.add(c.file);
-    for (const p of bd.props || []) names.add(p.file);
-  }
   await Promise.all(
     [...names].map(
       (file) =>
@@ -170,8 +163,6 @@ function layoutCrop(crop, shotDef) {
   const sH = Math.floor(stageH / crop.h);
   let s = Math.max(1, Math.min(sW, sH));
   if (shotDef?.wideMargin) s = Math.max(1, s - 1);
-  const cap = shotDef?.layout?.maxScale;
-  if (cap) s = Math.min(s, Math.max(1, cap));
   activeScale = s;
   const drawW = crop.w * activeScale;
   const drawH = crop.h * activeScale;
@@ -215,62 +206,6 @@ function drawExtendedRoom(warm = false) {
   ctx.fillRect(-160, -160, 320, 160 + ft);
   ctx.fillStyle = floor;
   ctx.fillRect(-160, ft, 320, 200);
-}
-
-function hubToScene(hx, hy) {
-  const hub = CFG.backdrop?.hub || { origin: { x: 0, y: 0 }, scale: 0.5 };
-  const sc = hub.scale;
-  return {
-    x: (hx - hub.origin.x) * sc,
-    y: (hy - hub.origin.y) * sc
-  };
-}
-
-function drawHubBitmap(file, hubLeft, hubTop, hubW, hubH) {
-  const im = images[file];
-  if (!im) return;
-  const hub = CFG.backdrop.hub;
-  const sc = hub.scale;
-  const p = hubToScene(hubLeft, hubTop);
-  const dw = (hubW ?? im.width) * sc;
-  const dh = (hubH ?? im.height) * sc;
-  ctx.drawImage(im, 0, 0, hubW ?? im.width, hubH ?? im.height, p.x, p.y, dw, dh);
-}
-
-function drawLivingRoomBackdrop(warm = false) {
-  const bd = CFG.backdrop;
-  if (!bd) return;
-  const fw = bd.floorWalls;
-  const src = fw.src;
-  const im = images[fw.file];
-  if (im) {
-    const p = hubToScene(src.x, src.y);
-    ctx.drawImage(im, src.x, src.y, src.w, src.h, p.x, p.y, src.w * bd.hub.scale, src.h * bd.hub.scale);
-  }
-  if (bd.windowPatch) {
-    const w = bd.windowPatch;
-    drawHubBitmap(w.file, w.hub.x, w.hub.y);
-  }
-  for (const c of bd.curtains || []) {
-    drawHubBitmap(c.file, c.hub.x, c.hub.y);
-  }
-  for (const p of bd.props || []) {
-    if (p.layer !== 'underSofa') continue;
-    const hx = p.hubPlace[0] - p.hubAnchor[0];
-    const hy = p.hubPlace[1] - p.hubAnchor[1];
-    drawHubBitmap(p.file, hx, hy);
-  }
-  if (warm) {
-    const ft = CFG.room.floorTop;
-    const a = bd.warmOverlayAlpha ?? 0.32;
-    ctx.save();
-    ctx.globalAlpha = a;
-    ctx.fillStyle = CFG.room.wallWarm || CFG.room.wall;
-    ctx.fillRect(-160, -160, 320, 160 + ft);
-    ctx.fillStyle = CFG.room.floorWarm || CFG.room.floor;
-    ctx.fillRect(-160, ft, 320, 200);
-    ctx.restore();
-  }
 }
 
 function drawImg(file, x, y, flip = false) {
@@ -590,7 +525,17 @@ function drawSceneContent(t) {
   }
   if (beat && CFG.camille.beats[beat].layer === 'front') drawCamille(beat, cx);
   if (cat && !catBehind) {
-    drawSprite(cat.key, cat.x, cat.y, cat.flip);
+    const sh = shotAtTime(t).id;
+    const catScale = sh === 6 ? (CFG.timing?.shot6CatScale ?? 1.35) : 1;
+    if (catScale !== 1) {
+      ctx.save();
+      ctx.translate(cat.x, cat.y);
+      ctx.scale(catScale, catScale);
+      drawSprite(cat.key, 0, 0, cat.flip);
+      ctx.restore();
+    } else {
+      drawSprite(cat.key, cat.x, cat.y, cat.flip);
+    }
     lastCatDraw = { key: cat.key, x: cat.x, y: cat.y, flip: cat.flip };
   } else if (!cat) {
     lastCatDraw = null;
@@ -607,7 +552,6 @@ function renderSceneLayer(crop, t, shotDef) {
   ctx.scale(activeScale, activeScale);
   ctx.translate(-crop.x, -crop.y);
   drawExtendedRoom(warm);
-  drawLivingRoomBackdrop(warm);
   drawSceneContent(t);
   ctx.restore();
 }
@@ -624,7 +568,6 @@ function render(now) {
     ctx.scale(activeScale, activeScale);
     ctx.translate(-CFG.startCrop.x, -CFG.startCrop.y);
     drawExtendedRoom(false);
-    drawLivingRoomBackdrop(false);
     drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
     ctx.restore();
     bctx.clearRect(0, 0, stageW, stageH);
