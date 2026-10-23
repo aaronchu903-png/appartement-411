@@ -24,7 +24,7 @@ test('sofa scene screenshots and no console errors', async ({ page }) => {
   await page.waitForTimeout(800);
   await page.screenshot({ path: path.join(OUT, '02-t1-bubble.png'), fullPage: true });
 
-  await page.waitForFunction(() => window.__sofaScene?.getPhase() === 'waitTail', { timeout: 20000 });
+  await page.waitForFunction(() => window.__sofaScene?.getPhase() === 'waitTail', { timeout: 25000 });
   await page.evaluate(() => {
     window.__sofaScene.setShot(4);
   });

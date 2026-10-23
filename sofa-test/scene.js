@@ -27,6 +27,8 @@ let bubbleText = null;
 let bubbleKind = null;
 let padTimer = 0;
 let lastIdleBellFrame = -1;
+let sighedShot7 = false;
+let sighCueUntil = 0;
 
 let stageW = 390;
 let stageH = 700;
@@ -142,8 +144,12 @@ function shotAtTime(t) {
   return CFG.shots[CFG.shots.length - 1];
 }
 
-function layoutCrop(crop) {
-  activeScale = Math.max(1, Math.floor(stageW / crop.w));
+function layoutCrop(crop, shotDef) {
+  const sW = Math.floor(stageW / crop.w);
+  const sH = Math.floor(stageH / crop.h);
+  let s = Math.max(1, Math.min(sW, sH));
+  if (shotDef?.wideMargin) s = Math.max(1, s - 1);
+  activeScale = s;
   const drawW = crop.w * activeScale;
   const drawH = crop.h * activeScale;
   activeOx = (stageW - drawW) / 2;
@@ -151,11 +157,17 @@ function layoutCrop(crop) {
   activeCrop = crop;
 }
 
-function fillFrameAmbient() {
+function roomColors(warm) {
+  if (!warm) return { wall: CFG.room.wall, floor: CFG.room.floor };
+  return { wall: CFG.room.wallWarm || CFG.room.wall, floor: CFG.room.floorWarm || CFG.room.floor };
+}
+
+function fillFrameAmbient(warm = false) {
+  const { wall, floor } = roomColors(warm);
   const floorScreen = activeOy + (CFG.room.floorTop - activeCrop.y) * activeScale;
-  ctx.fillStyle = CFG.room.wall;
+  ctx.fillStyle = wall;
   ctx.fillRect(0, 0, stageW, stageH);
-  ctx.fillStyle = CFG.room.floor;
+  ctx.fillStyle = floor;
   ctx.fillRect(0, floorScreen, stageW, stageH - floorScreen);
 }
 
@@ -173,11 +185,12 @@ function screenToScene(px, py) {
   };
 }
 
-function drawExtendedRoom() {
+function drawExtendedRoom(warm = false) {
   const ft = CFG.room.floorTop;
-  ctx.fillStyle = CFG.room.wall;
+  const { wall, floor } = roomColors(warm);
+  ctx.fillStyle = wall;
   ctx.fillRect(-160, -160, 320, 160 + ft);
-  ctx.fillStyle = CFG.room.floor;
+  ctx.fillStyle = floor;
   ctx.fillRect(-160, ft, 320, 200);
 }
 
@@ -207,22 +220,28 @@ function catBehindLane(cx, cy, spriteKey) {
   return feetY <= 43 && cx + im.width > 50 && cx < 94;
 }
 
+function camilleWalkX(t) {
+  const enterEnd = 5.5;
+  const enterStart = 3.5;
+  const dest = CFG.camille.beats.stand.anchor.x;
+  if (t < enterStart) return -20;
+  if (t >= enterEnd) return dest;
+  const prog = (t - enterStart) / (enterEnd - enterStart);
+  return -20 + prog * (dest + 20);
+}
+
 function getCamilleBeat(t) {
   const sh = shotAtTime(t).id;
-  if (sh === 3) return 'stand';
+  if (t >= 3.5 && t < 5.55) return 'stand';
   if (sh === 6) return 'hug';
   if (sh === 7) return 'standSeen';
   return null;
 }
 
 function camilleX(t) {
-  const sh = shotAtTime(t).id;
-  if (sh === 3) {
-    const prog = Math.min(1, (t - 3.5) / 2);
-    return -20 + prog * (CFG.camille.beats.stand.anchor.x + 20);
-  }
-  if (sh === 7) return CFG.camille.beats.standSeen.anchor.x;
-  if (sh === 6) return CFG.camille.beats.hug.anchor.x;
+  if (t >= 3.5 && t < 5.55) return camilleWalkX(t);
+  if (shotAtTime(t).id === 7) return CFG.camille.beats.standSeen.anchor.x;
+  if (shotAtTime(t).id === 6) return CFG.camille.beats.hug.anchor.x;
   return CFG.camille.beats.stand.anchor.x;
 }
 
@@ -238,7 +257,7 @@ function getCatState(t) {
     const idx = Math.min(3, Math.floor(prog * xs.length));
     return { key: `walk_side_${idx % 3}`, x: xs[idx], y: a.catBehindY, flip: false };
   }
-  if (sh === 3 || sh === 4) return null;
+  if (sh === 3 || sh === 4 || (phase === 'waitTail' && t < 8)) return null;
   if (sh === 5) {
     if (t < 8.35) return { key: 'peek_0', x: a.peek.x, y: a.peek.y, flip: false };
     if (t < 8.7) return { key: 'peek_1', x: a.peek.x, y: a.peek.y, flip: false };
@@ -259,27 +278,37 @@ function getCatState(t) {
   return null;
 }
 
+function ouLineTime() {
+  return CFG.timing?.ouLineAt ?? 4.7;
+}
+
+function tailRevealTime() {
+  return ouLineTime() + (CFG.timing?.tailRevealAfterOu ?? 0.5);
+}
+
 function tailVisible(t) {
   if (t >= 8.7) return false;
   if (t < 1.5) return true;
   if (t >= 1.5 && t < 2.3) return false;
-  return true;
+  if (t >= ouLineTime() && t < tailRevealTime()) return false;
+  return t < 8.7;
+}
+
+function tailTappable() {
+  return tailVisible(sceneT) && sceneT >= tailRevealTime() && phase === 'waitTail';
 }
 
 function updateBubble(t) {
   const sh = shotAtTime(t).id;
-  if (sh === 1) {
-    bubbleText = CFG.lines.ou;
-    bubbleKind = 'off';
-  } else if (sh === 2) {
+  if (sh === 2 && t >= 1.65 && t < 2.35) {
     bubbleText = CFG.lines.devant;
     bubbleKind = 'off';
+  } else if (t >= ouLineTime() && t < 8) {
+    bubbleText = CFG.lines.ou;
+    bubbleKind = 'camille';
   } else if (sh === 5) {
     bubbleText = CFG.lines.derriere;
     bubbleKind = 'camille';
-  } else if (phase === 'waitTail') {
-    bubbleText = null;
-    bubbleKind = null;
   } else {
     bubbleText = null;
     bubbleKind = null;
@@ -395,6 +424,23 @@ function roundRectB(x, y, w, h, r) {
   bctx.closePath();
 }
 
+function drawSighCue(now) {
+  if (now > sighCueUntil || shotAtTime(sceneT).id !== 7) return;
+  const head = camilleHeadScene(sceneT);
+  if (!head) return;
+  const p = sceneToScreen(head.x + 5, head.y);
+  const alpha = Math.min(1, (sighCueUntil - now) / 900);
+  bctx.save();
+  bctx.strokeStyle = `rgba(75, 65, 58, ${0.45 * alpha})`;
+  bctx.lineWidth = 1.5;
+  for (let i = 0; i < 3; i++) {
+    bctx.beginPath();
+    bctx.arc(p.x + i * 6, p.y - 6 - i * 5, 2 + i * 0.5, 0, Math.PI * 2);
+    bctx.stroke();
+  }
+  bctx.restore();
+}
+
 function drawTapGlowRing(now) {
   if (phase !== 'waitTail' || !idleGlow) return;
   const h = CFG.anchors.tailHitbox;
@@ -442,44 +488,47 @@ function drawSceneContent(t) {
   if (cat && !catBehind) drawSprite(cat.key, cat.x, cat.y, cat.flip);
 }
 
-function renderSceneLayer(crop, t, warmTint) {
-  layoutCrop(crop);
-  fillFrameAmbient();
+function renderSceneLayer(crop, t, shotDef) {
+  const warm = !!(shotDef && shotDef.warmTint);
+  layoutCrop(crop, shotDef);
+  fillFrameAmbient(warm);
   ctx.save();
   ctx.imageSmoothingEnabled = false;
   ctx.translate(activeOx, activeOy);
   ctx.scale(activeScale, activeScale);
   ctx.translate(-crop.x, -crop.y);
-  drawExtendedRoom();
+  drawExtendedRoom(warm);
   drawSceneContent(t);
   ctx.restore();
-  if (warmTint) {
-    ctx.fillStyle = 'rgba(235, 195, 140, 0.32)';
-    ctx.fillRect(0, 0, stageW, stageH);
-  }
 }
 
 function render(now) {
   if (!CFG) return;
 
   if (phase === 'overlay') {
-    layoutCrop(CFG.startCrop);
-    fillFrameAmbient();
+    layoutCrop(CFG.startCrop, { wideMargin: true });
+    fillFrameAmbient(false);
     ctx.save();
     ctx.imageSmoothingEnabled = false;
     ctx.translate(activeOx, activeOy);
     ctx.scale(activeScale, activeScale);
     ctx.translate(-CFG.startCrop.x, -CFG.startCrop.y);
-    drawExtendedRoom();
+    drawExtendedRoom(false);
     drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
     ctx.restore();
     bctx.clearRect(0, 0, stageW, stageH);
   } else {
     const shot = shotAtTime(sceneT);
-    renderSceneLayer(shot.crop, sceneT, !!shot.warmTint);
+    if (shot.id === 7 && !sighedShot7 && sceneT >= 12.05) {
+      sighedShot7 = true;
+      sigh();
+      sighCueUntil = now + 900;
+    }
+    renderSceneLayer(shot.crop, sceneT, shot);
     updateBubble(sceneT);
     drawBubbles();
     drawTapGlowRing(now);
+    drawSighCue(now);
   }
 
   if (fadeAlpha > 0) {
@@ -500,7 +549,7 @@ function hitTail(clientX, clientY) {
 }
 
 function onTailTap() {
-  if (phase !== 'waitTail') return;
+  if (!tailTappable()) return;
   bell();
   phase = 'play2';
   sceneT = 8;
@@ -577,6 +626,8 @@ function startScene() {
   idleGlow = false;
   fadeAlpha = 0;
   lastIdleBellFrame = -1;
+  sighedShot7 = false;
+  sighCueUntil = 0;
   overlay.hidden = true;
   wordcard.hidden = true;
   fadeVeil.hidden = true;
@@ -606,10 +657,11 @@ function tick(now) {
       }
     }
     if (sceneT >= 1.5) tailPhase = Math.floor(now / 350) % 2;
-    if (sceneT >= 5.5) {
+    if (sceneT >= tailRevealTime()) {
       phase = 'waitTail';
       waitSince = now;
-      sceneT = 5.5;
+      if (sceneT < tailRevealTime()) sceneT = tailRevealTime();
+      tailPhase = 1;
     }
   } else if (phase === 'waitTail') {
     tailPhase = Math.floor(now / 350) % 2;
@@ -648,7 +700,7 @@ canvas.addEventListener('pointerdown', pointerDown);
 function setPhaseForT(t) {
   if (t >= 15) phase = 'done';
   else if (t >= 8) phase = 'play2';
-  else if (t >= 5.5) phase = 'waitTail';
+  else if (t >= tailRevealTime()) phase = 'waitTail';
   else phase = 'play';
 }
 
@@ -670,16 +722,17 @@ window.__sofaScene = {
     setPhaseForT(sceneT);
     if (id === 4) {
       phase = 'waitTail';
-      sceneT = 5.75;
+      sceneT = tailRevealTime() + 0.15;
     }
     render(performance.now());
   },
   setIdleGlow(on) {
     idleGlow = on;
     phase = 'waitTail';
-    sceneT = 5.75;
+    sceneT = tailRevealTime() + 0.15;
     render(performance.now());
   },
+  getTailRevealTime: () => tailRevealTime(),
   showBlack() {
     fadeAlpha = 1;
     fadeVeil.hidden = false;

@@ -35,10 +35,10 @@ test('v3 portrait screenshots', async ({ page }) => {
   const shots = [
     { file: 'shot-01.png', t: 0.8 },
     { file: 'shot-02.png', t: 2.5 },
-    { file: 'shot-03.png', t: 4.5 },
+    { file: 'shot-03.png', t: 4.2 },
     { file: 'shot-04.png', shot: 4 },
     { file: 'shot-05.png', t: 9 },
-    { file: 'shot-06.png', t: 11 },
+    { file: 'shot-06.png', t: 10.85 },
     { file: 'shot-07.png', t: 12.8 },
     { file: 'shot-08.png', t: 14.5 }
   ];
@@ -51,6 +51,18 @@ test('v3 portrait screenshots', async ({ page }) => {
     await page.waitForTimeout(250);
     await saveBoth(page, s.file);
   }
+
+  await page.evaluate(() => {
+    window.__sofaScene.setT(4.85);
+  });
+  await page.waitForTimeout(200);
+  await saveBoth(page, 'shot-ou-bubble-only.png');
+
+  await page.evaluate(() => {
+    window.__sofaScene.setT(5.35);
+  });
+  await page.waitForTimeout(200);
+  await saveBoth(page, 'shot-ou-tail-visible.png');
 
   expect(errors, errors.join('; ')).toEqual([]);
 });

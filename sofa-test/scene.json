@@ -6,8 +6,11 @@
   "room": {
     "wall": "#e3d3c6",
     "floor": "#9d8064",
+    "wallWarm": "#ead4b8",
+    "floorWarm": "#a88668",
     "floorTop": 44
   },
+  "wideCrop": { "x": 24, "y": -36, "w": 72, "h": 128 },
   "sofa": {
     "file": "sofa_early.png",
     "x": 50,
@@ -61,6 +64,10 @@
       }
     }
   },
+  "timing": {
+    "ouLineAt": 4.7,
+    "tailRevealAfterOu": 0.5
+  },
   "anchors": {
     "catFront": { "x": 52, "y": 44 },
     "catBehindY": 36,
@@ -71,15 +78,15 @@
   },
   "shots": [
     { "id": 1, "t0": 0, "t1": 1.5, "crop": { "x": 43, "y": 31, "w": 9, "h": 16 } },
-    { "id": 2, "t0": 1.5, "t1": 3.5, "crop": { "x": 24, "y": -48, "w": 72, "h": 128 }, "warmTint": true },
+    { "id": 2, "t0": 1.5, "t1": 3.5, "crop": { "x": 24, "y": -36, "w": 72, "h": 128 }, "warmTint": true },
     { "id": 3, "t0": 3.5, "t1": 5.5, "crop": { "x": 18, "y": -8, "w": 45, "h": 80 } },
     { "id": 4, "t0": 5.5, "t1": 8, "crop": { "x": 43, "y": 31, "w": 9, "h": 16 } },
     { "id": 5, "t0": 8, "t1": 10, "crop": { "x": 52, "y": 14, "w": 18, "h": 32 } },
-    { "id": 6, "t0": 10, "t1": 12, "crop": { "x": 24, "y": -48, "w": 72, "h": 128 } },
+    { "id": 6, "t0": 10, "t1": 12, "crop": { "x": 24, "y": -36, "w": 72, "h": 128 }, "wideMargin": true },
     { "id": 7, "t0": 12, "t1": 13.5, "crop": { "x": 28, "y": -8, "w": 45, "h": 80 } },
     { "id": 8, "t0": 13.5, "t1": 15, "crop": { "x": 46, "y": 30, "w": 18, "h": 32 } }
   ],
-  "startCrop": { "x": 24, "y": -48, "w": 72, "h": 128 },
+  "startCrop": { "x": 24, "y": -36, "w": 72, "h": 128 },
   "lines": {
     "devant": "Le chat est devant le canapé.",
     "ou": "Où est le chat\u202F?",

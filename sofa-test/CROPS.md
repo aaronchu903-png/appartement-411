@@ -5,11 +5,11 @@ Rects may go past the room: pad by repeating the edge (wall #e3d3c6 above, floor
 | # | t | shot | rect (x, y, w, h) | scale | reference |
 |---|---|---|---|---|---|
 | 1 | 0.0–1.5 s | CLOSE tail, sofa left end | (43, 31, 9, 16) | x80 | crop_tail_closeup.png |
-| 2 | 1.5–3.5 s | WIDE whole sofa (flashback; tint is engine-side) | (24, -48, 72, 128) | x10 | crop_wide.png framing |
+| 2 | 1.5–3.5 s | WIDE whole sofa (flashback; warm wall/floor only) | (24, -36, 72, 128) | x10 | crop_wide.png framing |
 | 3 | 3.5–5.5 s | MEDIUM door side + sofa left half, Camille enters | (18, -8, 45, 80) | x16 | crop_medium.png |
 | 4 | 5.5–8 s | CLOSE tail (tap target, hitbox 44,34,8,12) | (43, 31, 9, 16) | x80 | crop_tail_closeup.png |
 | 5 | 8–10 s | CLOSE sofa arm, peek at (60,26) | (52, 14, 18, 32) | x40 | — |
-| 6 | 10–12 s | **WIDE gag, whole sofa, never cropped tighter** | (24, -48, 72, 128) | x10 | crop_wide.png |
+| 6 | 10–12 s | **WIDE gag, whole sofa, never cropped tighter** | (24, -36, 72, 128) | x10 | crop_wide.png |
 | 7 | 12–13.5 s | MEDIUM Camille (standing at 38,26) + sofa left | (28, -8, 45, 80) | x16 | — |
 | 8 | 13.5–15 s | CLOSE cat: glance → look_cam_0 → look_cam_1 → backs off | (46, 30, 18, 32) | x40 | — |
 
