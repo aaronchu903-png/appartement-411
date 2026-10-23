@@ -74,6 +74,7 @@ function spriteFile(key) {
 async function loadImages() {
   const names = new Set(Object.values(CFG.sprites));
   names.add(CFG.sofa.file);
+  if (CFG.plantProp?.file) names.add(CFG.plantProp.file);
   for (const beat of Object.values(CFG.camille.beats)) {
     names.add(beat.file);
     if (beat.brush) names.add(beat.brush.file);
@@ -354,7 +355,8 @@ function getCatState(t) {
     const dest = catRightSpot();
     const dur = 12.2 - shot6Start();
     const prog = Math.min(1, (t - shot6Start()) / dur);
-    const x = Math.round(94 - prog * (94 - dest.x));
+    const xOff = CFG.timing?.shot6CatXOffset ?? 0;
+    const x = Math.round(94 - prog * (94 - dest.x)) + xOff;
     return { key: `walk_side_${Math.floor(t * 5) % 3}`, x, y: dest.y, flip: true };
   }
   if (sh === 7) {
@@ -583,21 +585,12 @@ function drawCamille(beatName, ox) {
   if (beat.brush) drawImg(beat.brush.file, beat.brush.anchor.x + dx, beat.brush.anchor.y);
 }
 
-function drawTailSprite(key, x, y, thickenPx = 0) {
-  if (thickenPx <= 0) {
-    drawSprite(key, x, y);
-    return;
-  }
-  const offs = [
-    [0, 0],
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-    [1, 1],
-    [-1, 1]
-  ];
-  for (const [ox, oy] of offs) drawSprite(key, x + ox, y + oy);
+function drawPlantProp(t) {
+  const pp = CFG.plantProp;
+  if (!pp?.file) return;
+  const sh = shotAtTime(t).id;
+  if (pp.hideOnShots?.includes(sh)) return;
+  drawImg(pp.file, pp.x, pp.y);
 }
 
 function drawSceneContent(t) {
@@ -607,6 +600,7 @@ function drawSceneContent(t) {
   let catBehind = cat && catBehindLane(cat.x, cat.y, cat.key);
   if (cat && (cat.key === 'peek_0' || cat.key === 'peek_1')) catBehind = false;
 
+  drawPlantProp(t);
   if (beat) drawCamille(beat, cx);
   if (cat && catBehind) drawSprite(cat.key, cat.x, cat.y, cat.flip);
   drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
@@ -616,19 +610,28 @@ function drawSceneContent(t) {
     const tailScale = sh === 4 ? 2 : sh === 1 ? 1.35 : 1;
     const tx = CFG.anchors.tail.x;
     const ty = CFG.anchors.tail.y;
-    const thicken = sh === 1 ? 1 : 0;
     if (tailScale !== 1) {
       ctx.save();
       ctx.translate(tx, ty);
       ctx.scale(tailScale, tailScale);
-      drawTailSprite(tailKey, 0, 0, thicken);
+      drawSprite(tailKey, 0, 0);
       ctx.restore();
     } else {
-      drawTailSprite(tailKey, tx, ty, thicken);
+      drawSprite(tailKey, tx, ty);
     }
   }
   if (cat && !catBehind) {
-    drawSprite(cat.key, cat.x, cat.y, cat.flip);
+    const sh = shotAtTime(t).id;
+    const catScale = sh === 6 ? (CFG.timing?.shot6CatScale ?? 1.35) : 1;
+    if (catScale !== 1) {
+      ctx.save();
+      ctx.translate(cat.x, cat.y);
+      ctx.scale(catScale, catScale);
+      drawSprite(cat.key, 0, 0, cat.flip);
+      ctx.restore();
+    } else {
+      drawSprite(cat.key, cat.x, cat.y, cat.flip);
+    }
     lastCatDraw = { key: cat.key, x: cat.x, y: cat.y, flip: cat.flip };
   } else if (!cat) {
     lastCatDraw = null;
@@ -664,6 +667,7 @@ function render(now) {
     ctx.translate(-CFG.startCrop.x, -CFG.startCrop.y);
     drawBackdrop();
     paintCropFloor(false);
+    drawPlantProp(0);
     drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
     ctx.restore();
     bctx.clearRect(0, 0, stageW, stageH);

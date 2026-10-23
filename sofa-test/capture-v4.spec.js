@@ -71,7 +71,7 @@ test('v4 portrait screenshots', async ({ page }) => {
     { file: 'shot-03.png', t: 5.42, shotId: 3 },
     { file: 'shot-04.png', t: 6.2, shotId: 4, idleGlow: true },
     { file: 'shot-05.png', t: 8.25, shotId: 5, expectPeek: true },
-    { file: 'shot-06.png', t: 10.85, shotId: 6 },
+    { file: 'shot-06.png', t: 10.95, shotId: 6 },
     { file: 'shot-07.png', t: 12.5, shotId: 7 },
     { file: 'shot-08.png', t: 14.5, shotId: 8 },
     { file: 'shot-ou-bubble-only.png', t: 4.85, shotId: 3 },

@@ -35,14 +35,15 @@
     "mediumCamille": { "x": 28, "y": -8, "w": 45, "h": 80 },
     "wide": { "x": 16, "y": -8, "w": 80, "h": 72, "_note": "Full room height-fill; no pad below y=64" },
     "wideGag": {
-      "x": 30,
+      "x": 6,
       "y": 6,
-      "w": 58,
-      "h": 54,
-      "_note": "Shot 6: width-fit; sofa ~85% of frame (44/52 crop)"
+      "w": 90,
+      "h": 58,
+      "_note": "Shot 6: full sofa width; scaled by WIDTH on shot 6"
     }
   },
   "wideCrop": { "x": 16, "y": -8, "w": 80, "h": 72 },
+  "plantProp": { "file": "plant_pot.png", "x": 0, "y": 27, "hideOnShots": [3] },
   "sofa": {
     "file": "sofa_early.png",
     "x": 50,
@@ -74,7 +75,7 @@
           "file": "brush.png",
           "width": 6,
           "height": 3,
-          "anchor": { "x": 33, "y": 37 },
+          "anchor": { "x": 14, "y": 37 },
           "layer": "front"
         }
       },
@@ -100,6 +101,8 @@
     "ouLineAt": 4.7,
     "tailRevealAfterOu": 0.5,
     "shot6Start": 10.3,
+    "shot6CatScale": 2.35,
+    "shot6CatXOffset": -4,
     "sighAt": 12.3,
     "sceneEnd": 15.2
   },
