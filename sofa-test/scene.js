@@ -221,8 +221,8 @@ function catBehindLane(cx, cy, spriteKey) {
 }
 
 function camilleWalkX(t) {
-  const enterEnd = 5.5;
   const enterStart = 3.5;
+  const enterEnd = 5.35;
   const dest = CFG.camille.beats.stand.anchor.x;
   if (t < enterStart) return -20;
   if (t >= enterEnd) return dest;
@@ -264,16 +264,23 @@ function getCatState(t) {
     return null;
   }
   if (sh === 6) {
-    const prog = (t - 10) / 2;
-    const x = Math.round(94 - prog * (94 - a.catFront.x));
-    return { key: `walk_side_${Math.floor(t * 5) % 3}`, x, y: a.catFront.y, flip: true };
+    const dest = catRightSpot();
+    const dur = 12.2 - shot6Start();
+    const prog = Math.min(1, (t - shot6Start()) / dur);
+    const x = Math.round(94 - prog * (94 - dest.x));
+    return { key: `walk_side_${Math.floor(t * 5) % 3}`, x, y: dest.y, flip: true };
   }
-  if (sh === 7) return { key: 'found_0', x: a.catFront.x, y: a.catFront.y, flip: false };
+  if (sh === 7) {
+    const dest = catRightSpot();
+    return { key: 'found_0', x: dest.x, y: dest.y, flip: false };
+  }
   if (sh === 8) {
-    if (t < 14.2) return { key: 'glance', x: a.catFront.x, y: a.catFront.y, flip: false };
-    if (t < 14.55) return { key: 'look_cam_0', x: a.catFront.x, y: a.catFront.y, flip: false };
-    if (t < 14.85) return { key: 'look_cam_1', x: a.catFront.x, y: a.catFront.y, flip: false };
-    if (t < 15) return { key: 'found_0', x: 54, y: 40, flip: false };
+    const dest = catRightSpot();
+    const end = sceneEnd();
+    if (t < end - 1.0) return { key: 'glance', x: dest.x, y: dest.y, flip: false };
+    if (t < end - 0.65) return { key: 'look_cam_0', x: dest.x, y: dest.y, flip: false };
+    if (t < end - 0.35) return { key: 'look_cam_1', x: dest.x, y: dest.y, flip: false };
+    if (t < end) return { key: 'found_0', x: dest.x - 2, y: dest.y - 1, flip: false };
   }
   return null;
 }
@@ -284,6 +291,23 @@ function ouLineTime() {
 
 function tailRevealTime() {
   return ouLineTime() + (CFG.timing?.tailRevealAfterOu ?? 0.5);
+}
+
+function shot6Start() {
+  return CFG.timing?.shot6Start ?? 10.3;
+}
+
+function sighAt() {
+  return CFG.timing?.sighAt ?? 12.3;
+}
+
+function sceneEnd() {
+  return CFG.timing?.sceneEnd ?? 15.2;
+}
+
+function catRightSpot() {
+  const a = CFG.anchors.catRightFront || CFG.anchors.catFront;
+  return { x: a.x, y: a.y };
 }
 
 function tailVisible(t) {
@@ -300,7 +324,7 @@ function tailTappable() {
 
 function updateBubble(t) {
   const sh = shotAtTime(t).id;
-  if (sh === 2 && t >= 1.65 && t < 2.35) {
+  if (sh === 2 && t >= 1.6 && t < 2.85) {
     bubbleText = CFG.lines.devant;
     bubbleKind = 'off';
   } else if (t >= ouLineTime() && t < 8) {
@@ -519,7 +543,7 @@ function render(now) {
     bctx.clearRect(0, 0, stageW, stageH);
   } else {
     const shot = shotAtTime(sceneT);
-    if (shot.id === 7 && !sighedShot7 && sceneT >= 12.05) {
+    if (shot.id === 7 && !sighedShot7 && sceneT >= sighAt()) {
       sighedShot7 = true;
       sigh();
       sighCueUntil = now + 900;
@@ -675,9 +699,14 @@ function tick(now) {
     }
   } else if (phase === 'play2') {
     sceneT += dt;
-    if (sceneT >= 12.5 && sceneT < 12.55) sigh();
-    if (sceneT >= 14.4) fadeAlpha = Math.min(1, fadeAlpha + dt * 2.5);
-    if (sceneT >= 15.3 && fadeAlpha >= 1) {
+    if (sceneT >= sighAt() && sceneT < sighAt() + 0.05 && !sighedShot7) {
+      sighedShot7 = true;
+      sigh();
+      sighCueUntil = now + 900;
+    }
+    const fadeStart = sceneEnd() - 0.8;
+    if (sceneT >= fadeStart) fadeAlpha = Math.min(1, fadeAlpha + dt * 2.5);
+    if (sceneT >= sceneEnd() && fadeAlpha >= 1) {
       phase = 'done';
       sting();
       showWordcard();
@@ -698,10 +727,31 @@ replayBtn.addEventListener('click', resetScene);
 canvas.addEventListener('pointerdown', pointerDown);
 
 function setPhaseForT(t) {
-  if (t >= 15) phase = 'done';
+  if (t >= sceneEnd()) phase = 'done';
   else if (t >= 8) phase = 'play2';
   else if (t >= tailRevealTime()) phase = 'waitTail';
   else phase = 'play';
+}
+
+function previewAt(t) {
+  sceneT = t;
+  setPhaseForT(t);
+  const now = performance.now();
+  fadeAlpha = 0;
+  fadeVeil.hidden = true;
+  fadeVeil.style.opacity = '0';
+  wordcard.hidden = true;
+  overlay.hidden = true;
+  idleGlow = false;
+  if (t < sighAt()) {
+    sighedShot7 = false;
+    sighCueUntil = 0;
+  } else if (t >= sighAt() && t < 13.7 && !sighedShot7) {
+    sighedShot7 = true;
+    sigh();
+    sighCueUntil = now + 900;
+  }
+  render(now);
 }
 
 window.__sofaScene = {
@@ -711,26 +761,22 @@ window.__sofaScene = {
   start: startScene,
   tapTail: onTailTap,
   setT(t) {
-    sceneT = t;
-    setPhaseForT(t);
-    render(performance.now());
+    previewAt(t);
   },
   setShot(id) {
     const sh = CFG.shots.find((s) => s.id === id);
     if (!sh) return;
-    sceneT = (sh.t0 + sh.t1) / 2;
-    setPhaseForT(sceneT);
     if (id === 4) {
+      previewAt(5.75);
       phase = 'waitTail';
-      sceneT = tailRevealTime() + 0.15;
+      return;
     }
-    render(performance.now());
+    previewAt((sh.t0 + sh.t1) / 2);
   },
   setIdleGlow(on) {
     idleGlow = on;
+    previewAt(tailRevealTime() + 0.2);
     phase = 'waitTail';
-    sceneT = tailRevealTime() + 0.15;
-    render(performance.now());
   },
   getTailRevealTime: () => tailRevealTime(),
   showBlack() {
