@@ -143,15 +143,21 @@ function resize() {
   const rect = stage.getBoundingClientRect();
   stageW = rect.width;
   stageH = rect.height;
-  dpr = Math.min(window.devicePixelRatio || 1, 3);
+  if (stageW < 1 || stageH < 1) return;
+  const cap = Math.min(window.devicePixelRatio || 1, 3);
+  const bw = Math.round(stageW * cap);
+  const bh = Math.round(stageH * cap);
+  dpr = cap;
   for (const c of [canvas, bubbleCanvas]) {
-    c.width = Math.round(stageW * dpr);
-    c.height = Math.round(stageH * dpr);
+    c.width = bw;
+    c.height = bh;
     c.style.width = `${stageW}px`;
     c.style.height = `${stageH}px`;
   }
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const sx = bw / stageW;
+  const sy = bh / stageH;
+  ctx.setTransform(sx, 0, 0, sy, 0, 0);
+  bctx.setTransform(sx, 0, 0, sy, 0, 0);
   ctx.imageSmoothingEnabled = false;
 }
 
@@ -163,9 +169,7 @@ function shotAtTime(t) {
 }
 
 function layoutCrop(crop, shotDef) {
-  const sW = Math.floor(stageW / crop.w);
-  const sH = Math.floor(stageH / crop.h);
-  let s = Math.max(1, Math.min(sW, sH));
+  let s = Math.max(1, Math.floor(stageH / crop.h));
   if (shotDef?.wideMargin) s = Math.max(1, s - 1);
   activeScale = s;
   const drawW = crop.w * activeScale;
@@ -187,6 +191,21 @@ function fillFrameAmbient(warm = false) {
   ctx.fillRect(0, 0, stageW, stageH);
   ctx.fillStyle = floor;
   ctx.fillRect(0, floorScreen, stageW, stageH - floorScreen);
+  const drawW = activeCrop.w * activeScale;
+  const x0 = activeOx;
+  const x1 = x0 + drawW;
+  if (x0 > 0) {
+    ctx.fillStyle = wall;
+    ctx.fillRect(0, 0, x0, floorScreen);
+    ctx.fillStyle = floor;
+    ctx.fillRect(0, floorScreen, x0, stageH - floorScreen);
+  }
+  if (x1 < stageW) {
+    ctx.fillStyle = wall;
+    ctx.fillRect(x1, 0, stageW - x1, floorScreen);
+    ctx.fillStyle = floor;
+    ctx.fillRect(x1, floorScreen, stageW - x1, stageH - floorScreen);
+  }
 }
 
 function sceneToScreen(sx, sy) {
@@ -203,33 +222,34 @@ function screenToScene(px, py) {
   };
 }
 
-function drawExtendedRoom(warm = false) {
-  const ft = CFG.room.floorTop;
-  const { wall, floor } = roomColors(warm);
-  ctx.fillStyle = wall;
-  ctx.fillRect(-160, -160, 320, 160 + ft);
-  ctx.fillStyle = floor;
-  ctx.fillRect(-160, ft, 320, 200);
-}
-
 function cropNeedsTallBackdrop(crop) {
   const sh = CFG.scene.height;
   return crop.y < 0 || crop.y + crop.h > sh;
 }
 
-function applyBackdropWarmTint() {
-  const ft = CFG.backdrop?.floorTop ?? CFG.room.floorTop;
-  const a = CFG.backdrop?.warmTintAlpha ?? 0.32;
+function tintVisibleWallFloor(warm) {
+  if (!warm) return;
+  const ft = CFG.room.floorTop;
+  const c = activeCrop;
+  const alpha = CFG.backdrop?.warmTintAlpha ?? 0.32;
+  const { wall, floor } = roomColors(true);
+  const y0 = c.y;
+  const y1 = c.y + c.h;
   ctx.save();
-  ctx.globalAlpha = a;
-  ctx.fillStyle = CFG.room.wallWarm || CFG.room.wall;
-  ctx.fillRect(-80, -200, 256, ft + 200);
-  ctx.fillStyle = CFG.room.floorWarm || CFG.room.floor;
-  ctx.fillRect(-80, ft, 256, 200);
+  ctx.globalAlpha = alpha;
+  const wallBottom = Math.min(ft, y1);
+  if (wallBottom > y0) {
+    ctx.fillStyle = wall;
+    ctx.fillRect(c.x, y0, c.w, wallBottom - y0);
+  }
+  if (y1 > ft) {
+    ctx.fillStyle = floor;
+    ctx.fillRect(c.x, Math.max(ft, y0), c.w, y1 - Math.max(ft, y0));
+  }
   ctx.restore();
 }
 
-function drawBackdrop(warm = false) {
+function drawBackdrop() {
   const bd = CFG.backdrop;
   if (!bd) return;
   const crop = activeCrop;
@@ -242,7 +262,18 @@ function drawBackdrop(warm = false) {
   } else {
     ctx.drawImage(im, 0, 0, bd.base.w, bd.base.h, 0, 0, bd.base.w, bd.base.h);
   }
-  if (warm) applyBackdropWarmTint();
+}
+
+/** Solid floor in crop — backdrop art can leave a beige band; matches v3 floor-to-bottom. */
+function paintCropFloor(warm = false) {
+  const { floor } = roomColors(warm);
+  const ft = CFG.room.floorTop;
+  const c = activeCrop;
+  const yTop = Math.max(ft, c.y);
+  const yBot = c.y + c.h;
+  if (yBot <= yTop) return;
+  ctx.fillStyle = floor;
+  ctx.fillRect(c.x, yTop, c.w, yBot - yTop);
 }
 
 function drawImg(file, x, y, flip = false) {
@@ -521,8 +552,9 @@ function drawTapGlowRing(now) {
   const h = CFG.anchors.tailHitbox;
   const p = sceneToScreen(h.x + h.w / 2, h.y + h.h / 2);
   const pulse = 0.55 + 0.45 * Math.sin(now * 0.008);
-  const rOuter = (14 + pulse * 8) * (activeScale / 4);
-  const rInner = (8 + pulse * 4) * (activeScale / 4);
+  const ringScale = Math.max(1, activeScale / 5);
+  const rOuter = (16 + pulse * 10) * ringScale;
+  const rInner = (9 + pulse * 5) * ringScale;
   bctx.save();
   bctx.strokeStyle = `rgba(255, 200, 80, ${0.45 + pulse * 0.4})`;
   bctx.lineWidth = 4 + pulse * 3;
@@ -558,7 +590,19 @@ function drawSceneContent(t) {
   drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
   if (tailVisible(t)) {
     const tailKey = tailPhase % 2 === 0 ? 'tail_0' : 'tail_1';
-    drawSprite(tailKey, CFG.anchors.tail.x, CFG.anchors.tail.y);
+    const sh = shotAtTime(t).id;
+    const tailScale = sh === 1 || sh === 4 ? 2 : 1;
+    const tx = CFG.anchors.tail.x;
+    const ty = CFG.anchors.tail.y;
+    if (tailScale !== 1) {
+      ctx.save();
+      ctx.translate(tx, ty);
+      ctx.scale(tailScale, tailScale);
+      drawSprite(tailKey, 0, 0);
+      ctx.restore();
+    } else {
+      drawSprite(tailKey, tx, ty);
+    }
   }
   if (cat && !catBehind) {
     const sh = shotAtTime(t).id;
@@ -587,8 +631,9 @@ function renderSceneLayer(crop, t, shotDef) {
   ctx.translate(activeOx, activeOy);
   ctx.scale(activeScale, activeScale);
   ctx.translate(-crop.x, -crop.y);
-  drawExtendedRoom(warm);
-  drawBackdrop(warm);
+  drawBackdrop();
+  paintCropFloor(warm);
+  tintVisibleWallFloor(warm);
   drawSceneContent(t);
   ctx.restore();
 }
@@ -597,15 +642,15 @@ function render(now) {
   if (!CFG) return;
 
   if (phase === 'overlay') {
-    layoutCrop(CFG.startCrop, { wideMargin: true });
+    layoutCrop(CFG.startCrop, {});
     fillFrameAmbient(false);
     ctx.save();
     ctx.imageSmoothingEnabled = false;
     ctx.translate(activeOx, activeOy);
     ctx.scale(activeScale, activeScale);
     ctx.translate(-CFG.startCrop.x, -CFG.startCrop.y);
-    drawExtendedRoom(false);
-    drawBackdrop(false);
+    drawBackdrop();
+    paintCropFloor(false);
     drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
     ctx.restore();
     bctx.clearRect(0, 0, stageW, stageH);
@@ -885,5 +930,8 @@ window.__sofaScene = {
   await loadImages();
   resize();
   window.addEventListener('resize', resize);
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => resize()).observe(stage);
+  }
   requestAnimationFrame(tick);
 })();

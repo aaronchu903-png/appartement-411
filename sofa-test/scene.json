@@ -25,18 +25,18 @@
   },
   "cropLibrary": {
     "tailMedium": {
-      "x": 24,
-      "y": -8,
-      "w": 40,
-      "h": 72,
-      "_note": "Sofa left end + tail (47,38); 9:16 medium, fills phone like v3"
+      "x": 40,
+      "y": 26,
+      "w": 22,
+      "h": 38,
+      "_note": "Tight on sofa left + tail (47,38) for phone-readable tail"
     },
     "medium": { "x": 18, "y": -8, "w": 45, "h": 80 },
     "mediumCamille": { "x": 28, "y": -8, "w": 45, "h": 80 },
-    "wide": { "x": 24, "y": -36, "w": 72, "h": 128 },
-    "wideGag": { "x": 28, "y": -30, "w": 64, "h": 116, "_note": "Shot 6: whole sofa, tighter than wide for readable cat" }
+    "wide": { "x": 16, "y": -8, "w": 80, "h": 72, "_note": "Full room height-fill; no pad below y=64" },
+    "wideGag": { "x": 28, "y": 18, "w": 58, "h": 54, "_note": "Shot 6: Camille hug + cat path, height-fill" }
   },
-  "wideCrop": { "x": 24, "y": -36, "w": 72, "h": 128 },
+  "wideCrop": { "x": 16, "y": -8, "w": 80, "h": 72 },
   "sofa": {
     "file": "sofa_early.png",
     "x": 50,
@@ -94,7 +94,7 @@
     "ouLineAt": 4.7,
     "tailRevealAfterOu": 0.5,
     "shot6Start": 10.3,
-    "shot6CatScale": 1.35,
+    "shot6CatScale": 2,
     "sighAt": 12.3,
     "sceneEnd": 15.2
   },

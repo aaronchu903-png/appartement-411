@@ -21,7 +21,7 @@ html, body {
   width: min(100vw, 390px);
   height: 100vh;
   max-height: 844px;
-  background: linear-gradient(180deg, #d8cbb8 0%, #c4a88a 55%, #9d8064 100%);
+  background: #e3d3c6;
   box-shadow: 0 0 0 2px #6a5d52, 0 16px 40px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
