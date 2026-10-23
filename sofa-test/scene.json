@@ -21,9 +21,7 @@
       "_note": "image row = scene y + 36"
     },
     "floorTop": 44,
-    "warmTintAlpha": 0.55,
-    "plantBox": { "x": 7, "y": 27, "w": 20, "h": 17 },
-    "plantShiftLeft": 14
+    "warmTintAlpha": 0.55
   },
   "cropLibrary": {
     "tailMedium": {
@@ -38,10 +36,10 @@
     "wide": { "x": 16, "y": -8, "w": 80, "h": 72, "_note": "Full room height-fill; no pad below y=64" },
     "wideGag": {
       "x": 30,
-      "y": 2,
-      "w": 70,
-      "h": 56,
-      "_note": "Shot 6: scene x 30–100, width-fit; lower floor line"
+      "y": 6,
+      "w": 58,
+      "h": 54,
+      "_note": "Shot 6: width-fit; sofa ~85% of frame (44/52 crop)"
     }
   },
   "wideCrop": { "x": 16, "y": -8, "w": 80, "h": 72 },
@@ -102,8 +100,6 @@
     "ouLineAt": 4.7,
     "tailRevealAfterOu": 0.5,
     "shot6Start": 10.3,
-    "shot6CatScale": 8.5,
-    "shot6CamilleScale": 4,
     "sighAt": 12.3,
     "sceneEnd": 15.2
   },

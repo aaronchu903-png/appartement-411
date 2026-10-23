@@ -96,35 +96,6 @@ async function loadImages() {
         })
     )
   );
-  buildPlantPatch();
-}
-
-function buildPlantPatch() {
-  const bd = CFG.backdrop;
-  const box = bd?.plantBox;
-  const base = bd?.base?.file;
-  if (!box || !base || !images[base]) return;
-  const off = document.createElement('canvas');
-  off.width = box.w;
-  off.height = box.h;
-  const t = off.getContext('2d');
-  t.imageSmoothingEnabled = false;
-  t.drawImage(images[base], box.x, box.y, box.w, box.h, 0, 0, box.w, box.h);
-  images._plantPatch = off;
-}
-
-function applyPlantShift() {
-  const bd = CFG.backdrop;
-  const patch = images._plantPatch;
-  const shift = bd?.plantShiftLeft;
-  const box = bd?.plantBox;
-  if (!patch || !shift || !box) return;
-  const ft = CFG.room.floorTop;
-  ctx.fillStyle = CFG.room.wall;
-  ctx.fillRect(box.x, box.y, box.w, Math.max(0, ft - box.y));
-  ctx.fillStyle = CFG.room.floor;
-  ctx.fillRect(box.x, ft, box.w, box.y + box.h - ft);
-  ctx.drawImage(patch, box.x - shift, box.y);
 }
 
 function ensureAudio() {
@@ -296,7 +267,6 @@ function drawBackdrop() {
   } else {
     ctx.drawImage(im, 0, 0, bd.base.w, bd.base.h, 0, 0, bd.base.w, bd.base.h);
   }
-  applyPlantShift();
 }
 
 /** Solid floor in crop — backdrop art can leave a beige band; matches v3 floor-to-bottom. */
@@ -609,25 +579,25 @@ function drawCamille(beatName, ox) {
   if (!beat) return;
   const x = ox ?? beat.anchor.x;
   const dx = x - beat.anchor.x;
-  const sh = shotAtTime(sceneT).id;
-  const camScale = sh === 6 ? (CFG.timing?.shot6CamilleScale ?? 3.6) : 1;
-  if (camScale !== 1) {
-    const im = images[beat.file];
-    const h = im?.height ?? beat.height ?? 18;
-    ctx.save();
-    ctx.translate(x, beat.anchor.y + h);
-    ctx.scale(camScale, camScale);
-    drawImg(beat.file, 0, -h);
-    if (beat.brush) {
-      const bx = beat.brush.anchor.x + dx - x;
-      const by = beat.brush.anchor.y - beat.anchor.y;
-      drawImg(beat.brush.file, bx, by - h);
-    }
-    ctx.restore();
-  } else {
-    drawImg(beat.file, x, beat.anchor.y);
-    if (beat.brush) drawImg(beat.brush.file, beat.brush.anchor.x + dx, beat.brush.anchor.y);
+  drawImg(beat.file, x, beat.anchor.y);
+  if (beat.brush) drawImg(beat.brush.file, beat.brush.anchor.x + dx, beat.brush.anchor.y);
+}
+
+function drawTailSprite(key, x, y, thickenPx = 0) {
+  if (thickenPx <= 0) {
+    drawSprite(key, x, y);
+    return;
   }
+  const offs = [
+    [0, 0],
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+    [1, 1],
+    [-1, 1]
+  ];
+  for (const [ox, oy] of offs) drawSprite(key, x + ox, y + oy);
 }
 
 function drawSceneContent(t) {
@@ -646,31 +616,19 @@ function drawSceneContent(t) {
     const tailScale = sh === 4 ? 2 : sh === 1 ? 1.35 : 1;
     const tx = CFG.anchors.tail.x;
     const ty = CFG.anchors.tail.y;
-    const tim = images[spriteFile(tailKey)];
-    const tailW = tim?.width ?? 8;
-    const thickX = sh === 1 ? 1 + 2 / tailW : 1;
-    if (tailScale !== 1 || thickX !== 1) {
+    const thicken = sh === 1 ? 1 : 0;
+    if (tailScale !== 1) {
       ctx.save();
       ctx.translate(tx, ty);
-      ctx.scale(tailScale * thickX, tailScale);
-      drawSprite(tailKey, 0, 0);
+      ctx.scale(tailScale, tailScale);
+      drawTailSprite(tailKey, 0, 0, thicken);
       ctx.restore();
     } else {
-      drawSprite(tailKey, tx, ty);
+      drawTailSprite(tailKey, tx, ty, thicken);
     }
   }
   if (cat && !catBehind) {
-    const sh = shotAtTime(t).id;
-    const catScale = sh === 6 ? (CFG.timing?.shot6CatScale ?? 1.35) : 1;
-    if (catScale !== 1) {
-      ctx.save();
-      ctx.translate(cat.x, cat.y);
-      ctx.scale(catScale, catScale);
-      drawSprite(cat.key, 0, 0, cat.flip);
-      ctx.restore();
-    } else {
-      drawSprite(cat.key, cat.x, cat.y, cat.flip);
-    }
+    drawSprite(cat.key, cat.x, cat.y, cat.flip);
     lastCatDraw = { key: cat.key, x: cat.x, y: cat.y, flip: cat.flip };
   } else if (!cat) {
     lastCatDraw = null;
@@ -958,28 +916,6 @@ window.__sofaScene = {
   },
   getTailRevealTime: () => tailRevealTime(),
   getLastCatDraw: () => lastCatDraw,
-  measureFigureHeights() {
-    const stageH = document.getElementById('stage').getBoundingClientRect().height;
-    const sh = shotAtTime(sceneT);
-    if (sh.id !== 6) return null;
-    const beat = CFG.camille.beats.hug;
-    const camH = (beat.height ?? 18) * (CFG.timing?.shot6CamilleScale ?? 1) * activeScale;
-    const cat = getCatState(sceneT);
-    let catH = 0;
-    if (cat) {
-      const im = images[spriteFile(cat.key)];
-      const ch = im?.height ?? 14;
-      const cs = CFG.timing?.shot6CatScale ?? 1;
-      catH = ch * cs * activeScale;
-    }
-    return {
-      stageH,
-      activeScale,
-      camillePct: (camH / stageH) * 100,
-      catPct: (catH / stageH) * 100,
-      catX: cat?.x
-    };
-  },
   enableTapRing(on) {
     idleGlow = !!on;
     render(performance.now());
