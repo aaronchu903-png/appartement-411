@@ -6,8 +6,8 @@
   "room": {
     "wall": "#e3d3c6",
     "floor": "#9d8064",
-    "wallWarm": "#ead4b8",
-    "floorWarm": "#a88668",
+    "wallWarm": "#f2d9a8",
+    "floorWarm": "#b88858",
     "floorTop": 44
   },
   "backdrop": {
@@ -21,20 +21,26 @@
       "_note": "image row = scene y + 36"
     },
     "floorTop": 44,
-    "warmTintAlpha": 0.32
+    "warmTintAlpha": 0.55
   },
   "cropLibrary": {
     "tailMedium": {
-      "x": 40,
-      "y": 26,
-      "w": 22,
-      "h": 38,
-      "_note": "Tight on sofa left + tail (47,38) for phone-readable tail"
+      "x": 30,
+      "y": 20,
+      "w": 44,
+      "h": 52,
+      "_note": "Sofa left end + tail (47,38); ~2× context vs tight crop"
     },
     "medium": { "x": 18, "y": -8, "w": 45, "h": 80 },
     "mediumCamille": { "x": 28, "y": -8, "w": 45, "h": 80 },
     "wide": { "x": 16, "y": -8, "w": 80, "h": 72, "_note": "Full room height-fill; no pad below y=64" },
-    "wideGag": { "x": 28, "y": 18, "w": 58, "h": 54, "_note": "Shot 6: Camille hug + cat path, height-fill" }
+    "wideGag": {
+      "x": 6,
+      "y": 6,
+      "w": 90,
+      "h": 58,
+      "_note": "Shot 6: full sofa width; scaled by WIDTH on shot 6"
+    }
   },
   "wideCrop": { "x": 16, "y": -8, "w": 80, "h": 72 },
   "sofa": {
@@ -94,7 +100,7 @@
     "ouLineAt": 4.7,
     "tailRevealAfterOu": 0.5,
     "shot6Start": 10.3,
-    "shot6CatScale": 2,
+    "shot6CatScale": 2.35,
     "sighAt": 12.3,
     "sceneEnd": 15.2
   },
@@ -113,7 +119,7 @@
     { "id": 3, "t0": 3.5, "t1": 5.5, "crop": "medium" },
     { "id": 4, "t0": 5.5, "t1": 8, "crop": "tailMedium" },
     { "id": 5, "t0": 8, "t1": 10.3, "crop": { "x": 52, "y": 14, "w": 18, "h": 32 } },
-    { "id": 6, "t0": 10.3, "t1": 12.2, "crop": "wideGag" },
+    { "id": 6, "t0": 10.3, "t1": 12.2, "crop": "wideGag", "scaleByWidth": true },
     { "id": 7, "t0": 12.2, "t1": 13.7, "crop": "mediumCamille" },
     { "id": 8, "t0": 13.7, "t1": 15.2, "crop": { "x": 56, "y": 30, "w": 18, "h": 32 } }
   ],

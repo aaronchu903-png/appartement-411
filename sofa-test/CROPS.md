@@ -9,7 +9,7 @@ Side-view **backdrop** (`backdrop_living.png` / `backdrop_living_tall.png`, tall
 | 3 | 3.5–5.5 s | MEDIUM Camille enter | `medium` | |
 | 4 | 5.5–8 s | MEDIUM tail + tap | `tailMedium` | |
 | 5 | 8–10.3 s | CLOSE peek | (52,14,18,32) | capture ~8.25s |
-| 6 | 10.3–12.2 s | WIDE gag (tighter) | `wideGag` (28,-30,64,116) | Camille left, cat right @ 62 |
+| 6 | 10.3–12.2 s | WIDE gag (width-fit) | `wideGag` (6,6,90,58) + `scaleByWidth` | Full sofa; Camille left, cat right |
 | 7 | 12.2–13.7 s | MEDIUM + cat (62,44) | `mediumCamille` (28,-8,45,80) | |
 | 8 | 13.7–15.2 s | CLOSE cat | (56,30,18,32) | Pixel Studio |
 

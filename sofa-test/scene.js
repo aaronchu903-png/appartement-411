@@ -169,7 +169,12 @@ function shotAtTime(t) {
 }
 
 function layoutCrop(crop, shotDef) {
-  let s = Math.max(1, Math.floor(stageH / crop.h));
+  let s;
+  if (shotDef?.scaleByWidth) {
+    s = Math.max(1, Math.floor(stageW / crop.w));
+  } else {
+    s = Math.max(1, Math.floor(stageH / crop.h));
+  }
   if (shotDef?.wideMargin) s = Math.max(1, s - 1);
   activeScale = s;
   const drawW = crop.w * activeScale;
@@ -591,7 +596,7 @@ function drawSceneContent(t) {
   if (tailVisible(t)) {
     const tailKey = tailPhase % 2 === 0 ? 'tail_0' : 'tail_1';
     const sh = shotAtTime(t).id;
-    const tailScale = sh === 1 || sh === 4 ? 2 : 1;
+    const tailScale = sh === 4 ? 2 : sh === 1 ? 1.35 : 1;
     const tx = CFG.anchors.tail.x;
     const ty = CFG.anchors.tail.y;
     if (tailScale !== 1) {
