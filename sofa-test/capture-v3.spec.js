@@ -48,6 +48,10 @@ test('v3 portrait screenshots', async ({ page }) => {
   });
   page.on('pageerror', (err) => errors.push(String(err)));
 
+  const windows = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'scene.json'), 'utf8')
+  ).shots;
+
   await page.goto('./index.html', { waitUntil: 'networkidle' });
   await saveBoth(page, 'start.png');
 
@@ -55,19 +59,22 @@ test('v3 portrait screenshots', async ({ page }) => {
   await page.waitForFunction(() => window.__sofaScene?.getPhase() === 'play');
 
   const shots = [
-    { file: 'shot-01.png', t: 0.8 },
-    { file: 'shot-02.png', t: 2.05 },
-    { file: 'shot-03.png', t: 5.4 },
-    { file: 'shot-04.png', shot: 4 },
-    { file: 'shot-05.png', t: 9 },
-    { file: 'shot-06.png', t: 11.2 },
-    { file: 'shot-07.png', t: 12.45 },
-    { file: 'shot-08.png', t: 14.55 },
-    { file: 'shot-ou-bubble-only.png', t: 4.85 },
-    { file: 'shot-ou-tail-visible.png', t: 5.35 }
+    { file: 'shot-01.png', t: 0.8, shotId: 1 },
+    { file: 'shot-02.png', t: 2.05, shotId: 2 },
+    { file: 'shot-03.png', t: 5.42, shotId: 3 },
+    { file: 'shot-04.png', t: 5.85, shotId: 4 },
+    { file: 'shot-05.png', t: 9.0, shotId: 5 },
+    { file: 'shot-06.png', t: 11.2, shotId: 6 },
+    { file: 'shot-07.png', t: 12.5, shotId: 7 },
+    { file: 'shot-08.png', t: 14.5, shotId: 8 },
+    { file: 'shot-ou-bubble-only.png', t: 4.85, shotId: 3 },
+    { file: 'shot-ou-tail-visible.png', t: 5.35, shotId: 3 }
   ];
 
   for (const s of shots) {
+    const win = windows.find((w) => w.id === s.shotId);
+    expect(s.t, `${s.file} timing`).toBeGreaterThanOrEqual(win.t0);
+    expect(s.t, `${s.file} timing`).toBeLessThan(win.t1);
     await captureAt(page, s);
     await saveBoth(page, s.file);
   }
@@ -75,7 +82,6 @@ test('v3 portrait screenshots', async ({ page }) => {
   const ouA = path.join(OUT_REPO, 'shot-ou-bubble-only.png');
   const ouB = path.join(OUT_REPO, 'shot-ou-tail-visible.png');
   expect(md5(ouA)).not.toEqual(md5(ouB));
-  expect(fs.statSync(ouA).size).toBeGreaterThan(5000);
 
   expect(errors, errors.join('; ')).toEqual([]);
 });

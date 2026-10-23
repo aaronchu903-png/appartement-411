@@ -23,6 +23,7 @@ let waitSince = 0;
 let tailPhase = 0;
 let idleGlow = false;
 let fadeAlpha = 0;
+let previewHold = false;
 let bubbleText = null;
 let bubbleKind = null;
 let padTimer = 0;
@@ -135,9 +136,6 @@ function resize() {
 }
 
 function shotAtTime(t) {
-  if (phase === 'waitTail') {
-    return CFG.shots.find((s) => s.id === 4) || CFG.shots[3];
-  }
   for (const sh of CFG.shots) {
     if (t >= sh.t0 && t < sh.t1) return sh;
   }
@@ -574,6 +572,7 @@ function hitTail(clientX, clientY) {
 
 function onTailTap() {
   if (!tailTappable()) return;
+  previewHold = false;
   bell();
   phase = 'play2';
   sceneT = 8;
@@ -642,6 +641,7 @@ function showWordcard() {
 
 function startScene() {
   ensureAudio();
+  previewHold = false;
   phase = 'play';
   sceneT = 0;
   lastFrame = performance.now();
@@ -658,6 +658,7 @@ function startScene() {
 }
 
 function resetScene() {
+  previewHold = false;
   phase = 'overlay';
   sceneT = 0;
   fadeAlpha = 0;
@@ -670,6 +671,12 @@ function resetScene() {
 function tick(now) {
   const dt = Math.min(0.05, (now - lastFrame) / 1000);
   lastFrame = now;
+
+  if (previewHold) {
+    render(now);
+    requestAnimationFrame(tick);
+    return;
+  }
 
   if (phase === 'play') {
     sceneT += dt;
@@ -734,6 +741,7 @@ function setPhaseForT(t) {
 }
 
 function previewAt(t) {
+  previewHold = true;
   sceneT = t;
   setPhaseForT(t);
   const now = performance.now();
@@ -767,7 +775,7 @@ window.__sofaScene = {
     const sh = CFG.shots.find((s) => s.id === id);
     if (!sh) return;
     if (id === 4) {
-      previewAt(5.75);
+      previewAt(5.85);
       phase = 'waitTail';
       return;
     }

@@ -10,7 +10,7 @@ Rects may go past the room: pad by repeating the edge (wall #e3d3c6 above, floor
 | 4 | 5.5–8 s | CLOSE tail (tap target, hitbox 44,34,8,12) | (43, 31, 9, 16) | x80 | crop_tail_closeup.png |
 | 5 | 8–10.3 s | CLOSE sofa arm, peek at (60,26) | (52, 14, 18, 32) | x40 | — |
 | 6 | 10.3–12.2 s | **WIDE gag, whole sofa, never cropped tighter** | (24, -36, 72, 128) | x10 | crop_wide.png |
-| 7 | 12.2–13.7 s | MEDIUM Camille (standing at 38,26) + sofa left | (28, -8, 45, 80) | x16 | — |
-| 8 | 13.7–15.2 s | CLOSE cat: glance → look_cam_0 → look_cam_1 → backs off | (56, 30, 18, 32) | x40 | — |
+| 7 | 12.2–13.7 s | MEDIUM Camille (standing at 38,26) + sofa + **cat right (82,44)** | (22, -8, 62, 80) | x16 | engine widened from 28/45 — cat was off-frame |
+| 8 | 13.7–15.2 s | CLOSE cat: glance → look_cam → backs off | PS **(56, 30, 18, 32)** → engine **(66, 28, 22, 32)** | x40 | x56..74 misses cat at x82 |
 
 Shot 6: Camille (camille_bend_2 at 40,26) at the left arm; cat exits the **right** end and sits at the **right** front (82,44). Shot 7: cat stays right. Sigh at 12.3 s (shot 7).
