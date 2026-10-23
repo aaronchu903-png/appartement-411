@@ -1,6 +1,6 @@
 # Crop rects — sofa-test v4 plan B (`scene.json` `cropLibrary`)
 
-Side-view wall/floor fill (v3). Scene = 96×64 px; rects (x, y, w, h), 9:16, integer upscale.
+Side-view **backdrop** (`backdrop_living.png` / `backdrop_living_tall.png`, tall row = scene y+36) + wall/floor pad for overflow. Scene = 96×64 px; rects (x, y, w, h), 9:16, integer upscale.
 
 | # | t | shot | crop | notes |
 |---|---|---|---|---|

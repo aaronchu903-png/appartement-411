@@ -78,6 +78,10 @@ async function loadImages() {
     names.add(beat.file);
     if (beat.brush) names.add(beat.brush.file);
   }
+  if (CFG.backdrop) {
+    names.add(CFG.backdrop.base.file);
+    names.add(CFG.backdrop.tall.file);
+  }
   await Promise.all(
     [...names].map(
       (file) =>
@@ -206,6 +210,39 @@ function drawExtendedRoom(warm = false) {
   ctx.fillRect(-160, -160, 320, 160 + ft);
   ctx.fillStyle = floor;
   ctx.fillRect(-160, ft, 320, 200);
+}
+
+function cropNeedsTallBackdrop(crop) {
+  const sh = CFG.scene.height;
+  return crop.y < 0 || crop.y + crop.h > sh;
+}
+
+function applyBackdropWarmTint() {
+  const ft = CFG.backdrop?.floorTop ?? CFG.room.floorTop;
+  const a = CFG.backdrop?.warmTintAlpha ?? 0.32;
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.fillStyle = CFG.room.wallWarm || CFG.room.wall;
+  ctx.fillRect(-80, -200, 256, ft + 200);
+  ctx.fillStyle = CFG.room.floorWarm || CFG.room.floor;
+  ctx.fillRect(-80, ft, 256, 200);
+  ctx.restore();
+}
+
+function drawBackdrop(warm = false) {
+  const bd = CFG.backdrop;
+  if (!bd) return;
+  const crop = activeCrop;
+  const tall = cropNeedsTallBackdrop(crop);
+  const im = images[tall ? bd.tall.file : bd.base.file];
+  if (!im) return;
+  if (tall) {
+    const y0 = bd.tall.sceneTop ?? -36;
+    ctx.drawImage(im, 0, 0, bd.tall.w, bd.tall.h, 0, y0, bd.tall.w, bd.tall.h);
+  } else {
+    ctx.drawImage(im, 0, 0, bd.base.w, bd.base.h, 0, 0, bd.base.w, bd.base.h);
+  }
+  if (warm) applyBackdropWarmTint();
 }
 
 function drawImg(file, x, y, flip = false) {
@@ -516,14 +553,13 @@ function drawSceneContent(t) {
   let catBehind = cat && catBehindLane(cat.x, cat.y, cat.key);
   if (cat && (cat.key === 'peek_0' || cat.key === 'peek_1')) catBehind = false;
 
+  if (beat) drawCamille(beat, cx);
   if (cat && catBehind) drawSprite(cat.key, cat.x, cat.y, cat.flip);
-  if (beat && CFG.camille.beats[beat].layer === 'behind') drawCamille(beat, cx);
   drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
   if (tailVisible(t)) {
     const tailKey = tailPhase % 2 === 0 ? 'tail_0' : 'tail_1';
     drawSprite(tailKey, CFG.anchors.tail.x, CFG.anchors.tail.y);
   }
-  if (beat && CFG.camille.beats[beat].layer === 'front') drawCamille(beat, cx);
   if (cat && !catBehind) {
     const sh = shotAtTime(t).id;
     const catScale = sh === 6 ? (CFG.timing?.shot6CatScale ?? 1.35) : 1;
@@ -552,6 +588,7 @@ function renderSceneLayer(crop, t, shotDef) {
   ctx.scale(activeScale, activeScale);
   ctx.translate(-crop.x, -crop.y);
   drawExtendedRoom(warm);
+  drawBackdrop(warm);
   drawSceneContent(t);
   ctx.restore();
 }
@@ -568,6 +605,7 @@ function render(now) {
     ctx.scale(activeScale, activeScale);
     ctx.translate(-CFG.startCrop.x, -CFG.startCrop.y);
     drawExtendedRoom(false);
+    drawBackdrop(false);
     drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
     ctx.restore();
     bctx.clearRect(0, 0, stageW, stageH);

@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "_readme": "v4 plan B: side-view wall/floor (v3), cropLibrary tail medium for shots 1/4, tighter wide gag shot 6.",
+  "_readme": "v4: Pixel Studio side-view backdrop + plan B crops/timing.",
   "assetsBase": "assets/",
   "scene": { "width": 96, "height": 64 },
   "room": {
@@ -9,6 +9,19 @@
     "wallWarm": "#ead4b8",
     "floorWarm": "#a88668",
     "floorTop": 44
+  },
+  "backdrop": {
+    "_source": "Pixel Studio make_backdrop.py (sofa_backdrop tarball)",
+    "base": { "file": "backdrop_living.png", "w": 96, "h": 64 },
+    "tall": {
+      "file": "backdrop_living_tall.png",
+      "w": 96,
+      "h": 128,
+      "sceneTop": -36,
+      "_note": "image row = scene y + 36"
+    },
+    "floorTop": 44,
+    "warmTintAlpha": 0.32
   },
   "cropLibrary": {
     "tailMedium": {
