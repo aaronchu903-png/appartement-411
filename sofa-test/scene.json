@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "_readme": "Camille: stand / hug (camille_bend_2 before sofa). Cat camera: look_cam_0/1 at anchors.catFront. Shots = CROPS.md hard cuts.",
+  "version": 4,
+  "_readme": "v4: hub living-room backdrop, tail medium crops (cropLibrary), shot 6 tighter wide.",
   "assetsBase": "assets/",
   "scene": { "width": 96, "height": 64 },
   "room": {
@@ -9,6 +9,31 @@
     "wallWarm": "#ead4b8",
     "floorWarm": "#a88668",
     "floorTop": 44
+  },
+  "cropLibrary": {
+    "tailMedium": { "x": 22, "y": -4, "w": 42, "h": 72, "_note": "Sofa left end + tail; ~3× scale on phone (not 80× close-up)" },
+    "medium": { "x": 18, "y": -8, "w": 45, "h": 80 },
+    "wide": { "x": 24, "y": -36, "w": 72, "h": 128 },
+    "wideGag": { "x": 28, "y": -30, "w": 64, "h": 116, "_note": "Shot 6: whole sofa, slightly tighter for larger cat on phone" }
+  },
+  "backdrop": {
+    "_assetsFrom": "legacy/prototype/hub/assets/A/ (frozen Days 1–6 apartment, style Jour)",
+    "hub": { "origin": { "x": 0, "y": 162 }, "scale": 0.5 },
+    "floorWalls": {
+      "file": "hub_floor_walls.png",
+      "src": { "x": 0, "y": 162, "w": 192, "h": 128 }
+    },
+    "windowPatch": { "file": "hub_window_patch.png", "hub": { "x": 0, "y": 0 } },
+    "curtains": [
+      { "file": "hub_curtain_l.png", "hub": { "x": 43, "y": 162 } },
+      { "file": "hub_curtain_r.png", "hub": { "x": 76, "y": 162 } }
+    ],
+    "props": [
+      { "file": "hub_rug.png", "hubPlace": [48, 248], "hubAnchor": [32, 39], "layer": "underSofa" },
+      { "file": "hub_lamp.png", "hubPlace": [76, 191], "hubAnchor": [6, 35], "layer": "underSofa" },
+      { "file": "hub_splant.png", "hubPlace": [24, 303], "hubAnchor": [10, 33], "layer": "underSofa" }
+    ],
+    "warmOverlayAlpha": 0.32
   },
   "wideCrop": { "x": 24, "y": -36, "w": 72, "h": 128 },
   "sofa": {
@@ -81,16 +106,16 @@
     "touchMargin": 4
   },
   "shots": [
-    { "id": 1, "t0": 0, "t1": 1.5, "crop": { "x": 43, "y": 31, "w": 9, "h": 16 } },
-    { "id": 2, "t0": 1.5, "t1": 3.5, "crop": { "x": 24, "y": -36, "w": 72, "h": 128 }, "warmTint": true },
-    { "id": 3, "t0": 3.5, "t1": 5.5, "crop": { "x": 18, "y": -8, "w": 45, "h": 80 } },
-    { "id": 4, "t0": 5.5, "t1": 8, "crop": { "x": 43, "y": 31, "w": 9, "h": 16 } },
+    { "id": 1, "t0": 0, "t1": 1.5, "crop": "tailMedium", "layout": { "maxScale": 3 } },
+    { "id": 2, "t0": 1.5, "t1": 3.5, "crop": "wide", "warmTint": true },
+    { "id": 3, "t0": 3.5, "t1": 5.5, "crop": "medium" },
+    { "id": 4, "t0": 5.5, "t1": 8, "crop": "tailMedium", "layout": { "maxScale": 3 } },
     { "id": 5, "t0": 8, "t1": 10.3, "crop": { "x": 52, "y": 14, "w": 18, "h": 32 } },
-    { "id": 6, "t0": 10.3, "t1": 12.2, "crop": { "x": 24, "y": -36, "w": 72, "h": 128 }, "wideMargin": true },
-    { "id": 7, "t0": 12.2, "t1": 13.7, "crop": { "x": 28, "y": -8, "w": 45, "h": 80 } },
+    { "id": 6, "t0": 10.3, "t1": 12.2, "crop": "wideGag" },
+    { "id": 7, "t0": 12.2, "t1": 13.7, "crop": "medium" },
     { "id": 8, "t0": 13.7, "t1": 15.2, "crop": { "x": 56, "y": 30, "w": 18, "h": 32 } }
   ],
-  "startCrop": { "x": 24, "y": -36, "w": 72, "h": 128 },
+  "startCrop": "wide",
   "lines": {
     "devant": "Le chat est devant le canapé.",
     "ou": "Où est le chat\u202F?",
