@@ -576,13 +576,14 @@ function drawTapGlowRing(now) {
   bctx.restore();
 }
 
-function drawCamille(beatName, ox) {
+function drawCamille(beatName, ox, t) {
   const beat = CFG.camille.beats[beatName];
   if (!beat) return;
   const x = ox ?? beat.anchor.x;
   const dx = x - beat.anchor.x;
   drawImg(beat.file, x, beat.anchor.y);
-  if (beat.brush) drawImg(beat.brush.file, beat.brush.anchor.x + dx, beat.brush.anchor.y);
+  const sh = shotAtTime(t).id;
+  if (beat.brush && sh !== 3) drawImg(beat.brush.file, beat.brush.anchor.x + dx, beat.brush.anchor.y);
 }
 
 function drawPlantProp(t) {
@@ -601,7 +602,7 @@ function drawSceneContent(t) {
   if (cat && (cat.key === 'peek_0' || cat.key === 'peek_1')) catBehind = false;
 
   drawPlantProp(t);
-  if (beat) drawCamille(beat, cx);
+  if (beat) drawCamille(beat, cx, t);
   if (cat && catBehind) drawSprite(cat.key, cat.x, cat.y, cat.flip);
   drawImg(CFG.sofa.file, CFG.sofa.x, CFG.sofa.y);
   if (tailVisible(t)) {

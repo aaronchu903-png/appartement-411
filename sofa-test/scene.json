@@ -71,13 +71,7 @@
         "height": 18,
         "anchor": { "x": 22, "y": 26 },
         "layer": "front",
-        "brush": {
-          "file": "brush.png",
-          "width": 6,
-          "height": 3,
-          "anchor": { "x": 14, "y": 37 },
-          "layer": "front"
-        }
+        "brush": null
       },
       "standSeen": {
         "file": "camille_bend_0.png",
@@ -102,7 +96,7 @@
     "tailRevealAfterOu": 0.5,
     "shot6Start": 10.3,
     "shot6CatScale": 2.35,
-    "shot6CatXOffset": -4,
+    "shot6CatXOffset": -16,
     "sighAt": 12.3,
     "sceneEnd": 15.2
   },
