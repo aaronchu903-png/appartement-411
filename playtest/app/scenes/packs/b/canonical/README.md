@@ -1,0 +1,9 @@
+# Canonical sprites, style B (2026-10-25)
+Generator: `python3 gen_canonical.py` (PIL, original code art, $0). Checks: `python3 check_palette.py`, `python3 check_manifest.py` (validates against ../../tech/SPRITE_MANIFEST_FORMAT.md; last run: OK, 185 assets, 5 atlases).
+
+- `<who>_sheet.png` native-px atlases: noe, camille, martin, lefevre (16x24 cells), croissant (14x12 cells).
+- `manifest.json` pack manifest (assetRoot/atlases/assets). Every frame: `source:"atlas"`, `frame{x,y,w,h}`, `anchor:"feet"`, `anchorPoint` (humans {8,23}, cat {6,11}), `pixelScale:1`; arm frames also carry `handPoint` (prop attach). Sequences: `<who>.idle` (2 fps), `<who>.walk` (8 fps).
+- Names: `<who>.stand`, `.idle.0-1`, `.walk.0-3`, `.face.{neutral,happy,sad,shocked,big-eyes,blink,brow_raise,talk_0,talk_1}` (cat: chew + brow_raise, no talk), `.pose.facepalm` (people), `.base.noarms`, `.arm_l|arm_r.{down,wave,point,hips,chest,hold,facepalm}`, `.shadow`, `noe.overlay.scarf` (outdoors only), `lefevre.overlay.glasses`, `martin.pose.{proud,sigh,hips,wave,scold}`, `croissant.{sit,tail_up,base.noface}`, `noe|camille.back_stand`, `.back_idle.0-1`, `.back_walk.0-3` (+ sequences `back_idle`, `back_walk`; standalone PNGs in `back/x1`, `back/x30`). Names use `_` instead of a 4th dot to keep `<character>.<pose>[.<n>]`. `handPoint` is optional, see HANDPOINT_PROPOSAL.md.
+- Faces/arms/overlays are full-cell layers sharing the body's feet anchor: draw them at the same position as the body.
+- `x30/<who>/` set-C-style split layers (head, body, legs, arm_l, arm_r, shadow, face/eyes_*, face/mouth_*, arms/<pose>_<side>.png) at x30. NOTE: canvas is 16x24 (480x720), not set C's 14x19, so HumanC.tsx constants (HUMAN_C, SHOULDER_ROW etc.) must be updated before use.
+- `lineup_phone.png` (+ `_small`), `lineup_native.png`, `review_*_x8.png`, `palette.json`, `palette_check.txt`.

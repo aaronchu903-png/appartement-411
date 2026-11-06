@@ -1,0 +1,808 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d09_six_heures",
+ "day": 9,
+ "title": "Six heures",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d09_",
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "rooftop",
+  "stairwell"
+ ],
+ "target_words": [
+  "le basilic",
+  "la liste",
+  "la règle",
+  "le beurre",
+  "le frigo",
+  "tu pourrais",
+  "faire la vaisselle",
+  "ce n’est pas moi",
+  "asseyez-vous",
+  "la chaise"
+ ],
+ "recycle_words": [
+  "à six heures",
+  "venez chez moi",
+  "c’est gentil"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Atchoum",
+   "time": "07:30",
+   "plot": "cold_open",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "basil_pot",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "The desk plant is now Noé’s basil (baked prop.plant; pot ① lives on the roof since D8). Croissant sniffs it, nose in the leaves."
+      },
+      {
+       "do": "cat_action",
+       "action": "react_shocked",
+       "at": "desk_top",
+       "note": "Smile detail: a tiny sneeze (no sneeze art: shocked face)."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Non, Croissant ! C’est du basilic, pour la cuisine.",
+       "zh": "不行，可颂！这是罗勒，做菜用的。",
+       "gesture": "point"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_liste",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "La liste",
+   "time": "08:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "prop",
+       "id": "paper_pen",
+       "action": "hold",
+       "who": "camille"
+      },
+      {
+       "do": "prop",
+       "id": "paper_pen_table",
+       "action": "show",
+       "at": "table_paper"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ],
+       "note": "Camille with a sheet of paper and a pen."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Ce soir, à six heures : Madame Lefèvre. Une liste !",
+       "zh": "今晚六点：勒费弗尔太太。列个清单！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Règle un : le beurre, dans le frigo.",
+       "zh": "第一条：黄油放冰箱。"
+      },
+      {
+       "do": "prop",
+       "id": "insert_rules_list",
+       "action": "show",
+       "caption": {
+        "text": "Règle 1 : le beurre",
+        "on": "insert_rules_list"
+       },
+       "note": "She writes rule 1."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_rules_list"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le beurre… dans le frigo. D’accord.",
+       "zh": "黄油……放冰箱。好的。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "noe"
+       ],
+       "note": "Réalisateur 2026-10-27: insert rule (max 1 line per insert, then back to actors)."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Règle deux : Noé, tu pourrais faire la vaisselle ?",
+       "zh": "第二条：诺埃，你能洗碗吗？"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La vaisselle ? Ce n’est pas moi !",
+       "zh": "碗？不是我！",
+       "face": "big-eyes",
+       "gesture": "hold"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Très drôle.",
+       "zh": "真好笑。",
+       "face": "brow_raise"
+      }
+     ]
+    },
+    {
+     "id": "a1_out",
+     "steps": [
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Aide Camille. Demande à Noé.",
+        "zh": "帮卡米耶。问问诺埃。"
+       },
+       "options": [
+        {
+         "fr": "Tu pourrais faire la vaisselle ?",
+         "zh": "你能洗碗吗？",
+         "correct": true
+        },
+        {
+         "fr": "Tu pourrais faire le frigo ?",
+         "zh": "你能做冰箱吗？",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Faire la vaisselle… d’accord. Et toi, tu pourrais finir la liste ?",
+       "zh": "洗碗……好吧。那你能把清单写完吗？",
+       "face": "sad"
+      },
+      {
+       "do": "prop",
+       "id": "insert_rules_list",
+       "action": "show",
+       "caption": {
+        "text": "Règle 2 : la vaisselle",
+        "on": "insert_rules_list"
+       },
+       "note": "Rule 2 on the list (digits, matching Règle 1)."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_rules_list"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_liste",
+         "audio": "la_liste"
+        },
+        {
+         "id": "la_regle",
+         "audio": "la_regle"
+        },
+        {
+         "id": "le_beurre",
+         "audio": "le_beurre"
+        },
+        {
+         "id": "le_frigo",
+         "audio": "le_frigo"
+        },
+        {
+         "id": "tu_pourrais",
+         "audio": "tu_pourrais"
+        },
+        {
+         "id": "faire_la_vaisselle",
+         "audio": "faire_la_vaisselle"
+        },
+        {
+         "id": "ce_nest_pas_moi",
+         "audio": "ce_nest_pas_moi"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_beurre",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Le beurre",
+   "time": "12:00",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "basil_pot",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "prop",
+       "id": "butter_block",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Set-up: the butter is NOT in the fridge. Croissant on the counter."
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "butter_block",
+        "croissant"
+       ],
+       "note": "He licks the butter. Slowly."
+      },
+      {
+       "do": "cat_action",
+       "action": "chew",
+       "at": "counter_top"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le beurre !",
+       "zh": "黄油！",
+       "face": "shocked"
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ce n’est pas moi !",
+       "zh": "不是我！",
+       "gesture": "hold",
+       "note": "Hands up, by reflex. B words: targets said in A1 + Day 1–8."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Règle un : le beurre, dans le frigo.",
+       "zh": "第一条：黄油放冰箱。",
+       "face": "brow_raise"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_six_heures",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "title": "Six heures",
+   "time": "18:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "seat_back_l",
+       "note": "Croissant is already on the empty fourth chair, the one set for her."
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_door_r",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "walk_to",
+       "who": "lefevre",
+       "to": "stand_mid"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bonsoir, Madame ! Asseyez-vous.",
+       "zh": "晚上好，女士！请坐。",
+       "face": "happy",
+       "gesture": "point"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "Croissant does not move. Very straight. Eyes half closed."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ! Pas sur la chaise !",
+       "zh": "可颂！别上椅子！",
+       "face": "shocked"
+      }
+     ]
+    },
+    {
+     "id": "a2_payoff",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "Long beat. She looks at the cat. The cat looks at her."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Bonsoir, Monsieur.",
+       "zh": "晚上好，先生。"
+      },
+      {
+       "do": "sit",
+       "who": "lefevre",
+       "seat": "seat_end_l"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "La chaise ? C’est la chaise de Croissant.",
+       "zh": "椅子？那是可颂的椅子。",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Asseyez-vous… là ? Pardon, Madame !",
+       "zh": "您坐……那儿？对不起，女士！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est gentil, Madame.",
+       "zh": "您真好，女士。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "asseyez_vous",
+         "audio": "asseyez_vous"
+        },
+        {
+         "id": "la_chaise",
+         "audio": "la_chaise"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "title": "La clé",
+   "time": "18:30",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "sit",
+       "who": "lefevre",
+       "seat": "seat_end_l"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "key_hooks_flat",
+       "action": "show",
+       "at": "wall_key_hooks"
+      },
+      {
+       "do": "prop",
+       "id": "key_old_table",
+       "action": "show",
+       "at": "table_top",
+       "note": "Noé empties his pocket on the table: the old roof key from D8."
+      },
+      {
+       "do": "prop",
+       "id": "insert_key_old",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_key_old"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "She stops. Her hand moves toward the key… and stops an inch away. She says nothing about it (whose key it was is Day 11)."
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "table_end_l",
+       "note": "Croissant gets up and pushes his head against her stopped hand."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre",
+        "croissant"
+       ],
+       "note": "HOLD 3 s. Her fingers open; she strokes him once. Almost a smile."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Et le basilic ? Il est content ?",
+       "zh": "那罗勒呢？它开心吗？"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le basilic ? Très content, Madame !",
+       "zh": "罗勒？很开心，女士！",
+       "face": "happy"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "set": "rooftop",
+   "light": "night",
+   "title": "Bonne nuit, la plante",
+   "time": "21:00",
+   "plot": "watering",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "w",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_chez_nous_full",
+       "action": "show",
+       "at": "pot_chez_nous"
+      },
+      {
+       "do": "prop",
+       "id": "arrosoir",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_chez_nous_full"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Le beurre, dans le frigo.",
+         "zh": "黄油放冰箱。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Ce n’est pas moi !",
+         "zh": "不是我！"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Asseyez-vous.",
+         "zh": "请坐。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "C’est gentil.",
+         "zh": "您真好。"
+        }
+       ],
+       "note": "Optional review at pot ① on the roof (quick night visit, no walk). One word per pour; exit after any pour."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "stairwell",
+   "light": "night",
+   "title": "Jeudi",
+   "time": "21:30",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Jeudi, venez chez moi. Six heures.",
+       "zh": "星期四，来我家。六点。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Jeudi ? Oui, Madame !",
+       "zh": "星期四？好的，女士！",
+       "face": "happy"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "Her eyes go to the key in Noé’s hand. She opens her mouth… and closes the door instead."
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "swap",
+       "to": "door_neighbour_closed"
+      },
+      {
+       "do": "prop",
+       "id": "key_old",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "prop",
+       "id": "insert_key_old",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_key_old"
+       ],
+       "note": "Noé’s hand, the old key. Then up: the little roof door at the top of the stairs."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Demain matin… le toit !",
+       "zh": "明天早上……上屋顶！",
+       "face": "big-eyes"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

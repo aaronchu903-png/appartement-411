@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pack B lineup</title>
+  <link rel="stylesheet" href="scene-player.css">
+  <style>html, body { margin: 0; height: 100%; } #root { height: 100%; }</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { initScenePlayer } from './scene-player.js';
+    await initScenePlayer(document.getElementById('root'), './pack-b-lineup/scene.json');
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "source": "HANDOFF_LeCTO.md",
+  "stageWidth": 192,
+  "extendedStageHeight": 176,
+  "presetSize": {
+    "wide": { "w": 135, "h": 132 },
+    "medium": { "w": 90, "h": 88 },
+    "close": { "w": 60, "h": 59 },
+    "medium_table4": { "w": 90, "h": 88 },
+    "close_stairs": { "w": 60, "h": 59 },
+    "regard_close_option": { "w": 60, "h": 59 }
+  },
+  "cameras": {
+    "kitchen": {
+      "wide": { "x": 2, "y": 37, "fixedScale": 8 },
+      "medium": { "x": 46, "y": 70, "fixedScale": 12 },
+      "close": { "x": 72, "y": 90, "fixedScale": 18 },
+      "medium_table4": { "x": 68, "y": 100, "fixedScale": 12 }
+    },
+    "rooftop": {
+      "wide": { "x": 2, "y": 37, "fixedScale": 8 },
+      "medium": { "x": 20, "y": 70, "fixedScale": 12 },
+      "close": { "x": 60, "y": 90, "fixedScale": 18 }
+    },
+    "stairwell": {
+      "wide": { "x": 2, "y": 37, "fixedScale": 8 },
+      "medium": { "x": 44, "y": 70, "fixedScale": 12 },
+      "close": { "x": 60, "y": 90, "fixedScale": 18 },
+      "close_stairs": { "x": 84, "y": 90, "fixedScale": 18 },
+      "regard_close_option": { "x": 48, "y": 82, "fixedScale": 18 }
+    }
+  }
+}

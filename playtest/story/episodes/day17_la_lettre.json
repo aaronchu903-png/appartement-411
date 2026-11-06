@@ -1,0 +1,761 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d17_la_lettre",
+ "day": 17,
+ "title": "La lettre",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d17_",
+ "target_words": [
+  "la lettre",
+  "l’enveloppe",
+  "la recette",
+  "lire",
+  "cher",
+  "chère",
+  "à bientôt",
+  "la farine"
+ ],
+ "recycle_words": [
+  "ce n’est pas moi",
+  "le sucre"
+ ],
+ "martin_on_screen": false,
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "stairwell",
+  "rooftop"
+ ],
+ "flags_set": [],
+ "flags_read": [
+  "d12_verite"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "stairwell",
+   "light": "day",
+   "beats": [
+    {
+     "id": "co_lettre",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "envelope",
+       "action": "show",
+       "at": "doormat_home"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "doormat_home",
+       "note": "sitting on it"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "envelope"
+       ],
+       "note": "handwriting: « Au 411 »"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Une lettre ! Une enveloppe… pour nous !",
+       "zh": "一封信！一个信封……给我们的！",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "CO"
+    }
+   ]
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a1_lire",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "envelope",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Tu lis ?",
+       "zh": "你来念？",
+       "note": "to Camille"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Lire ? Moi ? Non. Toi.",
+       "zh": "念？我？不。你来。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ],
+       "note": "he opens it with a knife"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Doucement, l’enveloppe !",
+       "zh": "小心，信封！",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La lettre de Madame Martin ! Je vais lire.",
+       "zh": "Martin 太太的信！我来念。",
+       "face": "happy"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_lettre",
+         "audio": "la_lettre"
+        },
+        {
+         "id": "l_enveloppe",
+         "audio": "l_enveloppe"
+        },
+        {
+         "id": "lire",
+         "audio": "lire"
+        }
+       ]
+      }
+     ],
+     "ref": "A1"
+    }
+   ]
+  },
+  {
+   "id": "A2",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a2_lettre",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "envelope"
+       ],
+       "note": "the letter, read aloud; Martin’s voice over the page (insert, not on screen)"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Chère Camille, cher Noé, et cher… ou chère locataire du 411,",
+       "zh": "亲爱的 Camille，亲爱的 Noé，还有 411 亲爱的……租客，",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "player gender never fixed: « cher ou chère » IS the joke; Noé and Camille look at the player"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Cher… ou chère ?",
+       "zh": "亲爱的……阳性还是阴性？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Merci pour la photo et pour le colis.",
+       "zh": "谢谢你们的照片和包裹。"
+      }
+     ],
+     "ref": "A2"
+    },
+    {
+     "id": "a2_verite",
+     "steps": [
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Merci de m’avoir dit la vérité.",
+       "zh": "谢谢你们告诉我实话。",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "the Day 12 consequence"
+      }
+     ],
+     "ref": "A2-flag",
+     "if": {
+      "flag": "d12_verite",
+      "equals": true
+     }
+    },
+    {
+     "id": "a2_neutre",
+     "steps": [
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "…Merci pour la photo et pour le colis.",
+       "zh": "……谢谢照片，也谢谢包裹。",
+       "note": "neutral alternative when d12_verite is false: the thanks repeated, no reproach"
+      }
+     ],
+     "ref": "A2-flag-alt",
+     "if": {
+      "flag": "d12_verite",
+      "equals": false
+     }
+    },
+    {
+     "id": "a2_suite",
+     "steps": [
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "À bientôt. — M. Martin",
+       "zh": "回头见。—— M. Martin"
+      },
+      {
+       "do": "learning_module",
+       "module": "listening",
+       "items": [
+        {
+         "id": "cher_chere",
+         "audio": "cher_chere"
+        },
+        {
+         "id": "a_bientot",
+         "audio": "a_bientot"
+        }
+       ]
+      }
+     ],
+     "ref": "A2b"
+    }
+   ]
+  },
+  {
+   "id": "A3",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a3_recette",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "card"
+       ],
+       "note": "a second card in the envelope: a recipe card"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Une deuxième carte… Une recette !",
+       "zh": "第二张卡片……一张食谱！",
+       "face": "shocked",
+       "note": "RETURN map add (carte)"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "De la farine, du beurre, du sucre…",
+       "zh": "面粉、黄油、糖……",
+       "note": "reading"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La recette de Madame Martin ! Le kouign-amann !",
+       "zh": "Martin 太太的食谱！布列塔尼黄油酥！",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_recette",
+         "audio": "la_recette"
+        },
+        {
+         "id": "la_farine",
+         "audio": "la_farine"
+        }
+       ]
+      }
+     ],
+     "ref": "A3"
+    }
+   ]
+  },
+  {
+   "id": "A4",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a4_idee",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’ai une idée !",
+       "zh": "我有个主意！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Non.",
+       "zh": "不行。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "… Demain ?",
+       "zh": "……明天？",
+       "face": "happy",
+       "note": "cut on the turn"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "GATE (ECONOMY_V1 §3, Day 17): 6 € from la cagnotte for the ingredients; Noé goes out off-screen. No gate command in v0.2 and no cagnotte jar prop (jam_jar ≠ cagnotte): engine-side"
+      }
+     ],
+     "ref": "A4"
+    }
+   ]
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "v_noe",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "Farine, beurre, sucre… et la recette, sur le frigo !",
+       "zh": "面粉、黄油、糖……食谱贴在冰箱上！",
+       "sfx": "chime_message",
+       "note": "from the shop"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "la_farine",
+         "audio": "la_farine"
+        },
+        {
+         "id": "la_recette",
+         "audio": "la_recette"
+        }
+       ],
+       "prompt": {
+        "fr": "___, beurre, sucre… et ___, sur le frigo !",
+        "zh": "___、黄油、糖……还有___，在冰箱上！",
+        "audio": "la_farine"
+       }
+      }
+     ],
+     "ref": "V"
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "flour_bag",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "prop",
+       "id": "sugar_bowl",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "ingredients on the counter, the cat beside them"
+      }
+     ],
+     "ref": "B-setup"
+    },
+    {
+     "id": "b_cut",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "off-frame poof; hold 2 s"
+      }
+     ],
+     "ref": "B-cut"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "flour_on",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "a white cat"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_door_r",
+       "from": "right"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "De la farine !",
+       "zh": "面粉！",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "RETURN map add"
+      },
+      {
+       "do": "cat_action",
+       "action": "look",
+       "at": "counter_top",
+       "look_at": "camille",
+       "note": "« Ce n’est pas moi » is said FOR him by Camille, mock voice; the cat never talks"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Ce n’est pas moi !",
+       "zh": "“不是我！”",
+       "note": "Camille dubbing the cat; and du sucre on his nose: Le sucre ! next"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Et le sucre !",
+       "zh": "还有糖！"
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "cut on the gag"
+    }
+   ]
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "hp_chere",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ],
+       "note": "Camille writes the reply by hand, slowly, reading aloud"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Chère Madame Martin…",
+       "zh": "亲爱的 Martin 太太……",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Merci pour la recette. À bientôt.",
+       "zh": "谢谢您的食谱。回头见。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "À bientôt !",
+       "zh": "回头见！",
+       "face": "happy",
+       "note": "he signs too"
+      }
+     ],
+     "ref": "HP"
+    }
+   ]
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "r_carte",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "card"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Écris la carte :",
+        "zh": "写卡片："
+       },
+       "options": [
+        {
+         "fr": "Chère Madame Martin, merci pour la recette. À bientôt.",
+         "zh": "亲爱的 Martin 太太，谢谢您的食谱。回头见。",
+         "correct": true
+        }
+       ]
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "w_chere",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_tall",
+         "fr": "Chère plante… à bientôt.",
+         "zh": "亲爱的植物……回头见。"
+        },
+        {
+         "pot": "pot_tall",
+         "fr": "Une feuille !",
+         "zh": "一片叶子！"
+        }
+       ],
+       "note": "RETURN map add (feuille)"
+      }
+     ],
+     "ref": "W"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "stairwell",
+   "light": "night",
+   "beats": [
+    {
+     "id": "h_beurre",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_landing",
+       "from": "door",
+       "note": "GAP: no step-up mark; she stands on the landing"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "she looks up at the roof door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "she sees the player, smiles, and goes back in. Nothing is said"
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}

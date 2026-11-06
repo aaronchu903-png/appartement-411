@@ -1,0 +1,3 @@
+ok 79 assets
+kitchen maps diff 0 pixels 0
+stairwell maps diff 0 pixels 0

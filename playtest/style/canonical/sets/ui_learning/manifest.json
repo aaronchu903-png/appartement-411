@@ -1,0 +1,6627 @@
+{
+ "set": "ui_learning",
+ "rev": 2,
+ "spec": "tech/UI_COMPONENTS.md (2026-10-26)",
+ "assetRoot": ".",
+ "grading": "never (self-lit UI)",
+ "colorMap": {
+  "ink": "ink",
+  "panel": "cream",
+  "panel_sh": "wall_sh",
+  "field": "white",
+  "field_edge": "wall_sh",
+  "primary": "green",
+  "primary_sh": "green_sh",
+  "secondary": "wall",
+  "secondary_sh": "wall_sh",
+  "correct": "green",
+  "correct_sh": "green_sh",
+  "glint": "white",
+  "wrong": "orange",
+  "wrong_sh": "orange_sh",
+  "near": "orange",
+  "near_sh": "orange_sh",
+  "disabled": "grey",
+  "disabled_sh": "silver",
+  "focus": "navy",
+  "active": "sky",
+  "water": "sky",
+  "water_hi": "white",
+  "wood": "wood",
+  "wood_sh": "dark",
+  "gender_m": "navy",
+  "gender_f": "plum",
+  "gender_pl": null,
+  "underline_learned": "gold",
+  "underline_other": "green",
+  "accent": "sky",
+  "highlight": "cream",
+  "newdot": "green",
+  "record": "navy",
+  "record_ring": "sky"
+ },
+ "anchorCodes": {
+  "tl": {
+   "x": 0,
+   "y": 0
+  },
+  "tc": {
+   "x": 0.5,
+   "y": 0
+  },
+  "tr": {
+   "x": 1,
+   "y": 0
+  },
+  "c": {
+   "x": 0.5,
+   "y": 0.5
+  },
+  "bc": {
+   "x": 0.5,
+   "y": 1
+  },
+  "bl": {
+   "x": 0,
+   "y": 1
+  }
+ },
+ "atlases": {
+  "ui_learning_rev2": {
+   "file": "ui_learning_rev2.png",
+   "w": 512,
+   "h": 364
+  },
+  "ui_learning_m2": {
+   "file": "ui_learning_m2.png",
+   "w": 488,
+   "h": 203
+  }
+ },
+ "assets": {
+  "ui.icon.replay": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 120,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_replay.png",
+   "pri": "P0"
+  },
+  "ui.icon.slow": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 135,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_slow.png",
+   "pri": "P0"
+  },
+  "ui.icon.audio": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 465,
+    "y": 316,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_audio.png",
+   "pri": "P0"
+  },
+  "ui.icon.help": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 45,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_help.png",
+   "pri": "P0"
+  },
+  "ui.icon.mic": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 75,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_mic.png",
+   "pri": "P0"
+  },
+  "ui.icon.close": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 15,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_close.png",
+   "pri": "P0"
+  },
+  "ui.icon.leaf": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 60,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_leaf.png",
+   "pri": "P0"
+  },
+  "ui.icon.drop": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 30,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_drop.png",
+   "pri": "P0"
+  },
+  "ui.icon.book": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 480,
+    "y": 316,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_book.png",
+   "pri": "P0"
+  },
+  "ui.icon.pot": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 105,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_pot.png",
+   "pri": "P0"
+  },
+  "ui.icon.clock": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_clock.png",
+   "pri": "P0"
+  },
+  "ui.icon.check_leaf": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 495,
+    "y": 316,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_check_leaf.png",
+   "pri": "P0"
+  },
+  "ui.icon.slow_active": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 150,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_slow_active.png",
+   "pri": "P0"
+  },
+  "ui.icon.mic_active": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 90,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_mic_active.png",
+   "pri": "P0"
+  },
+  "ui.icon.thumb": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 180,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_thumb.png",
+   "pri": "P1"
+  },
+  "ui.icon.thinking": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 165,
+    "y": 339,
+    "w": 14,
+    "h": 14
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/icon_thinking.png",
+   "pri": "P1"
+  },
+  "ui.panel.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 289,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/panel_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "pri": "P0",
+   "note": "content = inner rect"
+  },
+  "ui.sheet_bottom.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 75,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 24
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/sheet_bottom_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 0
+   },
+   "textRects": [
+    {
+     "role": "title",
+     "x": 6,
+     "y": 6,
+     "w": "w-12",
+     "h": 10,
+     "max": 28
+    }
+   ],
+   "hit": {
+    "h": 22,
+    "note": "nub row"
+   },
+   "pri": "P0",
+   "note": "open bottom; overlay ui.sheet_bottom.nub centred at y=2 (idle: wall_sh, open: same)",
+   "textColor": "ink"
+  },
+  "ui.sheet_bottom.open": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 100,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 24
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/sheet_bottom_open.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 0
+   },
+   "textRects": [
+    {
+     "role": "title",
+     "x": 6,
+     "y": 6,
+     "w": "w-12",
+     "h": 10,
+     "max": 28
+    }
+   ],
+   "hit": {
+    "h": 22,
+    "note": "nub row"
+   },
+   "pri": "P0",
+   "note": "open bottom; overlay ui.sheet_bottom.nub centred at y=2 (idle: wall_sh, open: same)",
+   "textColor": "ink"
+  },
+  "ui.sheet_bottom.nub": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 484,
+    "y": 354,
+    "w": 12,
+    "h": 2
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 6,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/sheet_bottom_nub.png",
+   "pri": "P0",
+   "note": "draw centred at top+2 after 9-slicing"
+  },
+  "ui.btn_primary.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 431,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_primary_idle.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "cream"
+  },
+  "ui.btn_secondary.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 25,
+    "y": 237,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_secondary_idle.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.btn_primary.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 456,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_primary_pressed.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "cream"
+  },
+  "ui.btn_secondary.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 50,
+    "y": 237,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_secondary_pressed.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.btn_primary.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 406,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_primary_focus.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "cream"
+  },
+  "ui.btn_secondary.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 237,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_secondary_focus.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.btn_primary.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 381,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_primary_disabled.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "cream"
+  },
+  "ui.btn_secondary.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 481,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_secondary_disabled.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 6,
+     "y": 7,
+     "w": "w-12",
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "hit": {
+    "h": 28
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 281,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_idle.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 331,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_pressed.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 256,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_focus.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.correct": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 206,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_correct.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.wrong": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 356,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_wrong.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    },
+    {
+     "role": "recast_form",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.near": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 306,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_near.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    },
+    {
+     "role": "recast_form",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_option_row.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 231,
+    "y": 196,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_option_row_disabled.png",
+   "nineSlice": {
+    "l": 5,
+    "t": 5,
+    "r": 5,
+    "b": 7
+   },
+   "hit": {
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "answer",
+     "x": 8,
+     "y": 7,
+     "w": "w-16",
+     "h": 14,
+     "max": 32
+    },
+    {
+     "role": "pic_slot",
+     "x": 3,
+     "y": 3,
+     "w": 22,
+     "h": 22,
+     "max": 0
+    }
+   ],
+   "pri": "P0",
+   "note": "wrong/near = orange stripe (§10a); engine shows the player answer struck-free + the correct form in recast_form (right half, after the answer). pic_slot: when used, engine shifts answer x to 28",
+   "textColor": "ink"
+  },
+  "ui.btn_icon.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 140,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_icon_idle.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "iconSlot": {
+    "x": 4,
+    "y": 3,
+    "w": 14,
+    "h": 14
+   },
+   "pri": "P0"
+  },
+  "ui.btn_icon.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 163,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_icon_pressed.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "iconSlot": {
+    "x": 4,
+    "y": 4,
+    "w": 14,
+    "h": 14
+   },
+   "pri": "P0"
+  },
+  "ui.btn_icon.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 117,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_icon_focus.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "iconSlot": {
+    "x": 4,
+    "y": 3,
+    "w": 14,
+    "h": 14
+   },
+   "pri": "P0"
+  },
+  "ui.btn_icon.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 94,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_icon_disabled.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "iconSlot": {
+    "x": 4,
+    "y": 3,
+    "w": 14,
+    "h": 14
+   },
+   "pri": "P0"
+  },
+  "ui.btn_icon.active": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 71,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/btn_icon_active.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "iconSlot": {
+    "x": 4,
+    "y": 3,
+    "w": 14,
+    "h": 14
+   },
+   "pri": "P0"
+  },
+  "ui.exit.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 489,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/exit_idle.png",
+   "hit": {
+    "w": 22,
+    "h": 22,
+    "note": "+ label rect when shown"
+   },
+   "textRects": [
+    {
+     "role": "exit",
+     "x": 24,
+     "y": 4,
+     "w": 80,
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "pri": "P0",
+   "note": "door-out arrow, not a cross",
+   "textColor": "ink"
+  },
+  "ui.exit.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/exit_pressed.png",
+   "hit": {
+    "w": 22,
+    "h": 22,
+    "note": "+ label rect when shown"
+   },
+   "textRects": [
+    {
+     "role": "exit",
+     "x": 24,
+     "y": 4,
+     "w": 80,
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "pri": "P0",
+   "note": "door-out arrow, not a cross",
+   "textColor": "ink"
+  },
+  "ui.exit.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 466,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/exit_focus.png",
+   "hit": {
+    "w": 22,
+    "h": 22,
+    "note": "+ label rect when shown"
+   },
+   "textRects": [
+    {
+     "role": "exit",
+     "x": 24,
+     "y": 4,
+     "w": 80,
+     "h": 14,
+     "max": 22
+    }
+   ],
+   "pri": "P0",
+   "note": "door-out arrow, not a cross",
+   "textColor": "ink"
+  },
+  "ui.pips.todo": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 160,
+    "y": 354,
+    "w": 6,
+    "h": 6
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pips_todo.png",
+   "pri": "P0",
+   "note": "pip 6x6, gap 2, row = n*8-2"
+  },
+  "ui.pips.current": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 132,
+    "y": 354,
+    "w": 6,
+    "h": 6
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pips_current.png",
+   "pri": "P0",
+   "note": "pip 6x6, gap 2, row = n*8-2"
+  },
+  "ui.pips.done_ok": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 139,
+    "y": 354,
+    "w": 6,
+    "h": 6
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pips_done_ok.png",
+   "pri": "P0",
+   "note": "pip 6x6, gap 2, row = n*8-2"
+  },
+  "ui.pips.done_recast": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 146,
+    "y": 354,
+    "w": 6,
+    "h": 6
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pips_done_recast.png",
+   "pri": "P0",
+   "note": "pip 6x6, gap 2, row = n*8-2"
+  },
+  "ui.pips.skipped": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 153,
+    "y": 354,
+    "w": 6,
+    "h": 6
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pips_skipped.png",
+   "pri": "P0",
+   "note": "pip 6x6, gap 2, row = n*8-2"
+  },
+  "ui.toast.in": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 279,
+    "y": 316,
+    "w": 24,
+    "h": 18
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 18
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/toast_in.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "iconSlot": {
+    "x": 3,
+    "y": 2,
+    "w": 14,
+    "h": 14
+   },
+   "textRects": [
+    {
+     "role": "toast",
+     "x": 20,
+     "y": 3,
+     "w": "w-24",
+     "h": 12,
+     "max": 32
+    }
+   ],
+   "hit": {
+    "h": 22,
+    "note": "toast is 18 high → engine pads hit to 22"
+   },
+   "pri": "P0",
+   "note": "in/out = same art; engine slides 3 frames (6 px steps)",
+   "textColor": "ink"
+  },
+  "ui.toast.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 254,
+    "y": 316,
+    "w": 24,
+    "h": 18
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 18
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/toast_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "iconSlot": {
+    "x": 3,
+    "y": 2,
+    "w": 14,
+    "h": 14
+   },
+   "textRects": [
+    {
+     "role": "toast",
+     "x": 20,
+     "y": 3,
+     "w": "w-24",
+     "h": 12,
+     "max": 32
+    }
+   ],
+   "hit": {
+    "h": 22,
+    "note": "toast is 18 high → engine pads hit to 22"
+   },
+   "pri": "P0",
+   "note": "in/out = same art; engine slides 3 frames (6 px steps)",
+   "textColor": "ink"
+  },
+  "ui.toast.out": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 304,
+    "y": 316,
+    "w": 24,
+    "h": 18
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 18
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/toast_out.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "iconSlot": {
+    "x": 3,
+    "y": 2,
+    "w": 14,
+    "h": 14
+   },
+   "textRects": [
+    {
+     "role": "toast",
+     "x": 20,
+     "y": 3,
+     "w": "w-24",
+     "h": 12,
+     "max": 32
+    }
+   ],
+   "hit": {
+    "h": 22,
+    "note": "toast is 18 high → engine pads hit to 22"
+   },
+   "pri": "P0",
+   "note": "in/out = same art; engine slides 3 frames (6 px steps)",
+   "textColor": "ink"
+  },
+  "ui.word_toast.in": {
+   "type": "ref",
+   "anchor": "bc",
+   "alias": "ui.toast.in",
+   "icon": "ui.icon.leaf",
+   "pri": "P0"
+  },
+  "ui.word_toast.idle": {
+   "type": "ref",
+   "anchor": "bc",
+   "alias": "ui.toast.idle",
+   "icon": "ui.icon.leaf",
+   "pri": "P0"
+  },
+  "ui.word_toast.out": {
+   "type": "ref",
+   "anchor": "bc",
+   "alias": "ui.toast.out",
+   "icon": "ui.icon.leaf",
+   "pri": "P0"
+  },
+  "ui.recast_box.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 314,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/recast_box_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "player",
+     "x": 6,
+     "y": 4,
+     "w": "w-12",
+     "h": 12,
+     "max": 60
+    },
+    {
+     "role": "model",
+     "x": 6,
+     "y": 18,
+     "w": "w-12",
+     "h": 12,
+     "max": 60
+    }
+   ],
+   "note": "contains a btn_icon + icon.audio on the right; differing span highlight engine-drawn in ORANGE (§10a)",
+   "textColor": "ink"
+  },
+  "ui.recast_box.near": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 339,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/recast_box_near.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "player",
+     "x": 6,
+     "y": 4,
+     "w": "w-12",
+     "h": 12,
+     "max": 60
+    },
+    {
+     "role": "model",
+     "x": 6,
+     "y": 18,
+     "w": "w-12",
+     "h": 12,
+     "max": 60
+    }
+   ],
+   "note": "contains a btn_icon + icon.audio on the right; differing span highlight engine-drawn in ORANGE (§10a)",
+   "textColor": "ink"
+  },
+  "ui.recast_box.recast": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 364,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/recast_box_recast.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "player",
+     "x": 6,
+     "y": 4,
+     "w": "w-12",
+     "h": 12,
+     "max": 60
+    },
+    {
+     "role": "model",
+     "x": 6,
+     "y": 18,
+     "w": "w-12",
+     "h": 12,
+     "max": 60
+    }
+   ],
+   "note": "contains a btn_icon + icon.audio on the right; differing span highlight engine-drawn in ORANGE (§10a)",
+   "textColor": "ink"
+  },
+  "ui.accent_bar.bar": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 264,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 24
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/accent_bar_bar.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "pri": "P0",
+   "note": "9 keys x 20 = 180 wide"
+  },
+  "ui.accent_bar.key_idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 33,
+    "y": 291,
+    "w": 18,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/accent_bar_key_idle.png",
+   "hit": {
+    "w": 18,
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "char",
+     "x": 2,
+     "y": 5,
+     "w": 14,
+     "h": 12,
+     "max": 1
+    }
+   ],
+   "pri": "P0",
+   "note": "key 18 wide < 22: neighbours 2 px gap → hit 20 (see gaps)",
+   "textColor": "ink"
+  },
+  "ui.accent_bar.key_pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 52,
+    "y": 291,
+    "w": 18,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/accent_bar_key_pressed.png",
+   "hit": {
+    "w": 18,
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "char",
+     "x": 2,
+     "y": 5,
+     "w": 14,
+     "h": 12,
+     "max": 1
+    }
+   ],
+   "pri": "P0",
+   "note": "key 18 wide < 22: neighbours 2 px gap → hit 20 (see gaps)",
+   "textColor": "ink"
+  },
+  "ui.text_field.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 200,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/text_field_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "user_text",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 40
+    }
+   ],
+   "hit": {
+    "h": 24
+   },
+   "pri": "P0",
+   "note": "edge colour = state; bottom underline row repeats it",
+   "textColor": "ink"
+  },
+  "ui.text_field.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 175,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/text_field_focus.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "user_text",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 40
+    }
+   ],
+   "hit": {
+    "h": 24
+   },
+   "pri": "P0",
+   "note": "edge colour = state; bottom underline row repeats it",
+   "textColor": "ink"
+  },
+  "ui.text_field.near": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 225,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/text_field_near.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "user_text",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 40
+    }
+   ],
+   "hit": {
+    "h": 24
+   },
+   "pri": "P0",
+   "note": "edge colour = state; bottom underline row repeats it",
+   "textColor": "ink"
+  },
+  "ui.text_field.correct": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 125,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/text_field_correct.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "user_text",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 40
+    }
+   ],
+   "hit": {
+    "h": 24
+   },
+   "pri": "P0",
+   "note": "edge colour = state; bottom underline row repeats it",
+   "textColor": "ink"
+  },
+  "ui.text_field.recast": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 250,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/text_field_recast.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "user_text",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 40
+    }
+   ],
+   "hit": {
+    "h": 24
+   },
+   "pri": "P0",
+   "note": "edge colour = state; bottom underline row repeats it",
+   "textColor": "ink"
+  },
+  "ui.text_field.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 150,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/text_field_disabled.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "user_text",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 40
+    }
+   ],
+   "hit": {
+    "h": 24
+   },
+   "pri": "P0",
+   "note": "edge colour = state; bottom underline row repeats it",
+   "textColor": "ink"
+  },
+  "ui.feedback_burst.correct_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 329,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_correct_f0.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.correct_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 346,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_correct_f1.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.correct_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 363,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_correct_f2.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.correct_f3": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 380,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_correct_f3.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.correct": {
+   "type": "sequence",
+   "frames": [
+    "ui.feedback_burst.correct_f0",
+    "ui.feedback_burst.correct_f1",
+    "ui.feedback_burst.correct_f2",
+    "ui.feedback_burst.correct_f3"
+   ],
+   "fps": 12,
+   "pri": "P0"
+  },
+  "ui.feedback_burst.near_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 397,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_near_f0.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.near_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 414,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_near_f1.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.near_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 431,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_near_f2.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.near_f3": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 448,
+    "y": 316,
+    "w": 16,
+    "h": 16
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/feedback_burst_near_f3.png",
+   "pri": "P0"
+  },
+  "ui.feedback_burst.near": {
+   "type": "sequence",
+   "frames": [
+    "ui.feedback_burst.near_f0",
+    "ui.feedback_burst.near_f1",
+    "ui.feedback_burst.near_f2",
+    "ui.feedback_burst.near_f3"
+   ],
+   "fps": 12,
+   "pri": "P0"
+  },
+  "ui.wordbook_card.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 275,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 12,
+    "y": 12
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_card_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "target": {
+    "w": 172,
+    "h": 200
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 8,
+     "y": 8,
+     "w": 120,
+     "h": 16,
+     "max": 24
+    },
+    {
+     "role": "gloss",
+     "x": 8,
+     "y": 28,
+     "w": 156,
+     "h": 12,
+     "max": 30
+    }
+   ],
+   "note": "close via ui.exit; picture frame at (8,48)",
+   "textColor": "ink"
+  },
+  "ui.wordbook_card.open": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 325,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 12,
+    "y": 12
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_card_open.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "target": {
+    "w": 172,
+    "h": 200
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 8,
+     "y": 8,
+     "w": 120,
+     "h": 16,
+     "max": 24
+    },
+    {
+     "role": "gloss",
+     "x": 8,
+     "y": 28,
+     "w": 156,
+     "h": 12,
+     "max": 30
+    }
+   ],
+   "note": "close via ui.exit; picture frame at (8,48)",
+   "textColor": "ink"
+  },
+  "ui.wordbook_card.locked-preview": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 300,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 12,
+    "y": 12
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_card_locked_preview.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "target": {
+    "w": 172,
+    "h": 200
+   },
+   "pri": "P0",
+   "note": "overlay ui.wordbook_card.locked_pot centred"
+  },
+  "ui.wordbook_card.locked_pot": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 75,
+    "y": 237,
+    "w": 24,
+    "h": 28
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 12,
+    "y": 14
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_card_locked_pot.png",
+   "pri": "P0",
+   "note": "pot outline only (wall_sh)"
+  },
+  "ui.card_picture_frame.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 65,
+    "y": 151,
+    "w": 64,
+    "h": 44
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/card_picture_frame_idle.png",
+   "anchorInCard": {
+    "x": 8,
+    "y": 48
+   },
+   "hit": {
+    "w": 64,
+    "h": 44,
+    "note": "tap = audio"
+   },
+   "pri": "P0",
+   "inner": {
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   }
+  },
+  "ui.card_picture_frame.empty": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 151,
+    "w": 64,
+    "h": 44
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/card_picture_frame_empty.png",
+   "anchorInCard": {
+    "x": 8,
+    "y": 48
+   },
+   "hit": {
+    "w": 64,
+    "h": 44,
+    "note": "tap = audio"
+   },
+   "pri": "P0",
+   "inner": {
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   }
+  },
+  "ui.scene_thumb.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 141,
+    "y": 237,
+    "w": 40,
+    "h": 27
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/scene_thumb_idle.png",
+   "hit": {
+    "w": 40,
+    "h": 27
+   },
+   "inner": {
+    "x": 2,
+    "y": 2,
+    "w": 36,
+    "h": 23
+   },
+   "pri": "P0",
+   "note": "engine draws the 36x23 scene crop into inner"
+  },
+  "ui.scene_thumb.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 223,
+    "y": 237,
+    "w": 40,
+    "h": 27
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/scene_thumb_pressed.png",
+   "hit": {
+    "w": 40,
+    "h": 27
+   },
+   "inner": {
+    "x": 2,
+    "y": 3,
+    "w": 36,
+    "h": 23
+   },
+   "pri": "P0",
+   "note": "engine draws the 36x23 scene crop into inner"
+  },
+  "ui.scene_thumb.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 100,
+    "y": 237,
+    "w": 40,
+    "h": 27
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/scene_thumb_focus.png",
+   "hit": {
+    "w": 40,
+    "h": 27
+   },
+   "inner": {
+    "x": 2,
+    "y": 2,
+    "w": 36,
+    "h": 23
+   },
+   "pri": "P0",
+   "note": "engine draws the 36x23 scene crop into inner"
+  },
+  "ui.scene_thumb.newest": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 182,
+    "y": 237,
+    "w": 40,
+    "h": 27
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/scene_thumb_newest.png",
+   "hit": {
+    "w": 40,
+    "h": 27
+   },
+   "inner": {
+    "x": 2,
+    "y": 2,
+    "w": 36,
+    "h": 23
+   },
+   "pri": "P0",
+   "note": "engine draws the 36x23 scene crop into inner"
+  },
+  "ui.gender_pip.m": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 263,
+    "y": 354,
+    "w": 4,
+    "h": 4
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/gender_pip_m.png",
+   "pri": "P0",
+   "note": "m/f colours provisional (§10 Q1)"
+  },
+  "ui.gender_pip.f": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 258,
+    "y": 354,
+    "w": 4,
+    "h": 4
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/gender_pip_f.png",
+   "pri": "P0",
+   "note": "m/f colours provisional (§10 Q1)"
+  },
+  "ui.gender_pip.none": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 268,
+    "y": 354,
+    "w": 4,
+    "h": 4
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/gender_pip_none.png",
+   "pri": "P0",
+   "note": "m/f colours provisional (§10 Q1)"
+  },
+  "ui.wordbook_list_row.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 416,
+    "y": 266,
+    "w": 32,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_list_row_idle.png",
+   "nineSlice": {
+    "l": 24,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 26,
+     "y": 5,
+     "w": "w-48",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "note": "32 wide (not 24): l-inset 24 keeps the status mark un-stretched",
+   "textColor": "ink"
+  },
+  "ui.wordbook_list_row.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 291,
+    "w": 32,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_list_row_pressed.png",
+   "nineSlice": {
+    "l": 24,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 26,
+     "y": 5,
+     "w": "w-48",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "note": "32 wide (not 24): l-inset 24 keeps the status mark un-stretched",
+   "textColor": "ink"
+  },
+  "ui.wordbook_list_row.grown": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 383,
+    "y": 266,
+    "w": 32,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_list_row_grown.png",
+   "nineSlice": {
+    "l": 24,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 26,
+     "y": 5,
+     "w": "w-48",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "note": "32 wide (not 24): l-inset 24 keeps the status mark un-stretched",
+   "textColor": "ink"
+  },
+  "ui.wordbook_list_row.due": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 350,
+    "y": 266,
+    "w": 32,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_list_row_due.png",
+   "nineSlice": {
+    "l": 24,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 26,
+     "y": 5,
+     "w": "w-48",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "note": "32 wide (not 24): l-inset 24 keeps the status mark un-stretched",
+   "textColor": "ink"
+  },
+  "ui.wordbook_list_row.locked": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 449,
+    "y": 266,
+    "w": 32,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/wordbook_list_row_locked.png",
+   "nineSlice": {
+    "l": 24,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "fr",
+     "x": 26,
+     "y": 5,
+     "w": "w-48",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "note": "32 wide (not 24): l-inset 24 keeps the status mark un-stretched",
+   "textColor": "ink"
+  },
+  "ui.review_entry.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_primary.idle",
+   "icon": "ui.icon.drop",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 14
+    }
+   ],
+   "pri": "P0",
+   "note": "hidden-before-story = engine does not draw",
+   "textColor": "ink"
+  },
+  "ui.review_entry.pressed": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_primary.pressed",
+   "icon": "ui.icon.drop",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 14
+    }
+   ],
+   "pri": "P0",
+   "note": "hidden-before-story = engine does not draw",
+   "textColor": "ink"
+  },
+  "ui.review_entry.disabled": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_primary.disabled",
+   "icon": "ui.icon.drop",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 14
+    }
+   ],
+   "pri": "P0",
+   "note": "hidden-before-story = engine does not draw",
+   "textColor": "ink"
+  },
+  "ui.water_meter.empty": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 195,
+    "y": 339,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 8,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/can_small_empty.png",
+   "pri": "P0",
+   "note": "one can per pot; 5 cans gap 3 -> 92x14"
+  },
+  "ui.water_meter.third": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 246,
+    "y": 339,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 8,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/can_small_third.png",
+   "pri": "P0",
+   "note": "one can per pot; 5 cans gap 3 -> 92x14"
+  },
+  "ui.water_meter.twothird": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 263,
+    "y": 339,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 8,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/can_small_twothird.png",
+   "pri": "P0",
+   "note": "one can per pot; 5 cans gap 3 -> 92x14"
+  },
+  "ui.water_meter.full": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 212,
+    "y": 339,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 8,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/can_small_full.png",
+   "pri": "P0",
+   "note": "one can per pot; 5 cans gap 3 -> 92x14"
+  },
+  "ui.water_meter.glint": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 229,
+    "y": 339,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 8,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/can_small_glint.png",
+   "pri": "P0",
+   "note": "1 frame flash on fill"
+  },
+  "ui.top_bar.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 229,
+    "y": 316,
+    "w": 24,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/top_bar_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "pri": "P0",
+   "note": "full width; holds exit + meter/pips/timer"
+  },
+  "ui.water_hop.hop_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 228,
+    "y": 354,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_hop_f0.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.hop_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 233,
+    "y": 354,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_hop_f1.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.hop_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 238,
+    "y": 354,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_hop_f2.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.hop_f3": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 243,
+    "y": 354,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_hop_f3.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.hop_f4": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 248,
+    "y": 354,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_hop_f4.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.hop_f5": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 253,
+    "y": 354,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_hop_f5.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.splash_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 450,
+    "y": 354,
+    "w": 8,
+    "h": 4
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 4,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_splash_f0.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.splash_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 459,
+    "y": 354,
+    "w": 8,
+    "h": 4
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 4,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_splash_f1.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.splash_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 468,
+    "y": 354,
+    "w": 8,
+    "h": 4
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 4,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/water_hop_splash_f2.png",
+   "pri": "P0"
+  },
+  "ui.water_hop.hop": {
+   "type": "sequence",
+   "frames": [
+    "ui.water_hop.hop_f0",
+    "ui.water_hop.hop_f1",
+    "ui.water_hop.hop_f2",
+    "ui.water_hop.hop_f3",
+    "ui.water_hop.hop_f4",
+    "ui.water_hop.hop_f5"
+   ],
+   "fps": 10,
+   "pri": "P0",
+   "note": "engine moves it along can→pot arc (0.6 s)"
+  },
+  "ui.water_hop.splash": {
+   "type": "sequence",
+   "frames": [
+    "ui.water_hop.splash_f0",
+    "ui.water_hop.splash_f1",
+    "ui.water_hop.splash_f2"
+   ],
+   "fps": 12,
+   "pri": "P0"
+  },
+  "ui.pot_state.due_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 346,
+    "y": 0,
+    "w": 24,
+    "h": 66
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 66
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pot_state_due_f0.png",
+   "pri": "P0",
+   "note": "overlay around existing pot_front (2-frame glow)"
+  },
+  "ui.pot_state.due_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 371,
+    "y": 0,
+    "w": 24,
+    "h": 66
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 66
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pot_state_due_f1.png",
+   "pri": "P0",
+   "note": "overlay around existing pot_front (2-frame glow)"
+  },
+  "ui.pot_state.due": {
+   "type": "sequence",
+   "frames": [
+    "ui.pot_state.due_f0",
+    "ui.pot_state.due_f1"
+   ],
+   "fps": 2,
+   "pri": "P0"
+  },
+  "ui.pot_state.leaf_yellow_1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 396,
+    "y": 0,
+    "w": 24,
+    "h": 66
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 66
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pot_state_leaf_yellow_1.png",
+   "pri": "P0",
+   "note": "swap for leaves_full_1 for 1 s on a lapse"
+  },
+  "ui.pot_state.leaf_yellow_2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 421,
+    "y": 0,
+    "w": 24,
+    "h": 66
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 66
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pot_state_leaf_yellow_2.png",
+   "pri": "P0",
+   "note": "swap for leaves_full_2 for 1 s on a lapse"
+  },
+  "ui.pot_state.leaf_yellow_3": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 446,
+    "y": 0,
+    "w": 24,
+    "h": 66
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 66
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pot_state_leaf_yellow_3.png",
+   "pri": "P0",
+   "note": "swap for leaves_full_3 for 1 s on a lapse"
+  },
+  "ui.pot_state.leaf_yellow_4": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 471,
+    "y": 0,
+    "w": 24,
+    "h": 66
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 66
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/pot_state_leaf_yellow_4.png",
+   "pri": "P0",
+   "note": "swap for leaves_full_4 for 1 s on a lapse"
+  },
+  "ui.pot_state.watered": {
+   "type": "ref",
+   "anchor": "tl",
+   "existing": "garden/garden_parts (pot_back/front + stem/leaves_*)",
+   "pri": "P0"
+  },
+  "ui.pot_state.grown": {
+   "type": "ref",
+   "anchor": "tl",
+   "existing": "garden/garden_parts (pot_back/front + stem/leaves_*)",
+   "pri": "P0"
+  },
+  "ui.pot_state.dormant": {
+   "type": "ref",
+   "anchor": "tl",
+   "existing": "garden/garden_parts (pot_back/front + stem/leaves_*)",
+   "pri": "P0"
+  },
+  "ui.review_item_frame.recognition": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 50,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/review_item_frame_recognition.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "target": {
+    "w": 172,
+    "h": 100
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 6,
+     "y": 64,
+     "w": 160,
+     "h": 28,
+     "max": 70
+    }
+   ],
+   "note": "picture/thumb area y 4..60 engine-placed; « ? » btn_icon inside top-right",
+   "textColor": "ink"
+  },
+  "ui.review_item_frame.recall": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/review_item_frame_recall.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "target": {
+    "w": 172,
+    "h": 100
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 6,
+     "y": 64,
+     "w": 160,
+     "h": 28,
+     "max": 70
+    }
+   ],
+   "note": "picture/thumb area y 4..60 engine-placed; « ? » btn_icon inside top-right",
+   "textColor": "ink"
+  },
+  "ui.review_item_frame.recast": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 25,
+    "y": 266,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 12,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/review_item_frame_recast.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "target": {
+    "w": 172,
+    "h": 100
+   },
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 6,
+     "y": 64,
+     "w": 160,
+     "h": 28,
+     "max": 70
+    }
+   ],
+   "note": "picture/thumb area y 4..60 engine-placed; « ? » btn_icon inside top-right",
+   "textColor": "ink"
+  },
+  "ui.review_option_row.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_option_row.idle",
+   "pri": "P0"
+  },
+  "ui.review_option_row.pressed": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_option_row.pressed",
+   "pri": "P0"
+  },
+  "ui.review_option_row.correct": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_option_row.correct",
+   "pri": "P0"
+  },
+  "ui.review_option_row.recast": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_option_row.wrong",
+   "pri": "P0"
+  },
+  "ui.review_option_row.disabled": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_option_row.disabled",
+   "pri": "P0"
+  },
+  "ui.review_end.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 173,
+    "y": 0,
+    "w": 172,
+    "h": 120
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 86,
+    "y": 60
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/review_end_idle.png",
+   "textRects": [
+    {
+     "role": "msg",
+     "x": 8,
+     "y": 8,
+     "w": 156,
+     "h": 24,
+     "max": 60
+    }
+   ],
+   "pri": "P0",
+   "note": "baked 172x120: watered-pots strip y 46..76; buttons (Fini primary / Encore 5 ? secondary) engine-placed at y 84..112",
+   "textColor": "ink"
+  },
+  "ui.listen_controls.idle": {
+   "type": "ref",
+   "anchor": "bc",
+   "compose": [
+    "ui.btn_icon.idle",
+    "ui.icon.replay",
+    "ui.icon.slow"
+   ],
+   "pri": "P0",
+   "note": "row: replay | slow | (audio), each 22x22, gap 4"
+  },
+  "ui.listen_controls.pressed": {
+   "type": "ref",
+   "anchor": "bc",
+   "compose": [
+    "ui.btn_icon.pressed",
+    "ui.icon.replay",
+    "ui.icon.slow"
+   ],
+   "pri": "P0",
+   "note": "row: replay | slow | (audio), each 22x22, gap 4"
+  },
+  "ui.listen_controls.playing": {
+   "type": "ref",
+   "anchor": "bc",
+   "compose": [
+    "ui.btn_icon.active",
+    "ui.icon.replay",
+    "ui.icon.slow"
+   ],
+   "pri": "P0",
+   "note": "row: replay | slow | (audio), each 22x22, gap 4"
+  },
+  "ui.listen_controls.slow-active": {
+   "type": "ref",
+   "anchor": "bc",
+   "compose": [
+    "ui.btn_icon.active",
+    "ui.icon.replay",
+    "ui.icon.slow_active"
+   ],
+   "pri": "P0",
+   "note": "row: replay | slow | (audio), each 22x22, gap 4"
+  },
+  "ui.dictation_gap.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.idle",
+   "textRects": [
+    {
+     "role": "gap",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.dictation_gap.focus": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.focus",
+   "textRects": [
+    {
+     "role": "gap",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.dictation_gap.correct": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.correct",
+   "textRects": [
+    {
+     "role": "gap",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.dictation_gap.near": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.near",
+   "textRects": [
+    {
+     "role": "gap",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.dictation_gap.recast": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.recast",
+   "textRects": [
+    {
+     "role": "gap",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 24
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.reply_note.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 414,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/reply_note_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "reply",
+     "x": 6,
+     "y": 6,
+     "w": "w-12",
+     "h": "h-12",
+     "max": 80
+    }
+   ],
+   "pri": "P0",
+   "note": "paper, no ink edge; overlay ui.reply_note.tape centred on top edge",
+   "textColor": "ink"
+  },
+  "ui.reply_note.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 389,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/reply_note_focus.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "reply",
+     "x": 6,
+     "y": 6,
+     "w": "w-12",
+     "h": "h-12",
+     "max": 80
+    }
+   ],
+   "pri": "P0",
+   "note": "paper, no ink edge; overlay ui.reply_note.tape centred on top edge",
+   "textColor": "ink"
+  },
+  "ui.reply_note.match": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 439,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/reply_note_match.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "reply",
+     "x": 6,
+     "y": 6,
+     "w": "w-12",
+     "h": "h-12",
+     "max": 80
+    }
+   ],
+   "pri": "P0",
+   "note": "paper, no ink edge; overlay ui.reply_note.tape centred on top edge",
+   "textColor": "ink"
+  },
+  "ui.reply_note.recast": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 464,
+    "y": 237,
+    "w": 24,
+    "h": 24
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/reply_note_recast.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "textRects": [
+    {
+     "role": "reply",
+     "x": 6,
+     "y": 6,
+     "w": "w-12",
+     "h": "h-12",
+     "max": 80
+    }
+   ],
+   "pri": "P0",
+   "note": "paper, no ink edge; overlay ui.reply_note.tape centred on top edge",
+   "textColor": "ink"
+  },
+  "ui.reply_note.tape": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 477,
+    "y": 354,
+    "w": 6,
+    "h": 3
+   },
+   "anchor": "tc",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/reply_note_tape.png",
+   "pri": "P0"
+  },
+  "ui.chunk_chip.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 364,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_chip_idle.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "chunk",
+     "x": 4,
+     "y": 5,
+     "w": "w-8",
+     "h": 12,
+     "max": 16
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.chunk_chip.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 398,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_chip_pressed.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "chunk",
+     "x": 4,
+     "y": 5,
+     "w": "w-8",
+     "h": 12,
+     "max": 16
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.chunk_chip.placed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 381,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_chip_placed.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "chunk",
+     "x": 4,
+     "y": 5,
+     "w": "w-8",
+     "h": 12,
+     "max": 16
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.chunk_chip.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 347,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_chip_disabled.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 6
+   },
+   "hit": {
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "chunk",
+     "x": 4,
+     "y": 5,
+     "w": "w-8",
+     "h": 12,
+     "max": 16
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.chunk_slot.empty": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 415,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_slot_empty.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "hit": {
+    "h": 22
+   },
+   "pri": "P0",
+   "note": "dashed 2-on/1-off; tile the edge, do not stretch the dash"
+  },
+  "ui.chunk_slot.filled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 432,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_slot_filled.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "hit": {
+    "h": 22
+   },
+   "pri": "P0",
+   "note": "dashed 2-on/1-off; tile the edge, do not stretch the dash"
+  },
+  "ui.chunk_slot.focus": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 449,
+    "y": 291,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/chunk_slot_focus.png",
+   "nineSlice": {
+    "l": 4,
+    "t": 4,
+    "r": 4,
+    "b": 4
+   },
+   "hit": {
+    "h": 22
+   },
+   "pri": "P0",
+   "note": "dashed 2-on/1-off; tile the edge, do not stretch the dash"
+  },
+  "ui.mic_button.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 171,
+    "y": 151,
+    "w": 40,
+    "h": 40
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 20,
+    "y": 40
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/mic_button_idle.png",
+   "hit": {
+    "w": 40,
+    "h": 40
+   },
+   "pri": "P0"
+  },
+  "ui.mic_button.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 212,
+    "y": 151,
+    "w": 40,
+    "h": 40
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 20,
+    "y": 40
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/mic_button_pressed.png",
+   "hit": {
+    "w": 40,
+    "h": 40
+   },
+   "pri": "P0"
+  },
+  "ui.mic_button.recording_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 253,
+    "y": 151,
+    "w": 40,
+    "h": 40
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 20,
+    "y": 40
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/mic_button_recording_f0.png",
+   "hit": {
+    "w": 40,
+    "h": 40
+   },
+   "pri": "P0"
+  },
+  "ui.mic_button.recording_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 294,
+    "y": 151,
+    "w": 40,
+    "h": 40
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 20,
+    "y": 40
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/mic_button_recording_f1.png",
+   "hit": {
+    "w": 40,
+    "h": 40
+   },
+   "pri": "P0"
+  },
+  "ui.mic_button.recording_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 335,
+    "y": 151,
+    "w": 40,
+    "h": 40
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 20,
+    "y": 40
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/mic_button_recording_f2.png",
+   "hit": {
+    "w": 40,
+    "h": 40
+   },
+   "pri": "P0"
+  },
+  "ui.mic_button.recording": {
+   "type": "sequence",
+   "frames": [
+    "ui.mic_button.recording_f0",
+    "ui.mic_button.recording_f1",
+    "ui.mic_button.recording_f2"
+   ],
+   "fps": 4,
+   "pri": "P0",
+   "note": "navy + sky pulse ring (no red)"
+  },
+  "ui.mic_button.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 130,
+    "y": 151,
+    "w": 40,
+    "h": 40
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 20,
+    "y": 40
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/mic_button_disabled.png",
+   "pri": "P0",
+   "note": "spec: no mic → hidden + tap-choice fallback"
+  },
+  "ui.record_compare.mine_idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.idle",
+   "icon": "ui.icon.mic",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "playingTint": null,
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 10
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.record_compare.model_idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.idle",
+   "icon": "ui.icon.audio",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "playingTint": null,
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 10
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.record_compare.mine_pressed": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.pressed",
+   "icon": "ui.icon.mic",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "playingTint": null,
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 10
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.record_compare.model_pressed": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.pressed",
+   "icon": "ui.icon.audio",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "playingTint": null,
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 10
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.record_compare.mine_playing": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.idle",
+   "icon": "ui.icon.mic",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "playingTint": "ui.btn_icon.active",
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 10
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.record_compare.model_playing": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.idle",
+   "icon": "ui.icon.audio",
+   "iconAt": {
+    "x": 4,
+    "y": 7
+   },
+   "playingTint": "ui.btn_icon.active",
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 20,
+     "y": 7,
+     "w": "w-26",
+     "h": 14,
+     "max": 10
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.start_choice_big.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_primary.idle",
+   "target": {
+    "w": 172,
+    "h": 40
+   },
+   "art": "ui.start_choice_big.art",
+   "artAt": {
+    "x": 4,
+    "y": 4
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 40,
+     "y": 8,
+     "w": 124,
+     "h": 24,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 40
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.start_choice_big.pressed": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_primary.pressed",
+   "target": {
+    "w": 172,
+    "h": 40
+   },
+   "art": "ui.start_choice_big.art",
+   "artAt": {
+    "x": 4,
+    "y": 4
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 40,
+     "y": 8,
+     "w": 124,
+     "h": 24,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 40
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.start_choice_big.focus": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_primary.focus",
+   "target": {
+    "w": 172,
+    "h": 40
+   },
+   "art": "ui.start_choice_big.art",
+   "artAt": {
+    "x": 4,
+    "y": 4
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 40,
+     "y": 8,
+     "w": 124,
+     "h": 24,
+     "max": 18
+    }
+   ],
+   "hit": {
+    "h": 40
+   },
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.start_choice_big.art": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 173,
+    "y": 196,
+    "w": 32,
+    "h": 32
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/start_choice_big_art.png",
+   "pri": "P0",
+   "note": "32x32 art slot: Noé arriving at the door of 411"
+  },
+  "ui.start_choice_small.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.idle",
+   "target": {
+    "w": 172,
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 8,
+     "y": 7,
+     "w": 156,
+     "h": 14,
+     "max": 32
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.start_choice_small.pressed": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.pressed",
+   "target": {
+    "w": 172,
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 8,
+     "y": 7,
+     "w": 156,
+     "h": 14,
+     "max": 32
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.start_choice_small.focus": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.btn_secondary.focus",
+   "target": {
+    "w": 172,
+    "h": 28
+   },
+   "textRects": [
+    {
+     "role": "cta",
+     "x": 8,
+     "y": 7,
+     "w": 156,
+     "h": 14,
+     "max": 32
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.name_field.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.idle",
+   "target": {
+    "w": 172,
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "name",
+     "x": 5,
+     "y": 5,
+     "w": 162,
+     "h": 14,
+     "max": 20
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.name_field.focus": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.focus",
+   "target": {
+    "w": 172,
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "name",
+     "x": 5,
+     "y": 5,
+     "w": 162,
+     "h": 14,
+     "max": 20
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.name_field.disabled": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.disabled",
+   "target": {
+    "w": 172,
+    "h": 24
+   },
+   "textRects": [
+    {
+     "role": "name",
+     "x": 5,
+     "y": 5,
+     "w": 162,
+     "h": 14,
+     "max": 20
+    }
+   ],
+   "pri": "P0",
+   "textColor": "ink"
+  },
+  "ui.placement_timer.track": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 167,
+    "y": 354,
+    "w": 60,
+    "h": 6
+   },
+   "anchor": "tr",
+   "anchorPoint": {
+    "x": 60,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/placement_timer_track.png",
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "time",
+     "x": 64,
+     "y": 0,
+     "w": 40,
+     "h": 14,
+     "max": 14
+    }
+   ],
+   "note": "+ ui.icon.clock left of track; fill drawn inside (1,1,58,4), cropped by engine",
+   "textColor": "ink"
+  },
+  "ui.placement_timer.running": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 391,
+    "y": 354,
+    "w": 58,
+    "h": 4
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/placement_timer_fill_running.png",
+   "pri": "P0",
+   "note": "fill strip; engine crops width to time left"
+  },
+  "ui.placement_timer.low": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 332,
+    "y": 354,
+    "w": 58,
+    "h": 4
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/placement_timer_fill_low.png",
+   "pri": "P0",
+   "note": "fill strip; engine crops width to time left"
+  },
+  "ui.placement_timer.done": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 273,
+    "y": 354,
+    "w": 58,
+    "h": 4
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/placement_timer_fill_done.png",
+   "pri": "P0",
+   "note": "fill strip; engine crops width to time left"
+  },
+  "ui.placement_result.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 172,
+    "h": 150
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 86,
+    "y": 75
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/placement_result_idle.png",
+   "pri": "P0",
+   "textRects": [
+    {
+     "role": "day",
+     "x": 8,
+     "y": 48,
+     "w": 156,
+     "h": 18,
+     "max": 32
+    },
+    {
+     "role": "eta",
+     "x": 8,
+     "y": 70,
+     "w": 156,
+     "h": 40,
+     "max": 160
+    },
+    {
+     "role": "link",
+     "x": 8,
+     "y": 114,
+     "w": 156,
+     "h": 12,
+     "max": 24
+    }
+   ],
+   "note": "façade strip baked at top (door framed in cream); buttons below the panel, engine-placed",
+   "textColor": "ink"
+  },
+  "ui.placement_result.facade": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 196,
+    "w": 172,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/placement_result_facade.png",
+   "pri": "P0"
+  },
+  "ui.letter_tile.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 40,
+    "y": 316,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/letter_tile_idle.png",
+   "hit": {
+    "w": 16,
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "letter",
+     "x": 2,
+     "y": 4,
+     "w": 12,
+     "h": 14,
+     "max": 1
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.letter_tile.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 57,
+    "y": 316,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/letter_tile_pressed.png",
+   "hit": {
+    "w": 16,
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "letter",
+     "x": 2,
+     "y": 4,
+     "w": 12,
+     "h": 14,
+     "max": 1
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.letter_tile.used": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 74,
+    "y": 316,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/letter_tile_used.png",
+   "hit": {
+    "w": 16,
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "letter",
+     "x": 2,
+     "y": 4,
+     "w": 12,
+     "h": 14,
+     "max": 1
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.letter_tile.disabled": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 23,
+    "y": 316,
+    "w": 16,
+    "h": 22
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/letter_tile_disabled.png",
+   "hit": {
+    "w": 16,
+    "h": 22
+   },
+   "textRects": [
+    {
+     "role": "letter",
+     "x": 2,
+     "y": 4,
+     "w": 12,
+     "h": 14,
+     "max": 1
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.listen_wave.playing_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 0,
+    "y": 354,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 16,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/listen_wave_playing_f0.png",
+   "pri": "P1"
+  },
+  "ui.listen_wave.playing_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 33,
+    "y": 354,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 16,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/listen_wave_playing_f1.png",
+   "pri": "P1"
+  },
+  "ui.listen_wave.playing_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 66,
+    "y": 354,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 16,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/listen_wave_playing_f2.png",
+   "pri": "P1"
+  },
+  "ui.listen_wave.playing_f3": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 99,
+    "y": 354,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 16,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/listen_wave_playing_f3.png",
+   "pri": "P1"
+  },
+  "ui.listen_wave.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 463,
+    "y": 339,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "c",
+   "anchorPoint": {
+    "x": 16,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/listen_wave_idle.png",
+   "pri": "P1"
+  },
+  "ui.listen_wave.playing": {
+   "type": "sequence",
+   "frames": [
+    "ui.listen_wave.playing_f0",
+    "ui.listen_wave.playing_f1",
+    "ui.listen_wave.playing_f2",
+    "ui.listen_wave.playing_f3"
+   ],
+   "fps": 8,
+   "pri": "P1"
+  },
+  "ui.dictation_line.idle": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.idle",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 48
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.dictation_line.focus": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.focus",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 48
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.dictation_line.correct": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.correct",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 48
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.dictation_line.near": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.near",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 48
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.dictation_line.recast": {
+   "type": "ref",
+   "anchor": "tl",
+   "alias": "ui.text_field.recast",
+   "textRects": [
+    {
+     "role": "line",
+     "x": 5,
+     "y": 5,
+     "w": "w-10",
+     "h": 14,
+     "max": 48
+    }
+   ],
+   "pri": "P1",
+   "textColor": "ink"
+  },
+  "ui.self_rate.yes_idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 183,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 11,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/self_rate_yes_idle.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.self_rate.yes_pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 206,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 11,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/self_rate_yes_pressed.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.self_rate.yes_chosen": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 160,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 11,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/self_rate_yes_chosen.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.self_rate.unsure_idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 114,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 11,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/self_rate_unsure_idle.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.self_rate.unsure_pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 137,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 11,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/self_rate_unsure_pressed.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.self_rate.unsure_chosen": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 91,
+    "y": 316,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bc",
+   "anchorPoint": {
+    "x": 11,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/self_rate_unsure_chosen.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.eta_range_bar.track": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 306,
+    "y": 339,
+    "w": 156,
+    "h": 10
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/eta_range_bar_track.png",
+   "pri": "P1",
+   "note": "range blocks placed by engine"
+  },
+  "ui.eta_range_bar.block_near": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 293,
+    "y": 339,
+    "w": 12,
+    "h": 10
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/eta_range_bar_block_near.png",
+   "nineSlice": {
+    "l": 3,
+    "t": 3,
+    "r": 3,
+    "b": 3
+   },
+   "pri": "P1",
+   "note": "30 min (near) / 2 h (far) range block; labels engine-drawn under"
+  },
+  "ui.eta_range_bar.block_far": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 280,
+    "y": 339,
+    "w": 12,
+    "h": 10
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/eta_range_bar_block_far.png",
+   "nineSlice": {
+    "l": 3,
+    "t": 3,
+    "r": 3,
+    "b": 3
+   },
+   "pri": "P1",
+   "note": "30 min (near) / 2 h (far) range block; labels engine-drawn under"
+  },
+  "ui.carnet_button.idle": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 209,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_idle.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P0"
+  },
+  "ui.carnet_button.pressed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 255,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_pressed.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P0"
+  },
+  "ui.carnet_button.dimmed": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 186,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_dimmed.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P0"
+  },
+  "ui.carnet_button.new-dot": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 232,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_new_dot.png",
+   "hit": {
+    "w": 22,
+    "h": 22
+   },
+   "pri": "P1"
+  },
+  "ui.carnet_button.wiggle_f0": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 278,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_wiggle_f0.png",
+   "pri": "P1"
+  },
+  "ui.carnet_button.wiggle_f1": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 301,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_wiggle_f1.png",
+   "pri": "P1"
+  },
+  "ui.carnet_button.wiggle_f2": {
+   "source": "atlas",
+   "atlas": "ui_learning_rev2",
+   "frame": {
+    "x": 324,
+    "y": 291,
+    "w": 22,
+    "h": 22
+   },
+   "anchor": "bl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 22
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 20,
+   "file": "pieces/x1/carnet_button_wiggle_f2.png",
+   "pri": "P1"
+  },
+  "ui.carnet_button.wiggle": {
+   "type": "sequence",
+   "frames": [
+    "ui.carnet_button.wiggle_f0",
+    "ui.carnet_button.wiggle_f1",
+    "ui.carnet_button.wiggle_f2"
+   ],
+   "fps": 10,
+   "pri": "P1"
+  },
+  "word.bonjour.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_bonjour_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.je_m_appelle.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_je_m_appelle_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.c_est.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 122,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_c_est_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.il_faut.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 183,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_il_faut_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.il_y_a.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 244,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_il_y_a_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.il_n_y_a_pas_de.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 305,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_il_n_y_a_pas_de_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.c_est_combien.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 366,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_c_est_combien_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.tu_veux.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 427,
+    "y": 0,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_tu_veux_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.je_voudrais.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 0,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_je_voudrais_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.l_appartement.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 61,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_l_appartement_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.la_plante.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 122,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_la_plante_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.le_chat.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 183,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_le_chat_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.la_proprietaire.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 244,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_la_proprietaire_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.samedi.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 305,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_samedi_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.le_cafe.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 366,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_le_cafe_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.le_the.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 427,
+    "y": 41,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_le_the_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.l_eau.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 0,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_l_eau_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.le_lait.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 61,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_le_lait_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.le_pain.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 122,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_le_pain_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.les_croquettes.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 183,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_les_croquettes_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.le_colis.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 244,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_le_colis_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.une_boite.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 305,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_une_boite_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.la_cuisine.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 366,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_la_cuisine_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.la_table.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 427,
+    "y": 82,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_la_table_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.sur.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 0,
+    "y": 123,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_sur_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.sous.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 61,
+    "y": 123,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_sous_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.dans.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 122,
+    "y": 123,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_dans_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "word.derriere.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 183,
+    "y": 123,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/word_derriere_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "learn_words card picture (draw under ui.card_picture_frame.idle)"
+  },
+  "prompt.listen.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 244,
+    "y": 123,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/prompt_listen_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "listening prompt card picture (same 64x44 frame)"
+  },
+  "prompt.dictation.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 305,
+    "y": 123,
+    "w": 60,
+    "h": 40
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/prompt_dictation_any.png",
+   "slot": {
+    "component": "ui.card_picture_frame",
+    "rect": "inner",
+    "x": 2,
+    "y": 2,
+    "w": 60,
+    "h": 40
+   },
+   "pri": "P0",
+   "note": "dictation prompt card picture (same 64x44 frame)"
+  },
+  "prompt.placement.any": {
+   "source": "atlas",
+   "atlas": "ui_learning_m2",
+   "frame": {
+    "x": 0,
+    "y": 164,
+    "w": 156,
+    "h": 38
+   },
+   "anchor": "tl",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "displayScale": 2,
+   "depth": 19,
+   "file": "pieces/m2/prompt_placement_any.png",
+   "slot": {
+    "component": "ui.placement_result",
+    "x": 8,
+    "y": 8,
+    "w": 156,
+    "h": 38
+   },
+   "pri": "P0",
+   "note": "placement_result top card: stairwell welcome (fills the blank box above the day text at y48); 168-wide panel: draw at (6,8)"
+  }
+ }
+}

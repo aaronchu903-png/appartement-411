@@ -1,0 +1,1796 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "stairwell_day": {
+   "file": "stairwell_day_sheet.png",
+   "w": 192,
+   "h": 200
+  },
+  "stairwell_evening": {
+   "file": "stairwell_evening_sheet.png",
+   "w": 192,
+   "h": 200
+  },
+  "stairwell_night": {
+   "file": "stairwell_night_sheet.png",
+   "w": 192,
+   "h": 200
+  }
+ },
+ "assets": {
+  "backdrop.stairwell.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 128
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/day/backwall.png"
+  },
+  "backdrop.stairwell_floor.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 17,
+    "y": 172,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/day/floor.png"
+  },
+  "prop.pipe_run.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 65,
+    "y": 0,
+    "w": 3,
+    "h": 124
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 123
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/pipe_run.png"
+  },
+  "prop.door_home_closed.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 164,
+    "y": 0,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "special": "apartment 411 (home). plate = 3 abstract dots, no digits",
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    },
+    "peephole": {
+     "x": 12,
+     "y": 10
+    }
+   },
+   "file": "pieces/day/door_home_closed.png"
+  },
+  "prop.door_home_open.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 0,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/day/door_home_open.png"
+  },
+  "prop.door_neighbour_closed.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 27,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "recolour": "plum/plum_sh -> green/green_sh or wood/ink for other neighbours",
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/day/door_neighbour_closed.png"
+  },
+  "prop.door_neighbour_open.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 54,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/day/door_neighbour_open.png"
+  },
+  "prop.doormat_home.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 30,
+    "y": 191,
+    "w": 22,
+    "h": 4
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 11,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/doormat_home.png"
+  },
+  "prop.doormat_plain.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 53,
+    "y": 191,
+    "w": 20,
+    "h": 3
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 10,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/doormat_plain.png"
+  },
+  "prop.mailboxes.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 141,
+    "y": 129,
+    "w": 22,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "slots": {
+    "box_411": {
+     "x": 11,
+     "y": 6
+    }
+   },
+   "file": "pieces/day/mailboxes.png"
+  },
+  "prop.mailboxes_letter.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 164,
+    "y": 129,
+    "w": 22,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/mailboxes_letter.png"
+  },
+  "prop.notice_board.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 82,
+    "y": 172,
+    "w": 20,
+    "h": 14
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 10,
+    "y": 13
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/notice_board.png"
+  },
+  "prop.minuterie_off.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 8,
+    "y": 191,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "note": "timer switch; pressing it = bulb on for N seconds",
+   "file": "pieces/day/minuterie_off.png"
+  },
+  "prop.minuterie_on.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 14,
+    "y": 191,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/minuterie_on.png"
+  },
+  "prop.ceiling_bulb_on.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 77,
+    "y": 0,
+    "w": 7,
+    "h": 96
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "light": "lamp ceiling_bulb",
+   "ungraded_at_night": true,
+   "note": "cord may be cropped from the top for a lower ceiling",
+   "file": "pieces/day/ceiling_bulb_on.png"
+  },
+  "prop.ceiling_bulb_off.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 69,
+    "y": 0,
+    "w": 7,
+    "h": 96
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/ceiling_bulb_off.png"
+  },
+  "prop.wall_lamp.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 0,
+    "y": 191,
+    "w": 7,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/wall_lamp.png"
+  },
+  "prop.pipe_h.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 120,
+    "y": 172,
+    "w": 68,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "note": "rev2: tee off the riser at x4, runs right, elbows up into the cornice; runs under the cornice, out of the medium/close upper wall clutter",
+   "file": "pieces/day/pipe_h.png"
+  },
+  "prop.shoes.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 74,
+    "y": 191,
+    "w": 9,
+    "h": 3
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 4,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "rev2 home cue; recolour red_sh for other pairs",
+   "file": "pieces/day/shoes.png"
+  },
+  "prop.umbrella.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 11,
+    "y": 172,
+    "w": 5,
+    "h": 17
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 16
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "note": "rev2 home cue; leans on the wall; recolour green pair",
+   "file": "pieces/day/umbrella.png"
+  },
+  "prop.stairs_down.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 81,
+    "y": 129,
+    "w": 36,
+    "h": 34
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "rev2 down-flight to the street: local y18 = landing floor line; 4 visible treads 7x4 going down-left into the void; arrivals rise from bottom-left of the piece",
+   "slots": {
+    "top_step": {
+     "x": 26,
+     "y": 18
+    },
+    "step_3": {
+     "x": 5,
+     "y": 30
+    }
+   },
+   "file": "pieces/day/stairs_down.png"
+  },
+  "prop.landing_window.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 118,
+    "y": 129,
+    "w": 22,
+    "h": 30
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 29
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "ungraded": true,
+   "file": "pieces/day/landing_window.png"
+  },
+  "prop.radiator.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 103,
+    "y": 172,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 13
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/day/radiator.png"
+  },
+  "prop.plant_landing.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 0,
+    "y": 172,
+    "w": 10,
+    "h": 18
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 17
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/plant_landing.png"
+  },
+  "prop.parcel.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 20,
+    "y": 191,
+    "w": 9,
+    "h": 7
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 4,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "delivery beats; also usable as handprop (handPoint top centre)",
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "file": "pieces/day/parcel.png"
+  },
+  "prop.stairs.day": {
+   "source": "atlas",
+   "atlas": "stairwell_day",
+   "frame": {
+    "x": 85,
+    "y": 0,
+    "w": 78,
+    "h": 80
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "note": "12 steps of 6x5 px rising right from local x4; step i tread top y = h-1-(i+1)*5+1; anchor = newel foot",
+   "slots": {
+    "step_0": {
+     "x": 7,
+     "y": 75
+    },
+    "step_5": {
+     "x": 37,
+     "y": 50
+    },
+    "step_11": {
+     "x": 73,
+     "y": 20
+    }
+   },
+   "file": "pieces/day/stairs.png"
+  },
+  "backdrop.stairwell.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 128
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/evening/backwall.png"
+  },
+  "backdrop.stairwell_floor.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 17,
+    "y": 172,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/evening/floor.png"
+  },
+  "prop.pipe_run.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 65,
+    "y": 0,
+    "w": 3,
+    "h": 124
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 123
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/pipe_run.png"
+  },
+  "prop.door_home_closed.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 164,
+    "y": 0,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "special": "apartment 411 (home). plate = 3 abstract dots, no digits",
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    },
+    "peephole": {
+     "x": 12,
+     "y": 10
+    }
+   },
+   "file": "pieces/evening/door_home_closed.png"
+  },
+  "prop.door_home_open.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 0,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/evening/door_home_open.png"
+  },
+  "prop.door_neighbour_closed.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 27,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "recolour": "plum/plum_sh -> green/green_sh or wood/ink for other neighbours",
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/evening/door_neighbour_closed.png"
+  },
+  "prop.door_neighbour_open.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 54,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/evening/door_neighbour_open.png"
+  },
+  "prop.doormat_home.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 30,
+    "y": 191,
+    "w": 22,
+    "h": 4
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 11,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/doormat_home.png"
+  },
+  "prop.doormat_plain.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 53,
+    "y": 191,
+    "w": 20,
+    "h": 3
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 10,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/doormat_plain.png"
+  },
+  "prop.mailboxes.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 141,
+    "y": 129,
+    "w": 22,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "slots": {
+    "box_411": {
+     "x": 11,
+     "y": 6
+    }
+   },
+   "file": "pieces/evening/mailboxes.png"
+  },
+  "prop.mailboxes_letter.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 164,
+    "y": 129,
+    "w": 22,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/mailboxes_letter.png"
+  },
+  "prop.notice_board.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 82,
+    "y": 172,
+    "w": 20,
+    "h": 14
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 10,
+    "y": 13
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/notice_board.png"
+  },
+  "prop.minuterie_off.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 8,
+    "y": 191,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "note": "timer switch; pressing it = bulb on for N seconds",
+   "file": "pieces/evening/minuterie_off.png"
+  },
+  "prop.minuterie_on.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 14,
+    "y": 191,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/minuterie_on.png"
+  },
+  "prop.ceiling_bulb_on.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 77,
+    "y": 0,
+    "w": 7,
+    "h": 96
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "light": "lamp ceiling_bulb",
+   "ungraded_at_night": true,
+   "note": "cord may be cropped from the top for a lower ceiling",
+   "file": "pieces/evening/ceiling_bulb_on.png"
+  },
+  "prop.ceiling_bulb_off.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 69,
+    "y": 0,
+    "w": 7,
+    "h": 96
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/ceiling_bulb_off.png"
+  },
+  "prop.wall_lamp.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 0,
+    "y": 191,
+    "w": 7,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/wall_lamp.png"
+  },
+  "prop.pipe_h.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 120,
+    "y": 172,
+    "w": 68,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "note": "rev2: tee off the riser at x4, runs right, elbows up into the cornice; runs under the cornice, out of the medium/close upper wall clutter",
+   "file": "pieces/evening/pipe_h.png"
+  },
+  "prop.shoes.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 74,
+    "y": 191,
+    "w": 9,
+    "h": 3
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 4,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "rev2 home cue; recolour red_sh for other pairs",
+   "file": "pieces/evening/shoes.png"
+  },
+  "prop.umbrella.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 11,
+    "y": 172,
+    "w": 5,
+    "h": 17
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 16
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "note": "rev2 home cue; leans on the wall; recolour green pair",
+   "file": "pieces/evening/umbrella.png"
+  },
+  "prop.stairs_down.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 81,
+    "y": 129,
+    "w": 36,
+    "h": 34
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "rev2 down-flight to the street: local y18 = landing floor line; 4 visible treads 7x4 going down-left into the void; arrivals rise from bottom-left of the piece",
+   "slots": {
+    "top_step": {
+     "x": 26,
+     "y": 18
+    },
+    "step_3": {
+     "x": 5,
+     "y": 30
+    }
+   },
+   "file": "pieces/evening/stairs_down.png"
+  },
+  "prop.landing_window.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 118,
+    "y": 129,
+    "w": 22,
+    "h": 30
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 29
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "ungraded": true,
+   "file": "pieces/evening/landing_window.png"
+  },
+  "prop.radiator.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 103,
+    "y": 172,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 13
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/evening/radiator.png"
+  },
+  "prop.plant_landing.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 0,
+    "y": 172,
+    "w": 10,
+    "h": 18
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 17
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/plant_landing.png"
+  },
+  "prop.parcel.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 20,
+    "y": 191,
+    "w": 9,
+    "h": 7
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 4,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "delivery beats; also usable as handprop (handPoint top centre)",
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "file": "pieces/evening/parcel.png"
+  },
+  "prop.stairs.evening": {
+   "source": "atlas",
+   "atlas": "stairwell_evening",
+   "frame": {
+    "x": 85,
+    "y": 0,
+    "w": 78,
+    "h": 80
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "note": "12 steps of 6x5 px rising right from local x4; step i tread top y = h-1-(i+1)*5+1; anchor = newel foot",
+   "slots": {
+    "step_0": {
+     "x": 7,
+     "y": 75
+    },
+    "step_5": {
+     "x": 37,
+     "y": 50
+    },
+    "step_11": {
+     "x": 73,
+     "y": 20
+    }
+   },
+   "file": "pieces/evening/stairs.png"
+  },
+  "backdrop.stairwell.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 128
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/night/backwall.png"
+  },
+  "backdrop.stairwell_floor.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 17,
+    "y": 172,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/night/floor.png"
+  },
+  "prop.pipe_run.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 65,
+    "y": 0,
+    "w": 3,
+    "h": 124
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 123
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/pipe_run.png"
+  },
+  "prop.door_home_closed.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 164,
+    "y": 0,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "special": "apartment 411 (home). plate = 3 abstract dots, no digits",
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    },
+    "peephole": {
+     "x": 12,
+     "y": 10
+    }
+   },
+   "file": "pieces/night/door_home_closed.png"
+  },
+  "prop.door_home_open.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 0,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/night/door_home_open.png"
+  },
+  "prop.door_neighbour_closed.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 27,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "recolour": "plum/plum_sh -> green/green_sh or wood/ink for other neighbours",
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/night/door_neighbour_closed.png"
+  },
+  "prop.door_neighbour_open.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 54,
+    "y": 129,
+    "w": 26,
+    "h": 42
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 13,
+    "y": 41
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 13,
+     "y": 41
+    }
+   },
+   "file": "pieces/night/door_neighbour_open.png"
+  },
+  "prop.doormat_home.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 30,
+    "y": 191,
+    "w": 22,
+    "h": 4
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 11,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/doormat_home.png"
+  },
+  "prop.doormat_plain.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 53,
+    "y": 191,
+    "w": 20,
+    "h": 3
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 10,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/doormat_plain.png"
+  },
+  "prop.mailboxes.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 141,
+    "y": 129,
+    "w": 22,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "slots": {
+    "box_411": {
+     "x": 11,
+     "y": 6
+    }
+   },
+   "file": "pieces/night/mailboxes.png"
+  },
+  "prop.mailboxes_letter.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 164,
+    "y": 129,
+    "w": 22,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/mailboxes_letter.png"
+  },
+  "prop.notice_board.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 82,
+    "y": 172,
+    "w": 20,
+    "h": 14
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 10,
+    "y": 13
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/notice_board.png"
+  },
+  "prop.minuterie_off.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 8,
+    "y": 191,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "note": "timer switch; pressing it = bulb on for N seconds",
+   "file": "pieces/night/minuterie_off.png"
+  },
+  "prop.minuterie_on.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 14,
+    "y": 191,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/minuterie_on.png"
+  },
+  "prop.ceiling_bulb_on.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 77,
+    "y": 0,
+    "w": 7,
+    "h": 96
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "light": "lamp ceiling_bulb",
+   "ungraded_at_night": true,
+   "note": "cord may be cropped from the top for a lower ceiling",
+   "file": "pieces/night/ceiling_bulb_on.png"
+  },
+  "prop.ceiling_bulb_off.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 69,
+    "y": 0,
+    "w": 7,
+    "h": 96
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/ceiling_bulb_off.png"
+  },
+  "prop.wall_lamp.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 0,
+    "y": 191,
+    "w": 7,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/wall_lamp.png"
+  },
+  "prop.pipe_h.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 120,
+    "y": 172,
+    "w": 68,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "note": "rev2: tee off the riser at x4, runs right, elbows up into the cornice; runs under the cornice, out of the medium/close upper wall clutter",
+   "file": "pieces/night/pipe_h.png"
+  },
+  "prop.shoes.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 74,
+    "y": 191,
+    "w": 9,
+    "h": 3
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 4,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "rev2 home cue; recolour red_sh for other pairs",
+   "file": "pieces/night/shoes.png"
+  },
+  "prop.umbrella.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 11,
+    "y": 172,
+    "w": 5,
+    "h": 17
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 16
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "note": "rev2 home cue; leans on the wall; recolour green pair",
+   "file": "pieces/night/umbrella.png"
+  },
+  "prop.stairs_down.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 81,
+    "y": 129,
+    "w": 36,
+    "h": 34
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "rev2 down-flight to the street: local y18 = landing floor line; 4 visible treads 7x4 going down-left into the void; arrivals rise from bottom-left of the piece",
+   "slots": {
+    "top_step": {
+     "x": 26,
+     "y": 18
+    },
+    "step_3": {
+     "x": 5,
+     "y": 30
+    }
+   },
+   "file": "pieces/night/stairs_down.png"
+  },
+  "prop.landing_window.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 118,
+    "y": 129,
+    "w": 22,
+    "h": 30
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 29
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "ungraded": true,
+   "file": "pieces/night/landing_window.png"
+  },
+  "prop.radiator.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 103,
+    "y": 172,
+    "w": 16,
+    "h": 14
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 13
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/night/radiator.png"
+  },
+  "prop.plant_landing.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 0,
+    "y": 172,
+    "w": 10,
+    "h": 18
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 17
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/plant_landing.png"
+  },
+  "prop.parcel.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 20,
+    "y": 191,
+    "w": 9,
+    "h": 7
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 4,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "delivery beats; also usable as handprop (handPoint top centre)",
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "file": "pieces/night/parcel.png"
+  },
+  "prop.stairs.night": {
+   "source": "atlas",
+   "atlas": "stairwell_night",
+   "frame": {
+    "x": 85,
+    "y": 0,
+    "w": 78,
+    "h": 80
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "note": "12 steps of 6x5 px rising right from local x4; step i tread top y = h-1-(i+1)*5+1; anchor = newel foot",
+   "slots": {
+    "step_0": {
+     "x": 7,
+     "y": 75
+    },
+    "step_5": {
+     "x": 37,
+     "y": 50
+    },
+    "step_11": {
+     "x": 73,
+     "y": 20
+    }
+   },
+   "file": "pieces/night/stairs.png"
+  }
+ },
+ "stage": {
+  "width": 192,
+  "height": 144,
+  "horizon": 128,
+  "feetLine": 136,
+  "backBase": 131,
+  "doorBase": 128,
+  "chairRail": 92,
+  "layout": [
+   {
+    "piece": "backdrop.stairwell",
+    "x": 0,
+    "y": 0,
+    "tile": "x",
+    "tileWidth": 64
+   },
+   {
+    "piece": "backdrop.stairwell_floor",
+    "x": 0,
+    "y": 128,
+    "tile": "x",
+    "tileWidth": 64
+   },
+   {
+    "piece": "prop.pipe_run",
+    "x": 4,
+    "y": 123
+   },
+   {
+    "piece": "prop.pipe_h",
+    "x": 5,
+    "y": 2
+   },
+   {
+    "piece": "prop.door_neighbour_closed",
+    "x": 22,
+    "y": 128
+   },
+   {
+    "piece": "prop.notice_board",
+    "x": 46,
+    "y": 84
+   },
+   {
+    "piece": "prop.mailboxes",
+    "x": 46,
+    "y": 112
+   },
+   {
+    "piece": "prop.door_home_closed",
+    "x": 78,
+    "y": 128
+   },
+   {
+    "piece": "prop.minuterie_off",
+    "x": 95,
+    "y": 108
+   },
+   {
+    "piece": "prop.landing_window",
+    "x": 133,
+    "y": 77
+   },
+   {
+    "piece": "prop.radiator",
+    "x": 104,
+    "y": 127
+   },
+   {
+    "piece": "prop.stairs",
+    "x": 114,
+    "y": 130
+   },
+   {
+    "piece": "prop.doormat_plain",
+    "x": 22,
+    "y": 131
+   },
+   {
+    "piece": "prop.doormat_home",
+    "x": 78,
+    "y": 132
+   },
+   {
+    "piece": "prop.plant_landing",
+    "x": 59,
+    "y": 131
+   },
+   {
+    "piece": "prop.umbrella",
+    "x": 100,
+    "y": 128
+   },
+   {
+    "piece": "prop.shoes",
+    "x": 62,
+    "y": 133
+   },
+   {
+    "piece": "prop.stairs_down",
+    "x": 156,
+    "y": 110
+   },
+   {
+    "piece": "prop.ceiling_bulb_off|prop.ceiling_bulb_on",
+    "x": 104,
+    "y": 0,
+    "anchor": "topleft (anchorPoint 3,0)",
+    "variants": [
+     "day/evening (off)",
+     "night (on, ungraded)"
+    ]
+   }
+  ],
+  "light": {
+   "evening": "light/golden.json",
+   "night": "light/soir.json"
+  },
+  "ungraded": [
+   "prop.landing_window (pane carries its own sky)",
+   "prop.ceiling_bulb_on (night emitter)",
+   "prop.minuterie_on (night)"
+  ],
+  "depthLayers": {
+   "0": "wall + floor (tiled)",
+   "1": "wall pieces: pipe, notice board, mailboxes, window, wall lamp, minuterie, bulb",
+   "2": "doors, stairs, radiator",
+   "3": "doormats, plant, parcel",
+   "4": "cast + cat on feetLine (or stair step slots), sorted by feet y",
+   "5": "hand props",
+   "6": "light multiply + add (graded layers only), cast reduced"
+  }
+ }
+}

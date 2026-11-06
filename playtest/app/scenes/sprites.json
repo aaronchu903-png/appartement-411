@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "defaultPack": "sofa",
+  "packs": {
+    "sofa": "packs/sofa/manifest.json",
+    "v2": "packs/v2/manifest.json",
+    "b": "packs/b/manifest.json"
+  }
+}

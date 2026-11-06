@@ -1,0 +1,2074 @@
+{
+  "version": 1,
+  "tapAdvance": true,
+  "useHandoffCameras": true,
+  "title": "Day 10 kitchen — Phase 1 morning + Phase 2E evening",
+  "audioBase": "../../audio/w1/",
+  "scene": {
+    "width": 192,
+    "height": 144
+  },
+  "room": {
+    "wall": "#eddfc2",
+    "floor": "#b2936e",
+    "wallWarm": "#f2d9a8",
+    "floorWarm": "#b88858",
+    "floorTop": 136
+  },
+  "backdrop": null,
+  "cropLibrary": {
+    "wide": {
+      "x": 2,
+      "y": 37,
+      "w": 135,
+      "h": 132,
+      "fixedScale": 8,
+      "cameraPreset": "wide"
+    },
+    "medium": {
+      "x": 46,
+      "y": 70,
+      "w": 90,
+      "h": 88,
+      "fixedScale": 12,
+      "cameraPreset": "medium"
+    },
+    "close": {
+      "x": 72,
+      "y": 90,
+      "w": 60,
+      "h": 59,
+      "fixedScale": 18,
+      "cameraPreset": "close"
+    },
+    "closeCounter": {
+      "x": 68,
+      "y": 85,
+      "w": 60,
+      "h": 59,
+      "fixedScale": 18,
+      "cameraPreset": "close"
+    },
+    "closeDesk": {
+      "x": 124,
+      "y": 92,
+      "w": 60,
+      "h": 59,
+      "fixedScale": 18,
+      "cameraPreset": "close"
+    },
+    "medium_table4": {
+      "x": 68,
+      "y": 112,
+      "w": 90,
+      "h": 88,
+      "fixedScale": 12,
+      "cameraPreset": "medium_table4",
+      "fromHandoff": true,
+      "reservePoolMarginStagePx": 8
+    }
+  },
+  "props": [
+    {
+      "id": "cornice",
+      "asset": "prop.cornice",
+      "x": 8,
+      "y": 5,
+      "z": 8,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "upper_cabinets",
+      "asset": "prop.upper_cabinets",
+      "x": 46,
+      "y": 77,
+      "z": 8,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "clock",
+      "asset": "prop.clock",
+      "x": 88,
+      "y": 80,
+      "z": 8,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "frame",
+      "asset": "prop.frame",
+      "x": 104,
+      "y": 84,
+      "z": 8,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "house_rules",
+      "asset": "prop.house_rules",
+      "x": 136,
+      "y": 96,
+      "z": 8,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "backsplash",
+      "asset": "prop.backsplash",
+      "x": 46,
+      "y": 116,
+      "z": 10,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "window",
+      "asset": "prop.window",
+      "x": 46,
+      "y": 103,
+      "z": 10,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "shelf",
+      "asset": "prop.shelf",
+      "x": 90,
+      "y": 100,
+      "z": 10,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "fridge",
+      "asset": "prop.fridge",
+      "x": 12,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "counter",
+      "asset": "prop.counter_sink",
+      "x": 46,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "chair_left",
+      "asset": "prop.chairs",
+      "x": 98,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "table",
+      "asset": "prop.table",
+      "x": 118,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "chair_right",
+      "asset": "prop.chairs",
+      "x": 138,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": true
+    },
+    {
+      "id": "table_cup",
+      "asset": "handprop.cup",
+      "x": 107,
+      "y": 118,
+      "z": 50,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "table_plate",
+      "asset": "handprop.plate",
+      "x": 111,
+      "y": 118,
+      "z": 50,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "table_plate_103",
+      "asset": "handprop.plate",
+      "x": 103,
+      "y": 118,
+      "z": 50,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "table_plate_133",
+      "asset": "handprop.plate",
+      "x": 133,
+      "y": 118,
+      "z": 50,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "table_milk",
+      "asset": "handprop.milk",
+      "x": 118,
+      "y": 118,
+      "z": 50,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "desk",
+      "asset": "prop.desk",
+      "x": 166,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "plant",
+      "asset": "prop.plant",
+      "x": 177,
+      "y": 118,
+      "z": 30,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "pendant",
+      "asset": "prop.pendant_off",
+      "x": 118,
+      "y": 66,
+      "z": 10,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "laptop",
+      "asset": "prop.laptop",
+      "x": 170,
+      "y": 118,
+      "z": 30,
+      "layer": "behind",
+      "defaultState": "open"
+    },
+    {
+      "id": "stash_pen",
+      "asset": "prop.stash.pen",
+      "x": 52,
+      "y": 128,
+      "z": 32,
+      "layer": "front"
+    },
+    {
+      "id": "stash_sock",
+      "asset": "prop.stash.sock",
+      "x": 58,
+      "y": 130,
+      "z": 32,
+      "layer": "front"
+    },
+    {
+      "id": "spoon_dirty",
+      "asset": "prop.spoon.dirty",
+      "x": 62,
+      "y": 131,
+      "z": 33,
+      "layer": "front"
+    },
+    {
+      "id": "spoon_clean",
+      "asset": "prop.spoon.clean",
+      "x": 88,
+      "y": 131,
+      "z": 33,
+      "layer": "front"
+    },
+    {
+      "id": "milk",
+      "asset": "handprop.milk",
+      "x": 24,
+      "y": 131,
+      "z": 30,
+      "layer": "front"
+    },
+    {
+      "id": "pastry_bag",
+      "asset": "prop.pastry.bag",
+      "x": 50,
+      "y": 128,
+      "z": 30,
+      "layer": "front"
+    },
+    {
+      "id": "calendar_wall",
+      "asset": "prop.frame",
+      "x": 100,
+      "y": 82,
+      "z": 12,
+      "layer": "behind"
+    },
+    {
+      "id": "coffee_pot",
+      "asset": "handprop.cup",
+      "x": 58,
+      "y": 122,
+      "z": 40,
+      "layer": "front"
+    }
+  ],
+  "bubbleAnchors": {
+    "camille": {
+      "x": 32,
+      "y": 127
+    },
+    "noe": {
+      "x": 60,
+      "y": 127
+    },
+    "narrator": {
+      "x": 96,
+      "y": 24
+    },
+    "martin": {
+      "x": 120,
+      "y": 127
+    },
+    "lefevre": {
+      "x": 80,
+      "y": 127
+    },
+    "laptop": {
+      "x": 168,
+      "y": 108
+    }
+  },
+  "defaultStage": {
+    "props": [
+      "cornice",
+      "upper_cabinets",
+      "clock",
+      "frame",
+      "house_rules",
+      "backsplash",
+      "window",
+      "shelf",
+      "fridge",
+      "counter",
+      "chair_left",
+      "table",
+      "chair_right"
+    ],
+    "actors": {
+      "camille": {
+        "character": "camille",
+        "x": 58,
+        "y": 136,
+        "asset": "camille.stand"
+      },
+      "cat": {
+        "character": "croissant",
+        "x": 90,
+        "y": 136,
+        "layer": "front",
+        "asset": "croissant.idle"
+      },
+      "martin": null,
+      "lefevre": null
+    }
+  },
+  "overlay": {
+    "label": "Touchez pour commencer"
+  },
+  "timing": {
+    "sceneEnd": 1350
+  },
+  "shots": [
+    {
+      "id": "n_d11_matin2",
+      "t0": 0,
+      "t1": 45,
+      "excludeProps": [
+        "desk",
+        "laptop",
+        "plant",
+        "house_rules",
+        "frame",
+        "clock"
+      ],
+      "crop": "medium_table4",
+      "warmTint": true,
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_left",
+          "chair_right",
+          "stash_pen",
+          "stash_sock",
+          "spoon_dirty",
+          "table_plate_103",
+          "table_plate_133"
+        ],
+        "propStates": {
+          "laptop": "closed"
+        },
+        "propPlacement": {
+          "table": {
+            "y": 147
+          },
+          "chair_left": {
+            "y": 140
+          },
+          "chair_right": {
+            "y": 140
+          },
+          "table_plate_103": {
+            "y": 127
+          },
+          "table_plate_133": {
+            "y": 127
+          }
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": {
+            "character": "camille",
+            "x": 97,
+            "y": 134,
+            "asset": "camille.pose.sit_table_34"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 139,
+            "y": 134,
+            "flip": true,
+            "asset": "noe.pose.sit_table_34"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 128,
+            "y": 128,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "stash_back",
+      "t0": 45,
+      "t1": 90,
+      "crop": "medium",
+      "bubbleAnchors": {
+        "camille": {
+          "x": 100,
+          "y": 127
+        },
+        "noe": {
+          "x": 124,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_left",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "stash_pen",
+          "stash_sock",
+          "spoon_dirty",
+          "spoon_clean"
+        ],
+        "propStates": {
+          "laptop": "closed"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 100,
+            "y": 136,
+            "asset": "camille.bend"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 124,
+            "y": 136,
+            "asset": "noe.walk.1"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_cam_lit",
+      "t0": 90,
+      "t1": 135,
+      "crop": {
+        "x": 44,
+        "y": 56,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 48,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 54,
+            "y": 136,
+            "asset": "camille.bend"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 72,
+            "y": 136,
+            "asset": "noe.look.0"
+          }
+        }
+      }
+    },
+    {
+      "id": "n_d11_ecran",
+      "t0": 135,
+      "t1": 195,
+      "crop": "close",
+      "warmTint": true,
+      "bubbleAnchors": {
+        "camille": {
+          "x": 48,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 48,
+            "y": 136,
+            "asset": "camille.stand"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_mar_bonjour",
+      "t0": 195,
+      "t1": 245,
+      "excludeProps": [
+        "frame",
+        "clock",
+        "house_rules"
+      ],
+      "crop": "medium",
+      "bubbleAnchors": {
+        "camille": {
+          "x": 52,
+          "y": 127
+        },
+        "noe": {
+          "x": 88,
+          "y": 127
+        },
+        "laptop": {
+          "x": 168,
+          "y": 108
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": null,
+          "noe": null,
+          "cat": {
+            "character": "croissant",
+            "x": 128,
+            "y": 119,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_mar_photo",
+      "t0": 245,
+      "t1": 290,
+      "excludeProps": [
+        "house_rules",
+        "frame",
+        "clock"
+      ],
+      "crop": {
+        "x": 44,
+        "y": 56,
+        "w": 108,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "noe": {
+          "x": 108,
+          "y": 127
+        },
+        "laptop": {
+          "x": 168,
+          "y": 108
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_left",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": {
+            "character": "camille",
+            "x": 96,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 108,
+            "y": 136,
+            "asset": "noe.look.0"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 124,
+            "y": 119,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_mar_chat",
+      "t0": 290,
+      "t1": 335,
+      "excludeProps": [
+        "desk",
+        "plant",
+        "laptop",
+        "table_cup",
+        "table_milk",
+        "table_plate_103",
+        "table_plate_133",
+        "cornice",
+        "pendant",
+        "shelf"
+      ],
+      "crop": {
+        "x": 98,
+        "y": 72,
+        "w": 60,
+        "h": 59,
+        "fixedScale": 18,
+        "cameraPreset": "close"
+      },
+      "bubbleAnchors": {
+        "laptop": {
+          "x": 168,
+          "y": 108
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "counter",
+          "table",
+          "chair_left",
+          "chair_right",
+          "pendant"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": {
+            "character": "croissant",
+            "x": 118,
+            "y": 119,
+            "layer": "front",
+            "asset": "croissant.sit"
+          },
+          "camille": null,
+          "noe": null
+        }
+      },
+      "framingLandmarks": [
+        "window",
+        "counter",
+        "table"
+      ],
+      "soir": {
+        "crop": {
+          "x": 81,
+          "y": 52,
+          "w": 73,
+          "h": 84,
+          "fixedScale": 16,
+          "cameraPreset": "medium_table4",
+          "floorBandFracTarget": 0.54,
+          "reservePoolMarginStagePx": 8
+        },
+        "stage": {
+          "props": [
+            "cornice",
+            "upper_cabinets",
+            "clock",
+            "frame",
+            "house_rules",
+            "window",
+            "counter",
+            "table",
+            "chair_left",
+            "chair_right",
+            "pendant"
+          ],
+          "actors": {
+            "noe": {
+              "character": "noe",
+              "x": 97,
+              "y": 125,
+              "asset": "noe.pose.sit_table_34"
+            },
+            "martin": {
+              "character": "madame_martin",
+              "x": 139,
+              "y": 125,
+              "flip": true,
+              "asset": "martin.pose.sit_table_34"
+            },
+            "lefevre": null,
+            "cat": null,
+            "camille": null
+          }
+        }
+      }
+    },
+    {
+      "id": "keyboard_cat",
+      "t0": 335,
+      "t1": 380,
+      "excludeProps": [
+        "plant"
+      ],
+      "crop": "medium",
+      "stage": {
+        "props": [
+          "backsplash",
+          "window",
+          "shelf",
+          "fridge",
+          "counter",
+          "chair_left",
+          "table",
+          "chair_right",
+          "desk",
+          "laptop"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": {
+            "character": "croissant",
+            "x": 128,
+            "y": 119,
+            "layer": "front",
+            "asset": "croissant.keyboard_idle"
+          },
+          "camille": null,
+          "noe": null
+        }
+      }
+    },
+    {
+      "id": "d11_mar_futur",
+      "t0": 380,
+      "t1": 430,
+      "crop": "close",
+      "bubbleAnchors": {
+        "camille": {
+          "x": 88,
+          "y": 127
+        },
+        "laptop": {
+          "x": 168,
+          "y": 108
+        }
+      },
+      "stage": {
+        "props": [
+          "calendar_wall",
+          "frame",
+          "house_rules",
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 88,
+            "y": 136,
+            "asset": "camille.point"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_dictee",
+      "t0": 430,
+      "t1": 485,
+      "excludeProps": [
+        "frame",
+        "clock",
+        "house_rules"
+      ],
+      "crop": "medium",
+      "bubbleAnchors": {
+        "camille": {
+          "x": 52,
+          "y": 127
+        },
+        "noe": {
+          "x": 88,
+          "y": 127
+        },
+        "laptop": {
+          "x": 168,
+          "y": 108
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": {
+            "character": "camille",
+            "x": 52,
+            "y": 136,
+            "asset": "camille.bend"
+          },
+          "noe": {
+            "character": "noe",
+            "face": "brow_raise",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.look.1"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 122,
+            "y": 119,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_noe_court",
+      "t0": 485,
+      "t1": 530,
+      "crop": {
+        "x": 44,
+        "y": 56,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 52,
+          "y": 127
+        },
+        "noe": {
+          "x": 96,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "open"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 54,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 72,
+            "y": 136,
+            "asset": "noe.look.1"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_cam_court",
+      "t0": 530,
+      "t1": 575,
+      "crop": {
+        "x": 44,
+        "y": 56,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 44,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "closed"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 54,
+            "y": 136,
+            "asset": "camille.point"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 72,
+            "y": 136,
+            "asset": "noe.look.0"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_photo",
+      "t0": 575,
+      "t1": 620,
+      "excludeProps": [
+        "house_rules",
+        "frame",
+        "clock"
+      ],
+      "crop": "medium",
+      "bubbleAnchors": {
+        "camille": {
+          "x": 96,
+          "y": 127
+        },
+        "noe": {
+          "x": 120,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_left",
+          "chair_right",
+          "fridge",
+          "laptop",
+          "desk"
+        ],
+        "propStates": {
+          "laptop": "closed"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": {
+            "character": "camille",
+            "x": 96,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "noe": {
+            "character": "noe",
+            "face": "neutral",
+            "x": 120,
+            "y": 136,
+            "asset": "noe.look.0"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 108,
+            "y": 119,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "n_d11_matin",
+      "t0": 620,
+      "t1": 665,
+      "crop": "medium",
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "milk"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": null,
+          "noe": {
+            "character": "noe",
+            "x": 24,
+            "y": 136,
+            "asset": "noe.look.0"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_noe_lait",
+      "t0": 665,
+      "t1": 710,
+      "crop": {
+        "x": 44,
+        "y": 56,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 54,
+          "y": 127
+        },
+        "noe": {
+          "x": 72,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "milk"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 54,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 72,
+            "y": 136,
+            "asset": "noe.look.0"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_cam_lait",
+      "t0": 710,
+      "t1": 755,
+      "crop": {
+        "x": 44,
+        "y": 56,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 54,
+          "y": 127
+        },
+        "noe": {
+          "x": 72,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "milk"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "camille": {
+            "character": "camille",
+            "x": 60,
+            "y": 136,
+            "asset": "camille.point"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 78,
+            "y": 136
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_noe_faim",
+      "t0": 755,
+      "t1": 800,
+      "crop": {
+        "x": 36,
+        "y": 56,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "noe": {
+          "x": 60,
+          "y": 114
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "pastry_bag"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": null,
+          "noe": {
+            "character": "noe",
+            "x": 64,
+            "y": 138,
+            "face": "neutral"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 108,
+            "y": 136,
+            "asset": "croissant.tail.0"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_cam_cafe",
+      "t0": 800,
+      "t1": 845,
+      "crop": "medium",
+      "bubbleAnchors": {
+        "camille": {
+          "x": 58,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_right",
+          "fridge",
+          "coffee_pot",
+          "table_cup"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136
+          },
+          "camille": {
+            "character": "camille",
+            "x": 58,
+            "y": 136,
+            "asset": "camille.stand"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_cafe",
+      "t0": 845,
+      "t1": 890,
+      "floorBandFracTarget": 0.752,
+      "excludeProps": [
+        "desk",
+        "laptop",
+        "plant",
+        "house_rules",
+        "frame",
+        "clock"
+      ],
+      "crop": {
+        "x": 68,
+        "y": 100,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium_table4",
+        "fromHandoff": true,
+        "reservePoolMarginStagePx": 8
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 97,
+          "y": 122
+        }
+      },
+      "stage": {
+        "props": [
+          "window",
+          "shelf",
+          "counter",
+          "table",
+          "chair_left",
+          "chair_right",
+          "fridge",
+          "coffee_pot",
+          "table_cup",
+          "table_plate_103",
+          "table_plate_133",
+          "pastry_bag"
+        ],
+        "propPlacement": {
+          "table_cup": {
+            "y": 128
+          },
+          "table_plate_103": {
+            "y": 128
+          },
+          "table_plate_133": {
+            "y": 128
+          },
+          "pastry_bag": {
+            "y": 128
+          }
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "cat": null,
+          "noe": {
+            "character": "noe",
+            "x": 118,
+            "y": 136,
+            "flip": true,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 92,
+            "y": 136,
+            "asset": "camille.stand"
+          }
+        }
+      }
+    },
+    {
+      "id": "a3",
+      "floorBandFracTarget": 0.752,
+      "crop": {
+        "x": 44,
+        "y": 70,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium"
+      },
+      "bubbleAnchors": {
+        "noe": { "x": 78, "y": 118 },
+        "camille": { "x": 58, "y": 122 }
+      },
+      "stage": {
+        "props": ["counter", "fridge", "window", "shelf", "table", "chair_left", "chair_right"],
+        "actors": {
+          "noe": {
+            "character": "noe",
+            "x": 78,
+            "y": 136,
+            "asset": "noe.stand",
+            "face": "sad"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 58,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": null
+        }
+      }
+    },
+    {
+      "id": "n_d11_queue",
+      "t0": 900,
+      "t1": 945,
+      "crop": {
+        "x": 38,
+        "y": 56,
+        "w": 96,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium",
+        "floorBandFracTarget": 0.76,
+        "reservePoolMarginStagePx": 8
+      },
+      "phoneInsert": {
+        "assetId": "phone_photo_plant_tail",
+        "topBias": 0.34,
+        "screenOffsetX": 8,
+        "screenOffsetY": 20
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 92,
+          "y": 127
+        },
+        "noe": {
+          "x": 108,
+          "y": 127
+        }
+      },
+      "stage": {
+        "props": [
+          "cornice",
+          "upper_cabinets",
+          "clock",
+          "frame",
+          "window",
+          "shelf",
+          "fridge",
+          "counter",
+          "chair_left",
+          "table",
+          "chair_right",
+          "desk",
+          "plant",
+          "pendant"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 108,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 100,
+            "y": 136,
+            "asset": "camille.bend"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 124,
+            "y": 136,
+            "asset": "croissant.sit"
+          }
+        }
+      },
+      "lightVariant": "night",
+      "soirKitchen": true,
+      "warmTint": false
+    },
+    {
+      "id": "d11_cam_queue",
+      "t0": 945,
+      "t1": 990,
+      "floorBandFracTarget": 0.75,
+      "crop": {
+        "x": 48,
+        "y": 82,
+        "w": 60,
+        "h": 59,
+        "fixedScale": 18,
+        "cameraPreset": "regard_close_option",
+        "fromHandoff": true
+      },
+      "phoneInsert": {
+        "assetId": "phone_photo_plant_tail",
+        "topBias": 0.18,
+        "compactFrame": true,
+        "screenOffsetX": -72,
+        "screenOffsetY": 28
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 58,
+          "y": 88
+        }
+      },
+      "stage": {
+        "props": [
+          "cornice",
+          "upper_cabinets",
+          "clock",
+          "frame",
+          "window",
+          "shelf",
+          "fridge",
+          "counter",
+          "chair_left",
+          "table",
+          "chair_right",
+          "desk",
+          "plant",
+          "pendant"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 112,
+            "y": 136,
+            "asset": "noe.look.0"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 86,
+            "y": 136,
+            "asset": "camille.bend"
+          },
+          "cat": null
+        }
+      },
+      "lightVariant": "night",
+      "soirKitchen": true,
+      "warmTint": false
+    },
+    {
+      "id": "d11_noe_pasmoi",
+      "t0": 990,
+      "t1": 1035,
+      "floorBandFracTarget": 0.75,
+      "crop": {
+        "x": 46,
+        "y": 58,
+        "w": 90,
+        "h": 88,
+        "fixedScale": 12,
+        "cameraPreset": "medium",
+        "fromHandoff": true
+      },
+      "phoneInsert": {
+        "assetId": "phone_photo_plant_tail",
+        "topBias": 0.22,
+        "compactFrame": true,
+        "screenOffsetX": 28,
+        "screenOffsetY": 52
+      },
+      "bubbleAnchors": {
+        "camille": {
+          "x": 88,
+          "y": 127
+        },
+        "noe": {
+          "x": 82,
+          "y": 104
+        }
+      },
+      "stage": {
+        "props": [
+          "cornice",
+          "upper_cabinets",
+          "clock",
+          "frame",
+          "window",
+          "shelf",
+          "fridge",
+          "counter",
+          "chair_left",
+          "table",
+          "chair_right",
+          "desk",
+          "plant",
+          "pendant"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 72,
+            "y": 136,
+            "asset": "noe.look.1",
+            "face": "brow_raise"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 88,
+            "y": 140,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 128,
+            "y": 136,
+            "asset": "croissant.idle"
+          }
+        }
+      },
+      "lightVariant": "night",
+      "soirKitchen": true,
+      "warmTint": false
+    },
+    {
+      "id": "n_d11_souvenir",
+      "t0": 1035,
+      "t1": 1080,
+      "crop": "close",
+      "flashCut": {
+        "at": 0.35,
+        "duration": 1,
+        "desaturate": 0.85,
+        "stairwellFlash": true,
+        "lightVariant": "day",
+        "stage": {
+          "actors": {
+            "lefevre": {
+              "character": "lefevre",
+              "x": 72,
+              "y": 136,
+              "asset": "lefevre.stand",
+              "face": "big-eyes"
+            }
+          }
+        }
+      },
+      "stage": {
+        "props": [
+          "cornice",
+          "upper_cabinets",
+          "clock",
+          "frame",
+          "window",
+          "shelf",
+          "fridge",
+          "counter",
+          "chair_left",
+          "table",
+          "chair_right",
+          "desk",
+          "plant",
+          "pendant"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "camille": null,
+          "cat": null,
+          "noe": {
+            "character": "noe",
+            "x": 104,
+            "y": 136,
+            "face": "neutral"
+          }
+        }
+      },
+      "lightVariant": "night",
+      "soirKitchen": true,
+      "warmTint": false
+    },
+    {
+      "id": "a4_larmes",
+      "floorBandFracTarget": 0.75,
+      "crop": "close",
+      "bubbleAnchors": {
+        "noe": { "x": 82, "y": 96 }
+      }
+    },
+    {
+      "id": "b_setup",
+      "floorBandFracTarget": 0.74,
+      "crop": "medium_table4"
+    },
+    {
+      "id": "b_cut",
+      "floorBandFracTarget": 0.74,
+      "crop": "medium_table4"
+    },
+    {
+      "id": "b_payoff",
+      "floorBandFracTarget": 0.74,
+      "crop": "medium_table4"
+    },
+    {
+      "id": "done",
+      "t0": 1080,
+      "t1": 1125,
+      "floorBandFracTarget": 0.752,
+      "crop": "medium",
+      "stage": {
+        "props": [
+          "cornice",
+          "upper_cabinets",
+          "clock",
+          "frame",
+          "window",
+          "shelf",
+          "fridge",
+          "counter",
+          "chair_left",
+          "table",
+          "chair_right",
+          "desk",
+          "plant"
+        ],
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 108,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 92,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": null
+        }
+      },
+      "lightVariant": "night",
+      "soirKitchen": true,
+      "warmTint": false
+    }
+  ],
+  "startCrop": "wide",
+  "bubbles": [
+    {
+      "t0": 0.8,
+      "t1": 44,
+      "text": "Mercredi matin. Le message est là.",
+      "gloss": "星期三早上。那封消息还在那儿。",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 90.8,
+      "t1": 134,
+      "text": "Bon. Je lis le message.",
+      "gloss": "好。我来读消息。",
+      "actor": "camille",
+      "kind": "camille"
+    },
+    {
+      "t0": 135.8,
+      "t1": 194,
+      "text": "Sur l’écran, il y a le message.",
+      "gloss": "屏幕上是那封消息。",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 195.8,
+      "t1": 244,
+      "text": "Bonjour à vous trois. J’espère que tout va bien.",
+      "gloss": "你们三位好。希望一切都好。",
+      "anchor": "martin",
+      "kind": "screen"
+    },
+    {
+      "t0": 245.8,
+      "t1": 289,
+      "text": "Une photo de la plante, s’il vous plaît.",
+      "gloss": "请拍一张植物的照片。",
+      "anchor": "martin",
+      "kind": "screen"
+    },
+    {
+      "t0": 290.8,
+      "t1": 334,
+      "text": "De la plante. Pas du chat.",
+      "gloss": "是植物。不是猫。",
+      "anchor": "martin",
+      "kind": "screen"
+    },
+    {
+      "t0": 380.8,
+      "t1": 429,
+      "text": "Je reviendrai à la fin du mois. Nous parlerons de la plante.",
+      "gloss": "我月底会回来。我们会聊聊这盆植物。",
+      "anchor": "martin",
+      "kind": "screen"
+    },
+    {
+      "t0": 485.8,
+      "t1": 529,
+      "text": "C’est tout ? C’est un petit message.",
+      "gloss": "就这些？好短的消息。",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 530.8,
+      "t1": 574,
+      "text": "Un petit message. Un grand problème.",
+      "gloss": "消息很短。问题很大。",
+      "actor": "camille",
+      "kind": "camille"
+    },
+    {
+      "t0": 575.8,
+      "t1": 619,
+      "text": "Écoute. Madame Martin voudrait une photo de quoi ?",
+      "gloss": "听。Martin 太太想要什么的照片？",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 665.8,
+      "t1": 709,
+      "text": "Il n’y a plus de lait.",
+      "gloss": "牛奶没了。",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 710.8,
+      "t1": 754,
+      "text": "Règle numéro trois : le lait, ça va dans le frigo. Pas dans ton ventre.",
+      "gloss": "第三条：牛奶放冰箱里。不是放你肚子里。",
+      "actor": "camille",
+      "kind": "camille"
+    },
+    {
+      "t0": 755.8,
+      "t1": 799,
+      "text": "J’ai faim ! Et pas de lait.",
+      "gloss": "我饿了！还没有牛奶。",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 800.8,
+      "t1": 844,
+      "text": "Tu veux du café ? Sans lait.",
+      "gloss": "你要喝咖啡吗？不加奶的。",
+      "actor": "camille",
+      "kind": "camille"
+    },
+    {
+      "t0": 900.8,
+      "t1": 944,
+      "text": "Plus tard, à l’appartement. Camille regarde la photo. Derrière la plante… une queue orange.",
+      "gloss": "后来，回到家里，Camille 看着照片。植物后面……有一条橘色的尾巴。",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 945.8,
+      "t1": 989,
+      "text": "Noé. C’est quoi, ça ?",
+      "gloss": "Noé。这是什么？",
+      "actor": "camille",
+      "kind": "camille"
+    },
+    {
+      "t0": 990.8,
+      "t1": 1034,
+      "text": "Ce n’est pas moi !",
+      "gloss": "不是我！",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 1080.8,
+      "t1": 1124,
+      "text": "Une photo de la plante. Pas du chat. Mais le chat est sur la photo.",
+      "gloss": "一张植物的照片。不是猫的。可是猫在照片里。",
+      "anchor": "narrator",
+      "kind": "narrator"
+    }
+  ],
+  "audio": [
+    {
+      "t": 0.8,
+      "id": "n_d11_matin2"
+    },
+    {
+      "t": 90.8,
+      "id": "d11_cam_lit"
+    },
+    {
+      "t": 135.8,
+      "id": "n_d11_ecran"
+    },
+    {
+      "t": 138.5,
+      "id": "w_ecran"
+    },
+    {
+      "t": 195.8,
+      "id": "d11_mar_bonjour"
+    },
+    {
+      "t": 245.8,
+      "id": "d11_mar_photo"
+    },
+    {
+      "t": 290.8,
+      "id": "d11_mar_chat"
+    },
+    {
+      "t": 380.8,
+      "id": "d11_mar_futur"
+    },
+    {
+      "t": 430.8,
+      "id": "d11_mar_photo"
+    },
+    {
+      "t": 485.8,
+      "id": "d11_noe_court"
+    },
+    {
+      "t": 530.8,
+      "id": "d11_cam_court"
+    },
+    {
+      "t": 575.8,
+      "id": "d11_photo"
+    },
+    {
+      "t": 665.8,
+      "id": "d11_noe_lait"
+    },
+    {
+      "t": 710.8,
+      "id": "d11_cam_lait"
+    },
+    {
+      "t": 755.8,
+      "id": "d11_noe_faim"
+    },
+    {
+      "t": 800.8,
+      "id": "d11_cam_cafe"
+    },
+    {
+      "t": 900.8,
+      "id": "n_d11_queue"
+    },
+    {
+      "t": 945.8,
+      "id": "d11_cam_queue"
+    },
+    {
+      "t": 990.8,
+      "id": "d11_noe_pasmoi"
+    },
+    {
+      "t": 1080.8,
+      "id": "d11_hook"
+    }
+  ],
+  "taps": [],
+  "assetPack": "b",
+  "layout": {
+    "portraitSplit": {
+      "bubble": 0.15,
+      "scene": 0.55,
+      "hud": 0.3
+    },
+    "referencePhoneH": 1920,
+    "castHeadY": 114,
+    "feetFraction": 0.88,
+    "headMinFrac": 0.08,
+    "headMaxFrac": 0.45,
+    "maxBareFloorFrac": 0.12,
+    "maxWallAboveHeadNative": 12
+  },
+  "kitchen": true
+}

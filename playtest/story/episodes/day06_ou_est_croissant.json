@@ -1,0 +1,788 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d06_ou_est_croissant",
+ "day": 6,
+ "title": "Où est Croissant ?",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d06_",
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "stairwell",
+  "kitchen"
+ ],
+ "target_words": [
+  "vous avez vu",
+  "je l’ai vu",
+  "petit",
+  "roux",
+  "chez moi",
+  "en haut",
+  "en bas",
+  "à gauche",
+  "à droite",
+  "cette nuit"
+ ],
+ "recycle_words": [
+  "la voisine",
+  "pardon",
+  "je suis désolé"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "stairwell",
+   "light": "night",
+   "title": "Croissant !",
+   "time": "23:31",
+   "plot": "cold_open",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "door_home_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Picks up the D5 hook. Noé in socks on the landing."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ! Croissant ?",
+       "zh": "可颂！可颂？",
+       "face": "sad"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "stairs"
+       ],
+       "note": "Empty stairs, up and down."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "En haut ? En bas ?",
+       "zh": "楼上？楼下？"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "en_haut",
+         "audio": "en_haut"
+        },
+        {
+         "id": "en_bas",
+         "audio": "en_bas"
+        }
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "swap",
+       "to": "minuterie_off",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "Darkness. Only his voice."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il est petit… il est seul… cette nuit !",
+       "zh": "它那么小……一个人……今晚！",
+       "face": "sad"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_escalier",
+   "set": "stairwell",
+   "light": "day",
+   "title": "En haut, en bas",
+   "time": "07:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_off",
+       "action": "swap",
+       "to": "minuterie_on",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_stairs_down",
+       "from": "left",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Friday morning. Neither slept. Street search adapted to the stairwell (no street set)."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Moi, en bas. Toi, en haut.",
+       "zh": "我去楼下。你去楼上。",
+       "gesture": "point"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "En haut ? Il n’y a rien en haut !",
+       "zh": "楼上？楼上什么都没有！",
+       "note": "Plant: the little roof door at the top of the stairs (locked). Pays off D8."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "mailboxes"
+       ]
+      },
+      {
+       "do": "walk_to",
+       "who": "camille",
+       "to": "stand_mailboxes"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Les boîtes aux lettres… à gauche, non. À droite… non.",
+       "zh": "信箱……左边，没有。右边……也没有。",
+       "gesture": "point"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "a_gauche",
+         "audio": "a_gauche"
+        },
+        {
+         "id": "a_droite",
+         "audio": "a_droite"
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "doormat_neighbour"
+       ],
+       "note": "On the neighbour’s doormat: two ginger hairs. Paw_print stand-in."
+      },
+      {
+       "do": "prop",
+       "id": "paw_print",
+       "action": "show",
+       "at": "doormat_neighbour"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "À gauche… chez la voisine ?!",
+       "zh": "左边……邻居家？！",
+       "face": "shocked"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_voisine",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Vous avez vu… ?",
+   "time": "07:05",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2",
+     "steps": [
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_neighbour_door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "door_neighbour_closed"
+       ],
+       "sfx": "knock"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_closed",
+       "action": "swap",
+       "to": "door_neighbour_open"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door",
+       "pose": "gown_stand"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Bonjour, Madame. Pardon…",
+       "zh": "早上好，女士。打扰了……",
+       "face": "sad"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Demande à la voisine.",
+        "zh": "问问邻居。"
+       },
+       "options": [
+        {
+         "fr": "Vous avez vu un petit chat roux ?",
+         "zh": "您看见一只小橘猫吗？",
+         "correct": true
+        },
+        {
+         "fr": "Vous avez vu un petit chien ?",
+         "zh": "您看见一只小狗吗？",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "vous_avez_vu",
+         "audio": "vous_avez_vu"
+        },
+        {
+         "id": "petit",
+         "audio": "petit"
+        },
+        {
+         "id": "roux",
+         "audio": "roux"
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Un petit chat roux ? Hm.",
+       "zh": "一只小橘猫？嗯。",
+       "face": "brow_raise"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Oui. Je l’ai vu.",
+       "zh": "看见了。我看见它了。"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Vous l’avez vu ? Où ?!",
+       "zh": "您看见它了？在哪儿？！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Chez moi.",
+       "zh": "在我家。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "je_l_ai_vu",
+         "audio": "je_l_ai_vu"
+        },
+        {
+         "id": "chez_moi",
+         "audio": "chez_moi"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Pas seule",
+   "time": "07:07",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "doormat_neighbour",
+       "note": "Croissant walks out of HER door, slowly, a slice of ham in his mouth."
+      },
+      {
+       "do": "prop",
+       "id": "ham_slice",
+       "action": "hold",
+       "who": "croissant",
+       "note": "close shots only"
+      },
+      {
+       "do": "cat_action",
+       "action": "chew",
+       "at": "doormat_neighbour"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Il a mangé mon jambon. Tout mon jambon.",
+       "zh": "它吃了我的火腿。我所有的火腿。",
+       "face": "neutral"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je suis désolé, Madame !",
+       "zh": "对不起，女士！",
+       "face": "sad"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "doormat_neighbour",
+       "look_at": "lefevre",
+       "note": "SMILE: Noé crouches with open arms; Croissant walks right past him and sits on her slipper."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "She looks down at him. Something softens."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Cette nuit… je n’étais pas seule.",
+       "zh": "昨晚……我不是一个人。",
+       "face": "happy",
+       "note": "HOLD 3 s after. Her flat stays off-screen (bible)."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je l’ai vu ! Il est là !",
+       "zh": "我看见它了！它在这儿！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Un petit chat roux… chez moi. Hm.",
+       "zh": "一只小橘猫……在我家。嗯。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a3_samedi",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Samedi",
+   "time": "07:10",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a3",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Madame… vous avez vu ? Samedi, Madame Martin vient.",
+       "zh": "女士……您知道吗？星期六，马丁太太要来。"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Samedi matin, il peut venir chez moi. Une heure, deux heures.",
+       "zh": "星期六早上，它可以来我家。一个小时，两个小时。",
+       "note": "She offers to HIDE him for the visit, nothing more; does not imply he stays at 411."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Merci, Madame ! Vous êtes gentille !",
+       "zh": "谢谢您，女士！您真好！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Vous avez vu ? Il dort. Pas de bruit cette nuit. C’est tout.",
+       "zh": "您看见了吗？它在睡觉。今晚别出声。就这样。",
+       "note": "Door closes; a tiny smile before it does."
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "swap",
+       "to": "door_neighbour_closed"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_ascenseur",
+   "set": "stairwell",
+   "light": "day",
+   "title": "En bas",
+   "time": "18:00",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "cat_flap",
+       "action": "show",
+       "at": "flap_neighbour",
+       "note": "An old cat flap in Madame Lefèvre’s door, from a cat she once had (quiet payoff of « je n’étais pas seule »)."
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "step_3"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Evening. Croissant sits on a step, looking down, then up."
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "step_0"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "À gauche ? À droite ? En bas ? Non, non !",
+       "zh": "左边？右边？楼下？不行不行！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "step_5",
+       "note": "Up again."
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "En haut ? Non !",
+       "zh": "楼上？也不行！",
+       "face": "shocked"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "doormat_neighbour",
+       "note": "He settles on the neighbour’s doormat instead."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Chez la voisine… d’accord.",
+       "zh": "在邻居家……好吧。",
+       "gesture": "facepalm",
+       "note": "B words: Day 1–5 + en haut/en bas/chez taught earlier today."
+      },
+      {
+       "do": "cat_action",
+       "action": "flap_in",
+       "at": "flap_neighbour_cat",
+       "note": "He slips into her flat through her old cat flap. No flap on 411."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "cat_flap"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "voice_martin",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Message",
+   "time": "20:00",
+   "plot": "voice",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "v",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_young",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Bonsoir ! Demain, dix heures. J’apporte des croissants !",
+       "zh": "晚上好！明天十点。我带可颂面包来！"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "croissants",
+         "audio": "croissants"
+        }
+       ],
+       "prompt": {
+        "fr": "J’apporte des ___ !",
+        "zh": "我带___来！",
+        "audio": "croissants"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "reply_martin",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Réponse",
+   "time": "20:01",
+   "plot": "reply",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "r",
+     "steps": [
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Une réponse pour Madame Martin :",
+        "zh": "给马丁太太回个消息："
+       },
+       "options": [
+        {
+         "fr": "Merci, Madame Martin. À demain !",
+         "zh": "谢谢您，马丁太太。明天见！",
+         "correct": true
+        },
+        {
+         "fr": "Merci, Croissant. À demain !",
+         "zh": "谢谢你，可颂。明天见！",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Des croissants",
+   "time": "20:02",
+   "plot": "hook",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "floor",
+       "look_at": "noe"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Des croissants… demain. Oh là là.",
+       "zh": "可颂面包……明天。哎呀呀。",
+       "face": "big-eyes"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "At the word « croissants » the cat’s ears go up. He looks straight at camera. HOLD 2 s. Cut."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

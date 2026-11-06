@@ -1,0 +1,47 @@
+{
+ "multiply": {
+  "src": "light/evening_multiplier_half.png",
+  "decode": "x2 (= map*127.5)",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "cool_used": [
+   0.24,
+   0.31,
+   0.43
+  ],
+  "deviation": "night base hue nudged toward teal, same as kitchen soir.json",
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "sun_patch",
+    "shape": "skewed window patch on stairs + landing, multiply only",
+    "color": [
+     1.2,
+     1.02,
+     0.72
+    ]
+   }
+  ],
+  "window": {
+   "x": 122,
+   "y": 48,
+   "w": 22,
+   "h": 30,
+   "note": "pane ungraded (own sky)"
+  },
+  "ungraded": [
+   "prop.landing_window",
+   "prop.ceiling_bulb_on",
+   "prop.minuterie_on"
+  ],
+  "cast": "same map at strength 0.25 when <1, 0.6 when >1"
+ }
+}

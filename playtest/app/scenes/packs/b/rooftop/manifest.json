@@ -1,0 +1,1801 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "rooftop_day": {
+   "file": "rooftop_day_sheet.png",
+   "w": 192,
+   "h": 349
+  },
+  "rooftop_evening": {
+   "file": "rooftop_evening_sheet.png",
+   "w": 192,
+   "h": 349
+  },
+  "rooftop_night": {
+   "file": "rooftop_night_sheet.png",
+   "w": 192,
+   "h": 349
+  }
+ },
+ "assets": {
+  "backdrop.rooftop_sky.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 192,
+    "h": 116
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 192,
+   "depth": 0,
+   "ungraded": true,
+   "file": "pieces/day/sky.png"
+  },
+  "backdrop.rooftop_skyline_far.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 198,
+    "w": 96,
+    "h": 80
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 48,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 96,
+   "depth": 0,
+   "ungraded": true,
+   "note": "draw sky -> skyline_far -> tower -> skyline",
+   "file": "pieces/day/skyline_far.png"
+  },
+  "backdrop.rooftop_skyline.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 117,
+    "w": 96,
+    "h": 80
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 48,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 96,
+   "depth": 0,
+   "ungraded": true,
+   "file": "pieces/day/skyline.png"
+  },
+  "backdrop.rooftop_tower.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 97,
+    "y": 198,
+    "w": 17,
+    "h": 66
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 65
+   },
+   "pixelScale": 1,
+   "depth": 0,
+   "ungraded": true,
+   "note": "draw between sky and skyline",
+   "file": "pieces/day/tower.png"
+  },
+  "backdrop.rooftop_floor.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 97,
+    "y": 279,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/day/floor.png"
+  },
+  "prop.parapet.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 89,
+    "y": 312,
+    "w": 32,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 32,
+   "depth": 1,
+   "slots": {
+    "coping_top": {
+     "y": 0
+    }
+   },
+   "file": "pieces/day/parapet.png"
+  },
+  "prop.roof_door_closed.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 121,
+    "y": 198,
+    "w": 32,
+    "h": 44
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 43
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 16,
+     "y": 43
+    },
+    "strand_hook": {
+     "x": 31,
+     "y": 2
+    }
+   },
+   "file": "pieces/day/roof_door_closed.png"
+  },
+  "prop.roof_door_open.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 154,
+    "y": 198,
+    "w": 32,
+    "h": 44
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 43
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 16,
+     "y": 43
+    },
+    "strand_hook": {
+     "x": 31,
+     "y": 2
+    }
+   },
+   "file": "pieces/day/roof_door_open.png"
+  },
+  "prop.bench.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 58,
+    "y": 312,
+    "w": 30,
+    "h": 13
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 15,
+    "y": 12
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "sitLine": 5,
+   "slots": {
+    "seat_l": {
+     "x": 8,
+     "y": 5
+    },
+    "seat_r": {
+     "x": 21,
+     "y": 5
+    },
+    "cat": {
+     "x": 15,
+     "y": 5
+    }
+   },
+   "file": "pieces/day/bench.png"
+  },
+  "prop.pot_chez_nous_sprout.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 41,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/day/pot_chez_nous_sprout.png"
+  },
+  "prop.pot_chez_nous_young.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 56,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/day/pot_chez_nous_young.png"
+  },
+  "prop.pot_chez_nous_full.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 26,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/day/pot_chez_nous_full.png"
+  },
+  "prop.pot_round_empty.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 71,
+    "y": 279,
+    "w": 12,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "band row y14 (orange_sh) -> any palette colour for pots 2/3",
+   "file": "pieces/day/pot_round_empty.png"
+  },
+  "prop.pot_round_planted.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 84,
+    "y": 279,
+    "w": 12,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "band row y14",
+   "file": "pieces/day/pot_round_planted.png"
+  },
+  "prop.trough_empty.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 162,
+    "y": 279,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "green/green_sh -> plum/plum_sh or navy/navy_sh",
+   "file": "pieces/day/trough_empty.png"
+  },
+  "prop.trough_planted.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 29,
+    "y": 312,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "herbs + tomatoes; sits on parapet coping (y117)",
+   "file": "pieces/day/trough_planted.png"
+  },
+  "prop.trough_flowers.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 312,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "geraniums",
+   "file": "pieces/day/trough_flowers.png"
+  },
+  "prop.ivy.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 122,
+    "y": 312,
+    "w": 12,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "hang from the coping top (y116) over the parapet face",
+   "file": "pieces/day/ivy.png"
+  },
+  "prop.pot_tall_empty.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 279,
+    "w": 12,
+    "h": 32
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 31
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/pot_tall_empty.png"
+  },
+  "prop.pot_tall_planted.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 13,
+    "y": 279,
+    "w": 12,
+    "h": 32
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 31
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/pot_tall_planted.png"
+  },
+  "prop.arrosoir.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 168,
+    "y": 329,
+    "w": 13,
+    "h": 9
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/arrosoir.png"
+  },
+  "handprop.arrosoir.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 340,
+    "w": 13,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "file": "pieces/day/arrosoir_hand.png"
+  },
+  "prop.string_lights_on.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 84,
+    "y": 329,
+    "w": 83,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 6,
+   "light": "lamp string_lights",
+   "slots": {
+    "hook_r": {
+     "x": 82,
+     "y": 0
+    }
+   },
+   "file": "pieces/day/string_lights_on.png"
+  },
+  "prop.string_lights_off.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 0,
+    "y": 329,
+    "w": 83,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 6,
+   "slots": {
+    "hook_r": {
+     "x": 82,
+     "y": 0
+    }
+   },
+   "file": "pieces/day/string_lights_off.png"
+  },
+  "prop.light_pole.day": {
+   "source": "atlas",
+   "atlas": "rooftop_day",
+   "frame": {
+    "x": 115,
+    "y": 198,
+    "w": 5,
+    "h": 46
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 45
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "hook": {
+     "x": 0,
+     "y": 2
+    }
+   },
+   "file": "pieces/day/light_pole.png"
+  },
+  "backdrop.rooftop_sky.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 192,
+    "h": 116
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 192,
+   "depth": 0,
+   "ungraded": true,
+   "file": "pieces/evening/sky.png"
+  },
+  "backdrop.rooftop_skyline_far.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 198,
+    "w": 96,
+    "h": 80
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 48,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 96,
+   "depth": 0,
+   "ungraded": true,
+   "note": "draw sky -> skyline_far -> tower -> skyline",
+   "file": "pieces/evening/skyline_far.png"
+  },
+  "backdrop.rooftop_skyline.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 117,
+    "w": 96,
+    "h": 80
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 48,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 96,
+   "depth": 0,
+   "ungraded": true,
+   "file": "pieces/evening/skyline.png"
+  },
+  "backdrop.rooftop_tower.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 97,
+    "y": 198,
+    "w": 17,
+    "h": 66
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 65
+   },
+   "pixelScale": 1,
+   "depth": 0,
+   "ungraded": true,
+   "note": "draw between sky and skyline",
+   "file": "pieces/evening/tower.png"
+  },
+  "backdrop.rooftop_floor.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 97,
+    "y": 279,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/evening/floor.png"
+  },
+  "prop.parapet.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 89,
+    "y": 312,
+    "w": 32,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 32,
+   "depth": 1,
+   "slots": {
+    "coping_top": {
+     "y": 0
+    }
+   },
+   "file": "pieces/evening/parapet.png"
+  },
+  "prop.roof_door_closed.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 121,
+    "y": 198,
+    "w": 32,
+    "h": 44
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 43
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 16,
+     "y": 43
+    },
+    "strand_hook": {
+     "x": 31,
+     "y": 2
+    }
+   },
+   "file": "pieces/evening/roof_door_closed.png"
+  },
+  "prop.roof_door_open.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 154,
+    "y": 198,
+    "w": 32,
+    "h": 44
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 43
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 16,
+     "y": 43
+    },
+    "strand_hook": {
+     "x": 31,
+     "y": 2
+    }
+   },
+   "file": "pieces/evening/roof_door_open.png"
+  },
+  "prop.bench.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 58,
+    "y": 312,
+    "w": 30,
+    "h": 13
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 15,
+    "y": 12
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "sitLine": 5,
+   "slots": {
+    "seat_l": {
+     "x": 8,
+     "y": 5
+    },
+    "seat_r": {
+     "x": 21,
+     "y": 5
+    },
+    "cat": {
+     "x": 15,
+     "y": 5
+    }
+   },
+   "file": "pieces/evening/bench.png"
+  },
+  "prop.pot_chez_nous_sprout.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 41,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/evening/pot_chez_nous_sprout.png"
+  },
+  "prop.pot_chez_nous_young.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 56,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/evening/pot_chez_nous_young.png"
+  },
+  "prop.pot_chez_nous_full.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 26,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/evening/pot_chez_nous_full.png"
+  },
+  "prop.pot_round_empty.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 71,
+    "y": 279,
+    "w": 12,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "band row y14 (orange_sh) -> any palette colour for pots 2/3",
+   "file": "pieces/evening/pot_round_empty.png"
+  },
+  "prop.pot_round_planted.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 84,
+    "y": 279,
+    "w": 12,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "band row y14",
+   "file": "pieces/evening/pot_round_planted.png"
+  },
+  "prop.trough_empty.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 162,
+    "y": 279,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "green/green_sh -> plum/plum_sh or navy/navy_sh",
+   "file": "pieces/evening/trough_empty.png"
+  },
+  "prop.trough_planted.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 29,
+    "y": 312,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "herbs + tomatoes; sits on parapet coping (y117)",
+   "file": "pieces/evening/trough_planted.png"
+  },
+  "prop.trough_flowers.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 312,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "geraniums",
+   "file": "pieces/evening/trough_flowers.png"
+  },
+  "prop.ivy.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 122,
+    "y": 312,
+    "w": 12,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "hang from the coping top (y116) over the parapet face",
+   "file": "pieces/evening/ivy.png"
+  },
+  "prop.pot_tall_empty.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 279,
+    "w": 12,
+    "h": 32
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 31
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/pot_tall_empty.png"
+  },
+  "prop.pot_tall_planted.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 13,
+    "y": 279,
+    "w": 12,
+    "h": 32
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 31
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/pot_tall_planted.png"
+  },
+  "prop.arrosoir.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 168,
+    "y": 329,
+    "w": 13,
+    "h": 9
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/arrosoir.png"
+  },
+  "handprop.arrosoir.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 340,
+    "w": 13,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "file": "pieces/evening/arrosoir_hand.png"
+  },
+  "prop.string_lights_on.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 84,
+    "y": 329,
+    "w": 83,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 6,
+   "light": "lamp string_lights",
+   "slots": {
+    "hook_r": {
+     "x": 82,
+     "y": 0
+    }
+   },
+   "file": "pieces/evening/string_lights_on.png"
+  },
+  "prop.string_lights_off.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 0,
+    "y": 329,
+    "w": 83,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 6,
+   "slots": {
+    "hook_r": {
+     "x": 82,
+     "y": 0
+    }
+   },
+   "file": "pieces/evening/string_lights_off.png"
+  },
+  "prop.light_pole.evening": {
+   "source": "atlas",
+   "atlas": "rooftop_evening",
+   "frame": {
+    "x": 115,
+    "y": 198,
+    "w": 5,
+    "h": 46
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 45
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "hook": {
+     "x": 0,
+     "y": 2
+    }
+   },
+   "file": "pieces/evening/light_pole.png"
+  },
+  "backdrop.rooftop_sky.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 192,
+    "h": 116
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 192,
+   "depth": 0,
+   "ungraded": true,
+   "file": "pieces/night/sky.png"
+  },
+  "backdrop.rooftop_skyline_far.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 198,
+    "w": 96,
+    "h": 80
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 48,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 96,
+   "depth": 0,
+   "ungraded": true,
+   "note": "draw sky -> skyline_far -> tower -> skyline",
+   "file": "pieces/night/skyline_far.png"
+  },
+  "backdrop.rooftop_skyline.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 117,
+    "w": 96,
+    "h": 80
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 48,
+    "y": 79
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 96,
+   "depth": 0,
+   "ungraded": true,
+   "file": "pieces/night/skyline.png"
+  },
+  "backdrop.rooftop_tower.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 97,
+    "y": 198,
+    "w": 17,
+    "h": 66
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 65
+   },
+   "pixelScale": 1,
+   "depth": 0,
+   "ungraded": true,
+   "note": "draw between sky and skyline",
+   "file": "pieces/night/tower.png"
+  },
+  "backdrop.rooftop_floor.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 97,
+    "y": 279,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 64,
+   "depth": 0,
+   "file": "pieces/night/floor.png"
+  },
+  "prop.parapet.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 89,
+    "y": 312,
+    "w": 32,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "tileWidth": 32,
+   "depth": 1,
+   "slots": {
+    "coping_top": {
+     "y": 0
+    }
+   },
+   "file": "pieces/night/parapet.png"
+  },
+  "prop.roof_door_closed.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 121,
+    "y": 198,
+    "w": 32,
+    "h": 44
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 43
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 16,
+     "y": 43
+    },
+    "strand_hook": {
+     "x": 31,
+     "y": 2
+    }
+   },
+   "file": "pieces/night/roof_door_closed.png"
+  },
+  "prop.roof_door_open.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 154,
+    "y": 198,
+    "w": 32,
+    "h": 44
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 43
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "doorway": {
+     "x": 16,
+     "y": 43
+    },
+    "strand_hook": {
+     "x": 31,
+     "y": 2
+    }
+   },
+   "file": "pieces/night/roof_door_open.png"
+  },
+  "prop.bench.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 58,
+    "y": 312,
+    "w": 30,
+    "h": 13
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 15,
+    "y": 12
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "sitLine": 5,
+   "slots": {
+    "seat_l": {
+     "x": 8,
+     "y": 5
+    },
+    "seat_r": {
+     "x": 21,
+     "y": 5
+    },
+    "cat": {
+     "x": 15,
+     "y": 5
+    }
+   },
+   "file": "pieces/night/bench.png"
+  },
+  "prop.pot_chez_nous_sprout.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 41,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/night/pot_chez_nous_sprout.png"
+  },
+  "prop.pot_chez_nous_young.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 56,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/night/pot_chez_nous_young.png"
+  },
+  "prop.pot_chez_nous_full.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 26,
+    "y": 279,
+    "w": 14,
+    "h": 26
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "file": "pieces/night/pot_chez_nous_full.png"
+  },
+  "prop.pot_round_empty.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 71,
+    "y": 279,
+    "w": 12,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "band row y14 (orange_sh) -> any palette colour for pots 2/3",
+   "file": "pieces/night/pot_round_empty.png"
+  },
+  "prop.pot_round_planted.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 84,
+    "y": 279,
+    "w": 12,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "band row y14",
+   "file": "pieces/night/pot_round_planted.png"
+  },
+  "prop.trough_empty.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 162,
+    "y": 279,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "recolour": "green/green_sh -> plum/plum_sh or navy/navy_sh",
+   "file": "pieces/night/trough_empty.png"
+  },
+  "prop.trough_planted.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 29,
+    "y": 312,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "herbs + tomatoes; sits on parapet coping (y117)",
+   "file": "pieces/night/trough_planted.png"
+  },
+  "prop.trough_flowers.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 312,
+    "w": 28,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 14,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "geraniums",
+   "file": "pieces/night/trough_flowers.png"
+  },
+  "prop.ivy.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 122,
+    "y": 312,
+    "w": 12,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "note": "hang from the coping top (y116) over the parapet face",
+   "file": "pieces/night/ivy.png"
+  },
+  "prop.pot_tall_empty.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 279,
+    "w": 12,
+    "h": 32
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 31
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/pot_tall_empty.png"
+  },
+  "prop.pot_tall_planted.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 13,
+    "y": 279,
+    "w": 12,
+    "h": 32
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 31
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/pot_tall_planted.png"
+  },
+  "prop.arrosoir.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 168,
+    "y": 329,
+    "w": 13,
+    "h": 9
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/arrosoir.png"
+  },
+  "handprop.arrosoir.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 340,
+    "w": 13,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "file": "pieces/night/arrosoir_hand.png"
+  },
+  "prop.string_lights_on.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 84,
+    "y": 329,
+    "w": 83,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 6,
+   "light": "lamp string_lights",
+   "slots": {
+    "hook_r": {
+     "x": 82,
+     "y": 0
+    }
+   },
+   "file": "pieces/night/string_lights_on.png"
+  },
+  "prop.string_lights_off.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 0,
+    "y": 329,
+    "w": 83,
+    "h": 10
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 6,
+   "slots": {
+    "hook_r": {
+     "x": 82,
+     "y": 0
+    }
+   },
+   "file": "pieces/night/string_lights_off.png"
+  },
+  "prop.light_pole.night": {
+   "source": "atlas",
+   "atlas": "rooftop_night",
+   "frame": {
+    "x": 115,
+    "y": 198,
+    "w": 5,
+    "h": 46
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 2,
+    "y": 45
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "hook": {
+     "x": 0,
+     "y": 2
+    }
+   },
+   "file": "pieces/night/light_pole.png"
+  }
+ },
+ "stage": {
+  "width": 192,
+  "height": 144,
+  "horizon": 128,
+  "feetLine": 136,
+  "backBase": 131,
+  "parapetTop": 116,
+  "layout": [
+   {
+    "piece": "backdrop.rooftop_sky",
+    "x": 0,
+    "y": 0,
+    "tile": "x"
+   },
+   {
+    "piece": "backdrop.rooftop_skyline_far",
+    "x": 88,
+    "y": 115,
+    "tile": "x",
+    "tileWidth": 96,
+    "note": "offset 40 px vs near row"
+   },
+   {
+    "piece": "backdrop.rooftop_skyline",
+    "x": 48,
+    "y": 115,
+    "tile": "x",
+    "tileWidth": 96
+   },
+   {
+    "piece": "backdrop.rooftop_floor",
+    "x": 0,
+    "y": 128,
+    "tile": "x",
+    "tileWidth": 64
+   },
+   {
+    "piece": "prop.parapet",
+    "x": 16,
+    "y": 127,
+    "tile": "x",
+    "tileWidth": 32
+   },
+   {
+    "piece": "backdrop.rooftop_tower",
+    "x": 118,
+    "y": 92
+   },
+   {
+    "piece": "prop.roof_door_closed",
+    "x": 30,
+    "y": 131
+   },
+   {
+    "piece": "prop.light_pole",
+    "x": 128,
+    "y": 131
+   },
+   {
+    "piece": "prop.trough_planted",
+    "x": 66,
+    "y": 117
+   },
+   {
+    "piece": "prop.trough_flowers",
+    "x": 100,
+    "y": 117
+   },
+   {
+    "piece": "prop.trough_planted",
+    "x": 152,
+    "y": 117
+   },
+   {
+    "piece": "prop.pot_tall_planted",
+    "x": 52,
+    "y": 131
+   },
+   {
+    "piece": "prop.bench",
+    "x": 100,
+    "y": 131
+   },
+   {
+    "piece": "prop.pot_round_planted",
+    "x": 140,
+    "y": 131
+   },
+   {
+    "piece": "prop.pot_round_planted",
+    "x": 162,
+    "y": 131
+   },
+   {
+    "piece": "prop.pot_round_empty",
+    "x": 178,
+    "y": 131
+   },
+   {
+    "piece": "prop.pot_chez_nous_young",
+    "x": 70,
+    "y": 134
+   },
+   {
+    "piece": "prop.arrosoir",
+    "x": 84,
+    "y": 135
+   },
+   {
+    "piece": "prop.ivy",
+    "x": 58,
+    "y": 116,
+    "anchor": "topleft"
+   },
+   {
+    "piece": "prop.ivy",
+    "x": 112,
+    "y": 116,
+    "anchor": "topleft"
+   },
+   {
+    "piece": "prop.ivy",
+    "x": 156,
+    "y": 116,
+    "anchor": "topleft"
+   },
+   {
+    "piece": "prop.ivy",
+    "x": 88,
+    "y": 116,
+    "anchor": "topleft"
+   },
+   {
+    "piece": "prop.string_lights_off|prop.string_lights_on",
+    "x": 44,
+    "y": 88,
+    "anchor": "topleft",
+    "variants": [
+     "day/evening (off)",
+     "night (on)"
+    ]
+   }
+  ],
+  "light": {
+   "evening": "light/golden.json",
+   "night": "light/soir.json"
+  },
+  "ungraded": [
+   "backdrop.rooftop_sky",
+   "backdrop.rooftop_skyline_far",
+   "backdrop.rooftop_skyline",
+   "backdrop.rooftop_tower",
+   "prop.string_lights_on (night emitter)"
+  ],
+  "depthLayers": {
+   "0": "sky (tiled, ungraded) -> tower -> skyline (tiled, ungraded) ; deck (tiled)",
+   "1": "parapet (tiled)",
+   "2": "back props on backBase: roof door, bench, light pole",
+   "3": "pots, troughs, floor arrosoir (on floor or parapet coping y116)",
+   "4": "cast + cat on feetLine, sorted by feet y",
+   "5": "hand props (handPoint)",
+   "6": "string lights (topleft at door strand_hook)",
+   "7": "light multiply + add (graded layers only), cast reduced"
+  }
+ }
+}

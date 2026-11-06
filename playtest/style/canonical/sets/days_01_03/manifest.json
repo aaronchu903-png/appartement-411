@@ -1,0 +1,1033 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "days_props": {
+   "file": "days_props_sheet.png",
+   "w": 64,
+   "h": 35
+  },
+  "days_cat": {
+   "file": "days_cat_sheet.png",
+   "w": 64,
+   "h": 38
+  },
+  "days_noe": {
+   "file": "days_noe_sheet.png",
+   "w": 34,
+   "h": 24
+  },
+  "days_props2": {
+   "file": "days_props2_sheet.png",
+   "w": 48,
+   "h": 13
+  },
+  "days_props3": {
+   "file": "days_props3_sheet.png",
+   "w": 44,
+   "h": 20
+  }
+ },
+ "assets": {
+  "prop.pot_desk_sprout.day": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 11,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_sprout.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "replaces": "kitchen prop.plant (baked at 177,118) = pot 1 Chez nous",
+   "stage": "Day 1 start",
+   "variant": "day",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_sprout.evening": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 11,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_sprout.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "replaces": "kitchen prop.plant (baked at 177,118) = pot 1 Chez nous",
+   "stage": "Day 1 start",
+   "variant": "evening",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_sprout.night": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 11,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_sprout.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "replaces": "kitchen prop.plant (baked at 177,118) = pot 1 Chez nous",
+   "stage": "Day 1 start",
+   "variant": "night",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_young.day": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 22,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_young.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "stage": "Days 4-5",
+   "variant": "day",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_young.evening": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 22,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_young.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "stage": "Days 4-5",
+   "variant": "evening",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_young.night": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 22,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_young.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "stage": "Days 4-5",
+   "variant": "night",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_full.day": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_full.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "stage": "Days 6-7",
+   "variant": "day",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_full.evening": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_full.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "stage": "Days 6-7",
+   "variant": "evening",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.pot_desk_full.night": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 10,
+    "h": 17
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_pot_desk_full.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "stage": "Days 6-7",
+   "variant": "night",
+   "note": "same pixels per variant; graded in code with room light (rooftop pot convention)"
+  },
+  "prop.cat_bowl.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 0,
+    "y": 31,
+    "w": 7,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_cat_bowl.png",
+   "slots": {
+    "kitchen_floor": {
+     "x": 40,
+     "y": 136
+    }
+   },
+   "catPoint": {
+    "dx": 5,
+    "note": "croissant.drink feet = bowl x + 5, same y"
+   }
+  },
+  "prop.cat_bowl_ripple.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 8,
+    "y": 31,
+    "w": 7,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_cat_bowl_ripple.png"
+  },
+  "prop.box_cat_back.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 33,
+    "y": 0,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_box_cat_back.png"
+  },
+  "prop.box_cat_front.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 0,
+    "y": 18,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_box_cat_front.png"
+  },
+  "prop.parcel_closed_floor.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 19,
+    "y": 18,
+    "w": 16,
+    "h": 11
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_parcel_closed_floor.png",
+   "slots": {
+    "kitchen_floor": {
+     "x": 60,
+     "y": 136
+    },
+    "doormat_home": {
+     "x": 78,
+     "y": 132
+    }
+   },
+   "note": "parcel_closed + baked contact shadow row"
+  },
+  "prop.parcel_shadow.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 16,
+    "y": 31,
+    "w": 16,
+    "h": 1
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_parcel_shadow.png",
+   "note": "drop under any parcel_closed: shadow x = parcel x - 8, y = parcel feet y + 1"
+  },
+  "prop.parcel_pair.any": {
+   "source": "atlas",
+   "atlas": "days_props",
+   "frame": {
+    "x": 36,
+    "y": 18,
+    "w": 22,
+    "h": 11
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 11,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/prop_parcel_pair.png",
+   "slots": {
+    "doormat_home": {
+     "x": 78,
+     "y": 132
+    },
+    "kitchen_floor": {
+     "x": 60,
+     "y": 136
+    }
+   }
+  },
+  "croissant.sleep_curl.0": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 19,
+    "y": 26,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_sleep_curl_0.png",
+   "slots": {
+    "kitchen_desk": {
+     "x": 166,
+     "y": 119
+    }
+   },
+   "requires": "prop.pot_desk_* at 177,118 drawn BEFORE the cat; prop.desk_bare"
+  },
+  "croissant.sleep_curl.1": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 34,
+    "y": 26,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_sleep_curl_1.png"
+  },
+  "croissant.in_box.idle": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 30,
+    "y": 0,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_in_box_idle.png",
+   "note": "layer between prop.box_cat_back and prop.box_cat_front, same anchor point; see NOTES.md"
+  },
+  "croissant.in_box.twitch": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 0,
+    "y": 26,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_in_box_twitch.png"
+  },
+  "croissant.in_box.tail_a": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 0,
+    "y": 13,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_in_box_tail_a.png"
+  },
+  "croissant.in_box.tail_b": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 19,
+    "y": 13,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_in_box_tail_b.png"
+  },
+  "croissant.in_box.tail_c": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 38,
+    "y": 13,
+    "w": 18,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 9,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_in_box_tail_c.png"
+  },
+  "croissant.drink.0": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_drink_0.png"
+  },
+  "croissant.drink.1": {
+   "source": "atlas",
+   "atlas": "days_cat",
+   "frame": {
+    "x": 15,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/croissant_drink_1.png"
+  },
+  "noe.finger_to_lips.0": {
+   "source": "atlas",
+   "atlas": "days_noe",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/noe_finger_to_lips_0.png"
+  },
+  "noe.finger_to_lips.1": {
+   "source": "atlas",
+   "atlas": "days_noe",
+   "frame": {
+    "x": 17,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "depth": 4,
+   "file": "pieces/x1/noe_finger_to_lips_1.png"
+  },
+  "croissant.sleep_curl.loop": {
+   "type": "sequence",
+   "frames": [
+    "croissant.sleep_curl.0",
+    "croissant.sleep_curl.1"
+   ],
+   "fps": 0.83,
+   "durations": [
+    1400,
+    1000
+   ]
+  },
+  "croissant.in_box.loop": {
+   "type": "sequence",
+   "frames": [
+    "croissant.in_box.idle",
+    "croissant.in_box.twitch"
+   ],
+   "fps": 1.02,
+   "durations": [
+    1800,
+    160
+   ]
+  },
+  "croissant.in_box.tail_pop": {
+   "type": "sequence",
+   "frames": [
+    "croissant.in_box.tail_a",
+    "croissant.in_box.tail_b",
+    "croissant.in_box.tail_c"
+   ],
+   "fps": 2.54,
+   "durations": [
+    140,
+    140,
+    900
+   ]
+  },
+  "croissant.drink.loop": {
+   "type": "sequence",
+   "frames": [
+    "croissant.drink.0",
+    "croissant.drink.1"
+   ],
+   "fps": 4.35,
+   "durations": [
+    260,
+    200
+   ]
+  },
+  "noe.finger_to_lips.loop": {
+   "type": "sequence",
+   "frames": [
+    "noe.finger_to_lips.0",
+    "noe.finger_to_lips.1"
+   ],
+   "fps": 1.25,
+   "durations": [
+    900,
+    700
+   ]
+  },
+  "prop.wall_calendar.day": {
+   "source": "atlas",
+   "atlas": "days_props2",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 12,
+    "h": 13
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 5,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/x1/prop_wall_calendar.png",
+   "contact": "none (wall item)",
+   "slots": {
+    "kitchen_wall_calendar": {
+     "x": 126,
+     "y": 74
+    }
+   },
+   "beat": "d1 hook h (night) + insert_calendar",
+   "note": "occupies x121-132 y74-86; moved +6 from Rev3.1 mark (120,74) because the night pendant cord x118 y66-95 crosses it; same pixels per variant, graded in code with room light",
+   "variant": "day"
+  },
+  "prop.wall_calendar.evening": {
+   "source": "atlas",
+   "atlas": "days_props2",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 12,
+    "h": 13
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 5,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/x1/prop_wall_calendar.png",
+   "contact": "none (wall item)",
+   "slots": {
+    "kitchen_wall_calendar": {
+     "x": 126,
+     "y": 74
+    }
+   },
+   "beat": "d1 hook h (night) + insert_calendar",
+   "note": "occupies x121-132 y74-86; moved +6 from Rev3.1 mark (120,74) because the night pendant cord x118 y66-95 crosses it; same pixels per variant, graded in code with room light",
+   "variant": "evening"
+  },
+  "prop.wall_calendar.night": {
+   "source": "atlas",
+   "atlas": "days_props2",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 12,
+    "h": 13
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 5,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/x1/prop_wall_calendar.png",
+   "contact": "none (wall item)",
+   "slots": {
+    "kitchen_wall_calendar": {
+     "x": 126,
+     "y": 74
+    }
+   },
+   "beat": "d1 hook h (night) + insert_calendar",
+   "note": "occupies x121-132 y74-86; moved +6 from Rev3.1 mark (120,74) because the night pendant cord x118 y66-95 crosses it; same pixels per variant, graded in code with room light",
+   "variant": "night"
+  },
+  "prop.parcel_closed_table.any": {
+   "source": "atlas",
+   "atlas": "days_props2",
+   "frame": {
+    "x": 13,
+    "y": 0,
+    "w": 14,
+    "h": 11
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/prop_parcel_closed_table.png",
+   "contact": "baked:ink #4a3328 (last row; table top is wood #885939 -> LUT ink)",
+   "slots": {
+    "table_parcel": {
+     "x": 118,
+     "y": 119
+    }
+   },
+   "beat": "d3 a2 (sur la table), d3 hp",
+   "note": "sitcom prop.parcel_closed (14x10) + ink contact row; parcel_closed_floor is NOT reused on the table"
+  },
+  "prop.jam_jar.any": {
+   "source": "atlas",
+   "atlas": "days_props2",
+   "frame": {
+    "x": 28,
+    "y": 0,
+    "w": 6,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 7
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/prop_jam_jar.png",
+   "contact": "baked:ink #4a3328 (last row; table top is wood #885939 -> LUT ink)",
+   "slots": {
+    "kitchen_table_top": {
+     "x": 118,
+     "y": 119
+    },
+    "kitchen_table_jam": {
+     "x": 112,
+     "y": 119
+    }
+   },
+   "beat": "d3 hp, d3 hook h",
+   "registry": "alias of handprop.jam_jar",
+   "requires": "hide table cup/milk/plate; use kitchen_table_jam when the card is also on table_top"
+  },
+  "prop.toast_plate.any": {
+   "source": "atlas",
+   "atlas": "days_props2",
+   "frame": {
+    "x": 35,
+    "y": 0,
+    "w": 12,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/prop_toast_plate.png",
+   "contact": "baked:ink #4a3328 (last row; table top is wood #885939 -> LUT ink)",
+   "slots": {
+    "kitchen_table_top": {
+     "x": 118,
+     "y": 119
+    }
+   },
+   "beat": "d2 a2_pain",
+   "registry": "alias of handprop.toast_plate",
+   "requires": "hide table cup/milk/plate (x112-123) for the beat"
+  },
+  "prop.desk_bare.day": {
+   "source": "atlas",
+   "atlas": "days_props3",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 32,
+    "h": 20
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_desk_bare.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "depth": 2,
+   "deskSlots": {
+    "cat": {
+     "x": 15,
+     "y": 6
+    },
+    "plant": {
+     "x": 27,
+     "y": 7
+    }
+   },
+   "slots": {
+    "kitchen_desk": {
+     "x": 166,
+     "y": 131
+    }
+   },
+   "replaces": "prop.desk (kitchen) for d1 hp: laptop CLOSED (thin dark lid flat on the deck, no screen)",
+   "note": "same size/anchor/slots as kitchen prop.desk; like prop.desk the pixels are the same per variant except the screen, which is gone, so all 3 variants are identical and graded in code with room light",
+   "variant": "day"
+  },
+  "prop.desk_bare.evening": {
+   "source": "atlas",
+   "atlas": "days_props3",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 32,
+    "h": 20
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_desk_bare.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "depth": 2,
+   "deskSlots": {
+    "cat": {
+     "x": 15,
+     "y": 6
+    },
+    "plant": {
+     "x": 27,
+     "y": 7
+    }
+   },
+   "slots": {
+    "kitchen_desk": {
+     "x": 166,
+     "y": 131
+    }
+   },
+   "replaces": "prop.desk (kitchen) for d1 hp: laptop CLOSED (thin dark lid flat on the deck, no screen)",
+   "note": "same size/anchor/slots as kitchen prop.desk; like prop.desk the pixels are the same per variant except the screen, which is gone, so all 3 variants are identical and graded in code with room light",
+   "variant": "evening"
+  },
+  "prop.desk_bare.night": {
+   "source": "atlas",
+   "atlas": "days_props3",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 32,
+    "h": 20
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_desk_bare.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "depth": 2,
+   "deskSlots": {
+    "cat": {
+     "x": 15,
+     "y": 6
+    },
+    "plant": {
+     "x": 27,
+     "y": 7
+    }
+   },
+   "slots": {
+    "kitchen_desk": {
+     "x": 166,
+     "y": 131
+    }
+   },
+   "replaces": "prop.desk (kitchen) for d1 hp: laptop CLOSED (thin dark lid flat on the deck, no screen)",
+   "note": "same size/anchor/slots as kitchen prop.desk; like prop.desk the pixels are the same per variant except the screen, which is gone, so all 3 variants are identical and graded in code with room light",
+   "variant": "night"
+  },
+  "handprop.paper_bag.any": {
+   "source": "atlas",
+   "atlas": "days_props3",
+   "frame": {
+    "x": 33,
+    "y": 0,
+    "w": 5,
+    "h": 7
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_paper_bag.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 0
+   },
+   "copiedFrom": "sitcom_d11_17 handprop.paper_bag.any (pixel copy)"
+  },
+  "handprop.card.any": {
+   "source": "atlas",
+   "atlas": "days_props3",
+   "frame": {
+    "x": 39,
+    "y": 0,
+    "w": 5,
+    "h": 6
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_card.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "copiedFrom": "sitcom_d11_17 handprop.card.any (pixel copy)"
+  }
+ },
+ "note": "Days 1-3 pack. Props graded in code with room light (cast 0.25 mul / 0.6 add). See DAYS_01_03_NOTES.md"
+}

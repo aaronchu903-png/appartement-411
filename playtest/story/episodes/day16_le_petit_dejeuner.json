@@ -1,0 +1,694 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d16_le_petit_dejeuner",
+ "day": 16,
+ "title": "Le petit-déjeuner",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d16_",
+ "target_words": [
+  "le café",
+  "le thé",
+  "le sucre",
+  "la confiture",
+  "c’est pour toi",
+  "déjà"
+ ],
+ "recycle_words": [
+  "entrez",
+  "la minuterie",
+  "goûtez"
+ ],
+ "martin_on_screen": false,
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "stairwell",
+  "rooftop"
+ ],
+ "flags_set": [],
+ "flags_read": [],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "co_pd",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right"
+      },
+      {
+       "do": "prop",
+       "id": "tray",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Noé up early, the kitchen is his"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le petit-déjeuner !",
+       "zh": "早餐！",
+       "face": "happy",
+       "note": "Day 14 return"
+      }
+     ],
+     "ref": "CO"
+    }
+   ],
+   "ambience": "room_tone_day"
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a1_cafe_the",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "cafetiere",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "prop",
+       "id": "tea_green",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Café ou thé ?",
+       "zh": "咖啡还是茶？",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "to the player"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Café ou thé ?",
+        "zh": "咖啡还是茶？"
+       },
+       "choices": [
+        {
+         "fr": "Le café, s’il te plaît.",
+         "zh": "咖啡，谢谢。"
+        },
+        {
+         "fr": "Le thé, s’il te plaît.",
+         "zh": "茶，谢谢。"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le café, c’est bien. Le thé aussi.",
+       "zh": "咖啡不错。茶也不错。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_cafe",
+         "audio": "le_cafe"
+        },
+        {
+         "id": "le_the",
+         "audio": "le_the"
+        }
+       ]
+      }
+     ],
+     "ref": "A1"
+    }
+   ]
+  },
+  {
+   "id": "A2",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a2_pour_toi",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "prop",
+       "id": "cup",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "prop",
+       "id": "sugar_bowl",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "prop",
+       "id": "jam_jar",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Déjà là ? C’est pour toi. Avec du sucre.",
+       "zh": "已经来了？这是给你的。加了糖。",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "cup"
+       ],
+       "note": "the player’s cup"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Attention, c’est chaud !",
+       "zh": "小心，烫！",
+       "note": "RETURN map add (chaud, Day 15)"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et de la confiture ?",
+       "zh": "还要果酱吗？"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "c_est_pour_toi",
+         "audio": "c_est_pour_toi"
+        },
+        {
+         "id": "le_sucre",
+         "audio": "le_sucre"
+        },
+        {
+         "id": "la_confiture",
+         "audio": "la_confiture"
+        }
+       ]
+      }
+     ],
+     "ref": "A2"
+    }
+   ]
+  },
+  {
+   "id": "A3",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a3_camille",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_door_r",
+       "from": "right"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Déjà ? Il y a du thé ?",
+       "zh": "已经起了？有茶吗？",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "teapot",
+       "action": "show",
+       "at": "counter_top",
+       "note": "teapot (Rev 5)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "the tin is empty: the player had the last cup; lightness, a joke"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ah… il n’y en a plus.",
+       "zh": "啊……没有了。",
+       "face": "brow_raise"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Du café ? De la confiture ?",
+       "zh": "咖啡？果酱？",
+       "face": "happy"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "a half-second look at the player’s cup. Jealousy seed: never spoken, never a trap"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Du café. Avec du sucre.",
+       "zh": "咖啡。加糖。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "deja",
+         "audio": "deja"
+        }
+       ]
+      }
+     ],
+     "ref": "A3"
+    }
+   ]
+  },
+  {
+   "id": "A4",
+   "plot": "A",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a4_frigo",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "house_rules"
+       ],
+       "note": "the fridge shopping list grows by two words"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "thé, sucre",
+       "zh": "茶，糖",
+       "note": "written text, read as an insert (director rule 2026-10-25: own beat, no lead-in, no guillemets)"
+      }
+     ],
+     "ref": "A4"
+    }
+   ]
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "v_lefevre",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "lefevre",
+       "icon": "phone",
+       "fr": "Vous avez du sucre ? Je fais un gâteau. Il y a du café chaud chez moi.",
+       "zh": "您有糖吗？我在做蛋糕。我家有热咖啡。",
+       "sfx": "chime_message",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "listening",
+       "items": [
+        {
+         "id": "le_sucre",
+         "audio": "le_sucre"
+        },
+        {
+         "id": "le_cafe",
+         "audio": "le_cafe"
+        }
+       ]
+      }
+     ],
+     "ref": "V"
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "stairwell",
+   "light": "day",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door"
+      },
+      {
+       "do": "prop",
+       "id": "sugar_bowl",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Entrez, entrez ! Goûtez ça… et ça !",
+       "zh": "进来，进来！尝尝这个……还有这个！",
+       "note": "bible: « Goûtez celui-ci… et celui-ci… » — ça used (celui-ci not a known word). Lefèvre’s flat never a set: she hands things out at her door"
+      }
+     ],
+     "ref": "B-setup"
+    },
+    {
+     "id": "b_cut",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ],
+       "note": "Noé tastes, nods, tastes; she keeps handing"
+      }
+     ],
+     "ref": "B-cut"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "set_light",
+       "preset": "night",
+       "fade_ms": 0,
+       "sfx": "minuterie_click",
+       "note": "the minuterie goes out (blackout); Noé is still on the landing"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La minuterie !",
+       "zh": "定时灯！",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "set_light",
+       "preset": "day",
+       "fade_ms": 200,
+       "sfx": "minuterie_click",
+       "note": "light back: Noé, cheeks full, holding a plate of cakes"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "cut on the gag; RETURN chaud-free B"
+    }
+   ]
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "hp_pour_toi",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "prop",
+       "id": "toast_plate",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ],
+       "note": "she slides the plate of cakes (Lefèvre’s) toward the player"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est pour toi.",
+       "zh": "这是给你的。",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "first time she says it to the player; same words as Noé this morning"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "Noé sees it, smiles into his cup"
+      }
+     ],
+     "ref": "HP"
+    }
+   ]
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "r_liste",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "house_rules"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "La liste des courses :",
+        "zh": "购物清单："
+       },
+       "options": [
+        {
+         "fr": "thé, sucre, café",
+         "zh": "茶、糖、咖啡",
+         "correct": true
+        },
+        {
+         "fr": "thé, sucre, confiture",
+         "zh": "茶、糖、果酱",
+         "correct": true
+        }
+       ]
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "day",
+   "beats": [
+    {
+     "id": "w_deja",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Déjà ?",
+         "zh": "已经？"
+        }
+       ],
+       "note": "first bud on « Chez nous »"
+      }
+     ],
+     "ref": "W"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "stairwell",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "h_lettre",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "mailboxes_letter",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "mailboxes_letter"
+       ],
+       "note": "a real letter in the mailbox; stamp: Bretagne"
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}

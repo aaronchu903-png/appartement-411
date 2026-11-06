@@ -1,0 +1,821 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d05_la_cle",
+ "day": 5,
+ "title": "La clé",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d05_",
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "stairwell",
+  "kitchen",
+  "kitchen_table4"
+ ],
+ "target_words": [
+  "la clé",
+  "je cherche",
+  "je ne sais pas",
+  "j’ai perdu",
+  "j’ai trouvé",
+  "hier",
+  "d’abord",
+  "ensuite",
+  "la veste",
+  "la poche"
+ ],
+ "recycle_words": [
+  "une équipe",
+  "le bruit",
+  "la nuit"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "stairwell",
+   "light": "night",
+   "title": "Trois heures",
+   "time": "03:00",
+   "plot": "cold_open",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "door_home_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_home_door",
+       "from": "left",
+       "pose": "gown_hold"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "key_door",
+       "action": "hold",
+       "who": "lefevre",
+       "note": "Noé’s key ring (key_door): the red-ribbon flat key is NOT on it."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Bonsoir. Elles sont à vous ? Dans l’escalier.",
+       "zh": "晚上好。这是你们的吗？在楼梯上。",
+       "face": "neutral"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Mes clés ! Merci, Madame !",
+       "zh": "我的钥匙！谢谢您，女士！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Pas de bruit, la nuit.",
+       "zh": "晚上别出声。",
+       "note": "She goes. One beat later, the minuterie clicks off."
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "swap",
+       "to": "minuterie_off",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "In the dark he counts the keys on the ring. One is missing: the red ribbon."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et… la clé de l’appartement ?",
+       "zh": "那……公寓的钥匙呢？",
+       "face": "shocked"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_cherche",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Je cherche",
+   "time": "07:30",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_young",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Noé on all fours under the desk. The desk pot is now young (D5–7)."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Noé ? Tu cherches quoi ?",
+       "zh": "诺埃？你在找什么？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je cherche la clé ! La clé de l’appartement.",
+       "zh": "我在找钥匙！公寓的钥匙。",
+       "face": "sad"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_cle",
+         "audio": "la_cle"
+        },
+        {
+         "id": "je_cherche",
+         "audio": "je_cherche"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’ai perdu la clé.",
+       "zh": "我把钥匙弄丢了。",
+       "face": "sad"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Tu as perdu la clé ? Où ?",
+       "zh": "你把钥匙丢了？在哪儿？",
+       "face": "shocked"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je ne sais pas !",
+       "zh": "我不知道！",
+       "gesture": "hold"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "j_ai_perdu",
+         "audio": "j_ai_perdu"
+        },
+        {
+         "id": "je_ne_sais_pas",
+         "audio": "je_ne_sais_pas"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Madame Martin a une clé. Samedi… deux jours !",
+       "zh": "马丁太太有钥匙。星期六……还有两天！",
+       "note": "Countdown: Thu → Sat."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_enquete",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "L’enquête",
+   "time": "07:35",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "note": "Camille turns detective: pen, very serious."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bon. Hier. D’abord… tu es rentré à quelle heure ?",
+       "zh": "好。昨天。首先……你几点回来的？"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Hier, je suis rentré à minuit. D’abord, la porte.",
+       "zh": "昨天我半夜十二点回来的。首先，开门。"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Ensuite ?",
+       "zh": "然后呢？"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ensuite… la veste. Ma veste, sur la chaise.",
+       "zh": "然后……外套。我的外套，放在椅子上。",
+       "note": "Close on noe (the jacket itself is seen on its hook in A3)."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "hier",
+         "audio": "hier"
+        },
+        {
+         "id": "d_abord",
+         "audio": "d_abord"
+        },
+        {
+         "id": "ensuite",
+         "audio": "ensuite"
+        },
+        {
+         "id": "la_veste",
+         "audio": "la_veste"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Et la clé ?",
+       "zh": "那钥匙呢？"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La clé… dans la poche de la veste !",
+       "zh": "钥匙……在外套口袋里！",
+       "face": "happy"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_poche",
+         "audio": "la_poche"
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Raconte, dans l’ordre.",
+        "zh": "按顺序讲一遍。"
+       },
+       "options": [
+        {
+         "fr": "D’abord, la porte. Ensuite, la veste.",
+         "zh": "首先，开门。然后，外套。",
+         "correct": true
+        },
+        {
+         "fr": "D’abord, la veste. Ensuite, la porte.",
+         "zh": "首先，外套。然后，开门。",
+         "correct": false
+        }
+       ],
+       "note": "Order check; avoids « je suis rentré(e) » in the player’s mouth (gender)."
+      }
+     ]
+    },
+    {
+     "id": "a2_poche",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "He turns the pocket inside out: fluff, one cat hair."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La poche… il n’y a pas de clé.",
+       "zh": "口袋……里面没有钥匙。",
+       "face": "sad"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Je ne sais pas, Noé… Au travail !",
+       "zh": "我不知道啊，诺埃……上班去了！",
+       "face": "neutral"
+      },
+      {
+       "do": "walk_to",
+       "who": "camille",
+       "to": "stand_door_r"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_chaussette",
+   "set": "kitchen",
+   "light": "day",
+   "title": "La chaussette",
+   "time": "08:00",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "box_cat",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "prop",
+       "id": "sock_pile",
+       "action": "show",
+       "at": "floor_parcel"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "floor",
+       "note": "Croissant drags a sock from the sock pile across the floor."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "box_cat"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "in_box_tail_pop",
+       "at": "floor",
+       "note": "He drops the sock into the cat-tree box. Second trip. Third trip."
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ? Où est… Non. Je cherche la clé !",
+       "zh": "可颂？……在哪儿……算了。我在找钥匙！",
+       "face": "brow_raise",
+       "note": "He does not look in the box. Words: Day 1–3 + « je cherche » / « la clé » already taught today."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "voice_camille",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Message de Camille",
+   "time": "12:00",
+   "plot": "voice",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "v",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "camille",
+       "icon": "phone",
+       "fr": "Tu as trouvé la clé ? D’abord la veste, ensuite… la boîte de Croissant ?",
+       "zh": "你找到钥匙了吗？先是外套，然后……可颂的盒子？"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "trouve",
+         "audio": "trouve"
+        }
+       ],
+       "prompt": {
+        "fr": "Tu as ___ la clé ?",
+        "zh": "你___钥匙了吗？",
+        "audio": "trouve"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Trouvé !",
+   "time": "12:03",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "box_cat",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "box_cat"
+       ],
+       "note": "The player looks in the box: three socks, a hair tie, and the key with its red ribbon."
+      },
+      {
+       "do": "prop",
+       "id": "key_ribbon_floor",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "prop",
+       "id": "sock_pile",
+       "action": "show",
+       "at": "floor_parcel"
+      },
+      {
+       "do": "cat_action",
+       "action": "look",
+       "at": "floor",
+       "look_at": "key_ribbon_floor",
+       "note": "Croissant watches, offended."
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "options": [
+        {
+         "fr": "J’ai trouvé la clé !",
+         "zh": "我找到钥匙了！",
+         "correct": true
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "j_ai_trouve",
+         "audio": "j_ai_trouve"
+        }
+       ]
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’ai trouvé la clé ! Bravo ! Dans la boîte… de Croissant !",
+       "zh": "找到钥匙了！在……可颂的盒子里！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et trois chaussettes ! … Mes chaussettes ?",
+       "zh": "还有三只袜子！……我的袜子？",
+       "face": "big-eyes",
+       "note": "SMILE"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "HOLD 2 s. Innocent."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "reply_camille",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Réponse",
+   "time": "12:05",
+   "plot": "reply",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "r",
+     "steps": [
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Une réponse pour Camille :",
+        "zh": "给卡米耶回个消息："
+       },
+       "options": [
+        {
+         "fr": "J’ai trouvé la clé ! Dans la boîte.",
+         "zh": "我找到钥匙了！在盒子里。",
+         "correct": true
+        },
+        {
+         "fr": "J’ai perdu la clé ! Dans la boîte.",
+         "zh": "我把钥匙丢了！在盒子里。",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a3_crochet",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Un crochet",
+   "time": "19:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a3",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_fridge",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "jacket_hook",
+       "action": "show",
+       "at": "wall_jacket"
+      },
+      {
+       "do": "prop",
+       "id": "key_hooks_empty",
+       "action": "show",
+       "at": "wall_key_hooks"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "note": "Noé screws in the key hooks by the door, proud, and hangs the red-ribbon key."
+      },
+      {
+       "do": "prop",
+       "id": "key_hooks_empty",
+       "action": "swap",
+       "to": "key_hooks_flat"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "key_hooks_flat"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La clé, ici. Toujours ! Pas dans la poche, pas dans la veste.",
+       "zh": "钥匙，挂这儿。永远！不放口袋，不放外套。",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Et pas dans la boîte de Croissant.",
+       "zh": "也不放可颂的盒子里。",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Hier, j’ai perdu la clé. Aujourd’hui, j’ai trouvé trois chaussettes !",
+       "zh": "昨天我丢了钥匙。今天我找到了三只袜子！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bravo, l’équipe !",
+       "zh": "干得好，团队！"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen",
+   "light": "night",
+   "title": "La porte",
+   "time": "23:30",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "box_cat",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "box_cat"
+       ],
+       "note": "The box is empty. A cold draught: the front door is ajar (off-screen right, light from the landing)."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La porte… elle était ouverte ? Où est Croissant ?",
+       "zh": "门……是开着的？可颂呢？",
+       "face": "shocked"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

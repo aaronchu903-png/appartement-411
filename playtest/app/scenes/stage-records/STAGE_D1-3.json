@@ -1,0 +1,261 @@
+{
+ "record": "STAGE_D1-3",
+ "version": 1,
+ "base": "a93198f7",
+ "days": [
+  1,
+  2,
+  3
+ ],
+ "derived_from": [
+  "tech/checker/positive_control (build_control.py stage layout)",
+  "tech/STAGING_SPEC_D1-3.json v2 draw_order"
+ ],
+ "rule": "Base stage for every D1-3 beat on a kitchen / kitchen_table4 set that has no template-shot stage. Existing canonical props only, catalog ids from app/scenes/day10-kitchen/scene.json, canonical scale (pixelScale 1). Positions = positive-control positions; propPlacement pins them even if the catalog moves.",
+ "notes": {
+  "laptop": "Baked into prop.desk (spec d2_a3: no separate handprop laptop, E-PROP-DUP). The catalog 'laptop' prop is NOT staged; propStates.laptop=open keeps state consistent.",
+  "plant_slot": "plant at (177,118) is the pot-1 slot. When a beat's world carries pot_desk_sprout/young/full, the existing sitcom-stage rule omits 'plant' and draws pot 1 at the same slot (spec d1_b_feuille).",
+  "table4": "table/chairs at y131 as in the control; seated-actor table4 rendering is unchanged.",
+  "deskSlots": "Desk-top slots relative to the prop.desk.* sprite top-left (anchorPoint 16,19 at desk placement 166,131), from the kitchen manifest: cat (15,6) -> (165,118), plant (27,7) -> (177,119).",
+  "laptop_off": "beatOverrides set propStates.laptop=off per beat; the player masks the baked laptop_glow (light/soir.json x165 y114 r12) and desk_bare (if staged) replaces prop.desk.",
+  "desk_bare": "Pixel art prop.desk_bare.{day,evening,night} (atlas days_props3, frame 0,0,32,20, anchor feet 16,19, slot kitchen_desk 166,131, deskSlots cat 15,6 / plant 27,7). Drawn when laptopIsOff(propStates); the same predicate puts laptop_glow in stage.lightMasks so the player masks it."
+ },
+ "sets": {
+  "kitchen": {
+   "props": [
+    "cornice",
+    "upper_cabinets",
+    "clock",
+    "frame",
+    "house_rules",
+    "backsplash",
+    "window",
+    "shelf",
+    "fridge",
+    "counter",
+    "chair_left",
+    "table",
+    "chair_right",
+    "table_cup",
+    "table_plate",
+    "table_milk",
+    "desk",
+    "plant"
+   ],
+   "propStates": {
+    "laptop": "open"
+   },
+   "propPlacement": {
+    "cornice": {
+     "x": 8,
+     "y": 5
+    },
+    "upper_cabinets": {
+     "x": 46,
+     "y": 77
+    },
+    "clock": {
+     "x": 88,
+     "y": 80
+    },
+    "frame": {
+     "x": 104,
+     "y": 84
+    },
+    "house_rules": {
+     "x": 136,
+     "y": 96
+    },
+    "backsplash": {
+     "x": 46,
+     "y": 116
+    },
+    "window": {
+     "x": 46,
+     "y": 103
+    },
+    "shelf": {
+     "x": 90,
+     "y": 100
+    },
+    "fridge": {
+     "x": 12,
+     "y": 131
+    },
+    "counter": {
+     "x": 46,
+     "y": 131
+    },
+    "chair_left": {
+     "x": 98,
+     "y": 131
+    },
+    "table": {
+     "x": 118,
+     "y": 131
+    },
+    "chair_right": {
+     "x": 138,
+     "y": 131
+    },
+    "table_cup": {
+     "x": 112,
+     "y": 119
+    },
+    "table_plate": {
+     "x": 122,
+     "y": 119
+    },
+    "table_milk": {
+     "x": 117,
+     "y": 119
+    },
+    "desk": {
+     "x": 166,
+     "y": 131
+    },
+    "plant": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "deskSlots": {
+    "origin": [
+     16,
+     19
+    ],
+    "cat": [
+     12,
+     6
+    ],
+    "plant": [
+     27,
+     7
+    ]
+   },
+   "deskBareAsset": "prop.desk_bare"
+  },
+  "kitchen_table4": {
+   "props": [
+    "cornice",
+    "upper_cabinets",
+    "clock",
+    "frame",
+    "house_rules",
+    "backsplash",
+    "window",
+    "shelf",
+    "fridge",
+    "counter",
+    "chair_left",
+    "table",
+    "chair_right",
+    "table_cup",
+    "table_plate",
+    "table_milk",
+    "desk",
+    "plant"
+   ],
+   "propStates": {
+    "laptop": "open"
+   },
+   "propPlacement": {
+    "cornice": {
+     "x": 8,
+     "y": 5
+    },
+    "upper_cabinets": {
+     "x": 46,
+     "y": 77
+    },
+    "clock": {
+     "x": 88,
+     "y": 80
+    },
+    "frame": {
+     "x": 104,
+     "y": 84
+    },
+    "house_rules": {
+     "x": 136,
+     "y": 96
+    },
+    "backsplash": {
+     "x": 46,
+     "y": 116
+    },
+    "window": {
+     "x": 46,
+     "y": 103
+    },
+    "shelf": {
+     "x": 90,
+     "y": 100
+    },
+    "fridge": {
+     "x": 12,
+     "y": 131
+    },
+    "counter": {
+     "x": 46,
+     "y": 131
+    },
+    "chair_left": {
+     "x": 98,
+     "y": 131
+    },
+    "table": {
+     "x": 118,
+     "y": 131
+    },
+    "chair_right": {
+     "x": 138,
+     "y": 131
+    },
+    "table_cup": {
+     "x": 112,
+     "y": 119
+    },
+    "table_plate": {
+     "x": 122,
+     "y": 119
+    },
+    "table_milk": {
+     "x": 117,
+     "y": 119
+    },
+    "desk": {
+     "x": 166,
+     "y": 131
+    },
+    "plant": {
+     "x": 177,
+     "y": 118
+    }
+   },
+   "deskSlots": {
+    "origin": [
+     16,
+     19
+    ],
+    "cat": [
+     12,
+     6
+    ],
+    "plant": [
+     27,
+     7
+    ]
+   },
+   "deskBareAsset": "prop.desk_bare"
+  }
+ },
+ "beatOverrides": {
+  "1:hp": {
+   "set": "kitchen",
+   "propStates": {
+    "laptop": "off"
+   }
+  }
+ }
+}

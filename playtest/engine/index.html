@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<link rel="icon" href="data:,">
+<script>
+// 2026-11-06 playable D1–3 preview (build bf0a9bc2+e87f065b): fresh profile on first open (this origin only), jinyi dev slot for save/resume, never Yuechao's save.
+(function(){try{if(!localStorage.getItem('a411.preview.e87f065b.fresh')){localStorage.removeItem('a411.p.jinyi.engine');localStorage.setItem('a411.device.profile',JSON.stringify({activeProfile:'jinyi'}));localStorage.setItem('a411.preview.e87f065b.fresh','1');}}catch(e){}})();
+</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e3d3c6">
+  <title>[preview bf0a9bc2+e87f065b] Sitcom engine · L’Appartement 411</title>
+  <link rel="stylesheet" href="../app/scenes/scene-player.css">
+  <link rel="stylesheet" href="../learning-lab/m2.css">
+  <style>
+    html, body { margin: 0; height: 100%; background: #1a1f24; }
+    #root { height: 100%; }
+    .engine-module {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 12%;
+      max-width: 340px;
+      padding: 12px 16px;
+      background: rgba(255, 252, 245, 0.96);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      font-family: "Noto Sans", system-ui, sans-serif;
+      z-index: 20;
+    }
+    .engine-module-title { margin: 0 0 6px; font-weight: 700; font-size: 14px; }
+    .engine-module-prompt { margin: 0 0 10px; font-size: 15px; line-height: 1.35; }
+    .engine-module-skip {
+      border: none;
+      background: #293e37;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<div id="pv-bar" style="position:fixed;top:0;left:0;right:0;z-index:99;font:11px system-ui;background:rgba(20,24,28,.85);color:#fff;padding:3px 6px;display:flex;gap:8px;align-items:center">
+<span>build bf0a9bc2+e87f065b</span><span style='opacity:.7'>feedback mail = placeholder</span><a style="color:#9cf" href="../">days</a><a id="pv-fb" style="color:#9cf" href="#">feedback</a>
+<button id="pv-reset" style="font-size:11px">restart day</button></div>
+<script>
+(function(){const q=new URLSearchParams(location.search),day=q.get('day')||'1';
+document.getElementById('pv-fb').addEventListener('click',function(ev){ev.preventDefault();
+let beat='';try{beat=(JSON.parse(localStorage.getItem('a411.p.jinyi.engine')||'{}').days||{})[day]?.beatId||''}catch(e){}
+const body='day: '+day+'\nbeat: '+beat+'\nbuild: bf0a9bc2+e87f065b\ndevice: '+navigator.userAgent+'\n\n';
+location.href='mailto:playtest@appartement411.placeholder?subject='+encodeURIComponent('A411 feedback · day '+day)+'&body='+encodeURIComponent(body);});
+document.getElementById('pv-reset').onclick=function(){try{const o=JSON.parse(localStorage.getItem('a411.p.jinyi.engine')||'{}');if(o.days)delete o.days[day];localStorage.setItem('a411.p.jinyi.engine',JSON.stringify(o))}catch(e){}location.reload();};})();
+</script>
+  <div id="root" aria-label="Sitcom engine"></div>
+  <script type="module">
+    import { bootEngineShell } from '../app/engine/shell.js';
+    try {
+      await bootEngineShell(document.getElementById('root'));
+    } catch (err) {
+      console.error(err);
+      document.getElementById('root').textContent = String(err?.message || err);
+    }
+  </script>
+</body>
+</html>

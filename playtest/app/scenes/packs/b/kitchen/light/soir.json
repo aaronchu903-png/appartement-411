@@ -1,0 +1,87 @@
+{
+ "multiply": {
+  "src": "light/night_multiplier_half.png",
+  "decode": "x2 (= map*127.5)",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "cool_used": [
+   0.24,
+   0.31,
+   0.43
+  ],
+  "deviation": "night base hue nudged toward teal (blue-green) per art review; luminance unchanged",
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "table_pendant",
+    "x": 118,
+    "y": 95,
+    "shape": "add: no air glow, tabletop 90, rev3: tabletop 116 core/100, soft floor ellipse 70/48/28-12 dithered rim + floor-only warm multiply 0.55/0.40/0.25-0.12 inside the same ellipse; multiply lift 0.55 on table cluster above floor only",
+    "s": 1.0
+   },
+   {
+    "id": "under_counter_strip",
+    "x": 46,
+    "y": 117,
+    "shape": "add 40 on backsplash/counter top, 16 step above"
+   },
+   {
+    "id": "laptop_glow",
+    "x": 165,
+    "y": 114,
+    "r": 12,
+    "s": 0.8
+   }
+  ],
+  "window": {
+   "x": 32,
+   "y": 79,
+   "w": 28,
+   "h": 22,
+   "color": [
+    150,
+    170,
+    230
+   ],
+   "mix": 0.55,
+   "note": "moonlight shaft slanting down-right onto counter/floor"
+  },
+  "upper_wall": {
+   "pieces": [
+    "prop.cornice",
+    "prop.upper_cabinets",
+    "prop.clock",
+    "prop.frame",
+    "prop.house_rules"
+   ],
+   "rect": {
+    "x": 0,
+    "y": 0,
+    "w": 192,
+    "h": 100
+   },
+   "note": "covered by the base map: night = cool base only (no pendant add, no table lift; y<110), evening = warm base + side bands"
+  },
+  "cast": "draw cast with the same map at strength 0.25 when <1 (light cool tint), 0.6 when >1 (warm fill/rim)"
+ },
+ "add": {
+  "src": "light/night_add_half.png",
+  "decode": "x2 (= value*2, 0..254 per channel)",
+  "blend": "additive (linear dodge)",
+  "order": "out = clamp(src * multiply + add); multiply first, then add",
+  "cast": "add at 0.6 strength on cast pixels"
+ },
+ "masking": {
+  "baked": true,
+  "note": "Canonical night_multiplier_half.png and night_add_half.png have the wall mask baked in: they are exactly what scene() applies. No engine-side mask needed. Rule used: bare-wall pixels (the plain wall colours, y<129) get the cool base without the table lift, and get no pendant add in the table column x88-148. The *_unmasked.png files are raw lightmap() output for reference only. Do not ship them.",
+  "apply": "room: out = clamp(src*2*mult + 2*add) on opaque pixels. cast: multiply with strength 0.25 where mult<1 and 0.6 where mult>1 (f = 1+(m-1)*s), add x0.6. Emitters (pendant_on) are drawn ungraded on top of the room, before the cast."
+ }
+}

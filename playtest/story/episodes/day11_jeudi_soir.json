@@ -1,0 +1,954 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d11_jeudi_soir",
+ "day": 11,
+ "title": "Jeudi soir",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d11_",
+ "target_words": [
+  "le jeudi",
+  "la soupe",
+  "l’oignon",
+  "d’abord",
+  "ensuite",
+  "doucement",
+  "goûtez !",
+  "délicieux"
+ ],
+ "recycle_words": [
+  "la chaise",
+  "la table",
+  "bonsoir"
+ ],
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "stairwell",
+  "rooftop"
+ ],
+ "flags_set": [],
+ "flags_read": [],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Jeudi",
+   "time": "8:00",
+   "beats": [
+    {
+     "id": "co_frigo",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cat_action",
+       "action": "stand",
+       "at": "floor",
+       "note": "GAP: bible has Croissant lying ON the fridge list; fridge_front allows nothing. Fallback: stands in front of the fridge for feet/crop gate."
+      }
+     ],
+     "ref": "CO"
+    },
+    {
+     "id": "co_frigo_ecrit",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "house_rules"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Jeudi : dîner avec Madame Lefèvre.",
+       "zh": "星期四：和 Lefèvre 太太一起吃晚饭。",
+       "note": "Neng 10/25: FR ok (dinner at 411); zh aligned to FR written text, read as an insert (director rule 2026-10-25: own beat, no lead-in, no guillemets)"
+      }
+     ],
+     "ref": "CO",
+     "note": "written text beat"
+    },
+    {
+     "ref": "CO",
+     "id": "co_frigo_suite",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "stand",
+       "at": "floor"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "time": "8:30",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1_tablier",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right"
+      },
+      {
+       "do": "prop",
+       "action": "wear",
+       "who": "noe",
+       "overlay": "apron_towel"
+      },
+      {
+       "do": "prop",
+       "action": "wear",
+       "who": "noe",
+       "overlay": "flour"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ce soir, c’est jeudi !",
+       "zh": "今晚是星期四！",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_jeudi",
+         "audio": "le_jeudi"
+        }
+       ]
+      }
+     ],
+     "ref": "A1"
+    }
+   ]
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Le message de Noé",
+   "time": "17:40",
+   "beats": [
+    {
+     "id": "v_tel",
+     "steps": [
+      {
+       "do": "leave",
+       "who": "noe",
+       "note": "Noé is out buying bread (phone message only)."
+      },
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "J’achète du pain. Pas de tarte. Désolé.",
+       "zh": "我去买面包。没有挞了。抱歉。"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "pain",
+         "audio": "pain"
+        }
+       ],
+       "prompt": {
+        "fr": "J’achète du ___. Pas de tarte. Désolé.",
+        "zh": "我去买___。没有挞了。抱歉。",
+        "audio": "pain"
+       }
+      }
+     ],
+     "ref": "V",
+     "note": "Noé is out; message plays on the phone on the desk (desk prop has the laptop baked in, so phone avoids a double laptop)"
+    }
+   ]
+  },
+  {
+   "id": "A2",
+   "plot": "A",
+   "set": "stairwell",
+   "light": "evening",
+   "time": "18:00",
+   "beats": [
+    {
+     "id": "a2_porte",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_home_door",
+       "from": "door"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door"
+      },
+      {
+       "do": "prop",
+       "id": "soup_pot",
+       "action": "hold",
+       "who": "lefevre"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bonsoir, Madame Lefèvre !",
+       "zh": "晚上好，Lefèvre 太太！"
+      }
+     ],
+     "ref": "A2"
+    },
+    {
+     "id": "a2_monte",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Ma cuisine est trop petite. Je viens chez vous.",
+       "zh": "我的厨房太小了。我去你们家。",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Une soupe, pour le jeudi.",
+       "zh": "一锅汤，星期四喝的。",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_soupe",
+         "audio": "la_soupe"
+        }
+       ]
+      }
+     ],
+     "ref": "A2"
+    }
+   ]
+  },
+  {
+   "id": "A3",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "time": "18:10",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "a3_comptoir",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_counter",
+       "from": "right"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "prop",
+       "id": "soup_pot",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "prop",
+       "id": "onion",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "prop",
+       "id": "spoon_wood",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "onion"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "D’abord, l’oignon. Ensuite… doucement.",
+       "zh": "先是洋葱。然后……慢慢来。",
+       "gesture": "point",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "l_oignon",
+         "audio": "l_oignon"
+        },
+        {
+         "id": "d_abord",
+         "audio": "d_abord"
+        },
+        {
+         "id": "ensuite",
+         "audio": "ensuite"
+        },
+        {
+         "id": "doucement",
+         "audio": "doucement"
+        }
+       ],
+       "note": "player cuts (gesture) and stirs"
+      }
+     ],
+     "ref": "A3"
+    },
+    {
+     "id": "a4_larmes",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter_r",
+       "from": "right"
+      },
+      {
+       "do": "prop",
+       "id": "paper_bag",
+       "action": "drop",
+       "at": "table_top"
+      },
+      {
+       "do": "prop",
+       "action": "wear",
+       "who": "noe",
+       "overlay": "tears"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est l’oignon !",
+       "zh": "是洋葱啦！",
+       "face": "sad",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "A4",
+     "note": "gag payoff: hard cut to Noé's silent tears, then the line"
+    },
+    {
+     "id": "a5_goutez",
+     "steps": [
+      {
+       "do": "prop",
+       "action": "remove",
+       "who": "noe",
+       "overlay": "tears"
+      },
+      {
+       "do": "prop",
+       "id": "spoon_wood",
+       "action": "hold",
+       "who": "lefevre"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre",
+        "spoon_wood"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Goûtez !",
+       "zh": "尝尝！",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "options": [
+        {
+         "fr": "C’est délicieux !",
+         "zh": "真好吃！",
+         "correct": true
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Oh… délicieux !",
+       "zh": "哇……太好吃了！",
+       "face": "happy"
+      },
+      {
+       "do": "prop",
+       "id": "soup_bowl",
+       "action": "show",
+       "at": "counter_top",
+       "note": "she ladles a second bowl for Noé (soup_bowl, Rev 4)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Goûtez !",
+       "zh": "再尝尝！",
+       "face": "happy",
+       "note": "second « Goûtez ! »: she insists, a small warm beat"
+      }
+     ],
+     "ref": "A5"
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "time": "19:00",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "lefevre",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "prop",
+       "id": "soup_pot",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ],
+     "ref": "B-setup",
+     "note": "four chairs, five diners (player = camera)"
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "seat_end_l",
+       "note": "Croissant takes the empty end-left chair, very straight (cat on an empty seat now allowed, Le CTO 10/25)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "tail_up"
+      }
+     ],
+     "ref": "B-action"
+    },
+    {
+     "id": "b_cut",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "camille",
+        "noe",
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ! La chaise !",
+       "zh": "Croissant！椅子！",
+       "face": "shocked"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Une chaise, une table… et un chat.",
+       "zh": "一把椅子，一张桌子……还有一只猫。"
+      }
+     ],
+     "ref": "B-cut"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Bonsoir, Monsieur Croissant.",
+       "zh": "晚上好，Croissant 先生。",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "end on the wide: the player eats standing at the counter (camera), happy; no line, so no new words and no agreement"
+    }
+   ]
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "kitchen_table4",
+   "light": "night",
+   "time": "20:00",
+   "beats": [
+    {
+     "id": "hp_mari",
+     "steps": [
+      {
+       "do": "set_light",
+       "preset": "night",
+       "fade_ms": 1200
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "camille",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Mon mari. Le jeudi, il était là. Toujours.",
+       "zh": "我丈夫。每个星期四，他都在。一直都在。",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "HP1"
+    },
+    {
+     "id": "hp_cle",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "C’était à lui. Cette clé.",
+       "zh": "这原来是他的。这把钥匙。",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "Before this line the player has put the key on the table (table_top, near the player's place); she looks at it. GAP: no key handprop in the registry, so the key is staged by the close-up and this note only."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Le jardin, là-haut… c’était son jardin.",
+       "zh": "上面那个花园……是他的花园。",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "HP2"
+    },
+    {
+     "id": "hp_pieds",
+     "steps": [
+      {
+       "do": "leave",
+       "who": "noe",
+       "note": "Noé not in this tableau; keeps registry feet on table cast."
+      },
+      {
+       "do": "cat_action",
+       "action": "stand",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_key_slide"
+       ],
+       "note": "insert_key_slide (Rev 4.1): her hand slides the key across the table"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Elle pousse la clé vers toi. Doucement.",
+       "zh": "她把钥匙轻轻推回你面前。",
+       "tags": [],
+       "note": "2026-10-25 director: key already handed over on Day 8 (DAY08_FINAL_v2 l.167); no replay. She slides the key back across table_top toward the player = 'keep it', wordless. 3 s hold after this line, no music."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Wide hold so table feet land in the 70–80% band for capture."
+      }
+     ],
+     "ref": "HP3"
+    }
+   ]
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "stairwell",
+   "light": "night",
+   "time": "21:30",
+   "beats": [
+    {
+     "id": "r_mot",
+     "steps": [
+      {
+       "do": "leave",
+       "who": "noe"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_closed",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "show",
+       "at": "doormat_neighbour",
+       "note": "note slid under her door (doormat_neighbour now accepts card)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "card"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Un mot pour Madame Lefèvre :",
+        "zh": "给 Lefèvre 太太写张字条："
+       },
+       "options": [
+        {
+         "fr": "Merci pour la soupe. Elle était délicieuse.",
+         "zh": "谢谢您的汤。很好喝。",
+         "correct": true
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Wide hold for stairwell feet gate."
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "evening",
+   "ambience": "roof_wind",
+   "beats": [
+    {
+     "id": "w_arrosage",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "D’abord l’eau. Ensuite… doucement.",
+         "zh": "先浇水。然后……慢慢来。"
+        }
+       ]
+      }
+     ],
+     "ref": "W"
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "kitchen",
+   "light": "night",
+   "time": "23:58",
+   "beats": [
+    {
+     "id": "h_envoyer",
+     "steps": [
+      {
+       "do": "leave",
+       "who": "noe"
+      },
+      {
+       "do": "leave",
+       "who": "lefevre"
+      },
+      {
+       "do": "cat_action",
+       "action": "sleep",
+       "at": "desk_sleep"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "table_top",
+       "note": "laptop on the table, not on prop.desk (prop.desk already is the open laptop)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "screen_send"
+       ],
+       "note": "tail photo attached; screen_send insert, engine-drawn « Envoyer » button, idle",
+       "caption": {
+        "text": "Envoyer",
+        "on": "screen_send",
+        "state": "idle"
+       }
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Le message pour Madame Martin. Avec la photo.",
+       "zh": "给 Martin 太太的消息。附上那张照片。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "her finger stops above Envoyer"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_clock_midnight"
+       ],
+       "note": "insert_clock_midnight (Rev 5); engine-drawn caption 00:00",
+       "caption": {
+        "text": "00:00",
+        "on": "insert_clock_midnight"
+       }
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Wide hold for kitchen night feet gate."
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}

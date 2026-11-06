@@ -1,0 +1,4 @@
+geometry diff (all asset fields except per-asset atlas name): 0 lines -> IDENTICAL
+sha256 d10f2dc67c122b8138c7f5ec1346cfd169cbe13780103cc3190f7c9010f41881 == d10f2dc67c122b8138c7f5ec1346cfd169cbe13780103cc3190f7c9010f41881
+
+full-manifest changed lines: 334 (unique: ['+   "atlas": "ui_learning_rev2",', '+   "file": "ui_learning_rev2.png",', '+  "ui_learning_rev2": {', '+ "rev": 2,', '-   "atlas": "ui_learning_rev1",', '-   "file": "ui_learning_rev1.png",', '-  "ui_learning_rev1": {', '- "rev": 1,'])

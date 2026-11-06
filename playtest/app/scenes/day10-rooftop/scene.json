@@ -1,0 +1,924 @@
+{
+  "version": 1,
+  "useHandoffCameras": true,
+  "title": "Day 10 rooftop — Phase 2C (C1–C11)",
+  "audioBase": "../../audio/w1/",
+  "rooftop": true,
+  "scene": {
+    "width": 192,
+    "height": 144
+  },
+  "room": {
+    "horizon": 128,
+    "floorTop": 136,
+    "wall": "#c8dce8",
+    "floor": "#6a7080"
+  },
+  "cropLibrary": {
+    "wide": {
+      "x": 2,
+      "y": 37,
+      "w": 135,
+      "h": 132,
+      "fixedScale": 8,
+      "cameraPreset": "wide"
+    },
+    "medium": {
+      "x": 20,
+      "y": 70,
+      "w": 90,
+      "h": 88,
+      "fixedScale": 12,
+      "cameraPreset": "medium"
+    },
+    "close": {
+      "x": 60,
+      "y": 90,
+      "w": 60,
+      "h": 59,
+      "fixedScale": 18,
+      "cameraPreset": "close"
+    }
+  },
+  "props": [
+    {
+      "id": "roof_door",
+      "asset": "prop.roof_door",
+      "x": 22,
+      "y": 131,
+      "z": 2,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "light_pole",
+      "asset": "prop.light_pole",
+      "x": 150,
+      "y": 131,
+      "z": 2,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "bench",
+      "asset": "prop.bench",
+      "x": 100,
+      "y": 131,
+      "z": 2,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "trough_planted",
+      "asset": "prop.trough_planted",
+      "x": 132,
+      "y": 117,
+      "z": 3,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "pot_tall_planted",
+      "asset": "prop.pot_tall_planted",
+      "x": 46,
+      "y": 131,
+      "z": 3,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "pot_round_planted",
+      "asset": "prop.pot_round_planted",
+      "x": 166,
+      "y": 131,
+      "z": 3,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "pot_round_empty",
+      "asset": "prop.pot_round_empty",
+      "x": 179,
+      "y": 131,
+      "z": 3,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "pot_chez_nous",
+      "asset": "prop.pot_chez_nous_young",
+      "x": 70,
+      "y": 134,
+      "z": 3,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "arrosoir",
+      "asset": "prop.arrosoir",
+      "x": 81,
+      "y": 135,
+      "z": 3,
+      "layer": "behind",
+      "flip": false
+    },
+    {
+      "id": "string_lights",
+      "asset": "prop.string_lights",
+      "x": 37,
+      "y": 90,
+      "z": 6,
+      "layer": "front",
+      "flip": false
+    }
+  ],
+  "bubbleAnchors": {
+    "noe": {
+      "x": 88,
+      "y": 127
+    },
+    "camille": {
+      "x": 72,
+      "y": 127
+    },
+    "narrator": {
+      "x": 96,
+      "y": 24
+    }
+  },
+  "defaultStage": {
+    "props": [
+      "roof_door",
+      "light_pole",
+      "bench",
+      "trough_planted",
+      "pot_tall_planted",
+      "pot_round_planted",
+      "pot_round_empty",
+      "pot_chez_nous",
+      "arrosoir",
+      "string_lights"
+    ],
+    "propStates": {
+      "roof_door": "closed",
+      "string_lights": "off",
+      "pot_chez_nous": "default"
+    },
+    "actors": {
+      "martin": null,
+      "lefevre": null,
+      "noe": {
+        "character": "noe",
+        "x": 88,
+        "y": 136,
+        "asset": "noe.stand"
+      },
+      "camille": {
+        "character": "camille",
+        "x": 72,
+        "y": 136,
+        "asset": "camille.stand"
+      },
+      "cat": {
+        "character": "croissant",
+        "x": 115,
+        "y": 124,
+        "layer": "front",
+        "asset": "croissant.sit"
+      }
+    }
+  },
+  "timing": {
+    "sceneEnd": 495
+  },
+  "startCrop": "wide",
+  "shots": [
+    {
+      "id": "n_d11_phone",
+      "t0": 0,
+      "t1": 45,
+      "crop": "medium",
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "pot_wiggle",
+      "t0": 45,
+      "t1": 90,
+      "crop": "medium",
+      "lightVariant": "day",
+      "tapRing": {
+        "x": 118,
+        "y": 268,
+        "w": 44,
+        "h": 44
+      },
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_focus_photo",
+      "t0": 90,
+      "t1": 130,
+      "crop": "close",
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": null,
+          "camille": null,
+          "cat": null
+        }
+      },
+      "phoneInsert": {
+        "mode": "closeInsert",
+        "fullBleed": true,
+        "skipVeil": true,
+        "liveViewFile": "day10/closeups/cu_phone_live_0.png",
+        "topBias": 0.32,
+        "compactFrame": true,
+        "screenOffsetX": 24,
+        "screenOffsetY": 40
+      }
+    },
+    {
+      "id": "d11_noe_photo",
+      "t0": 130,
+      "t1": 175,
+      "crop": "medium",
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 102,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_noe_pres",
+      "t0": 175,
+      "t1": 220,
+      "crop": "medium",
+      "lightVariant": "day",
+      "bubbleAnchors": {
+        "noe": {
+          "x": 90,
+          "y": 112
+        }
+      },
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 90,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": null,
+          "cat": null
+        }
+      }
+    },
+    {
+      "id": "d11_noe_souriez",
+      "t0": 220,
+      "t1": 260,
+      "crop": "medium",
+      "lightVariant": "day",
+      "bubbleAnchors": {
+        "noe": {
+          "x": 90,
+          "y": 112
+        }
+      },
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 90,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": null,
+          "cat": null
+        }
+      }
+    },
+    {
+      "id": "d11_cam_souriez",
+      "t0": 260,
+      "t1": 305,
+      "crop": "medium",
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 70,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_souriez_vous",
+      "t0": 305,
+      "t1": 350,
+      "crop": "medium",
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      },
+      "layoutProfile": "lineup"
+    },
+    {
+      "id": "d11_cam_souriez2",
+      "t0": 350,
+      "t1": 395,
+      "crop": {
+        "x": 54,
+        "y": 85,
+        "w": 60,
+        "h": 59,
+        "fixedScale": 18,
+        "cameraPreset": "close"
+      },
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": null,
+          "camille": {
+            "character": "camille",
+            "x": 90,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": null
+        }
+      }
+    },
+    {
+      "id": "n_d11_clic",
+      "t0": 395,
+      "t1": 440,
+      "crop": "medium",
+      "lightVariant": "day",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_noe_encore",
+      "t0": 440,
+      "t1": 495,
+      "crop": "medium",
+      "lightVariant": "day",
+      "bubbleAnchors": {
+        "noe": {
+          "x": 90,
+          "y": 108
+        },
+        "camille": {
+          "x": 72,
+          "y": 118
+        }
+      },
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_round_empty",
+          "pot_chez_nous",
+          "arrosoir",
+          "string_lights"
+        ],
+        "propStates": {
+          "roof_door": "closed",
+          "string_lights": "off"
+        },
+        "actors": {
+          "martin": null,
+          "lefevre": null,
+          "noe": {
+            "character": "noe",
+            "x": 90,
+            "y": 136,
+            "asset": "noe.walk.0"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 115,
+            "y": 124,
+            "layer": "front",
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "w_arrosage",
+      "floorBandFracTarget": 0.75,
+      "crop": "wide",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_chez_nous",
+          "arrosoir"
+        ],
+        "actors": {
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 128,
+            "y": 136,
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "w",
+      "floorBandFracTarget": 0.75,
+      "crop": "wide",
+      "stage": {
+        "props": [
+          "roof_door",
+          "light_pole",
+          "bench",
+          "trough_planted",
+          "pot_tall_planted",
+          "pot_round_planted",
+          "pot_chez_nous",
+          "arrosoir"
+        ],
+        "actors": {
+          "noe": {
+            "character": "noe",
+            "x": 88,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 72,
+            "y": 136,
+            "asset": "camille.stand"
+          },
+          "cat": {
+            "character": "croissant",
+            "x": 128,
+            "y": 136,
+            "asset": "croissant.sit"
+          }
+        }
+      }
+    },
+    {
+      "id": "co",
+      "floorBandFracTarget": 0.752,
+      "crop": "wide"
+    },
+    {
+      "id": "a1_walk",
+      "floorBandFracTarget": 0.752,
+      "crop": "wide"
+    },
+    {
+      "id": "a3",
+      "floorBandFracTarget": 0.752,
+      "crop": "medium"
+    },
+    {
+      "id": "b_set",
+      "floorBandFracTarget": 0.752,
+      "crop": "wide"
+    }
+  ],
+  "bubbles": [
+    {
+      "t0": 0.8,
+      "t1": 44,
+      "text": "Sur le toit, Noé prend son téléphone. Il veut prendre la photo.",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 130.8,
+      "t1": 174,
+      "text": "Une photo de la plante. Facile ! Je suis un artiste.",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 175.8,
+      "t1": 219,
+      "text": "Plus près… plus près !",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 220.8,
+      "t1": 259,
+      "text": "Souriez !",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 260.8,
+      "t1": 304,
+      "text": "Noé. C’est une plante.",
+      "actor": "camille",
+      "kind": "camille"
+    },
+    {
+      "t0": 395.8,
+      "t1": 439,
+      "text": "Clic. Voilà la photo.",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 440.8,
+      "t1": 494,
+      "text": "Encore une photo !",
+      "actor": "noe",
+      "kind": "noe"
+    }
+  ],
+  "audio": [
+    {
+      "t": 0.8,
+      "id": "n_d11_phone"
+    },
+    {
+      "t": 130.8,
+      "id": "d11_noe_photo"
+    },
+    {
+      "t": 175.8,
+      "id": "d11_noe_pres"
+    },
+    {
+      "t": 220.8,
+      "id": "d11_noe_souriez"
+    },
+    {
+      "t": 260.8,
+      "id": "d11_cam_souriez"
+    },
+    {
+      "t": 395.8,
+      "id": "n_d11_clic"
+    },
+    {
+      "t": 440.8,
+      "id": "d11_noe_encore"
+    }
+  ],
+  "taps": [
+    {
+      "t0": 45,
+      "t1": 90,
+      "ring": true,
+      "rect": {
+        "x": 70,
+        "y": 134,
+        "w": 12,
+        "h": 12
+      }
+    }
+  ],
+  "assetPack": "b",
+  "layout": {
+    "portraitSplit": {
+      "bubble": 0.15,
+      "scene": 0.55,
+      "hud": 0.3
+    },
+    "referencePhoneH": 1920,
+    "feetFraction": 0.88,
+    "headMinFrac": 0.08,
+    "headMaxFrac": 0.45,
+    "maxBareFloorFrac": 0.12,
+    "maxWallAboveHeadNative": 12
+  }
+}

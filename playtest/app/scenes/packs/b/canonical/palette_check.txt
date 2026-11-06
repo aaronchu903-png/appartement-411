@@ -1,0 +1,3 @@
+palette entries: 27; colours used (opaque): 27; off-palette: ['#9b7857', '#a37f5b']
+(shadows are palette "wood" at alpha 90, not extra colours)
+note: the 2 off-palette colours are the 35%-alpha shadow blended onto floor/stripe in the composited lineup only; sprite sheets themselves are 100% on-palette.

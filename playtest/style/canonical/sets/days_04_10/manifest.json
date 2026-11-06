@@ -1,0 +1,1194 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "days410_inserts": {
+   "file": "days410_inserts_sheet.png",
+   "w": 190,
+   "h": 235
+  },
+  "days410_props": {
+   "file": "days410_props_sheet.png",
+   "w": 64,
+   "h": 64
+  },
+  "days410_cat": {
+   "file": "days410_cat_sheet.png",
+   "w": 64,
+   "h": 10
+  },
+  "days410_sitcom_inserts": {
+   "file": "days410_sitcom_inserts_sheet.png",
+   "w": 162,
+   "h": 117
+  },
+  "days410_chat": {
+   "file": "days410_chat_sheet.png",
+   "w": 182,
+   "h": 58
+  }
+ },
+ "assets": {
+  "prop.insert_card.any": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_card_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "textRect": {
+    "x": 8,
+    "y": 31,
+    "w": 44,
+    "h": 14
+   },
+   "note": "D1-3 jam parcel: mother card, heart stamp; engine text e.g. « Bisous, Maman »",
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_calendar.any": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_calendar_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "textRect": {
+    "x": 7,
+    "y": 38,
+    "w": 46,
+    "h": 13
+   },
+   "note": "D1 « Samedi : Madame Martin. » / D10 « Jeudi : Madame Lefèvre »; Thursday-column cell circled, empty grid",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_rules_list.any": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_rules_list_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "textRect": {
+    "x": 18,
+    "y": 13,
+    "w": 27,
+    "h": 36
+   },
+   "note": "D9 house rules sheet on the fridge, red magnet; 6 bullets + empty lines; engine text over the lines",
+   "frame": {
+    "x": 0,
+    "y": 177,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_key_old.any": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_key_old_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "textRect": {
+    "x": 10,
+    "y": 44,
+    "w": 40,
+    "h": 10
+   },
+   "note": "D8/D9 Lefèvre rooftop key: dark iron, round quatrefoil bow, long shank, toothed bit, string + blank tag",
+   "frame": {
+    "x": 122,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_phone_notif.day": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_phone_notif_day.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "day",
+   "note": "one notification bubble (parcel-app blob); « Livraison demain : 1 colis »; surround per variant, screen self-lit, do not grade",
+   "textRect": {
+    "x": 19,
+    "y": 16,
+    "w": 29,
+    "h": 12
+   },
+   "frame": {
+    "x": 0,
+    "y": 118,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_phone_notif.evening": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_phone_notif_evening.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "evening",
+   "note": "one notification bubble (parcel-app blob); « Livraison demain : 1 colis »; surround per variant, screen self-lit, do not grade",
+   "textRect": {
+    "x": 19,
+    "y": 16,
+    "w": 29,
+    "h": 12
+   },
+   "frame": {
+    "x": 61,
+    "y": 118,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_phone_notif.night": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_phone_notif_night.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "night",
+   "note": "one notification bubble (parcel-app blob); « Livraison demain : 1 colis »; surround per variant, screen self-lit, do not grade",
+   "textRect": {
+    "x": 19,
+    "y": 16,
+    "w": 29,
+    "h": 12
+   },
+   "frame": {
+    "x": 122,
+    "y": 118,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_laptop_price.day": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_laptop_price_day.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "day",
+   "note": "product tile; overlay prop.laptop_img_* at imageSlot; price in textRect (« 12 € »), optional name in nameRect; surround per variant, screen self-lit, do not grade",
+   "textRect": {
+    "x": 31,
+    "y": 25,
+    "w": 22,
+    "h": 13
+   },
+   "nameRect": {
+    "x": 31,
+    "y": 11,
+    "w": 22,
+    "h": 11
+   },
+   "imageSlot": {
+    "x": 8,
+    "y": 12,
+    "w": 20,
+    "h": 27
+   },
+   "frame": {
+    "x": 0,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_laptop_price.evening": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_laptop_price_evening.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "evening",
+   "note": "product tile; overlay prop.laptop_img_* at imageSlot; price in textRect (« 12 € »), optional name in nameRect; surround per variant, screen self-lit, do not grade",
+   "textRect": {
+    "x": 31,
+    "y": 25,
+    "w": 22,
+    "h": 13
+   },
+   "nameRect": {
+    "x": 31,
+    "y": 11,
+    "w": 22,
+    "h": 11
+   },
+   "imageSlot": {
+    "x": 8,
+    "y": 12,
+    "w": 20,
+    "h": 27
+   },
+   "frame": {
+    "x": 61,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "prop.insert_laptop_price.night": {
+   "source": "atlas",
+   "atlas": "days410_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_laptop_price_night.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "night",
+   "note": "product tile; overlay prop.laptop_img_* at imageSlot; price in textRect (« 12 € »), optional name in nameRect; surround per variant, screen self-lit, do not grade",
+   "textRect": {
+    "x": 31,
+    "y": 25,
+    "w": 22,
+    "h": 13
+   },
+   "nameRect": {
+    "x": 31,
+    "y": 11,
+    "w": 22,
+    "h": 11
+   },
+   "imageSlot": {
+    "x": 8,
+    "y": 12,
+    "w": 20,
+    "h": 27
+   },
+   "frame": {
+    "x": 122,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   }
+  },
+  "handprop.key_old.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_key_old_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 1
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 1
+   },
+   "note": "held by the bow",
+   "frame": {
+    "x": 13,
+    "y": 58,
+    "w": 11,
+    "h": 5
+   }
+  },
+  "prop.key_old_table.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_key_old_table_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 4
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_table_top": {
+     "x": 118,
+     "y": 119
+    }
+   },
+   "frame": {
+    "x": 48,
+    "y": 46,
+    "w": 11,
+    "h": 6
+   }
+  },
+  "handprop.key_ribbon.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_key_ribbon_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 10
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 0
+   },
+   "note": "flat gold key dangling from a red ribbon (mouth/red_sh)",
+   "frame": {
+    "x": 0,
+    "y": 46,
+    "w": 5,
+    "h": 11
+   }
+  },
+  "prop.key_ribbon_floor.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_key_ribbon_floor_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 3
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_floor": {
+     "x": 96,
+     "y": 136
+    },
+    "kitchen_table_top": {
+     "x": 112,
+     "y": 119
+    }
+   },
+   "frame": {
+    "x": 41,
+    "y": 58,
+    "w": 11,
+    "h": 5
+   }
+  },
+  "prop.sock_pile.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_sock_pile_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 8
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_floor": {
+     "x": 60,
+     "y": 136
+    }
+   },
+   "note": "D5 cat stash: 4 mismatched socks",
+   "frame": {
+    "x": 6,
+    "y": 46,
+    "w": 16,
+    "h": 10
+   }
+  },
+  "prop.jacket_hook.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_jacket_hook_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "depth": 3,
+   "anchorKind": "nail",
+   "slots": {
+    "kitchen_wall_door": {
+     "x": 186,
+     "y": 82
+    }
+   },
+   "note": "x182-191 y82-97, clear of laptop (y112) and key hooks",
+   "frame": {
+    "x": 42,
+    "y": 28,
+    "w": 10,
+    "h": 16
+   }
+  },
+  "prop.key_hooks_empty.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_key_hooks_empty_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 6,
+    "y": 0
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_wall_door": {
+     "x": 172,
+     "y": 90
+    }
+   },
+   "note": "x166-178 y90-106 (keys hang to y106; laptop top y112)",
+   "frame": {
+    "x": 0,
+    "y": 28,
+    "w": 13,
+    "h": 17
+   }
+  },
+  "prop.key_hooks_flat.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_key_hooks_flat_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 6,
+    "y": 0
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_wall_door": {
+     "x": 172,
+     "y": 90
+    }
+   },
+   "frame": {
+    "x": 14,
+    "y": 28,
+    "w": 13,
+    "h": 17
+   }
+  },
+  "prop.key_hooks_old.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_key_hooks_old_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 6,
+    "y": 0
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_wall_door": {
+     "x": 172,
+     "y": 90
+    }
+   },
+   "frame": {
+    "x": 28,
+    "y": 28,
+    "w": 13,
+    "h": 17
+   }
+  },
+  "prop.key_hooks_both.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_key_hooks_both_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 6,
+    "y": 0
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_wall_door": {
+     "x": 172,
+     "y": 90
+    }
+   },
+   "frame": {
+    "x": 42,
+    "y": 0,
+    "w": 13,
+    "h": 17
+   }
+  },
+  "prop.basil_pot.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_basil_pot_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 13
+   },
+   "depth": 3,
+   "handPoint": {
+    "x": 5,
+    "y": 10
+   },
+   "slots": {
+    "kitchen_desk": {
+     "x": 177,
+     "y": 118
+    },
+    "kitchen_counter_top_r": {
+     "x": 60,
+     "y": 117
+    }
+   },
+   "note": "D8 gift; desk slot = pot 1 footprint (use instead of pot_desk_*, desk_bare / plant blanked)",
+   "frame": {
+    "x": 53,
+    "y": 28,
+    "w": 10,
+    "h": 15
+   }
+  },
+  "handprop.paper_pen.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_paper_pen_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 6
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 0,
+    "y": 6
+   },
+   "frame": {
+    "x": 23,
+    "y": 46,
+    "w": 7,
+    "h": 7
+   }
+  },
+  "prop.paper_pen_table.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_paper_pen_table_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 4
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_table_top": {
+     "x": 106,
+     "y": 119
+    }
+   },
+   "frame": {
+    "x": 0,
+    "y": 58,
+    "w": 12,
+    "h": 6
+   }
+  },
+  "prop.ham_pack.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_ham_pack_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 5
+   },
+   "depth": 3,
+   "slots": {
+    "kitchen_table_top": {
+     "x": 130,
+     "y": 119
+    },
+    "kitchen_counter_top_r": {
+     "x": 60,
+     "y": 117
+    }
+   },
+   "frame": {
+    "x": 31,
+    "y": 46,
+    "w": 11,
+    "h": 7
+   }
+  },
+  "handprop.ham_slice.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_ham_slice_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 3
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 0
+   },
+   "note": "in hand or in the cat mouth",
+   "frame": {
+    "x": 53,
+    "y": 58,
+    "w": 6,
+    "h": 4
+   }
+  },
+  "prop.cat_flap.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_cat_flap_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 4
+   },
+   "depth": 3,
+   "defaultSlot": "door_neighbour",
+   "slots": {
+    "door_neighbour": {
+     "x": 22,
+     "y": 127
+    },
+    "door_home": {
+     "x": 78,
+     "y": 127
+    }
+   },
+   "note": "OLD flap (Mme Lefevre's former cat): tarnished frame, dent, scuff, warped corner; bottom of the door leaf (leaf bottom row 127); default = neighbour door",
+   "frame": {
+    "x": 25,
+    "y": 58,
+    "w": 7,
+    "h": 5
+   }
+  },
+  "prop.cat_flap_open.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_cat_flap_open_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 4
+   },
+   "depth": 3,
+   "defaultSlot": "door_neighbour",
+   "slots": {
+    "door_neighbour": {
+     "x": 22,
+     "y": 127
+    },
+    "door_home": {
+     "x": 78,
+     "y": 127
+    }
+   },
+   "frame": {
+    "x": 33,
+    "y": 58,
+    "w": 7,
+    "h": 5
+   }
+  },
+  "prop.glove_chair_back.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_glove_chair_back_any.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 1
+   },
+   "depth": 3,
+   "defaultSlot": "kitchen_chair_back_l",
+   "slots": {
+    "kitchen_chair_back_l": {
+     "x": 91,
+     "y": 116
+    },
+    "kitchen_chair_back_r": {
+     "x": 145,
+     "y": 116
+    }
+   },
+   "note": "D7 Martin's single pink glove draped over a table4 chair back (cuff on the top rail, fingers outside); colours = handprop.glove_loose / martin.overlay.gloves",
+   "frame": {
+    "x": 43,
+    "y": 46,
+    "w": 4,
+    "h": 6
+   }
+  },
+  "prop.laptop_img_catfood.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_laptop_img_catfood_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 3,
+   "note": "overlay at insert_laptop_price imageSlot (8,12), topleft",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 20,
+    "h": 27
+   }
+  },
+  "prop.laptop_img_cattree.any": {
+   "source": "atlas",
+   "atlas": "days410_props",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_laptop_img_cattree_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 3,
+   "note": "overlay at insert_laptop_price imageSlot (8,12), topleft",
+   "frame": {
+    "x": 21,
+    "y": 0,
+    "w": 20,
+    "h": 27
+   }
+  },
+  "croissant.flap_in.0": {
+   "source": "atlas",
+   "atlas": "days410_cat",
+   "pixelScale": 1,
+   "file": "pieces/x1/croissant_flap_in_0.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 9
+   },
+   "depth": 4,
+   "defaultSlot": "door_neighbour",
+   "slots": {
+    "door_neighbour": {
+     "x": 22,
+     "y": 132
+    },
+    "door_home": {
+     "x": 78,
+     "y": 132
+    }
+   },
+   "note": "includes the (old) flap; draw instead of prop.cat_flap while playing; end on prop.cat_flap",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 11,
+    "h": 10
+   }
+  },
+  "croissant.flap_in.1": {
+   "source": "atlas",
+   "atlas": "days410_cat",
+   "pixelScale": 1,
+   "file": "pieces/x1/croissant_flap_in_1.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 9
+   },
+   "depth": 4,
+   "defaultSlot": "door_neighbour",
+   "slots": {
+    "door_neighbour": {
+     "x": 22,
+     "y": 132
+    },
+    "door_home": {
+     "x": 78,
+     "y": 132
+    }
+   },
+   "note": "includes the (old) flap; draw instead of prop.cat_flap while playing; end on prop.cat_flap",
+   "frame": {
+    "x": 12,
+    "y": 0,
+    "w": 11,
+    "h": 10
+   }
+  },
+  "croissant.flap_in.2": {
+   "source": "atlas",
+   "atlas": "days410_cat",
+   "pixelScale": 1,
+   "file": "pieces/x1/croissant_flap_in_2.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 9
+   },
+   "depth": 4,
+   "defaultSlot": "door_neighbour",
+   "slots": {
+    "door_neighbour": {
+     "x": 22,
+     "y": 132
+    },
+    "door_home": {
+     "x": 78,
+     "y": 132
+    }
+   },
+   "note": "includes the (old) flap; draw instead of prop.cat_flap while playing; end on prop.cat_flap",
+   "frame": {
+    "x": 24,
+    "y": 0,
+    "w": 11,
+    "h": 10
+   }
+  },
+  "croissant.flap_in": {
+   "type": "sequence",
+   "frames": [
+    "croissant.flap_in.0",
+    "croissant.flap_in.1",
+    "croissant.flap_in.2"
+   ],
+   "fps": 3.06,
+   "durations": [
+    280,
+    280,
+    420
+   ]
+  },
+  "prop.insert_parcel_label": {
+   "source": "atlas",
+   "atlas": "days410_sitcom_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_parcel_label.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "Day 13 close on the parcel label: blank label (grey rules, red stamp square, no letters); engine renders « Mme Martin, Quimper » inside textRect",
+   "textRect": {
+    "x": 13,
+    "y": 25,
+    "w": 34,
+    "h": 14
+   },
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "copiedFrom": "sitcom_d11_17 prop.insert_parcel_label (pixel copy)"
+  },
+  "prop.insert_clock_midnight": {
+   "source": "atlas",
+   "atlas": "days410_sitcom_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_clock_midnight.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "Day 11 midnight close: both hands on 12, no numerals; engine may caption « 00:00 »",
+   "textRect": {
+    "x": 24,
+    "y": 31,
+    "w": 14,
+    "h": 8
+   },
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "copiedFrom": "sitcom_d11_17 prop.insert_clock_midnight (pixel copy)"
+  },
+  "prop.screen_send.any": {
+   "source": "atlas",
+   "atlas": "days410_sitcom_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_screen_send_any.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "buttonRect": {
+    "x0": 24,
+    "y0": 19,
+    "x1": 35,
+    "y1": 23
+   },
+   "clockRect": {
+    "x0": 29,
+    "y0": 2,
+    "x1": 36,
+    "y1": 3
+   },
+   "note": "Day 11 h_envoyer close insert; engine draws « Envoyer » in buttonRect, optional digital time in clockRect",
+   "textRect": {
+    "x": 24,
+    "y": 19,
+    "w": 12,
+    "h": 5
+   },
+   "frame": {
+    "x": 122,
+    "y": 0,
+    "w": 40,
+    "h": 26
+   },
+   "copiedFrom": "sitcom_d11_17 prop.screen_send.any (pixel copy)"
+  },
+  "prop.insert_key_slide.0": {
+   "source": "atlas",
+   "atlas": "days410_sitcom_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_key_slide_0.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail",
+   "frame": {
+    "x": 0,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "copiedFrom": "sitcom_d11_17 prop.insert_key_slide.0 (pixel copy)"
+  },
+  "prop.insert_key_slide.1": {
+   "source": "atlas",
+   "atlas": "days410_sitcom_inserts",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_key_slide_1.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail",
+   "frame": {
+    "x": 61,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "copiedFrom": "sitcom_d11_17 prop.insert_key_slide.1 (pixel copy)"
+  },
+  "prop.insert_key_slide": {
+   "type": "sequence",
+   "frames": [
+    "prop.insert_key_slide.0",
+    "prop.insert_key_slide.1"
+   ],
+   "fps": 2,
+   "note": "Day 11 « Elle pousse la clé vers toi »",
+   "copiedFrom": "sitcom_d11_17 prop.insert_key_slide"
+  },
+  "prop.insert_phone_chat.day": {
+   "source": "atlas",
+   "atlas": "days410_chat",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_phone_chat_day.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "day",
+   "textRect": {
+    "x": 10,
+    "y": 21,
+    "w": 41,
+    "h": 22
+   },
+   "nameRect": {
+    "x": 18,
+    "y": 5,
+    "w": 31,
+    "h": 5
+   },
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "note": "phone chat screen: one incoming bubble (textRect, ~60 chars / 3 lines at caption font 2.2 stage px), neutral avatar + empty name bar (nameRect: «Madame Martin» / «Noé» / «Camille»); surround per variant, screen self-lit, do not grade"
+  },
+  "prop.insert_phone_chat.evening": {
+   "source": "atlas",
+   "atlas": "days410_chat",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_phone_chat_evening.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "evening",
+   "textRect": {
+    "x": 10,
+    "y": 21,
+    "w": 41,
+    "h": 22
+   },
+   "nameRect": {
+    "x": 18,
+    "y": 5,
+    "w": 31,
+    "h": 5
+   },
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "note": "phone chat screen: one incoming bubble (textRect, ~60 chars / 3 lines at caption font 2.2 stage px), neutral avatar + empty name bar (nameRect: «Madame Martin» / «Noé» / «Camille»); surround per variant, screen self-lit, do not grade"
+  },
+  "prop.insert_phone_chat.night": {
+   "source": "atlas",
+   "atlas": "days410_chat",
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_phone_chat_night.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "variant": "night",
+   "textRect": {
+    "x": 10,
+    "y": 21,
+    "w": 41,
+    "h": 22
+   },
+   "nameRect": {
+    "x": 18,
+    "y": 5,
+    "w": 31,
+    "h": 5
+   },
+   "frame": {
+    "x": 122,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "note": "phone chat screen: one incoming bubble (textRect, ~60 chars / 3 lines at caption font 2.2 stage px), neutral avatar + empty name bar (nameRect: «Madame Martin» / «Noé» / «Camille»); surround per variant, screen self-lit, do not grade"
+  }
+ },
+ "note": "Days 4-10 pack + Days 1-3 insert addendum. Props graded with room light; insert_phone/laptop screens self-lit (do not grade). See NOTES.md",
+ "reused": {
+  "Martin glove": "handprop.glove_loose.any (sitcom_d11_17) + registry prop glove_on_chair",
+  "arrosoir (kitchen)": "rooftop prop.arrosoir.<v> / handprop.arrosoir.<v>; kitchen slots kitchen_desk (157,118) laptop-off only, kitchen_floor (186,136)",
+  "flat key (no ribbon)": "handprop.key_door.any / prop.key_floor.any",
+  "newspaper": "handprop.newspaper_folded/open.any",
+  "wall calendar (in scene)": "prop.wall_calendar.any",
+  "house rules (in scene)": "kitchen prop.house_rules.<v>"
+ }
+}

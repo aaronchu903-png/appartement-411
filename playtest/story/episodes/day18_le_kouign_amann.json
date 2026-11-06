@@ -1,0 +1,824 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d18_le_kouign_amann",
+ "day": 18,
+ "title": "Le kouign-amann",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d18_",
+ "martin_on_screen": true,
+ "target_words": [
+  "ça colle"
+ ],
+ "recycle_words": [
+  "le beurre",
+  "doucement",
+  "la farine",
+  "le plateau",
+  "mouillé",
+  "sécher",
+  "la serviette",
+  "un pain au chocolat",
+  "déjà",
+  "l’enveloppe",
+  "la recette",
+  "lire",
+  "chaud"
+ ],
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen_table4",
+  "rooftop",
+  "stairwell"
+ ],
+ "flags_set": [],
+ "flags_read": [],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "co_recette",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "envelope",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "prop",
+       "id": "plate",
+       "action": "show",
+       "at": "table_top",
+       "note": "FALLBACK: GAP no beurre prop; plate = the butter stand-in"
+      },
+      {
+       "do": "prop",
+       "id": "sugar_bowl",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "table_end_r",
+       "note": "next to the butter, very still"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "envelope"
+       ],
+       "note": "Martin’s envelope from Day 17"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "L’enveloppe…",
+       "zh": "信封……",
+       "note": "NEW (D17 return enveloppe)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La recette !",
+       "zh": "食谱！",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "CO"
+    }
+   ],
+   "ambience": "room_tone_night"
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "a1_lire",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_counter",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "flour_bag",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Tu lis ?",
+       "zh": "你来念？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "La recette, à voix haute :",
+        "zh": "大声念食谱："
+       },
+       "options": [
+        {
+         "fr": "D’abord, la farine… ensuite, le beurre.",
+         "zh": "先放面粉……然后，放黄油。",
+         "correct": true
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La farine… le sucre…",
+       "zh": "面粉……糖……",
+       "note": "NEW (D17 return farine/sucre): reading the card"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Beaucoup de beurre.",
+       "zh": "好多黄油。",
+       "face": "big-eyes"
+      }
+     ],
+     "ref": "A1"
+    },
+    {
+     "id": "a2_colle",
+     "steps": [
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_counter_l",
+       "gesture": "hold",
+       "note": "GAP: no dough / rolling_pin props; hands only"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ça colle !",
+       "zh": "粘手！",
+       "face": "shocked",
+       "tags": [
+        "NENG"
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "towel_folded",
+       "action": "hold",
+       "who": "camille"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La serviette !",
+       "zh": "毛巾！",
+       "note": "RETURN serviette"
+      },
+      {
+       "do": "prop",
+       "id": "towel_folded",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ça colle !",
+       "zh": "粘住了！",
+       "face": "sad",
+       "tags": [
+        "NENG"
+       ],
+       "note": "the towel sticks too: cut on the payoff"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "ca_colle",
+         "audio": "ca_colle"
+        }
+       ]
+      }
+     ],
+     "ref": "A2"
+    },
+    {
+     "id": "a3_painchoc",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "butter everywhere: implied (no butter-smear art)"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est comme un pain au chocolat, non ?",
+       "zh": "这跟巧克力面包差不多吧？",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Non.",
+       "zh": "不是。",
+       "face": "neutral"
+      }
+     ],
+     "ref": "A3"
+    }
+   ]
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "v_lefevre",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "lefevre",
+       "icon": "phone",
+       "fr": "Pas de soupe ce soir ? Vous cuisinez ? Bon appétit !",
+       "zh": "今晚不喝汤吗？你们在做饭？祝好胃口！",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "soupe",
+         "audio": "soupe"
+        }
+       ],
+       "prompt": {
+        "fr": "Pas de ___ ce soir ?",
+        "zh": "今晚不喝___吗？",
+        "audio": "soupe"
+       }
+      }
+     ],
+     "ref": "V"
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le beurre… Doucement.",
+       "zh": "黄油……轻点。",
+       "face": "brow_raise"
+      },
+      {
+       "do": "cat_action",
+       "action": "stand",
+       "at": "table_end_r",
+       "look_at": "plate"
+      }
+     ],
+     "ref": "B-setup"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "table_top",
+       "note": "GAP: no paw_print overlay (Croissant has only `flour`); the flour paw print on the table is implied"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "De la farine… sur la table !",
+       "zh": "面粉……在桌子上！",
+       "note": "NEW (D17 return farine): flour paw prints"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ],
+       "note": "butter on Noé’s chin (no overlay art)"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ce n’est pas moi !",
+       "zh": "不是我！",
+       "face": "shocked"
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "cut on the gag"
+    }
+   ]
+  },
+  {
+   "id": "A4",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "a4_porte",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "sfx": "knock"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "sfx": "minuterie_click",
+       "note": "the minuterie is heard through the door only (sfx)"
+      },
+      {
+       "do": "enter",
+       "who": "martin",
+       "at": "stand_door_r",
+       "from": "right",
+       "note": "first « palier » visit: she came to see the landing she pays for (ECONOMY_V1 §11); visual only"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ],
+       "note": "motivation, visual: she glances back over her shoulder at the landing (shoes, umbrella, plant tidy) before looking in"
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "La minuterie…",
+       "zh": "这楼道的定时灯……",
+       "note": "heard from outside in the bible; staged in the doorway (no off-screen say). RETURN minuterie"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Vous êtes mouillée !",
+       "zh": "您都淋湿了！",
+       "face": "shocked",
+       "tags": [
+        "NENG"
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "towel_folded",
+       "action": "hold",
+       "who": "camille"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Je sèche mes gants, merci.",
+       "zh": "我烘一下手套，谢谢。",
+       "tags": [
+        "NENG"
+       ],
+       "note": "GAP: no glove prop"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ],
+       "note": "she looks at the table, the flour, the butter. Long beat. No line."
+      }
+     ],
+     "ref": "A4"
+    },
+    {
+     "id": "a5_commeca",
+     "steps": [
+      {
+       "do": "walk_to",
+       "who": "martin",
+       "to": "stand_counter",
+       "gesture": "point",
+       "note": "she folds the dough herself (hands, no dough art)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "martin",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Comme ça.",
+       "zh": "像这样。"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Déjà ?",
+       "zh": "已经好了？",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Pas encore.",
+       "zh": "还没有。",
+       "face": "neutral"
+      }
+     ],
+     "ref": "A5"
+    }
+   ]
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "kitchen_table4",
+   "light": "night",
+   "beats": [
+    {
+     "id": "hp_plateau",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "prop",
+       "id": "tray",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "prop",
+       "id": "kouign_amann",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le plateau, Noé !",
+       "zh": "托盘，Noé！",
+       "note": "NEW (D14 return plateau): she slides the tray over"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est chaud !",
+       "zh": "好烫！",
+       "face": "big-eyes",
+       "note": "RETURN plateau/chaud"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ],
+       "note": "she tastes; pose proud, hand on chest"
+      },
+      {
+       "do": "walk_to",
+       "who": "martin",
+       "to": "stand_mid",
+       "gesture": "chest"
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Bien. Très bien.",
+       "zh": "好。很好。",
+       "face": "happy"
+      },
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "hide"
+      },
+      {
+       "do": "prop",
+       "id": "envelope",
+       "action": "show",
+       "at": "table_top",
+       "note": "she slips the recipe card back in the envelope"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "table_end_l",
+       "note": "GAP: no sugar_crystal overlay; a sugar crystal on Croissant’s nose is implied"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Bon appétit.",
+       "zh": "好胃口。",
+       "face": "happy"
+      }
+     ],
+     "ref": "HP"
+    }
+   ]
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "stairwell",
+   "light": "night",
+   "beats": [
+    {
+     "id": "r_mot",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "show",
+       "at": "doormat_neighbour"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "card"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Un mot pour Madame Lefèvre :",
+        "zh": "给 Lefèvre 太太留张字条："
+       },
+       "options": [
+        {
+         "fr": "Merci pour le message. Le kouign-amann : délicieux ! Il y en a pour vous.",
+         "zh": "谢谢您的消息。kouign-amann：太好吃了！也给您留了一份。",
+         "correct": true
+        }
+       ]
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "w_chaud",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Pas trop chaud ? Ça va.",
+         "zh": "不太热吧？还好。"
+        }
+       ]
+      }
+     ],
+     "ref": "W"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "kitchen_table4",
+   "light": "night",
+   "beats": [
+    {
+     "id": "h_gant",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "Martin’s forgotten glove on the chair. GAP: no glove prop; reads from Camille’s look + narrator"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Sur la chaise : un gant. Le gant de Madame Martin.",
+       "zh": "椅子上：一只手套。Martin 太太的手套。"
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}
