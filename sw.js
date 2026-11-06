@@ -5,7 +5,7 @@ const SCOPE = new URL('./', self.location.href);
 const PREFIX = 'a411-root-static-' + encodeURIComponent(SCOPE.pathname) + '-';
 const CACHE = PREFIX + 'v1-production-day8';
 const CORE = ['./', 'index.html', 'tokens.css', 'style.css', 'icons.js', 'modules/index.js', 'modules/M1.js', 'modules/M2.js', 'modules/M3.js', 'modules/M4.js', 'app.js', 'art.js', 'audio.js', 'engine.js', 'save.js', 'content.js', 'language.js', 'data/inherited.js', 'manifest.webmanifest', 'js/conjugate.js'];
-const EXCLUDED = ['/legacy/', '/day8/'];
+const EXCLUDED = ['/legacy/', '/day8/', '/playtest/'];
 
 function underScope(pathname) {
   if (!pathname.startsWith(SCOPE.pathname)) return false;
