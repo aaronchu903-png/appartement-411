@@ -1,0 +1,31 @@
+{
+ "registry_version": 2,
+ "presets": {
+  "day": {
+   "sets": "all",
+   "file": "base pieces"
+  },
+  "evening": {
+   "sets": "all",
+   "file": "light/golden.json"
+  },
+  "night": {
+   "sets": "all",
+   "file": "light/soir.json"
+  },
+  "golden": {
+   "sets": "all",
+   "alias_of": "evening"
+  },
+  "rain": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4",
+    "stairwell"
+   ],
+   "time": "day only",
+   "file": "light/rain.json (+ fx.rain_window_*)",
+   "notes": "no evening/night rain (SITCOM_D11_17_NOTES)"
+  }
+ }
+}

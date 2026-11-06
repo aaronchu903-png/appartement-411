@@ -1,0 +1,27 @@
+{
+ "day": 1,
+ "episode": "d01_bienvenue_chez_nous",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "bonjour",
+  "je m’appelle",
+  "c’est",
+  "merci",
+  "l’appartement",
+  "la plante",
+  "le chat",
+  "la propriétaire",
+  "samedi",
+  "il faut"
+ ],
+ "recognition": [
+  "Bienvenue chez nous !",
+  "Salut !",
+  "la porte",
+  "Chut !",
+  "un secret",
+  "la lettre",
+  "colocataire"
+ ]
+}

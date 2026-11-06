@@ -1,0 +1,129 @@
+{
+ "registry_version": 2,
+ "actions": {
+  "idle": "croissant.idle",
+  "sit": "croissant.sit",
+  "stand": "croissant.stand",
+  "walk": "croissant.walk",
+  "tail_up": "croissant.tail_up",
+  "lie": "croissant.pose.lie (sitcom_d11_17)",
+  "sleep": "croissant.pose.sleep (sitcom_d11_17)",
+  "look": "face.* toward look_at",
+  "react_shocked": "croissant.face.shocked",
+  "chew": "croissant.face.chew",
+  "flour_on": "croissant.overlay.flour (sitcom_d11_17)",
+  "flour_off": "remove overlay",
+  "keyboard_idle": {
+   "asset": "croissant.keyboard_idle",
+   "frames": [
+    "croissant.keyboard_idle.0",
+    "croissant.keyboard_idle.1"
+   ],
+   "fps": 2,
+   "at": "desk_keyboard",
+   "shadow": false,
+   "requires": "prop.desk (open laptop baked in), not desk_bare"
+  },
+  "sleep_curl": {
+   "asset": "croissant.sleep_curl",
+   "frames": [
+    "croissant.sleep_curl.0",
+    "croissant.sleep_curl.1"
+   ],
+   "durations": [
+    1400,
+    1000
+   ],
+   "at": "desk_sleep",
+   "shadow": false,
+   "requires": "prop.desk_bare (Day 1)",
+   "draw_order": [
+    "desk_bare",
+    "pot_desk_sprout",
+    "cat"
+   ],
+   "source": "style/canonical/sets/days_01_03/manifest.json"
+  },
+  "in_box": {
+   "asset": "croissant.in_box",
+   "frames": [
+    "croissant.in_box.idle",
+    "croissant.in_box.twitch"
+   ],
+   "durations": [
+    1800,
+    160
+   ],
+   "requires": "prop box_cat shown at the same mark",
+   "draw_order": [
+    "box_cat.back",
+    "cat",
+    "box_cat.front"
+   ],
+   "source": "style/canonical/sets/days_01_03/manifest.json"
+  },
+  "in_box_tail_pop": {
+   "asset": "croissant.in_box",
+   "frames": [
+    "croissant.in_box.tail_a",
+    "croissant.in_box.tail_b",
+    "croissant.in_box.tail_c"
+   ],
+   "durations": [
+    140,
+    140,
+    900
+   ],
+   "hold_last": true,
+   "then": "in_box",
+   "requires": "box_cat",
+   "draw_order": [
+    "box_cat.back",
+    "cat",
+    "box_cat.front"
+   ],
+   "source": "style/canonical/sets/days_01_03/manifest.json"
+  },
+  "drink": {
+   "asset": "croissant.drink",
+   "frames": [
+    "croissant.drink.0",
+    "croissant.drink.1"
+   ],
+   "durations": [
+    260,
+    200
+   ],
+   "at": "floor_drink",
+   "requires": "cat_bowl at floor_bowl (bowl x = cat x-5)",
+   "draw_order": [
+    "cat",
+    "cat_bowl"
+   ],
+   "bowl_variant_by_frame": {
+    "0": "idle",
+    "1": "ripple"
+   },
+   "source": "style/canonical/sets/days_01_03/manifest.json"
+  },
+  "flap_in": {
+   "asset": "croissant.flap_in",
+   "frames": [
+    "croissant.flap_in.0",
+    "croissant.flap_in.1",
+    "croissant.flap_in.2"
+   ],
+   "durations": [
+    280,
+    280,
+    420
+   ],
+   "at": "doormat_home",
+   "alt_at": "flap_neighbour_cat",
+   "then": "cut to prop cat_flap (cat gone)",
+   "requires": "cat_flap or cat_flap_open at flap_home / flap_neighbour",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  }
+ },
+ "todo": []
+}

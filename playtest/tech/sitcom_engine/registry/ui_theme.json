@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "provisional": true,
+  "note": "UI_COMPONENTS.md §10a rulings (binding). Gold = learned underline only.",
+  "ink": "#4a3328",
+  "panel": "#f4efe6",
+  "panel_shade": "#d8c39a",
+  "primary": "#2f7d5b",
+  "primary_pressed": "#24624a",
+  "secondary": "#eddfc2",
+  "secondary_shade": "#d8c39a",
+  "correct": "#2f7d5b",
+  "feedback_wrong_near": "#e2873a",
+  "disabled": "#9a9aa2",
+  "focus_ring": "#2f4060",
+  "water": "#a9c8dc",
+  "gender": {
+    "le": "#2f4060",
+    "la": "#7a4a6e",
+    "les": null,
+    "article_always_text": true
+  },
+  "underline": {
+    "learned": "#d9a441",
+    "other": "green-dither",
+    "other_color": "#2f7d5b"
+  }
+}

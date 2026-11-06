@@ -1,0 +1,15 @@
+{
+ "registry_version": 1,
+ "season": "S1 (Days 11-18)",
+ "notes": "declared by episodes via flags_set/flags_read; persisted per profile in the save",
+ "flags": {},
+ "profile_state": {
+  "cagnotte_eur": {
+   "type": "number",
+   "default": 0,
+   "saved": "per profile, like flags",
+   "written_by": "cost fields (engine) + economy chores",
+   "read_by": "cost fields only; never in `if`"
+  }
+ }
+}

@@ -1,0 +1,19 @@
+{
+ "day": 5,
+ "episode": "d05_la_cle",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "la clé",
+  "je cherche",
+  "je ne sais pas",
+  "j’ai perdu",
+  "j’ai trouvé",
+  "hier",
+  "d’abord",
+  "ensuite",
+  "la veste",
+  "la poche"
+ ],
+ "recognition": []
+}

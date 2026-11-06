@@ -1,0 +1,19 @@
+{
+ "day": 6,
+ "episode": "d06_ou_est_croissant",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "vous avez vu",
+  "je l’ai vu",
+  "petit",
+  "roux",
+  "chez moi",
+  "en haut",
+  "en bas",
+  "à gauche",
+  "à droite",
+  "cette nuit"
+ ],
+ "recognition": []
+}

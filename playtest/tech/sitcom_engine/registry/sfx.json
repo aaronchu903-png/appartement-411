@@ -1,0 +1,103 @@
+{
+ "registry_version": 1,
+ "status": "v2 (fixes per Le Buzz review 2026-10-25); all ids have files; see audio/CREDITS.md. v1 in audio/src/v1/",
+ "sfx": {
+  "knock": {
+   "use": "Day 12 hook, Day 18 A4",
+   "file": "audio/knock.ogg",
+   "master": "audio/src/knock.wav",
+   "duration_s": 0.797,
+   "loop": false,
+   "version": 2,
+   "true_peak_dbtp": -1.3
+  },
+  "minuterie_click": {
+   "use": "Day 12 B plot, Day 16, Day 18",
+   "file": "audio/minuterie_click.ogg",
+   "master": "audio/src/minuterie_click.wav",
+   "duration_s": 0.173,
+   "loop": false,
+   "version": 2,
+   "true_peak_dbtp": -1.4
+  },
+  "stomach_growl": {
+   "use": "Day 10 B4",
+   "file": "audio/stomach_growl.ogg",
+   "master": "audio/src/stomach_growl.wav",
+   "duration_s": 1.3,
+   "loop": false,
+   "version": 2,
+   "true_peak_dbtp": -1.2
+  },
+  "camera_click": {
+   "use": "Day 10 C8",
+   "file": "audio/camera_click.ogg",
+   "master": "audio/src/camera_click.wav",
+   "duration_s": 0.373,
+   "loop": false,
+   "version": 2,
+   "true_peak_dbtp": -2.8
+  },
+  "key_turn": {
+   "use": "Day 8 roof key in lock (synthesized; not wired in locked episode JSON)",
+   "file": "audio/key_turn.ogg",
+   "master": "audio/src/key_turn.wav",
+   "duration_s": 0.22,
+   "loop": false,
+   "version": 2
+  },
+  "chime_message": {
+   "use": "Day 9/10 laptop chime",
+   "file": "audio/chime_message.ogg",
+   "master": "audio/src/chime_message.wav",
+   "duration_s": 0.897,
+   "loop": false,
+   "version": 2,
+   "true_peak_dbtp": -5.0
+  }
+ },
+ "ambience": {
+  "rain_loop": {
+   "use": "default when light=rain",
+   "file": "audio/rain_loop.ogg",
+   "master": "audio/src/rain_loop.wav",
+   "duration_s": 9.0,
+   "loop": true,
+   "version": 2,
+   "lufs": -28.2
+  },
+  "room_tone_day": {
+   "use": "default",
+   "file": "audio/room_tone_day.ogg",
+   "master": "audio/src/room_tone_day.wav",
+   "duration_s": 10.0,
+   "loop": true,
+   "version": 2,
+   "lufs": -34.0
+  },
+  "room_tone_night": {
+   "use": "default night",
+   "file": "audio/room_tone_night.ogg",
+   "master": "audio/src/room_tone_night.wav",
+   "duration_s": 10.0,
+   "loop": true,
+   "version": 2,
+   "lufs": -37.9
+  },
+  "roof_wind": {
+   "use": "rooftop default",
+   "file": "audio/roof_wind.ogg",
+   "master": "audio/src/roof_wind.wav",
+   "duration_s": 10.0,
+   "loop": true,
+   "version": 2,
+   "lufs": -28.0
+  }
+ },
+ "mix_rules": {
+  "room_tone_under_dialogue_lufs": -34,
+  "ambience_loop_max_lufs": -28,
+  "rule": "room tone under dialogue fixed at -34 LUFS; ambience loops (rain/wind) up to -28 LUFS only in scenes with no dialogue; any scene with say/phone_bubble must duck ambience to -34 (W-AMBIENCE-DIALOGUE)",
+  "source": "Croissant 2026-10-25 22:08"
+ }
+}

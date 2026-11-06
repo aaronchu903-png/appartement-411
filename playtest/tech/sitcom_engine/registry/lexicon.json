@@ -1,0 +1,27 @@
+{
+"registry_version": 1,
+"status": "seed only (TODO: full form->lemma from Days 1-18 wordlists)",
+"forms": {
+"délicieuse": "délicieux",
+"délicieuses": "délicieux",
+"goûte": "goûter",
+"goûtez": "goûter",
+"goûtes": "goûter",
+"chaises": "chaise",
+"tables": "table",
+"oignons": "oignon",
+"soupes": "soupe",
+"photos": "photo",
+"messages": "message",
+"mouillée": "mouillé",
+"mouillés": "mouillé",
+"envoie": "envoyer",
+"envoyé": "envoyer",
+"coupe": "couper",
+"coupez": "couper",
+"sèche": "sécher",
+"sèches": "sécher",
+"lis": "lire",
+"lit": "lire"
+}
+}
