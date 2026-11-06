@@ -1,0 +1,26 @@
+{
+ "day": 2,
+ "episode": "d02_the_ou_cafe",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "tu veux",
+  "je voudrais",
+  "le café",
+  "le thé",
+  "l’eau",
+  "le lait",
+  "le pain",
+  "il n’y a pas de",
+  "c’est combien",
+  "les croquettes"
+ ],
+ "recognition": [
+  "S’il vous plaît.",
+  "D’accord.",
+  "Je vais acheter…",
+  "un arbre à chat",
+  "Voilà.",
+  "S’il te plaît."
+ ]
+}

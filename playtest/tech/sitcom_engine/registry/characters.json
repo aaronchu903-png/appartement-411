@@ -1,0 +1,226 @@
+{
+ "registry_version": 2,
+ "characters": {
+  "noe": {
+   "poses": [
+    "stand",
+    "idle",
+    "walk",
+    "back_idle",
+    "back_stand",
+    "back_walk",
+    "sit_front",
+    "sit_34",
+    "sit_table",
+    "sit_table_34",
+    "facepalm",
+    "crouch",
+    "crouch_reach",
+    "finger_to_lips"
+   ],
+   "faces": [
+    "neutral",
+    "happy",
+    "sad",
+    "shocked",
+    "big-eyes",
+    "blink",
+    "brow_raise",
+    "talk"
+   ],
+   "overlays": [
+    "apron_towel",
+    "apron_towel_sit",
+    "flour",
+    "tears"
+   ],
+   "source": "canonical manifest + sitcom_d11_17",
+   "finger_to_lips": {
+    "frames": [
+     "noe.finger_to_lips.0",
+     "noe.finger_to_lips.1"
+    ],
+    "durations": [
+     900,
+     700
+    ],
+    "size": [
+     16,
+     24
+    ],
+    "feet": [
+     8,
+     23
+    ],
+    "source": "style/canonical/sets/days_01_03/manifest.json"
+   }
+  },
+  "camille": {
+   "poses": [
+    "stand",
+    "idle",
+    "walk",
+    "back_idle",
+    "back_stand",
+    "back_walk",
+    "sit_front",
+    "sit_34",
+    "sit_table",
+    "sit_table_34",
+    "facepalm",
+    "crouch",
+    "crouch_reach"
+   ],
+   "faces": [
+    "neutral",
+    "happy",
+    "sad",
+    "shocked",
+    "big-eyes",
+    "blink",
+    "brow_raise",
+    "talk"
+   ],
+   "overlays": []
+  },
+  "martin": {
+   "poses": [
+    "stand",
+    "idle",
+    "walk",
+    "sit_front",
+    "sit_34",
+    "sit_table",
+    "sit_table_34",
+    "facepalm",
+    "proud",
+    "scold",
+    "sigh",
+    "hips",
+    "wave",
+    "crouch",
+    "crouch_reach",
+    "taste"
+   ],
+   "faces": [
+    "neutral",
+    "happy",
+    "sad",
+    "shocked",
+    "big-eyes",
+    "blink",
+    "brow_raise",
+    "talk"
+   ],
+   "overlays": [
+    "gloves"
+   ],
+   "notes": "phone_bubble only unless martin_on_screen; Day 18: taste=pose.taste, gloves overlay (pale pink, Rev 4.1c); fold = cut_to insert_fold_dough; at counter = stand + gloves at stand_counter_r. Deprecated: fold_dough, pose.counter_reach",
+   "screen_only_unless": "martin_on_screen: true (episode or scene)",
+   "arms": [
+    "chest",
+    "down",
+    "facepalm",
+    "hips",
+    "hold",
+    "point",
+    "wave"
+   ]
+  },
+  "lefevre": {
+   "poses": [
+    "stand",
+    "idle",
+    "walk",
+    "sit_front",
+    "sit_34",
+    "sit_table",
+    "sit_table_34",
+    "facepalm",
+    "crouch",
+    "crouch_reach",
+    "gown_stand",
+    "gown_hold"
+   ],
+   "faces": [
+    "neutral",
+    "happy",
+    "sad",
+    "shocked",
+    "big-eyes",
+    "blink",
+    "brow_raise",
+    "talk"
+   ],
+   "overlays": [
+    "glasses"
+   ],
+   "notes": "no back views; no rail pose (stand on a step)"
+  },
+  "ines": {
+   "poses": [
+    "stand",
+    "idle",
+    "walk",
+    "sit_front",
+    "sit_34",
+    "sit_table",
+    "sit_table_34",
+    "facepalm"
+   ],
+   "faces": [
+    "neutral",
+    "happy",
+    "sad",
+    "shocked",
+    "big-eyes",
+    "blink",
+    "brow_raise",
+    "talk"
+   ],
+   "overlays": [],
+   "max_frequency": "visitor, at most once a fortnight",
+   "notes": "no back views; not on Day 11",
+   "source": "sitcom_d11_17"
+  },
+  "croissant": {
+   "kind": "cat",
+   "poses": [
+    "idle",
+    "sit",
+    "stand",
+    "walk",
+    "tail_up",
+    "lie",
+    "sleep"
+   ],
+   "faces": [
+    "neutral",
+    "happy",
+    "sad",
+    "shocked",
+    "big-eyes",
+    "blink",
+    "brow_raise",
+    "chew"
+   ],
+   "overlays": [
+    "flour",
+    "sugar_crystal",
+    "flour_paw"
+   ],
+   "fr_aliases": [
+    "chat"
+   ],
+   "fr_aliases_note": "fix20: a line naming « chat » names Croissant (catNameRes): he is framed as a named subject ; not after « à » / « pour » (compound nouns: arbre à chat, croquettes pour chat)",
+   "fr_alias_not_after": [
+    "à",
+    "pour"
+   ]
+  },
+  "narrator": {
+   "kind": "virtual",
+   "notes": "panel caption only, no sprite"
+  }
+ }
+}

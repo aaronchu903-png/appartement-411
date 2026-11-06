@@ -1,0 +1,16 @@
+{
+ "day": 13,
+ "owner": "tech",
+ "episode": "day13_le_colis",
+ "ops": [
+  {
+   "at": "a2_carte",
+   "swap": {
+    "mark": "table_parcel",
+    "from": "parcel_closed",
+    "to": "box_open"
+   },
+   "note": "parcel opened by A2: box_open (13x7 baseline, table art) replaces parcel_closed on the same mark"
+  }
+ ]
+}

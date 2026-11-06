@@ -1,0 +1,24 @@
+{
+ "day": 9,
+ "episode": "d09_six_heures",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "le basilic",
+  "la liste",
+  "la règle",
+  "le beurre",
+  "le frigo",
+  "tu pourrais",
+  "faire la vaisselle",
+  "ce n’est pas moi",
+  "asseyez-vous",
+  "la chaise"
+ ],
+ "recognition": [
+  "Bonsoir, Monsieur.",
+  "la chaise de Croissant",
+  "il est content ?",
+  "jeudi"
+ ]
+}

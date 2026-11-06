@@ -1,0 +1,13 @@
+{
+ "note": "fix23d: French nouns a line may use for a stage prop (D1-11). Every on-stage prop named by one of these nouns must resolve through props.json fr_aliases (tests/stg22c/fix23d.test.mjs). not_this_prop: a noun in that line that names a different object.",
+ "nouns": {
+  "door_home_closed": ["porte"], "door_home_open": ["porte"], "door_neighbour_open": ["porte"], "door_neighbour_closed": ["porte"], "roof_door_closed": ["porte"], "roof_door_open": ["porte"],
+  "phone": ["téléphone", "portable"], "desk_bare": ["bureau"], "wall_calendar": ["calendrier"], "paper_bag": ["sac", "sachet"], "cup": ["tasse"],
+  "toast_plate": ["tartine", "tartines", "assiette"], "milk": ["lait"], "cat_bowl": ["gamelle"], "jam_jar": ["confiture"], "card": ["carte"],
+  "key_door": ["clé", "clef"], "key_ribbon_floor": ["clé", "ruban"], "jacket_hook": ["veste", "manteau"], "key_hooks_empty": ["crochet", "crochets"], "key_hooks_flat": ["crochet", "crochets"],
+  "minuterie_on": ["minuterie"], "minuterie_off": ["minuterie"], "paw_print": ["trace", "traces"], "ham_slice": ["jambon"], "cat_flap": ["chatière"], "teapot": ["théière"], "glove_on_chair": ["gant"],
+  "arrosoir": ["arrosoir"], "key_old": ["clé"], "key_old_table": ["clé"], "pot_chez_nous_full": ["plante"], "pot_chez_nous_newleaf": ["plante"], "basil_pot": ["basilic"],
+  "paper_pen": ["liste"], "paper_pen_table": ["liste"], "butter_block": ["beurre"], "soup_pot": ["marmite", "casserole"], "onion": ["oignon", "oignons"], "spoon_wood": ["cuillère"], "laptop": ["ordi", "ordinateur"]
+ },
+ "not_this_prop": [{ "prop": "door_neighbour_closed", "fr_has": "petite porte, là-haut", "why": "« la petite porte, là-haut » is the roof door, not the neighbour's door" }]
+}

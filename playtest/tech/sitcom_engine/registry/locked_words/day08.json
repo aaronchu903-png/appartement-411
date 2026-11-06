@@ -1,0 +1,25 @@
+{
+ "day": 8,
+ "episode": "d08_la_cle_du_toit",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "une semaine",
+  "venez chez moi",
+  "à six heures",
+  "c’est gentil",
+  "le toit",
+  "le jardin",
+  "là-haut"
+ ],
+ "recognition": [
+  "la clé",
+  "la petite porte",
+  "allez-y",
+  "pas encore",
+  "pour moi ?",
+  "une question",
+  "depuis",
+  "attendre"
+ ]
+}

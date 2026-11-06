@@ -1,0 +1,1996 @@
+{
+ "registry_version": 1,
+ "scope": "words taught Days 1-10 plus locked episodes in registry/locked_words/ (max day 18)",
+ "built_by": "tools/build_wordlists.py",
+ "sources": {
+  "WORDLIST_W1-2_DRAFT": "/workspace/a411-team/strategy/WORDLIST_W1-2_DRAFT.md (Prof Neng, display days 1-10)",
+  "DAY10_BEATS": "/workspace/a411-team/day10/DAY10_BEATS.md wordlist line",
+  "ACT1_POTS": "/workspace/appartement-411/docs/ACT1_POTS.md (items whose status says met D1-D10 or W1)",
+  "locked_words": "registry/locked_words/dayNN.json (targets + recognition, added when an episode is locked)",
+  "SITCOM_BIBLE": "/workspace/a411-team/story/SITCOM_BIBLE.md §7 resolutions; bible §5 table = Day 11+ targets (not known before Day 11)"
+ },
+ "limitation": "form-level; inflected forms need registry/lexicon.json (TODO). Built-line vocabulary outside the wordlists is not included.",
+ "items": {
+  "Asseyez-vous. / Assieds-toi.": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Bienvenue chez nous !": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Bonjour !": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Bonne chance !": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Bonsoir !": {
+   "day": 6,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "C’est combien ?": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "C’est du basilic, pour la cuisine.": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "C’est mon appartement.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "C’est pour moi ?": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "C’est une bonne idée.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "D’accord.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Elle est seule.": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Enchanté(e) !": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Encore un peu ?": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Entrez !": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il est content. / Il n’est pas content.": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il est gentil.": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il fait froid.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il faut de l’eau.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il n’y a pas de croquettes.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il n’y a pas de pain.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il n’y a plus de lait.": {
+   "day": 10,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il pleut.": {
+   "day": 5,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il y a du bruit.": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Il y a une supérette au coin.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je cherche un bureau de poste.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je m’appelle…": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je ne sais pas.": {
+   "day": 3,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je prends ce… / ça.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je suis désolé(e).": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je suis étudiant(e).": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je vais acheter…": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je voudrais de l’eau.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je voudrais du café / du thé.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je voudrais du pain, s’il vous plaît.": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Je voudrais un sac de croquettes, s’il vous plaît.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "J’ai acheté du pain.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "J’ai faim !": {
+   "day": 10,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "J’ai fait du café.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "J’ai froid.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "J’ai mal à la tête.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "J’habite à Paris.": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Le lait, ça va dans le frigo.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Madame / Monsieur": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Merci !": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Merci, bonne journée !": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Moi aussi.": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Moi, c’est…": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "On mange à table.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Où est la station de métro ?": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Pardon.": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Pas de bruit la nuit.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Pas de nourriture sur le canapé.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Prenez, c’est pour vous.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Salut !": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "S’il vous plaît.": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Très drôle.": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Tu es nouveau / nouvelle ici ?": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Tu habites où ?": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Tu pourrais faire la vaisselle ?": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Tu t’appelles comment ?": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Tu veux du thé ou du café ?": {
+   "day": 2,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Vous avez vu… ?": {
+   "day": 6,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Vous pouvez m’indiquer… ?": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Vous pouvez répéter, s’il vous plaît ?": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "Vous voulez de la soupe ?": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "attendre": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "aujourd’hui / demain / hier": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "avec plaisir": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "beaucoup de beurre": {
+   "day": 18,
+   "sources": [
+    "locked_words/day18 recognition"
+   ]
+  },
+  "bon appétit !": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "bonjour": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "ce n’est pas moi !": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "chaud": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "cher": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "chers": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "chez moi": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "chère": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "chères": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "comme ça": {
+   "day": 18,
+   "sources": [
+    "locked_words/day18 recognition"
+   ]
+  },
+  "coupe": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "couper": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "coupez": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "c’est combien ?": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "c’est gentil": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "c’est ma faute": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "c’est pour toi": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 targets"
+   ]
+  },
+  "c’est quoi, ça ?": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "c’est tout ?": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "c’est…": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "c’était à lui": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 recognition"
+   ]
+  },
+  "dans": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "dans un mois": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "depuis": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "derrière": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "doucement": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "locked_words/day11 targets"
+   ]
+  },
+  "déjà": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 targets"
+   ]
+  },
+  "délicieuse": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "délicieux": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "d’abord": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "d’abord… ensuite…": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "en haut / en bas": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "enchanté(e)": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "ensuite": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "envoie": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "envoyer": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "envoyé": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "et cher… ou chère": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "facile": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "faire la vaisselle": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "fait sécher": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "fermez bien les fenêtres": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 recognition"
+   ]
+  },
+  "gentil / gentille": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "goûter": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "goûtez !": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "hier": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "ici": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "il a chaud": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 recognition"
+   ]
+  },
+  "il est chaud": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "il fait beau": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "il fait froid": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "il faut que…": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "il faut…": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "il n’y a pas de…": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "il n’y a plus de…": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "il n’y en a plus": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 recognition"
+   ]
+  },
+  "il pleut": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "il y a du café chaud chez moi": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 recognition"
+   ]
+  },
+  "il y a…": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je cherche…": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je fais un gâteau": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 recognition"
+   ]
+  },
+  "je l’ai vu": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je m’appelle…": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je ne sais pas": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je n’ai pas compris": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je suis désolé(e)": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je suis rentré(e)": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je voudrais…, s’il vous plaît": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "je vous promets": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "j’ai faim": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "j’ai perdu…": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "j’ai trouvé…": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "j’espère que…": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "la boîte": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "la carte": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "la chaise": {
+   "day": 8,
+   "sources": [
+    "SITCOM_BIBLE §7 (Neng 10/25)"
+   ]
+  },
+  "la clé": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS",
+    "locked_words/day11 recognition"
+   ]
+  },
+  "la confiture": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 targets"
+   ]
+  },
+  "la cuisine": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "la famille": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "la farine": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "la fenêtre": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "la fin du mois": {
+   "day": 10,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "la lettre": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS",
+    "locked_words/day17 targets"
+   ]
+  },
+  "la liste": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "locked_words/day16 recognition"
+   ]
+  },
+  "la minuterie": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "la nuit": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "la photo": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "la plante": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "la poche": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "la porte": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "la propriétaire": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "la queue": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "la recette": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "la rue": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "la règle": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "la serviette": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "la soupe": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "la table": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "SITCOM_BIBLE §7 (Neng 10/25)"
+   ]
+  },
+  "la veste": {
+   "day": 5,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "la voisine": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "la voisine / le voisin": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "la vérité": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "le / la colocataire": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "le balcon": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "le basilic": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "le beurre": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS",
+    "SITCOM_BIBLE §7 (Neng 10/25)"
+   ]
+  },
+  "le bruit": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "le café": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "locked_words/day16 targets"
+   ]
+  },
+  "le café (lieu)": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "le canapé": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "le chat": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "le colis": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS",
+    "locked_words/day13 targets"
+   ]
+  },
+  "le frigo": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "le fromage": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "le gant": {
+   "day": 18,
+   "sources": [
+    "locked_words/day18 recognition"
+   ]
+  },
+  "le jardin": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "locked_words/day11 recognition"
+   ]
+  },
+  "le jeudi": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS",
+    "locked_words/day11 targets"
+   ]
+  },
+  "le kouign-amann": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 recognition"
+   ]
+  },
+  "le lait": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "le lit": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "le mari": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 recognition"
+   ]
+  },
+  "le matin / le soir / la nuit": {
+   "day": 4,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "le message": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "le pain": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "le palier": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 recognition"
+   ]
+  },
+  "le parapluie": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "le petit-déjeuner": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "le plateau": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "le radiateur": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "le sucre": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 targets"
+   ]
+  },
+  "le thé": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "locked_words/day16 targets"
+   ]
+  },
+  "le toit": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "locked_words/day14 recognition"
+   ]
+  },
+  "les cartes": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "les confitures": {
+   "day": 16,
+   "sources": [
+    "locked_words/day16 targets"
+   ]
+  },
+  "les croquettes": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "les feuilles": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "les jours (lundi… dimanche)": {
+   "day": 1,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "les lettres": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "les nombres 1–10": {
+   "day": 3,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "les recettes": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "les serviettes": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "lire": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "lis": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "locataire": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 recognition"
+   ]
+  },
+  "là-haut": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "l’appartement (m.)": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "l’arrosoir (m.)": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "l’eau (f.)": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "l’enveloppe": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "l’escalier (m.)": {
+   "day": 5,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "l’oignon": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 targets"
+   ]
+  },
+  "merci": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "merci de m’avoir dit la vérité": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 recognition"
+   ]
+  },
+  "moins cher / trop cher": {
+   "day": 7,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "mouillé": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "mouillée": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "mouillés": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "on ne fait rien": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "on va faire attention": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "où est… ?": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "pains au chocolat": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "pardon": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "partage": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "partager": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "partagez": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "partagé": {
+   "day": 13,
+   "sources": [
+    "locked_words/day13 targets"
+   ]
+  },
+  "pas encore": {
+   "day": 18,
+   "sources": [
+    "locked_words/day18 recognition"
+   ]
+  },
+  "petit / petite": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "photos": {
+   "day": 12,
+   "sources": [
+    "locked_words/day12 targets"
+   ]
+  },
+  "prenez": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 recognition"
+   ]
+  },
+  "quand j’étais petit(e)": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "ranger": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 recognition"
+   ]
+  },
+  "rester": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "revenir": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "roux / rousse": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "samedi": {
+   "day": 1,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "sept heures et demie": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "souriez !": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS",
+    "locked_words/day12 targets"
+   ]
+  },
+  "sous": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "SITCOM_BIBLE §7 (Neng 10/25)"
+   ]
+  },
+  "sur": {
+   "day": 3,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "sur / sous la table": {
+   "day": 3,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "sèche": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "sèchent": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "sécher": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "séché": {
+   "day": 15,
+   "sources": [
+    "locked_words/day15 targets"
+   ]
+  },
+  "toujours": {
+   "day": 11,
+   "sources": [
+    "locked_words/day11 recognition"
+   ]
+  },
+  "tout droit": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "triste": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "tu habites ici depuis une semaine": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "tu pourrais… ?": {
+   "day": 9,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "tu veux… ?": {
+   "day": 2,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "un pain au chocolat": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "une boîte de…": {
+   "day": 3,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "une deuxième carte": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 recognition"
+   ]
+  },
+  "une feuille": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 targets"
+   ]
+  },
+  "une nouvelle feuille": {
+   "day": 14,
+   "sources": [
+    "locked_words/day14 recognition"
+   ]
+  },
+  "une photo": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "une question": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "une règle": {
+   "day": 9,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "une semaine": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "une équipe": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "venez chez moi": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "vous avez vu… ?": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "vous pouvez répéter ?": {
+   "day": 4,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "vous voulez… ?": {
+   "day": 7,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT"
+   ]
+  },
+  "À jeudi ! / À bientôt !": {
+   "day": 8,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "à bientôt": {
+   "day": 17,
+   "sources": [
+    "locked_words/day17 targets"
+   ]
+  },
+  "à côté de…": {
+   "day": 3,
+   "sources": [
+    "ACT1_POTS"
+   ]
+  },
+  "à droite": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "à gauche": {
+   "day": 6,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "à la fin du mois": {
+   "day": 10,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "DAY10_BEATS"
+   ]
+  },
+  "à six heures": {
+   "day": 8,
+   "sources": [
+    "WORDLIST_W1-2_DRAFT",
+    "ACT1_POTS"
+   ]
+  },
+  "ça colle": {
+   "day": 18,
+   "sources": [
+    "locked_words/day18 targets"
+   ]
+  }
+ },
+ "tokens": [
+  "1–10",
+  "abord",
+  "accord",
+  "acheter",
+  "acheté",
+  "appartement",
+  "appelle",
+  "appelles",
+  "appétit",
+  "arrosoir",
+  "asseyez-vous",
+  "assieds-toi",
+  "attendre",
+  "attention",
+  "aujourd'hui",
+  "balcon",
+  "bas",
+  "basilic",
+  "beau",
+  "beaucoup",
+  "beurre",
+  "bientôt",
+  "bienvenue",
+  "bonjour",
+  "bonne",
+  "bonsoir",
+  "boîte",
+  "bruit",
+  "bureau",
+  "café",
+  "canapé",
+  "carte",
+  "cartes",
+  "chaise",
+  "chance",
+  "chat",
+  "chaud",
+  "cher",
+  "cherche",
+  "chers",
+  "chocolat",
+  "chère",
+  "chères",
+  "clé",
+  "coin",
+  "colis",
+  "colle",
+  "colocataire",
+  "comme",
+  "compris",
+  "confiture",
+  "confitures",
+  "content",
+  "coupe",
+  "couper",
+  "coupez",
+  "croquettes",
+  "cuisine",
+  "côté",
+  "demain",
+  "demie",
+  "depuis",
+  "derrière",
+  "deuxième",
+  "dit",
+  "doucement",
+  "droit",
+  "droite",
+  "drôle",
+  "déjà",
+  "délicieuse",
+  "délicieux",
+  "désolé",
+  "eau",
+  "enchanté",
+  "ensuite",
+  "entrez",
+  "enveloppe",
+  "envoie",
+  "envoyer",
+  "envoyé",
+  "escalier",
+  "espère",
+  "facile",
+  "faim",
+  "faire",
+  "fais",
+  "fait",
+  "famille",
+  "farine",
+  "faut",
+  "faute",
+  "fenêtre",
+  "fenêtres",
+  "fermez",
+  "feuille",
+  "feuilles",
+  "fin",
+  "frigo",
+  "froid",
+  "fromage",
+  "gant",
+  "gauche",
+  "gentil",
+  "gentille",
+  "goûter",
+  "goûtez",
+  "gâteau",
+  "habite",
+  "habites",
+  "haut",
+  "heures",
+  "hier",
+  "idée",
+  "indiquer",
+  "jardin",
+  "jeudi",
+  "journée",
+  "jours",
+  "kouign-amann",
+  "lait",
+  "lettre",
+  "lettres",
+  "lire",
+  "lis",
+  "liste",
+  "lit",
+  "locataire",
+  "là-haut",
+  "mal",
+  "mange",
+  "mari",
+  "matin",
+  "merci",
+  "message",
+  "minuterie",
+  "moins",
+  "mois",
+  "mouillé",
+  "mouillée",
+  "mouillés",
+  "métro",
+  "nombres",
+  "nourriture",
+  "nouveau",
+  "nouvelle",
+  "nuit",
+  "oignon",
+  "pain",
+  "pains",
+  "palier",
+  "parapluie",
+  "pardon",
+  "paris",
+  "partage",
+  "partager",
+  "partagez",
+  "partagé",
+  "perdu",
+  "petit",
+  "petit-déjeuner",
+  "petite",
+  "peu",
+  "photo",
+  "photos",
+  "plaisir",
+  "plante",
+  "plateau",
+  "plaît",
+  "pleut",
+  "poche",
+  "porte",
+  "poste",
+  "pourrais",
+  "pouvez",
+  "prends",
+  "prenez",
+  "promets",
+  "propriétaire",
+  "question",
+  "queue",
+  "radiateur",
+  "ranger",
+  "recette",
+  "recettes",
+  "rentré",
+  "rester",
+  "revenir",
+  "rousse",
+  "roux",
+  "rue",
+  "règle",
+  "répéter",
+  "sac",
+  "sais",
+  "salut",
+  "samedi",
+  "semaine",
+  "sept",
+  "serviette",
+  "serviettes",
+  "seule",
+  "six",
+  "soir",
+  "soupe",
+  "souriez",
+  "station",
+  "sucre",
+  "supérette",
+  "sèche",
+  "sèchent",
+  "sécher",
+  "séché",
+  "table",
+  "thé",
+  "toit",
+  "toujours",
+  "tout",
+  "triste",
+  "trop",
+  "trouvé",
+  "tête",
+  "va",
+  "vais",
+  "vaisselle",
+  "venez",
+  "veste",
+  "veux",
+  "voisin",
+  "voisine",
+  "voudrais",
+  "voulez",
+  "vu",
+  "vérité",
+  "équipe",
+  "étudiant"
+ ]
+}

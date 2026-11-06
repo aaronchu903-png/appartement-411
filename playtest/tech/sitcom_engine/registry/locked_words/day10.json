@@ -1,0 +1,24 @@
+{
+ "day": 10,
+ "episode": "d10_le_jardin",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "c’est quoi, ça ?",
+  "il faut de l’eau",
+  "l’arrosoir",
+  "facile",
+  "triste",
+  "j’espère que",
+  "j’ai faim",
+  "il n’y a plus de",
+  "c’est tout ?"
+ ],
+ "recognition": [
+  "c’est nouveau",
+  "c’est beau, ici",
+  "un oignon",
+  "demain",
+  "doucement"
+ ]
+}

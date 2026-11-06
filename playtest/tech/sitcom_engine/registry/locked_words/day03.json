@@ -1,0 +1,25 @@
+{
+ "day": 3,
+ "episode": "d03_deux_colis",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "où est",
+  "il y a",
+  "sur",
+  "sous",
+  "dans",
+  "derrière",
+  "la table",
+  "la cuisine",
+  "le colis",
+  "une boîte"
+ ],
+ "recognition": [
+  "à côté de…",
+  "Je ne sais pas.",
+  "la chaise",
+  "Allô ?",
+  "Vite !"
+ ]
+}

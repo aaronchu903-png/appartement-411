@@ -1,0 +1,10 @@
+{
+ "registry_version": 2,
+ "modules": {
+  "learn_words": "M1 word card",
+  "review": "M2 Jardin, always optional",
+  "listening": "M3 replay + pick",
+  "dictation": "M3 dictation",
+  "output": "M4 Réplique, any attempt counts"
+ }
+}

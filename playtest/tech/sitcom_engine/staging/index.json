@@ -1,0 +1,4 @@
+{
+ "_note": "fix17: days with a staging file (dayN.json here). loader.js fetches dayN.json only for listed days; tests/stg22c/staging_index.test.mjs keeps this in sync with the directory.",
+ "days": [13]
+}

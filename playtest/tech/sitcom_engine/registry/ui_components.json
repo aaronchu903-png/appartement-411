@@ -1,0 +1,319 @@
+{
+  "version": 2,
+  "spec": "tech/UI_COMPONENTS.md",
+  "placeholder_art": false,
+  "manifest": "style/canonical/sets/ui_learning/manifest.json",
+  "scale": 2,
+  "design_viewport": { "width": 390, "height": 844 },
+  "x1_column": { "width_min": 180, "width_max": 215, "height": 422 },
+  "theme": "registry/ui_theme.json",
+  "legacy_aliases": {
+    "m2.exit": "ui.exit",
+    "m2.learn.toast": "ui.word_toast",
+    "m2.wordbook.icon": "ui.carnet_button",
+    "m2.review.entry": "ui.review_entry",
+    "m2.review.meter": "ui.water_meter",
+    "m2.review.options": "ui.review_option_row",
+    "m2.listen.controls": "ui.listen_controls",
+    "m2.listen.accent_bar": "ui.accent_bar",
+    "m2.output.mic": "ui.mic_button",
+    "m2.start.zero": "ui.start_choice_big",
+    "m2.start.placement": "ui.start_choice_small",
+    "m2.placement.result": "ui.placement_result",
+    "m2.export": "ui.btn_secondary"
+  },
+  "defs": {
+    "ui.panel": {
+      "states": ["idle"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 24 },
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.sheet_bottom": {
+      "states": ["idle", "open"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 0 },
+      "x1": { "w": 24, "h": 24 },
+      "textRects": [{ "role": "title", "x": 6, "y": 6, "w": 12, "h": 10, "maxChars": 28, "relative": "w" }],
+      "anchor": "bc",
+      "scale": 2
+    },
+    "ui.btn_primary": {
+      "states": ["idle", "pressed", "focus", "disabled"],
+      "nineSlice": { "l": 5, "t": 5, "r": 5, "b": 7 },
+      "x1": { "w": 24, "h": 28 },
+      "hit": { "w": 24, "h": 28 },
+      "textRects": [{ "role": "cta", "x": 6, "y": 7, "w": 12, "h": 14, "maxChars": 18, "relative": "w" }],
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.btn_secondary": {
+      "states": ["idle", "pressed", "focus", "disabled"],
+      "nineSlice": { "l": 5, "t": 5, "r": 5, "b": 7 },
+      "x1": { "w": 24, "h": 28 },
+      "hit": { "w": 24, "h": 28 },
+      "textRects": [{ "role": "cta", "x": 6, "y": 7, "w": 12, "h": 14, "maxChars": 22, "relative": "w" }],
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.btn_option_row": {
+      "states": ["idle", "pressed", "focus", "correct", "wrong", "near", "disabled"],
+      "nineSlice": { "l": 5, "t": 5, "r": 5, "b": 7 },
+      "x1": { "w": 24, "h": 28 },
+      "hit": { "w": 24, "h": 28 },
+      "textRects": [
+        { "role": "answer", "x": 8, "y": 7, "w": 16, "h": 14, "maxChars": 32, "relative": "w" }
+      ],
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.btn_icon": {
+      "states": ["idle", "pressed", "focus", "disabled", "active"],
+      "x1": { "w": 22, "h": 22 },
+      "hit": { "w": 22, "h": 22 },
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.exit": {
+      "states": ["idle", "pressed", "focus"],
+      "x1": { "w": 22, "h": 22 },
+      "hit": { "w": 22, "h": 22 },
+      "textRects": [{ "role": "exit", "x": 24, "y": 4, "w": 80, "h": 14, "maxChars": 22 }],
+      "anchor": "tl",
+      "scale": 2,
+      "screen": "top-left-safe"
+    },
+    "ui.pips": {
+      "states": ["todo", "current", "done_ok", "done_recast", "skipped"],
+      "x1": { "w": 6, "h": 6 },
+      "anchor": "tc",
+      "scale": 2
+    },
+    "ui.toast": {
+      "states": ["in", "idle", "out"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 18 },
+      "hit": { "w": 24, "h": 22 },
+      "textRects": [{ "role": "toast", "x": 20, "y": 3, "w": 24, "h": 12, "maxChars": 32, "relative": "w" }],
+      "anchor": "bc",
+      "scale": 2
+    },
+    "ui.word_toast": {
+      "states": ["in", "idle", "out"],
+      "extends": "ui.toast",
+      "icon": "ui.icon.leaf",
+      "textRects": [{ "role": "toast", "x": 20, "y": 3, "w": 24, "h": 12, "maxChars": 32, "relative": "w" }],
+      "anchor": "bc",
+      "scale": 2
+    },
+    "ui.recast_box": {
+      "states": ["idle", "near", "recast"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 24 },
+      "textRects": [
+        { "role": "user", "x": 6, "y": 4, "w": 12, "h": 12, "maxChars": 60, "relative": "w" },
+        { "role": "model", "x": 6, "y": 18, "w": 12, "h": 12, "maxChars": 60, "relative": "w" }
+      ],
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.accent_bar": {
+      "states": ["key_idle", "key_pressed"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 24 },
+      "hit": { "w": 20, "h": 22 },
+      "anchor": "bc",
+      "scale": 2,
+      "keys": ["é", "è", "à", "ç", "ê", "ô", "ù", "î", "'"]
+    },
+    "ui.text_field": {
+      "states": ["idle", "focus", "near", "correct", "recast", "disabled"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 24 },
+      "hit": { "w": 24, "h": 24 },
+      "textRects": [{ "role": "input", "x": 5, "y": 5, "w": 10, "h": 14, "maxChars": 40, "relative": "w" }],
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.top_bar": {
+      "states": ["idle"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 22 },
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.carnet_button": {
+      "states": ["idle", "pressed", "wiggle", "new-dot", "dimmed"],
+      "x1": { "w": 22, "h": 22 },
+      "hit": { "w": 22, "h": 22 },
+      "anchor": "bl",
+      "scale": 2
+    },
+    "ui.wordbook_card": {
+      "states": ["idle", "locked-preview", "open"],
+      "x1": { "w": 168, "h": 200 },
+      "textRects": [
+        { "role": "fr", "x": 8, "y": 8, "w": 120, "h": 16, "maxChars": 24 },
+        { "role": "gloss", "x": 8, "y": 28, "w": 156, "h": 12, "maxChars": 30 }
+      ],
+      "anchor": "c",
+      "scale": 2
+    },
+    "ui.card_picture_frame": {
+      "states": ["idle", "empty"],
+      "x1": { "w": 64, "h": 44 },
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.scene_thumb": {
+      "states": ["idle", "pressed", "focus", "newest"],
+      "x1": { "w": 40, "h": 27 },
+      "hit": { "w": 40, "h": 27 },
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.gender_pip": {
+      "states": ["m", "f", "none"],
+      "x1": { "w": 4, "h": 4 },
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.wordbook_list_row": {
+      "states": ["idle", "pressed", "grown", "due", "locked"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 4 },
+      "x1": { "w": 24, "h": 24 },
+      "hit": { "w": 24, "h": 24 },
+      "textRects": [{ "role": "fr", "x": 26, "y": 5, "w": 48, "h": 14, "maxChars": 24, "relative": "w" }],
+      "anchor": "tl",
+      "scale": 2
+    },
+    "ui.review_entry": {
+      "states": ["idle", "pressed", "disabled", "hidden_before_story"],
+      "extends": "ui.btn_primary",
+      "icon": "ui.icon.drop",
+      "textRects": [{ "role": "cta", "x": 20, "y": 7, "w": 26, "h": 14, "maxChars": 14, "relative": "w" }],
+      "hit": { "w": 24, "h": 28 },
+      "scale": 2
+    },
+    "ui.water_meter": {
+      "states": ["empty", "third", "twothird", "full", "glint"],
+      "x1": { "w": 92, "h": 14 },
+      "anchor": "tc",
+      "scale": 2
+    },
+    "ui.water_hop": {
+      "states": ["hop", "splash"],
+      "x1": { "w": 8, "h": 6 },
+      "scale": 2
+    },
+    "ui.review_item_frame": {
+      "states": ["recognition", "recall", "recast"],
+      "x1": { "w": 168, "h": 100 },
+      "textRects": [{ "role": "line", "x": 6, "y": 64, "w": 160, "h": 28, "maxChars": 70 }],
+      "anchor": "tc",
+      "scale": 2
+    },
+    "ui.review_option_row": {
+      "extends": "ui.btn_option_row",
+      "states": ["idle", "pressed", "correct", "recast", "disabled"]
+    },
+    "ui.review_end": {
+      "states": ["idle"],
+      "x1": { "w": 168, "h": 120 },
+      "textRects": [{ "role": "msg", "x": 8, "y": 8, "w": 156, "h": 24, "maxChars": 60 }],
+      "anchor": "c",
+      "scale": 2
+    },
+    "ui.listen_controls": {
+      "states": ["idle", "pressed", "playing", "slow-active"],
+      "anchor": "bc",
+      "scale": 2
+    },
+    "ui.dictation_gap": {
+      "extends": "ui.text_field",
+      "states": ["idle", "focus", "correct", "near", "recast"]
+    },
+    "ui.reply_note": {
+      "states": ["idle", "focus", "match", "recast"],
+      "x1": { "w": 24, "h": 24 },
+      "textRects": [{ "role": "reply", "x": 6, "y": 6, "w": 12, "h": 12, "maxChars": 80, "relative": "w" }],
+      "scale": 2
+    },
+    "ui.chunk_chip": {
+      "states": ["idle", "pressed", "placed", "disabled"],
+      "nineSlice": { "l": 4, "t": 4, "r": 4, "b": 6 },
+      "x1": { "w": 16, "h": 22 },
+      "hit": { "w": 16, "h": 22 },
+      "textRects": [{ "role": "chunk", "x": 4, "y": 5, "w": 8, "h": 12, "maxChars": 16, "relative": "w" }],
+      "scale": 2
+    },
+    "ui.chunk_slot": {
+      "states": ["empty", "filled", "focus"],
+      "x1": { "w": 16, "h": 22 },
+      "hit": { "w": 16, "h": 22 },
+      "scale": 2
+    },
+    "ui.mic_button": {
+      "states": ["idle", "pressed", "recording", "disabled"],
+      "x1": { "w": 40, "h": 40 },
+      "hit": { "w": 40, "h": 40 },
+      "anchor": "bc",
+      "scale": 2
+    },
+    "ui.record_compare": {
+      "states": ["model_idle", "model_pressed", "model_playing", "mine_idle", "mine_pressed", "mine_playing"],
+      "textRects": [{ "role": "cta", "x": 20, "y": 7, "w": 26, "h": 14, "maxChars": 10, "relative": "w" }],
+      "hit": { "w": 24, "h": 28 },
+      "scale": 2
+    },
+    "ui.start_choice_big": {
+      "states": ["idle", "pressed", "focus"],
+      "x1": { "w": 168, "h": 40 },
+      "hit": { "w": 168, "h": 40 },
+      "textRects": [{ "role": "cta", "x": 40, "y": 8, "w": 124, "h": 24, "maxChars": 18 }],
+      "scale": 2
+    },
+    "ui.start_choice_small": {
+      "states": ["idle", "pressed", "focus"],
+      "x1": { "w": 168, "h": 28 },
+      "hit": { "w": 168, "h": 28 },
+      "textRects": [{ "role": "cta", "x": 8, "y": 7, "w": 156, "h": 14, "maxChars": 32 }],
+      "scale": 2
+    },
+    "ui.name_field": {
+      "extends": "ui.text_field",
+      "states": ["idle", "focus", "disabled"],
+      "x1": { "w": 168, "h": 24 },
+      "hit": { "w": 168, "h": 24 },
+      "textRects": [{ "role": "input", "x": 5, "y": 5, "w": 162, "h": 14, "maxChars": 20 }]
+    },
+    "ui.placement_timer": {
+      "states": ["running", "low", "done"],
+      "x1": { "w": 60, "h": 6 },
+      "textRects": [{ "role": "timer", "x": 64, "y": 0, "w": 40, "h": 14, "maxChars": 14 }],
+      "anchor": "tr",
+      "scale": 2
+    },
+    "ui.placement_result": {
+      "states": ["idle"],
+      "x1": { "w": 168, "h": 150 },
+      "textRects": [
+        { "role": "day", "x": 8, "y": 48, "w": 156, "h": 18, "maxChars": 32 },
+        { "role": "eta", "x": 8, "y": 70, "w": 156, "h": 40, "maxChars": 160 },
+        { "role": "link", "x": 8, "y": 114, "w": 156, "h": 12, "maxChars": 24 }
+      ],
+      "anchor": "c",
+      "scale": 2
+    },
+    "ui.feedback_burst": {
+      "states": ["correct", "near"],
+      "x1": { "w": 16, "h": 16 },
+      "anchor": "c",
+      "scale": 2
+    },
+    "ui.asr_line": {
+      "not_built": true,
+      "note": "ASR OFF playtest"
+    }
+  }
+}

@@ -1,0 +1,1664 @@
+{
+ "registry_version": 3,
+ "props": {
+  "arrosoir": {
+   "fr_aliases": ["arrosoir"],
+   "sets": [
+    "rooftop",
+    "kitchen"
+   ],
+   "asset": "prop.arrosoir",
+   "notes": "kitchen (days_04_10): desk_arrosoir (157,118) ONLY with desk_bare (laptop off), or floor_arrosoir (186,136)"
+  },
+  "backsplash": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.backsplash",
+   "wallMounted": true
+  },
+  "bench": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.bench"
+  },
+  "box_front": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.box_front"
+  },
+  "box_open": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.box_open"
+  },
+  "cafetiere": {
+   "sets": [
+    "any"
+   ],
+   "asset": "day10/props/cafetiere_{0,1,2}.png",
+   "notes": "Day 10 pack (path fixed)",
+   "files": [
+    "day10/props/cafetiere_0.png",
+    "day10/props/cafetiere_1.png",
+    "day10/props/cafetiere_2.png"
+   ]
+  },
+  "card": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.card.any",
+   "insert": "text",
+   "insert_asset": "prop.insert_card.any"
+  },
+  "ceiling_bulb_off": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.ceiling_bulb_off"
+  },
+  "ceiling_bulb_on": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.ceiling_bulb_on"
+  },
+  "chairs": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.chairs"
+  },
+  "clock": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.clock",
+   "insert": "clock (fixed hands)"
+  },
+  "cornice": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.cornice"
+  },
+  "counter_sink": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.counter_sink"
+  },
+  "cup": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "handprop.cup"
+  },
+  "cushion": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.cushion"
+  },
+  "desk": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.desk",
+   "built_in": [
+    "laptop"
+   ],
+   "notes": "open laptop is part of prop.desk; never place handprop laptop on it (E-PROP-DUP)"
+  },
+  "desk_bare": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.desk_bare.any",
+   "source": "sitcom_d11_17 Rev 3.1 (atlas sitcom_rev3_sheet.png)",
+   "at": {
+    "x": 166,
+    "y": 131
+   },
+   "anchor": "baseline",
+   "swaps_with": "desk"
+  },
+  "door_home_closed": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.door_home_closed",
+   "wallMounted": true
+  },
+  "door_home_open": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.door_home_open",
+   "wallMounted": true
+  },
+  "door_neighbour_closed": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.door_neighbour_closed",
+   "wallMounted": true
+  },
+  "door_neighbour_open": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.door_neighbour_open",
+   "wallMounted": true
+  },
+  "doormat_home": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.doormat_home"
+  },
+  "doormat_plain": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.doormat_plain"
+  },
+  "envelope": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.envelope",
+   "insert": "text"
+  },
+  "flour_bag": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.flour_bag"
+  },
+  "frame": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.frame",
+   "wallMounted": true
+  },
+  "fridge": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.fridge"
+  },
+  "house_rules": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.house_rules",
+   "insert": "list",
+   "insert_asset": "prop.insert_rules_list.any"
+  },
+  "ivy": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.ivy"
+  },
+  "jam_jar": {
+   "fr_aliases": ["confiture", "le pot de confiture"],
+   "aim_box": {"w": 6, "h": 9, "ax": 3, "ay": 7, "note": "fix23d: days_01_03 manifest prop.jam_jar.any 6x9 anchor (3,7); relation framing measures it"},
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.jam_jar.any",
+   "default_mark": "table_top",
+   "source": "days_01_03 days_props2 (P0)"
+  },
+  "knife": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.knife"
+  },
+  "kouign_amann": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.kouign_amann.any",
+   "notes": "sitcom pack version only"
+  },
+  "kouign_part": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.kouign_part"
+  },
+  "landing_window": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.landing_window",
+   "wallMounted": true
+  },
+  "laptop": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.laptop",
+   "insert": "screen"
+  },
+  "laptop_closed": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.laptop_closed.any",
+   "source": "sitcom_d11_17 Rev 3.1 (atlas sitcom_rev3_sheet.png)"
+  },
+  "light_pole": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.light_pole"
+  },
+  "mailboxes": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.mailboxes"
+  },
+  "mailboxes_letter": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.mailboxes_letter",
+   "insert": "letter"
+  },
+  "milk": {
+   "fr_aliases": ["lait"],
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "handprop.milk"
+  },
+  "minuterie_off": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.minuterie_off"
+  },
+  "minuterie_on": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.minuterie_on"
+  },
+  "newspaper_folded": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.newspaper_folded.any",
+   "source": "sitcom_d11_17 Rev 3.1 (atlas sitcom_rev3_sheet.png)"
+  },
+  "newspaper_open": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.newspaper_open.any",
+   "source": "sitcom_d11_17 Rev 3.1 (atlas sitcom_rev3_sheet.png)",
+   "in_hand_only": true
+  },
+  "notice_board": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.notice_board",
+   "insert": "notice"
+  },
+  "onion": {
+   "fr_aliases": ["oignon", "oignons"],
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.onion"
+  },
+  "pain_choc": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.pain_choc"
+  },
+  "paper_bag": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.paper_bag.any"
+  },
+  "parapet": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.parapet"
+  },
+  "parcel": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.parcel",
+   "fr_aliases": [
+    "colis",
+    "boîte",
+    "boîtes",
+    "carton"
+   ],
+   "fr_aliases_note": "fix20 (Réalisateur): « colis/boîte » names the parcel when it is on stage; a named noun resolves against the props on stage in that scene (compile namedProps)."
+  },
+  "pastry_croissant": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.pastry_croissant"
+  },
+  "pendant_off": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.pendant_off"
+  },
+  "pendant_on": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.pendant_on"
+  },
+  "phone": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.phone",
+   "held_only": true,
+   "held_only_note": "fix22 F: handprop.phone is a 12x16 topleft-anchored in-hand sprite (no resting baseline); on a mark it hung off desk_top as a ghost rectangle (d1 v_reac L22-24). On stage it is drawn only when held; the screen insert shows it.",
+   "insert": "screen",
+   "insert_asset": "prop.insert_phone_chat",
+   "insert_prop": "insert_phone_chat"
+  },
+  "pipe_h": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.pipe_h"
+  },
+  "pipe_run": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.pipe_run"
+  },
+  "plant": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.plant"
+  },
+  "plant_landing": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.plant_landing"
+  },
+  "plate": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "handprop.plate"
+  },
+  "polaroid_frame": {
+   "sets": [
+    "any"
+   ],
+   "asset": "day10/props/polaroid_frame.png",
+   "notes": "Day 10 pack (path fixed)",
+   "insert": "photo",
+   "placeholder": true,
+   "placeholder_reason": "D12 photo insert stand-in (polaroid_full style-fail; sitcom photo insert is a gap)",
+   "replace_with": "sitcom-pack photo insert (ART_GAPS A)"
+  },
+  "pot_chez_nous_full": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_chez_nous_full"
+  },
+  "pot_chez_nous_sprout": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_chez_nous_sprout"
+  },
+  "pot_chez_nous_young": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_chez_nous_young"
+  },
+  "pot_round_empty": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_round_empty"
+  },
+  "pot_round_planted": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_round_planted"
+  },
+  "pot_tall_empty": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_tall_empty"
+  },
+  "pot_tall_planted": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.pot_tall_planted"
+  },
+  "puddle": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.puddle"
+  },
+  "radiator": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.radiator",
+   "default_mark": "radiator",
+   "use": "D15 kitchen radiator, wall slot (80,129), x72-87",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "roof_door_closed": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.roof_door_closed",
+   "wallMounted": true
+  },
+  "roof_door_open": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.roof_door_open",
+   "wallMounted": true
+  },
+  "shelf": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.shelf",
+   "wallMounted": true
+  },
+  "shoes": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.shoes"
+  },
+  "soup_pot": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.soup_pot"
+  },
+  "spoon_wood": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.spoon_wood"
+  },
+  "stairs": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.stairs"
+  },
+  "stairs_down": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.stairs_down"
+  },
+  "string_lights_off": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.string_lights_off"
+  },
+  "string_lights_on": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.string_lights_on"
+  },
+  "sugar_bowl": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.sugar_bowl"
+  },
+  "table": {
+   "relation_ref": {"fr": ["table"], "note": "fix23 (Réalisateur 2026-10-28 21:05 MT): « sur / sous la table » lines frame the table (incl. the space under it) and the related props first"},
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.table"
+  },
+  "tea_gold": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.tea_gold"
+  },
+  "tea_green": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.tea_green",
+   "placeholder": true,
+   "placeholder_reason": "teapot stand-in (manifest: 'replaces the tea_green tin stand-in')",
+   "replace_with": "teapot",
+   "placeholder_scope": "only when standing in for the teapot; as a tea tin it is canon"
+  },
+  "tea_plum": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.tea_plum"
+  },
+  "toast_plate": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.toast_plate.any",
+   "default_mark": "table_top",
+   "source": "days_01_03 days_props2 (P0)"
+  },
+  "towel_folded": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.towel_folded"
+  },
+  "towel_hang": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.towel_hang"
+  },
+  "tray": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.tray"
+  },
+  "trough_empty": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.trough_empty"
+  },
+  "trough_flowers": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.trough_flowers"
+  },
+  "trough_planted": {
+   "sets": [
+    "rooftop"
+   ],
+   "asset": "prop.trough_planted"
+  },
+  "umbrella": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.umbrella"
+  },
+  "upper_cabinets": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.upper_cabinets",
+   "wallMounted": true
+  },
+  "wall_calendar": {
+   "sets": [
+    "any"
+   ],
+   "insert": "calendar",
+   "source": "style/canonical/sets/days_01_03 days_props2 (Pixel P0 2026-10-27)",
+   "wallMounted": true,
+   "assets": {
+    "day": "prop.wall_calendar.day",
+    "evening": "prop.wall_calendar.evening",
+    "night": "prop.wall_calendar.night"
+   },
+   "default_mark": "wall_calendar"
+  },
+  "wall_lamp": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.wall_lamp",
+   "wallMounted": true
+  },
+  "window": {
+   "sets": [
+    "kitchen"
+   ],
+   "asset": "prop.window",
+   "wallMounted": true
+  },
+  "wine_bottle": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.wine_bottle"
+  },
+  "soup_bowl": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.soup_bowl.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "screen_send": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.screen_send.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08",
+   "insert": "screen",
+   "caption_rect": [
+    24,
+    19,
+    12,
+    5
+   ],
+   "caption_default": "Envoyer",
+   "caption_rect_source": "manifest buttonRect x0 24 y0 19 x1 35 y1 23"
+  },
+  "clock_midnight": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.clock_midnight.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08; the midnight kitchen look comes from light preset night (composite day11_kitchen_midnight is PENDING redo)",
+   "caption_rect": null,
+   "caption_rect_source": "null: too small (9x9); captions on it fail E-CAPTION-NO-RECT; use insert_clock_midnight"
+  },
+  "roof_steps": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.roof_steps.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "notice_sheet": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.notice_sheet.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "notice_insert": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.notice_insert.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08; blank sheet + pictogram, French as engine bubble",
+   "insert": "notice"
+  },
+  "butter_block": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.butter_block.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "dough_sheet": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.dough_sheet.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "dough_folded": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.dough_folded.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "rolling_pin": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.rolling_pin.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "glove_loose": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.glove_loose.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08 · Martin's glove (days_04_10 reuse)"
+  },
+  "paw_print": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.paw_print.any",
+   "notes": "Rev 4, approved by Croissant 2026-10-25 22:08"
+  },
+  "key_door": {
+   "fr_aliases": ["clé"],
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.key_door.any",
+   "notes": "Rev 4, whitelisted after Pixel redo mapping 2026-10-25 22:12"
+  },
+  "key_floor": {
+   "footprint": {
+    "w": 7,
+    "h": 2,
+    "ax": 3,
+    "ay": 1,
+    "note": "fix22 D: days_04_10 manifest prop.key_floor.any frame/anchorPoint; floor props yield to earlier floor props"
+   },
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.key_floor.any",
+   "notes": "Rev 4, whitelisted after Pixel redo mapping 2026-10-25 22:12"
+  },
+  "insert_key_slide": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_key_slide",
+   "frames": [
+    "prop.insert_key_slide.0",
+    "prop.insert_key_slide.1"
+   ],
+   "fps": 2,
+   "insert": "close",
+   "use": "cut_to close on:[insert_key_slide]; D11 hp_cle, hp_pieds (Lefèvre's hand slides the key across the table)",
+   "ref": "composites/phone_day11_key_slide_insert.gif",
+   "notes": "Rev 4.1, Croissant signed off 2026-10-25 22:15"
+  },
+  "insert_fold_dough": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_fold_dough",
+   "frames": [
+    "prop.insert_fold_dough.0",
+    "prop.insert_fold_dough.1",
+    "prop.insert_fold_dough.2"
+   ],
+   "durations_ms": [
+    600,
+    400,
+    500
+   ],
+   "insert": "close",
+   "use": "cut_to close on:[insert_fold_dough]; D18 fold. Dialogue: martin.stand + gloves overlay at stand_counter_r (medium)",
+   "notes": "Rev 4.1, Croissant signed off 2026-10-25 22:23"
+  },
+  "insert_parcel_label": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_parcel_label",
+   "insert": "close",
+   "caption_rect": [
+    13,
+    25,
+    34,
+    14
+   ],
+   "caption_rect_source": "manifest textRect",
+   "use": "D13 label « Mme Martin, Quimper » via caption; label lines removed (empty label + stamp)",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "insert_clock_midnight": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_clock_midnight",
+   "insert": "close",
+   "caption_rect": [
+    24,
+    31,
+    14,
+    8
+   ],
+   "caption_rect_source": "Pixel Studio",
+   "notes": "Pixel prefers NO caption on the face; use only if the beat needs « 00:00 » · Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "parcel_closed": {
+   "aim_box": {"w": 14, "h": 11, "ax": 7, "ay": 9, "note": "fix23: days_01_03 manifest prop.parcel_closed_table.any 14x11 anchor (7,9); relation framing measures it"},
+   "sets": [
+    "kitchen_table4"
+   ],
+   "asset": "prop.parcel_closed_table.any",
+   "default_mark": "table_parcel",
+   "use": "D13 closed parcel on table4 (cup/milk off for the beat)",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25; P0: table sprite prop.parcel_closed_table.any (never parcel_closed_floor on the table)",
+   "fr_aliases": [
+    "colis",
+    "boîte",
+    "boîtes",
+    "carton"
+   ],
+   "fr_aliases_note": "fix20 (Réalisateur): « colis/boîte » names the parcel when it is on stage; a named noun resolves against the props on stage in that scene (compile namedProps)."
+  },
+  "teapot": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "handprop.teapot",
+   "default_mark": "counter_top",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "cagnotte_jar": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.cagnotte_jar",
+   "default_mark": "counter_top_l",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "glove_on_chair": {
+   "sets": [
+    "kitchen_table4"
+   ],
+   "asset": "prop.glove_chair_back.any",
+   "default_mark": "chair_seat_l_glove",
+   "use": "Martin glove draped on table4 chair back (kitchen_chair_back_l 91,116 / kitchen_chair_back_r 145,116)",
+   "notes": "G-D7-GLOVE · days_04_10 prop.glove_chair_back.any"
+  },
+  "pot_chez_nous_newleaf": {
+   "sets": [
+    "rooftop"
+   ],
+   "assets": {
+    "day": "prop.pot_chez_nous_newleaf.day",
+    "evening": "prop.pot_chez_nous_newleaf.evening",
+    "night": "prop.pot_chez_nous_newleaf.night"
+   },
+   "size": [
+    18,
+    26
+   ],
+   "anchor": [
+    7,
+    25
+   ],
+   "swap_at": [
+    70,
+    134
+   ],
+   "use": "D14 swaps in for pot 1 Chez nous at (70,134); in the full rooftop pair with narrator « Une nouvelle feuille »",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "insert_new_leaf": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_new_leaf",
+   "frames": [
+    "prop.insert_new_leaf.0",
+    "prop.insert_new_leaf.1"
+   ],
+   "fps": 2,
+   "size": [
+    60,
+    58
+   ],
+   "insert": "close",
+   "use": "D14 2-frame glint close; pair with narrator « Une nouvelle feuille »",
+   "notes": "Rev 5/5.1, Croissant PASSED 2026-10-25 22:25"
+  },
+  "pot_desk_sprout": {
+   "aim_box": { "w": 10, "h": 17, "ax": 5, "ay": 15, "note": "fix22 E: days_01_03 manifest 10x17 anchor (5,15); aim only, no floor yield" },
+   "fr_aliases": ["plante", "la plante", "ta plante"],
+   "sets": [
+    "kitchen"
+   ],
+   "assets": {
+    "day": "prop.pot_desk_sprout.day",
+    "evening": "prop.pot_desk_sprout.evening",
+    "night": "prop.pot_desk_sprout.night"
+   },
+   "default_mark": "pot_desk",
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "pot ① « Chez nous » on the kitchen desk, 10x17 anchor (5,15), row 16 = desk contact shadow. Engine SKIPS the kitchen's drawn-in prop.plant (177,118) whenever any pot_desk_* is drawn. Stage by day (Le Réalisateur 2026-10-26): sprout D1–4, young D5–7 (first watering D7), full only from the D8 morning open (surprise; never full before the first review). From D8 pot ① lives on the rooftop (pot_chez_nous_*)."
+  },
+  "pot_desk_young": {
+   "aim_box": { "w": 10, "h": 17, "ax": 5, "ay": 15, "note": "fix22 E: days_01_03 manifest 10x17 anchor (5,15); aim only, no floor yield" },
+   "fr_aliases": ["plante", "la plante", "ta plante"],
+   "sets": [
+    "kitchen"
+   ],
+   "assets": {
+    "day": "prop.pot_desk_young.day",
+    "evening": "prop.pot_desk_young.evening",
+    "night": "prop.pot_desk_young.night"
+   },
+   "default_mark": "pot_desk",
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "pot ① « Chez nous » on the kitchen desk, 10x17 anchor (5,15), row 16 = desk contact shadow. Engine SKIPS the kitchen's drawn-in prop.plant (177,118) whenever any pot_desk_* is drawn. Stage by day (Le Réalisateur 2026-10-26): sprout D1–4, young D5–7 (first watering D7), full only from the D8 morning open (surprise; never full before the first review). From D8 pot ① lives on the rooftop (pot_chez_nous_*)."
+  },
+  "pot_desk_full": {
+   "aim_box": { "w": 10, "h": 17, "ax": 5, "ay": 15, "note": "fix22 E: days_01_03 manifest 10x17 anchor (5,15); aim only, no floor yield" },
+   "fr_aliases": ["plante", "la plante", "ta plante"],
+   "sets": [
+    "kitchen"
+   ],
+   "assets": {
+    "day": "prop.pot_desk_full.day",
+    "evening": "prop.pot_desk_full.evening",
+    "night": "prop.pot_desk_full.night"
+   },
+   "default_mark": "pot_desk",
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "pot ① « Chez nous » on the kitchen desk, 10x17 anchor (5,15), row 16 = desk contact shadow. Engine SKIPS the kitchen's drawn-in prop.plant (177,118) whenever any pot_desk_* is drawn. Stage by day (Le Réalisateur 2026-10-26): sprout D1–4, young D5–7 (first watering D7), full only from the D8 morning open (surprise; never full before the first review). From D8 pot ① lives on the rooftop (pot_chez_nous_*)."
+  },
+  "parcel_closed_floor": {
+   "footprint": { "w": 16, "h": 11, "ax": 8, "ay": 9, "note": "fix21 A2: days_01_03 manifest prop.parcel_closed_floor 16x11 anchor (8,9); lets scene spots clear it" },
+    "sets": [
+    "kitchen",
+    "stairwell"
+   ],
+   "asset": "prop.parcel_closed_floor.any",
+   "default_mark": "floor_parcel",
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "16x11 anchor (8,9), baked floor shadow. Floor/doormat version; parcel_closed stays the table4 version. Marks: kitchen floor_parcel (60,136), stairwell doormat_home (78,132).",
+   "fr_aliases": [
+    "colis",
+    "boîte",
+    "boîtes",
+    "carton"
+   ],
+   "fr_aliases_note": "fix20 (Réalisateur): « colis/boîte » names the parcel when it is on stage; a named noun resolves against the props on stage in that scene (compile namedProps)."
+  },
+  "parcel_pair": {
+   "sets": [
+    "kitchen",
+    "stairwell"
+   ],
+   "asset": "prop.parcel_pair.any",
+   "default_mark": "floor_parcel",
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "22x11 anchor (11,9), two parcels with shadow in one piece (alternative to 2 instances of parcel_closed_floor).",
+   "fr_aliases": [
+    "colis",
+    "boîte",
+    "boîtes",
+    "carton"
+   ],
+   "fr_aliases_note": "fix20 (Réalisateur): « colis/boîte » names the parcel when it is on stage; a named noun resolves against the props on stage in that scene (compile namedProps)."
+  },
+  "box_cat": {
+   "replaces": ["parcel_closed_floor"],
+   "replaces_note": "fix23b (JINYI review 21:39 MT, d3 h_3of3 floating parcel): box_cat is Noé's cat-tree parcel (parcel_closed_floor, d3 a2 note « Noé's parcel (the cat tree) ») once opened; showing it removes the closed floor parcel (engine: sitcom-stage worldAtBeat).",
+   "fr_aliases": [
+    "boîte",
+    "boîtes",
+    "carton",
+    "colis"
+   ],
+   "sets": [
+    "kitchen"
+   ],
+   "assets": {
+    "back": "prop.box_cat_back.any",
+    "front": "prop.box_cat_front.any"
+   },
+   "default_mark": "floor",
+   "footprint": {
+    "w": 18,
+    "h": 12,
+    "ax": 9,
+    "ay": 11,
+    "note": "box_cat_back/front and croissant.in_box.* are all 18x12 anchor (9,11) (days_01_03 manifest); used to aim/contain the close."
+   },
+   "close_frame": {
+    "sole_frac": 0.78,
+    "max_sole_frac": 0.82,
+    "top_margin_px": 4,
+    "source": "Réalisateur 2026-10-27 22:14 America/Edmonton d3_b_boite steering: framing lives in the registry/preset crop, not the story JSON"
+   },
+   "scene_spots_note": "fix19b (Réalisateur ruling 1, 2026-10-28): per-scene marks keyed <day>/<scene id> -> set -> mark, used as-is; x154 (furniture slide of the floor spot) stands as the d3 b_boite mark; other scenes keep spots + the props-yield-to-feet rule unless listed here",
+   "scene_spots": {
+    "3/hook": {
+     "kitchen": {
+      "floor": {
+       "x": 58,
+       "y": 136,
+       "note": "fix21 (Réalisateur 11:10): on Camille's floor line y136 (same depth/scale); the furniture clear slides it along x | ruling 4 d3 h#3: box (cat inside) on the floor beside Camille (stand_mid x80, feet 72..87), left of her, 5px clear; TV/desk on the right may drop | fix20: y141->y148 (rect y137..148), clear of the counter footprint x22..70 y114..132"
+      }
+     }
+    },
+    "5/high_point": {
+     "kitchen": {
+      "floor": {
+       "x": 58,
+       "y": 136,
+       "note": "fix21 (Réalisateur 11:10): on Noé's floor line y136; the furniture clear slides it along x | ruling 4 d5 hp#1: box on the floor downstage beside Noé (stand_mid x80), fully visible, clear of his feet (story JSON casts only Noé + Croissant in high_point) | fix20: y141->y148 (rect y137..148), clear of the counter footprint x22..70 y114..132"
+      }
+     }
+    }
+   },
+   "spots": {
+    "kitchen": {
+     "floor": {
+      "x": 112,
+      "y": 141,
+      "note": "Réalisateur 2026-10-27 d3/h ruling: downstage on the floor IN FRONT of the table (table 96..140 x 120..132), fully visible; registry-level spot, not marks.json. x 105->112 (2026-10-27): at 105 the bbox (96..113) took chair_left's legs (93..102, rows 130-131) through the open flap; 112 -> bbox 103..120, clear of chairs and table legs (98-99, 136-137)."
+     }
+    }
+   },
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "18x12 anchor (9,11), same top-left (x-9,y-11). Draw order: back, cat (in_box), front. box_open (13x7) is too small for a cat. Kitchen only until placed on other sets."
+  },
+  "cat_bowl": {
+   "sets": [
+    "kitchen"
+   ],
+   "assets": {
+    "idle": "prop.cat_bowl.any",
+    "ripple": "prop.cat_bowl_ripple.any"
+   },
+   "default_mark": "floor_bowl",
+   "source": "style/canonical/sets/days_01_03/manifest.json",
+   "notes": "7x4 anchor (3,2). Drawn AFTER the cat. Ripple variant on drink frame .1. Cat feet at bowl x+5."
+  },
+  "insert_card": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_card.any",
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    8,
+    31,
+    44,
+    14
+   ],
+   "caption_lines": 2,
+   "caption_rect_source": "manifest textRect",
+   "notes": "60x58 topleft; no baked text",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "insert_phone_notif": {
+   "sets": [
+    "any"
+   ],
+   "assets": {
+    "day": "prop.insert_phone_notif.day",
+    "evening": "prop.insert_phone_notif.evening",
+    "night": "prop.insert_phone_notif.night"
+   },
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    19,
+    16,
+    29,
+    12
+   ],
+   "caption_rect_source": "manifest textRect",
+   "self_lit": true,
+   "graded": false,
+   "notes": "Pixel 2026-10-27 21:37 (c): phone screens are self-lit, never graded",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "insert_phone_chat": {
+   "sets": [
+    "any"
+   ],
+   "assets": {
+    "day": "prop.insert_phone_chat.day",
+    "evening": "prop.insert_phone_chat.evening",
+    "night": "prop.insert_phone_chat.night"
+   },
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    10,
+    21,
+    41,
+    22
+   ],
+   "name_rect": [
+    18,
+    5,
+    31,
+    5
+   ],
+   "caption_rect_source": "manifest textRect/nameRect",
+   "self_lit": true,
+   "graded": false,
+   "notes": "Pixel 2026-10-27 21:39: chat screen, one bubble per tap, sender name in nameRect; self-lit, never graded",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "insert_laptop_price": {
+   "sets": [
+    "any"
+   ],
+   "assets": {
+    "day": "prop.insert_laptop_price.day",
+    "evening": "prop.insert_laptop_price.evening",
+    "night": "prop.insert_laptop_price.night"
+   },
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    31,
+    25,
+    22,
+    13
+   ],
+   "caption_rects": {
+    "price": [
+     31,
+     25,
+     22,
+     13
+    ],
+    "name": [
+     31,
+     11,
+     22,
+     11
+    ]
+   },
+   "caption_rect_source": "manifest textRect (price); nameRect from NOTES.md (not in manifest)",
+   "image_slot": [
+    8,
+    12,
+    20,
+    27
+   ],
+   "image_overlays": [
+    "laptop_img_catfood",
+    "laptop_img_cattree"
+   ],
+   "self_lit": false,
+   "graded": true,
+   "notes": "gold buy button blank",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "laptop_img_catfood": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.laptop_img_catfood.any",
+   "overlay_of": "insert_laptop_price",
+   "notes": "20x27 topleft, drawn in image_slot",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "laptop_img_cattree": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.laptop_img_cattree.any",
+   "overlay_of": "insert_laptop_price",
+   "notes": "20x27 topleft, drawn in image_slot",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "insert_calendar": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_calendar.any",
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    7,
+    38,
+    46,
+    13
+   ],
+   "caption_lines": 2,
+   "caption_rect_source": "manifest textRect",
+   "notes": "D1 and D10",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "insert_rules_list": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_rules_list.any",
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    18,
+    13,
+    27,
+    36
+   ],
+   "caption_rect_source": "manifest textRect",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "insert_key_old": {
+   "sets": [
+    "any"
+   ],
+   "asset": "prop.insert_key_old.any",
+   "insert": "close",
+   "depth": 7,
+   "caption_rect": [
+    10,
+    44,
+    40,
+    10
+   ],
+   "caption_rect_source": "manifest textRect (optional caption)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_old": {
+   "fr_aliases": ["clé"],
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.key_old.any",
+   "notes": "hand 11x5 hp(1,1)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_old_table": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.key_old_table.any",
+   "default_mark": "table_top",
+   "notes": "11x6 baseline (5,4)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_ribbon": {
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.key_ribbon.any",
+   "notes": "hand 5x11; anchorPoint (2,10) = baseline at key bottom; handPoint (1,0) = ribbon top grip (Pixel confirmed 2026-10-26)",
+   "source": "style/canonical/sets/days_04_10/manifest.json",
+   "anchor": [
+    2,
+    10
+   ],
+   "hand_point": [
+    1,
+    0
+   ]
+  },
+  "key_ribbon_floor": {
+   "fr_aliases": ["clé"],
+   "footprint": {
+    "w": 11,
+    "h": 5,
+    "ax": 5,
+    "ay": 3,
+    "note": "fix22 D: days_04_10 manifest prop.key_ribbon_floor.any frame/anchorPoint; floor props yield to earlier floor props"
+   },
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.key_ribbon_floor.any",
+   "default_mark": "floor",
+   "notes": "11x5 baseline (5,3); slots floor (96,136), table_ribbon (112,119)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "sock_pile": {
+   "footprint": {
+    "w": 16,
+    "h": 10,
+    "ax": 8,
+    "ay": 8,
+    "note": "fix22 D: days_04_10 manifest prop.sock_pile.any frame/anchorPoint; floor props yield to earlier floor props"
+   },
+   "fr_aliases": [
+    "chaussette",
+    "chaussettes"
+   ],
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.sock_pile.any",
+   "default_mark": "floor_parcel",
+   "notes": "16x10 baseline (8,8) at kitchen floor (60,136); reads as socks only in close",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "jacket_hook": {
+   "fr_aliases": ["veste"],
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.jacket_hook.any",
+   "default_mark": "wall_jacket",
+   "notes": "10x16 topleft (4,0)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_hooks_empty": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.key_hooks_empty.any",
+   "default_mark": "wall_key_hooks",
+   "swaps_with": "key_hooks_*",
+   "notes": "13x17 topleft (6,0)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_hooks_flat": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.key_hooks_flat.any",
+   "default_mark": "wall_key_hooks",
+   "swaps_with": "key_hooks_*",
+   "notes": "13x17 topleft (6,0)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_hooks_old": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.key_hooks_old.any",
+   "default_mark": "wall_key_hooks",
+   "swaps_with": "key_hooks_*",
+   "notes": "13x17 topleft (6,0)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "key_hooks_both": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.key_hooks_both.any",
+   "default_mark": "wall_key_hooks",
+   "swaps_with": "key_hooks_*",
+   "notes": "13x17 topleft (6,0)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "basil_pot": {
+   "fr_aliases": ["basilic"],
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.basil_pot.any",
+   "default_mark": "counter_top_r",
+   "notes": "Noé's kitchen basil, 10x15 baseline (5,13). Desk plant from D8 on (bible) at pot_desk (177,118); engine skips drawn-in prop.plant like pot_desk_*. Never with pot_desk_* at once.",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "paper_pen": {
+   "fr_aliases": ["liste"],
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.paper_pen.any",
+   "notes": "hand 7x7 baseline (3,6)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "paper_pen_table": {
+   "fr_aliases": ["liste"],
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.paper_pen_table.any",
+   "default_mark": "table_paper",
+   "notes": "12x6 baseline (6,4)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "ham_pack": {
+   "sets": [
+    "kitchen",
+    "kitchen_table4"
+   ],
+   "asset": "prop.ham_pack.any",
+   "default_mark": "table_ham",
+   "notes": "11x7 baseline (5,5); also counter_top_r",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "ham_slice": {
+   "fr_aliases": ["jambon"],
+   "sets": [
+    "any"
+   ],
+   "asset": "handprop.ham_slice.any",
+   "notes": "6x4; pink blob at stage scale",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "cat_flap": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.cat_flap.any",
+   "default_mark": "flap_neighbour",
+   "swaps_with": "cat_flap_open",
+   "notes": "7x5 baseline (3,4)",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  },
+  "cat_flap_open": {
+   "sets": [
+    "stairwell"
+   ],
+   "asset": "prop.cat_flap_open.any",
+   "default_mark": "flap_neighbour",
+   "swaps_with": "cat_flap",
+   "source": "style/canonical/sets/days_04_10/manifest.json"
+  }
+ },
+ "overlays": {
+  "noe": [
+   "apron_towel",
+   "apron_towel_sit",
+   "flour",
+   "tears"
+  ],
+  "lefevre": [
+   "glasses"
+  ],
+  "croissant": [
+   "flour"
+  ]
+ },
+ "fx": [
+  "rain_window_kitchen",
+  "rain_window_stairwell"
+ ],
+ "todo_missing_art": [],
+ "art_gaps": [
+  "beurre (butter block)",
+  "rolling_pin",
+  "glove (Martin)",
+  "croissant overlays paw_print, sugar_crystal",
+  "key (la clé, style-B handprop)"
+ ],
+ "rev3_1_added": {
+  "wall_calendar": "kitchen nail (120,74)",
+  "laptop_closed": "table4 (108,119), desk_bare (165,119)",
+  "newspaper_folded": "table4 (128,119)",
+  "newspaper_open": "hand only",
+  "desk_bare": "replaces prop.desk when laptop closed/off desk"
+ },
+ "style_fail": {
+  "polaroid_full": "day10/props/polaroid_full.png: style-fail (Pixel review); not whitelisted. D12 photo insert needs a sitcom-pack photo (gap)",
+  "kouign_amann (old)": "boulangerie/bo/kouign_amann.png: style-fail; use sitcom pack handprop.kouign_amann.any",
+  "social-pack kitchen props": "/workspace/a411-social/props/* (beurre, farine, assiette, oignon, casserole...): style-fail; use sitcom pack handprops (onion, flour_bag, soup_pot, butter_block Rev 4...)"
+ },
+ "rev4_added": [
+  "soup_bowl",
+  "screen_send",
+  "clock_midnight",
+  "roof_steps",
+  "notice_sheet",
+  "notice_insert",
+  "butter_block",
+  "dough_sheet",
+  "dough_folded",
+  "rolling_pin",
+  "glove_loose",
+  "paw_print",
+  "key_door",
+  "key_floor",
+  "insert_key_slide",
+  "insert_fold_dough"
+ ],
+ "rev4_pending_redo": {},
+ "deprecated": {
+  "martin.fold_dough.0": "Rev 4.1: replaced by prop.insert_fold_dough (pending) + martin at stand_counter_r",
+  "martin.fold_dough.1": "same",
+  "martin.fold_dough": "Rev 4.1: use insert_fold_dough + martin.stand/gloves",
+  "martin.pose.counter_reach": "Rev 5: reads as a waiter lifting a tray; use martin.stand + gloves overlay"
+ },
+ "floor_strips": {
+  "root": "style/canonical/sets/floor_strips/",
+  "attach": {
+   "x": 0,
+   "y": 144,
+   "w": 192,
+   "h": 32
+  },
+  "draw_order": "room → emitters → floor strip → cast → props → phone UI",
+  "sets": {
+   "kitchen": {
+    "grades": {
+     "day": "backdrop.kitchen_floor_strip.day",
+     "evening": "backdrop.kitchen_floor_strip.evening",
+     "night": "backdrop.kitchen_floor_strip.night"
+    },
+    "piece": "backdrop.kitchen_floor_strip.piece",
+    "files": "kitchen/x1/floor_strip_{grade}_x1.png",
+    "light_maps": "kitchen/light/{grade}_multiplier_half.png (+ night_add_half.png)"
+   },
+   "rooftop": {
+    "grades": {
+     "day": "backdrop.rooftop_floor_strip.day",
+     "evening": "backdrop.rooftop_floor_strip.evening",
+     "night": "backdrop.rooftop_floor_strip.night"
+    },
+    "piece": "backdrop.rooftop_floor_strip.piece",
+    "files": "rooftop/x1/floor_strip_{grade}_x1.png",
+    "light_maps": "rooftop/light/{grade}_multiplier_half.png (+ night_add_half.png)"
+   },
+   "stairwell": {
+    "grades": {
+     "day": "backdrop.stairwell_floor_strip.day",
+     "evening": "backdrop.stairwell_floor_strip.evening",
+     "night": "backdrop.stairwell_floor_strip.night"
+    },
+    "piece": "backdrop.stairwell_floor_strip.piece",
+    "files": "stairwell/x1/floor_strip_{grade}_x1.png",
+    "light_maps": "stairwell/light/{grade}_multiplier_half.png (+ night_add_half.png)"
+   }
+  },
+  "kitchen_table4": "uses kitchen strip",
+  "status": "Croissant-approved, active"
+ },
+ "rev5_added": [
+  "insert_parcel_label",
+  "insert_clock_midnight",
+  "parcel_closed",
+  "teapot",
+  "cagnotte_jar",
+  "radiator",
+  "glove_on_chair",
+  "pot_chez_nous_newleaf",
+  "insert_new_leaf"
+ ],
+ "placeholder_convention": "A prop with `placeholder: true` (plus placeholder_reason, replace_with, optional placeholder_scope) is a stand-in: allowed in dev captures, E-PLACEHOLDER in a release capture. `standin_uses` lists episode steps where a canonical prop stands in for missing art; they also fail E-PLACEHOLDER until re-staged (via staging/dayNN.json, not episode edits).",
+ "standin_uses": [
+  {
+   "episode": "day12",
+   "prop": "polaroid_frame",
+   "where": "photo insert steps (note 'stand-in')",
+   "replace_with": "sitcom photo insert (gap)"
+  },
+  {
+   "episode": "day13",
+   "prop": "house_rules",
+   "where": "close insert, new fridge note",
+   "replace_with": "fridge note insert (gap)"
+  },
+  {
+   "episode": "day16",
+   "prop": "tea_green",
+   "where": "show at counter_top as the teapot",
+   "replace_with": "teapot (Rev 5, whitelisted)"
+  },
+  {
+   "episode": "day18",
+   "prop": "plate",
+   "where": "table_top, 'plate = the butter stand-in'",
+   "replace_with": "butter_block (Rev 4, whitelisted)"
+  }
+ ],
+ "days_01_03_added": [
+  "pot_desk_sprout",
+  "pot_desk_young",
+  "pot_desk_full",
+  "parcel_closed_floor",
+  "parcel_pair",
+  "box_cat",
+  "cat_bowl"
+ ],
+ "days_04_10_added": [
+  "insert_card",
+  "insert_phone_notif",
+  "insert_laptop_price",
+  "laptop_img_catfood",
+  "laptop_img_cattree",
+  "insert_calendar",
+  "insert_rules_list",
+  "insert_key_old",
+  "key_old",
+  "key_old_table",
+  "key_ribbon",
+  "key_ribbon_floor",
+  "sock_pile",
+  "jacket_hook",
+  "key_hooks_empty",
+  "key_hooks_flat",
+  "key_hooks_old",
+  "key_hooks_both",
+  "basil_pot",
+  "paper_pen",
+  "paper_pen_table",
+  "ham_pack",
+  "ham_slice",
+  "cat_flap",
+  "cat_flap_open"
+ ]
+}

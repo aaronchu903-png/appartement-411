@@ -1,0 +1,2086 @@
+{
+ "registry_version": 7,
+ "coords": "stage px 192x144, feetLine 136, backBase 131; anchors bottom-centre",
+ "provenance": "read = copied from a canonical file; inferred = Le CTO estimate, Pixel Studio to confirm",
+ "sets": {
+  "kitchen": {
+   "furniture": [
+    {
+     "id": "table",
+     "x0": 92,
+     "x1": 143,
+     "top": 118,
+     "bottom": 132,
+     "floor_props_beside": true,
+     "under": {"x0": 103, "x1": 132, "top": 123, "floor": 132, "note": "fix23b: clear floor between the legs (measured kitchen_table4 k4: legs x94-102 / x133-141, top underside row 122, legs end row 132). A prop a line places « sous la table » stands here (registry.propMarkCoords -> relation-place.js); it overrides floor_props_beside only for that prop."},
+     "beside_side": "right",
+     "beside_side_note": "fix19: left of the table (73..90) is stand_mid (x80), occupied in 39 box shots d3-d5; right (145..162) is stand_desk",
+     "source": "marks table_top: style/canonical/sets/kitchen/table 52x12 at (118,131), x92-143, top row y118/119",
+     "note": "fix19 (Réalisateur 2026-10-28 d3 b_set/b_action): a floor prop must never read as UNDER the table; a floor-prop spot whose footprint overlaps x0..x1 slides beside the table on its nearer side (1px gap). Engine: registry.resolvePropSpot."
+    },
+    {
+     "id": "counter",
+     "x0": 22,
+     "x1": 70,
+     "top": 114,
+     "bottom": 132,
+     "note": "fix20 (Réalisateur d3 h#3): kitchen counter footprint (dark at night). Not floor_props_beside; used by the scene_spot clearance rule (registry.clearSceneSpot): an authored scene spot may not overlap any furniture footprint."
+    }
+   ],
+   "stage": "style/canonical/sets/kitchen/stage_day_x1.png",
+   "cameras": {
+    "wide": {
+     "scale": 8,
+     "x": 2,
+     "y": 37,
+     "edge_ok": [
+      "cornice"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "medium": {
+     "scale": 12,
+     "x": 46,
+     "y": 70,
+     "edge_ok": [
+      "upper_cabinets",
+      "pendant_cord"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "close": {
+     "scale": 18,
+     "x": 72,
+     "y": 90,
+     "edge_ok": [
+      "pendant_cord",
+      "table",
+      "chair_m (right edge)"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    }
+   },
+   "marks": [
+    {
+     "id": "stand_fridge",
+     "kind": "mark",
+     "x": 24,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/kitchen/manifest.json stage.layout prop.fridge (12,131)",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "in front of / beside fridge; x inferred"
+    },
+    {
+     "id": "stand_counter_l",
+     "kind": "mark",
+     "x": 34,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/kitchen/README counter 48 wide at x46 (x22-70)",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "12px from stand_counter (46): never occupied at the same time as stand_counter (W-MARK-CROWD)"
+    },
+    {
+     "id": "stand_counter",
+     "kind": "mark",
+     "x": 46,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: prop.counter_sink 48 wide at (46,131) -> x22-70; centre",
+     "provenance": "confirmed",
+     "facing": "front",
+     "notes": "Day 11: the 5th diner eats standing here (SITCOM_D11_17_NOTES Bible restaging)"
+    },
+    {
+     "id": "stand_counter_r",
+     "kind": "mark",
+     "x": 62,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: counter right end x70; mark 8 px inside",
+     "provenance": "confirmed",
+     "facing": "left"
+    },
+    {
+     "id": "stand_mid",
+     "kind": "mark",
+     "x": 80,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: gap between counter end x70 and left chair x90",
+     "provenance": "confirmed",
+     "facing": "auto",
+     "notes": "no declared slot; still inferred"
+    },
+    {
+     "id": "stand_desk",
+     "kind": "mark",
+     "x": 154,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: prop.desk 32 wide at (166,131) -> x150-182; left edge",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "x150 overlapped the right chair"
+    },
+    {
+     "id": "stand_door_r",
+     "kind": "mark",
+     "x": 188,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; right frame exit",
+     "provenance": "confirmed",
+     "facing": "left",
+     "notes": "entry/exit only, half off stage; no say from here (E-SAY-AT-EXIT-MARK)"
+    },
+    {
+     "id": "seat_end_l",
+     "kind": "seat",
+     "x": 97,
+     "y": 125,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "right",
+     "pose": "sit_table_34",
+     "cat": {
+      "x": 95,
+      "y": 125,
+      "action": "sit",
+      "provenance": "derived",
+      "source": "chair at (95,131), 10x16 anchor (5,15), sitLine 9 -> seat surface y125 (SLOTS_table4_NOTES rev2); croissant.sit 14x12 feet anchor (6,11)",
+      "notes": "cat_action sit only, chair must be empty; cat 14 px on a 10 px seat overhangs 2 px each side: Pixel Studio to confirm"
+     }
+    },
+    {
+     "id": "seat_back_l",
+     "kind": "seat",
+     "x": 111,
+     "y": 122,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "front",
+     "pose": "sit_table"
+    },
+    {
+     "id": "seat_back_r",
+     "kind": "seat",
+     "x": 125,
+     "y": 122,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "front",
+     "pose": "sit_table"
+    },
+    {
+     "id": "seat_end_r",
+     "kind": "seat",
+     "x": 139,
+     "y": 125,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "left",
+     "pose": "sit_table_34",
+     "flip": true,
+     "cat": {
+      "x": 141,
+      "y": 125,
+      "action": "sit",
+      "provenance": "derived",
+      "source": "chair at (141,131), 10x16 anchor (5,15), sitLine 9 -> seat surface y125 (SLOTS_table4_NOTES rev2); croissant.sit 14x12 feet anchor (6,11)",
+      "notes": "cat_action sit only, chair must be empty; cat 14 px on a 10 px seat overhangs 2 px each side: Pixel Studio to confirm"
+     }
+    },
+    {
+     "id": "table_top",
+     "kind": "surface",
+     "x": 118,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/table 52x12 at (118,131), x92-143, top row y118/119; Rev 3.1 slots laptop_closed (108,119), newspaper_folded (128,119)",
+     "provenance": "confirmed",
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "laptop_closed",
+      "milk",
+      "newspaper_folded",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "toast_plate",
+      "tray",
+      "wine_bottle",
+      "key_door",
+      "key_floor",
+      "key_old_table"
+     ],
+     "notes": "cat allowed only at table ends (cat must not overlap a head)",
+     "spots": {
+      "plate_1": 103,
+      "plate_2": 111,
+      "plate_3": 125,
+      "plate_4": 133,
+      "cup": 116,
+      "milk": 120,
+      "laptop_closed": 108,
+      "newspaper_folded": 128
+     },
+     "clears": [
+      "table_cup",
+      "table_plate",
+      "table_milk"
+     ]
+    },
+    {
+     "id": "table_end_l",
+     "kind": "surface",
+     "x": 98,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); left end of table top",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ],
+     "notes": "overlaps seat_end_l head zone x92-101: cat ERROR if seat_end_l occupied",
+     "blocks_heads": true
+    },
+    {
+     "id": "table_end_r",
+     "kind": "surface",
+     "x": 136,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); right end of table top",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ],
+     "notes": "overlaps seat_end_r head x134-143: cat ERROR if seat_end_r occupied",
+     "blocks_heads": true
+    },
+    {
+     "id": "counter_top",
+     "kind": "surface",
+     "x": 60,
+     "y": 117,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/README counter 48x18 (14 px body) on backBase 131",
+     "provenance": "confirmed",
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "cagnotte_jar",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "key_door",
+      "key_floor",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "milk",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "teapot",
+      "toast_plate",
+      "tray",
+      "wine_bottle"
+     ],
+     "notes": "x46 was inside the sink (x40-51)"
+    },
+    {
+     "id": "desk_top",
+     "kind": "surface",
+     "x": 165,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); sitcom_d11_17 Rev 3.1 laptop_closed slots.kitchen_desk (165,119)",
+     "provenance": "confirmed",
+     "allows": [
+      "laptop",
+      "phone",
+      "plant",
+      "cup",
+      "card",
+      "envelope",
+      "cat",
+      "laptop_closed",
+      "newspaper_folded",
+      "key_door",
+      "key_floor"
+     ],
+     "spots": {
+      "laptop_closed": 165
+     },
+     "notes": "prop.desk = open laptop built in (never add handprop laptop: E-PROP-DUP). Closed laptop = swap prop.desk -> desk_bare, then laptop_closed at (165,119)"
+    },
+    {
+     "id": "desk_keyboard",
+     "kind": "surface",
+     "x": 163,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); sitcom_d11_17 manifest croissant.keyboard_idle onProp anchor (163,119)",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ],
+     "notes": "cat_action keyboard_idle only (2 fps, no floor shadow); desk must be prop.desk with the baked open laptop; 163 (cat) vs 165 (laptop_closed) intentional per review",
+     "shadow": false
+    },
+    {
+     "id": "shelf_top",
+     "kind": "surface",
+     "x": 90,
+     "y": 97,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest prop.shelf (90,100), 32 wide",
+     "provenance": "confirmed",
+     "allows": [
+      "cup",
+      "jam_jar",
+      "tea_green",
+      "tea_plum",
+      "tea_gold",
+      "sugar_bowl"
+     ],
+     "notes": "free columns only x88-91 and x74-75"
+    },
+    {
+     "id": "fridge_front",
+     "kind": "surface",
+     "x": 12,
+     "y": 110,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/kitchen/prop.house_rules? list on fridge",
+     "provenance": "confirmed",
+     "allows": [],
+     "notes": "cat not allowed; use fridge_top or floor"
+    },
+    {
+     "id": "floor",
+     "kind": "surface",
+     "x": 96,
+     "y": 136,
+     "source": "feetLine 136, full width",
+     "provenance": "read",
+     "allows": [
+      "cat",
+      "box_open",
+      "puddle",
+      "paper_bag",
+      "flour_bag",
+      "cushion",
+      "key_door",
+      "key_floor",
+      "box_cat",
+      "key_ribbon_floor"
+     ]
+    },
+    {
+     "id": "wall_calendar",
+     "kind": "surface",
+     "x": 126,
+     "y": 74,
+     "source": "sitcom_d11_17 Rev 3.1 prop.wall_calendar slots.kitchen nail (120,74)",
+     "provenance": "read",
+     "allows": [
+      "wall_calendar"
+     ],
+     "notes": "wall item; x116-124 y74-83 Moved 120->126 (Pixel P0 2026-10-27): pendant cord no longer crosses it; slot kitchen_wall_calendar.",
+     "bbox": {
+      "x0": 116,
+      "x1": 124,
+      "y0": 74,
+      "y1": 83
+     }
+    },
+    {
+     "id": "counter_top_l",
+     "provenance": "confirmed",
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25)",
+     "kind": "surface",
+     "x": 31,
+     "y": 117,
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "cagnotte_jar",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "key_door",
+      "key_floor",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "milk",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "teapot",
+      "toast_plate",
+      "tray",
+      "wine_bottle"
+     ]
+    },
+    {
+     "id": "fridge_top",
+     "provenance": "confirmed",
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25)",
+     "kind": "surface",
+     "x": 12,
+     "y": 102,
+     "allows": [
+      "cat",
+      "plant",
+      "cup",
+      "card"
+     ],
+     "notes": "top row 103; cat fits x6-19. Day 11 cold open: cat can lie here (not on fridge_front)"
+    },
+    {
+     "id": "counter_top_r",
+     "kind": "surface",
+     "x": 60,
+     "y": 117,
+     "alias_of": "counter_top",
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "cagnotte_jar",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "key_door",
+      "key_floor",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "milk",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "teapot",
+      "toast_plate",
+      "tray",
+      "wine_bottle",
+      "basil_pot",
+      "ham_pack"
+     ],
+     "provenance": "confirmed",
+     "source": "Pixel Studio Rev 5 handoff",
+     "notes": "right counter work area x52-67: board, dough, rolling pin, butter"
+    },
+    {
+     "id": "radiator",
+     "kind": "wall_slot",
+     "x": 80,
+     "y": 129,
+     "allows": [
+      "radiator"
+     ],
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes"
+    },
+    {
+     "id": "pot_desk",
+     "kind": "surface",
+     "x": 177,
+     "y": 118,
+     "source": "style/canonical/sets/days_01_03/manifest.json slot kitchen_desk (177,118)",
+     "provenance": "read",
+     "allows": [
+      "pot_desk_sprout",
+      "pot_desk_young",
+      "pot_desk_full",
+      "basil_pot"
+     ],
+     "notes": "x172–181 on the desk top; clear of laptop (~165) and desk_keyboard (163). Engine skips drawn-in prop.plant (177,118) while a pot_desk_* is shown. basil_pot from D8 (pot ① moved to the rooftop)."
+    },
+    {
+     "id": "desk_sleep",
+     "kind": "surface",
+     "x": 166,
+     "y": 119,
+     "source": "style/canonical/sets/days_01_03/manifest.json croissant.sleep_curl slot kitchen_desk (166,119)",
+     "provenance": "read",
+     "allows": [
+      "cat"
+     ],
+     "notes": "Day 1 sleep_curl only; desk must be desk_bare (166,131). Draw: desk_bare, pot_desk_sprout, cat."
+    },
+    {
+     "id": "floor_parcel",
+     "kind": "surface",
+     "x": 60,
+     "y": 136,
+     "source": "style/canonical/sets/days_01_03/manifest.json slot kitchen_floor (60,136)",
+     "provenance": "read",
+     "allows": [
+      "parcel_closed_floor",
+      "parcel_pair",
+      "sock_pile"
+     ]
+    },
+    {
+     "id": "floor_bowl",
+     "kind": "surface",
+     "x": 40,
+     "y": 136,
+     "source": "style/canonical/sets/days_01_03/manifest.json cat_bowl slot kitchen_floor (40,136)",
+     "provenance": "read",
+     "allows": [
+      "cat_bowl"
+     ],
+     "notes": "cat drink at x45 (bowl x+5), same y; bowl drawn after the cat"
+    },
+    {
+     "id": "floor_drink",
+     "kind": "surface",
+     "x": 45,
+     "y": 136,
+     "source": "style/canonical/sets/days_01_03/manifest.json cat feet = bowl x+5",
+     "provenance": "read",
+     "allows": [
+      "cat"
+     ],
+     "notes": "drink only"
+    },
+    {
+     "id": "desk_arrosoir",
+     "kind": "surface",
+     "x": 157,
+     "y": 118,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "arrosoir"
+     ],
+     "notes": "only when desk is desk_bare (laptop off)"
+    },
+    {
+     "id": "floor_arrosoir",
+     "kind": "surface",
+     "x": 186,
+     "y": 136,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "arrosoir"
+     ]
+    },
+    {
+     "id": "wall_jacket",
+     "kind": "wall_slot",
+     "x": 186,
+     "y": 82,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "jacket_hook"
+     ],
+     "notes": "topleft piece: anchor (4,0)"
+    },
+    {
+     "id": "wall_key_hooks",
+     "kind": "wall_slot",
+     "x": 172,
+     "y": 90,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "key_hooks_empty",
+      "key_hooks_flat",
+      "key_hooks_old",
+      "key_hooks_both"
+     ],
+     "notes": "topleft piece: anchor (6,0)"
+    },
+    {
+     "id": "table_ribbon",
+     "kind": "surface",
+     "x": 112,
+     "y": 119,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "key_ribbon_floor"
+     ]
+    },
+    {
+     "id": "table_paper",
+     "kind": "surface",
+     "x": 106,
+     "y": 119,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "paper_pen_table"
+     ]
+    },
+    {
+     "id": "table_ham",
+     "kind": "surface",
+     "x": 130,
+     "y": 119,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "ham_pack"
+     ]
+    },
+    {
+     "id": "kitchen_table_jam",
+     "kind": "surface",
+     "x": 112,
+     "y": 119,
+     "source": "days_01_03 manifest slot kitchen_table_jam (Pixel P0 2026-10-27)",
+     "provenance": "read",
+     "allows": [
+      "jam_jar"
+     ],
+     "clears": [
+      "table_cup",
+      "table_plate",
+      "table_milk"
+     ]
+    },
+    {
+     "id": "table_parcel",
+     "kind": "surface",
+     "x": 118,
+     "y": 119,
+     "allows": [
+      "parcel_closed",
+      "teapot",
+      "cagnotte_jar",
+      "box_open"
+     ],
+     "notes": "table centre (same table as kitchen_table4 table_top 118,119); cup/milk/plate off for the beat",
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes",
+     "clears": [
+      "table_cup",
+      "table_plate",
+      "table_milk"
+     ]
+    },
+    {
+     "id": "floor_calendar_watch",
+     "kind": "surface",
+     "x": 83,
+     "y": 136,
+     "provenance": "derived",
+     "source": "STG22C d1 h ruling (a): floor mark (96,136) slid -13 px; croissant.sit 14x12 anchor (6,11) -> opaque x78-89 y126-136; chair_left prop.chairs at (98,131) opaque x94-102 y116-131 -> min gap 4 px (>=3 required)",
+     "notes": "Croissant (he/him) stays on the floor, never on the chair; looks up at wall_calendar (x121-132 y74-86)"
+    }
+   ]
+  },
+  "kitchen_table4": {
+   "furniture": [
+    {
+     "id": "table",
+     "x0": 92,
+     "x1": 143,
+     "top": 118,
+     "bottom": 132,
+     "floor_props_beside": true,
+     "under": {"x0": 103, "x1": 132, "top": 123, "floor": 132, "note": "fix23b: clear floor between the legs (measured kitchen_table4 k4: legs x94-102 / x133-141, top underside row 122, legs end row 132). A prop a line places « sous la table » stands here (registry.propMarkCoords -> relation-place.js); it overrides floor_props_beside only for that prop."},
+     "beside_side": "right",
+     "beside_side_note": "fix19: left of the table (73..90) is stand_mid (x80), occupied in 39 box shots d3-d5; right (145..162) is stand_desk",
+     "source": "marks table_top: style/canonical/sets/kitchen/table 52x12 at (118,131), x92-143, top row y118/119",
+     "note": "fix19 (Réalisateur 2026-10-28 d3 b_set/b_action): a floor prop must never read as UNDER the table; a floor-prop spot whose footprint overlaps x0..x1 slides beside the table on its nearer side (1px gap). Engine: registry.resolvePropSpot."
+    },
+    {
+     "id": "counter",
+     "x0": 22,
+     "x1": 70,
+     "top": 114,
+     "bottom": 132,
+     "note": "fix20 (Réalisateur d3 h#3): kitchen counter footprint (dark at night). Not floor_props_beside; used by the scene_spot clearance rule (registry.clearSceneSpot): an authored scene spot may not overlap any furniture footprint."
+    }
+   ],
+   "stage": "style/canonical/sets/kitchen/stage_day_table4_x1.png",
+   "same_as": "kitchen",
+   "cameras": {
+    "wide": {
+     "scale": 8,
+     "x": 2,
+     "y": 37,
+     "edge_ok": [
+      "cornice"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "medium": {
+     "scale": 12,
+     "x": 73,
+     "y": 70,
+     "edge_ok": [
+      "upper_cabinets",
+      "pendant_cord"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "close": {
+     "scale": 18,
+     "x": 72,
+     "y": 90,
+     "edge_ok": [
+      "pendant_cord",
+      "table",
+      "chair_m (right edge)"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "medium_table4": {
+     "scale": 12,
+     "x": 68,
+     "y": 100,
+     "edge_ok": [
+      "upper_cabinets",
+      "pendant_cord"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    }
+   },
+   "marks": [
+    {
+     "id": "stand_fridge",
+     "kind": "mark",
+     "x": 24,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/kitchen/manifest.json stage.layout prop.fridge (12,131)",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "in front of / beside fridge; x inferred"
+    },
+    {
+     "id": "stand_counter_l",
+     "kind": "mark",
+     "x": 34,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/kitchen/README counter 48 wide at x46 (x22-70)",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "12px from stand_counter (46): never occupied at the same time as stand_counter (W-MARK-CROWD)"
+    },
+    {
+     "id": "stand_counter",
+     "kind": "mark",
+     "x": 46,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: prop.counter_sink 48 wide at (46,131) -> x22-70; centre",
+     "provenance": "confirmed",
+     "facing": "front",
+     "notes": "Day 11: the 5th diner eats standing here (SITCOM_D11_17_NOTES Bible restaging)"
+    },
+    {
+     "id": "stand_counter_r",
+     "kind": "mark",
+     "x": 62,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: counter right end x70; mark 8 px inside",
+     "provenance": "confirmed",
+     "facing": "left"
+    },
+    {
+     "id": "stand_mid",
+     "kind": "mark",
+     "x": 80,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: gap between counter end x70 and left chair x90",
+     "provenance": "confirmed",
+     "facing": "auto",
+     "notes": "no declared slot; still inferred"
+    },
+    {
+     "id": "stand_desk",
+     "kind": "mark",
+     "x": 154,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest.json layout: prop.desk 32 wide at (166,131) -> x150-182; left edge",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "x150 overlapped the right chair"
+    },
+    {
+     "id": "stand_door_r",
+     "kind": "mark",
+     "x": 188,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; right frame exit",
+     "provenance": "confirmed",
+     "facing": "left",
+     "notes": "entry/exit only, half off stage; no say from here (E-SAY-AT-EXIT-MARK)"
+    },
+    {
+     "id": "seat_end_l",
+     "kind": "seat",
+     "x": 97,
+     "y": 125,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "right",
+     "pose": "sit_table_34",
+     "cat": {
+      "x": 95,
+      "y": 125,
+      "action": "sit",
+      "provenance": "derived",
+      "source": "chair at (95,131), 10x16 anchor (5,15), sitLine 9 -> seat surface y125 (SLOTS_table4_NOTES rev2); croissant.sit 14x12 feet anchor (6,11)",
+      "notes": "cat_action sit only, chair must be empty; cat 14 px on a 10 px seat overhangs 2 px each side: Pixel Studio to confirm"
+     }
+    },
+    {
+     "id": "seat_back_l",
+     "kind": "seat",
+     "x": 111,
+     "y": 122,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "front",
+     "pose": "sit_table"
+    },
+    {
+     "id": "seat_back_r",
+     "kind": "seat",
+     "x": 125,
+     "y": 122,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "front",
+     "pose": "sit_table"
+    },
+    {
+     "id": "seat_end_r",
+     "kind": "seat",
+     "x": 139,
+     "y": 125,
+     "source": "style/canonical/sets/kitchen/SLOTS_table4_NOTES rev2",
+     "provenance": "read",
+     "facing": "left",
+     "pose": "sit_table_34",
+     "flip": true,
+     "cat": {
+      "x": 141,
+      "y": 125,
+      "action": "sit",
+      "provenance": "derived",
+      "source": "chair at (141,131), 10x16 anchor (5,15), sitLine 9 -> seat surface y125 (SLOTS_table4_NOTES rev2); croissant.sit 14x12 feet anchor (6,11)",
+      "notes": "cat_action sit only, chair must be empty; cat 14 px on a 10 px seat overhangs 2 px each side: Pixel Studio to confirm"
+     }
+    },
+    {
+     "id": "table_top",
+     "kind": "surface",
+     "x": 118,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/table 52x12 at (118,131), x92-143, top row y118/119; Rev 3.1 slots laptop_closed (108,119), newspaper_folded (128,119)",
+     "provenance": "confirmed",
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "laptop_closed",
+      "milk",
+      "newspaper_folded",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "toast_plate",
+      "tray",
+      "wine_bottle",
+      "key_door",
+      "key_floor",
+      "key_old_table"
+     ],
+     "notes": "cat allowed only at table ends (cat must not overlap a head)",
+     "spots": {
+      "plate_1": 103,
+      "plate_2": 111,
+      "plate_3": 125,
+      "plate_4": 133,
+      "cup": 116,
+      "milk": 120,
+      "laptop_closed": 108,
+      "newspaper_folded": 128
+     },
+     "clears": [
+      "table_cup",
+      "table_plate",
+      "table_milk"
+     ]
+    },
+    {
+     "id": "table_end_l",
+     "kind": "surface",
+     "x": 98,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); left end of table top",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ],
+     "notes": "overlaps seat_end_l head zone x92-101: cat ERROR if seat_end_l occupied",
+     "blocks_heads": true
+    },
+    {
+     "id": "table_end_r",
+     "kind": "surface",
+     "x": 136,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); right end of table top",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ],
+     "notes": "overlaps seat_end_r head x134-143: cat ERROR if seat_end_r occupied",
+     "blocks_heads": true
+    },
+    {
+     "id": "counter_top",
+     "kind": "surface",
+     "x": 60,
+     "y": 117,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/README counter 48x18 (14 px body) on backBase 131",
+     "provenance": "confirmed",
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "cagnotte_jar",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "key_door",
+      "key_floor",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "milk",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "teapot",
+      "toast_plate",
+      "tray",
+      "wine_bottle"
+     ],
+     "notes": "x46 was inside the sink (x40-51)"
+    },
+    {
+     "id": "desk_top",
+     "kind": "surface",
+     "x": 165,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); sitcom_d11_17 Rev 3.1 laptop_closed slots.kitchen_desk (165,119)",
+     "provenance": "confirmed",
+     "allows": [
+      "laptop",
+      "phone",
+      "plant",
+      "cup",
+      "card",
+      "envelope",
+      "cat",
+      "laptop_closed",
+      "newspaper_folded",
+      "key_door",
+      "key_floor"
+     ],
+     "spots": {
+      "laptop_closed": 165
+     },
+     "notes": "prop.desk = open laptop built in (never add handprop laptop: E-PROP-DUP). Closed laptop = swap prop.desk -> desk_bare, then laptop_closed at (165,119)"
+    },
+    {
+     "id": "desk_keyboard",
+     "kind": "surface",
+     "x": 163,
+     "y": 119,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); sitcom_d11_17 manifest croissant.keyboard_idle onProp anchor (163,119)",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ],
+     "notes": "cat_action keyboard_idle only (2 fps, no floor shadow); desk must be prop.desk with the baked open laptop; 163 (cat) vs 165 (laptop_closed) intentional per review",
+     "shadow": false
+    },
+    {
+     "id": "shelf_top",
+     "kind": "surface",
+     "x": 90,
+     "y": 97,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/kitchen/manifest prop.shelf (90,100), 32 wide",
+     "provenance": "confirmed",
+     "allows": [
+      "cup",
+      "jam_jar",
+      "tea_green",
+      "tea_plum",
+      "tea_gold",
+      "sugar_bowl"
+     ],
+     "notes": "free columns only x88-91 and x74-75"
+    },
+    {
+     "id": "fridge_front",
+     "kind": "surface",
+     "x": 12,
+     "y": 110,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/kitchen/prop.house_rules? list on fridge",
+     "provenance": "confirmed",
+     "allows": [],
+     "notes": "cat not allowed; use fridge_top or floor"
+    },
+    {
+     "id": "floor",
+     "kind": "surface",
+     "x": 96,
+     "y": 136,
+     "source": "feetLine 136, full width",
+     "provenance": "read",
+     "allows": [
+      "cat",
+      "box_open",
+      "puddle",
+      "paper_bag",
+      "flour_bag",
+      "cushion",
+      "key_door",
+      "key_floor",
+      "key_ribbon_floor"
+     ]
+    },
+    {
+     "id": "wall_calendar",
+     "kind": "surface",
+     "x": 126,
+     "y": 74,
+     "source": "sitcom_d11_17 Rev 3.1 prop.wall_calendar slots.kitchen nail (120,74)",
+     "provenance": "read",
+     "allows": [
+      "wall_calendar"
+     ],
+     "notes": "wall item; x116-124 y74-83 Moved 120->126 (Pixel P0 2026-10-27): pendant cord no longer crosses it; slot kitchen_wall_calendar.",
+     "bbox": {
+      "x0": 116,
+      "x1": 124,
+      "y0": 74,
+      "y1": 83
+     }
+    },
+    {
+     "id": "counter_top_l",
+     "provenance": "confirmed",
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25)",
+     "kind": "surface",
+     "x": 31,
+     "y": 117,
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "cagnotte_jar",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "key_door",
+      "key_floor",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "milk",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "teapot",
+      "toast_plate",
+      "tray",
+      "wine_bottle"
+     ]
+    },
+    {
+     "id": "fridge_top",
+     "provenance": "confirmed",
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25)",
+     "kind": "surface",
+     "x": 12,
+     "y": 102,
+     "allows": [
+      "cat",
+      "plant",
+      "cup",
+      "card"
+     ],
+     "notes": "top row 103; cat fits x6-19. Day 11 cold open: cat can lie here (not on fridge_front)"
+    },
+    {
+     "id": "counter_top_r",
+     "kind": "surface",
+     "x": 60,
+     "y": 117,
+     "alias_of": "counter_top",
+     "allows": [
+      "box_open",
+      "cafetiere",
+      "cagnotte_jar",
+      "card",
+      "cat",
+      "cup",
+      "envelope",
+      "flour_bag",
+      "jam_jar",
+      "key_door",
+      "key_floor",
+      "knife",
+      "kouign_amann",
+      "kouign_part",
+      "laptop",
+      "milk",
+      "onion",
+      "pain_choc",
+      "paper_bag",
+      "pastry_croissant",
+      "phone",
+      "plate",
+      "polaroid_frame",
+      "soup_pot",
+      "spoon_wood",
+      "sugar_bowl",
+      "tea_gold",
+      "tea_green",
+      "tea_plum",
+      "teapot",
+      "toast_plate",
+      "tray",
+      "wine_bottle",
+      "basil_pot",
+      "ham_pack"
+     ],
+     "provenance": "confirmed",
+     "source": "Pixel Studio Rev 5 handoff",
+     "notes": "right counter work area x52-67: board, dough, rolling pin, butter"
+    },
+    {
+     "id": "radiator",
+     "kind": "wall_slot",
+     "x": 80,
+     "y": 129,
+     "allows": [
+      "radiator"
+     ],
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes"
+    },
+    {
+     "id": "table_parcel",
+     "kind": "surface",
+     "x": 118,
+     "y": 119,
+     "allows": [
+      "parcel_closed",
+      "teapot",
+      "cagnotte_jar",
+      "box_open"
+     ],
+     "notes": "table centre; cup/milk off for the beat",
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes",
+     "clears": [
+      "table_cup",
+      "table_plate",
+      "table_milk"
+     ]
+    },
+    {
+     "id": "chair_seat_l_glove",
+     "kind": "surface",
+     "x": 91,
+     "y": 116,
+     "allows": [
+      "glove_on_chair",
+      "glove_loose"
+     ],
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes"
+    },
+    {
+     "id": "chair_seat_r_glove",
+     "kind": "surface",
+     "x": 145,
+     "y": 116,
+     "allows": [
+      "glove_on_chair",
+      "glove_loose"
+     ],
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes"
+    },
+    {
+     "id": "desk_arrosoir",
+     "kind": "surface",
+     "x": 157,
+     "y": 118,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "arrosoir"
+     ],
+     "notes": "only when desk is desk_bare (laptop off)"
+    },
+    {
+     "id": "floor_arrosoir",
+     "kind": "surface",
+     "x": 186,
+     "y": 136,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "arrosoir"
+     ]
+    },
+    {
+     "id": "wall_jacket",
+     "kind": "wall_slot",
+     "x": 186,
+     "y": 82,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "jacket_hook"
+     ],
+     "notes": "topleft piece: anchor (4,0)"
+    },
+    {
+     "id": "wall_key_hooks",
+     "kind": "wall_slot",
+     "x": 172,
+     "y": 90,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "key_hooks_empty",
+      "key_hooks_flat",
+      "key_hooks_old",
+      "key_hooks_both"
+     ],
+     "notes": "topleft piece: anchor (6,0)"
+    },
+    {
+     "id": "table_ribbon",
+     "kind": "surface",
+     "x": 112,
+     "y": 119,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "key_ribbon_floor"
+     ]
+    },
+    {
+     "id": "table_paper",
+     "kind": "surface",
+     "x": 106,
+     "y": 119,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "paper_pen_table"
+     ]
+    },
+    {
+     "id": "table_ham",
+     "kind": "surface",
+     "x": 130,
+     "y": 119,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "ham_pack"
+     ]
+    },
+    {
+     "id": "floor_parcel",
+     "kind": "surface",
+     "x": 60,
+     "y": 136,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "sock_pile",
+      "parcel_closed_floor",
+      "parcel_pair"
+     ]
+    },
+    {
+     "id": "kitchen_table_jam",
+     "kind": "surface",
+     "x": 112,
+     "y": 119,
+     "source": "days_01_03 manifest slot kitchen_table_jam (Pixel P0 2026-10-27)",
+     "provenance": "read",
+     "allows": [
+      "jam_jar"
+     ],
+     "clears": [
+      "table_cup",
+      "table_plate",
+      "table_milk"
+     ]
+    },
+    {
+     "id": "floor_calendar_watch",
+     "kind": "surface",
+     "x": 83,
+     "y": 136,
+     "provenance": "derived",
+     "source": "STG22C d1 h ruling (a): floor mark (96,136) slid -13 px; croissant.sit 14x12 anchor (6,11) -> opaque x78-89 y126-136; chair_left prop.chairs at (98,131) opaque x94-102 y116-131 -> min gap 4 px (>=3 required)",
+     "notes": "Croissant (he/him) stays on the floor, never on the chair; looks up at wall_calendar (x121-132 y74-86)"
+    }
+   ],
+   "notes": "same stage() and coordinates as kitchen (confirmed by Pixel review); medium_table4 k12 (73,56), view x73-162"
+  },
+  "rooftop": {
+   "stage": "style/canonical/sets/rooftop/stage_day_x1.png",
+   "cameras": {
+    "wide": {
+     "scale": 8,
+     "x": 2,
+     "y": 37,
+     "edge_ok": [
+      "tower_top"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "medium": {
+     "scale": 12,
+     "x": 20,
+     "y": 70,
+     "edge_ok": [
+      "building_tops",
+      "string_lights (right)",
+      "trough_flowers (right)"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "close": {
+     "scale": 18,
+     "x": 60,
+     "y": 90,
+     "edge_ok": [
+      "building_tops",
+      "string_lights (sides)"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    }
+   },
+   "marks": [
+    {
+     "id": "stand_roof_door",
+     "kind": "mark",
+     "x": 30,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/rooftop/SLOTS: roof_door (22,131) doorway slot (manifest layout says x30)",
+     "provenance": "confirmed",
+     "facing": "right",
+     "notes": "door x30 (DOOR_X=30, leaf x25-34); SLOTS_rooftop_NOTES rev1 table stale for door/pole/string lights/arrosoir/camera: use manifest"
+    },
+    {
+     "id": "stand_pot1",
+     "kind": "mark",
+     "x": 62,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/rooftop/pot_chez_nous at (70,134)",
+     "provenance": "confirmed",
+     "facing": "right"
+    },
+    {
+     "id": "stand_bench",
+     "kind": "mark",
+     "x": 120,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; beside bench",
+     "provenance": "confirmed",
+     "facing": "left"
+    },
+    {
+     "id": "stand_pots_r",
+     "kind": "mark",
+     "x": 152,
+     "y": 136,
+     "source": "REGISTRY_REVIEW_pixel.md addendum 2026-10-25; style/canonical/sets/rooftop/pots at 140-179",
+     "provenance": "confirmed",
+     "facing": "right"
+    },
+    {
+     "id": "crouch_pot1",
+     "kind": "mark",
+     "x": 84,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); C8 three crouched around pot 1",
+     "provenance": "confirmed",
+     "facing": "left",
+     "notes": "pose crouch_reach (Rev 4, approved)",
+     "pose": "crouch_reach",
+     "handprop": "arrosoir"
+    },
+    {
+     "id": "seat_bench_l",
+     "kind": "seat",
+     "x": 93,
+     "y": 124,
+     "source": "style/canonical/sets/rooftop/bench (100,131) anchor (15,12) seat_l (8,5) -> stage",
+     "provenance": "read",
+     "facing": "front",
+     "pose": "sit_front"
+    },
+    {
+     "id": "seat_bench_r",
+     "kind": "seat",
+     "x": 106,
+     "y": 124,
+     "source": "style/canonical/sets/rooftop/bench seat_r (21,5)",
+     "provenance": "read",
+     "facing": "front",
+     "pose": "sit_front"
+    },
+    {
+     "id": "bench_cat",
+     "kind": "surface",
+     "x": 100,
+     "y": 124,
+     "source": "style/canonical/sets/rooftop/bench cat slot (15,5)",
+     "provenance": "read",
+     "allows": [
+      "cat",
+      "tray",
+      "phone",
+      "pastry_croissant",
+      "pain_choc"
+     ],
+     "notes": "Day 14 cat asleep on tray"
+    },
+    {
+     "id": "parapet_top",
+     "kind": "surface",
+     "x": 120,
+     "y": 115,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/rooftop/parapet coping_top y116 for troughs/pots/cat",
+     "provenance": "confirmed",
+     "allows": [
+      "cat",
+      "pot_round_empty",
+      "pot_round_planted",
+      "trough_empty",
+      "trough_planted",
+      "trough_flowers"
+     ],
+     "notes": "alternative free coping x80-85"
+    },
+    {
+     "id": "floor",
+     "kind": "surface",
+     "x": 96,
+     "y": 136,
+     "source": "deck feetLine",
+     "provenance": "read",
+     "allows": [
+      "cat",
+      "arrosoir",
+      "pot_chez_nous_sprout",
+      "pot_chez_nous_young",
+      "pot_chez_nous_full",
+      "pot_round_empty",
+      "pot_round_planted",
+      "pot_tall_empty",
+      "pot_tall_planted",
+      "puddle",
+      "key_door",
+      "key_floor"
+     ]
+    },
+    {
+     "id": "roof_step_top",
+     "provenance": "confirmed",
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25)",
+     "kind": "surface",
+     "x": 30,
+     "y": 131,
+     "allows": [
+      "cat",
+      "stand",
+      "arrosoir",
+      "cushion"
+     ],
+     "notes": "on prop.roof_steps (Rev 4, approved)"
+    },
+    {
+     "id": "roof_step_low",
+     "provenance": "confirmed",
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25)",
+     "kind": "surface",
+     "x": 30,
+     "y": 133,
+     "allows": [
+      "cat",
+      "stand",
+      "arrosoir",
+      "cushion"
+     ],
+     "notes": "on prop.roof_steps (Rev 4, approved)"
+    },
+    {
+     "id": "pot_chez_nous",
+     "kind": "prop_slot",
+     "x": 70,
+     "y": 134,
+     "allows": [
+      "pot_chez_nous_newleaf"
+     ],
+     "notes": "pot 1 Chez nous; newleaf state swaps in here",
+     "provenance": "confirmed",
+     "source": "Pixel Rev 5 notes"
+    }
+   ],
+   "notes": "Door x30 per manifest + Pixel review. Roof steps = prop.roof_steps (Rev 4)."
+  },
+  "stairwell": {
+   "stage": "style/canonical/sets/stairwell/stage_day_x1.png",
+   "cameras": {
+    "wide": {
+     "scale": 8,
+     "x": 2,
+     "y": 37,
+     "edge_ok": [
+      "pipe",
+      "bulb_cord"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "medium": {
+     "scale": 12,
+     "x": 44,
+     "y": 70,
+     "edge_ok": [
+      "window",
+      "stairs",
+      "pipe",
+      "bulb_cord"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "close": {
+     "scale": 18,
+     "x": 60,
+     "y": 90,
+     "edge_ok": [
+      "door411_top",
+      "bulb_cord",
+      "bulb_cap"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    },
+    "close_stairs": {
+     "scale": 18,
+     "x": 84,
+     "y": 90,
+     "edge_ok": [
+      "door411_top",
+      "stairs",
+      "bulb_cord",
+      "bulb_cap"
+     ],
+     "source": "style/canonical/sets/floor_strips/HANDOFF_LeCTO.md"
+    }
+   },
+   "marks": [
+    {
+     "id": "stand_neighbour_door",
+     "kind": "mark",
+     "x": 22,
+     "y": 136,
+     "source": "style/canonical/sets/stairwell/door_neighbour (22,128) doorway slot",
+     "provenance": "read",
+     "facing": "front",
+     "notes": "Lefèvre's door; x read, feet y feetLine"
+    },
+    {
+     "id": "stand_home_door",
+     "kind": "mark",
+     "x": 78,
+     "y": 136,
+     "source": "style/canonical/sets/stairwell/door_home (78,128)",
+     "provenance": "read",
+     "facing": "front",
+     "notes": "door 411"
+    },
+    {
+     "id": "stand_mailboxes",
+     "kind": "mark",
+     "x": 54,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/stairwell/mailboxes (46,112) box_411 slot",
+     "provenance": "confirmed",
+     "facing": "back",
+     "notes": "x46 was cut in the medium"
+    },
+    {
+     "id": "stand_landing",
+     "kind": "mark",
+     "x": 93,
+     "y": 136,
+     "source": "SITCOM_D11_17_NOTES rev2: Noé x93 on landing",
+     "provenance": "read",
+     "facing": "right"
+    },
+    {
+     "id": "stand_radiator",
+     "kind": "mark",
+     "x": 104,
+     "y": 136,
+     "source": "style/canonical/sets/stairwell/radiator (104,127)",
+     "provenance": "read",
+     "facing": "auto"
+    },
+    {
+     "id": "stand_stairs_down",
+     "kind": "mark",
+     "x": 182,
+     "y": 128,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/stairwell/stairs_down top_step (26,18) + pos (156,110)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "notes": "arrivals from the street"
+    },
+    {
+     "id": "cat_landing",
+     "kind": "surface",
+     "x": 106,
+     "y": 136,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); SITCOM_D11_17_NOTES rev2: cat x106",
+     "provenance": "confirmed",
+     "allows": [
+      "cat"
+     ]
+    },
+    {
+     "id": "radiator_top",
+     "kind": "surface",
+     "x": 104,
+     "y": 114,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25); style/canonical/sets/stairwell/radiator 16x14 feet at y127",
+     "provenance": "confirmed",
+     "allows": [
+      "cat",
+      "towel_hang",
+      "towel_folded"
+     ],
+     "notes": "top pixel row 115; Day 15 cat lie"
+    },
+    {
+     "id": "doormat_home",
+     "kind": "surface",
+     "x": 78,
+     "y": 132,
+     "source": "style/canonical/sets/stairwell/doormat_home (78,132)",
+     "provenance": "read",
+     "allows": [
+      "box_open",
+      "card",
+      "cat",
+      "envelope",
+      "parcel",
+      "shoes",
+      "key_door",
+      "key_floor",
+      "parcel_closed_floor",
+      "parcel_pair"
+     ],
+     "notes": " ('note' has no prop: use card) · flap_in cat feet (78,132)"
+    },
+    {
+     "id": "doormat_neighbour",
+     "kind": "surface",
+     "x": 22,
+     "y": 131,
+     "source": "style/canonical/sets/stairwell/doormat_plain (22,131)",
+     "provenance": "read",
+     "allows": [
+      "card",
+      "cat",
+      "envelope",
+      "parcel",
+      "key_door",
+      "key_floor"
+     ],
+     "notes": "slide-under-door: card/envelope/note lie flat on the mat ('note' has no prop: use card)"
+    },
+    {
+     "id": "floor",
+     "kind": "surface",
+     "x": 96,
+     "y": 136,
+     "source": "feetLine 136",
+     "provenance": "read",
+     "allows": [
+      "cat",
+      "parcel",
+      "puddle",
+      "umbrella",
+      "shoes",
+      "box_open",
+      "key_door",
+      "key_floor"
+     ]
+    },
+    {
+     "id": "step_0",
+     "kind": "seat",
+     "x": 119,
+     "y": 126,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cushion",
+      "cat",
+      "parcel"
+     ],
+     "notes": "Day 14 reference: Lefèvre stands on step 0",
+     "stand_y": 125,
+     "seat": {
+      "x": 119,
+      "y": 123,
+      "on": "cushion"
+     }
+    },
+    {
+     "id": "step_1",
+     "kind": "seat",
+     "x": 125,
+     "y": 121,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cushion",
+      "cat",
+      "parcel",
+      "shoes"
+     ],
+     "notes": "cushion gag steps 1-3 only in close (cam x84-144); seated = seatPoint at (x+3, tread-3) on cushion; Day 14 runner: cushion on step N moves to step N+1 between beats (reference: step 2 in close)",
+     "stand_y": 120,
+     "seat": {
+      "x": 125,
+      "y": 118,
+      "on": "cushion"
+     }
+    },
+    {
+     "id": "step_2",
+     "kind": "seat",
+     "x": 131,
+     "y": 116,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cushion",
+      "cat",
+      "parcel",
+      "shoes"
+     ],
+     "notes": "cushion gag steps 1-3 only in close (cam x84-144); seated = seatPoint at (x+3, tread-3) on cushion; Day 14 runner: cushion on step N moves to step N+1 between beats (reference: step 2 in close)",
+     "stand_y": 115,
+     "seat": {
+      "x": 131,
+      "y": 113,
+      "on": "cushion"
+     }
+    },
+    {
+     "id": "step_3",
+     "kind": "seat",
+     "x": 137,
+     "y": 111,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cushion",
+      "cat",
+      "parcel",
+      "shoes"
+     ],
+     "notes": "cushion gag steps 1-3 only in close (cam x84-144); seated = seatPoint at (x+3, tread-3) on cushion; Day 14 runner: cushion on step N moves to step N+1 between beats (reference: step 2 in close)",
+     "stand_y": 110,
+     "seat": {
+      "x": 137,
+      "y": 108,
+      "on": "cushion"
+     }
+    },
+    {
+     "id": "step_4",
+     "kind": "mark",
+     "x": 143,
+     "y": 106,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "notes": "step 4+ falls off right edge at 18x",
+     "stand_y": 105
+    },
+    {
+     "id": "step_5",
+     "kind": "mark",
+     "x": 149,
+     "y": 101,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 100
+    },
+    {
+     "id": "step_6",
+     "kind": "mark",
+     "x": 155,
+     "y": 96,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 95
+    },
+    {
+     "id": "step_7",
+     "kind": "mark",
+     "x": 161,
+     "y": 91,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 90
+    },
+    {
+     "id": "step_8",
+     "kind": "mark",
+     "x": 167,
+     "y": 86,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 85
+    },
+    {
+     "id": "step_9",
+     "kind": "mark",
+     "x": 173,
+     "y": 81,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 80
+    },
+    {
+     "id": "step_10",
+     "kind": "mark",
+     "x": 179,
+     "y": 76,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 75
+    },
+    {
+     "id": "step_11",
+     "kind": "mark",
+     "x": 185,
+     "y": 71,
+     "source": "style/canonical/sets/REGISTRY_REVIEW_pixel.md (2026-10-25): x=119+6i, tread 126-5i, stand 125-5i, seat (x,123-5i) seatPoint (8,16)",
+     "provenance": "confirmed",
+     "facing": "left",
+     "allows": [
+      "cat"
+     ],
+     "stand_y": 70
+    },
+    {
+     "id": "stand_step1",
+     "kind": "mark",
+     "x": 125,
+     "y": 120,
+     "alias_of": "step_1 (standing)",
+     "source": "step formula x=119+6i, stand y=125-5i (Pixel confirmed formula)",
+     "provenance": "inferred-from-formula",
+     "facing": "left",
+     "allows": [
+      "lefevre",
+      "noe",
+      "camille",
+      "martin"
+     ],
+     "notes": "Lefèvre one step up (Day 13/14); step_1 is kind seat, this is its standing alias"
+    },
+    {
+     "id": "flap_home",
+     "kind": "surface",
+     "x": 78,
+     "y": 127,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "cat_flap",
+      "cat_flap_open"
+     ],
+     "notes": "in the home door, above doormat_home"
+    },
+    {
+     "id": "flap_neighbour",
+     "kind": "surface",
+     "x": 22,
+     "y": 127,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "cat_flap",
+      "cat_flap_open"
+     ]
+    },
+    {
+     "id": "flap_neighbour_cat",
+     "kind": "surface",
+     "x": 22,
+     "y": 132,
+     "source": "style/canonical/sets/days_04_10/manifest.json",
+     "provenance": "read",
+     "allows": [
+      "cat"
+     ],
+     "notes": "flap_in feet; doormat_neighbour is y131, manifest says y132 for the cat"
+    }
+   ]
+  }
+ }
+}

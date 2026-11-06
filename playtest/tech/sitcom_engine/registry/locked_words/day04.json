@@ -1,0 +1,19 @@
+{
+ "day": 4,
+ "episode": "d04_la_voisine",
+ "locked": "LOCKED 2026-10-26 (Croissant)",
+ "status": "final",
+ "targets": [
+  "pardon",
+  "vous pouvez répéter",
+  "je n’ai pas compris",
+  "je suis désolé",
+  "le bruit",
+  "la nuit",
+  "la voisine",
+  "c’est ma faute",
+  "une équipe",
+  "gentil"
+ ],
+ "recognition": []
+}
