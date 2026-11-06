@@ -1,0 +1,1488 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "kitchen_day": {
+   "file": "kitchen_day_sheet.png",
+   "w": 128,
+   "h": 196
+  },
+  "kitchen_evening": {
+   "file": "kitchen_evening_sheet.png",
+   "w": 128,
+   "h": 196
+  },
+  "kitchen_night": {
+   "file": "kitchen_night_sheet.png",
+   "w": 128,
+   "h": 196
+  }
+ },
+ "assets": {
+  "backdrop.kitchen.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 128
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "depth": 0,
+   "file": "pieces/day/backwall.png"
+  },
+  "backdrop.kitchen_floor.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 49,
+    "y": 154,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "depth": 0,
+   "file": "pieces/day/floor.png"
+  },
+  "prop.backsplash.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 0,
+    "y": 173,
+    "w": 48,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 24,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/backsplash.png"
+  },
+  "prop.window.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 0,
+    "y": 129,
+    "w": 28,
+    "h": 24
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 14,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/window.png"
+  },
+  "prop.shelf.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 0,
+    "y": 186,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/shelf.png"
+  },
+  "prop.fridge.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 85,
+    "y": 0,
+    "w": 16,
+    "h": 29
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 28
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/day/fridge.png"
+  },
+  "prop.counter_sink.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 0,
+    "y": 154,
+    "w": 48,
+    "h": 18
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 24,
+    "y": 17
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/day/counter_sink.png"
+  },
+  "prop.desk.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 29,
+    "y": 129,
+    "w": 32,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "cat": {
+     "x": 15,
+     "y": 6
+    },
+    "plant": {
+     "x": 27,
+     "y": 7
+    }
+   },
+   "file": "pieces/day/desk.png"
+  },
+  "prop.laptop.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 33,
+    "y": 186,
+    "w": 14,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/laptop.png"
+  },
+  "prop.plant.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 94,
+    "y": 173,
+    "w": 8,
+    "h": 11
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 10
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/day/plant.png"
+  },
+  "prop.table.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 49,
+    "y": 173,
+    "w": 44,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 22,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "sitLine": 2,
+   "slots": {
+    "top": {
+     "x": 22,
+     "y": 0
+    },
+    "back_l": {
+     "x": 15,
+     "y": 2
+    },
+    "back_r": {
+     "x": 29,
+     "y": 2
+    }
+   },
+   "sitNote": "sitLine = seat line of behind-table sitters (pose.sit_table); draw table AFTER them",
+   "file": "pieces/day/table.png"
+  },
+  "prop.chairs.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 114,
+    "y": 154,
+    "w": 10,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "mirror": "flip x for the facing chair",
+   "sitLine": 9,
+   "slots": {
+    "seat": {
+     "x": 7,
+     "y": 9
+    }
+   },
+   "file": "pieces/day/chairs.png"
+  },
+  "prop.pendant_on.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 65,
+    "y": 0,
+    "w": 9,
+    "h": 30
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "light": "lamp table_pendant",
+   "file": "pieces/day/pendant_on.png"
+  },
+  "prop.pendant_off.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 75,
+    "y": 0,
+    "w": 9,
+    "h": 30
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/pendant_off.png"
+  },
+  "prop.cornice.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 78,
+    "y": 186,
+    "w": 16,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "tile": "x",
+   "tileWidth": 16,
+   "file": "pieces/day/cornice.png"
+  },
+  "prop.upper_cabinets.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 62,
+    "y": 129,
+    "w": 48,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 24,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/upper_cabinets.png"
+  },
+  "prop.clock.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 57,
+    "y": 186,
+    "w": 9,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/clock.png"
+  },
+  "prop.house_rules.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 48,
+    "y": 186,
+    "w": 8,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/house_rules.png"
+  },
+  "prop.frame.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 67,
+    "y": 186,
+    "w": 10,
+    "h": 8
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 7
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/day/frame.png"
+  },
+  "handprop.milk.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 95,
+    "y": 186,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 3
+   },
+   "file": "pieces/day/milk.png"
+  },
+  "handprop.cup.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 100,
+    "y": 186,
+    "w": 5,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 1
+   },
+   "file": "pieces/day/cup.png"
+  },
+  "handprop.plate.day": {
+   "source": "atlas",
+   "atlas": "kitchen_day",
+   "frame": {
+    "x": 106,
+    "y": 186,
+    "w": 6,
+    "h": 2
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 1
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "file": "pieces/day/plate.png"
+  },
+  "backdrop.kitchen.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 128
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "depth": 0,
+   "file": "pieces/evening/backwall.png"
+  },
+  "backdrop.kitchen_floor.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 49,
+    "y": 154,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "depth": 0,
+   "file": "pieces/evening/floor.png"
+  },
+  "prop.backsplash.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 0,
+    "y": 173,
+    "w": 48,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 24,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/backsplash.png"
+  },
+  "prop.window.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 0,
+    "y": 129,
+    "w": 28,
+    "h": 24
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 14,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/window.png"
+  },
+  "prop.shelf.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 0,
+    "y": 186,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/shelf.png"
+  },
+  "prop.fridge.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 85,
+    "y": 0,
+    "w": 16,
+    "h": 29
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 28
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/evening/fridge.png"
+  },
+  "prop.counter_sink.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 0,
+    "y": 154,
+    "w": 48,
+    "h": 18
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 24,
+    "y": 17
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/evening/counter_sink.png"
+  },
+  "prop.desk.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 29,
+    "y": 129,
+    "w": 32,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "cat": {
+     "x": 15,
+     "y": 6
+    },
+    "plant": {
+     "x": 27,
+     "y": 7
+    }
+   },
+   "file": "pieces/evening/desk.png"
+  },
+  "prop.laptop.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 33,
+    "y": 186,
+    "w": 14,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/laptop.png"
+  },
+  "prop.plant.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 94,
+    "y": 173,
+    "w": 8,
+    "h": 11
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 10
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/evening/plant.png"
+  },
+  "prop.table.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 49,
+    "y": 173,
+    "w": 44,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 22,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "sitLine": 2,
+   "slots": {
+    "top": {
+     "x": 22,
+     "y": 0
+    },
+    "back_l": {
+     "x": 15,
+     "y": 2
+    },
+    "back_r": {
+     "x": 29,
+     "y": 2
+    }
+   },
+   "sitNote": "sitLine = seat line of behind-table sitters (pose.sit_table); draw table AFTER them",
+   "file": "pieces/evening/table.png"
+  },
+  "prop.chairs.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 114,
+    "y": 154,
+    "w": 10,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "mirror": "flip x for the facing chair",
+   "sitLine": 9,
+   "slots": {
+    "seat": {
+     "x": 7,
+     "y": 9
+    }
+   },
+   "file": "pieces/evening/chairs.png"
+  },
+  "prop.pendant_on.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 65,
+    "y": 0,
+    "w": 9,
+    "h": 30
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "light": "lamp table_pendant",
+   "file": "pieces/evening/pendant_on.png"
+  },
+  "prop.pendant_off.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 75,
+    "y": 0,
+    "w": 9,
+    "h": 30
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/pendant_off.png"
+  },
+  "prop.cornice.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 78,
+    "y": 186,
+    "w": 16,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "tile": "x",
+   "tileWidth": 16,
+   "file": "pieces/evening/cornice.png"
+  },
+  "prop.upper_cabinets.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 62,
+    "y": 129,
+    "w": 48,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 24,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/upper_cabinets.png"
+  },
+  "prop.clock.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 57,
+    "y": 186,
+    "w": 9,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/clock.png"
+  },
+  "prop.house_rules.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 48,
+    "y": 186,
+    "w": 8,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/house_rules.png"
+  },
+  "prop.frame.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 67,
+    "y": 186,
+    "w": 10,
+    "h": 8
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 7
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/evening/frame.png"
+  },
+  "handprop.milk.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 95,
+    "y": 186,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 3
+   },
+   "file": "pieces/evening/milk.png"
+  },
+  "handprop.cup.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 100,
+    "y": 186,
+    "w": 5,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 1
+   },
+   "file": "pieces/evening/cup.png"
+  },
+  "handprop.plate.evening": {
+   "source": "atlas",
+   "atlas": "kitchen_evening",
+   "frame": {
+    "x": 106,
+    "y": 186,
+    "w": 6,
+    "h": 2
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 1
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "file": "pieces/evening/plate.png"
+  },
+  "backdrop.kitchen.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 128
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "depth": 0,
+   "file": "pieces/night/backwall.png"
+  },
+  "backdrop.kitchen_floor.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 49,
+    "y": 154,
+    "w": 64,
+    "h": 16
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "tile": "x",
+   "depth": 0,
+   "file": "pieces/night/floor.png"
+  },
+  "prop.backsplash.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 0,
+    "y": 173,
+    "w": 48,
+    "h": 12
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 24,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/backsplash.png"
+  },
+  "prop.window.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 0,
+    "y": 129,
+    "w": 28,
+    "h": 24
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 14,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/window.png"
+  },
+  "prop.shelf.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 0,
+    "y": 186,
+    "w": 32,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/shelf.png"
+  },
+  "prop.fridge.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 85,
+    "y": 0,
+    "w": 16,
+    "h": 29
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 28
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/night/fridge.png"
+  },
+  "prop.counter_sink.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 0,
+    "y": 154,
+    "w": 48,
+    "h": 18
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 24,
+    "y": 17
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "file": "pieces/night/counter_sink.png"
+  },
+  "prop.desk.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 29,
+    "y": 129,
+    "w": 32,
+    "h": 20
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "slots": {
+    "cat": {
+     "x": 15,
+     "y": 6
+    },
+    "plant": {
+     "x": 27,
+     "y": 7
+    }
+   },
+   "file": "pieces/night/desk.png"
+  },
+  "prop.laptop.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 33,
+    "y": 186,
+    "w": 14,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/laptop.png"
+  },
+  "prop.plant.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 94,
+    "y": 173,
+    "w": 8,
+    "h": 11
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 10
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/night/plant.png"
+  },
+  "prop.table.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 49,
+    "y": 173,
+    "w": 44,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 22,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "sitLine": 2,
+   "slots": {
+    "top": {
+     "x": 22,
+     "y": 0
+    },
+    "back_l": {
+     "x": 15,
+     "y": 2
+    },
+    "back_r": {
+     "x": 29,
+     "y": 2
+    }
+   },
+   "sitNote": "sitLine = seat line of behind-table sitters (pose.sit_table); draw table AFTER them",
+   "file": "pieces/night/table.png"
+  },
+  "prop.chairs.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 114,
+    "y": 154,
+    "w": 10,
+    "h": 16
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 15
+   },
+   "pixelScale": 1,
+   "depth": 2,
+   "mirror": "flip x for the facing chair",
+   "sitLine": 9,
+   "slots": {
+    "seat": {
+     "x": 7,
+     "y": 9
+    }
+   },
+   "file": "pieces/night/chairs.png"
+  },
+  "prop.pendant_on.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 65,
+    "y": 0,
+    "w": 9,
+    "h": 30
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "light": "lamp table_pendant",
+   "file": "pieces/night/pendant_on.png"
+  },
+  "prop.pendant_off.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 75,
+    "y": 0,
+    "w": 9,
+    "h": 30
+   },
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/pendant_off.png"
+  },
+  "prop.cornice.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 78,
+    "y": 186,
+    "w": 16,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "tile": "x",
+   "tileWidth": 16,
+   "file": "pieces/night/cornice.png"
+  },
+  "prop.upper_cabinets.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 62,
+    "y": 129,
+    "w": 48,
+    "h": 20
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 24,
+    "y": 19
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/upper_cabinets.png"
+  },
+  "prop.clock.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 57,
+    "y": 186,
+    "w": 9,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/clock.png"
+  },
+  "prop.house_rules.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 48,
+    "y": 186,
+    "w": 8,
+    "h": 10
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 9
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/house_rules.png"
+  },
+  "prop.frame.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 67,
+    "y": 186,
+    "w": 10,
+    "h": 8
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 7
+   },
+   "pixelScale": 1,
+   "depth": 1,
+   "file": "pieces/night/frame.png"
+  },
+  "handprop.milk.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 95,
+    "y": 186,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 3
+   },
+   "file": "pieces/night/milk.png"
+  },
+  "handprop.cup.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 100,
+    "y": 186,
+    "w": 5,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 1
+   },
+   "file": "pieces/night/cup.png"
+  },
+  "handprop.plate.night": {
+   "source": "atlas",
+   "atlas": "kitchen_night",
+   "frame": {
+    "x": 106,
+    "y": 186,
+    "w": 6,
+    "h": 2
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 1
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "file": "pieces/night/plate.png"
+  }
+ },
+ "stage": {
+  "horizon": 128,
+  "feetLine": 136,
+  "backBase": 131,
+  "width": 192,
+  "height": 144,
+  "layout": [
+   {
+    "piece": "prop.backsplash",
+    "x": 46,
+    "y": 116
+   },
+   {
+    "piece": "prop.window",
+    "x": 46,
+    "y": 103
+   },
+   {
+    "piece": "prop.shelf",
+    "x": 90,
+    "y": 100
+   },
+   {
+    "piece": "prop.fridge",
+    "x": 12,
+    "y": 131
+   },
+   {
+    "piece": "prop.counter_sink",
+    "x": 46,
+    "y": 131
+   },
+   {
+    "piece": "prop.chairs",
+    "x": 98,
+    "y": 131
+   },
+   {
+    "piece": "prop.table",
+    "x": 118,
+    "y": 131
+   },
+   {
+    "piece": "prop.chairs",
+    "x": 138,
+    "y": 131,
+    "mirror": true
+   },
+   {
+    "piece": "handprop.cup",
+    "x": 112,
+    "y": 119
+   },
+   {
+    "piece": "handprop.plate",
+    "x": 122,
+    "y": 119
+   },
+   {
+    "piece": "handprop.milk",
+    "x": 117,
+    "y": 119
+   },
+   {
+    "piece": "prop.desk",
+    "x": 166,
+    "y": 131
+   },
+   {
+    "piece": "prop.plant",
+    "x": 177,
+    "y": 118
+   },
+   {
+    "piece": "prop.upper_cabinets",
+    "x": 46,
+    "y": 77
+   },
+   {
+    "piece": "prop.clock",
+    "x": 88,
+    "y": 80
+   },
+   {
+    "piece": "prop.frame",
+    "x": 104,
+    "y": 84
+   },
+   {
+    "piece": "prop.house_rules",
+    "x": 136,
+    "y": 96
+   },
+   {
+    "piece": "prop.cornice",
+    "x": 8,
+    "y": 5,
+    "tile": "x",
+    "tileWidth": 16
+   },
+   {
+    "piece": "prop.pendant_off|prop.pendant_on",
+    "x": 118,
+    "y": 66,
+    "variants": [
+     "evening (off)",
+     "night (on)"
+    ]
+   }
+  ],
+  "light": {
+   "evening": "light/golden.json",
+   "night": "light/soir.json"
+  },
+  "depthLayers": {
+   "0": "wall, floor (tiled)",
+   "1": "wall-mounted: cornice, upper cabinets, clock, frame, house rules, backsplash, window, shelf, pendant",
+   "2": "back furniture on backBase: fridge, counter, desk, table, chairs",
+   "3": "items on furniture: laptop, plant",
+   "4": "cast + cat (feetLine), sorted by feet y",
+   "5": "hand props (handPoint) / table props",
+   "6": "front-of-cast furniture if a shot needs it",
+   "7": "light multiply (evening/night), cast at reduced strength"
+  }
+ }
+}

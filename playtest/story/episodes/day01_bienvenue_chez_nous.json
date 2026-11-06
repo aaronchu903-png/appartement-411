@@ -1,0 +1,914 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d01_bienvenue_chez_nous",
+ "day": 1,
+ "title": "Bienvenue chez nous",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d01_",
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "stairwell",
+  "kitchen_table4",
+  "kitchen"
+ ],
+ "target_words": [
+  "bonjour",
+  "je m’appelle",
+  "c’est",
+  "merci",
+  "l’appartement",
+  "la plante",
+  "le chat",
+  "la propriétaire",
+  "samedi",
+  "il faut"
+ ],
+ "flags_set": [
+  "d01_secret"
+ ],
+ "flags_read": [
+  "d01_secret"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Palier, porte 411",
+   "time": "09:00",
+   "plot": "cold_open",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "co_chat",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_home_closed",
+       "action": "show"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "doormat_home",
+       "look_at": "door_home_closed"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "doormat_home"
+       ],
+       "note": "Mystery: a small ginger cat sits on the 411 doormat as if waiting to be let in. Hold 1.5 s. No text."
+      },
+      {
+       "do": "cat_action",
+       "action": "look",
+       "at": "doormat_home",
+       "look_at": "stand_landing",
+       "note": "He looks straight at us (the player), then back at the door."
+      }
+     ],
+     "note": "Opens inside the scene in <5 s: the player has just climbed the stairs."
+    },
+    {
+     "id": "co_porte",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_home_closed",
+       "action": "swap",
+       "to": "door_home_open"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "stand_home_door",
+       "note": "The cat slips between Noé’s feet into the flat, out of frame."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Oh ! Euh… bonjour !",
+       "zh": "哦！呃……你好！",
+       "face": "shocked"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "finger_to_lips"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Chut !",
+       "zh": "嘘！",
+       "face": "big-eyes"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_bienvenue",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Bienvenue",
+   "time": "09:01",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1_noms",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter_r",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bonjour ! Je m’appelle Camille.",
+       "zh": "你好！我叫卡米耶。",
+       "face": "happy",
+       "gesture": "wave"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et moi, je m’appelle Noé.",
+       "zh": "我叫诺埃。",
+       "face": "happy"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bienvenue chez nous ! C’est l’appartement 411.",
+       "zh": "欢迎来我们家！这是411号公寓。",
+       "gesture": "chest"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "bonjour",
+         "audio": "bonjour"
+        },
+        {
+         "id": "je_m_appelle",
+         "audio": "je_m_appelle"
+        },
+        {
+         "id": "l_appartement",
+         "audio": "l_appartement"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a1_toi",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Et toi ?",
+       "zh": "你呢？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Dis ton nom.",
+        "zh": "说出你的名字。"
+       },
+       "options": [
+        {
+         "fr": "Bonjour ! Je m’appelle…",
+         "zh": "你好！我叫……",
+         "correct": true
+        }
+       ],
+       "note": "First output at ~1:30. The player says their own name; any attempt passes; the name is not stored or displayed."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bienvenue, colocataire !",
+       "zh": "欢迎你，室友！",
+       "face": "happy",
+       "note": "Neng flag 1 / founder: « colocataire » for recognition only (Day 1 at 10-target cap); pays off D3 « Mes colocataires… c’est toi ! »."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "floor"
+       ],
+       "note": "Under the table: the ginger cat, sitting very still. Camille has her back to him."
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "floor",
+       "look_at": "stand_mid"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Euh… merci, Camille !",
+       "zh": "呃……谢谢，卡米耶！",
+       "face": "big-eyes",
+       "note": "He steps sideways to block the view of the table."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_plante",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Ton bureau",
+   "time": "09:04",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2_bureau",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "pot_desk_sprout",
+       "action": "show",
+       "at": "pot_desk",
+       "note": "The player’s own plant = pot ① « Chez nous » (founder decision; NOT Martin’s plant). Stage sprout D1–4."
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "pot_desk_sprout"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est ton bureau. Et c’est ta plante.",
+       "zh": "这是你的书桌。这是你的植物。",
+       "gesture": "point"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_desk_sprout"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est ta plante. Il faut du soleil !",
+       "zh": "这是你的植物。它需要阳光！",
+       "note": "Delta after Neng: was « La plante a soif. Il faut de l’eau. » — no watering before D7 (founder)."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_plante",
+         "audio": "la_plante"
+        },
+        {
+         "id": "il_faut",
+         "audio": "il_faut"
+        },
+        {
+         "id": "c_est",
+         "audio": "c_est"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Merci ! Bon… je vais au travail.",
+       "zh": "谢谢！好啦……我去上班了。",
+       "face": "happy",
+       "note": "Plays after the player taps the pot: it slides into the sun patch on the desk. No watering before Day 7."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a3_secret",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Un secret",
+   "time": "09:06",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a3_chat",
+     "steps": [
+      {
+       "do": "leave",
+       "who": "camille"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "table_end_r"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est mon chat.",
+       "zh": "这是我的猫。",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il s’appelle Croissant.",
+       "zh": "它叫可颂。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_chat",
+         "audio": "le_chat"
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Camille ne sait pas. Chut !",
+       "zh": "卡米耶不知道。嘘！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Tu m’aides ? C’est un secret.",
+       "zh": "你帮我吗？这是个秘密。"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "choices": [
+        {
+         "fr": "Oui. Chut !",
+         "zh": "好。嘘！",
+         "sets_flag": {
+          "flag": "d01_secret",
+          "value": true
+         }
+        },
+        {
+         "fr": "Euh… je ne sais pas.",
+         "zh": "呃……我不知道。",
+         "sets_flag": {
+          "flag": "d01_secret",
+          "value": false
+         }
+        }
+       ],
+       "note": "Meaningful choice at ~3:00. Neither answer is wrong."
+      }
+     ],
+     "crop": {
+      "k": 5,
+      "viewX": 70,
+      "viewY": 66
+     }
+    },
+    {
+     "id": "a3_oui",
+     "steps": [
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci !",
+       "zh": "谢谢！",
+       "face": "happy"
+      }
+     ],
+     "if": {
+      "flag": "d01_secret",
+      "equals": true
+     }
+    },
+    {
+     "id": "a3_non",
+     "steps": [
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "D’accord… merci quand même.",
+       "zh": "好吧……还是谢谢你。",
+       "face": "sad"
+      }
+     ],
+     "if": {
+      "flag": "d01_secret",
+      "equals": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "b_feuille",
+   "set": "kitchen",
+   "light": "day",
+   "title": "La feuille",
+   "time": "09:08",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_sprout",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ],
+     "note": "Set-up: Croissant jumps on the desk next to the plant."
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "chew",
+       "at": "desk_top",
+       "note": "He chews a leaf of the plant."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant",
+        "pot_desk_sprout"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "crop": {
+      "k": 10,
+      "viewX": 136,
+      "viewY": 101
+     },
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ! La plante !",
+       "zh": "可颂！植物！",
+       "face": "shocked"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "desk_top",
+       "look_at": "stand_mid",
+       "note": "Leaf still in his mouth. Innocent face."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci, Croissant…",
+       "zh": "谢谢你啊，可颂……",
+       "face": "neutral",
+       "gesture": "facepalm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "voice_martin",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Un message",
+   "time": "19:00",
+   "plot": "voice",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "v_msg",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Bonjour ! Ici Madame Martin, la propriétaire.",
+       "zh": "您好！我是马丁太太，房东。"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Samedi, je viens chez vous.",
+       "zh": "星期六，我去你们那儿。"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Et pas d’animaux dans l’appartement. Merci !",
+       "zh": "还有，公寓里不许养动物。谢谢！"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "samedi",
+         "audio": "samedi"
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "samedi",
+         "audio": "samedi"
+        }
+       ],
+       "prompt": {
+        "fr": "___, je viens chez vous.",
+        "zh": "___，我去你们那儿。",
+        "audio": "samedi"
+       }
+      }
+     ],
+     "note": "Noé and the player both hear it. Camille is out."
+    },
+    {
+     "id": "v_reac",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La propriétaire ! Samedi !",
+       "zh": "房东！星期六！",
+       "face": "shocked"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Pas d’animaux… Croissant, c’est un chat !",
+       "zh": "不许养动物……可颂是只猫啊！",
+       "face": "sad"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il faut cacher Croissant.",
+       "zh": "得把可颂藏起来。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_proprietaire",
+         "audio": "la_proprietaire"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "kitchen",
+   "light": "night",
+   "title": "La plante et le chat",
+   "time": "23:00",
+   "plot": "high_point",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "desk_bare",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "pot_desk_sprout",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "cat_action",
+       "action": "sleep_curl",
+       "at": "desk_sleep"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant",
+        "pot_desk_sprout"
+       ],
+       "note": "HOLD 3 s. Croissant curls up around the pot of the player’s plant, one paw on it, like a guard (sleep_curl on desk_bare)."
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il aime ta plante.",
+       "zh": "它喜欢你的植物。",
+       "face": "happy",
+       "note": "whisper"
+      }
+     ],
+     "crop": {
+      "k": 10,
+      "viewX": 146,
+      "viewY": 94
+     }
+    }
+   ]
+  },
+  {
+   "id": "reply_martin",
+   "set": "kitchen",
+   "light": "night",
+   "title": "Réponse",
+   "time": "23:02",
+   "plot": "reply",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "r",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Une réponse pour Madame Martin :",
+        "zh": "给马丁太太回个消息："
+       },
+       "options": [
+        {
+         "fr": "Merci, Madame Martin. À samedi !",
+         "zh": "谢谢您，马丁太太。星期六见！",
+         "correct": true
+        },
+        {
+         "fr": "Merci, Camille. À samedi !",
+         "zh": "谢谢，卡米耶。星期六见！",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen",
+   "light": "night",
+   "title": "Samedi",
+   "time": "23:05",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "wall_calendar",
+       "action": "show",
+       "at": "wall_calendar"
+      },
+      {
+       "do": "prop",
+       "id": "insert_calendar",
+       "action": "show",
+       "caption": {
+        "text": "Samedi : Madame Martin",
+        "on": "insert_calendar"
+       },
+       "note": "Written on the calendar (Noé’s pen). zh: 星期六：马丁太太。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_calendar"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "floor_calendar_watch",
+       "look_at": "wall_calendar"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "crop": { "k": 10, "viewX": 64, "viewY": 94, "note": "crop A (Croissant 2026-10-27): close on Croissant at floor_calendar_watch" }
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Samedi… six jours.",
+       "zh": "星期六……还有六天。",
+       "face": "sad",
+       "note": "whisper, off-screen"
+      }
+     ],
+     "crop": {
+      "k": 6,
+      "viewX": 72,
+      "viewY": 60
+     }
+    }
+   ]
+  }
+ ]
+}

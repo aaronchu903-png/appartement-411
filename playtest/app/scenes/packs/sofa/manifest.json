@@ -1,0 +1,222 @@
+{
+  "version": 1,
+  "pack": "sofa",
+  "assetRoot": "../../day10-kitchen/assets/",
+  "atlases": {},
+  "assets": {
+    "backdrop.kitchen": {
+      "type": "backdrop",
+      "base": { "source": "file", "file": "kitchen_backdrop.png", "w": 96, "h": 64 },
+      "tall": { "source": "file", "file": "kitchen_backdrop_tall.png", "w": 96, "h": 128, "sceneTop": -36 }
+    },
+    "camille.stand": {
+      "source": "file",
+      "file": "camille_bend_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "camille.bend": {
+      "source": "file",
+      "file": "camille_bend_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "camille.point": {
+      "source": "file",
+      "file": "camille_bend_2.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "noe.walk.0": {
+      "source": "file",
+      "file": "walk_side_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "noe.walk.1": {
+      "source": "file",
+      "file": "walk_side_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "noe.walk.2": {
+      "source": "file",
+      "file": "walk_side_2.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "noe.look.0": {
+      "source": "file",
+      "file": "look_cam_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "noe.look.1": {
+      "source": "file",
+      "file": "look_cam_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.idle": {
+      "source": "file",
+      "file": "found_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.idle.alt": {
+      "source": "file",
+      "file": "found_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.glance": {
+      "source": "file",
+      "file": "glance.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.peek.0": {
+      "source": "file",
+      "file": "peek_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.peek.1": {
+      "source": "file",
+      "file": "peek_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.walk": {
+      "type": "sequence",
+      "fps": 8,
+      "frames": ["croissant.walk.0", "croissant.walk.1", "croissant.walk.2"]
+    },
+    "croissant.walk.0": {
+      "source": "file",
+      "file": "walk_side_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.walk.1": {
+      "source": "file",
+      "file": "walk_side_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.walk.2": {
+      "source": "file",
+      "file": "walk_side_2.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.tail.0": {
+      "source": "file",
+      "file": "tail_0.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "croissant.tail.1": {
+      "source": "file",
+      "file": "tail_1.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.table": {
+      "source": "file",
+      "file": "table.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.laptop.closed": {
+      "source": "file",
+      "file": "laptop_closed.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.laptop.open": {
+      "source": "file",
+      "file": "laptop_open.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.laptop": {
+      "type": "states",
+      "states": {
+        "closed": "prop.laptop.closed",
+        "open": "prop.laptop.open",
+        "default": "prop.laptop.closed"
+      }
+    },
+    "prop.stash.pen": {
+      "source": "file",
+      "file": "stash_pen.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.stash.sock": {
+      "source": "file",
+      "file": "stash_sock.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.spoon.dirty": {
+      "source": "file",
+      "file": "spoon_dirty.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.spoon.clean": {
+      "source": "file",
+      "file": "spoon_clean.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.milk": {
+      "source": "file",
+      "file": "milk_bottle.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.pastry.bag": {
+      "source": "file",
+      "file": "pastry_bag.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    },
+    "prop.fridge": {
+      "source": "file",
+      "file": "fridge_zone.png",
+      "anchor": "topleft",
+      "anchorPoint": { "x": 0, "y": 0 },
+      "pixelScale": 1
+    }
+  }
+}

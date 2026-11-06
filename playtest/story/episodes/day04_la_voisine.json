@@ -1,0 +1,884 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d04_la_voisine",
+ "day": 4,
+ "title": "La voisine",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d04_",
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "stairwell",
+  "kitchen_table4"
+ ],
+ "target_words": [
+  "pardon",
+  "vous pouvez répéter",
+  "je n’ai pas compris",
+  "je suis désolé",
+  "le bruit",
+  "la nuit",
+  "la voisine",
+  "c’est ma faute",
+  "une équipe",
+  "gentil"
+ ],
+ "recycle_words": [
+  "merci",
+  "chut",
+  "samedi"
+ ],
+ "flags_set": [
+  "d04_equipe"
+ ],
+ "flags_read": [
+  "d04_equipe"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "kitchen",
+   "light": "night",
+   "title": "Un chat ?!",
+   "time": "22:00",
+   "plot": "cold_open",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "prop",
+       "id": "pot_desk_sprout",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "prop",
+       "id": "box_cat",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "cat_action",
+       "action": "in_box_tail_pop",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Picks up the Day 3 hook exactly: the box behind the chair, the tail."
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "table_end_r",
+       "note": "Croissant climbs out of the box and onto the table, right in front of Camille."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Il y a un chat ici ?!",
+       "zh": "这里有只猫？！",
+       "face": "shocked"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Euh… c’est Croissant. Il est gentil !",
+       "zh": "呃……这是可颂。它很乖的！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "cat_action",
+       "action": "look",
+       "at": "table_end_r",
+       "look_at": "camille",
+       "note": "He blinks at Camille, slowly. Very gentil."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Un chat… et Madame Martin, samedi !",
+       "zh": "一只猫……而马丁太太星期六就来！",
+       "face": "sad",
+       "gesture": "facepalm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_faute",
+   "set": "kitchen_table4",
+   "light": "night",
+   "title": "C’est ma faute",
+   "time": "22:02",
+   "plot": "A",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est ma faute. Je suis désolé, Camille.",
+       "zh": "是我的错。对不起，卡米耶。",
+       "face": "sad"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "c_est_ma_faute",
+         "audio": "c_est_ma_faute"
+        },
+        {
+         "id": "je_suis_desole",
+         "audio": "je_suis_desole"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est ta faute, oui !",
+       "zh": "是你的错，没错！",
+       "face": "neutral"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bon… la nuit, on dort. Demain, on parle.",
+       "zh": "好吧……晚上先睡觉。明天再说。",
+       "note": "She leaves; no decision yet. Nothing implies the cat can stay."
+      },
+      {
+       "do": "walk_to",
+       "who": "camille",
+       "to": "stand_door_r"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Pardon, Croissant…",
+       "zh": "对不起啊，可颂……",
+       "face": "sad",
+       "note": "whisper to the cat, who is already asleep on the table"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_voisine",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Le bruit",
+   "time": "07:30",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2_knock",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_home_open",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door",
+       "pose": "gown_stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Wednesday morning. The neighbour from across the landing, in her dressing gown, glasses on."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est la voisine…",
+       "zh": "是邻居……",
+       "note": "whisper"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_voisine",
+         "audio": "la_voisine"
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Bonsoir. Il y a du bruit chez vous. La nuit !",
+       "zh": "晚上好。你们家有噪音。晚上！",
+       "face": "neutral"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Boum, boum… à minuit, à une heure, à deux heures !",
+       "zh": "咚、咚……半夜十二点、一点、两点！",
+       "note": "fast, clipped; meant to be too fast for the player"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_bruit",
+         "audio": "le_bruit"
+        },
+        {
+         "id": "la_nuit",
+         "audio": "la_nuit"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a2_repeter",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Pardon ? Je n’ai pas compris…",
+       "zh": "对不起？我没听懂……",
+       "face": "big-eyes"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Demande à la voisine de répéter.",
+        "zh": "请邻居再说一遍。"
+       },
+       "options": [
+        {
+         "fr": "Pardon, Madame. Vous pouvez répéter, s’il vous plaît ?",
+         "zh": "对不起，女士。您可以再说一遍吗？",
+         "correct": true
+        },
+        {
+         "fr": "Je n’ai pas compris. Bonne nuit !",
+         "zh": "我没听懂。晚安！",
+         "correct": false
+        }
+       ],
+       "note": "First output: vous to the neighbour; politeness phrase « s’il vous plaît » already known from D2."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "pardon",
+         "audio": "pardon"
+        },
+        {
+         "id": "vous_pouvez_repeter",
+         "audio": "vous_pouvez_repeter"
+        },
+        {
+         "id": "je_n_ai_pas_compris",
+         "audio": "je_n_ai_pas_compris"
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Vous pouvez répéter… Bon. Le bruit. La nuit. Chez vous.",
+       "zh": "再说一遍……好。噪音。晚上。你们家。",
+       "note": "Slowly, one word per beat, glasses pushed up. The player has succeeded."
+      }
+     ]
+    },
+    {
+     "id": "a2_desole",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "cat_landing",
+       "note": "SMILE: Croissant has slipped out between Noé’s ankles and sits on the landing, in plain view, looking up at the neighbour."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "He nudges the cat back inside with his foot, smiling far too much."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je suis désolé, Madame. Pardon !",
+       "zh": "对不起，女士。抱歉！",
+       "face": "happy"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "She looks at the cat. At Noé. At the cat."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Hm. Je connais bien Madame Martin, vous savez…",
+       "zh": "嗯。我跟马丁太太很熟，你们知道吧……",
+       "face": "brow_raise"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "swap",
+       "to": "door_neighbour_closed"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La voisine… elle connaît Madame Martin. Oh non.",
+       "zh": "邻居……她认识马丁太太。哦不。",
+       "face": "shocked"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Vous pouvez répéter ?… Je n’ai pas compris, moi !",
+       "zh": "您可以再说一遍吗？……我是真没听懂！",
+       "face": "sad",
+       "note": "SMILE: he admits he did not understand either."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "voice_camille",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Message de Camille",
+   "time": "12:00",
+   "plot": "voice",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "v",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "camille",
+       "icon": "phone",
+       "fr": "Ce soir, on parle. Toi, moi et Noé. Pas de bruit, d’accord ?",
+       "zh": "今晚我们谈谈。你、我和诺埃。别出声，好吗？"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "le_bruit",
+         "audio": "le_bruit"
+        }
+       ],
+       "prompt": {
+        "fr": "Pas de ___, d’accord ?",
+        "zh": "别出___，好吗？",
+        "audio": "le_bruit"
+       }
+      }
+     ],
+     "note": "Camille at work, writing to the player."
+    }
+   ]
+  },
+  {
+   "id": "reply_camille",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Réponse",
+   "time": "12:01",
+   "plot": "reply",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "r",
+     "steps": [
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Une réponse pour Camille :",
+        "zh": "给卡米耶回个消息："
+       },
+       "options": [
+        {
+         "fr": "D’accord. Pas de bruit. À ce soir !",
+         "zh": "好的。不出声。晚上见！",
+         "correct": true
+        },
+        {
+         "fr": "D’accord. Bonne nuit !",
+         "zh": "好的。晚安！",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_tasse",
+   "set": "kitchen",
+   "light": "day",
+   "title": "La tasse",
+   "time": "15:00",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "cup",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "counter_top",
+       "look_at": "cup"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Set-up: a cup at the edge of the counter. The cat looks at it."
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant",
+        "cup"
+       ],
+       "note": "One paw. He pushes the cup, slowly, toward the edge."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant… non. Chut !",
+       "zh": "可颂……不行。嘘！",
+       "face": "big-eyes"
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_counter"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "cup"
+       ],
+       "note": "The cup falls; Noé catches it one centimetre above the floor. Silence."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci, Croissant…",
+       "zh": "谢谢你啊，可颂……",
+       "face": "neutral",
+       "gesture": "facepalm",
+       "note": "Callback to Day 1 « Merci, Croissant… ». Only Day 1–3 words."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "title": "Une équipe",
+   "time": "19:30",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Camille… je suis désolé. C’est ma faute.",
+       "zh": "卡米耶……对不起。都是我的错。",
+       "face": "sad"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Oui. C’est ta faute.",
+       "zh": "对。是你的错。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "Beat. She looks at the cat, who is sitting politely at her feet."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Mais il est gentil… et on est une équipe. Toi, moi…",
+       "zh": "可它很乖……而且我们是一个团队。你、我……",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "… et toi. Une équipe, d’accord ?",
+       "zh": "……还有你。一个团队，好吗？",
+       "gesture": "point",
+       "note": "to the player"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "choices": [
+        {
+         "fr": "Oui ! Une équipe !",
+         "zh": "好！一个团队！",
+         "sets_flag": {
+          "flag": "d04_equipe",
+          "value": true
+         }
+        },
+        {
+         "fr": "Une équipe… et Croissant ?",
+         "zh": "一个团队……那可颂呢？",
+         "sets_flag": {
+          "flag": "d04_equipe",
+          "value": false
+         }
+        }
+       ],
+       "note": "Both answers lead to the same smile; flag only colours Noé’s line."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "une_equipe",
+         "audio": "une_equipe"
+        },
+        {
+         "id": "gentil",
+         "audio": "gentil"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hp_oui",
+     "steps": [
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Une équipe !",
+       "zh": "一个团队！",
+       "face": "happy"
+      }
+     ],
+     "if": {
+      "flag": "d04_equipe",
+      "equals": true
+     }
+    },
+    {
+     "id": "hp_chat",
+     "steps": [
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et Croissant ! Une équipe de quatre !",
+       "zh": "还有可颂！四个人的团队！",
+       "face": "happy"
+      }
+     ],
+     "if": {
+      "flag": "d04_equipe",
+      "equals": false
+     }
+    },
+    {
+     "id": "hp_patte",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "table_end_l"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "HOLD 3 s. Croissant puts one paw on the table, in the middle of their three hands. Nobody says anything."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Samedi… trois jours. Pas de bruit la nuit, Croissant.",
+       "zh": "星期六……还有三天。晚上别出声，可颂。",
+       "note": "Countdown: Wed → Sat. She is NOT saying he stays; she is saying they will try."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen_table4",
+   "light": "night",
+   "title": "Trois heures",
+   "time": "03:00",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "floor",
+       "look_at": "stand_door_r"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "03:00. Dark kitchen. The cat is awake, staring at the front door."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "sfx": "knock",
+       "note": "Three soft knocks at the door."
+      },
+      {
+       "do": "cat_action",
+       "action": "react_shocked",
+       "at": "floor"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "À trois heures… la nuit ?!",
+       "zh": "凌晨三点……这个时候？！",
+       "face": "shocked",
+       "note": "whisper"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

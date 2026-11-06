@@ -1,0 +1,3026 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "sitcom_props": {
+   "file": "sitcom_props_sheet.png",
+   "w": 96,
+   "h": 18
+  },
+  "ines": {
+   "file": "ines_sheet.png",
+   "w": 128,
+   "h": 144
+  },
+  "sitcom_overlays": {
+   "file": "sitcom_overlays_sheet.png",
+   "w": 112,
+   "h": 24
+  },
+  "sitcom_rev3": {
+   "file": "sitcom_rev3_sheet.png",
+   "w": 96,
+   "h": 25
+  },
+  "sitcom_rev4": {
+   "file": "sitcom_rev4_sheet.png",
+   "w": 160,
+   "h": 64
+  },
+  "sitcom_rev41": {
+   "file": "sitcom_rev41_sheet.png",
+   "w": 128,
+   "h": 176
+  },
+  "sitcom_rev41b": {
+   "file": "sitcom_rev41b_sheet.png",
+   "w": 32,
+   "h": 24
+  },
+  "sitcom_rev5": {
+   "file": "sitcom_rev5_sheet.png",
+   "w": 128,
+   "h": 144
+  },
+  "sitcom_rev52": {
+   "file": "sitcom_rev52_sheet.png",
+   "w": 128,
+   "h": 117
+  },
+  "sitcom_rev55": {
+   "file": "sitcom_rev55_sheet.png",
+   "w": 96,
+   "h": 24
+  }
+ },
+ "assets": {
+  "handprop.spoon_wood.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 17,
+    "y": 0,
+    "w": 3,
+    "h": 8
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 7
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 6
+   },
+   "file": "pieces/x1/spoon_wood.png"
+  },
+  "handprop.soup_pot.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 27,
+    "y": 0,
+    "w": 11,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 5,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 0,
+    "y": 3
+   },
+   "file": "pieces/x1/soup_pot.png"
+  },
+  "handprop.sugar_bowl.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 14,
+    "y": 10,
+    "w": 5,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/sugar_bowl.png"
+  },
+  "handprop.flour_bag.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 10,
+    "y": 0,
+    "w": 6,
+    "h": 8
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 7
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 4
+   },
+   "file": "pieces/x1/flour_bag.png"
+  },
+  "handprop.tray.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 59,
+    "y": 10,
+    "w": 16,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 8,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 0,
+    "y": 1
+   },
+   "file": "pieces/x1/tray.png"
+  },
+  "handprop.kouign_amann.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 27,
+    "y": 10,
+    "w": 7,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/kouign_amann.png"
+  },
+  "handprop.kouign_part.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 35,
+    "y": 10,
+    "w": 4,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/kouign_part.png"
+  },
+  "handprop.pastry_croissant.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 46,
+    "y": 10,
+    "w": 5,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/pastry_croissant.png"
+  },
+  "handprop.pain_choc.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 40,
+    "y": 10,
+    "w": 5,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/pain_choc.png"
+  },
+  "handprop.knife.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 84,
+    "y": 10,
+    "w": 7,
+    "h": 2
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 1
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 5,
+    "y": 0
+   },
+   "file": "pieces/x1/knife.png"
+  },
+  "handprop.onion.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 86,
+    "y": 0,
+    "w": 4,
+    "h": 5
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/onion.png"
+  },
+  "handprop.jam_jar.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 10,
+    "y": 10,
+    "w": 3,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/jam_jar.png"
+  },
+  "handprop.toast_plate.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 20,
+    "y": 10,
+    "w": 6,
+    "h": 4
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 3
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/toast_plate.png"
+  },
+  "handprop.envelope.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 78,
+    "y": 0,
+    "w": 7,
+    "h": 5
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "file": "pieces/x1/envelope.png"
+  },
+  "handprop.card.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 67,
+    "y": 0,
+    "w": 5,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 3
+   },
+   "file": "pieces/x1/card.png"
+  },
+  "handprop.phone.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 73,
+    "y": 0,
+    "w": 4,
+    "h": 6
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 3
+   },
+   "file": "pieces/x1/phone.png"
+  },
+  "handprop.tea_green.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 0,
+    "y": 10,
+    "w": 4,
+    "h": 5
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/tea_green.png"
+  },
+  "handprop.tea_plum.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 5,
+    "y": 10,
+    "w": 4,
+    "h": 5
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/tea_plum.png"
+  },
+  "handprop.tea_gold.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 91,
+    "y": 0,
+    "w": 4,
+    "h": 5
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 4
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "file": "pieces/x1/tea_gold.png"
+  },
+  "handprop.towel_folded.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 52,
+    "y": 10,
+    "w": 6,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 3,
+    "y": 1
+   },
+   "file": "pieces/x1/towel_folded.png"
+  },
+  "handprop.towel_hang.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 5,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 0
+   },
+   "file": "pieces/x1/towel_hang.png"
+  },
+  "handprop.paper_bag.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 21,
+    "y": 0,
+    "w": 5,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 0
+   },
+   "file": "pieces/x1/paper_bag.png"
+  },
+  "handprop.wine_bottle.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 6,
+    "y": 0,
+    "w": 3,
+    "h": 9
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 1,
+    "y": 8
+   },
+   "pixelScale": 1,
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 3
+   },
+   "file": "pieces/x1/wine_bottle.png"
+  },
+  "prop.cushion.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 76,
+    "y": 10,
+    "w": 7,
+    "h": 3
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/cushion.png"
+  },
+  "prop.box_open.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 53,
+    "y": 0,
+    "w": 13,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/box_open.png"
+  },
+  "prop.box_front.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 39,
+    "y": 0,
+    "w": 13,
+    "h": 7
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 6
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/box_front.png"
+  },
+  "prop.puddle.any": {
+   "source": "atlas",
+   "atlas": "sitcom_props",
+   "frame": {
+    "x": 0,
+    "y": 16,
+    "w": 12,
+    "h": 2
+   },
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 1
+   },
+   "pixelScale": 1,
+   "depth": 3,
+   "file": "pieces/x1/puddle.png"
+  },
+  "ines.idle.0": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.idle.1": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.stand": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.walk.0": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.walk.1": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 64,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.walk.2": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.walk.3": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.neutral": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 112,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.happy": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 0,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.sad": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 16,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.shocked": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 32,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.big-eyes": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 48,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.blink": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 64,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.talk_0": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 80,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.talk_1": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 96,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.face.brow_raise": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 112,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.base.noarms": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 0,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.arm_l.down": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 16,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 3,
+    "y": 16
+   }
+  },
+  "ines.arm_r.down": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 32,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 12,
+    "y": 16
+   }
+  },
+  "ines.arm_l.wave": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 48,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 7
+   }
+  },
+  "ines.arm_r.wave": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 64,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 7
+   }
+  },
+  "ines.arm_l.point": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 80,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 11
+   }
+  },
+  "ines.arm_r.point": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 96,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 11
+   }
+  },
+  "ines.arm_l.hips": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 112,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 4,
+    "y": 14
+   }
+  },
+  "ines.arm_r.hips": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 0,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 11,
+    "y": 14
+   }
+  },
+  "ines.arm_l.chest": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 16,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 12
+   }
+  },
+  "ines.arm_r.chest": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 32,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 12
+   }
+  },
+  "ines.arm_l.hold": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 48,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 15
+   }
+  },
+  "ines.arm_r.hold": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 64,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 15
+   }
+  },
+  "ines.arm_l.facepalm": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 80,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 6
+   }
+  },
+  "ines.arm_r.facepalm": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 96,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 6
+   }
+  },
+  "ines.shadow": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 112,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.pose.facepalm": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 0,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "ines.pose.sit_front": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 16,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.pose.sit_34": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 32,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.sit_front_idle.0": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 48,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.sit_front_idle.1": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 64,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.sit_angle_idle.0": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 80,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.sit_angle_idle.1": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 96,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.pose.sit_table": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 112,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.pose.sit_table_34": {
+   "source": "atlas",
+   "atlas": "ines",
+   "frame": {
+    "x": 0,
+    "y": 120,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "seatPoint": {
+    "x": 8,
+    "y": 16
+   }
+  },
+  "ines.idle": {
+   "type": "sequence",
+   "frames": [
+    "ines.idle.0",
+    "ines.idle.1"
+   ],
+   "fps": 2
+  },
+  "ines.walk": {
+   "type": "sequence",
+   "frames": [
+    "ines.walk.0",
+    "ines.walk.1",
+    "ines.walk.2",
+    "ines.walk.3"
+   ],
+   "fps": 8
+  },
+  "ines.sit_front_idle": {
+   "type": "sequence",
+   "frames": [
+    "ines.sit_front_idle.0",
+    "ines.sit_front_idle.1"
+   ],
+   "fps": 2
+  },
+  "ines.sit_angle_idle": {
+   "type": "sequence",
+   "frames": [
+    "ines.sit_angle_idle.0",
+    "ines.sit_angle_idle.1"
+   ],
+   "fps": 2
+  },
+  "noe.overlay.apron_towel": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "layerOver": "noe.stand / idle / walk / talk frames, same 16x24 (cat 14x12) registration"
+  },
+  "noe.overlay.apron_towel_sit": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "layerOver": "noe.stand / sit poses (rows 0-15 only)"
+  },
+  "noe.overlay.tears": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "layerOver": "noe.stand / idle / walk / talk frames, same 16x24 (cat 14x12) registration"
+  },
+  "noe.overlay.flour": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "layerOver": "noe.stand / idle / walk / talk frames, same 16x24 (cat 14x12) registration"
+  },
+  "croissant.pose.lie": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 64,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.pose.sleep": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.overlay.flour": {
+   "source": "atlas",
+   "atlas": "sitcom_overlays",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1,
+   "layerOver": "croissant.stand / idle / walk / talk frames, same 16x24 (cat 14x12) registration"
+  },
+  "prop.wall_calendar.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 63,
+    "y": 0,
+    "w": 9,
+    "h": 10
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/wall_calendar.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 4,
+    "y": 0
+   },
+   "depth": 1,
+   "slots": {
+    "kitchen": {
+     "x": 120,
+     "y": 74,
+     "note": "nail point; occupies x116-124 y74-83, clear of clock (84-92), frame (99-108) and house_rules (132-139, y87-96)"
+    }
+   }
+  },
+  "handprop.laptop_closed.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 0,
+    "y": 21,
+    "w": 14,
+    "h": 4
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/laptop_closed.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 3
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 7,
+    "y": 2
+   },
+   "slots": {
+    "kitchen_desk": {
+     "x": 165,
+     "y": 119,
+     "note": "on prop.desk_bare top (row 8 of the desk = stage y120)"
+    },
+    "kitchen_table4": {
+     "x": 108,
+     "y": 119
+    }
+   }
+  },
+  "handprop.newspaper_folded.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 81,
+    "y": 0,
+    "w": 12,
+    "h": 5
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/newspaper_folded.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 6,
+    "y": 4
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 6,
+    "y": 2
+   },
+   "slots": {
+    "kitchen_table4": {
+     "x": 128,
+     "y": 119
+    }
+   }
+  },
+  "handprop.newspaper_open.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 73,
+    "y": 0,
+    "w": 7,
+    "h": 9
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/newspaper_open.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 8
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 4
+   }
+  },
+  "prop.desk_bare.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 32,
+    "h": 20
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/desk_bare.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 16,
+    "y": 19
+   },
+   "depth": 2,
+   "replaces": "prop.desk (kitchen) when the laptop is closed / off the desk",
+   "at": {
+    "x": 166,
+    "y": 131
+   }
+  },
+  "croissant.keyboard_idle.0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 33,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 10
+   },
+   "pixelScale": 1,
+   "onProp": "kitchen prop.desk (baked open laptop) keyboard deck: anchor at stage (163,119) = cat body bottom row resting on the deck row; or kitchen laptop piece deck row 8",
+   "canvas": "14x12 (standard cat canvas; no extra room needed)"
+  },
+  "croissant.keyboard_idle.1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev3",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 10
+   },
+   "pixelScale": 1,
+   "onProp": "kitchen prop.desk (baked open laptop) keyboard deck: anchor at stage (163,119) = cat body bottom row resting on the deck row; or kitchen laptop piece deck row 8",
+   "canvas": "14x12 (standard cat canvas; no extra room needed)"
+  },
+  "croissant.keyboard_idle": {
+   "type": "sequence",
+   "frames": [
+    "croissant.keyboard_idle.0",
+    "croissant.keyboard_idle.1"
+   ],
+   "fps": 2
+  },
+  "handprop.key_door.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 88,
+    "y": 52,
+    "w": 7,
+    "h": 3
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/key_door.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 1,
+    "y": 1
+   },
+   "note": "Day 11 hp_cle / hp_pieds: in hand (handPoint = bow); table slot kitchen_table4 (118,119)"
+  },
+  "prop.key_floor.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 144,
+    "y": 52,
+    "w": 7,
+    "h": 2
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/key_floor.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 1
+   },
+   "depth": 5,
+   "note": "Day 11: key on floor (y = feet line) or table top (119); baseline"
+  },
+  "handprop.soup_bowl.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 96,
+    "y": 52,
+    "w": 7,
+    "h": 3
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/soup_bowl.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 2
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 3,
+    "y": 0
+   },
+   "note": "Day 11 Lef\u00e8vre second bowl; table4 slots = plate xs 103/111/125/133 at y119",
+   "slots": {
+    "kitchen_table4_a": {
+     "x": 103,
+     "y": 119
+    },
+    "kitchen_table4_b": {
+     "x": 111,
+     "y": 119
+    },
+    "kitchen_table4_c": {
+     "x": 125,
+     "y": 119
+    },
+    "kitchen_table4_d": {
+     "x": 133,
+     "y": 119
+    }
+   }
+  },
+  "prop.screen_send.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 40,
+    "h": 26
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/screen_send.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "buttonRect": {
+    "x0": 24,
+    "y0": 19,
+    "x1": 35,
+    "y1": 23
+   },
+   "clockRect": {
+    "x0": 29,
+    "y0": 2,
+    "x1": 36,
+    "y1": 3
+   },
+   "note": "Day 11 h_envoyer close insert; engine draws \u00ab Envoyer \u00bb in buttonRect, optional digital time in clockRect"
+  },
+  "prop.clock_midnight.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 30,
+    "y": 52,
+    "w": 9,
+    "h": 9
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/clock_midnight.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 8
+   },
+   "depth": 1,
+   "replaces": "prop.clock",
+   "at": {
+    "x": 88,
+    "y": 80
+   },
+   "note": "Day 11 h_envoyer: swap for kitchen prop.clock at (88,80), same 9x9 + baseline anchor (4,8)"
+  },
+  "prop.roof_steps.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 46,
+    "y": 52,
+    "w": 18,
+    "h": 5
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/roof_steps.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 9,
+    "y": 4
+   },
+   "depth": 2,
+   "note": "D13 hook: stoop under roof door, at (30,136) baseline; slots roof_step_top (30,131) roof_step_low (30,133)",
+   "slots": {
+    "roof_step_top": {
+     "x": 30,
+     "y": 131
+    },
+    "roof_step_low": {
+     "x": 30,
+     "y": 133
+    },
+    "at": {
+     "x": 30,
+     "y": 136
+    }
+   }
+  },
+  "prop.notice_sheet.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 40,
+    "y": 52,
+    "w": 5,
+    "h": 6
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/notice_sheet.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 5
+   },
+   "depth": 5,
+   "note": "D15: pinned on stairwell notice board (board x36-55); slot (46,82) baseline"
+  },
+  "prop.notice_insert.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 119,
+    "y": 27,
+    "w": 30,
+    "h": 22
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/notice_insert.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "D15 close insert; French line is an engine bubble/caption, art carries pictograms only"
+  },
+  "handprop.butter_block.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 65,
+    "y": 52,
+    "w": 7,
+    "h": 4
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/butter_block.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 3,
+    "y": 3
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 3,
+    "y": 0
+   }
+  },
+  "handprop.dough_sheet.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 114,
+    "y": 52,
+    "w": 14,
+    "h": 2
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/dough_sheet.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 1
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 7,
+    "y": 0
+   }
+  },
+  "handprop.dough_folded.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 73,
+    "y": 52,
+    "w": 8,
+    "h": 3
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/dough_folded.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 2
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 4,
+    "y": 0
+   }
+  },
+  "handprop.rolling_pin.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 129,
+    "y": 52,
+    "w": 14,
+    "h": 2
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/rolling_pin.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 7,
+    "y": 1
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 7,
+    "y": 0
+   }
+  },
+  "handprop.glove_loose.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 82,
+    "y": 52,
+    "w": 5,
+    "h": 3
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/glove_loose.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 2,
+    "y": 2
+   },
+   "depth": 5,
+   "handPoint": {
+    "x": 2,
+    "y": 0
+   }
+  },
+  "prop.paw_print.any": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 104,
+    "y": 52,
+    "w": 9,
+    "h": 3
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/paw_print.png",
+   "anchor": "baseline",
+   "anchorPoint": {
+    "x": 4,
+    "y": 2
+   },
+   "depth": 5
+  },
+  "noe.pose.crouch": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 85,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/noe_pose_crouch.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   }
+  },
+  "noe.pose.crouch_reach": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 102,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/noe_pose_crouch_reach.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 14,
+    "y": 16
+   }
+  },
+  "camille.pose.crouch": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 41,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/camille_pose_crouch.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   }
+  },
+  "camille.pose.crouch_reach": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 58,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/camille_pose_crouch_reach.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 14,
+    "y": 16
+   }
+  },
+  "martin.pose.crouch": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 34,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/martin_pose_crouch.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   }
+  },
+  "martin.pose.crouch_reach": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 51,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/martin_pose_crouch_reach.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 15,
+    "y": 17
+   }
+  },
+  "lefevre.pose.crouch": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 75,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/lefevre_pose_crouch.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   }
+  },
+  "lefevre.pose.crouch_reach": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 92,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/lefevre_pose_crouch_reach.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 14,
+    "y": 16
+   }
+  },
+  "lefevre.pose.gown_stand": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 126,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/lefevre_pose_gown_stand.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   }
+  },
+  "lefevre.pose.gown_hold": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 109,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/lefevre_pose_gown_hold.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 7,
+    "y": 14
+   }
+  },
+  "martin.fold_dough.0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 143,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/martin_fold_dough_0.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 8,
+    "y": 14
+   }
+  },
+  "martin.fold_dough.1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 0,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/martin_fold_dough_1.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 5,
+    "y": 12
+   }
+  },
+  "martin.pose.taste": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 68,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/martin_pose_taste.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 9,
+    "y": 10
+   }
+  },
+  "martin.overlay.gloves": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 17,
+    "y": 27,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/martin_overlay_gloves.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "overlay": true,
+   "note": "pale pink latex gloves (Rev 4.1c, was wood); stand/idle.0/talk frames"
+  },
+  "croissant.overlay.sugar_crystal": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 15,
+    "y": 52,
+    "w": 14,
+    "h": 12
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/croissant_overlay_sugar_crystal.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "overlay": true
+  },
+  "croissant.overlay.flour_paw": {
+   "source": "atlas",
+   "atlas": "sitcom_rev4",
+   "frame": {
+    "x": 0,
+    "y": 52,
+    "w": 14,
+    "h": 12
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/croissant_overlay_flour_paw.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "overlay": true
+  },
+  "martin.fold_dough": {
+   "type": "sequence",
+   "frames": [
+    "martin.fold_dough.0",
+    "martin.fold_dough.1"
+   ],
+   "fps": 2,
+   "deprecated": "Rev 4.1: use prop.insert_fold_dough (close) + martin.stand with martin.overlay.gloves at the counter (medium)"
+  },
+  "prop.insert_key_slide.0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev41",
+   "frame": {
+    "x": 61,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "file": "pieces/x1/prop_insert_key_slide_0.png",
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail"
+  },
+  "prop.insert_key_slide.1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev41",
+   "frame": {
+    "x": 0,
+    "y": 118,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "file": "pieces/x1/prop_insert_key_slide_1.png",
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail"
+  },
+  "prop.insert_fold_dough.0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev41",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "file": "pieces/x1/prop_insert_fold_dough_0.png",
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail"
+  },
+  "prop.insert_fold_dough.1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev41",
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "file": "pieces/x1/prop_insert_fold_dough_1.png",
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail"
+  },
+  "prop.insert_fold_dough.2": {
+   "source": "atlas",
+   "atlas": "sitcom_rev41",
+   "frame": {
+    "x": 0,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "file": "pieces/x1/prop_insert_fold_dough_2.png",
+   "note": "full-frame close insert, 60x58 at 18x fills the phone scene band (y288-1344); ~3x stage detail"
+  },
+  "prop.insert_key_slide": {
+   "type": "sequence",
+   "frames": [
+    "prop.insert_key_slide.0",
+    "prop.insert_key_slide.1"
+   ],
+   "fps": 2,
+   "note": "Day 11 \u00ab Elle pousse la cl\u00e9 vers toi \u00bb"
+  },
+  "prop.insert_fold_dough": {
+   "type": "sequence",
+   "frames": [
+    "prop.insert_fold_dough.0",
+    "prop.insert_fold_dough.1",
+    "prop.insert_fold_dough.2"
+   ],
+   "fps": 2,
+   "durationsMs": [
+    600,
+    400,
+    500
+   ],
+   "note": "D18 fold; replaces martin.fold_dough (deprecated)"
+  },
+  "martin.pose.counter_reach": {
+   "source": "atlas",
+   "atlas": "sitcom_rev41b",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 20,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "handPoint": {
+    "x": 17,
+    "y": 6
+   },
+   "file": "pieces/x1/martin_pose_counter_reach.png",
+   "note": "right hand raised to the counter-top front edge (y~119 at feet 136); gloves pink built in; use at stand_counter 46 with work on counter_top_r",
+   "deprecated": "Rev 5: read as a waiter lifting a tray; use martin.stand + martin.overlay.gloves at stand_counter (46), turned toward counter_top_r"
+  },
+  "prop.insert_new_leaf.0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_new_leaf_0.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true
+  },
+  "prop.insert_new_leaf.1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 0,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_new_leaf_1.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true
+  },
+  "prop.insert_clock_midnight": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_clock_midnight.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "Day 11 midnight close: both hands on 12, no numerals; engine may caption \u00ab 00:00 \u00bb"
+  },
+  "prop.insert_parcel_label": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 61,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_insert_parcel_label.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "insert": true,
+   "note": "Day 13 close on the parcel label: blank label (grey rules, red stamp square, no letters); engine renders \u00ab Mme Martin, Quimper \u00bb inside textRect",
+   "textRect": {
+    "x": 13,
+    "y": 25,
+    "w": 34,
+    "h": 14
+   }
+  },
+  "prop.parcel_closed": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 74,
+    "y": 118,
+    "w": 14,
+    "h": 10
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_parcel_closed.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 9
+   },
+   "depth": 3,
+   "note": "Day 13 closed parcel for table4; proposed table4 mark table_parcel (118,119) = table centre (cup/milk off for this beat)",
+   "slots": {
+    "top": {
+     "x": 7,
+     "y": 0
+    }
+   }
+  },
+  "handprop.teapot": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 97,
+    "y": 118,
+    "w": 11,
+    "h": 8
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/handprop_teapot.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 5,
+    "y": 7
+   },
+   "depth": 3,
+   "note": "Days 14-18 teapot (replaces the tea_green tin stand-in); table4 slot: any plate gap, e.g. (118,119)"
+  },
+  "prop.cagnotte_jar": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 89,
+    "y": 118,
+    "w": 7,
+    "h": 9
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_cagnotte_jar.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 3,
+    "y": 8
+   },
+   "depth": 3,
+   "note": "Days 14/17 cagnotte: glass jar, coins as plain discs; kitchen shelf or table (118,119)"
+  },
+  "prop.radiator": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 57,
+    "y": 118,
+    "w": 16,
+    "h": 13
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_radiator.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 12
+   },
+   "depth": 3,
+   "note": "Day 15 kitchen radiator (kitchen had none): proposed wall slot (80,129) baseline = x72-87 between counter end (70) and table4 chair (90), clear of window/shelf/clock; slots top for gloves/cat (\u00ab Sur le radiateur \u00bb), under (\u00ab Sous le radiateur \u00bb)",
+   "slots": {
+    "top": {
+     "x": 8,
+     "y": 0
+    },
+    "under": {
+     "x": 8,
+     "y": 12
+    }
+   }
+  },
+  "prop.pot_chez_nous_newleaf.day": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 0,
+    "y": 118,
+    "w": 18,
+    "h": 26
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_pot_chez_nous_newleaf_day.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "note": "Day 14 \u00ab une nouvelle feuille \u00bb: young + a new leaf on its own stem (up-right, cream midrib, gold tips); 18x26, anchor (7,25) same as young, swap in place at (70,134); pair with narrator \u00ab Une nouvelle feuille \u00bb"
+  },
+  "prop.pot_chez_nous_newleaf.evening": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 19,
+    "y": 118,
+    "w": 18,
+    "h": 26
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_pot_chez_nous_newleaf_evening.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "note": "Day 14 \u00ab une nouvelle feuille \u00bb: young + a new leaf on its own stem (up-right, cream midrib, gold tips); 18x26, anchor (7,25) same as young, swap in place at (70,134); pair with narrator \u00ab Une nouvelle feuille \u00bb"
+  },
+  "prop.pot_chez_nous_newleaf.night": {
+   "source": "atlas",
+   "atlas": "sitcom_rev5",
+   "frame": {
+    "x": 38,
+    "y": 118,
+    "w": 18,
+    "h": 26
+   },
+   "pixelScale": 1,
+   "file": "pieces/x1/prop_pot_chez_nous_newleaf_night.png",
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 7,
+    "y": 25
+   },
+   "depth": 3,
+   "special": "pot 1 Chez nous",
+   "note": "Day 14 \u00ab une nouvelle feuille \u00bb: young + a new leaf on its own stem (up-right, cream midrib, gold tips); 18x26, anchor (7,25) same as young, swap in place at (70,134); pair with narrator \u00ab Une nouvelle feuille \u00bb"
+  },
+  "prop.insert_new_leaf": {
+   "type": "sequence",
+   "frames": [
+    "prop.insert_new_leaf.0",
+    "prop.insert_new_leaf.1"
+   ],
+   "fps": 2,
+   "note": "Day 14 \u00ab Une nouvelle feuille \u00bb close, 2-frame glint"
+  },
+  "prop.photo_plant_tail.screen": {
+   "source": "atlas",
+   "atlas": "sitcom_rev52",
+   "frame": {
+    "x": 61,
+    "y": 59,
+    "w": 46,
+    "h": 51
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "file": "pieces/x1/prop_photo_plant_tail_screen.png",
+   "note": "Day 11 photo (plant + Croissant tail photobomb from the right edge), daylight content; 46x51 = engine phone-overlay screen (184x204 css px at 4x); self-lit: never grade",
+   "selfLit": true
+  },
+  "prop.photo_plant_tail.tiny": {
+   "source": "atlas",
+   "atlas": "sitcom_rev52",
+   "frame": {
+    "x": 108,
+    "y": 59,
+    "w": 2,
+    "h": 4
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "file": "pieces/x1/prop_photo_plant_tail_tiny.png",
+   "note": "2x4 screen for handprop.phone (paste at phone-local (1,1)); self-lit",
+   "selfLit": true,
+   "fitsIn": "handprop.phone screen x1-2 y1-4"
+  },
+  "prop.insert_photo_plant_tail.day": {
+   "source": "atlas",
+   "atlas": "sitcom_rev52",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "file": "pieces/x1/prop_insert_photo_plant_tail_day.png",
+   "note": "close insert, phone in hands, photo 1:1 at screenRect; surroundings day",
+   "insert": true,
+   "screenRect": {
+    "x": 7,
+    "y": 3,
+    "w": 46,
+    "h": 51
+   }
+  },
+  "prop.insert_photo_plant_tail.evening": {
+   "source": "atlas",
+   "atlas": "sitcom_rev52",
+   "frame": {
+    "x": 61,
+    "y": 0,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "file": "pieces/x1/prop_insert_photo_plant_tail_evening.png",
+   "note": "as .day; surround dimmed + 1px glow ring; screen ungraded (lamp rule) - do not grade this asset",
+   "insert": true,
+   "screenRect": {
+    "x": 7,
+    "y": 3,
+    "w": 46,
+    "h": 51
+   }
+  },
+  "prop.insert_photo_plant_tail.night": {
+   "source": "atlas",
+   "atlas": "sitcom_rev52",
+   "frame": {
+    "x": 0,
+    "y": 59,
+    "w": 60,
+    "h": 58
+   },
+   "pixelScale": 1,
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "depth": 7,
+   "file": "pieces/x1/prop_insert_photo_plant_tail_night.png",
+   "note": "as .day; surround navy + 1px glow ring; screen ungraded (lamp rule) - do not grade this asset",
+   "insert": true,
+   "screenRect": {
+    "x": 7,
+    "y": 3,
+    "w": 46,
+    "h": 51
+   }
+  },
+  "lefevre.pose.look_phone_f0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev55",
+   "frame": {
+    "x": 17,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "file": "pieces/x1/lefevre_pose_look_phone_f0.png",
+   "handPoint": {
+    "x": 7,
+    "y": 13
+   },
+   "note": "phone seen from the back (screen faces her); head tilted 1px down; .0 eyes down, .1 closed-eye smile"
+  },
+  "lefevre.pose.look_phone_f1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev55",
+   "frame": {
+    "x": 34,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "file": "pieces/x1/lefevre_pose_look_phone_f1.png",
+   "handPoint": {
+    "x": 7,
+    "y": 13
+   },
+   "note": "phone seen from the back (screen faces her); head tilted 1px down; .0 eyes down, .1 closed-eye smile"
+  },
+  "lefevre.pose.look_phone_gown_f0": {
+   "source": "atlas",
+   "atlas": "sitcom_rev55",
+   "frame": {
+    "x": 51,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "file": "pieces/x1/lefevre_pose_look_phone_gown_f0.png",
+   "handPoint": {
+    "x": 7,
+    "y": 13
+   },
+   "note": "phone seen from the back (screen faces her); head tilted 1px down; .0 eyes down, .1 closed-eye smile; dressing-gown variant"
+  },
+  "lefevre.pose.look_phone_gown_f1": {
+   "source": "atlas",
+   "atlas": "sitcom_rev55",
+   "frame": {
+    "x": 68,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "file": "pieces/x1/lefevre_pose_look_phone_gown_f1.png",
+   "handPoint": {
+    "x": 7,
+    "y": 13
+   },
+   "note": "phone seen from the back (screen faces her); head tilted 1px down; .0 eyes down, .1 closed-eye smile; dressing-gown variant"
+  },
+  "lefevre.overlay.phone_glow": {
+   "source": "atlas",
+   "atlas": "sitcom_rev55",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "pixelScale": 1,
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "file": "pieces/x1/lefevre_overlay_phone_glow.png",
+   "overlay": true,
+   "ungraded": true,
+   "onlyGrades": [
+    "evening",
+    "night"
+   ],
+   "fitsPoses": [
+    "lefevre.pose.look_phone_f0",
+    "lefevre.pose.look_phone_f1",
+    "lefevre.pose.look_phone_gown_f0",
+    "lefevre.pose.look_phone_gown_f1"
+   ],
+   "note": "cool screen spill on jaw + hands; draw AFTER the cast grade, evening/night only"
+  },
+  "lefevre.pose.look_phone": {
+   "type": "sequence",
+   "frames": [
+    "lefevre.pose.look_phone_f0",
+    "lefevre.pose.look_phone_f1"
+   ],
+   "fps": 1,
+   "durations": [
+    1200,
+    0
+   ],
+   "loop": false,
+   "note": "f0 hold 1200 ms, then f1 holds to the end of the shot (0 = hold)"
+  },
+  "lefevre.pose.look_phone_gown": {
+   "type": "sequence",
+   "frames": [
+    "lefevre.pose.look_phone_gown_f0",
+    "lefevre.pose.look_phone_gown_f1"
+   ],
+   "fps": 1,
+   "durations": [
+    1200,
+    0
+   ],
+   "loop": false,
+   "note": "f0 hold 1200 ms, then f1 holds to the end of the shot (0 = hold)"
+  }
+ },
+ "note": "Sitcom Days 11-17 add-on pack. Props are variant-free (graded in code with the room light like kitchen cup/plate/milk); see SITCOM_D11_17_NOTES.md",
+ "files": {
+  "light.rain_kitchen.day": {
+   "source": "file",
+   "file": "../kitchen/light/rain.json",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "note": "rain grade maps (not a set)"
+  },
+  "light.rain_stairwell.day": {
+   "source": "file",
+   "file": "../stairwell/light/rain.json",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1
+  },
+  "fx.rain_window_kitchen.any": {
+   "source": "file",
+   "file": "pieces/x1/rain_kitchen_window.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "at": {
+    "x": 32,
+    "y": 80
+   }
+  },
+  "fx.rain_window_stairwell.any": {
+   "source": "file",
+   "file": "pieces/x1/rain_stairwell_window.png",
+   "anchor": "topleft",
+   "anchorPoint": {
+    "x": 0,
+    "y": 0
+   },
+   "pixelScale": 1,
+   "at": {
+    "x": 122,
+    "y": 48
+   }
+  }
+ }
+}

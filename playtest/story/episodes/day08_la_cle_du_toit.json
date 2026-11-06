@@ -1,0 +1,861 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d08_la_cle_du_toit",
+ "day": 8,
+ "title": "La clé du toit",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d08_",
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "stairwell",
+  "rooftop",
+  "kitchen_table4"
+ ],
+ "target_words": [
+  "une semaine",
+  "venez chez moi",
+  "à six heures",
+  "c’est gentil",
+  "le toit",
+  "le jardin",
+  "là-haut"
+ ],
+ "recycle_words": [
+  "la plante",
+  "merci",
+  "pardon"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Oh !",
+   "time": "07:30",
+   "plot": "cold_open",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_full",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Monday morning. Noé, half asleep, mug in hand, walks to the desk."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_desk_full"
+       ],
+       "note": "Pot ① is suddenly full and green (stage: full, D8 open only). No comment beyond one word."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Oh !",
+       "zh": "哦！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "HOLD 1 s. He smiles, says nothing more. Cut."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_question",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Une question",
+   "time": "08:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_off",
+       "action": "swap",
+       "to": "minuterie_on",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_neighbour_door",
+       "from": "left",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "door_neighbour_closed"
+       ],
+       "sfx": "knock"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_closed",
+       "action": "swap",
+       "to": "door_neighbour_open"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "lefevre"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Bonjour, Madame Lefèvre. Pardon… une question.",
+       "zh": "早上好，勒费弗尔太太。打扰了……我有个问题。"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Une question ?",
+       "zh": "一个问题？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La petite porte, là-haut… c’est quoi ?",
+       "zh": "上面那扇小门……是什么？",
+       "gesture": "point"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Le toit.",
+       "zh": "屋顶。"
+      }
+     ]
+    },
+    {
+     "id": "a1_depuis",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "She looks at him for a long beat."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Vous habitez ici depuis une semaine…",
+       "zh": "您住在这儿才一个星期……"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Attendez. Venez chez moi à six heures.",
+       "zh": "等等吧。六点来我这儿。"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "swap",
+       "to": "door_neighbour_closed"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Elle a dit quoi ? Quelle heure ?",
+        "zh": "她说什么？几点？"
+       },
+       "options": [
+        {
+         "fr": "À six heures !",
+         "zh": "六点！",
+         "correct": true
+        },
+        {
+         "fr": "À sept heures !",
+         "zh": "七点！",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "une_question",
+         "audio": "une_question"
+        },
+        {
+         "id": "depuis",
+         "audio": "depuis"
+        },
+        {
+         "id": "une_semaine",
+         "audio": "une_semaine"
+        },
+        {
+         "id": "attendre",
+         "audio": "attendre"
+        },
+        {
+         "id": "venez_chez_moi",
+         "audio": "venez_chez_moi"
+        },
+        {
+         "id": "a_six_heures",
+         "audio": "a_six_heures"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_cuisine",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Attendre",
+   "time": "08:10",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1b",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Elle dit : venez chez moi à six heures.",
+       "zh": "她说：六点去她家。",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "À six heures ? Attendre… toute la journée ?",
+       "zh": "六点？要等……一整天？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Attendre, oui. Six heures.",
+       "zh": "等，对。六点。"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Depuis une semaine, j’ai une question : c’est quoi, là-haut ?",
+       "zh": "一个星期以来，我一直有个问题：上面是什么？"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_clavier",
+   "set": "kitchen",
+   "light": "day",
+   "title": "La plante",
+   "time": "12:00",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_full",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Croissant on the desk, nose an inch from the full pot."
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ! La plante ! Non !",
+       "zh": "可颂！植物！不行！",
+       "face": "shocked"
+      },
+      {
+       "do": "cat_action",
+       "action": "keyboard_idle",
+       "at": "desk_keyboard",
+       "note": "He steps off the plant… onto the laptop keyboard, and settles."
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Pas la plante… d’accord.",
+       "zh": "不碰植物……好吧。",
+       "gesture": "facepalm",
+       "note": "B words: Day 1–7 only."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_cle",
+   "set": "stairwell",
+   "light": "evening",
+   "title": "Six heures",
+   "time": "18:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_neighbour_door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "door_neighbour_closed"
+       ],
+       "sfx": "knock"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_closed",
+       "action": "swap",
+       "to": "door_neighbour_open"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Six heures. Bon.",
+       "zh": "六点。好。"
+      },
+      {
+       "do": "prop",
+       "id": "key_old",
+       "action": "hold",
+       "who": "lefevre",
+       "note": "The old roof key, not the flat key (no ribbon). Nobody says whose it was (D11)."
+      },
+      {
+       "do": "prop",
+       "id": "insert_key_old",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_key_old"
+       ],
+       "note": "Her open hand. An old key."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "La clé du toit. Il y a un jardin, là-haut.",
+       "zh": "屋顶的钥匙。上面有个花园。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "camille"
+       ],
+       "note": "Réalisateur 2026-10-27: insert rule (max 1 line per insert, then back to actors). Player answers Lefèvre face to face."
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "options": [
+        {
+         "fr": "C’est pour moi ?",
+         "zh": "是给我的吗？",
+         "correct": true
+        },
+        {
+         "fr": "C’est mon chat ?",
+         "zh": "是我的猫吗？",
+         "correct": false
+        }
+       ],
+       "note": "The player speaks; any attempt counts."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Allez-y. Moi… pas encore.",
+       "zh": "去吧。我……还不去。"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est gentil, Madame. Merci !",
+       "zh": "真好心，女士。谢谢！",
+       "face": "happy"
+      }
+     ]
+    },
+    {
+     "id": "a2_basilic",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre"
+       ],
+       "note": "She also hands over a small pot of basil from her windowsill. GAP: basil_pot is kitchen-set art only, so it is not staged on the landing."
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Et ça : c’est du basilic, pour la cuisine.",
+       "zh": "还有这个：是罗勒，做菜用的。"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Oh… c’est gentil !",
+       "zh": "哦……您真好！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Madame… demain, à six heures, chez nous ?",
+       "zh": "女士……明天六点，来我们家？"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ],
+       "note": "A tiny nod. Door closes softly; a line of light under it."
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "swap",
+       "to": "door_neighbour_closed"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "cest_gentil",
+         "audio": "cest_gentil"
+        },
+        {
+         "id": "le_toit",
+         "audio": "le_toit"
+        },
+        {
+         "id": "le_jardin",
+         "audio": "le_jardin"
+        },
+        {
+         "id": "la_haut",
+         "audio": "la_haut"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "rooftop",
+   "light": "night",
+   "title": "Le jardin",
+   "time": "18:15",
+   "plot": "high_point",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "roof_door_closed",
+       "action": "swap",
+       "to": "roof_door_open",
+       "note": "The key turns (no key_turn sfx in registry: GAP sfx)."
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_roof_door",
+       "from": "left",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "roof_step_top",
+       "from": "left",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Night threshold only (the first daytime walk is Day 10). Moonlight, dry pots, an old bench."
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_pot1"
+      },
+      {
+       "do": "prop",
+       "id": "pot_chez_nous_full",
+       "action": "show",
+       "at": "pot_chez_nous",
+       "note": "Noé carries pot ① up from the desk and sets it down. From now on pot ① lives on the roof; the desk plant is basil_pot."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_chez_nous_full"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le jardin… là-haut !",
+       "zh": "花园……在上面！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le toit… et un jardin.",
+       "zh": "屋顶……还有个花园。",
+       "face": "happy"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "bench_cat"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "bench_cat",
+       "look_at": "stand_pot1",
+       "note": "Smile detail: Croissant already on the bench, as if he had always had a seat here."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "HOLD 3 s. Moon, the three of them, pot ① among the empty pots."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "set": "rooftop",
+   "light": "night",
+   "title": "Là-haut",
+   "time": "18:20",
+   "plot": "watering",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "w",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_chez_nous_full",
+       "action": "show",
+       "at": "pot_chez_nous"
+      },
+      {
+       "do": "prop",
+       "id": "arrosoir",
+       "action": "show",
+       "at": "floor",
+       "note": "Martin’s old arrosoir, brought up."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_chez_nous_full"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Il y a un jardin, là-haut.",
+         "zh": "上面有个花园。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "C’est gentil.",
+         "zh": "您真好。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Il peut rester ici ?",
+         "zh": "它能留在这儿吗？"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Je vous promets.",
+         "zh": "我向您保证。"
+        }
+       ],
+       "note": "Optional review, now at pot ① on the roof. One word per pour; exit after any pour."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen_table4",
+   "light": "night",
+   "title": "Sa chaise",
+   "time": "22:00",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "basil_pot",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "prop",
+       "id": "key_hooks_flat",
+       "action": "show",
+       "at": "wall_key_hooks",
+       "note": "Flat key on its hook; the old roof key stays in Noé’s pocket (D9)."
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "note": "Late. The desk behind them now holds the basil."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Demain, à six heures, Madame Lefèvre… ici.",
+       "zh": "明天六点，勒费弗尔太太……来这儿。",
+       "gesture": "point"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "seat_back_l",
+       "look_at": "stand_mid",
+       "note": "Croissant hops onto the empty fourth chair (seat_back_l) and claims it as HIS. Nobody calls it Lefèvre’s chair (D11 is frozen) and sits, very straight, staring at Noé."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et Croissant… sa chaise : là !",
+       "zh": "可颂嘛……它的椅子：就那把！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "He curls up on it. HOLD 2 s. Cut."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,895 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d07_la_visite",
+ "day": 7,
+ "title": "La visite",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d07_",
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "stairwell",
+  "kitchen_table4",
+  "kitchen"
+ ],
+ "target_words": [
+  "enchanté",
+  "vous voulez",
+  "rester",
+  "revenir",
+  "dans un mois",
+  "je vous promets",
+  "on va faire attention"
+ ],
+ "recycle_words": [
+  "c’est ma faute",
+  "une équipe",
+  "le bruit"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Dix heures moins cinq",
+   "time": "09:55",
+   "plot": "cold_open",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Noé hands Croissant over at her door, as agreed on D6. The cat walks in by himself."
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "doormat_neighbour"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci, Madame ! Une heure… deux heures !",
+       "zh": "谢谢您，女士！一个小时……两个小时！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Pas de bruit. C’est tout.",
+       "zh": "别出声。就这样。"
+      },
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "swap",
+       "to": "door_neighbour_closed"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "stairs_down"
+       ],
+       "note": "Footsteps coming up. A paper bag rustles."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_martin",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Enchantée !",
+   "time": "10:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "martin",
+       "at": "stand_door_r",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "walk_to",
+       "who": "martin",
+       "to": "stand_counter_r"
+      },
+      {
+       "do": "prop",
+       "id": "paper_bag",
+       "action": "hold",
+       "who": "martin",
+       "note": "The croissants (pastries)."
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "martin"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Bonjour ! Enchantée !",
+       "zh": "你好！很高兴认识你们！",
+       "face": "happy",
+       "gesture": "wave"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Enchantée, Madame Martin !",
+       "zh": "很高兴认识您，马丁太太！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Enchanté… euh… bienvenue !",
+       "zh": "很高兴……呃……欢迎！",
+       "face": "big-eyes",
+       "note": "Noé is male; « Enchanté » is safe in his mouth. The player is never made to say enchanté(e)."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "enchante",
+         "audio": "enchante"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Et voilà : des croissants ! Vous voulez un croissant ?",
+       "zh": "瞧：可颂面包！你们要一个吗？"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "He flinches at the word. Nobody notices but the player."
+      }
+     ]
+    },
+    {
+     "id": "a1_the",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Vous voulez du thé ou du café ?",
+       "zh": "您要茶还是咖啡？"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Propose à Madame Martin.",
+        "zh": "问问马丁太太。"
+       },
+       "options": [
+        {
+         "fr": "Vous voulez du thé, Madame ?",
+         "zh": "您要茶吗，女士？",
+         "correct": true
+        },
+        {
+         "fr": "Tu veux du thé, Martin ?",
+         "zh": "你要茶吗，马丁？",
+         "correct": false
+        }
+       ],
+       "note": "vous for the landlady; contrasts with D2 tu."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "vous_voulez",
+         "audio": "vous_voulez"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Du thé, merci. Ici, c’est très joli !",
+       "zh": "茶，谢谢。这里真漂亮！",
+       "face": "happy"
+      },
+      {
+       "do": "prop",
+       "id": "teapot",
+       "action": "show",
+       "at": "table_top"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_gant",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Le gant",
+   "time": "10:05",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "martin",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "action": "wear",
+       "who": "martin",
+       "overlay": "gloves"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "note": "She takes off her gloves and puts one on the chair beside her."
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "glove_on_chair",
+       "action": "show",
+       "at": "chair_seat_l_glove",
+       "note": "GAP: Martin’s glove (registry art gap). glove_on_chair stand-in."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "glove_on_chair"
+       ],
+       "note": "A ginger paw comes up from under the chair (he came out of Madame Lefèvre’s flat through her old cat flap, set up D6, and in through our door when it opened) and pulls the glove down."
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "glove_on_chair",
+       "action": "hide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Où est… ?",
+       "zh": "在哪儿……？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je ne sais pas !",
+       "zh": "我不知道！",
+       "face": "big-eyes",
+       "note": "B words known by D7."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_verite",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "La vérité",
+   "time": "10:07",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "table_end_l",
+       "note": "Croissant jumps on the table with the glove in his mouth. Sits. Drops it in front of Martin."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin"
+       ],
+       "note": "Long beat."
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Un chat. Ici.",
+       "zh": "一只猫。在这里。",
+       "face": "shocked"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Madame… c’est mon chat. Il s’appelle Croissant. C’est ma faute.",
+       "zh": "女士……这是我的猫。它叫可颂。是我的错。",
+       "face": "sad"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "On est une équipe, Madame. C’est notre faute.",
+       "zh": "我们是一个团队，女士。是我们的错。"
+      }
+     ]
+    },
+    {
+     "id": "a2_promets",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il peut rester ici ? Je vous promets…",
+       "zh": "它能留在这儿吗？我向您保证……"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Aide Noé. Promets.",
+        "zh": "帮诺埃。做个保证。"
+       },
+       "options": [
+        {
+         "fr": "Je vous promets : on va faire attention.",
+         "zh": "我向您保证：我们会注意的。",
+         "correct": true
+        },
+        {
+         "fr": "Je ne sais pas.",
+         "zh": "我不知道。",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "rester",
+         "audio": "rester"
+        },
+        {
+         "id": "je_vous_promets",
+         "audio": "je_vous_promets"
+        },
+        {
+         "id": "on_va_faire_attention",
+         "audio": "on_va_faire_attention"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Je vous promets, Madame. On va faire attention. Pas de bruit la nuit.",
+       "zh": "我向您保证，女士。我们会注意的。晚上不出声。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Quand j’étais petite",
+   "time": "10:10",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "table_end_l",
+       "look_at": "martin"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "martin",
+        "croissant"
+       ],
+       "note": "She picks up the glove. Croissant looks at her. She looks at him."
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Quand j’étais petite, j’avais un chat roux…",
+       "zh": "我小时候，养过一只橘猫……",
+       "face": "happy",
+       "note": "HOLD 2 s on her face after. The reveal of the week."
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Il s’appelait Biscotte.",
+       "zh": "它叫比斯科特。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "quand_j_etais_petite",
+         "audio": "quand_j_etais_petite"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Bon. Il peut rester. Mais faites attention.",
+       "zh": "好吧。它可以留下。但要小心。",
+       "note": "FIRST moment the episode says he can stay (Day 7). Trial period."
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Écrivez les règles, s’il vous plaît.",
+       "zh": "请把规矩写下来。"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Vous allez revenir ?",
+       "zh": "您还会再来吗？"
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Oui. Je vais revenir dans un mois.",
+       "zh": "会的。我一个月后会再来。",
+       "note": "Delta after Neng round 2: restores the second hearing of « revenir » / « dans un mois » lost when hp#6 became « Écrivez les règles… »."
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "il_faut_inf",
+         "audio": "il_faut_inf"
+        },
+        {
+         "id": "revenir",
+         "audio": "revenir"
+        },
+        {
+         "id": "dans_un_mois",
+         "audio": "dans_un_mois"
+        }
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "SMILE: Noé hugs the cat; the cat looks at Martin over his shoulder."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci ! On va faire attention ! Croissant… tu restes ici !",
+       "zh": "谢谢！我们会注意的！可颂……你可以留在这儿了！",
+       "face": "happy",
+       "gesture": "hold"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a3_arrosoir",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Ma surprise",
+   "time": "10:20",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a3",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_young",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "martin",
+       "at": "stand_desk",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "martin",
+        "pot_desk_young"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Quand j’étais petite, c’était mon arrosoir.",
+       "zh": "我小时候，这是我的喷壶。"
+      },
+      {
+       "do": "prop",
+       "id": "arrosoir",
+       "action": "show",
+       "at": "floor_arrosoir",
+       "note": "Martin’s old arrosoir (laptop on: floor mark)."
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Et voilà ma surprise : mon vieil arrosoir. Pour votre plante !",
+       "zh": "这就是我的惊喜：我的旧喷壶。给你们的植物！",
+       "face": "happy",
+       "note": "Gift = her OLD watering can, NOT a plant (arrosoir on floor_arrosoir)."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Oh ! Merci, Madame !",
+       "zh": "哦！谢谢您，女士！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "martin",
+       "fr": "Un mot, un peu d’eau. Un mot, une fois. Pas tout l’arrosoir !",
+       "zh": "一个词，一点水。一个词，浇一次。别把整壶都倒了！",
+       "note": "Teaches the review mechanic."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Première fois",
+   "time": "10:22",
+   "plot": "watering",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "w",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_desk_young",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_desk_young"
+       ],
+       "note": "FIRST watering (stage plan): Martin’s arrosoir over the young desk pot."
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Bonjour, la plante !",
+         "zh": "你好，植物！"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Bonjour. Je m’appelle…",
+         "zh": "你好。我叫……"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Il y a un chat ici.",
+         "zh": "这里有只猫。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Pardon. Vous pouvez répéter ?",
+         "zh": "对不起。您可以再说一遍吗？"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "J’ai perdu la clé… j’ai trouvé la clé !",
+         "zh": "我丢了钥匙……我找到钥匙了！"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Il peut rester ici.",
+         "zh": "它可以留在这儿。"
+        }
+       ],
+       "note": "Optional Week 1 review at desk pot ① (pot_desk_young). One Week 1 word per pour; exit after any pour. First watering of the desk pot."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "voice_martin",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Message",
+   "time": "18:00",
+   "plot": "voice",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "v",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Merci pour le thé ! Je vais revenir dans un mois. Bisous à Biscotte… pardon, à Croissant !",
+       "zh": "谢谢你们的茶！我一个月后再来。亲亲比斯科特……不对，亲亲可颂！"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "dans_un_mois",
+         "audio": "dans_un_mois"
+        }
+       ],
+       "prompt": {
+        "fr": "Je vais revenir ___ ___ ___.",
+        "zh": "我___后再来。",
+        "audio": "dans_un_mois"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "reply_martin",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Réponse",
+   "time": "18:01",
+   "plot": "reply",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "r",
+     "steps": [
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Une réponse pour Madame Martin :",
+        "zh": "给马丁太太回个消息："
+       },
+       "options": [
+        {
+         "fr": "Merci, Madame ! On va faire attention.",
+         "zh": "谢谢您，女士！我们会注意的。",
+         "correct": true
+        },
+        {
+         "fr": "Merci, Madame ! Pas de thé.",
+         "zh": "谢谢您，女士！不要茶。",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "stairwell",
+   "light": "night",
+   "title": "La petite porte",
+   "time": "23:00",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "step_11",
+       "note": "Top of the stairs, by the little locked roof door (roof_steps)."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "He scratches at the little door. Locked. He looks up: a line of moonlight under it."
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ? En haut… c’est quoi, ici ?",
+       "zh": "可颂？楼上……这里是什么？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "swap",
+       "to": "minuterie_off",
+       "sfx": "minuterie_click"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

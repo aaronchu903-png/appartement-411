@@ -1,0 +1,45 @@
+{
+ "multiply": {
+  "src": "light/evening_multiplier_half.png",
+  "decode": "x2 (= map*127.5)",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "cool_used": [
+   0.24,
+   0.31,
+   0.43
+  ],
+  "deviation": "night base hue nudged toward teal, same as kitchen soir.json",
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "low_sun",
+    "shape": "flat warm ellipse on parapet + deck under the sun (x60), multiply only",
+    "color": [
+     1.2,
+     1.02,
+     0.72
+    ]
+   }
+  ],
+  "scenery": {
+   "note": "sky, tower, skyline ungraded (own sunset colours)"
+  },
+  "ungraded": [
+   "backdrop.rooftop_sky",
+   "backdrop.rooftop_skyline_far",
+   "backdrop.rooftop_skyline",
+   "backdrop.rooftop_tower",
+   "prop.string_lights_on"
+  ],
+  "cast": "same map at strength 0.25 when <1, 0.6 when >1"
+ }
+}

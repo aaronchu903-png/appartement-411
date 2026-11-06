@@ -1,0 +1,3118 @@
+{
+ "assetRoot": "",
+ "atlases": {
+  "noe": {
+   "file": "noe_sheet.png",
+   "w": 128,
+   "h": 144
+  },
+  "camille": {
+   "file": "camille_sheet.png",
+   "w": 128,
+   "h": 120
+  },
+  "martin": {
+   "file": "martin_sheet.png",
+   "w": 128,
+   "h": 120
+  },
+  "lefevre": {
+   "file": "lefevre_sheet.png",
+   "w": 128,
+   "h": 120
+  },
+  "croissant": {
+   "file": "croissant_sheet.png",
+   "w": 112,
+   "h": 36
+  }
+ },
+ "assets": {
+  "noe.idle.0": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.idle.1": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.stand": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.walk.0": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.walk.1": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 64,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.walk.2": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.walk.3": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.neutral": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 112,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.happy": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 0,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.sad": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 16,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.shocked": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 32,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.big-eyes": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 48,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.blink": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 64,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.talk_0": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 80,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.talk_1": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 96,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.face.brow_raise": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 112,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.base.noarms": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 0,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.arm_l.down": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 16,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 3,
+    "y": 16
+   }
+  },
+  "noe.arm_r.down": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 32,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 12,
+    "y": 16
+   }
+  },
+  "noe.arm_l.wave": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 48,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 7
+   }
+  },
+  "noe.arm_r.wave": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 64,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 7
+   }
+  },
+  "noe.arm_l.point": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 80,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 11
+   }
+  },
+  "noe.arm_r.point": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 96,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 11
+   }
+  },
+  "noe.arm_l.hips": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 112,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 4,
+    "y": 14
+   }
+  },
+  "noe.arm_r.hips": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 0,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 11,
+    "y": 14
+   }
+  },
+  "noe.arm_l.chest": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 16,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 12
+   }
+  },
+  "noe.arm_r.chest": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 32,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 12
+   }
+  },
+  "noe.arm_l.hold": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 48,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 15
+   }
+  },
+  "noe.arm_r.hold": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 64,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 15
+   }
+  },
+  "noe.arm_l.facepalm": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 80,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 6
+   }
+  },
+  "noe.arm_r.facepalm": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 96,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 6
+   }
+  },
+  "noe.overlay.scarf": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 112,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.shadow": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 0,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.pose.facepalm": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 16,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_stand": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 32,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_idle.0": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 48,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_idle.1": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 64,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_walk.0": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 80,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_walk.1": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 96,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_walk.2": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 112,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "noe.back_walk.3": {
+   "source": "atlas",
+   "atlas": "noe",
+   "frame": {
+    "x": 0,
+    "y": 120,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.idle.0": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.idle.1": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.stand": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.walk.0": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.walk.1": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 64,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.walk.2": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.walk.3": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.neutral": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 112,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.happy": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 0,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.sad": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 16,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.shocked": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 32,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.big-eyes": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 48,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.blink": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 64,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.talk_0": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 80,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.talk_1": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 96,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.face.brow_raise": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 112,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.base.noarms": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 0,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.arm_l.down": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 16,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 3,
+    "y": 16
+   }
+  },
+  "camille.arm_r.down": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 32,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 12,
+    "y": 16
+   }
+  },
+  "camille.arm_l.wave": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 48,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 7
+   }
+  },
+  "camille.arm_r.wave": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 64,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 7
+   }
+  },
+  "camille.arm_l.point": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 80,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 11
+   }
+  },
+  "camille.arm_r.point": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 96,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 11
+   }
+  },
+  "camille.arm_l.hips": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 112,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 4,
+    "y": 14
+   }
+  },
+  "camille.arm_r.hips": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 0,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 11,
+    "y": 14
+   }
+  },
+  "camille.arm_l.chest": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 16,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 12
+   }
+  },
+  "camille.arm_r.chest": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 32,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 12
+   }
+  },
+  "camille.arm_l.hold": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 48,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 15
+   }
+  },
+  "camille.arm_r.hold": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 64,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 15
+   }
+  },
+  "camille.arm_l.facepalm": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 80,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 6
+   }
+  },
+  "camille.arm_r.facepalm": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 96,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 6
+   }
+  },
+  "camille.shadow": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 112,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.pose.facepalm": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 0,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_stand": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 16,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_idle.0": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 32,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_idle.1": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 48,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_walk.0": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 64,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_walk.1": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 80,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_walk.2": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 96,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "camille.back_walk.3": {
+   "source": "atlas",
+   "atlas": "camille",
+   "frame": {
+    "x": 112,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.idle.0": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.idle.1": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.stand": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.walk.0": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.walk.1": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 64,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.walk.2": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.walk.3": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.neutral": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 112,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.happy": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 0,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.sad": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 16,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.shocked": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 32,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.big-eyes": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 48,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.blink": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 64,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.talk_0": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 80,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.talk_1": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 96,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.face.brow_raise": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 112,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.base.noarms": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 0,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.arm_l.down": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 16,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 2,
+    "y": 18
+   }
+  },
+  "martin.arm_r.down": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 32,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 13,
+    "y": 18
+   }
+  },
+  "martin.arm_l.wave": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 48,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 0,
+    "y": 9
+   }
+  },
+  "martin.arm_r.wave": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 64,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 15,
+    "y": 9
+   }
+  },
+  "martin.arm_l.point": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 80,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 0,
+    "y": 13
+   }
+  },
+  "martin.arm_r.point": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 96,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 15,
+    "y": 13
+   }
+  },
+  "martin.arm_l.hips": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 112,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 3,
+    "y": 16
+   }
+  },
+  "martin.arm_r.hips": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 0,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 12,
+    "y": 16
+   }
+  },
+  "martin.arm_l.chest": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 16,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 5,
+    "y": 14
+   }
+  },
+  "martin.arm_r.chest": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 32,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 10,
+    "y": 14
+   }
+  },
+  "martin.arm_l.hold": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 48,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 0,
+    "y": 17
+   }
+  },
+  "martin.arm_r.hold": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 64,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 15,
+    "y": 17
+   }
+  },
+  "martin.arm_l.facepalm": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 80,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 7
+   }
+  },
+  "martin.arm_r.facepalm": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 96,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 7
+   }
+  },
+  "martin.shadow": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 112,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.pose.facepalm": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 0,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.pose.proud": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 16,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.pose.sigh": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 32,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.pose.hips": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 48,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.pose.wave": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 64,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "martin.pose.scold": {
+   "source": "atlas",
+   "atlas": "martin",
+   "frame": {
+    "x": 80,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.idle.0": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.idle.1": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.stand": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.walk.0": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.walk.1": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 64,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.walk.2": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 80,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.walk.3": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.neutral": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 112,
+    "y": 0,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.happy": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 0,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.sad": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 16,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.shocked": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 32,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.big-eyes": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 48,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.blink": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 64,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.talk_0": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 80,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.talk_1": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 96,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.face.brow_raise": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 112,
+    "y": 24,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.base.noarms": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 0,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.arm_l.down": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 16,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 3,
+    "y": 16
+   }
+  },
+  "lefevre.arm_r.down": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 32,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 12,
+    "y": 16
+   }
+  },
+  "lefevre.arm_l.wave": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 48,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 7
+   }
+  },
+  "lefevre.arm_r.wave": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 64,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 7
+   }
+  },
+  "lefevre.arm_l.point": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 80,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 11
+   }
+  },
+  "lefevre.arm_r.point": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 96,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 11
+   }
+  },
+  "lefevre.arm_l.hips": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 112,
+    "y": 48,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 4,
+    "y": 14
+   }
+  },
+  "lefevre.arm_r.hips": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 0,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 11,
+    "y": 14
+   }
+  },
+  "lefevre.arm_l.chest": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 16,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 12
+   }
+  },
+  "lefevre.arm_r.chest": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 32,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 12
+   }
+  },
+  "lefevre.arm_l.hold": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 48,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 1,
+    "y": 15
+   }
+  },
+  "lefevre.arm_r.hold": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 64,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 14,
+    "y": 15
+   }
+  },
+  "lefevre.arm_l.facepalm": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 80,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 6,
+    "y": 6
+   }
+  },
+  "lefevre.arm_r.facepalm": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 96,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1,
+   "handPoint": {
+    "x": 9,
+    "y": 6
+   }
+  },
+  "lefevre.overlay.glasses": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 112,
+    "y": 72,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.shadow": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 0,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "lefevre.pose.facepalm": {
+   "source": "atlas",
+   "atlas": "lefevre",
+   "frame": {
+    "x": 16,
+    "y": 96,
+    "w": 16,
+    "h": 24
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 8,
+    "y": 23
+   },
+   "pixelScale": 1
+  },
+  "croissant.idle.0": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.idle.1": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 14,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.stand": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 28,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.sit": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 42,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.walk.0": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 56,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.walk.1": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 70,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.walk.2": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 84,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.walk.3": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 98,
+    "y": 0,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.tail_up": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 0,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.neutral": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 14,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.happy": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 28,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.sad": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 42,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.shocked": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 56,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.big-eyes": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 70,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.blink": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 84,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.chew": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 98,
+    "y": 12,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.face.brow_raise": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 0,
+    "y": 24,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "croissant.base.noface": {
+   "source": "atlas",
+   "atlas": "croissant",
+   "frame": {
+    "x": 14,
+    "y": 24,
+    "w": 14,
+    "h": 12
+   },
+   "anchor": "feet",
+   "anchorPoint": {
+    "x": 6,
+    "y": 11
+   },
+   "pixelScale": 1
+  },
+  "noe.idle": {
+   "type": "sequence",
+   "frames": [
+    "noe.idle.0",
+    "noe.idle.1"
+   ],
+   "fps": 2
+  },
+  "noe.walk": {
+   "type": "sequence",
+   "frames": [
+    "noe.walk.0",
+    "noe.walk.1",
+    "noe.walk.2",
+    "noe.walk.3"
+   ],
+   "fps": 8
+  },
+  "noe.back_idle": {
+   "type": "sequence",
+   "frames": [
+    "noe.back_idle.0",
+    "noe.back_idle.1"
+   ],
+   "fps": 2
+  },
+  "noe.back_walk": {
+   "type": "sequence",
+   "frames": [
+    "noe.back_walk.0",
+    "noe.back_walk.1",
+    "noe.back_walk.2",
+    "noe.back_walk.3"
+   ],
+   "fps": 8
+  },
+  "camille.idle": {
+   "type": "sequence",
+   "frames": [
+    "camille.idle.0",
+    "camille.idle.1"
+   ],
+   "fps": 2
+  },
+  "camille.walk": {
+   "type": "sequence",
+   "frames": [
+    "camille.walk.0",
+    "camille.walk.1",
+    "camille.walk.2",
+    "camille.walk.3"
+   ],
+   "fps": 8
+  },
+  "camille.back_idle": {
+   "type": "sequence",
+   "frames": [
+    "camille.back_idle.0",
+    "camille.back_idle.1"
+   ],
+   "fps": 2
+  },
+  "camille.back_walk": {
+   "type": "sequence",
+   "frames": [
+    "camille.back_walk.0",
+    "camille.back_walk.1",
+    "camille.back_walk.2",
+    "camille.back_walk.3"
+   ],
+   "fps": 8
+  },
+  "martin.idle": {
+   "type": "sequence",
+   "frames": [
+    "martin.idle.0",
+    "martin.idle.1"
+   ],
+   "fps": 2
+  },
+  "martin.walk": {
+   "type": "sequence",
+   "frames": [
+    "martin.walk.0",
+    "martin.walk.1",
+    "martin.walk.2",
+    "martin.walk.3"
+   ],
+   "fps": 8
+  },
+  "lefevre.idle": {
+   "type": "sequence",
+   "frames": [
+    "lefevre.idle.0",
+    "lefevre.idle.1"
+   ],
+   "fps": 2
+  },
+  "lefevre.walk": {
+   "type": "sequence",
+   "frames": [
+    "lefevre.walk.0",
+    "lefevre.walk.1",
+    "lefevre.walk.2",
+    "lefevre.walk.3"
+   ],
+   "fps": 8
+  },
+  "croissant.idle": {
+   "type": "sequence",
+   "frames": [
+    "croissant.idle.0",
+    "croissant.idle.1"
+   ],
+   "fps": 2
+  },
+  "croissant.walk": {
+   "type": "sequence",
+   "frames": [
+    "croissant.walk.0",
+    "croissant.walk.1",
+    "croissant.walk.2",
+    "croissant.walk.3"
+   ],
+   "fps": 8
+  }
+ }
+}

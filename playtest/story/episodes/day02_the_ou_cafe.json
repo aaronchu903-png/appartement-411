@@ -1,0 +1,1035 @@
+{
+  "schema": "a411.episode/0.2",
+  "id": "d02_the_ou_cafe",
+  "day": 2,
+  "title": "Thé ou café ?",
+  "version": 1,
+  "status": "draft",
+  "clip_prefix": "d02_",
+  "cast": [
+    "noe",
+    "camille",
+    "croissant",
+    "narrator"
+  ],
+  "sets": [
+    "kitchen_table4",
+    "kitchen"
+  ],
+  "target_words": [
+    "tu veux",
+    "je voudrais",
+    "le café",
+    "le thé",
+    "l’eau",
+    "le lait",
+    "le pain",
+    "il n’y a pas de",
+    "c’est combien",
+    "les croquettes"
+  ],
+  "recycle_words": [
+    "merci",
+    "c’est",
+    "il faut"
+  ],
+  "flags_set": [
+    "d02_boisson"
+  ],
+  "flags_read": [
+    "d01_secret",
+    "d02_boisson"
+  ],
+  "scenes": [
+    {
+      "id": "cold_open",
+      "set": "kitchen_table4",
+      "light": "day",
+      "title": "Le sac",
+      "time": "07:30",
+      "plot": "cold_open",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "co",
+          "steps": [
+            {
+              "do": "prop",
+              "id": "paper_bag",
+              "action": "show",
+              "at": "floor",
+              "note": "The kibble bag, empty."
+            },
+            {
+              "do": "cat_action",
+              "action": "sit",
+              "at": "floor",
+              "look_at": "paper_bag"
+            },
+            {
+              "do": "cut_to",
+              "shot": "wide"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "paper_bag",
+                "croissant"
+              ],
+              "note": "Croissant puts his whole head in the bag. The bag is empty. He comes out with a sad face. No text."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a1_cafe",
+      "set": "kitchen_table4",
+      "light": "day",
+      "title": "Thé ou café ?",
+      "time": "07:31",
+      "plot": "A",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "a1_hier_oui",
+          "steps": [
+            {
+              "do": "enter",
+              "who": "noe",
+              "at": "stand_counter",
+              "from": "right",
+              "pose": "stand"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Merci pour hier. Chut !",
+              "zh": "谢谢你昨天的事。嘘！",
+              "face": "happy",
+              "note": "whisper"
+            }
+          ],
+          "if": {
+            "flag": "d01_secret",
+            "equals": true
+          }
+        },
+        {
+          "id": "a1_hier_non",
+          "steps": [
+            {
+              "do": "enter",
+              "who": "noe",
+              "at": "stand_counter",
+              "from": "right",
+              "pose": "stand"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Pas un mot à Camille… s’il te plaît.",
+              "zh": "别跟卡米耶说……拜托了。",
+              "face": "big-eyes",
+              "note": "whisper"
+            }
+          ],
+          "if": {
+            "flag": "d01_secret",
+            "equals": false
+          }
+        },
+        {
+          "id": "a1_serveur",
+          "steps": [
+            {
+              "do": "prop",
+              "action": "wear",
+              "who": "noe",
+              "overlay": "apron_towel"
+            },
+            {
+              "do": "enter",
+              "who": "camille",
+              "at": "seat_back_l",
+              "from": "right",
+              "pose": "sit_front"
+            },
+            {
+              "do": "cut_to",
+              "shot": "medium"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Bonjour, Madame ! Vous voulez du thé ou du café ?",
+              "zh": "早上好，女士！您要茶还是咖啡？",
+              "face": "happy",
+              "note": "Noé plays a café waiter, towel on the arm."
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Je voudrais du café, s’il vous plaît.",
+              "zh": "我想要咖啡，劳驾。",
+              "face": "neutral",
+              "note": "She plays along, deadpan."
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Très bien, Madame !",
+              "zh": "好的，女士！",
+              "gesture": "hold"
+            },
+            {
+              "do": "learning_module",
+              "module": "learn_words",
+              "items": [
+                {
+                  "id": "le_the",
+                  "audio": "le_the"
+                },
+                {
+                  "id": "le_cafe",
+                  "audio": "le_cafe"
+                },
+                {
+                  "id": "je_voudrais",
+                  "audio": "je_voudrais"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a1_toi",
+          "steps": [
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "noe"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Et toi ? Tu veux du thé ou du café ?",
+              "zh": "你呢？你要茶还是咖啡？"
+            },
+            {
+              "do": "learning_module",
+              "module": "output",
+              "mode": "spoken",
+              "choices": [
+                {
+                  "fr": "Je voudrais du thé, s’il te plaît.",
+                  "zh": "请给我茶。",
+                  "sets_flag": {
+                    "flag": "d02_boisson",
+                    "value": "the"
+                  }
+                },
+                {
+                  "fr": "Je voudrais du café, s’il te plaît.",
+                  "zh": "请给我咖啡。",
+                  "sets_flag": {
+                    "flag": "d02_boisson",
+                    "value": "cafe"
+                  }
+                },
+                {
+                  "fr": "De l’eau, s’il te plaît.",
+                  "zh": "请给我水。",
+                  "sets_flag": {
+                    "flag": "d02_boisson",
+                    "value": "eau"
+                  }
+                }
+              ],
+              "note": "Choice at ~1:30; the cup that arrives matches it."
+            },
+            {
+              "do": "learning_module",
+              "module": "learn_words",
+              "items": [
+                {
+                  "id": "tu_veux",
+                  "audio": "tu_veux"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a1_the",
+          "steps": [
+            {
+              "do": "prop",
+              "id": "cup",
+              "action": "show",
+              "at": "table_top"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Du thé ! Voilà.",
+              "zh": "茶！给你。",
+              "face": "happy"
+            }
+          ],
+          "if": {
+            "flag": "d02_boisson",
+            "equals": "the"
+          }
+        },
+        {
+          "id": "a1_cafe2",
+          "steps": [
+            {
+              "do": "prop",
+              "id": "cup",
+              "action": "show",
+              "at": "table_top"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Du café ! Voilà.",
+              "zh": "咖啡！给你。",
+              "face": "happy"
+            }
+          ],
+          "if": {
+            "flag": "d02_boisson",
+            "equals": "cafe"
+          }
+        },
+        {
+          "id": "a1_eau",
+          "steps": [
+            {
+              "do": "prop",
+              "id": "cup",
+              "action": "show",
+              "at": "table_top"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "De l’eau ! Voilà.",
+              "zh": "水！给你。",
+              "face": "happy"
+            }
+          ],
+          "if": {
+            "flag": "d02_boisson",
+            "equals": "eau"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a2_pain",
+      "set": "kitchen_table4",
+      "light": "day",
+      "title": "Pas de lait",
+      "time": "07:34",
+      "plot": "A",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "a2_pain",
+          "steps": [
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Il y a du pain ?",
+              "zh": "有面包吗？"
+            },
+            {
+              "do": "prop",
+              "id": "toast_plate",
+              "action": "show",
+              "at": "table_top"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Oui ! Voilà du pain.",
+              "zh": "有！面包来了。",
+              "face": "happy"
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Et du lait, pour le café ?",
+              "zh": "还有牛奶吗？加咖啡里。"
+            },
+            {
+              "do": "walk_to",
+              "who": "noe",
+              "to": "stand_fridge"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "noe"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Euh… il n’y a pas de lait.",
+              "zh": "呃……没有牛奶了。",
+              "face": "sad"
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Pas de lait… D’accord. Et de l’eau, s’il te plaît.",
+              "zh": "没牛奶……好吧。那请给我点水。"
+            },
+            {
+              "do": "learning_module",
+              "module": "learn_words",
+              "items": [
+                {
+                  "id": "le_pain",
+                  "audio": "le_pain"
+                },
+                {
+                  "id": "le_lait",
+                  "audio": "le_lait"
+                },
+                {
+                  "id": "il_n_y_a_pas_de",
+                  "audio": "il_n_y_a_pas_de"
+                },
+                {
+                  "id": "l_eau",
+                  "audio": "l_eau"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a2_croquettes",
+          "steps": [
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "paper_bag"
+              ]
+            },
+            {
+              "do": "sit",
+              "who": "noe",
+              "seat": "seat_end_r"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Et il n’y a pas de croquettes…",
+              "zh": "而且猫粮也没了……",
+              "face": "sad",
+              "note": "whisper, to the player only"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "camille"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Des croquettes ?",
+              "zh": "猫粮？",
+              "face": "brow_raise"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "noe"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Euh… des croissants ! Il n’y a pas de croissants !",
+              "zh": "呃……是可颂！可颂面包没了！",
+              "face": "big-eyes"
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "On a du pain, Noé.",
+              "zh": "我们有面包啊，诺埃。",
+              "face": "neutral"
+            },
+            {
+              "do": "learning_module",
+              "module": "learn_words",
+              "items": [
+                {
+                  "id": "les_croquettes",
+                  "audio": "les_croquettes"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b_pain",
+      "set": "kitchen_table4",
+      "light": "day",
+      "title": "Le pain",
+      "time": "07:37",
+      "plot": "B",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "b_set",
+          "steps": [
+            {
+              "do": "cut_to",
+              "shot": "medium",
+              "on": [
+                "camille",
+                "toast_plate"
+              ],
+              "note": "Set-up: Camille’s bread is on the plate. She gets up to the fridge, back to the table."
+            },
+            {
+              "do": "walk_to",
+              "who": "camille",
+              "to": "stand_fridge"
+            }
+          ]
+        },
+        {
+          "id": "b_action",
+          "steps": [
+            {
+              "do": "cat_action",
+              "action": "walk",
+              "at": "floor"
+            },
+            {
+              "do": "cat_action",
+              "action": "chew",
+              "at": "table_end_r",
+              "note": "While Camille is at the fridge (back turned, door open), Croissant eats her bread on the table end."
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "croissant",
+                "toast_plate"
+              ]
+            },
+            {
+              "do": "cat_action",
+              "action": "walk",
+              "at": "stand_mid",
+              "note": "He drops under the table, out of sight, before she turns round."
+            }
+          ]
+        },
+        {
+          "id": "b_payoff",
+          "crop": {
+            "k": 8,
+            "viewX": 100,
+            "viewY": 92
+          },
+          "steps": [
+            {
+              "do": "sit",
+              "who": "camille",
+              "seat": "seat_back_l"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "toast_plate"
+              ],
+              "note": "Camille sees only the empty plate. She never sees the cat."
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "camille"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Mon pain ?",
+              "zh": "我的面包呢？",
+              "face": "brow_raise"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "noe"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "C’est moi !",
+              "zh": "是我！",
+              "face": "happy",
+              "note": "Mouth full; he grabbed a slice to cover. Inverts his usual « Ce n’est pas moi ! »."
+            },
+            {
+              "do": "say",
+              "who": "camille",
+              "fr": "Merci, Noé.",
+              "zh": "谢谢你啊，诺埃。",
+              "face": "neutral"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "voice_camille",
+      "set": "kitchen",
+      "light": "day",
+      "title": "Message de Camille",
+      "time": "12:00",
+      "plot": "voice",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "v",
+          "steps": [
+            {
+              "do": "prop",
+              "id": "phone",
+              "action": "show",
+              "at": "desk_top",
+              "sfx": "chime_message"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "phone"
+              ]
+            },
+            {
+              "do": "phone_bubble",
+              "who": "camille",
+              "icon": "phone",
+              "fr": "Il n’y a pas de lait. Tu peux acheter du lait ? Merci !",
+              "zh": "没有牛奶了。你能买点牛奶吗？谢谢！"
+            },
+            {
+              "do": "learning_module",
+              "module": "dictation",
+              "items": [
+                {
+                  "id": "le_lait",
+                  "audio": "le_lait"
+                }
+              ],
+              "prompt": {
+                "fr": "Il n’y a pas de ___.",
+                "zh": "没有___了。",
+                "audio": "le_lait"
+              }
+            }
+          ],
+          "note": "Camille at work; message to the player."
+        }
+      ]
+    },
+    {
+      "id": "reply_camille",
+      "set": "kitchen",
+      "light": "day",
+      "title": "Réponse",
+      "time": "12:01",
+      "plot": "reply",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "r",
+          "steps": [
+            {
+              "do": "learning_module",
+              "module": "output",
+              "mode": "written",
+              "prompt": {
+                "fr": "Une réponse pour Camille :",
+                "zh": "给卡米耶回个消息："
+              },
+              "options": [
+                {
+                  "fr": "D’accord ! Je vais acheter du lait.",
+                  "zh": "好的！我去买牛奶。",
+                  "correct": true
+                },
+                {
+                  "fr": "D’accord ! Je vais acheter du café.",
+                  "zh": "好的！我去买咖啡。",
+                  "correct": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a3_internet",
+      "set": "kitchen",
+      "light": "day",
+      "title": "C’est combien ?",
+      "time": "12:05",
+      "plot": "A",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "a3",
+          "crop": {
+            "k": 10,
+            "viewX": 147,
+            "viewY": 101
+          },
+          "stage": "world",
+          "steps": [
+            {
+              "do": "enter",
+              "who": "noe",
+              "at": "stand_desk",
+              "from": "right",
+              "pose": "stand"
+            },
+            {
+              "do": "cut_to",
+              "shot": "medium",
+              "on": [
+                "noe",
+                "desk_top"
+              ],
+              "note": "Réalisateur 2026-10-27: Noé visible at the laptop for his question (insert rule)."
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Il faut des croquettes. Les croquettes… c’est combien ?",
+              "zh": "得买猫粮。猫粮……多少钱？"
+            },
+            {
+              "do": "prop",
+              "id": "insert_laptop_price",
+              "action": "show",
+              "caption": {
+                "text": "12 €",
+                "on": "insert_laptop_price"
+              },
+              "note": "Laptop shop page: price caption (price rect ~11 chars); the cat-food image names the product. (Was narrator « Croquettes : 12 € ».) zh: 猫粮：12欧元"
+            },
+            {
+              "do": "prop",
+              "id": "laptop_img_catfood",
+              "action": "show"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "insert_laptop_price"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Douze euros… d’accord.",
+              "zh": "十二欧……行吧。"
+            },
+            {
+              "do": "cut_to",
+              "shot": "medium",
+              "on": [
+                "noe"
+              ],
+              "note": "Réalisateur 2026-10-27: back to the actor after the 12 € insert; insert carries only « Douze euros… d’accord. » (off-screen)."
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Je voudrais des croquettes… et un arbre à chat !",
+              "zh": "我想要猫粮……还有一个猫爬架！",
+              "face": "happy"
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Un arbre à chat, c’est combien ?",
+              "zh": "猫爬架多少钱？"
+            },
+            {
+              "do": "prop",
+              "id": "laptop_img_catfood",
+              "action": "hide"
+            },
+            {
+              "do": "prop",
+              "id": "insert_laptop_price",
+              "action": "show",
+              "caption": {
+                "text": "39 €",
+                "on": "insert_laptop_price"
+              },
+              "note": "Second product page. (Was narrator « Arbre à chat : 39 € ».) zh: 猫爬架：39欧元"
+            },
+            {
+              "do": "prop",
+              "id": "laptop_img_cattree",
+              "action": "show"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "insert_laptop_price"
+              ]
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "noe"
+              ],
+              "note": "Réalisateur 2026-10-27: 39 € insert is a silent held beat; cut back so the shocked face is seen."
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Oh là là. Bon… d’accord !",
+              "zh": "哎呀呀。好吧……买了！",
+              "face": "shocked"
+            },
+            {
+              "do": "learning_module",
+              "module": "learn_words",
+              "items": [
+                "c_est_combien"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "high_point",
+      "set": "kitchen",
+      "light": "evening",
+      "title": "Monsieur Croissant",
+      "time": "19:00",
+      "plot": "high_point",
+      "ambience": "room_tone_day",
+      "beats": [
+        {
+          "id": "hp",
+          "steps": [
+            {
+              "do": "prop",
+              "id": "milk",
+              "action": "show",
+              "at": "counter_top",
+              "note": "The milk the player bought, for Camille’s coffee."
+            },
+            {
+              "do": "enter",
+              "who": "noe",
+              "at": "stand_mid",
+              "from": "right",
+              "pose": "stand"
+            },
+            {
+              "do": "cat_action",
+              "action": "sit",
+              "at": "floor",
+              "look_at": "stand_mid",
+              "note": "He sits up straight by the bowl spot, like a customer."
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "croissant",
+                "milk"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Bonsoir, Monsieur ! Tu veux du lait ?",
+              "zh": "晚上好，先生！你要牛奶吗？",
+              "face": "happy",
+              "note": "Callback to the morning waiter bit, towel on the arm. Camille is not home yet."
+            },
+            {
+              "do": "learning_module",
+              "module": "output",
+              "mode": "spoken",
+              "options": [
+                {
+                  "fr": "Non ! Pas de lait pour un chat. De l’eau.",
+                  "zh": "不！猫不喝牛奶。给水。",
+                  "correct": true
+                }
+              ],
+              "note": "The player cuts in (Camille cannot: she doesn’t know about the cat until the D3 hook)."
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Pas de lait pour un chat ? D’accord… de l’eau !",
+              "zh": "猫不能喝牛奶？好吧……那就水！",
+              "face": "big-eyes"
+            },
+            {
+              "do": "prop",
+              "id": "milk",
+              "action": "hide"
+            },
+            {
+              "do": "prop",
+              "id": "cat_bowl",
+              "action": "show",
+              "at": "floor_bowl",
+              "note": "A bowl of water for Croissant."
+            },
+            {
+              "do": "cat_action",
+              "action": "drink",
+              "at": "floor_drink"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "croissant",
+                "cat_bowl"
+              ]
+            },
+            {
+              "do": "cat_action",
+              "action": "tail_up",
+              "at": "floor_drink"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "croissant"
+              ],
+              "note": "HOLD 3 s. Tail straight up."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hook",
+      "set": "kitchen",
+      "light": "night",
+      "title": "Livraison",
+      "time": "23:00",
+      "plot": "hook",
+      "ambience": "room_tone_night",
+      "beats": [
+        {
+          "id": "h",
+          "steps": [
+            {
+              "do": "enter",
+              "who": "noe",
+              "at": "stand_desk",
+              "from": "right",
+              "pose": "stand"
+            },
+            {
+              "do": "prop",
+              "id": "phone",
+              "action": "show",
+              "at": "desk_top",
+              "sfx": "chime_message"
+            },
+            {
+              "do": "prop",
+              "id": "insert_phone_notif",
+              "action": "show",
+              "caption": {
+                "text": "Livraison demain",
+                "on": "insert_phone_notif"
+              },
+              "note": "Phone notification, card 1 of 2 (16/line, 2 lines). zh: 明天送达"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "insert_phone_notif"
+              ]
+            },
+            {
+              "do": "prop",
+              "id": "insert_phone_notif",
+              "action": "show",
+              "caption": {
+                "text": "1 colis pour Camille",
+                "on": "insert_phone_notif"
+              },
+              "note": "Card 2 of 2, wraps « 1 colis pour / Camille ». zh: 1个包裹，收件人卡米耶"
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "insert_phone_notif"
+              ]
+            },
+            {
+              "do": "cut_to",
+              "shot": "close",
+              "on": [
+                "noe"
+              ]
+            },
+            {
+              "do": "say",
+              "who": "noe",
+              "fr": "Oh non… pour Camille ?!",
+              "zh": "哦不……收件人是卡米耶？！",
+              "face": "shocked",
+              "gesture": "facepalm",
+              "note": "He ordered on Camille’s account by mistake."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

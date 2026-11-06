@@ -1,0 +1,83 @@
+{
+ "multiply": {
+  "src": "light/night_multiplier_half.png",
+  "decode": "x2 (= map*127.5)",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "cool_used": [
+   0.24,
+   0.31,
+   0.43
+  ],
+  "deviation": "night base hue nudged toward teal, same as kitchen soir.json",
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "pot_chez_nous_spot",
+    "x": 70,
+    "y": 134,
+    "shape": "hero: pot-1 silhouette mask (full stage, top-left 63,109) multiply 0.85 + add 28; floor pool 59/34 (rev 2.1: -30%) (ellipse 12x4.5)"
+   },
+   {
+    "id": "string_lights",
+    "bulbs": [
+     {
+      "x": 48,
+      "y": 91
+     },
+     {
+      "x": 59,
+      "y": 93
+     },
+     {
+      "x": 70,
+      "y": 94
+     },
+     {
+      "x": 81,
+      "y": 95
+     },
+     {
+      "x": 92,
+      "y": 95
+     },
+     {
+      "x": 103,
+      "y": 94
+     },
+     {
+      "x": 114,
+      "y": 92
+     }
+    ],
+    "shape": "add: no air glow; per bulb a flat floor pool 56/28 (ellipse 9x4 at feetLine-1) + coping catch-light 30; multiply lift 0.45 in a 15-px column below each bulb (props + cast)"
+   }
+  ],
+  "scenery": {
+   "note": "sky, tower, skyline are ungraded (they carry their own night colours, lit windows); the map is ignored there"
+  },
+  "ungraded": [
+   "backdrop.rooftop_sky",
+   "backdrop.rooftop_skyline_far",
+   "backdrop.rooftop_skyline",
+   "backdrop.rooftop_tower",
+   "prop.string_lights_on"
+  ],
+  "cast": "same map at strength 0.25 when <1, 0.6 when >1"
+ },
+ "add": {
+  "src": "light/night_add_half.png",
+  "decode": "x2 (= value*2, 0..254 per channel)",
+  "blend": "additive (linear dodge)",
+  "order": "out = clamp(src * multiply + add); multiply first, then add",
+  "cast": "add at 0.6 strength on cast pixels"
+ }
+}

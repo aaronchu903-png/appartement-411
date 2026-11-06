@@ -1,0 +1,286 @@
+{
+  "version": 1,
+  "useHandoffCameras": true,
+  "title": "Day 10 stairwell — Phase 2D (D1–D4, E4 flash)",
+  "audioBase": "../../audio/w1/",
+  "stairwell": true,
+  "assetPack": "b",
+  "scene": {
+    "width": 192,
+    "height": 144
+  },
+  "room": {
+    "horizon": 128,
+    "floorTop": 136,
+    "wall": "#e8e0d4",
+    "floor": "#8a7060"
+  },
+  "cropLibrary": {
+    "wide": {
+      "x": 2,
+      "y": 37,
+      "w": 135,
+      "h": 132,
+      "fixedScale": 8,
+      "cameraPreset": "wide"
+    },
+    "medium": {
+      "x": 44,
+      "y": 70,
+      "w": 90,
+      "h": 88,
+      "fixedScale": 12,
+      "cameraPreset": "medium"
+    },
+    "close": {
+      "x": 60,
+      "y": 90,
+      "w": 60,
+      "h": 59,
+      "fixedScale": 18,
+      "cameraPreset": "close"
+    }
+  },
+  "props": [],
+  "bubbleAnchors": {
+    "noe": { "x": 56, "y": 120 },
+    "camille": { "x": 40, "y": 120 },
+    "lefevre": { "x": 78, "y": 118 },
+    "narrator": { "x": 96, "y": 24 }
+  },
+  "defaultStage": {
+    "props": [],
+    "actors": {
+      "martin": null,
+      "lefevre": {
+        "character": "lefevre",
+        "x": 70,
+        "y": 136,
+        "asset": "lefevre.stand"
+      },
+      "noe": {
+        "character": "noe",
+        "x": 48,
+        "y": 136,
+        "asset": "noe.stand"
+      },
+      "camille": {
+        "character": "camille",
+        "x": 34,
+        "y": 136,
+        "asset": "camille.stand"
+      },
+      "cat": null
+    }
+  },
+  "timing": { "sceneEnd": 270 },
+  "startCrop": "wide",
+  "shots": [
+    {
+      "id": "n_d11_escalier",
+      "t0": 0,
+      "t1": 45,
+      "crop": "medium",
+      "lightVariant": "day",
+      "stage": {
+        "actors": {
+          "lefevre": {
+            "character": "lefevre",
+            "x": 68,
+            "y": 136,
+            "asset": "lefevre.stand"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 50,
+            "y": 136,
+            "asset": "noe.stand"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 34,
+            "y": 136,
+            "asset": "camille.stand"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_noe_montre",
+      "t0": 45,
+      "t1": 90,
+      "crop": "medium",
+      "lightVariant": "day",
+      "bubbleAnchors": {
+        "noe": { "x": 62, "y": 118 },
+        "camille": { "x": 38, "y": 120 },
+        "lefevre": { "x": 82, "y": 118 }
+      },
+      "stage": {
+        "actors": {
+          "lefevre": {
+            "character": "lefevre",
+            "x": 98,
+            "y": 136,
+            "asset": "lefevre.stand"
+          },
+          "noe": {
+            "character": "noe",
+            "x": 78,
+            "y": 136,
+            "asset": "noe.stand",
+            "face": "happy"
+          },
+          "camille": {
+            "character": "camille",
+            "x": 60,
+            "y": 136,
+            "asset": "camille.arm_r.point"
+          }
+        }
+      }
+    },
+    {
+      "id": "d11_lef_photo",
+      "t0": 90,
+      "t1": 135,
+      "crop": "close",
+      "lightVariant": "day",
+      "phoneInsert": {
+        "assetId": "phone_photo_plant_tail",
+        "topBias": 0.28,
+        "compactFrame": true,
+        "screenOffsetX": 12,
+        "screenOffsetY": 48
+      },
+      "bubbleAnchors": {
+        "lefevre": {
+          "x": 72,
+          "y": 81
+        }
+      },
+      "stage": {
+        "actors": {
+          "lefevre": {
+            "character": "lefevre",
+            "x": 72,
+            "y": 136,
+            "asset": "lefevre.stand",
+            "face": "happy"
+          },
+          "noe": null,
+          "camille": null
+        }
+      }
+    },
+    {
+      "id": "n_d11_regard",
+      "t0": 135,
+      "t1": 180,
+      "crop": {
+        "x": 48,
+        "y": 82,
+        "w": 60,
+        "h": 59,
+        "fixedScale": 18,
+        "cameraPreset": "close"
+      },
+      "lightVariant": "evening",
+      "stage": {
+        "actors": {
+          "lefevre": {
+            "character": "lefevre",
+            "x": 72,
+            "y": 136,
+            "asset": "lefevre.pose.look_phone.f0",
+            "face": "happy"
+          },
+          "noe": null,
+          "camille": null
+        }
+      }
+    },
+    {
+      "id": "regard_close_option",
+      "t0": 225,
+      "t1": 270,
+      "crop": "regard_close_option",
+      "lightVariant": "day",
+      "stage": {
+        "actors": {
+          "lefevre": {
+            "character": "lefevre",
+            "x": 72,
+            "y": 136,
+            "asset": "lefevre.pose.look_phone.f1",
+            "face": "happy"
+          },
+          "noe": null,
+          "camille": null
+        }
+      }
+    },
+    {
+      "id": "n_d11_souvenir",
+      "t0": 180,
+      "t1": 225,
+      "crop": "close",
+      "lightVariant": "day",
+      "desaturate": 0.85,
+      "phoneInsert": {
+        "assetId": "phone_photo_plant_tail",
+        "mode": "closeInsert",
+        "fullBleed": true,
+        "skipVeil": true,
+        "topBias": 0.12
+      },
+      "stage": {
+        "actors": {
+          "lefevre": {
+            "character": "lefevre",
+            "x": 78,
+            "y": 136,
+            "asset": "lefevre.stand",
+            "face": "big-eyes"
+          },
+          "noe": null,
+          "camille": null
+        }
+      }
+    }
+  ],
+  "bubbles": [
+    {
+      "t0": 0.8,
+      "t1": 44,
+      "text": "Dans l’escalier, Noé voit Madame Lefèvre.",
+      "gloss": "在楼梯上，Noé 遇见 Lefèvre 太太。",
+      "anchor": "narrator",
+      "kind": "narrator"
+    },
+    {
+      "t0": 45.8,
+      "t1": 89,
+      "text": "Bonjour, Madame ! Regardez ma photo !",
+      "gloss": "您好，夫人！看看我拍的照片！",
+      "actor": "noe",
+      "kind": "noe"
+    },
+    {
+      "t0": 90.8,
+      "t1": 134,
+      "text": "Oh… C’est une belle photo.",
+      "gloss": "哦……这是一张很美的照片。",
+      "actor": "lefevre",
+      "kind": "lefevre"
+    },
+    {
+      "t0": 135.8,
+      "t1": 179,
+      "text": "Elle regarde la photo. Longtemps. Elle sourit.",
+      "gloss": "她看着照片。看了很久。她笑了。",
+      "anchor": "narrator",
+      "kind": "narrator"
+    }
+  ]
+}

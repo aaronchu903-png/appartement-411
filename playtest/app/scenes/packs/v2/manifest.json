@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "pack": "v2",
+  "assetRoot": "../../day10-kitchen/assets/",
+  "styleGuide": "Pixel Studio STYLE_GUIDE.md (canonical sheet TBD)",
+  "atlases": {
+    "kitchen_v2": {
+      "file": "kitchen_backdrop.png",
+      "w": 96,
+      "h": 64
+    }
+  },
+  "assets": {
+    "backdrop.kitchen": {
+      "type": "backdrop",
+      "base": {
+        "source": "atlas",
+        "atlas": "kitchen_v2",
+        "frame": { "x": 0, "y": 0, "w": 96, "h": 64 },
+        "w": 96,
+        "h": 64
+      },
+      "tall": {
+        "source": "file",
+        "file": "kitchen_backdrop_tall.png",
+        "w": 96,
+        "h": 128,
+        "sceneTop": -36
+      }
+    },
+    "noe.idle": {
+      "source": "atlas",
+      "atlas": "kitchen_v2",
+      "frame": { "x": 0, "y": 0, "w": 12, "h": 18 },
+      "w": 12,
+      "h": 18,
+      "anchor": "feet",
+      "anchorPoint": { "x": 6, "y": 17 },
+      "pixelScale": 1
+    },
+    "prop.bowl": {
+      "source": "atlas",
+      "atlas": "kitchen_v2",
+      "frame": { "x": 20, "y": 40, "w": 8, "h": 6 },
+      "w": 8,
+      "h": 6,
+      "anchor": "baseline",
+      "anchorPoint": { "x": 4, "y": 5 },
+      "pixelScale": 1
+    }
+  }
+}

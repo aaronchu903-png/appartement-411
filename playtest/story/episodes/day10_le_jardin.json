@@ -1,0 +1,805 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d10_le_jardin",
+ "day": 10,
+ "title": "Le jardin",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d10_",
+ "cast": [
+  "noe",
+  "camille",
+  "croissant",
+  "narrator",
+  "lefevre"
+ ],
+ "sets": [
+  "stairwell",
+  "rooftop",
+  "kitchen",
+  "kitchen_table4"
+ ],
+ "target_words": [
+  "c’est quoi, ça ?",
+  "il faut de l’eau",
+  "l’arrosoir",
+  "facile",
+  "triste",
+  "j’espère que",
+  "j’ai faim",
+  "il n’y a plus de",
+  "c’est tout ?"
+ ],
+ "recycle_words": [
+  "le toit",
+  "le beurre",
+  "le frigo"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "stairwell",
+   "light": "day",
+   "title": "La petite porte",
+   "time": "07:00",
+   "plot": "cold_open",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_off",
+       "action": "swap",
+       "to": "minuterie_on",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "step_11",
+       "note": "Croissant is already at the top, by the little door."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Wednesday morning, pyjamas and scarves. Noé holds the old key up like a trophy."
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_stairs_down"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le toit… le matin ? Oh là là.",
+       "zh": "屋顶……一大早？哎呀呀。",
+       "face": "brow_raise"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_jardin",
+   "set": "rooftop",
+   "light": "day",
+   "title": "Le jardin, le jour",
+   "time": "07:05",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1_walk",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "roof_door_open",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "pot_chez_nous_newleaf",
+       "action": "show",
+       "at": "pot_chez_nous",
+       "note": "Pot ① on the roof, with one new leaf (Rev 5)."
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_roof_door",
+       "from": "left",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "roof_step_top",
+       "from": "left",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "First daytime walk: the D8 visit was a night threshold. Morning light, chimneys, the dry pots."
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_pot1"
+      },
+      {
+       "do": "walk_to",
+       "who": "camille",
+       "to": "stand_roof_door"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "floor"
+      }
+     ]
+    },
+    {
+     "id": "a1_pot",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "pot_chez_nous_newleaf"
+       ],
+       "note": "A new leaf on pot ①."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est quoi, ça ?",
+       "zh": "这是什么？",
+       "gesture": "point"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est nouveau ! Il faut de l’eau.",
+       "zh": "是新的！得浇水。",
+       "face": "happy"
+      },
+      {
+       "do": "prop",
+       "id": "arrosoir",
+       "action": "show",
+       "at": "floor",
+       "note": "Martin’s old arrosoir, left here on D8."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "L’arrosoir… c’est facile !",
+       "zh": "喷壶……很简单！"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "cest_quoi_ca",
+         "audio": "cest_quoi_ca"
+        },
+        {
+         "id": "il_faut_de_leau",
+         "audio": "il_faut_de_leau"
+        },
+        {
+         "id": "larrosoir",
+         "audio": "larrosoir"
+        },
+        {
+         "id": "facile",
+         "audio": "facile"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a1_pots",
+     "steps": [
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_pots_r"
+      },
+      {
+       "do": "walk_to",
+       "who": "camille",
+       "to": "stand_bench"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ],
+       "note": "The pots on the right: dry earth, one dead stalk."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Elle est triste, cette plante.",
+       "zh": "这株植物看着好难过。",
+       "face": "sad"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Oui. Triste. J’espère que… elle revient.",
+       "zh": "是啊。好难过。我希望……它能活过来。"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "J’espère que oui.",
+       "zh": "希望如此。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Il faut de l’eau. Beaucoup !",
+       "zh": "得浇水。浇很多！"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "triste",
+         "audio": "triste"
+        },
+        {
+         "id": "jespere_que",
+         "audio": "jespere_que"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_arrosoir",
+   "set": "rooftop",
+   "light": "day",
+   "title": "L’arrosoir",
+   "time": "07:15",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "arrosoir",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "crouch_pot1",
+       "note": "Croissant sniffs the spout of the arrosoir."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Croissant approche l’arrosoir.",
+       "zh": "Croissant 走向浇水壶。"
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "He licks the spout. Noé tips the can. Splash on his nose."
+      },
+      {
+       "do": "cat_action",
+       "action": "react_shocked",
+       "at": "crouch_pot1",
+       "note": "He jumps back and knocks the arrosoir over."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Doucement, Croissant !",
+       "zh": "轻点，可颂！",
+       "face": "shocked",
+       "note": "Recognition only (D11 preview), not a target."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant ! L’arrosoir !",
+       "zh": "可颂！喷壶！",
+       "face": "shocked"
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "bench_cat",
+       "note": "He shakes his head, offended, and sits on the bench, wet."
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Facile, l’arrosoir ? Très drôle.",
+       "zh": "喷壶很简单？真好笑。",
+       "face": "happy",
+       "note": "B words: targets said in A + Day 1–9."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "rooftop",
+   "light": "day",
+   "title": "Le matin",
+   "time": "07:20",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_bench_l"
+      },
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_bench_r"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "bench_cat"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Golden morning light. The two on the old bench, the cat between them, pot ① in front. Nobody speaks for 3 s."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est beau, ici.",
+       "zh": "这儿真美。",
+       "face": "happy",
+       "note": "Camille, who mocked the roof at 7:00, says it quietly."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Hold wide so bench feet stay in the feet band for capture."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "set": "rooftop",
+   "light": "day",
+   "title": "Il faut de l’eau",
+   "time": "07:25",
+   "plot": "watering",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "w",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_chez_nous_newleaf",
+       "action": "show",
+       "at": "pot_chez_nous"
+      },
+      {
+       "do": "prop",
+       "id": "arrosoir",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "pot_chez_nous_newleaf"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Il faut de l’eau.",
+       "zh": "得浇水。"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Il faut de l’eau.",
+         "zh": "得浇水。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "C’est quoi, ça ?",
+         "zh": "这是什么？"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Le beurre, dans le frigo.",
+         "zh": "黄油放冰箱。"
+        },
+        {
+         "pot": "pot_chez_nous",
+         "fr": "Asseyez-vous.",
+         "zh": "请坐。"
+        }
+       ],
+       "note": "Optional review at pot ① on the roof. One word per pour; exit after any pour."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Hold wide so rooftop feet stay in the 70–80% band for capture."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a3_frigo",
+   "set": "kitchen",
+   "light": "evening",
+   "title": "Plus de pain",
+   "time": "19:00",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a3",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "basil_pot",
+       "action": "show",
+       "at": "pot_desk"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’ai faim !",
+       "zh": "我饿了！",
+       "face": "sad"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "Camille opens the fridge."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le frigo… Il n’y a plus de pain. Il n’y a plus de beurre.",
+       "zh": "冰箱……没有面包了。也没有黄油了。"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est tout ?",
+       "zh": "就这些？",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "C’est tout ? Oui. Un oignon. C’est tout.",
+       "zh": "就这些？对。一个洋葱。就这些。",
+       "face": "brow_raise",
+       "note": "Plants the onion for D11 (said once, not a target)."
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Dis à Noé.",
+        "zh": "告诉诺埃。"
+       },
+       "options": [
+        {
+         "fr": "Il n’y a plus de pain.",
+         "zh": "没有面包了。",
+         "correct": true
+        },
+        {
+         "fr": "Il n’y a plus de chat.",
+         "zh": "没有猫了。",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’ai faim… et demain, c’est jeudi !",
+       "zh": "我饿……明天就是星期四了！"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "jai_faim",
+         "audio": "jai_faim"
+        },
+        {
+         "id": "il_ny_a_plus_de",
+         "audio": "il_ny_a_plus_de"
+        },
+        {
+         "id": "cest_tout",
+         "audio": "cest_tout"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen_table4",
+   "light": "night",
+   "title": "Jeudi",
+   "time": "21:00",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_r"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "insert_calendar",
+       "action": "show",
+       "caption": {
+        "text": "Jeudi : Madame Lefèvre",
+        "on": "insert_calendar"
+       },
+       "note": "Camille writes on the calendar, matching the D11 cold open. zh: 星期四：勒费弗尔太太"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_calendar"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Demain, jeudi : Madame Lefèvre. Six heures.",
+       "zh": "明天星期四：勒费弗尔太太。六点。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ],
+       "note": "Réalisateur 2026-10-27: insert rule (max 1 line per insert, then back to actors)."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et il n’y a plus de pain…",
+       "zh": "可是没面包了……",
+       "face": "sad"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "seat_back_l",
+       "note": "Croissant is on the same chair again (seat_back_l, his since D8), facing the door, waiting."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "He looks at the door. Then at the camera. HOLD 2 s. Cut."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Croissant… demain, tu es sage, d’accord ?",
+       "zh": "可颂……明天要乖哦，好吗？",
+       "face": "brow_raise"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r7_photo",
+   "set": "rooftop",
+   "light": "day",
+   "title": "Photo (capture)",
+   "beats": [
+    {
+     "id": "d11_focus_photo",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "une photo",
+       "zh": "一张照片"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r7_lef",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Lefèvre photo (capture)",
+   "beats": [
+    {
+     "id": "d11_lef_photo",
+     "steps": [
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Une belle photo.",
+       "zh": "一张好照片。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r7_done",
+   "set": "kitchen",
+   "light": "night",
+   "title": "Queue payoff (capture)",
+   "beats": [
+    {
+     "id": "done",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "La queue orange disparaît dans le couloir.",
+       "zh": "橘色的尾巴消失在走廊里。"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

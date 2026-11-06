@@ -1,0 +1,463 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d10_le_message",
+ "day": 10,
+ "title": "Le message",
+ "version": 5,
+ "status": "draft",
+ "clip_prefix": "d10_",
+ "target_words": [
+  "j’ai faim",
+  "il n’y a plus de",
+  "le message",
+  "une photo",
+  "j’espère que",
+  "à la fin du mois",
+  "c’est tout ?",
+  "c’est quoi, ça ?",
+  "facile",
+  "souriez !"
+ ],
+ "recycle_words": [],
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "rooftop",
+  "stairwell"
+ ],
+ "scenes": [
+  {
+   "id": "day10",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Le message",
+   "beats": [
+    {
+     "id": "n_d11_matin2",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Mercredi matin. Le message est là.",
+       "zh": "星期三早上。那封消息还在那儿。",
+       "audio": "n_d11_matin2"
+      }
+     ]
+    },
+    {
+     "id": "d11_cam_lit",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bon. Je lis le message.",
+       "zh": "好。我来读消息。",
+       "audio": "d11_cam_lit"
+      }
+     ]
+    },
+    {
+     "id": "n_d11_ecran",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Sur l’écran, il y a le message.",
+       "zh": "屏幕上是那封消息。",
+       "audio": "n_d11_ecran"
+      }
+     ]
+    },
+    {
+     "id": "d11_mar_bonjour",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "laptop",
+       "fr": "Bonjour à vous trois. J’espère que tout va bien.",
+       "zh": "你们三位好。希望一切都好。",
+       "audio": "d11_mar_bonjour"
+      }
+     ]
+    },
+    {
+     "id": "d11_mar_photo",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "laptop",
+       "fr": "Une photo de la plante, s’il vous plaît.",
+       "zh": "请拍一张植物的照片。",
+       "audio": "d11_mar_photo"
+      }
+     ]
+    },
+    {
+     "id": "d11_mar_chat",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "laptop",
+       "fr": "De la plante. Pas du chat.",
+       "zh": "是植物。不是猫。",
+       "audio": "d11_mar_chat"
+      }
+     ]
+    },
+    {
+     "id": "keyboard_cat",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      }
+     ]
+    },
+    {
+     "id": "d11_mar_futur",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "laptop",
+       "fr": "Je reviendrai à la fin du mois. Nous parlerons de la plante.",
+       "zh": "我月底会回来。我们会聊聊这盆植物。",
+       "audio": "d11_mar_futur"
+      }
+     ]
+    },
+    {
+     "id": "d11_dictee",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      }
+     ]
+    },
+    {
+     "id": "d11_noe_court",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "C’est tout ? C’est un petit message.",
+       "zh": "就这些？好短的消息。",
+       "audio": "d11_noe_court"
+      }
+     ]
+    },
+    {
+     "id": "d11_cam_court",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Un petit message. Un grand problème.",
+       "zh": "消息很短。问题很大。",
+       "audio": "d11_cam_court"
+      }
+     ]
+    },
+    {
+     "id": "d11_photo",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Écoute. Madame Martin voudrait une photo de quoi ?",
+       "zh": "听。Martin 太太想要什么的照片？",
+       "audio": "d11_photo"
+      }
+     ]
+    },
+    {
+     "id": "n_d11_matin",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      }
+     ]
+    },
+    {
+     "id": "d11_noe_lait",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il n’y a plus de lait.",
+       "zh": "牛奶没了。",
+       "audio": "d11_noe_lait"
+      }
+     ]
+    },
+    {
+     "id": "d11_cam_lait",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Règle numéro trois : le lait, ça va dans le frigo. Pas dans ton ventre.",
+       "zh": "第三条：牛奶放冰箱里。不是放你肚子里。",
+       "audio": "d11_cam_lait"
+      }
+     ]
+    },
+    {
+     "id": "d11_noe_faim",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’ai faim ! Et pas de lait.",
+       "zh": "我饿了！还没有牛奶。",
+       "audio": "d11_noe_faim"
+      }
+     ]
+    },
+    {
+     "id": "d11_cam_cafe",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Tu veux du café ? Sans lait.",
+       "zh": "你要喝咖啡吗？不加奶的。",
+       "audio": "d11_cam_cafe"
+      }
+     ]
+    },
+    {
+     "id": "d11_cafe",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_counter",
+       "from": "left"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium_table4"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Tu veux du café ? Sans lait.",
+       "zh": "你要喝咖啡吗？不加奶的。",
+       "audio": "d11_cam_cafe"
+      }
+     ]
+    },
+    {
+     "id": "n_d11_queue",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Plus tard, à l’appartement. Camille regarde la photo.",
+       "zh": "后来，回到家里，Camille 看着照片。植物后面……有一条橘色的尾巴。",
+       "audio": "n_d11_queue"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Derrière la plante… une queue orange.",
+       "zh": "后来，回到家里，Camille 看着照片。植物后面……有一条橘色的尾巴。",
+       "audio": "n_d11_queue"
+      }
+     ]
+    },
+    {
+     "id": "d11_cam_queue",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_counter",
+       "from": "left"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Noé. C’est quoi, ça ?",
+       "zh": "Noé。这是什么？",
+       "audio": "d11_cam_queue"
+      }
+     ]
+    },
+    {
+     "id": "d11_noe_pasmoi",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Ce n’est pas moi !",
+       "zh": "不是我！",
+       "audio": "d11_noe_pasmoi"
+      }
+     ]
+    },
+    {
+     "id": "n_d11_souvenir",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r7_photo",
+   "set": "rooftop",
+   "light": "day",
+   "beats": [
+    {
+     "id": "d11_focus_photo",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r7_lef",
+   "set": "stairwell",
+   "light": "day",
+   "beats": [
+    {
+     "id": "d11_lef_photo",
+     "steps": [
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Une belle photo.",
+       "zh": "一张好照片。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r7_done",
+   "set": "kitchen",
+   "light": "night",
+   "beats": [
+    {
+     "id": "done",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,854 @@
+{
+ "version": "fix23b",
+ "source": "audio/full/audio_manifest.json (final manifest; files copied, not linked)",
+ "clips": {
+  "bonjour": {
+   "kind": "word",
+   "day": 1,
+   "slow": false,
+   "file": "bonjour.mp3",
+   "text": "Bonjour !",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.06,
+   "asr_text": "Bonjour.",
+   "asr_text_prompted": "Bonjour.",
+   "asr_words": [
+    [
+     "Bonjour.",
+     -0.5,
+     0.62,
+     0.68
+    ]
+   ],
+   "asr_pass": true,
+   "uncertain": false,
+   "henri_replaced_denise": false,
+   "renamed_from": null,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Bonjour.",
+      "Bonjour."
+     ]
+    }
+   ]
+  },
+  "c_est": {
+   "day": 1,
+   "type": "word_card",
+   "file": "c_est.mp3",
+   "text": "c’est",
+   "voice": "fr-FR-HenriNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "C'est.",
+   "asr_text_prompted": "C'est.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "C",
+      "C."
+     ]
+    },
+    {
+     "voice": "fr-FR-HenriNeural",
+     "asr": [
+      "C'est.",
+      "C'est."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_c_est.mp3",
+   "henri_replaced_denise": true
+  },
+  "dans": {
+   "day": 3,
+   "type": "word_card",
+   "file": "dans.mp3",
+   "text": "dans",
+   "voice": "fr-FR-HenriNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "dans",
+   "asr_text_prompted": "Dans.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Don",
+      "Dans."
+     ]
+    },
+    {
+     "voice": "fr-FR-HenriNeural",
+     "asr": [
+      "dans",
+      "Dans."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_dans.mp3",
+   "henri_replaced_denise": true
+  },
+  "derriere": {
+   "kind": "dictation",
+   "day": 3,
+   "slow": true,
+   "file": "derriere.mp3",
+   "text": "Mets le colis derrière la chaise.",
+   "voice": "fr-FR-HenriNeural",
+   "rate": "-25%",
+   "duration_s": 2.14,
+   "asr_text": "Mets le colis derrière la chaise.",
+   "asr_text_prompted": "Mets le colis derrière la chaise.",
+   "asr_words": [
+    [
+     "Mets",
+     -0.5,
+     0.3,
+     0.68
+    ],
+    [
+     "le",
+     0.3,
+     0.6,
+     0.85
+    ],
+    [
+     "colis",
+     0.6,
+     0.86,
+     0.98
+    ],
+    [
+     "derrière",
+     0.86,
+     1.24,
+     0.98
+    ],
+    [
+     "la",
+     1.24,
+     1.52,
+     1.0
+    ],
+    [
+     "chaise.",
+     1.52,
+     1.92,
+     0.97
+    ]
+   ],
+   "asr_pass": true,
+   "uncertain": false,
+   "henri_replaced_denise": true,
+   "renamed_from": null,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Mais le colis derrière la chaise",
+      "Mets le colis derrière la chaise."
+     ]
+    },
+    {
+     "voice": "fr-FR-HenriNeural",
+     "asr": [
+      "Mets le colis derrière la chaise.",
+      "Mets le colis derrière la chaise."
+     ]
+    }
+   ]
+  },
+  "il_faut": {
+   "day": 1,
+   "type": "word_card",
+   "file": "il_faut.mp3",
+   "text": "il faut",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Il faut !",
+   "asr_text_prompted": "Il faut.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Il faut !",
+      "Il faut."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_il_faut.mp3",
+   "henri_replaced_denise": false
+  },
+  "il_n_y_a_pas_de": {
+   "day": 2,
+   "type": "word_card",
+   "file": "il_n_y_a_pas_de.mp3",
+   "text": "il n’y a pas de",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.97,
+   "asr_text": "Il n'y a pas de",
+   "asr_text_prompted": "Il n'y a pas de.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Il n'y a pas de",
+      "Il n'y a pas de."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_il_n_y_a_pas_de.mp3",
+   "henri_replaced_denise": false
+  },
+  "il_y_a": {
+   "day": 3,
+   "type": "word_card",
+   "file": "il_y_a.mp3",
+   "text": "il y a",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Il y a",
+   "asr_text_prompted": "Il y a.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Il y a",
+      "Il y a."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_il_y_a.mp3",
+   "henri_replaced_denise": false
+  },
+  "je_m_appelle": {
+   "day": 1,
+   "type": "word_card",
+   "file": "je_m_appelle.mp3",
+   "text": "je m’appelle",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 2.06,
+   "asr_text": "Je m'appelle",
+   "asr_text_prompted": "Je m'appelle.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Je m'appelle",
+      "Je m'appelle."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_je_m_appelle.mp3",
+   "henri_replaced_denise": false
+  },
+  "je_voudrais": {
+   "day": 2,
+   "type": "word_card",
+   "file": "je_voudrais.mp3",
+   "text": "je voudrais",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.94,
+   "asr_text": "Je voudrais",
+   "asr_text_prompted": "Je voudrais.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Je voudrais",
+      "Je voudrais."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_je_voudrais.mp3",
+   "henri_replaced_denise": false
+  },
+  "l_appartement": {
+   "day": 1,
+   "type": "word_card",
+   "file": "l_appartement.mp3",
+   "text": "l’appartement",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.99,
+   "asr_text": "L'appartement",
+   "asr_text_prompted": "L'appartement.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "L'appartement",
+      "L'appartement."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_l_appartement.mp3",
+   "henri_replaced_denise": false
+  },
+  "l_eau": {
+   "day": 2,
+   "type": "word_card",
+   "file": "l_eau.mp3",
+   "text": "l’eau",
+   "voice": "fr-FR-HenriNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "l'eau",
+   "asr_text_prompted": "l'eau",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "bleu",
+      "bleu"
+     ]
+    },
+    {
+     "voice": "fr-FR-HenriNeural",
+     "asr": [
+      "l'eau",
+      "l'eau"
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_l_eau.mp3",
+   "henri_replaced_denise": true
+  },
+  "la_cuisine": {
+   "day": 3,
+   "type": "word_card",
+   "file": "la_cuisine.mp3",
+   "text": "la cuisine",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 2.09,
+   "asr_text": "la cuisine",
+   "asr_text_prompted": "La cuisine.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "la cuisine",
+      "La cuisine."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_la_cuisine.mp3",
+   "henri_replaced_denise": false
+  },
+  "la_plante": {
+   "day": 1,
+   "type": "word_card",
+   "file": "la_plante.mp3",
+   "text": "la plante",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.99,
+   "asr_text": "La plante",
+   "asr_text_prompted": "La plante.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "La plante",
+      "La plante."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_la_plante.mp3",
+   "henri_replaced_denise": false
+  },
+  "la_proprietaire": {
+   "day": 1,
+   "type": "word_card",
+   "file": "la_proprietaire.mp3",
+   "text": "la propriétaire",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 2.45,
+   "asr_text": "La propriétaire",
+   "asr_text_prompted": "La propriétaire.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "La propriétaire",
+      "La propriétaire."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_la_proprietaire.mp3",
+   "henri_replaced_denise": false
+  },
+  "la_table": {
+   "day": 3,
+   "type": "word_card",
+   "file": "la_table.mp3",
+   "text": "la table",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.97,
+   "asr_text": "la table",
+   "asr_text_prompted": "la table",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "la table",
+      "la table"
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_la_table.mp3",
+   "henri_replaced_denise": false
+  },
+  "le_cafe": {
+   "day": 16,
+   "type": "word_card",
+   "file": "le_cafe.mp3",
+   "text": "le café",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Le café",
+   "asr_text_prompted": "Le café.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Le café",
+      "Le café."
+     ]
+    }
+   ],
+   "kind": "listening",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_le_cafe.mp3",
+   "henri_replaced_denise": false
+  },
+  "le_chat": {
+   "day": 1,
+   "type": "word_card",
+   "file": "le_chat.mp3",
+   "text": "le chat",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "le chat",
+   "asr_text_prompted": "Le chat.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "le chat",
+      "Le chat."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d01_w_le_chat.mp3",
+   "henri_replaced_denise": false
+  },
+  "le_colis": {
+   "day": 13,
+   "type": "word_card",
+   "file": "le_colis.mp3",
+   "text": "le colis",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Le colis",
+   "asr_text_prompted": "Le colis.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Le colis",
+      "Le colis."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_le_colis.mp3",
+   "henri_replaced_denise": false
+  },
+  "le_lait": {
+   "kind": "dictation",
+   "day": 2,
+   "slow": true,
+   "file": "le_lait.mp3",
+   "text": "Il n’y a pas de lait.",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-25%",
+   "duration_s": 1.32,
+   "asr_text": "Il n'y a pas de lait.",
+   "asr_text_prompted": "Il n'y a pas de lait.",
+   "asr_words": [
+    [
+     "Il",
+     -0.08,
+     0.28,
+     0.48
+    ],
+    [
+     "n",
+     0.28,
+     0.4,
+     0.99
+    ],
+    [
+     "'y",
+     0.4,
+     0.52,
+     0.99
+    ],
+    [
+     "a",
+     0.52,
+     0.62,
+     0.98
+    ],
+    [
+     "pas",
+     0.62,
+     0.8,
+     1.0
+    ],
+    [
+     "de",
+     0.8,
+     0.98,
+     1.0
+    ],
+    [
+     "lait.",
+     0.98,
+     1.3,
+     0.88
+    ]
+   ],
+   "asr_pass": true,
+   "uncertain": false,
+   "henri_replaced_denise": false,
+   "renamed_from": null,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Il n'y a pas de lait.",
+      "Il n'y a pas de lait."
+     ]
+    }
+   ]
+  },
+  "le_pain": {
+   "day": 2,
+   "type": "word_card",
+   "file": "le_pain.mp3",
+   "text": "le pain",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "le pain",
+   "asr_text_prompted": "Le pain.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "le pain",
+      "Le pain."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_le_pain.mp3",
+   "henri_replaced_denise": false
+  },
+  "le_the": {
+   "day": 16,
+   "type": "word_card",
+   "file": "le_the.mp3",
+   "text": "le thé",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "le thé",
+   "asr_text_prompted": "le thé",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "le thé",
+      "le thé"
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_le_the.mp3",
+   "henri_replaced_denise": false
+  },
+  "les_croquettes": {
+   "day": 2,
+   "type": "word_card",
+   "file": "les_croquettes.mp3",
+   "text": "les croquettes",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 2.18,
+   "asr_text": "les croquettes",
+   "asr_text_prompted": "Les croquettes.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "les croquettes",
+      "Les croquettes."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_les_croquettes.mp3",
+   "henri_replaced_denise": false
+  },
+  "samedi": {
+   "kind": "dictation",
+   "day": 1,
+   "slow": true,
+   "file": "samedi.mp3",
+   "text": "Samedi, je viens chez vous.",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-25%",
+   "duration_s": 2.4,
+   "asr_text": "Samedi, je viens chez vous.",
+   "asr_text_prompted": "Samedi, je viens chez vous.",
+   "asr_words": [
+    [
+     "Samedi,",
+     0.52,
+     1.04,
+     0.77
+    ],
+    [
+     "je",
+     1.3,
+     1.48,
+     0.97
+    ],
+    [
+     "viens",
+     1.48,
+     1.7,
+     1.0
+    ],
+    [
+     "chez",
+     1.7,
+     1.98,
+     1.0
+    ],
+    [
+     "vous.",
+     1.98,
+     2.22,
+     0.97
+    ]
+   ],
+   "asr_pass": true,
+   "uncertain": false,
+   "henri_replaced_denise": false,
+   "renamed_from": null,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Samedi, je viens chez vous.",
+      "Samedi, je viens chez vous."
+     ]
+    }
+   ]
+  },
+  "sous": {
+   "day": 3,
+   "type": "word_card",
+   "file": "sous.mp3",
+   "text": "sous",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Sous",
+   "asr_text_prompted": "Sous.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Sous",
+      "Sous."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_sous.mp3",
+   "henri_replaced_denise": false
+  },
+  "sur": {
+   "day": 3,
+   "type": "word_card",
+   "file": "sur.mp3",
+   "text": "sur",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Sûr.",
+   "asr_text_prompted": "Sur.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Sûr.",
+      "Sur."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_sur.mp3",
+   "henri_replaced_denise": false
+  },
+  "tu_veux": {
+   "day": 2,
+   "type": "word_card",
+   "file": "tu_veux.mp3",
+   "text": "tu veux",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.92,
+   "asr_text": "Tu veux",
+   "asr_text_prompted": "Tu veux.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Tu veux",
+      "Tu veux."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d02_w_tu_veux.mp3",
+   "henri_replaced_denise": false
+  },
+  "une_boite": {
+   "day": 3,
+   "type": "word_card",
+   "file": "une_boite.mp3",
+   "text": "une boîte",
+   "voice": "fr-FR-DeniseNeural",
+   "rate": "-10%",
+   "duration_s": 1.99,
+   "asr_text": "Une boîte",
+   "asr_text_prompted": "Une boîte.",
+   "asr_pass": true,
+   "uncertain": false,
+   "tries": [
+    {
+     "voice": "fr-FR-DeniseNeural",
+     "asr": [
+      "Une boîte",
+      "Une boîte."
+     ]
+    }
+   ],
+   "kind": "word",
+   "slow": false,
+   "reused_from": "d01_03/d03_w_une_boite.mp3",
+   "henri_replaced_denise": false
+  }
+ }
+}

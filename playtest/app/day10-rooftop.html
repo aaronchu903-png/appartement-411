@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Day 10 · Toit phase 2C</title>
+  <link rel="stylesheet" href="scenes/scene-player.css">
+  <style>html,body{margin:0;height:100%}#root{height:100%}</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { initScenePlayer } from './scenes/scene-player.js';
+    window.__scenePlayer = await initScenePlayer(document.getElementById('root'), './scenes/day10-rooftop/scene.json');
+  </script>
+</body>
+</html>

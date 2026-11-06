@@ -1,0 +1,56 @@
+{
+ "multiply": {
+  "src": "light/night_multiplier_half.png",
+  "decode": "x2 (= map*127.5)",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "cool_used": [
+   0.24,
+   0.31,
+   0.43
+  ],
+  "deviation": "night base hue nudged toward teal, same as kitchen soir.json",
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "ceiling_bulb",
+    "x": 104,
+    "y": 93,
+    "shape": "rev2: add = floor pool 4 dithered steps up to 64 (ellipse 36x7 centred x100 at feetLine-1) + wall falloff 3 flat ordered bands up to 22 (rev2.1: no checker dither on the wall) (ellipse 30x22 centred x104 y116), only below the bulb glass; multiply = 3 flat soft bands warm lift 0.42 (ellipse 40x34 centred x104 y128) below the bulb. No in-air glow, no rectangles."
+   }
+  ],
+  "minuterie": {
+   "x": 95,
+   "y": 105,
+   "note": "minuterie_on drawn ungraded at night (tiny orange-gold glow), timer cue for the bulb"
+  },
+  "window": {
+   "x": 122,
+   "y": 48,
+   "w": 22,
+   "h": 30,
+   "note": "pane ungraded (own sky)"
+  },
+  "ungraded": [
+   "prop.landing_window",
+   "prop.ceiling_bulb_on",
+   "prop.minuterie_on"
+  ],
+  "cast": "same map at strength 0.25 when <1, 0.6 when >1"
+ },
+ "add": {
+  "src": "light/night_add_half.png",
+  "decode": "x2 (= value*2, 0..254 per channel)",
+  "blend": "additive (linear dodge)",
+  "order": "out = clamp(src * multiply + add); multiply first, then add",
+  "cast": "add at 0.6 strength on cast pixels"
+ }
+}

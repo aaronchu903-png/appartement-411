@@ -1,0 +1,818 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d03_deux_colis",
+ "day": 3,
+ "title": "Deux colis",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d03_",
+ "cast": [
+  "noe",
+  "camille",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "stairwell",
+  "kitchen_table4",
+  "kitchen"
+ ],
+ "target_words": [
+  "où est",
+  "il y a",
+  "sur",
+  "sous",
+  "dans",
+  "derrière",
+  "la table",
+  "la cuisine",
+  "le colis",
+  "une boîte"
+ ],
+ "recycle_words": [
+  "merci",
+  "c’est",
+  "il faut"
+ ],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Deux colis",
+   "time": "09:00",
+   "plot": "cold_open",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "co",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_home_closed",
+       "action": "show"
+      },
+      {
+       "do": "prop",
+       "id": "parcel_pair",
+       "action": "show",
+       "at": "doormat_home"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "doormat_home"
+       ],
+       "note": "Two parcels on the 411 doormat. From inside, a scratching sound at the door. No text."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a1_palier",
+   "set": "stairwell",
+   "light": "day",
+   "title": "Sur le palier",
+   "time": "09:01",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a1",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_home_closed",
+       "action": "swap",
+       "to": "door_home_open"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door",
+       "pose": "stand"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il y a deux colis !",
+       "zh": "有两个包裹！",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Un colis, c’est une boîte. Une grande boîte !",
+       "zh": "包裹就是一个盒子。一个大盒子！",
+       "gesture": "hold"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_colis",
+         "audio": "le_colis"
+        },
+        {
+         "id": "il_y_a",
+         "audio": "il_y_a"
+        },
+        {
+         "id": "une_boite",
+         "audio": "une_boite"
+        }
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "insert_parcel_label",
+       "action": "show",
+       "caption": {
+        "text": "Camille · Marseille",
+        "on": "insert_parcel_label"
+       }
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_parcel_label"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Marseille… c’est la mère de Camille.",
+       "zh": "马赛……是卡米耶的妈妈。"
+      },
+      {
+       "do": "prop",
+       "id": "insert_parcel_label",
+       "action": "show",
+       "caption": {
+        "text": "Camille · Arbre à chat",
+        "on": "insert_parcel_label"
+       }
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_parcel_label"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ],
+       "note": "Réalisateur 2026-10-27: insert rule (max 1 line per insert, then back to actors). 2nd label insert is a silent hold; his happy face is seen."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et ça… c’est mon colis ! L’arbre à chat !",
+       "zh": "这个……是我的包裹！猫爬架！",
+       "face": "happy"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Vite ! Dans la cuisine !",
+       "zh": "快！拿进厨房！"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "dans",
+         "audio": "dans"
+        },
+        {
+         "id": "la_cuisine",
+         "audio": "la_cuisine"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2_cuisine",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Sur, sous",
+   "time": "09:03",
+   "plot": "A",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "a2",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "prop",
+       "id": "parcel_closed",
+       "action": "show",
+       "at": "table_parcel"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le colis de Camille : sur la table.",
+       "zh": "卡米耶的包裹：放在桌子上。",
+       "gesture": "point"
+      },
+      {
+       "do": "prop",
+       "id": "parcel_closed_floor",
+       "action": "show",
+       "at": "floor_parcel",
+       "note": "Noé’s parcel (the cat tree) on the floor slot."
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et mon colis… sous la table.",
+       "zh": "我的包裹……放桌子下面。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "sur",
+         "audio": "sur"
+        },
+        {
+         "id": "sous",
+         "audio": "sous"
+        },
+        {
+         "id": "la_table",
+         "audio": "la_table"
+        }
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Oh non, il est neuf heures ! Au travail !",
+       "zh": "哦不，九点了！去上班！",
+       "face": "shocked"
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_door_r"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "voice_noe",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Allô ?",
+   "time": "11:30",
+   "plot": "voice",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "v",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "Mon colis est sous la table. Il faut le cacher !",
+       "zh": "我的包裹在桌子下面。得把它藏起来！"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "Camille arrive à midi ! Mets le colis derrière la chaise.",
+       "zh": "卡米耶中午回来！把包裹放到椅子后面。"
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "Il faut cacher le colis. Derrière la chaise, d’accord ? Merci !",
+       "zh": "得把包裹藏起来。椅子后面，好吗？谢谢！"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "derriere",
+         "audio": "derriere"
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "listening",
+       "items": [
+        {
+         "id": "derriere",
+         "audio": "derriere"
+        }
+       ],
+       "prompt": {
+        "fr": "Où est le colis ?",
+        "zh": "包裹放哪儿？",
+        "audio": "derriere"
+       },
+       "options": [
+        {
+         "fr": "sur la table",
+         "zh": "桌子上",
+         "correct": false
+        },
+        {
+         "fr": "sous la table",
+         "zh": "桌子下",
+         "correct": false
+        },
+        {
+         "fr": "derrière la chaise",
+         "zh": "椅子后面",
+         "correct": true
+        }
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "derriere",
+         "audio": "derriere"
+        }
+       ],
+       "prompt": {
+        "fr": "Mets le colis ___ la chaise.",
+        "zh": "把包裹放到椅子___。",
+        "audio": "derriere"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "b_boite",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Où est Croissant ?",
+   "time": "11:35",
+   "plot": "B",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "b_set",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "box_cat",
+       "action": "show",
+       "at": "floor",
+       "note": "The cat-tree box, moved by the player behind the chair (no behind-chair slot; floor)."
+      },
+      {
+       "do": "cat_action",
+       "action": "in_box",
+       "at": "floor",
+       "note": "Croissant is already hidden inside box_cat when the scene opens: never visible in b_set or b_action. The tail pop in b_payoff is the first time we see him. Box closed/still, no cat sprite beside it."
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ]
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ],
+       "note": "Noé calls again from work, worried about the cat. No narrator line (narrator is zh-only; the schema needs fr, so the stage line is a note)."
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "Où est Croissant ? Sur la table ?",
+       "zh": "可颂在哪儿？在桌子上吗？"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "table_top"
+       ],
+       "note": "The player looks: nothing on the table. No cat anywhere in frame."
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Réponds à Noé.",
+        "zh": "回答诺埃。"
+       },
+       "options": [
+        {
+         "fr": "Non. Pas sur la table.",
+         "zh": "不在。不在桌子上。",
+         "correct": true
+        },
+        {
+         "fr": "Oui, sur la table.",
+         "zh": "在，在桌子上。",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "fr": "Sous la table ?",
+       "zh": "在桌子下面吗？"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "floor"
+       ],
+       "note": "Empty floor under the table, no cat. box_cat may be at frame edge but must not read as under the table."
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Réponds à Noé.",
+        "zh": "回答诺埃。"
+       },
+       "options": [
+        {
+         "fr": "Non. Pas sous la table.",
+         "zh": "不在。不在桌子下面。",
+         "correct": true
+        },
+        {
+         "fr": "Oui, sous la table.",
+         "zh": "在，在桌子下面。",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "crop": {
+        "k": 10,
+        "viewX": 77,
+        "viewY": 101
+       },
+       "on": [
+        "box_cat"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "in_box_tail_pop",
+       "at": "floor",
+       "note": "Only a ginger tail pops out of the box."
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Dis à Noé.",
+        "zh": "告诉诺埃。"
+       },
+       "options": [
+        {
+         "fr": "Dans la boîte !",
+         "zh": "在盒子里！",
+         "correct": true
+        },
+        {
+         "fr": "Sur la boîte !",
+         "zh": "在盒子上！",
+         "correct": false
+        }
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "noe",
+       "icon": "phone",
+       "rect": [
+        24,
+        142,
+        366,
+        214
+       ],
+       "tail": false,
+       "fr": "Dans la boîte ? Dans la cuisine ? Merci !",
+       "zh": "在盒子里？在厨房里？谢谢！"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "high_point",
+   "set": "kitchen_table4",
+   "light": "day",
+   "title": "Maman",
+   "time": "12:05",
+   "plot": "high_point",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "hp",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right",
+       "pose": "stand"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "parcel_closed"
+       ],
+       "note": "Croissant is asleep inside the box behind the chair, out of Camille’s sight; she never looks there until the hook."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Un colis ! Une boîte de Marseille !",
+       "zh": "一个包裹！马赛寄来的盒子！",
+       "face": "happy"
+      },
+      {
+       "do": "prop",
+       "id": "parcel_closed",
+       "action": "hide"
+      },
+      {
+       "do": "prop",
+       "id": "jam_jar",
+       "action": "show",
+       "at": "kitchen_table_jam"
+      },
+      {
+       "do": "prop",
+       "id": "card",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "De la confiture… de ma mère. Et il y a un mot !",
+       "zh": "果酱……我妈妈给的。还有一张卡片！",
+       "face": "happy"
+      },
+      {
+       "do": "prop",
+       "id": "insert_card",
+       "action": "show",
+       "caption": {
+        "text": "Bisous, Maman",
+        "on": "insert_card"
+       },
+       "note": "Card insert, signature only (tiny drawn sun); she reads the full text aloud next."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "insert_card"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Ma Camille, de la confiture pour toi et tes colocataires ! Bisous, Maman",
+       "zh": "我的卡米耶，给你和你室友们的果酱！亲亲，妈妈",
+       "note": "She reads the card aloud (no guillemets)."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Mes colocataires… c’est toi !",
+       "zh": "我的室友们……就是你呀！",
+       "face": "happy",
+       "gesture": "point",
+       "note": "HOLD 3 s after the line: she pushes the jar toward the player."
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La confiture, sur la table. Et la boîte… où est la boîte ?",
+       "zh": "果酱放桌子上。那盒子……盒子在哪儿？",
+       "face": "brow_raise",
+       "note": "Delta after Neng: replaces the « où est / sur / dans / la cuisine » hearings lost with the D3 watering line; she glances around, never behind the chair."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "reply_noe",
+   "set": "kitchen",
+   "light": "day",
+   "title": "Réponse",
+   "time": "12:10",
+   "plot": "reply",
+   "ambience": "room_tone_day",
+   "beats": [
+    {
+     "id": "r",
+     "steps": [
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Un message pour Noé :",
+        "zh": "给诺埃发个消息："
+       },
+       "options": [
+        {
+         "fr": "Le colis est derrière la chaise.",
+         "zh": "包裹在椅子后面。",
+         "correct": true
+        },
+        {
+         "fr": "Le colis est sur la table.",
+         "zh": "包裹在桌子上。",
+         "correct": false
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hook",
+   "set": "kitchen",
+   "light": "night",
+   "title": "La boîte bouge",
+   "time": "22:00",
+   "plot": "hook",
+   "ambience": "room_tone_night",
+   "beats": [
+    {
+     "id": "h",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "door",
+       "pose": "stand",
+       "note": "Réalisateur 2026-10-27: Camille just came home looking for her parcel; standing, not seated behind the table (read as a floating head)."
+      },
+      {
+       "do": "prop",
+       "id": "jam_jar",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "box_cat",
+       "action": "show",
+       "at": "floor",
+       "note": "Réalisateur 2026-10-27: box must sit downstage, on the floor IN FRONT of the table, fully visible (Le CTO picks the mark)."
+      },
+      {
+       "do": "cat_action",
+       "action": "in_box",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "box_cat"
+       ],
+       "note": "The box behind the chair moves. Once. Twice."
+      },
+      {
+       "do": "cat_action",
+       "action": "in_box_tail_pop",
+       "at": "floor",
+       "note": "A ginger tail rises out of it."
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Où est mon colis ? Dans la cuisine ?",
+       "zh": "我的包裹在哪儿？在厨房吗？",
+       "face": "big-eyes"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Noé… C’est quoi, ça ?",
+       "zh": "诺埃……那是什么？",
+       "face": "shocked"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

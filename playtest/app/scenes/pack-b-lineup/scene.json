@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "title": "Style B five-character lineup",
+  "assetPack": "b",
+  "kitchen": true,
+  "scene": {
+    "width": 192,
+    "height": 144
+  },
+  "room": {
+    "wall": "#eddfc2",
+    "floor": "#b2936e",
+    "floorTop": 136
+  },
+  "layout": {
+    "portraitSplit": {
+      "bubble": 0.15,
+      "scene": 0.55,
+      "hud": 0.3
+    },
+    "referencePhoneH": 1920,
+    "lineupFeetFraction": 0.88,
+    "lineupHeadMinFrac": 0.08,
+    "lineupHeadMaxFrac": 0.42,
+    "lineupMaxBareFloorFrac": 0.12,
+    "maxWallAboveHeadNative": 12,
+    "castHeadY": 114
+  },
+  "cropLibrary": {
+    "wide": {
+      "x": 2,
+      "y": 12,
+      "w": 135,
+      "h": 132,
+      "fixedScale": 8,
+      "cameraPreset": "wide"
+    }
+  },
+  "props": [
+    {
+      "id": "backsplash",
+      "asset": "prop.backsplash",
+      "x": 46,
+      "y": 116,
+      "z": 10,
+      "layer": "behind"
+    },
+    {
+      "id": "window",
+      "asset": "prop.window",
+      "x": 46,
+      "y": 103,
+      "z": 10,
+      "layer": "behind"
+    },
+    {
+      "id": "shelf",
+      "asset": "prop.shelf",
+      "x": 90,
+      "y": 100,
+      "z": 10,
+      "layer": "behind"
+    },
+    {
+      "id": "fridge",
+      "asset": "prop.fridge",
+      "x": 12,
+      "y": 131,
+      "z": 20,
+      "layer": "behind"
+    },
+    {
+      "id": "counter",
+      "asset": "prop.counter_sink",
+      "x": 46,
+      "y": 131,
+      "z": 20,
+      "layer": "behind"
+    },
+    {
+      "id": "chair_left",
+      "asset": "prop.chairs",
+      "x": 104,
+      "y": 131,
+      "z": 20,
+      "layer": "behind"
+    },
+    {
+      "id": "table",
+      "asset": "prop.table",
+      "x": 118,
+      "y": 131,
+      "z": 20,
+      "layer": "behind"
+    },
+    {
+      "id": "chair_right",
+      "asset": "prop.chairs",
+      "x": 132,
+      "y": 131,
+      "z": 20,
+      "layer": "behind",
+      "flip": true
+    }
+  ],
+  "defaultStage": {
+    "props": [
+      "backsplash",
+      "window",
+      "shelf",
+      "fridge",
+      "counter",
+      "chair_left",
+      "table",
+      "chair_right"
+    ],
+    "actors": {
+      "noe": {
+        "character": "noe",
+        "face": "neutral",
+        "x": 22,
+        "y": 136
+      },
+      "camille": {
+        "character": "camille",
+        "face": "neutral",
+        "x": 48,
+        "y": 136
+      },
+      "madame_martin": {
+        "character": "madame_martin",
+        "face": "neutral",
+        "x": 74,
+        "y": 136
+      },
+      "lefevre": {
+        "character": "lefevre",
+        "face": "neutral",
+        "x": 100,
+        "y": 136
+      },
+      "croissant": {
+        "character": "croissant",
+        "face": "neutral",
+        "x": 126,
+        "y": 136
+      }
+    }
+  },
+  "lineupLabels": {
+    "noe": "Noé",
+    "camille": "Camille",
+    "madame_martin": "Mme Martin",
+    "lefevre": "Lefèvre",
+    "croissant": "Croissant"
+  },
+  "overlay": {
+    "label": "Lineup pack b"
+  },
+  "timing": {
+    "sceneEnd": 45
+  },
+  "shots": [
+    {
+      "id": "lineup",
+      "t0": 0,
+      "t1": 45,
+      "crop": "wide",
+      "layoutProfile": "lineup"
+    }
+  ],
+  "startCrop": "wide",
+  "bubbles": []
+}

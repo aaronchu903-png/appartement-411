@@ -1,0 +1,68 @@
+{
+ "lefevre_handover": {
+  "frames": [
+   "day08/characters/lefevre_handover_0.png",
+   "day08/characters/lefevre_handover_1.png",
+   "day08/characters/lefevre_handover_2.png"
+  ],
+  "size": [
+   30,
+   32
+  ],
+  "anchor": [
+   9,
+   31
+  ],
+  "facing": "right",
+  "order": [
+   0,
+   1,
+   2
+  ],
+  "ms": [
+   350,
+   600,
+   0
+  ],
+  "beat": "Day 8 step 37: « À la porte, elle ouvre la main. La vieille clé. »",
+  "note": "stand in her doorway (hub_day8_9/lefevre/furniture/door.png), player to her right; 2 = open hand with gold key, hold. Mirror horizontally if the player stands to her left. Base body = lefevre_idle_right_0."
+ },
+ "key_door_open_hand": {
+  "file": "day08/closeups/key_door_open_hand.png",
+  "size": [
+   96,
+   64
+  ],
+  "anchor": [
+   0,
+   0
+  ],
+  "stage": "art.js 96x64",
+  "beat": "Day 8 step 37 close-up: « elle ouvre la main. La vieille clé. »",
+  "note": "v2 redraw: figure = Day 11 key_open_hand pixels (face, hand, key) on the Day 11 stage(); night window + plant left, table corner + empty chair right. v1 kept as closeups/key_door_open_hand_v1_rejected.png"
+ },
+ "lfd_fenetre": {
+  "file": "day08/objects/lfd_fenetre.png",
+  "bbox_in_closeup": [
+   1,
+   3,
+   30,
+   27
+  ],
+  "note": "wilted thirsty basil on her night windowsill (drooping, never dead); bbox [x0,y0,x1,y1) on the 96x64 key_door_open_hand stage",
+  "visible_px": 612,
+  "total_px": 614
+ },
+ "lfd_chaises": {
+  "file": "day08/objects/lfd_chaises.png",
+  "bbox_in_closeup": [
+   76,
+   11,
+   96,
+   42
+  ],
+  "note": "table corner + the empty fourth chair; bbox [x0,y0,x1,y1) on the 96x64 key_door_open_hand stage",
+  "visible_px": 413,
+  "total_px": 449
+ }
+}

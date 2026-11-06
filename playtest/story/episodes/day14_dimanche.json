@@ -1,0 +1,762 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d14_dimanche",
+ "day": 14,
+ "title": "Dimanche",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d14_",
+ "target_words": [
+  "le petit-déjeuner",
+  "un pain au chocolat",
+  "il fait beau",
+  "on ne fait rien",
+  "une feuille",
+  "il pleut",
+  "le plateau"
+ ],
+ "recycle_words": [
+  "le plateau",
+  "doucement",
+  "la queue"
+ ],
+ "martin_on_screen": false,
+ "cast": [
+  "noe",
+  "camille",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "stairwell",
+  "rooftop"
+ ],
+ "flags_set": [],
+ "flags_read": [],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "co_rien",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ],
+     "ref": "CO"
+    },
+    {
+     "id": "co_rien_ecrit",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "house_rules"
+       ],
+       "note": "fridge list: « Dimanche : rien. » underlined twice"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Dimanche : rien.",
+       "zh": "星期天：什么都不做。",
+       "note": "written text, read as an insert (director rule 2026-10-25: own beat, no lead-in, no guillemets)"
+      }
+     ],
+     "ref": "CO",
+     "note": "written text beat"
+    },
+    {
+     "ref": "CO",
+     "id": "co_rien_suite",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_fridge",
+       "from": "left"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "she underlines it a second time, content"
+      }
+     ]
+    }
+   ],
+   "ambience": "room_tone_day"
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a1_plateau",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "right"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "pastry_croissant",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "prop",
+       "id": "pain_choc",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "GATE (ECONOMY_V1 §3, Day 14): 5 € from la cagnotte for croissants for four; no gate/coin command in v0.2, engine-side"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "On prend le petit-déjeuner sur le toit ?",
+       "zh": "我们去屋顶吃早餐？",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "prop",
+       "id": "tray",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Le plateau est prêt ! Le petit-déjeuner pour tout le monde !",
+       "zh": "托盘准备好了！大家的早餐！",
+       "face": "happy"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_petit_dejeuner",
+         "audio": "le_petit_dejeuner"
+        },
+        {
+         "id": "le_plateau",
+         "audio": "le_plateau"
+        }
+       ]
+      }
+     ],
+     "ref": "A1"
+    }
+   ]
+  },
+  {
+   "id": "A2",
+   "plot": "A",
+   "set": "stairwell",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a2_escalier",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_stairs_down",
+       "from": "left"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_landing",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "tray",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "step_5"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "carrying the tray up: walking is allowed on the stairs"
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_landing"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Un croissant ou un pain au chocolat ?",
+       "zh": "可颂还是巧克力面包？",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "said to the humans"
+      },
+      {
+       "do": "cat_action",
+       "action": "look",
+       "at": "step_5",
+       "look_at": "noe",
+       "note": "the cat looks up anyway"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Un pain au chocolat. Merci.",
+       "zh": "巧克力面包。谢谢。"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "un_pain_au_chocolat",
+         "audio": "un_pain_au_chocolat"
+        }
+       ]
+      }
+     ],
+     "ref": "A2"
+    }
+   ]
+  },
+  {
+   "id": "A3",
+   "plot": "A",
+   "set": "rooftop",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a3_beau",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_bench",
+       "from": "left"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_pot1",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "tray",
+       "action": "show",
+       "at": "bench_cat"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il fait beau !",
+       "zh": "天气真好！",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ],
+       "note": "clouds"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Aujourd’hui, on ne fait rien.",
+       "zh": "今天，我们什么都不做。",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il fait beau… et on ne fait rien ?",
+       "zh": "天气这么好……我们什么都不做？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "il_fait_beau",
+         "audio": "il_fait_beau"
+        },
+        {
+         "id": "on_ne_fait_rien",
+         "audio": "on_ne_fait_rien"
+        }
+       ]
+      }
+     ],
+     "ref": "A3"
+    },
+    {
+     "id": "a4_rien",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_bench_l"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_bench_r"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Qu’est-ce qu’on fait ?",
+        "zh": "我们做什么？"
+       },
+       "options": [
+        {
+         "fr": "On ne fait rien.",
+         "zh": "我们什么都不做。",
+         "correct": true
+        }
+       ],
+       "note": "the mini-game of doing nothing: every other tap makes Camille shake her head (any attempt counts)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "Camille shakes her head at every tap"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Rien.",
+       "zh": "什么都不做。",
+       "face": "neutral"
+      }
+     ],
+     "ref": "A4"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "v_lefevre",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "lefevre",
+       "icon": "phone",
+       "fr": "Demain, il pleut. Prenez un parapluie. Et merci pour samedi. C’était délicieux.",
+       "zh": "明天下雨。带把伞吧。还有，星期六谢谢你们。很好吃。",
+       "sfx": "chime_message",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "il_pleut",
+         "audio": "il_pleut"
+        }
+       ],
+       "prompt": {
+        "fr": "Demain, ___. Prenez un parapluie.",
+        "zh": "明天___。带把伞吧。",
+        "audio": "il_pleut"
+       }
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_desk",
+       "from": "right"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il pleut demain ? Oh non.",
+       "zh": "明天下雨？哦不。",
+       "face": "sad"
+      }
+     ],
+     "ref": "V"
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "rooftop",
+   "light": "day",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_bench_l"
+      },
+      {
+       "do": "prop",
+       "id": "tray",
+       "action": "show",
+       "at": "bench_cat"
+      },
+      {
+       "do": "prop",
+       "id": "pastry_croissant",
+       "action": "show",
+       "at": "bench_cat",
+       "note": "one croissant left, on the tray"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Pas sur le plateau !",
+       "zh": "别上托盘！",
+       "note": "RETURN map add"
+      },
+      {
+       "do": "cat_action",
+       "action": "look",
+       "at": "floor",
+       "look_at": "pastry_croissant"
+      }
+     ],
+     "ref": "B-setup"
+    },
+    {
+     "id": "b_cut",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "three seconds of clouds, sky only",
+       "wait": true
+      }
+     ],
+     "ref": "B-cut"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "sleep",
+       "at": "bench_cat",
+       "note": "asleep on the tray, tail over the edge; the croissant untouched"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La queue…",
+       "zh": "尾巴……"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Doucement…",
+       "zh": "轻点……",
+       "note": "lifting him"
+      },
+      {
+       "do": "prop",
+       "id": "pastry_croissant",
+       "action": "hide",
+       "note": "Noé eats the croissant, guilty for nobody"
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "cut on the gag"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "rooftop",
+   "light": "golden",
+   "beats": [
+    {
+     "id": "hp_feuille",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "crouch_pot1",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "pot_tall_planted",
+       "action": "show",
+       "at": "floor",
+       "note": "GAP: no « new leaf » pot state; same sprite, the leaf is implied (pot_* state change wanted)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "pot_tall_planted"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Une feuille. Une nouvelle feuille.",
+       "zh": "一片叶子。一片新叶子。",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ],
+       "gesture": "point",
+       "note": "almost a whisper; she touches it with one finger"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "3 s hold"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "une_feuille",
+         "audio": "une_feuille"
+        }
+       ]
+      }
+     ],
+     "ref": "HP"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "kitchen",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "r_lettre14",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "laptop"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "La lettre de la semaine, pour Madame Martin :",
+        "zh": "本周给 Martin 太太的信："
+       },
+       "options": [
+        {
+         "fr": "Bonjour Madame Martin. Il fait beau à Paris. La plante a une nouvelle feuille.",
+         "zh": "Martin 太太您好。巴黎天气很好。植物长了一片新叶子。",
+         "correct": true
+        }
+       ]
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "w_beau",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_tall",
+         "fr": "Il fait beau.",
+         "zh": "天气很好。"
+        },
+        {
+         "pot": "pot_tall",
+         "fr": "Souriez !",
+         "zh": "笑一个！"
+        }
+       ],
+       "note": "« Il fait beau. » or « Il pleut. » by the sky the player picks; then « Souriez ! » to the new leaf"
+      }
+     ],
+     "ref": "W"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "stairwell",
+   "light": "night",
+   "beats": [
+    {
+     "id": "h_coussin",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "cushion",
+       "action": "show",
+       "at": "step_3",
+       "note": "one step higher than Day 13 (step_2 → step_3)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "nobody sees it but the camera; no line"
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}

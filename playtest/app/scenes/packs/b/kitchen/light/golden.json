@@ -1,0 +1,63 @@
+{
+ "multiply": {
+  "src": "light/evening_multiplier_half.png",
+  "decode": "x2 (= map*127.5)",
+  "cool": [
+   0.26,
+   0.29,
+   0.45
+  ],
+  "cool_used": [
+   0.24,
+   0.31,
+   0.43
+  ],
+  "deviation": "night base hue nudged toward teal (blue-green) per art review; luminance unchanged",
+  "warm": [
+   0.95,
+   0.7,
+   0.36
+  ],
+  "cap": 1.2,
+  "lamps": [
+   {
+    "id": "sun_patch",
+    "shape": "skewed window patch on the wall + floor band",
+    "color": [
+     1.2,
+     1.02,
+     0.72
+    ]
+   }
+  ],
+  "window": {
+   "x": 32,
+   "y": 79,
+   "w": 28,
+   "h": 22,
+   "color": [
+    255,
+    190,
+    110
+   ],
+   "mix": 0.5
+  },
+  "upper_wall": {
+   "pieces": [
+    "prop.cornice",
+    "prop.upper_cabinets",
+    "prop.clock",
+    "prop.frame",
+    "prop.house_rules"
+   ],
+   "rect": {
+    "x": 0,
+    "y": 0,
+    "w": 192,
+    "h": 100
+   },
+   "note": "covered by the base map: night = cool base only (no pendant add, no table lift; y<110), evening = warm base + side bands"
+  },
+  "cast": "draw cast with the same map at strength 0.25 when <1 (light cool tint), 0.6 when >1 (warm fill/rim)"
+ }
+}

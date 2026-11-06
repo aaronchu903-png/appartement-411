@@ -1,0 +1,981 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d12_la_photo",
+ "day": 12,
+ "title": "La photo",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d12_",
+ "target_words": [
+  "la photo",
+  "souriez !",
+  "la queue",
+  "couper",
+  "envoyer",
+  "la vérité",
+  "la minuterie"
+ ],
+ "recycle_words": [
+  "la soupe",
+  "délicieux",
+  "doucement"
+ ],
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "rooftop",
+  "stairwell"
+ ],
+ "flags_set": [
+  "d12_verite"
+ ],
+ "flags_read": [],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "co_queue",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "prop",
+       "id": "polaroid_frame",
+       "action": "show",
+       "at": "table_top",
+       "note": "FALLBACK: the photo is on the laptop screen; polaroid_frame = photo insert stand-in (polaroid_full is style-fail, registry v3; GAP: sitcom-pack photo insert)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "polaroid_frame"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "La photo de la plante. Et dans le coin…",
+       "zh": "植物的照片。角落里还有……"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La queue !",
+       "zh": "尾巴！",
+       "face": "shocked",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "CO"
+    }
+   ],
+   "ambience": "room_tone_day"
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "rooftop",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a1_souriez",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "pot_tall_planted",
+       "action": "show",
+       "at": "floor",
+       "note": "Martin's plant on the roof (pot ① in the sun, Day 10)"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_pot1",
+       "from": "left"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_bench",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "pot_tall_planted"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Souriez !",
+       "zh": "笑一个！",
+       "face": "happy",
+       "sfx": "camera_click",
+       "note": "to a plant"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Encore une photo ?",
+       "zh": "还要拍一张？",
+       "face": "brow_raise"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_photo",
+         "audio": "la_photo"
+        },
+        {
+         "id": "souriez",
+         "audio": "souriez"
+        }
+       ]
+      }
+     ],
+     "ref": "A1"
+    },
+    {
+     "id": "a2_chat",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "pot_tall_planted",
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Souriez !",
+       "zh": "笑一个！",
+       "sfx": "camera_click"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "pot_tall_planted",
+        "croissant"
+       ],
+       "sfx": "camera_click"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "sfx": "camera_click",
+       "note": "third take: same framing, the cat closer each time (no scale command: closer = cut medium→medium→close)"
+      }
+     ],
+     "ref": "A2",
+     "note": "gag: 3 quick cuts, cut on the payoff"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "A1b",
+   "plot": "A",
+   "set": "stairwell",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a1b_minuterie",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "left"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_home_door",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "swap",
+       "to": "minuterie_off",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "set_light",
+       "preset": "night",
+       "fade_ms": 0,
+       "note": "the landing light clicks off: near-black"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La minuterie !",
+       "zh": "楼道的定时灯！",
+       "face": "sad"
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_off",
+       "action": "swap",
+       "to": "minuterie_on",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "set_light",
+       "preset": "day",
+       "fade_ms": 0
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_minuterie",
+         "audio": "la_minuterie"
+        }
+       ]
+      }
+     ],
+     "ref": "A1b",
+     "note": "new set-up so la minuterie is said in the A plot before the B gag"
+    }
+   ]
+  },
+  {
+   "id": "A2",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "day",
+   "beats": [
+    {
+     "id": "a3_couper",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_l"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cat_action",
+       "action": "sit",
+       "at": "table_end_r"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille",
+        "laptop"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Un tout petit peu de chat…",
+       "zh": "就一点点猫……",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "On coupe la queue ?",
+       "zh": "把尾巴剪掉？",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "of the photo!"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "croissant"
+       ]
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_mid",
+       "gesture": "hold",
+       "note": "Noé covers Croissant’s ears (hold gesture stand-in)"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Pas la queue !",
+       "zh": "别剪尾巴！",
+       "face": "shocked"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La vérité, Noé : c’est un chat.",
+       "zh": "说实话，Noé：那是只猫。",
+       "face": "brow_raise"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "la_queue",
+         "audio": "la_queue"
+        },
+        {
+         "id": "couper",
+         "audio": "couper"
+        },
+        {
+         "id": "la_verite",
+         "audio": "la_verite"
+        }
+       ]
+      }
+     ],
+     "ref": "A3"
+    }
+   ]
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen",
+   "light": "day",
+   "beats": [
+    {
+     "id": "v_martin",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Bonjour. Une photo de la plante, s’il vous plaît. Merci.",
+       "zh": "您好。请发一张植物的照片。谢谢。",
+       "sfx": "chime_message"
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "photo",
+         "audio": "photo"
+        }
+       ],
+       "prompt": {
+        "fr": "Une ___ de la plante, s’il vous plaît.",
+        "zh": "请发一张植物的___。",
+        "audio": "photo"
+       }
+      }
+     ],
+     "ref": "V"
+    }
+   ]
+  },
+  {
+   "id": "A3",
+   "plot": "A",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "a4_choix",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_l"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Madame Lefèvre a vu la photo. On coupe… ou on dit la vérité ?",
+       "zh": "Lefèvre 太太看过这张照片了。剪掉……还是说实话？",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "choices": [
+        {
+         "fr": "On dit la vérité.",
+         "zh": "我们说实话。",
+         "sets_flag": {
+          "flag": "d12_verite",
+          "value": true
+         }
+        },
+        {
+         "fr": "On coupe.",
+         "zh": "我们剪掉。",
+         "sets_flag": {
+          "flag": "d12_verite",
+          "value": false
+         }
+        }
+       ],
+       "note": "both play, neither is wrong; Day 17 letter reads d12_verite"
+      }
+     ],
+     "ref": "A4"
+    },
+    {
+     "id": "a4_verite",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "La vérité. Il est sur la photo, c’est tout.",
+       "zh": "说实话。它就在照片里，就这样。",
+       "face": "happy"
+      }
+     ],
+     "ref": "A4a",
+     "if": {
+      "flag": "d12_verite",
+      "equals": true
+     }
+    },
+    {
+     "id": "a4_coupe",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "polaroid_frame"
+       ],
+       "note": "photo insert, tail cropped (stand-in)"
+      },
+      {
+       "do": "prop",
+       "id": "polaroid_frame",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "On coupe… un tout petit peu.",
+       "zh": "剪掉……就一点点。",
+       "face": "sad"
+      }
+     ],
+     "ref": "A4b",
+     "if": {
+      "flag": "d12_verite",
+      "equals": false
+     }
+    },
+    {
+     "id": "a4_envoyer",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Envoyer ?",
+       "zh": "发送？",
+       "face": "brow_raise"
+      }
+     ],
+     "ref": "A4c"
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "stairwell",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "soup_pot",
+       "action": "hold",
+       "who": "noe",
+       "note": "her clean pot from Day 11"
+      },
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Votre soupe ! Délicieuse !",
+       "zh": "您的汤！太好喝了！",
+       "face": "happy"
+      }
+     ],
+     "ref": "B-setup"
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_on",
+       "action": "swap",
+       "to": "minuterie_off",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "set_light",
+       "preset": "night",
+       "fade_ms": 0,
+       "note": "black screen mid-sentence (reads without words)"
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "La minuterie. Doucement…",
+       "zh": "是定时灯。慢慢来……"
+      }
+     ],
+     "ref": "B-cut"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "minuterie_off",
+       "action": "swap",
+       "to": "minuterie_on",
+       "sfx": "minuterie_click"
+      },
+      {
+       "do": "set_light",
+       "preset": "evening",
+       "fade_ms": 0
+      },
+      {
+       "do": "prop",
+       "id": "soup_pot",
+       "action": "hold",
+       "who": "lefevre",
+       "note": "GAP: no upside-down pot pose; she holds the pot, the joke is in the note/animation"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "lefevre"
+       ]
+      },
+      {
+       "do": "cat_action",
+       "action": "idle",
+       "at": "cat_landing",
+       "note": "Croissant watching from the landing, silent"
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "cut on the payoff: light back on, the pot upside down, she smiles"
+    }
+   ]
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "kitchen_table4",
+   "light": "night",
+   "beats": [
+    {
+     "id": "hp_envoyer",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "laptop"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Bon. J’envoie.",
+       "zh": "好。我发了。"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "screen_send"
+       ],
+       "caption": {
+        "text": "Envoyer",
+        "on": "screen_send",
+        "state": "pressed"
+       },
+       "note": "screen_send insert: Camille taps « Envoyer »"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "screen_send"
+       ],
+       "caption": {
+        "text": "Envoyer",
+        "on": "screen_send",
+        "state": "sent"
+       },
+       "sfx": "chime_message",
+       "note": "button ends on sent"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "La photo est partie.",
+       "zh": "照片发出去了。"
+      },
+      {
+       "do": "cat_action",
+       "action": "walk",
+       "at": "table_top"
+      },
+      {
+       "do": "cat_action",
+       "action": "sleep",
+       "at": "table_top",
+       "note": "sleeps next to the warm laptop (no on-laptop spot)"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ],
+       "note": "3 s hold"
+      }
+     ],
+     "ref": "HP"
+    }
+   ]
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "kitchen",
+   "light": "night",
+   "beats": [
+    {
+     "id": "r_legende",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "laptop"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Un mot avec la photo :",
+        "zh": "给照片配一句话："
+       },
+       "options": [
+        {
+         "fr": "Voici la photo. La plante va bien.",
+         "zh": "这是照片。植物很好。",
+         "correct": true
+        }
+       ]
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "w_souriez",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_tall",
+         "fr": "Souriez !",
+         "zh": "笑一个！"
+        }
+       ]
+      }
+     ],
+     "ref": "W"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "kitchen_table4",
+   "light": "night",
+   "beats": [
+    {
+     "id": "h_toc",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_l"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "sfx": "knock",
+       "note": "21:00, three knocks at the door of 411"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ],
+       "sfx": "knock"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "sfx": "knock",
+       "note": "all three look at each other; no line"
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}

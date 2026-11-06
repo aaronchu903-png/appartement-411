@@ -1,0 +1,782 @@
+{
+ "schema": "a411.episode/0.2",
+ "id": "d15_la_pluie",
+ "day": 15,
+ "title": "La pluie",
+ "version": 1,
+ "status": "draft",
+ "clip_prefix": "d15_",
+ "target_words": [
+  "le parapluie",
+  "mouillé",
+  "sécher",
+  "la serviette",
+  "le radiateur",
+  "il fait froid",
+  "chaud"
+ ],
+ "recycle_words": [
+  "la queue",
+  "sous",
+  "la table"
+ ],
+ "martin_on_screen": false,
+ "cast": [
+  "noe",
+  "camille",
+  "martin",
+  "lefevre",
+  "croissant",
+  "narrator"
+ ],
+ "sets": [
+  "kitchen",
+  "kitchen_table4",
+  "stairwell",
+  "rooftop"
+ ],
+ "flags_set": [],
+ "flags_read": [],
+ "scenes": [
+  {
+   "id": "cold_open",
+   "plot": "cold_open",
+   "set": "stairwell",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "co_pluie",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "umbrella",
+       "action": "show",
+       "at": "floor",
+       "note": "Lefèvre’s umbrella left on the landing (HP payoff)"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_stairs_down",
+       "from": "left"
+      },
+      {
+       "do": "prop",
+       "id": "puddle",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_landing"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il pleut !",
+       "zh": "下雨了！",
+       "face": "shocked",
+       "tags": [
+        "KEPT"
+       ]
+      }
+     ],
+     "ref": "CO"
+    }
+   ],
+   "ambience": "rain_loop"
+  },
+  {
+   "id": "A1",
+   "plot": "A",
+   "set": "stairwell",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "a1_serviette",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "door_neighbour_open",
+       "action": "show"
+      },
+      {
+       "do": "enter",
+       "who": "lefevre",
+       "at": "stand_neighbour_door",
+       "from": "door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "lefevre",
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "lefevre",
+       "fr": "Noé ! Vous êtes mouillé ! Tenez, une serviette.",
+       "zh": "Noé！您全湿了！拿着，一条毛巾。",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "she looks at Noé, not the player"
+      },
+      {
+       "do": "prop",
+       "id": "towel_folded",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci pour la serviette, Madame. Je suis mouillé…",
+       "zh": "谢谢您的毛巾，夫人。我全湿了……",
+       "face": "sad"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "mouille",
+         "audio": "mouille"
+        },
+        {
+         "id": "la_serviette",
+         "audio": "la_serviette"
+        }
+       ]
+      }
+     ],
+     "ref": "A1"
+    }
+   ],
+   "ambience": "rain_loop"
+  },
+  {
+   "id": "A2",
+   "plot": "A",
+   "set": "kitchen",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "a2_radiateur",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_door_r",
+       "from": "right"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il fait froid !",
+       "zh": "好冷！",
+       "face": "sad",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "she turns the radiator knob; GAP: radiator is a stairwell prop, kitchen radiator is off-frame"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Le radiateur marche. Il est chaud !",
+       "zh": "暖气开了。它热了！",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe",
+        "camille"
+       ],
+       "note": "everyone gathers by it"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il fait froid… mais le radiateur, c’est chaud.",
+       "zh": "好冷……不过暖气是热的。",
+       "face": "happy"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "il_fait_froid",
+         "audio": "il_fait_froid"
+        },
+        {
+         "id": "le_radiateur",
+         "audio": "le_radiateur"
+        },
+        {
+         "id": "chaud",
+         "audio": "chaud"
+        }
+       ]
+      }
+     ],
+     "ref": "A2"
+    }
+   ]
+  },
+  {
+   "id": "A3",
+   "plot": "A",
+   "set": "stairwell",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "a3_secher",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_radiator",
+       "from": "door"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_home_door",
+       "from": "door"
+      },
+      {
+       "do": "prop",
+       "id": "shoes",
+       "action": "show",
+       "at": "doormat_home"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille",
+        "noe"
+       ],
+       "note": "staged on the landing: shoes and radiator are stairwell props"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "On fait sécher les chaussures.",
+       "zh": "我们把鞋晾干。",
+       "note": "bible: « On sèche les chaussures. » (sécher form kept for the word check)"
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "spoken",
+       "prompt": {
+        "fr": "Où ? Sur le radiateur ?",
+        "zh": "放哪儿？放暖气上？"
+       },
+       "choices": [
+        {
+         "fr": "Sur le radiateur.",
+         "zh": "放暖气上。"
+        },
+        {
+         "fr": "Sous le radiateur.",
+         "zh": "放暖气下面。"
+        }
+       ],
+       "note": "the player chooses where to dry things; any attempt counts"
+      },
+      {
+       "do": "prop",
+       "id": "towel_hang",
+       "action": "show",
+       "at": "radiator_top"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Et la serviette, à sécher !",
+       "zh": "还有毛巾，也晾干！",
+       "face": "happy"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "secher",
+         "audio": "secher"
+        }
+       ]
+      }
+     ],
+     "ref": "A3"
+    }
+   ],
+   "ambience": "rain_loop"
+  },
+  {
+   "id": "voice",
+   "plot": "voice",
+   "set": "kitchen",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "v_martin",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "phone",
+       "action": "show",
+       "at": "desk_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "phone"
+       ]
+      },
+      {
+       "do": "phone_bubble",
+       "who": "martin",
+       "icon": "phone",
+       "fr": "Il pleut à Paris ? Fermez bien les fenêtres, s’il vous plaît.",
+       "zh": "巴黎下雨了吗？请把窗户关好。",
+       "sfx": "chime_message",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "dictation",
+       "items": [
+        {
+         "id": "il_pleut",
+         "audio": "il_pleut"
+        }
+       ],
+       "prompt": {
+        "fr": "___ à Paris ?",
+        "zh": "巴黎___吗？",
+        "audio": "il_pleut"
+       }
+      }
+     ],
+     "ref": "V"
+    }
+   ]
+  },
+  {
+   "id": "palier",
+   "plot": "A",
+   "set": "stairwell",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "m_palier",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "notice_board",
+       "action": "show"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      }
+     ],
+     "ref": "MONEY",
+     "note": "L’entretien du palier"
+    },
+    {
+     "id": "m_palier_ecrit",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "notice_board"
+       ],
+       "note": "money beat (ECONOMY_V1 §11): new notice from Martin; recognition only; opens the optional « palier » chore, 5 €/week, never gates"
+      },
+      {
+       "do": "say",
+       "who": "narrator",
+       "fr": "Merci de ranger le palier : les chaussures, le parapluie, la plante. — M.",
+       "zh": "请整理楼道：鞋子、雨伞、植物。—— M.",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "written text, read as an insert (director rule 2026-10-25: own beat, no lead-in, no guillemets)"
+      }
+     ],
+     "ref": "MONEY",
+     "note": "written text beat"
+    }
+   ],
+   "ambience": "rain_loop"
+  },
+  {
+   "id": "B",
+   "plot": "B",
+   "set": "kitchen",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "b_setup",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "camille",
+       "at": "stand_mid",
+       "from": "right"
+      },
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_counter",
+       "from": "left"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "Croissant missing"
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Croissant ? Sous la table ?",
+       "zh": "Croissant？在桌子下面？",
+       "face": "brow_raise"
+      }
+     ],
+     "ref": "B-setup"
+    },
+    {
+     "id": "b_action",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "camille"
+       ],
+       "note": "the player looks under the table, on the shelf…"
+      }
+     ],
+     "ref": "B-action"
+    },
+    {
+     "id": "b_payoff",
+     "steps": [
+      {
+       "do": "cat_action",
+       "action": "lie",
+       "at": "floor",
+       "note": "pressed flat against the (off-frame) radiator; only the tail shows. Runner: he doesn’t move for the rest of the episode"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "croissant"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "La queue !",
+       "zh": "尾巴！"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Il a chaud, lui.",
+       "zh": "它倒是挺暖和。",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "camille",
+       "fr": "Il est mouillé ? Non. Il a chaud.",
+       "zh": "它湿了吗？没有。它暖和着呢。",
+       "note": "RETURN map add mouillé (said in A1)"
+      }
+     ],
+     "ref": "B-payoff",
+     "note": "reads without the word: tail only, cat flat"
+    }
+   ]
+  },
+  {
+   "id": "HP",
+   "plot": "high_point",
+   "set": "stairwell",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "hp_parapluie",
+     "steps": [
+      {
+       "do": "enter",
+       "who": "noe",
+       "at": "stand_landing",
+       "from": "door"
+      },
+      {
+       "do": "prop",
+       "id": "umbrella",
+       "action": "show",
+       "at": "floor"
+      },
+      {
+       "do": "prop",
+       "id": "towel_folded",
+       "action": "hold",
+       "who": "noe"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ],
+       "note": "he realises Lefèvre left the umbrella for him this morning; he doesn’t say so"
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Je sèche le parapluie.",
+       "zh": "我把雨伞擦干。",
+       "note": "RETURN map add; to himself"
+      },
+      {
+       "do": "walk_to",
+       "who": "noe",
+       "to": "stand_neighbour_door"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "Merci pour le parapluie.",
+       "zh": "谢谢您的雨伞。",
+       "face": "happy",
+       "tags": [
+        "KEPT"
+       ],
+       "note": "whispered to her closed door; zh 您"
+      },
+      {
+       "do": "learning_module",
+       "module": "learn_words",
+       "items": [
+        {
+         "id": "le_parapluie",
+         "audio": "le_parapluie"
+        }
+       ]
+      }
+     ],
+     "ref": "HP"
+    }
+   ],
+   "ambience": "rain_loop"
+  },
+  {
+   "id": "reply",
+   "plot": "reply",
+   "set": "kitchen",
+   "light": "rain",
+   "beats": [
+    {
+     "id": "r_martin",
+     "steps": [
+      {
+       "do": "prop",
+       "id": "laptop",
+       "action": "show",
+       "at": "counter_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "laptop"
+       ]
+      },
+      {
+       "do": "learning_module",
+       "module": "output",
+       "mode": "written",
+       "prompt": {
+        "fr": "Pour Madame Martin :",
+        "zh": "给 Martin 太太："
+       },
+       "options": [
+        {
+         "fr": "Les fenêtres sont fermées. La plante va bien. Il fait froid, mais le radiateur marche.",
+         "zh": "窗户都关好了。植物很好。天很冷，但暖气开着。",
+         "correct": true
+        }
+       ]
+      }
+     ],
+     "ref": "REPLY"
+    }
+   ]
+  },
+  {
+   "id": "watering",
+   "plot": "watering",
+   "set": "rooftop",
+   "light": "day",
+   "beats": [
+    {
+     "id": "w_pluie",
+     "steps": [
+      {
+       "do": "cut_to",
+       "shot": "wide",
+       "note": "covered pot; no rain preset on the roof"
+      },
+      {
+       "do": "learning_module",
+       "module": "review",
+       "optional": true,
+       "watering_lines": [
+        {
+         "pot": "pot_round",
+         "fr": "Il pleut… on arrose quand même ?",
+         "zh": "下着雨……还要浇水吗？"
+        }
+       ],
+       "note": "Camille, deadpan"
+      }
+     ],
+     "ref": "W"
+    }
+   ],
+   "ambience": "roof_wind"
+  },
+  {
+   "id": "hook",
+   "plot": "hook",
+   "set": "kitchen_table4",
+   "light": "evening",
+   "beats": [
+    {
+     "id": "h_tartines",
+     "steps": [
+      {
+       "do": "sit",
+       "who": "noe",
+       "seat": "seat_end_r"
+      },
+      {
+       "do": "sit",
+       "who": "camille",
+       "seat": "seat_back_l"
+      },
+      {
+       "do": "prop",
+       "id": "toast_plate",
+       "action": "show",
+       "at": "table_top",
+       "note": "at the player’s seat; GAP: heart drawn in jam (no overlay)"
+      },
+      {
+       "do": "prop",
+       "id": "jam_jar",
+       "action": "show",
+       "at": "table_top"
+      },
+      {
+       "do": "cut_to",
+       "shot": "wide"
+      },
+      {
+       "do": "cut_to",
+       "shot": "medium",
+       "on": [
+        "noe"
+       ]
+      },
+      {
+       "do": "say",
+       "who": "noe",
+       "fr": "J’en ai fait trop.",
+       "zh": "我做多了。",
+       "tags": [
+        "KEPT"
+       ]
+      },
+      {
+       "do": "cut_to",
+       "shot": "close",
+       "on": [
+        "camille"
+       ],
+       "note": "she looks at the plate a beat too long. Undercurrent seed: never spoken"
+      }
+     ],
+     "ref": "HOOK"
+    }
+   ]
+  }
+ ]
+}
